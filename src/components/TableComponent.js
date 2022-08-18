@@ -18,35 +18,35 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import "./TableComponent.css";
 import { MenuItem, Pagination, Select, Stack } from "@mui/material";
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
-    return -1;
-  }
-  if (b[orderBy].toLowerCase() > a[orderBy].toLowerCase()) {
-    return 1;
-  }
-  return 0;
-}
+// function descendingComparator(a, b, orderBy) {
+//   if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
+//     return -1;
+//   }
+//   if (b[orderBy].toLowerCase() > a[orderBy].toLowerCase()) {
+//     return 1;
+//   }
+//   return 0;
+// }
 
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
+// function getComparator(order, orderBy) {
+//   return order === "desc"
+//     ? (a, b) => descendingComparator(a, b, orderBy)
+//     : (a, b) => -descendingComparator(a, b, orderBy);
+// }
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+// function stableSort(array, comparator) {
+//   const stabilizedThis = array.map((el, index) => [el, index]);
+//   stabilizedThis.sort((a, b) => {
+//     const order = comparator(a[0], b[0]);
+//     if (order !== 0) {
+//       return order;
+//     }
+//     return a[1] - b[1];
+//   });
+//   return stabilizedThis.map((el) => el[0]);
+// }
 
 function EnhancedTableHead(props) {
   const {
@@ -59,6 +59,8 @@ function EnhancedTableHead(props) {
     onRequestSort,
   } = props;
   const createSortHandler = (property) => (event) => {
+    console.log("property",property,"event",event.target)
+
     onRequestSort(event, property);
   };
 
@@ -82,7 +84,7 @@ function EnhancedTableHead(props) {
             key={headCell.id}
             align="left"
             padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
+            // sortDirection={orderBy === headCell.id ? order : false}
             className="table-header"
           >
             <TableSortLabel
@@ -93,11 +95,11 @@ function EnhancedTableHead(props) {
               className="sorted-blk"
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
+              {/* {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </Box>
-              ) : null}
+              ) : null} */}
             </TableSortLabel>
           </TableCell>
         ))}
@@ -129,10 +131,12 @@ export default function TableComponent({
   onClickVisibilityIconHandler1,
   onClickDeleteIconHandler1,
   selected,
-  setSelected
+  setSelected,
+  order,
+  setOrder
 }) {
   //   console.log("records",records)
-  const [order, setOrder] = React.useState("asc");
+  // const [order, setOrder] = React.useState("asc");
 
   const handleRequestSort = (_event,property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -210,8 +214,8 @@ export default function TableComponent({
               <TableBody>
                 {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  records.slice().sort(getComparator(order, orderBy)) */}
-                {stableSort(records, getComparator(order, orderBy))
-                  .map((row, index) => {
+                {/* {stableSort(records, getComparator(order, orderBy)) */}
+                  {records.map((row, index) => {
                     const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
