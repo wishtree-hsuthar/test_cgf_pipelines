@@ -1,0 +1,60 @@
+.table-blk .css-1q1u3t4-MuiTableRow-root{height: 69px;}
+.table-blk .css-1q1u3t4-MuiTableRow-root.MuiTableRow-hover:hover {
+    background-color: #ABB8C326;
+}
+.table-blk .MuiTableRow-head{height: 54px;background: #4596D11A;white-space: nowrap;padding: 0 10px;}
+.table-header span{font-size: 14px;color: #1E1E1E !important;font-family: 'ProximaNova-Semibold';}
+.table-blk .MuiPaper-root{box-shadow: 0px 3px 6px #00000029 !important;}
+.table-blk .css-177gid-MuiTableCell-root{font-family: 'ProximaNova-Regular';font-size: 14px;}
+.table-blk .MuiTableCell-head{padding: 0 !important;text-align: left;}
+.table-blk .MuiTableCell-head:nth-child(2){padding: 0 !important;}
+/* .table-blk .MuiCheckbox-root svg{width: 13px;height: 12px;} */
+.table-blk .MuiTableCell-root{padding: 0;border-bottom: none;font-size: 14px;}
+.table-blk .MuiCheckbox-root{padding: 17px 15px;}
+.table-blk .MuiTableRow-root .button-style span{color: #E53850;background: #E5385026;padding: 5px;font-size: 14px;width: 67px;display: inline-block;text-align: center;}
+.button-style-success span{color: #6DB02D !important;background: #6DB02D26 !important;}
+.table-blk .css-1azl6jz-MuiTableCell-root .css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root{flex-direction: initial;}
+.table-blk .css-194a1fa-MuiSelect-select-MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input{min-width: 5px !important;background: transparent !important;}
+
+.icon svg{font-size: 16px;color: #000000;}
+.icon {
+    padding: 0 15px;
+    cursor: pointer;
+
+}
+.table-blk .css-1q1u3t4-MuiTableRow-root.Mui-selected {
+    background-color: rgba(171, 184, 195, 0.26);
+}
+.show-entries-txt{font-size: 14px;color: #1D1D23;}
+.per-page-blk{display: flex;align-items: center;margin: 0 50px 0 0;}
+.table-footer-left {
+    display: flex;
+    align-items: center;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+.per-page-txt{margin-right: 10px;font-size: 14px;color: #1D1D23;}
+.per-page-select-field fieldset{border: none;}
+.per-page-select-field .MuiSelect-select{background: transparent !important;padding: 0 30px 0 0 !important;font-family: 'ProximaNova-Semibold';}
+.per-page-select-field svg{color: #1D1D23 !important;}
+.table-content-wrap .css-19kzrtu{padding: 30px 0 20px;}
+.table-blk .sorted-blk .MuiSvgIcon-root {
+    color: #1E1E1E !important;
+    font-size: 18px;
+}
+.table-checkbox svg{font-size: 16px;color: #707070;}
+.table-checkbox .Mui-checked svg{font-size: 16px;color: #0082C9;}
+.table-checkbox.MuiCheckbox-root.Mui-checked{color: #0082C9;}
+.table-checkbox.MuiCheckbox-root.Mui-checked svg{color: #0082C9;}
+.table-checkbox .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate{color: #0082C9;}
+.table-checkbox .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate svg{color: #0082C9;}
+
+
+/* Pagination CSS */
+
+.pagination-blk .MuiPaginationItem-root.Mui-selected{background: #4596D1;color: #fff;border-color: #4596D1;}
+.pagination-blk .MuiPaginationItem-root{margin: 0;border: 1px solid rgba(30, 30, 30, 0.15);background: #fff;border-radius: 3px !important;font-family: 'ProximaNova-Regular';font-size: 14px;}
+.pagination-blk .MuiPaginationItem-previousNext{background: #fff !important;}
+.pagination-blk .MuiPaginationItem-ellipsis{border-radius: 3px;height: 32px;}
+.pagination-blk .MuiPaginationItem-root:hover{background: rgba(30, 30, 30, 0.05);color: #4596D1;border: none;}
+.pagination-blk .Mui-disabled{background: rgba(255,255,255,0) !important;}
