@@ -1,24 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import ToasterTester from './components/ToasterTester';
+import TableTester from './components/TableTester';
+import DialogBoxTester from './components/DialogBoxTester.js';
+import DialogBox from './components/DialogBox';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      {/* Jay shree krishna */}
+      <ToasterTester/>
+      {/* <TableTester/> */}
+      {/* <DialogBoxTester/> */}
+    </React.Fragment>
   );
 }
 
