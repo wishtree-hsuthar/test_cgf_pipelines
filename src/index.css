@@ -207,6 +207,191 @@ h3 {
 
 .heading2 {
   font-family: 'ProximaNova-Semibold';
+
+  font-size: 14px;
+  font-family: 'ProximaNova-Regular';
+  color: #1E1E1E;
+  background: #F4F7FC;
+
+}
+
+img {
+  vertical-align: top !important;
+  display: inline-block !important;
+  max-width: 100%;
+}
+
+h2 {
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 27px;
+}
+
+h3 {
+
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 33px;
+}
+
+.container {
+
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+.flex-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@font-face {
+  font-family: 'ProximaNova-Regular';
+  src: url('./assets/fonts/ProximaNova-Regular.eot');
+  src: url('./assets/fonts/ProximaNova-Regular.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/ProximaNova-Regular.svg#ProximaNova-Regular') format('svg'),
+    url('./assets/fonts/ProximaNova-Regular.ttf') format('truetype'),
+    url('./assets/fonts/ProximaNova-Regular.woff') format('woff'),
+    url('./assets/fonts/ProximaNova-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Proxima Nova Semibold';
+  src: url('./assets/fonts/Proxima Nova Semibold.eot');
+  src: url('./assets/fonts/Proxima Nova Semibold.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/Proxima Nova Semibold.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ProximaNova-Semibold';
+  src: url('./assets/fonts/ProximaNova-Semibold.svg#ProximaNova-Semibold') format('svg'),
+    url('./assets/fonts/ProximaNova-Semibold.ttf') format('truetype'),
+    url('./assets/fonts/ProximaNova-Semibold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ProximaNova-Bold';
+  src: url('./assets/fonts/ProximaNova-Bold.eot');
+  src: url('./assets/fonts/ProximaNova-Bold.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/ProximaNova-Bold.svg#ProximaNova-Bold') format('svg'),
+    url('./assets/fonts/ProximaNova-Bold.ttf') format('truetype'),
+    url('./assets/fonts/ProximaNova-Bold.woff') format('woff'),
+    url('./assets/fonts/ProximaNova-Bold.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+::-webkit-input-placeholder {
+  /* Edge */
+  color: rgba(30, 30, 30, 0.5) !important;
+  opacity: 1 !important;
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer */
+  color: rgba(30, 30, 30, 0.5) !important;
+  opacity: 1 !important;
+}
+
+::placeholder {
+  color: rgba(30, 30, 30, 0.5) !important;
+  opacity: 1 !important;
+}
+
+.primary-button {
+  background: #F7A823;
+  color: #fff;
+  padding: 14px 28px;
+  font-size: 14px;
+  line-height: 14px;
+  height: 45px;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+  text-transform: capitalize;
+  font-family: 'Proxima Nova Semibold';
+  border: 1px solid #F7A823;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  background: #D98C08;
+  color: #F4F7FC;
+}
+
+.secondary-button {
+  background: #E0E0E0;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05);
+  color: #707070;
+  padding: 14px 28px;
+  font-size: 14px;
+  line-height: 14px;
+  height: 45px;
+  border-radius: 3px;
+  text-transform: capitalize;
+  font-family: 'Proxima Nova Semibold';
+  border: none;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  background: #CCCCCC;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0
+  }
+
+  100% {
+    opacity: 1
+  }
+}
+
+.owl-carousel .fadeIn {
+  animation-name: fadeIn
+}
+
+.logo {
+  width: 160px;
+  margin-bottom: 40px;
+}
+
+.heading1 {
+  color: #F7A823;
+  font-family: 'ProximaNova-Bold';
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.heading2 {
+  font-family: 'ProximaNova-Semibold';
   margin: 0;
   font-size: 18px;line-height: 18px;
 }
@@ -789,3 +974,6 @@ input[type=checkbox]:checked:before {
 .phone-field.PhoneInput--disabled .PhoneInputCountry select, .phone-field.PhoneInput--disabled input{cursor: not-allowed;}
 .phone-field input:hover, .phone-field .PhoneInputCountry:hover{border-color: rgba(30, 30, 30, 0.8);}
 .phone-field.PhoneInput--disabled .PhoneInputCountry:hover{border-color: rgba(30, 30, 30, 0.5);}
+
+
+.table-blk td {font-family: 'ProximaNova-Regular';}

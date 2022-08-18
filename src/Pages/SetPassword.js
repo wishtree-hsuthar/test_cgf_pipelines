@@ -14,7 +14,7 @@ const schema = yup.object().shape({
       ).required("Password required"),
     confirmPassword:yup.string().required("Please enter confirm password") .oneOf([yup.ref('newPassword'), null], "Passwords don't match.")
 })
-const setPassword = () => {
+const SetPassword = () => {
     const {register,handleSubmit,formState:{ errors}} =useForm({
         resolver:yupResolver(schema)
     })
@@ -151,4 +151,4 @@ const setPassword = () => {
     )
 }
 
-export default setPassword
+export default SetPassword

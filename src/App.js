@@ -1,5 +1,11 @@
-
 import './App.css';
+import React from 'react';
+import ToasterTester from './components/ToasterTester';
+import TableTester from './components/TableTester';
+import DialogBoxTester from './components/DialogBoxTester.js';
+import DialogBox from './components/DialogBox';
+
+
 import Login from './Pages/Login';
 import ForgetPassword from './Pages/ForgetPassword';
 import ResetPassword from './Pages/ResetPassword';
@@ -15,8 +21,13 @@ import EditSubAdmin from './Pages/EditSubAdmin';
 function App() {
   const userO = localStorage.getItem('user')
   return (
-   <>
-   <Routes>
+    <React.Fragment>
+      {/* Jay shree krishna */}
+      <ToasterTester/>
+      {/* <TableTester/> */}
+      {/* <DialogBoxTester/> */}
+   
+    <Routes>
     <Route path='/login' element={<Login />} />
         <Route path='/' element={<Layout />} >
            <Route path='/dashboard' element={<Dashboard />} />
@@ -32,7 +43,7 @@ function App() {
    {/* <ResetPassword /> */}
    {/* <SetPassword /> */}
    </Routes>
-   </>
+   </React.Fragment>
   );
 }
 
