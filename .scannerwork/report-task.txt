@@ -1,6 +1,0 @@
-projectKey=PR74-CGF-HRDD-Web-Front
-serverUrl=https://sonarqube.wishtree.tech
-serverVersion=8.9.1.44547
-dashboardUrl=https://sonarqube.wishtree.tech/dashboard?id=PR74-CGF-HRDD-Web-Front
-ceTaskId=AYKvM7Jhm_L6HG8wPFhS
-ceTaskUrl=https://sonarqube.wishtree.tech/api/ce/task?id=AYKvM7Jhm_L6HG8wPFhS
