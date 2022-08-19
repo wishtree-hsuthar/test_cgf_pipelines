@@ -213,6 +213,7 @@ const TableTester = () => {
   
   //array to get array of selected rows ids
   const [selected, setSelected] = React.useState([]);
+  const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("operationalMember");
 
   //page change handler
@@ -246,6 +247,10 @@ tempRows.forEach(object => {
   delete object['createdBy']
   delete object['updatedAt']
 })
+console.log("page: ",page,"rows Per Page: ",rowsPerPage,"order: ",order,"order By: ",orderBy)
+useEffect(()=>{
+ 
+},[])
   return (
     <div>
       <TableComponent
@@ -260,6 +265,8 @@ tempRows.forEach(object => {
         icons = {["visibility","delete"]}
         onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
         onClickDeleteIconHandler1={onClickDeleteIconHandler}
+        order={order}
+        setOrder={setOrder}
         setOrderBy={setOrderBy}
         selected={selected}
         setSelected={setSelected}
