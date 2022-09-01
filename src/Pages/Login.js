@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect ,useRef} from 'react'
 
 import Slider from './Slider';
 import { TextField } from '@mui/material';
@@ -8,9 +8,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import * as yup from 'yup'
 import {yupResolver} from '@hookform/resolvers/yup'
 import {useForm} from 'react-hook-form'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import {Logger} from '../Logger/Logger'
-import { useLocation } from 'react-router-dom';
+import Toaster from '../components/Toasters';
 const loginFormSchema = yup.object().shape({
     email:yup.string().email("Please enter valid email").required("Email address required"),
     password:yup.string().matches(
@@ -19,6 +19,7 @@ const loginFormSchema = yup.object().shape({
       ).required("Password required"),
 })
 const Login = (prop) => {
+    const toasterRef = useRef()
     Logger.info(prop)
     const location = useLocation()
     console.log('location',location)
@@ -60,16 +61,29 @@ const Login = (prop) => {
         event.preventDefault();
     };
 
+    const navigateToforgetPasswordPage=()=>{
+        navigate('/forget-password')
+    }
+
     const submitLoginData=(data)=>{
         console.log(data)
-        
+        toasterRef.current()
         localStorage.setItem('user',JSON.stringify(data))
         localStorage.setItem('role','admin')
-        navigate('/dashboard')
+        setTimeout(() => {
+            navigate('/dashboard')
+        }, 3000);
+        
     }
 
     return (
         <div class="page-wrapper login-page-wrap">
+             <Toaster
+        myRef={toasterRef}
+        titleMessage={"Success"}
+        descriptionMessage={"Login successful"}
+        messageType={"success"}
+      />
             <div class="login-section">
                 <div class="container">
                     <div class="login-wrapper">
@@ -94,8 +108,9 @@ const Login = (prop) => {
                                             placeholder='Enter email id' 
                                             variant="outlined"
                                             {...register('email')}
+                                            helperText={errors.email?errors.email.message:""}
                                             />
-                                               <p className={`input-error-msg`}>{errors.email?.message}</p>
+                                               {/* <p className={`input-error-msg`}>{errors.email?.message}</p> */}
                                         </div>
                                         <div class="form-group">
                                             <label for="password">Password <span class="mandatory">*</span></label>
@@ -107,6 +122,7 @@ const Login = (prop) => {
                                                  
                                                     placeholder='Enter password'
                                                    className={`input-field ${errors.password&&'input-error'}`}
+                                                
                                                     endAdornment={
                                                         <InputAdornment position="end">
                                                             <IconButton
@@ -127,7 +143,7 @@ const Login = (prop) => {
                                         </div>
                                         <div class="form-btn flex-between">
                                             <button type="submit" class="primary-button">Log In</button>
-                                            <div class="tertiary-btn-blk mr-10">Forgot Password?</div>
+                                            <div class="tertiary-btn-blk mr-10" onClick={navigateToforgetPasswordPage} >Forgot Password?</div>
                                         </div>
                                     </form>
                                 </div>

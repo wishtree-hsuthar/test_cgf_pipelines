@@ -1,10 +1,11 @@
 import React,{useState} from 'react'
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation ,useNavigate} from "react-router-dom";
 import { TextField, Select, MenuItem} from '@mui/material';
 import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
-import {useForm } from 'react-hook-form'
+// import PhoneInput from 'react-phone-number-input'
+import {useForm ,Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
+import PhoneInput from "react-phone-number-input/react-hook-form"
 
 import * as yup from 'yup'
 
@@ -15,39 +16,63 @@ const AddSubAdminSchema =yup.object().shape({
   phoneNumber:yup.string().min(3,"Minimum 3 digits required")
 })
 const AddSubAdmin = () => {
-  const {register,handleSubmit,formState:{errors}} = useForm({
-    resolver:yupResolver(AddSubAdminSchema)
+    const navigate = useNavigate()
+  const {register,handleSubmit,formState:{errors},reset,control} = useForm({
+    resolver:yupResolver(AddSubAdminSchema),
+    defaultValues:{
+        subAdminName:"",
+        email:"",
+        role:"",
+        phoneNumber:""
+    }
 })
     const location = useLocation()
     console.log(location)
-    const [value, setValue] = useState()
-
+    const [value, setValue] = useState('')
+    const [roleSelected, setRoleSelected] = useState('')
+    const handleRoleSelection=(e)=>{
+        setRoleSelected(e.target.value)
+    }
     const handleOnSubmit=(data)=>{
       console.log("data",data)
+      navigate('/sub-admins')
     }
+
+    const handleSaveAndMore=(data)=>{
+        console.log(data)
+        reset()
+        setValue("")
+        setRoleSelected("")
+
+    }
+    const handleCancel =()=>{
+        navigate('/sub-admins')
+    } 
   return (
     <div className="page-wrapper">
         <div className="breadcrumb-wrapper">
             <div className="container">
                 <ul className="breadcrumb">
-                <li><Link to="/sub-admins">Sub-Admin</Link></li>
-                <li>Add Sub-Admin</li>
+                <li><Link to="/sub-admins">Sub Admin</Link></li>
+                <li>Add Sub Admin</li>
                 </ul>
             </div>
         </div>
         <section>
             <div className="container">
+            <form onSubmit={handleSubmit(handleOnSubmit)}>
+
                 <div className="form-header flex-between">
-                <h2 className="heading2">Add Sub-Admin</h2>
-                <div className="form-header-right-txt">
-                    <div className="tertiary-btn-blk">
+                    <h2 className="heading2">Add Sub Admin</h2>
+                            <div className="form-header-right-txt">
+                              <div className="tertiary-btn-blk" onClick={handleSubmit(handleSaveAndMore)} >
                         <span class="addmore-icon"><i className='fa fa-plus'></i></span>
                         <span className="addmore-txt">Save & Add More</span>
                     </div>
                 </div>
                 </div>
                 <div className="card-wrapper" >
-                  <form onSubmit={handleSubmit(handleOnSubmit)}>
+                 
                     <div className="card-blk flex-between">
                     <div className="card-form-field">
                         <div className="form-group">
@@ -80,34 +105,67 @@ const AddSubAdmin = () => {
                     <div className="card-form-field">
                         <div className="form-group">
                             <label for="emailid">Phone Number</label>
-                            <PhoneInput
-                            international
-                            
-                            defaultCountry="IN"
-                            limitMaxLength={15}
-                            {...register('phoneNumber',{
-                                // onChange:e=>console.log('onchange method from phoneInput',e)
-                            })}
+                            {/* <Controller
+                                name='phoneNumber'
+                           
+                                control={control}
+                                render={({ field, fieldState: {error} }) => (
+                                    <>
+                                    <PhoneInput
+                                    international
+                                    defaultCountry="IN"
+                                    limitMaxLength={15}
+                                    {...register('phoneNumber')}
+                                 
+                                    value={value}
+                                    onChange={setValue}
+                                    className={`phone-field  ${errors.phoneNumber&&'input-error'}`} />
+                                 <p className={`input-error-msg`}>{errors.phoneNumber?.message}</p>
+                                 </>
+                                  )}
+                            />
+                            */}
+                              <PhoneInput
+        withCountryCallingCode
 
-                            value={value}
-                            onChange={setValue}
-                            className={`phone-field  ${errors.phoneNumber&&'input-error'}`} />
-                         <p className={`input-error-msg`}>{errors.phoneNumber?.message}</p>
+        name="phoneNumber"
+        control={control}
+        // {...register('phoneNumber')}
+        // defaultCountry="IN"
+        className={`phone-field  ${errors.phoneNumber&&'input-error'}`}
+        rules={{required:true}}
+        />
+                                 <p className={`input-error-msg`}>{errors.phoneNumber?.message}</p>
+
                         </div>
                     </div>
                     <div className="card-form-field">
                         <div className="form-group">
-                            <label for="role">Select role <span className="mandatory">*</span></label>
+                            <label for="role">Select Role <span className="mandatory">*</span></label>
                              
                             <div className="select-field" >
-                            <Select 
-                              {...register('role')}
+                            <Controller
+                                name='role'
+                           
+                                control={control}
+
+                                render={({ field, fieldState: {error} }) => (
+                                    <>
+                                    <Select 
                               className={`input-field ${errors.role&&'input-error'}`}
+                              {...register('role')}
+
+                              value={roleSelected}
+                              onChange={e=>handleRoleSelection(e)}
                             >
-                              <MenuItem value={"manager"} >{"Manager"}</MenuItem>
-                              <MenuItem value={"manager"}>{"Assistent manager"}</MenuItem>
-                              <MenuItem value={"manager"}>{"Supervisor"}</MenuItem>
+                              <MenuItem value={"Manager"} >{"Manager"}</MenuItem>
+                              <MenuItem value={"Assistent manager"}>{"Assistent manager"}</MenuItem>
+                              <MenuItem value={"Supervisor"}>{"Supervisor"}</MenuItem>
                             </Select>
+                                 </>
+                                  )}
+                            />
+                          
                          <p className={`input-error-msg`}>{errors.role?.message}</p>
 
                             </div>
@@ -116,14 +174,16 @@ const AddSubAdmin = () => {
                   
                    
                     <div className="form-btn flex-between add-members-btn">
-                        <button  className="secondary-button mr-10">Cancel</button>
+                        <button onClick={handleCancel} className="secondary-button mr-10">Cancel</button>
                         <button type="submit" className="primary-button add-button">Add</button>
                     </div>
                     
                     </div>
-                    </form>
+               
                 </div>
+             </form>
             </div>
+           
         </section>
     </div>
   )

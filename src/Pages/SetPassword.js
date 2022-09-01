@@ -99,7 +99,7 @@ const SetPassword = () => {
                                                     error={errors.newPassword?true:false}
                                                     
                                                 />
-                                                <p className={`input-error-msg`}>{errors.newPassword?.message}</p>
+                                                <p className={`input-error-msg`}>{errors.newPassword?errors.newPassword.message:" "}</p>
                                                 </div>
                                            </div>
                                         <div class="form-group">
@@ -131,7 +131,7 @@ const SetPassword = () => {
                                                     error={errors.confirmPassword?true:false}
                                                     
                                                 />
-                                                <p className={`input-error-msg`} >{errors.confirmPassword?.message}</p>
+                                                <p className={`input-error-msg`} >{errors.confirmPassword?errors.confirmPassword.message:" "}</p>
 
                                             </div>
                                         </div>

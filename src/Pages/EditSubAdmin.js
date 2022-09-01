@@ -1,7 +1,9 @@
 import React,{useState} from 'react'
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation ,useNavigate} from "react-router-dom";
 import { TextField, Select, MenuItem} from '@mui/material';
 import PhoneInputWithCountry from "react-phone-number-input/react-hook-form"
+// import PhoneInput from "react-phone-number-input"
+
 
 import 'react-phone-number-input/style.css'
 
@@ -16,6 +18,7 @@ const editSubAdminSchema =yup.object().shape({
   })
  
 const EditSubAdmin = () => {
+    const navigate = useNavigate()
     const [values,setValues ]= useState( {
         subAdminName:'madhav',
         email:'madhav@yopmail.com',
@@ -32,12 +35,7 @@ const EditSubAdmin = () => {
         console.log(location)
         
         const resetVal =()=>{
-            reset({
-                subAdminName:'madhav',
-                email:'madhav@yopmail.com',
-                role:'manager',
-                phoneNumber:'+917350378900'
-            })
+          navigate('/sub-admins')
         } 
     
         const handleOnSubmit=(data)=>{
@@ -48,15 +46,16 @@ const EditSubAdmin = () => {
         <div className="breadcrumb-wrapper">
             <div className="container">
                 <ul className="breadcrumb">
-                <li><Link to="/sub-admins">Sub-Admin</Link></li>
-                <li>Edit Sub-Admin</li>
+                <li><Link to="/sub-admins">Sub Admin</Link></li>
+                <li><Link to="/sub-admins/view-sub-admin">View Sub Admin</Link></li>
+                <li>Edit Sub Admin</li>
                 </ul>
             </div>
         </div>
         <section>
             <div className="container">
                 <div className="form-header flex-between">
-                <h2 className="heading2">Edit Sub-Admin</h2>
+                <h2 className="heading2">Edit Sub Admin</h2>
                 {/* <div className="form-header-right-txt">
                     <div className="tertiary-btn-blk">
                         <span class="addmore-icon"><i className='fa fa-plus'></i></span>
@@ -77,8 +76,10 @@ const EditSubAdmin = () => {
                             variant="outlined" 
                             className={`input-field ${errors.subAdminName&&'input-error'}`} 
                             {...register('subAdminName')}
+                            helperText={errors.subAdminName?errors.subAdminName?.message:" "}
+                            
                             />
-                            <p className={`input-error-msg`}>{errors.subAdminName?.message}</p>
+                            {/* <p className={`input-error-msg`}>{errors.subAdminName?.message}</p> */}
 
                         </div>
                     </div>
@@ -91,8 +92,10 @@ const EditSubAdmin = () => {
                             placeholder='Enter email address' 
                             variant="outlined"
                             {...register('email')}
+                            disabled={true}
+                            helperText={errors.email?errors.email?.message:" "}
                             />
-                             <p className={`input-error-msg`}>{errors.email?.message}</p>
+                             {/* <p className={`input-error-msg`}>{errors.email?.message}</p> */}
                         </div>
                     </div>
                     <div className="card-form-field">
@@ -107,7 +110,7 @@ const EditSubAdmin = () => {
         // })} 
         value={defaultPhone}
         onChange={e=>setDefaultPhone(e)}
-
+        className={`phone-field  ${errors.phoneNumber&&'input-error'}`} 
         name="phoneNumber"
         control={control}
         />
