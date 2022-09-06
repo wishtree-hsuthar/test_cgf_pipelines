@@ -1,0 +1,523 @@
+//Third party imports
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+
+//Internal Imports
+import Toaster from "../../components/Toaster";
+import "../../components/TableComponent.css";
+import { backendBase } from "../../utils/urls";
+import useCallbackState from "../../utils/useCallBackState";
+import Loader2 from "../../assets/Loader/Loader2.svg";
+
+const titleMessage = "";
+const descriptionMessage = "";
+const messageType = "";
+
+const EditRole = () => {
+  const params = useParams();
+
+  // state to manage loader
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage,
+    descriptionMessage,
+    messageType,
+  });
+  // let temp = {};
+  //Ref for Toaster
+  const myRef = React.useRef();
+
+  let editDefault = {
+    roleName: "",
+    status: "",
+    description: "",
+  };
+  //temp to hold privileges
+  let temp = {};
+  const [previleges, setPrevileges] = useState({ ...temp });
+  const { control, reset, setValue, handleSubmit } = useForm({
+    defaultValues: editDefault,
+  });
+
+  //helper message for inputs
+  const myHelper = {
+    description: {
+      required: "Enter the description",
+      maxLength: "Max char limit exceed",
+      minLength: "Description must contain atlest 3 characters",
+    },
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      console.log("input Data: ", data, "Previleges: ", previleges);
+      let previlegesForBackend = JSON.parse(JSON.stringify(previleges));
+      Object.keys(previlegesForBackend).forEach((p_key) => {
+        delete previlegesForBackend[p_key]["all"];
+        delete previlegesForBackend[p_key]["name"];
+      });
+      console.log("previleges : ", previlegesForBackend);
+      const response = await axios.put(backendBase + `roles/${params.id}`, {
+        description: data.description,
+        isActive: data.status === "active" ? true : false,
+        privileges: previlegesForBackend,
+      });
+      console.log("response", response);
+      data.status === "inactive"
+        ? setToasterDetails(
+            {
+              titleMessage: "Alert!",
+              descriptionMessage:
+                "The Assistant Manager is the bridge that connects top management with employees. They ensure operational excellence by performing managerial tasks such as scheduling",
+              messageType: "success",
+            },
+            () => myRef.current()
+          )
+        : setToasterDetails(
+            {
+              titleMessage: "Success",
+              descriptionMessage: "Role details updated successfully!",
+              messageType: "success",
+            },
+            () => myRef.current()
+          );
+      console.log("Default Values", editDefault);
+      reset({
+        roleName : "",
+        status: "active",
+        description: ""
+      });
+      setTimeout(() => navigate("/roles"), 3000);
+    } catch (error) {
+      console.log("error", error);
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.error &&
+            typeof error.response.data.error === "string"
+              ? error.response.data.error
+              : "Something Went Wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+    }
+  };
+  const onClickCancelHandler = () => {
+    navigate(`/roles/view-role/${params.id}`);
+  };
+  const createPrevileges = (tempPrivileges) => {
+    console.log("temp data", tempPrivileges);
+    Object.keys(tempPrivileges).forEach((tempPriv) => {
+      // console.log("temp Previ value",tempPrivileges[tempPriv])
+      temp[tempPriv] = {
+        add: tempPrivileges[tempPriv]["add"],
+        assign: tempPrivileges[tempPriv]["assign"],
+        delete: tempPrivileges[tempPriv]["delete"],
+        edit: tempPrivileges[tempPriv]["edit"],
+        list: tempPrivileges[tempPriv]["list"],
+        view: tempPrivileges[tempPriv]["view"],
+        all:
+          tempPrivileges[tempPriv]["add"] &&
+          tempPrivileges[tempPriv]["assign"] &&
+          tempPrivileges[tempPriv]["delete"] &&
+          tempPrivileges[tempPriv]["edit"] &&
+          tempPrivileges[tempPriv]["view"] &&
+          tempPrivileges[tempPriv]["list"],
+        name: tempPrivileges[tempPriv]["moduleId"]["name"],
+      };
+    });
+    setPrevileges({ ...temp });
+  };
+  const updateEditFields = (data) => {
+    console.log("previleges", data.privileges);
+    reset({
+      roleName: data.name,
+      status: data.isActive ? "active" : "inactive",
+      description: data.description,
+    });
+    createPrevileges(data.privileges);
+  };
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    (async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(backendBase + `roles/${params.id}`, {
+          signal: controller.signal,
+        });
+        console.log("response: ", response);
+        isMounted && updateEditFields(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Error", error);
+        if (error?.code === "ERR_CANCELED") return;
+        setToasterDetails(
+          {
+            titleMessage: "Error",
+            descriptionMessage:
+              error?.response?.data?.error &&
+              typeof error.response.data.error === "string"
+                ? error.response.data.error
+                : "Something Went Wrong!",
+            messageType: "error",
+          },
+          () => myRef.current()
+        );
+        setIsLoading(false);
+      }
+    })();
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+  return (
+    <div className="page-wrapper">
+      <Toaster
+        myRef={myRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
+      <div className="breadcrumb-wrapper">
+        <div className="container">
+          <ul className="breadcrumb">
+            <li>
+              <Link to="/roles">Roles</Link>
+            </li>
+            <li>
+              <Link to={`/roles/view-role/${params.id}`}>View Role</Link>
+            </li>
+            <li>Edit Role</li>
+          </ul>
+        </div>
+      </div>
+      <section>
+        <div className="container">
+          <div className="form-header flex-between">
+            <h2 className="heading2">Edit Role</h2>
+          </div>
+          {isLoading ? (
+            <div className="loader-blk">
+            <img src={Loader2} alt="Loading" />
+          </div>
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="card-wrapper">
+                <div className="card-blk flex-between">
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="roleName">
+                        Role Name <span className="mandatory">*</span>
+                      </label>
+                      <Controller
+                        name="roleName"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                          <TextField
+                            disabled
+                            {...field}
+                            // value={editDefault && editDefault.roleName}
+                            className={`input-field ${error && "input-error"}`}
+                            id="outlined-basic"
+                            placeholder="Enter role name"
+                            variant="outlined"
+                            helperText=" "
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="status">Status</label>
+                      <div className="radio-btn-field">
+                        <Controller
+                          name="status"
+                          control={control}
+                          render={({ field }) => (
+                            <RadioGroup
+                              {...field}
+                              // value={editDefault && editDefault.status}
+                              aria-labelledby="demo-radio-buttons-group-label"
+                              name="radio-buttons-group"
+                              className="radio-btn"
+                            >
+                              <FormControlLabel
+                                value="active"
+                                control={<Radio />}
+                                label="Active"
+                              />
+                              <FormControlLabel
+                                value="inactive"
+                                control={<Radio />}
+                                label="Inactive"
+                              />
+                            </RadioGroup>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-form-field fullwidth">
+                    <div className="form-group">
+                      <label htmlFor="description">
+                        Description <span className="mandatory">*</span>
+                      </label>
+                      <Controller
+                        name="description"
+                        rules={{
+                          required: true,
+                          maxLength: 500,
+                          minLength: 3,
+                        }}
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                          <TextField
+                            multiline
+                            {...field}
+                            // value={editDefault && editDefault.description}
+                            onBlur={(e) =>
+                              setValue("description", e.target.value.trim())
+                            }
+                            inputProps={{ maxLength: 500 }}
+                            className={`input-textarea ${
+                              error && "input-textarea-error"
+                            }`}
+                            //   className={`input-field ${error && "input-error"}`}
+                            id="outlined-basic"
+                            placeholder="Enter description"
+                            helperText={
+                              error ? myHelper.description[error.type] : " "
+                            }
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
+                {/* <div className="table-blk"> */}
+                <Box
+                  sx={{ width: "100%" }}
+                  className="table-blk table-blk-role"
+                >
+                  <Paper sx={{ width: "100%" }}>
+                    <TableContainer>
+                      <Table sx={{ minWidth: 750 }}>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell
+                              align="left"
+                              className="tableHeader"
+                              width="16%"
+                            >
+                              Modules
+                            </TableCell>
+                            <TableCell className="tableHeader">List</TableCell>
+                            <TableCell align="center" className="tableHeader">
+                              Add
+                            </TableCell>
+                            <TableCell align="center" className="tableHeader">
+                              Edit
+                            </TableCell>
+                            <TableCell align="center" className="tableHeader">
+                              View
+                            </TableCell>
+                            <TableCell align="center" className="tableHeader">
+                              Delete
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              className="tableHeader"
+                              width="16%"
+                            >
+                              Assign to Member
+                            </TableCell>
+                            <TableCell align="center" className="tableHeader">
+                              All
+                            </TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {Object.keys(previleges).map((previleg, id) => {
+                            return (
+                              <TableRow key={previleg} hover>
+                                <TableCell>
+                                  {previleges[previleg]["name"]}
+                                </TableCell>
+                                <TableCell align="center" padding="checkbox">
+                                  <Checkbox
+                                    className="table-checkbox"
+                                    checked={previleges[previleg]["list"]}
+                                    onChange={() =>
+                                      setPrevileges((previous) => ({
+                                        ...previous,
+                                        [previleg]: {
+                                          ...previous[previleg],
+                                          list: !previous[previleg]["list"],
+                                          all: false,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </TableCell>
+                                <TableCell align="center" padding="checkbox">
+                                  <Checkbox
+                                    className="table-checkbox"
+                                    checked={previleges[previleg]["add"]}
+                                    onChange={() =>
+                                      setPrevileges((previous) => ({
+                                        ...previous,
+                                        [previleg]: {
+                                          ...previous[previleg],
+                                          add: !previous[previleg]["add"],
+                                          all: false,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </TableCell>
+                                <TableCell align="center" padding="checkbox">
+                                  <Checkbox
+                                    className="table-checkbox"
+                                    checked={previleges[previleg]["edit"]}
+                                    onChange={() =>
+                                      setPrevileges((previous) => ({
+                                        ...previous,
+                                        [previleg]: {
+                                          ...previous[previleg],
+                                          edit: !previous[previleg]["edit"],
+                                          all: false,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </TableCell>
+                                <TableCell align="center" padding="checkbox">
+                                  <Checkbox
+                                    className="table-checkbox"
+                                    checked={previleges[previleg]["view"]}
+                                    onChange={() =>
+                                      setPrevileges((previous) => ({
+                                        ...previous,
+                                        [previleg]: {
+                                          ...previous[previleg],
+                                          view: !previous[previleg]["view"],
+                                          all: false,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </TableCell>
+                                <TableCell align="center" padding="checkbox">
+                                  <Checkbox
+                                    className="table-checkbox"
+                                    checked={previleges[previleg]["delete"]}
+                                    onChange={() =>
+                                      setPrevileges((previous) => ({
+                                        ...previous,
+                                        [previleg]: {
+                                          ...previous[previleg],
+                                          delete: !previous[previleg]["delete"],
+                                          all: false,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </TableCell>
+                                <TableCell align="center" padding="checkbox">
+                                  <Checkbox
+                                    className="table-checkbox"
+                                    checked={previleges[previleg]["assign"]}
+                                    onChange={() =>
+                                      setPrevileges((previous) => ({
+                                        ...previous,
+                                        [previleg]: {
+                                          ...previous[previleg],
+                                          assign: !previous[previleg]["assign"],
+                                          all: false,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </TableCell>
+                                <TableCell align="center" padding="checkbox">
+                                  <Checkbox
+                                    className="table-checkbox"
+                                    checked={previleges[previleg]["all"]}
+                                    onChange={() =>
+                                      setPrevileges((previous) => ({
+                                        ...previous,
+                                        [previleg]: {
+                                          ...previous[previleg],
+                                          all: !previous[previleg]["all"],
+                                          list: !previous[previleg]["all"],
+                                          view: !previous[previleg]["all"],
+                                          add: !previous[previleg]["all"],
+                                          edit: !previous[previleg]["all"],
+                                          delete: !previous[previleg]["all"],
+                                          assign: !previous[previleg]["all"],
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Paper>
+                </Box>
+                {/* </div> */}
+                <div className="form-btn flex-between add-members-btn">
+                  <button
+                    type="reset"
+                    style={{ marginTop: "30px" }}
+                    className="secondary-button mr-10"
+                    onClick={onClickCancelHandler}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="primary-button"
+                    style={{ marginTop: "30px" }}
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default EditRole;

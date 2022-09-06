@@ -1,10 +1,12 @@
 import React from "react";
+import PropTypes from 'prop-types'
 import { Backdrop, Box, Modal, Fade } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const DialogBox = ({
   title,
-  info,
+  info1,
+  info2,
   primaryButtonText,
   secondaryButtonText,
   onPrimaryModalButtonClickHandler,
@@ -56,7 +58,7 @@ const DialogBox = ({
         <Box sx={style} className="popup-box">
           <div id="transition-modal-title" className="popup-ttl-blk">
             <h2 className="popup-ttl heading2">
-              {title.length >= 50 ? `${title.slice(0, 50)}...` : title}
+              {title}
             </h2>
             <span className="popup-close-icon" onClick={handleClose}>
               <CloseIcon />
@@ -64,7 +66,8 @@ const DialogBox = ({
           </div>
           <div id="transition-modal-description" className="popup-body">
             <div className="popup-content-blk text-center">
-              <p>{info.length >= 150 ? `${info.slice(0, 150)}...` : info}</p>
+              {info2 && <p>{info1}</p>}
+              {info2 && <p>{info2}</p>}
               <div className="form-btn flex-center">
                 <button
                   type="submit"
@@ -90,3 +93,17 @@ const DialogBox = ({
 };
 
 export default DialogBox;
+
+
+DialogBox.propTypes = {
+  title : PropTypes.string,
+  info1: PropTypes.string,
+  info2: PropTypes.string,
+  primaryButtonText: PropTypes.string,
+  secondaryButtonText: PropTypes.string,
+  onPrimaryModalButtonClickHandler: PropTypes.func,
+  onSecondaryModalButtonClickHandler: PropTypes.func,
+  openModal:PropTypes.bool,
+  setOpenModal:PropTypes.func,
+};
+ 

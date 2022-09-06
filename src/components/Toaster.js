@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
@@ -16,7 +17,6 @@ function Toaster({ titleMessage, descriptionMessage, messageType, myRef }) {
       progress: undefined,
     });
   };
-  console.log("messageType", messageType);
   const customMsg = () => (
     <div
       className={`toaster-blk flex-start ${
@@ -35,24 +35,22 @@ function Toaster({ titleMessage, descriptionMessage, messageType, myRef }) {
         </div>
       </div>
       <div className="toaster-right">
-          <div
-            className={`toaster-ttl ${
-              messageType === "success" && "toaster-ttl-success"
-            }`}
-          >
-            {titleMessage.length >= 30
-              ? `${titleMessage.slice(0, 30)}...`
-              : titleMessage}
-          </div>
-        <p>
-          {descriptionMessage.length >= 50
-            ? `${descriptionMessage.slice(0, 50)}...`
-            : descriptionMessage}
-        </p>
+        <div
+          className={`toaster-ttl ${
+            messageType === "success" && "toaster-ttl-success"
+          }`}
+        >
+          {titleMessage.length >= 30
+            ? `${titleMessage.slice(0, 30)}...`
+            : titleMessage}
+        </div>
+        <p>{descriptionMessage}</p>
       </div>
     </div>
   );
-  myRef.current = showToasts;
+  useEffect(() => {
+    myRef.current = showToasts;
+  }, [showToasts, myRef]);
   return (
     <div className="toaster-sect">
       <button style={{ display: "none" }}>Show Toast !</button>
@@ -66,3 +64,10 @@ function Toaster({ titleMessage, descriptionMessage, messageType, myRef }) {
 }
 
 export default Toaster;
+
+Toaster.propTypes = {
+  titleMessage: PropTypes.string.isRequired,
+  descriptionMessage: PropTypes.string.isRequired,
+  messageType: PropTypes.string.isRequired,
+  myRef: PropTypes.object.isRequired,
+};

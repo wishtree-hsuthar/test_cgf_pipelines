@@ -1,5 +1,5 @@
 import React from "react";
-import Toaster from "./Toasters";
+import Toaster from "./Toaster";
 
 const ToasterTester = () => {
   const myRef = React.useRef({});

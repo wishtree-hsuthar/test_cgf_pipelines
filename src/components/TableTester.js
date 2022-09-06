@@ -31,7 +31,7 @@ const tableHead = [
   {
     id: "action",
     disablePadding: false,
-    label: " ",
+    label: "Action",
   }
 ];
 //Array of Object (idealy we will get this data from backend)
@@ -209,7 +209,7 @@ const rows = [
 ];
 const TableTester = () => {
   const [page, setPage] = React.useState(1);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   
   //array to get array of selected rows ids
   const [selected, setSelected] = React.useState([]);
@@ -248,9 +248,7 @@ tempRows.forEach(object => {
   delete object['updatedAt']
 })
 console.log("page: ",page,"rows Per Page: ",rowsPerPage,"order: ",order,"order By: ",orderBy)
-useEffect(()=>{
- 
-},[])
+
   return (
     <div>
       <TableComponent
@@ -262,7 +260,7 @@ useEffect(()=>{
         rowsPerPage={rowsPerPage}
         totalRecords = {rows.length}
         orderBy={orderBy}
-        icons = {["visibility","delete"]}
+        icons = {["visibility"]}
         onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
         onClickDeleteIconHandler1={onClickDeleteIconHandler}
         order={order}
@@ -270,6 +268,7 @@ useEffect(()=>{
         setOrderBy={setOrderBy}
         selected={selected}
         setSelected={setSelected}
+
       />
     </div>
   );
