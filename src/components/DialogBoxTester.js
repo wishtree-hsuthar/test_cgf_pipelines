@@ -23,7 +23,8 @@ const DialogBoxTester = () => {
     <div>
       <DialogBox
         title='Replace Member "KitKat" with Dairy milk lorem bisnoi way of doing it!'
-        info="On replacing a member, all the statistics and record would get transfer to the new member. Are you sure you want to replace KitKat? On replacing a member, all the statistics and record would get transfer to the new member. Are you sure you want to replace KitKat? On replacing a member, all the statistics and record would get transfer to the new member. Are you sure you want to replace KitKat?"
+        info1="On replacing a member, all the statistics and record would get transfer to the new member, on replacing a member, all the statistics and record would get transfer to the new member."
+        info2="Are you sure you want to replace KitKat?"
         primaryButtonText="Yes"
         secondaryButtonText="No"
         onPrimaryModalButtonClickHandler={onPrimaryButtonClickHandler}

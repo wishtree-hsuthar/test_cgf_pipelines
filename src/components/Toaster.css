@@ -1,18 +1,22 @@
 
 
 .toaster-left {
-    width: 45px;
+    /* width: 45px; */
     /* background: rgba(69, 150, 209, 1); */
-    height: 89px;
+    padding: 0px 16px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     background-color: #E53850;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
 }
 .toaster-left-success{
-    background-color: rgba(69, 150, 209, 1); ;
+    background-color: rgba(69, 150, 209, 1); 
 }
 
 /* .toaster-left-error{
@@ -20,7 +24,7 @@
 } */
 
 .toaster-right {
-    padding: 14px;
+    padding: 14px 14px 14px 60px;
 }
 .toaster-ttl{font-size: 14px; margin-bottom: 12px;color:#E53850}
 .toaster-ttl-success{color: #4596D1;}
@@ -30,9 +34,10 @@
 .toaster-blk {border: 1px solid #E53850;
     border-radius: 10px;
     box-shadow: -3px 0px 15px rgb(0 0 0 / 1%);
-    background: #fff;flex-wrap: nowrap;padding: 0;width: 312px;
+    background: #fff;
+    padding: 0;width: 312px;
     flex-wrap: nowrap;
-    height: 89px;
+    position: relative;
 }
 .toaster-blk-success{
     border: 1px solid #4596D1;

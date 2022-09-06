@@ -1,20 +1,41 @@
-.table-blk .css-1q1u3t4-MuiTableRow-root{height: 69px;}
+.table-blk .css-1q1u3t4-MuiTableRow-root{height: 58px;}
 .table-blk .css-1q1u3t4-MuiTableRow-root.MuiTableRow-hover:hover {
     background-color: #ABB8C326;
 }
-.table-blk .MuiTableRow-head{height: 54px;background: #4596D11A;white-space: nowrap;padding: 0 10px;}
-.table-header span{font-size: 14px;color: #1E1E1E !important;font-family: 'ProximaNova-Semibold';}
-.table-blk .MuiPaper-root{box-shadow: 0px 3px 6px #00000029 !important;}
-.table-blk .css-177gid-MuiTableCell-root{font-family: 'ProximaNova-Regular';font-size: 14px;}
+.table-blk .MuiTableRow-head{height: 58px;background: #4596D11A;white-space: nowrap;padding: 0 10px;}
+.table-header span{font-size: 14px;color: #1E1E1E !important;font-family: 'ProximaNova-Semibold',serif, sans-serif;}
+.table-blk .MuiPaper-root{box-shadow: 0px 3px 6px #00000029 !important;margin-bottom: 0;}
+.table-blk .css-177gid-MuiTableCell-root{font-family: 'ProximaNova-Regular',serif, sans-serif;font-size: 14px;}
 .table-blk .MuiTableCell-head{padding: 0 !important;text-align: left;}
-.table-blk .MuiTableCell-head:nth-child(2){padding: 0 !important;}
+/* .table-blk .MuiTableCell-head:nth-child(2){padding: 0 !important;} */
 /* .table-blk .MuiCheckbox-root svg{width: 13px;height: 12px;} */
 .table-blk .MuiTableCell-root{padding: 0;border-bottom: none;font-size: 14px;}
-.table-blk .MuiCheckbox-root{padding: 17px 15px;}
+.table-blk .MuiCheckbox-root{padding: 16px;}
 .table-blk .MuiTableRow-root .button-style span{color: #E53850;background: #E5385026;padding: 5px;font-size: 14px;width: 67px;display: inline-block;text-align: center;}
 .button-style-success span{color: #6DB02D !important;background: #6DB02D26 !important;}
 .table-blk .css-1azl6jz-MuiTableCell-root .css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root{flex-direction: initial;}
 .table-blk .css-194a1fa-MuiSelect-select-MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input{min-width: 5px !important;background: transparent !important;}
+
+/* CSS added by Rajkumar */
+.table-blk th{font-family: 'ProximaNova-Semibold',serif, sans-serif;}
+.table-blk td {font-family: 'ProximaNova-Regular',serif, sans-serif;}
+.no-records-blk{padding: 30px; text-align: center;}
+
+.table-blk-without-checkbox .MuiTableCell-head{
+    padding: 0px 16px !important;
+  }
+.table-blk-without-checkbox .MuiTableCell-root{
+    padding: 0px 16px !important;
+}
+  
+
+
+
+
+
+
+
+
 
 .icon svg{font-size: 16px;color: #000000;}
 .icon {
@@ -35,9 +56,20 @@
 }
 .per-page-txt{margin-right: 10px;font-size: 14px;color: #1D1D23;}
 .per-page-select-field fieldset{border: none;}
-.per-page-select-field .MuiSelect-select{background: transparent !important;padding: 0 30px 0 0 !important;font-family: 'ProximaNova-Semibold';}
+.per-page-select-field .MuiSelect-select{background: transparent !important;padding: 0 30px 0 0 !important;font-family: 'ProximaNova-Semibold',serif, sans-serif;}
 .per-page-select-field svg{color: #1D1D23 !important;}
-.table-content-wrap .css-19kzrtu{padding: 30px 0 20px;}
+/* .table-content-wrap .css-19kzrtu{padding: 30px 0 20px;} */
+.table-content-wrap .table-blk {
+    padding: 30px 0;
+}
+/* CSS By Rajkumar */
+/* .table-role-content-wrap .table-blk{padding-bottom: 0;} */
+.table-footer {
+    margin: 0 0 30px;
+}
+.table-role-content-wrap .table-footer{margin-bottom: 0;}
+.table-content-width table th:first-child{width: 30%;}
+
 .table-blk .sorted-blk .MuiSvgIcon-root {
     color: #1E1E1E !important;
     font-size: 18px;
@@ -53,8 +85,27 @@
 /* Pagination CSS */
 
 .pagination-blk .MuiPaginationItem-root.Mui-selected{background: #4596D1;color: #fff;border-color: #4596D1;}
-.pagination-blk .MuiPaginationItem-root{margin: 0;border: 1px solid rgba(30, 30, 30, 0.15);background: #fff;border-radius: 3px !important;font-family: 'ProximaNova-Regular';font-size: 14px;}
+.pagination-blk .MuiPaginationItem-root{margin: 0;border: 1px solid rgba(30, 30, 30, 0.15);background: #fff;border-radius: 3px !important;font-family: 'ProximaNova-Regular', serif,sans-serif;font-size: 14px;}
 .pagination-blk .MuiPaginationItem-previousNext{background: #fff !important;}
 .pagination-blk .MuiPaginationItem-ellipsis{border-radius: 3px;height: 32px;}
 .pagination-blk .MuiPaginationItem-root:hover{background: rgba(30, 30, 30, 0.05);color: #4596D1;border: none;}
 .pagination-blk .Mui-disabled{background: rgba(255,255,255,0) !important;}
+
+
+
+.table-blk-role .MuiTableCell-head{
+    padding: 20px !important;text-align: center;
+  }
+.table-blk-role td{
+    padding: 0px !important;
+
+  }
+  .table-blk-role td:first-child{
+    padding: 0 16px !important;
+  }
+.table-blk-role .MuiTableCell-head:nth-child(2) {
+    padding: 15px !important;
+}
+.table-blk-role .MuiTableCell-head:first-child {
+    text-align: left;
+}
