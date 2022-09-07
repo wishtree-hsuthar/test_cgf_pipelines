@@ -89,7 +89,16 @@ const Header = () => {
                                 <div className="nav-listblk">
                                     <ul className="nav-list flex-between">
                                         <li>
-                                            <a href="/dashboard">Dashboard</a>
+                                            <a
+                                                onClick={() =>
+                                                    navigate("/dashboard")
+                                                }
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+                                                Dashboard
+                                            </a>
                                         </li>
                                         <li>
                                             <a href="/#">Members</a>
@@ -101,7 +110,16 @@ const Header = () => {
                                             <a href="/#">Questionnaires</a>
                                         </li>
                                         <li>
-                                            <a href="/sub-admins">Sub Admins</a>
+                                            <a
+                                                onClick={() =>
+                                                    navigate("/sub-admins")
+                                                }
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+                                                Sub Admins
+                                            </a>
                                         </li>
                                         <li>
                                             <a href="/#">

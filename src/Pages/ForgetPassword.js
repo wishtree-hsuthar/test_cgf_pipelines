@@ -20,8 +20,12 @@ const ForgetPassword = () => {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm({
         resolver: yupResolver(forgetPasswordSchema),
+        defaultValues: {
+            email: "",
+        },
     });
     useEffect(() => {
         document.body.classList.add("login-page");
@@ -39,23 +43,33 @@ const ForgetPassword = () => {
     };
     const submitEmail = async (data) => {
         try {
-            const { response } = await privateAxios.get(
+            const response = await privateAxios.get(
                 `${FORGET_PASSWORD}${data.email}`
             );
+            console.log("response from forgot password", response);
+
             if (response.status === 200) {
-                toasterRef.current();
                 setMessageType("success");
                 setMessageTitle("Success");
                 setMessageDescription(response?.data?.message);
+                setTimeout(() => {
+                    toasterRef.current();
+                }, 3000);
+                reset();
             }
         } catch (error) {
             if (error?.response?.status === 400) {
+                let errorMsg = error?.response?.data?.error;
+                console.log("error message", errorMsg);
+                console.log("error body", error.response);
                 setMessageType("error");
                 setMessageTitle("Error");
-                setMessageDescription(error?.response?.data?.message);
+
+                setMessageDescription(errorMsg);
                 setTimeout(() => {
                     toasterRef.current();
                 }, 1000);
+                reset();
             }
         }
         console.log(data);

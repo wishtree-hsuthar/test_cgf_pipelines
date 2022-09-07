@@ -34,8 +34,13 @@ const ResetPassword = () => {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm({
         resolver: yupResolver(schema),
+        defaultValues: {
+            newPassword: "",
+            confirmPassword: "",
+        },
     });
     const navigate = useNavigate();
     const toasterRef = useRef();
@@ -108,18 +113,21 @@ const ResetPassword = () => {
     console.log("params", params);
     const submitForm = async (data) => {
         try {
-            const { response } = await axios.post(
+            const response = await axios.post(
                 `${FORGOT_PASSWORD}${params.id}`,
                 {
                     password: data.newPassword,
                     confirmPassword: data.confirmPassword,
                 }
             );
-            if (response?.status == 200) {
+            if (response?.status == 201) {
                 setMessageType("success");
-                setMessageTitle("Password Reset");
+                setMessageTitle("Success");
                 setMessageDescription("Password reset successfull");
-                toasterRef.current();
+                setTimeout(() => {
+                    toasterRef.current();
+                }, 1000);
+                reset();
             }
         } catch (error) {
             console.log("error from reset password submit method", error);
@@ -127,7 +135,10 @@ const ResetPassword = () => {
                 setMessageType("error");
                 setMessageTitle("Password Reset Failure");
                 setMessageDescription("Password reset unsuccessfull");
-                toasterRef.current();
+                reset();
+                setTimeout(() => {
+                    toasterRef.current();
+                }, 1000);
             }
         }
     };
