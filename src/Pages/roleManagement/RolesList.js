@@ -105,7 +105,7 @@ const RolesList = () => {
       delete object["isDeleted"];
       delete object["__v"];
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
-        "en-GB"
+        "en-US"
       );
       keysOrder.forEach((k) => {
         const v = object[k];
