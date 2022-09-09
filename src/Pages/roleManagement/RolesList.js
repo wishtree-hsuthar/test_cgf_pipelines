@@ -55,7 +55,7 @@ const RolesList = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   //state to hold search timeout delay
-  const [searchTimeout, setSearchTimeout] = useState(null);
+  const [searchTimeout, setSearchTimeout] = useState("none");
   //state to hold wheather to make api call or not
   const [makeApiCall, setMakeApiCall] = useState(true);
 
@@ -64,8 +64,10 @@ const RolesList = () => {
   const keysOrder = ["_id", "name", "createdAt", "isActive"];
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
-    status: "all",
+    status: "none",
   });
+  const [showStatusFilterPlaceholder, setShowStatusFilterPlaceholder] =
+    useState(filters.status === "none");
   const onFilterChangeHandler = (e) => {
     console.log("value: ", e.target.value);
     // console.log("type of time out func",typeof(timoutFunc))
@@ -131,9 +133,13 @@ const RolesList = () => {
     let url = `${backendBase}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
     if (search?.length >= 3)
       url = `${backendBase}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
-    if (filters?.status !== "all")
+    if (filters?.status !== "none" && filters?.status !== "all")
       url = `${backendBase}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&status=${filters.status}`;
-    if (search?.length >= 3 && filters?.status !== "all")
+    if (
+      search?.length >= 3 &&
+      filters?.status !== "none" &&
+      filters?.status !== "all"
+    )
       url = `${backendBase}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}&status=${filters.status}`;
     return url;
   };
@@ -147,13 +153,11 @@ const RolesList = () => {
       const response = await axios.get(url, {
         signal: controller.signal,
       });
-      // console.log(response.headers["x-total-count"]);
       setTotalRecords(parseInt(response.headers["x-total-count"]));
       updateRecords(response.data);
       setIsLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      // console.log(toasterDetails);
       isMounted &&
         setToasterDetails(
           {
@@ -185,7 +189,6 @@ const RolesList = () => {
   }, [page, rowsPerPage, orderBy, order, filters, makeApiCall]);
   {
     console.log("makeApiCall outside UseEffect ", makeApiCall);
-    // console.log("order", order, "order BY", orderBy);
   }
   return (
     <div className="page-wrapper">
@@ -235,10 +238,26 @@ const RolesList = () => {
                   <div className="filter-select-field">
                     <div className="dropdown-field">
                       <Select
+                        displayEmpty
                         name="status"
                         value={filters.status}
                         onChange={onFilterChangeHandler}
+                        onFocus={(e) => setShowStatusFilterPlaceholder(false)}
+                        onClose={(e) =>
+                          setShowStatusFilterPlaceholder(
+                            e.target.value === undefined
+                          )
+                        }
                       >
+                        <MenuItem
+                          value="none"
+                          disabled
+                          sx={{
+                            display: !showStatusFilterPlaceholder && "none",
+                          }}
+                        >
+                          Status
+                        </MenuItem>
                         <MenuItem value="active">active</MenuItem>
                         <MenuItem value="inactive">inactive</MenuItem>
                         <MenuItem value="all">All</MenuItem>
