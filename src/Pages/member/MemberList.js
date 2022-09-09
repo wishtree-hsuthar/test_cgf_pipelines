@@ -1,18 +1,11 @@
 import { Box, MenuItem, Select, Tab, Tabs } from '@mui/material'
 import DownloadIcon from '@mui/icons-material/Download';
 import PropTypes from "prop-types";
-import React from 'react'
+import React, { useState } from 'react'
 import TableTester from '../../components/TableTester';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-    const [filters, setFilters] = useState({
-        memberCompany : "none",
-        companyType : "none",
-        createdBy : "none",
-        status: "none"
-    })
-
     return (
         <div
             role="tabpanel"
@@ -45,7 +38,18 @@ function a11yProps(index) {
 
 const MemberList = () => {
     const [value, setValue] = React.useState(0);
-
+    const [filters, setFilters] = useState({
+        memberCompany : "none",
+        companyType : "none",
+        createdBy : "none",
+        status: "none"
+    })
+    const [showFiltersPlaceholder, setShowFiltersPlaceholder] = useState({
+        memberCompany : filters.memberCompany === "none",
+        companyType : filters.companyType === "none",
+        createdBy : filters.createdBy === "none",
+        status : filters.status === "none",
+    })
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -86,9 +90,11 @@ const MemberList = () => {
                                 <div className="filter-select-wrap flex-between">
                                     <div className="filter-select-field">
                                         <div className='dropdown-field'>
-                                            <Select displayEmpty value="Member Company" placeholder='Member Company'>
-                                                {/* <MenuItem value="Member Company">Member Company</MenuItem> */}
-                                                <MenuItem value="External">External</MenuItem>
+                                            <Select displayEmpty value={filters.memberCompany}>
+                                                <MenuItem value="none">Member Company</MenuItem>
+                                                <MenuItem value="iom3">IOM</MenuItem>
+                                                <MenuItem value="iom2">IOM</MenuItem>
+                                                <MenuItem value="iom1">IOM</MenuItem>
                                             </Select>
                                         </div>
                                     </div>
