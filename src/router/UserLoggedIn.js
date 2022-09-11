@@ -8,24 +8,24 @@ import { privateAxios } from "../api/axios";
 const UserLoggedIn = ({ children }) => {
     const authUser = useSelector((state) => state.user.userObj);
     const navigate = useNavigate();
-    console.log("auth user from check user -----------", authUser);
+    // console.log("auth user from check user -----------", authUser);
 
     const dispatch = useDispatch();
 
     const fetchUser = async () => {
         try {
             const { data } = await privateAxios.get(GET_USER);
-            console.log("data from app fetcuser method", data);
+            // console.log("data from app fetcuser method", data);
             dispatch(setUser(data));
         } catch (error) {
-            console.log("Error from app file useEffect", error);
+            // console.log("Error from app file useEffect", error);
             navigate("/login");
         }
     };
 
-    console.log("after useEFFECT", authUser);
+    // console.log("after useEFFECT", authUser);
 
-    console.log("authuser from checkuser======", authUser);
+    // console.log("authuser from checkuser======", authUser);
     if (authUser == undefined) {
         fetchUser();
     } else {
