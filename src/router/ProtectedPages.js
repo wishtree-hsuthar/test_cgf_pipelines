@@ -13,6 +13,7 @@ import AddRole from "../Pages/roleManagement/AddRole";
 import EditRole from "../Pages/roleManagement/EditRole";
 import ViewRole from "../Pages/roleManagement/ViewRole";
 import MemberList from "../Pages/member/MemberList";
+import AddMember from "../Pages/member/AddMember"
 const ProtectedPages = () => {
     return (
         <Routes>
@@ -53,7 +54,8 @@ const ProtectedPages = () => {
             <Route path="roles/edit-role/:id" element={<EditRole />} />
 
             {/* Member Pages */}
-            <Route path="/member" element={<MemberList/>}></Route>
+            <Route path="/members" element={<MemberList/>}></Route>
+            <Route path="/members/add-member" element={<AddMember/>}></Route>
 
 
             {/* </Route> */}

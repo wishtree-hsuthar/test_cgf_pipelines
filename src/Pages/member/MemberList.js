@@ -3,6 +3,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import TableTester from "../../components/TableTester";
+import {useNavigate} from 'react-router-dom'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,6 +47,7 @@ const memberCompanies = [
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
 const MemberList = () => {
+  const navigate = useNavigate()
   //state to hold which tab to show
   const [value, setValue] = React.useState(0);
 
@@ -165,7 +167,7 @@ const MemberList = () => {
                 Download
               </div>
               <div className="form-btn">
-                <button type="submit" className="primary-button add-button">
+                <button type="submit" className="primary-button add-button" onClick={() => navigate('/members/add-member')}>
                   Add Member
                 </button>
               </div>

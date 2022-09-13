@@ -563,7 +563,19 @@ ul.breadcrumb li a:hover {
 .loader-blk img {
     width: 100%;
 }
-
+.select-reusable{
+    width: 100%;
+}
+.sub-heading1{
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+    margin: 0;
+    font-size: 16px;
+    line-height: 16px;
+    margin-bottom: 30px;
+}
+.card-inner-wrap{
+    margin-bottom: 30px;
+}
 .Mui-focused .MuiOutlinedInput-notchedOutline {
     border-color: #4596d1 !important;
 }
