@@ -7,3 +7,4 @@ export const FORGOT_PASSWORD = `${REACT_APP_API_ENDPOINT}auth/forgot/`;
 export const FORGOT_PASSWORD_VERIFY_TOKEN = `${REACT_APP_API_ENDPOINT}auth/verify/forgot/`;
 export const CONFIRM_PASSWORD = `${REACT_APP_API_ENDPOINT}auth/confirm/`;
 export const RESET_PASSWORD = `${REACT_APP_API_ENDPOINT}auth/reset/`;
+export const REGIONS = `${REACT_APP_API_ENDPOINT}countries/regions`

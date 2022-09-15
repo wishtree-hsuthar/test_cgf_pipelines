@@ -6,7 +6,7 @@ import {
   Select,
 } from "@mui/material";
 import { useController } from "react-hook-form";
-function Dropdown({ control, name, myHelper, placeholder, rules, options }) {
+function Dropdown({ control, name, myOnChange, myHelper, placeholder, rules, options,isDisabled }) {
   const {
     field: { value, onChange, ref },
     fieldState: { error },
@@ -17,14 +17,15 @@ function Dropdown({ control, name, myHelper, placeholder, rules, options }) {
     defaultValue: "",
   });
   const [showPlaceholder, setShowPlaceholder] = useState(true);
+  // console.log("options",options)
   return (
-    <FormControl className="select-reusable">
+    <FormControl className="select-reusable" disabled={isDisabled}>
        <div className="select-field">
        <Select
         displayEmpty
         value={value}
         placeholder={placeholder}
-        onChange={onChange} // send value to hook form
+        onChange={myOnChange ? myOnChange : onChange} // send value to hook form
         onFocus={(e) => setShowPlaceholder(false)}
         inputRef={ref}
       >
@@ -45,7 +46,7 @@ function Dropdown({ control, name, myHelper, placeholder, rules, options }) {
       </Select>
        </div>
       <FormHelperText>
-        {console.log("error: ", error)}
+        {/* {console.log("error: ", error)} */}
         {error ? myHelper ? myHelper[name] ? myHelper[name][error.type] ? myHelper[name][error.type] : "Invalid Input" : "Invalid Input" : "Invalid Input": " "}
       </FormHelperText>
     </FormControl>

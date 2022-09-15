@@ -1,22 +1,43 @@
 import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
+import { REGIONS } from "../../api/Url";
+import axios from "axios";
+import { useState } from "react";
+
+//CGF Categories (Ideally get from backend)
+const cgfCategories = ["Manufacturer", "Retailer", "Other"];
+
+//Suggestion from het implement it later
+// const categories = {
+//   "Manufacture": ["Activity 1", "Activity 2"],
+//   "Retauiler": []
+// }
+
+// Object.keys(categories)
+// categories[category] = Array of activities[]
+const cgfActivitiesManufacturer = [
+  "None",
+  "Apparel",
+  "Food Manufacturer",
+  "Personal care & beauty",
+];
+const cgfActivitiesRetailer = [
+  "Department Store",
+  "Ecommerce",
+  "Food/Non food retailer",
+  "food retailer",
+  "food service",
+  "Grocery",
+  "Health/beaty drugstore",
+  "Non food retailer",
+  "Wholesaler",
+];
 
 const myHelper = {
-  roleName: {
-    required: "Enter the role name",
-    maxLength: "Max char limit exceed",
-    minLength: "Role must contain atleast 3 characters",
-    pattern: "Invalid format",
-  },
-  description: {
-    required: "Enter the description",
-    maxLength: "Max char limit exceed",
-    minLength: "Description must contain atlest 3 characters",
-  },
   memberCompany: {
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
@@ -25,6 +46,10 @@ const myHelper = {
   parentCompany: {
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
+    pattern: "Invalid Input",
+  },
+  cgfActivity: {
+    required: "Select Activity",
   },
   corporateEmail: {
     required: "Enter Email",
@@ -32,11 +57,12 @@ const myHelper = {
     minLength: "Input must contain atleast 3 characters",
     pattern: "Invalid Input",
   },
-  countryCode: {},
+  // countryCode: {},
   phoneNumber: {
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
     pattern: "Invalid Input",
+    validate: "Invalid Input"
   },
   websiteUrl: {
     maxLength: "Max char limit exceed",
@@ -56,50 +82,51 @@ const myHelper = {
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 charcters",
   },
-  address:{
+  address: {
     required: "Enter the address",
     maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters"
+    minLength: "Input must contain atleast 3 characters",
   },
-  cgfOfficeRegion:{
-    required: "Select the Region"
+  cgfOfficeRegion: {
+    required: "Select the Region",
   },
-  cgfOfficeCountry:{
-    required: "Select the Country"
+  cgfOfficeCountry: {
+    required: "Select the Country",
   },
-  cgfOffice:{
-    required : "Select the office"
+  cgfOffice: {
+    required: "Select the office",
   },
-  memberContactSalutation:{
-    required: "Select the Salutation"
+  memberContactSalutation: {
+    required: "Select the Salutation",
   },
-  memberContactFullName:{
+  memberContactFullName: {
     required: "Enter the name",
     minLength: "Input must contain atleast 3 charcters",
     maxLength: "Max char limit exceed",
-    pattern: "Invalid Input"
-
+    pattern: "Invalid Input",
   },
-  title:{
+  title: {
     minLength: "Input must contain atleast 3 charcters",
     maxLength: "Max char limit exceed",
-    pattern: "Invalid Input"
+    pattern: "Invalid Input",
   },
-  department:{
+  department: {
     minLength: "Input must contain atleast 3 charcters",
     maxLength: "Max char limit exceed",
-    pattern: "Invalid Input"
+    pattern: "Invalid Input",
   },
-  memberContactEmail:{
+  memberContactEmail: {
     required: true,
     minLength: "Input must contain atleast 3 charcters",
     maxLength: "Max char limit exceed",
+    validate: "Invalid Input"
   },
-  memberContactCountryCode:{},
+  memberContactCountryCode: {},
   memberContactPhoneNuber: {
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
     pattern: "Invalid Input",
+    validate: "Invalid Input"
   },
 };
 const AddMember = () => {
@@ -108,11 +135,12 @@ const AddMember = () => {
     companyType: "internal",
     parentCompany: "",
     cgfCategory: "Manufacturer",
-    cgfActivity: "None",
+    cgfActivity: "",
+    corporateEmail: "",
     countryCode: "+91",
     phoneNumber: "",
     websiteUrl: "",
-    region: "Africa",
+    region: "",
     country: "",
     state: "",
     city: "",
@@ -122,17 +150,64 @@ const AddMember = () => {
     memberContactSalutation: "Mr.",
     memberContactFullName: "",
     title: "",
-    member: "",
+    department: "",
     memberContactCountryCode: "+91",
     memberContactEmail: "",
-    memberContactPhoneNuber: ""
+    memberContactPhoneNuber: "",
   };
-  const { control, reset, setValue, handleSubmit } = useForm({
+  const [arrOfRegions, setArrOfRegions] = useState([]);
+  const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
+  const { control, reset, setValue, watch, handleSubmit } = useForm({
     defaultValues: defaultValues,
   });
   const onSubmit = (data) => {
     console.log("data", data);
   };
+  const updateRegionCountries = (regionCountries) => {
+    console.log("region countries must fire on change ",regionCountries);
+    const arrOfCountryRegionsTemp = JSON.parse(
+      JSON.stringify(arrOfCountryRegions)
+    );
+    regionCountries.data.forEach(
+      (country, id) => (arrOfCountryRegionsTemp[id] = country.name)
+    );
+    console.log("arr of country ", arrOfCountryRegionsTemp);
+    setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
+  };
+  //method to set region and update other fields accordingly
+  const onRegionChangeHandler = async (e) => {
+    console.log("region: ", e.target.value);
+    setValue("region", e.target.value);
+    const regionCountries = await axios.get(REGIONS + `/${watch("region")}`);
+    updateRegionCountries(regionCountries);
+    console.log("Response for countries", regionCountries.data);
+    // console.log("regions: ", regions.data);
+  };
+
+  const getMasterData = async (isMounted, controller) => {
+    const regions = await axios.get(REGIONS, { signal: controller.signal });
+    setArrOfRegions(regions.data);
+    console.log("region values ", watch("region"));
+    if (watch("region")) {
+      console.log("inside watch function");
+      const regionCountries = await axios.get(REGIONS + `/${watch("region")}`);
+      updateRegionCountries(regionCountries);
+      console.log("Response for countries", regionCountries.data);
+      console.log("regions: ", regions.data);
+      // setArrOfCountryRegions(regionCountries.data.name)
+    }
+  };
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    getMasterData(isMounted, controller);
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [watch]);
+  console.log("Region", watch("region"));
   return (
     <div className="page-wrapper">
       <div className="breadcrumb-wrapper">
@@ -174,7 +249,7 @@ const AddMember = () => {
                         placeholder="Enter member company"
                         myHelper={myHelper}
                         rules={{
-                          required: "true",
+                          required: true,
                           maxLength: 50,
                           minLength: 3,
                         }}
@@ -225,6 +300,7 @@ const AddMember = () => {
                         rules={{
                           minLength: 3,
                           maxLength: 50,
+                          pattern: /^[A-Za-z]+[A-Za-z ]*$/,
                         }}
                       />
                     </div>
@@ -239,7 +315,7 @@ const AddMember = () => {
                         control={control}
                         name="cgfCategory"
                         placeholder="Select category"
-                        options={["Manufacturer", "Retailer", "Other"]}
+                        options={cgfCategories}
                       />
                     </div>
                     {/* </div> */}
@@ -254,7 +330,14 @@ const AddMember = () => {
                         control={control}
                         name="cgfActivity"
                         placeholder="Select activity"
-                        options={["None", "Apparel", "Food Manucaturer"]}
+                        myHelper={myHelper}
+                        rules={{ required: true }}
+                        options={
+                          watch("cgfCategory") === "Manufacturer"
+                            ? cgfActivitiesManufacturer
+                            : cgfActivitiesRetailer
+                        }
+                        isDisabled={watch("cgfCategory") === "Other"}
                       />
                     </div>
                     {/* </div> */}
@@ -278,6 +361,8 @@ const AddMember = () => {
                           required: "true",
                           maxLength: 50,
                           minLength: 3,
+                          pattern:
+                            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                         }}
                       />
                     </div>
@@ -293,12 +378,13 @@ const AddMember = () => {
                       />
                       <Input
                         control={control}
-                        name="phoneNuber"
+                        name="phoneNumber"
                         placeholder="Enter phone number"
                         myHelper={myHelper}
                         rules={{
                           maxLength: 15,
                           minLength: 3,
+                          validate : (value) => {if(value && !Number(value)) return "Invalid Input"},
                         }}
                       />
                     </div>
@@ -314,6 +400,7 @@ const AddMember = () => {
                         rules={{
                           maxLength: 50,
                           minLength: 3,
+                          pattern: /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
                         }}
                       />
                     </div>
@@ -330,17 +417,12 @@ const AddMember = () => {
                       </label>
                       <Dropdown
                         control={control}
+                        myOnChange={onRegionChangeHandler}
                         name="region"
                         placeholder="Select region"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={[
-                          "Asia",
-                          "Europe",
-                          "Africa",
-                          "Middle East",
-                          "Madacascar",
-                        ]}
+                        options={arrOfRegions ? arrOfRegions : []}
                       />
                     </div>
                   </div>
@@ -350,19 +432,13 @@ const AddMember = () => {
                         Conuntry <span className="mandatory">*</span>
                       </label>
                       <Dropdown
+                        isDisabled={!watch("region")}
                         control={control}
                         name="country"
                         placeholder="Select country"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={[
-                          "India",
-                          "USA",
-                          "Britan",
-                          "Australia",
-                          "Israel",
-                          "Japan",
-                        ]}
+                        options={arrOfCountryRegions ? arrOfCountryRegions : []}
                       />
                     </div>
                   </div>
@@ -372,6 +448,7 @@ const AddMember = () => {
                         State <span className="mandatory">*</span>
                       </label>
                       <Dropdown
+                        isDisabled={!watch("country")}
                         control={control}
                         name="state"
                         placeholder="Enter state"
@@ -405,7 +482,7 @@ const AddMember = () => {
                         rules={{
                           required: true,
                           minLength: 3,
-                          maxLength: 250
+                          maxLength: 250,
                         }}
                         render={({ field, fieldState: { error } }) => (
                           <TextField
@@ -445,7 +522,7 @@ const AddMember = () => {
                         name="cgfOfficeRegion"
                         placeholder="Select Region"
                         myHelper={myHelper}
-                        rules={{required : true}}
+                        rules={{ required: true }}
                         options={["Asia", "Africa", "Europe"]}
                       />
                     </div>
@@ -460,7 +537,7 @@ const AddMember = () => {
                         name="cgfOfficeCountry"
                         placeholder="Select country"
                         myHelper={myHelper}
-                        rules={{required :true}}
+                        rules={{ required: true }}
                         options={["Canda", "USA", "India"]}
                       />
                     </div>
@@ -475,7 +552,7 @@ const AddMember = () => {
                         name="cgfOffice"
                         placeholder="Select office"
                         myHelper={myHelper}
-                        rules={{required : true}}
+                        rules={{ required: true }}
                         options={["Mumbai", "Delhi", "Vadodara"]}
                       />
                     </div>
@@ -495,7 +572,7 @@ const AddMember = () => {
                         name="memberContactSalutation"
                         placeholder="Mr."
                         myHelper={myHelper}
-                        rules={{required: true}}
+                        rules={{ required: true }}
                         options={["Mr.", "Mrs.", "Ms."]}
                       />
                       <label htmlFor="memberContactFullName">
@@ -504,7 +581,12 @@ const AddMember = () => {
                       <Input
                         control={control}
                         myHelper={myHelper}
-                        rules={{required: true, maxLength: 50, minLength: 3, pattern:  /^[A-Za-z]+[A-Za-z ]*$/}}
+                        rules={{
+                          required: true,
+                          maxLength: 50,
+                          minLength: 3,
+                          pattern: /^[A-Za-z]+[A-Za-z ]*$/,
+                        }}
                         name="memberContactFullName"
                         placeholder="Enter full name"
                       />
@@ -516,7 +598,7 @@ const AddMember = () => {
                       <Input
                         control={control}
                         myHelper={myHelper}
-                        rules={{maxLength:50,minLength:3}}
+                        rules={{ maxLength: 50, minLength: 3 }}
                         name="title"
                         placeholder="Enter title"
                       />
@@ -528,7 +610,7 @@ const AddMember = () => {
                       <Input
                         control={control}
                         myHelper={myHelper}
-                        rules={{maxLength: 50,minLength:3}}
+                        rules={{ maxLength: 50, minLength: 3 }}
                         name="department"
                         placeholder="Enter department"
                       />
@@ -542,7 +624,7 @@ const AddMember = () => {
                       <Input
                         control={control}
                         myHelper={myHelper}
-                        rules={{required: true, maxLength: 50,minLength:3}}
+                        rules={{ required: true, maxLength: 50, minLength: 3, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ }}
                         name="memberContactEmail"
                         placeholder="Enter email"
                       />
@@ -566,6 +648,7 @@ const AddMember = () => {
                         rules={{
                           maxLength: 15,
                           minLength: 3,
+                          validate : (value) => {if(value && !Number(value)) return "Invalid Input"},
                         }}
                         placeholder="Enter phone number"
                       />

@@ -11,7 +11,7 @@ const Input = ({control, name,myHelper,placeholder,rules,onBlur,multiline}) => {
         rules: rules,
         defaultValue: ""
     })
-    console.log("error on text inputs: ",rules)
+    // console.log("error on text inputs: ",myHelper)
   return (
     <TextField
       className={`input-field ${error && 'input-error'}`}
