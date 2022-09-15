@@ -113,9 +113,9 @@ const EditRole = () => {
         {
           titleMessage: "Error",
           descriptionMessage:
-            error?.response?.data?.error &&
-            typeof error.response.data.error === "string"
-              ? error.response.data.error
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
               : "Something Went Wrong!",
           messageType: "error",
         },
@@ -177,9 +177,9 @@ const EditRole = () => {
           {
             titleMessage: "Error",
             descriptionMessage:
-              error?.response?.data?.error &&
-              typeof error.response.data.error === "string"
-                ? error.response.data.error
+              error?.response?.data?.message &&
+              typeof error.response.data.message === "string"
+                ? error.response.data.message
                 : "Something Went Wrong!",
             messageType: "error",
           },
