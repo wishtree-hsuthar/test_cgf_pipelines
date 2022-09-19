@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-// import "./Header.css"
 import {
     AppBar,
     Box,
@@ -10,42 +9,41 @@ import {
     MenuItem,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUser, setUser } from "../redux/UserSlice";
-import { GET_USER } from "../api/Url";
+import { GET_USER, LOGOUT_URL } from "../api/Url";
 import axios from "axios";
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { privateAxios } from "../api/axios";
 const Header = () => {
     // const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [isActive, setActive] = React.useState("false");
     const userAuth = useSelector((state) => state.user.userObj);
-    // const handleOpenNavMenu = (event) => {
-    //   setAnchorElNav(event.currentTarget);
-    // };
+    const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
+    const MEMBER_ACCESS = userAuth?.roleId?.name == "Member";
+    const OPERATION_MEMBER = userAuth?.roleId?.name == "Operation Member";
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
+    console.log("location in header", location.pathname);
     useEffect(() => {
-        const controller = new AbortController();
-
-        const fetchUser = async () => {
-            try {
-                const { data } = await axios.get(GET_USER);
-                dispatch(setUser(data));
-            } catch (error) {
-                console.log("Error from header file useEffect", error);
-                navigate("/login");
-            }
-        };
-
-        fetchUser();
-
-        //clean up function
-        return () => {
-            controller.abort();
-        };
+        // const controller = new AbortController();
+        // const fetchUser = async () => {
+        //     try {
+        //         const { data } = await axios.get(GET_USER);
+        //         dispatch(setUser(data));
+        //     } catch (error) {
+        //         console.log("Error from header file useEffect", error);
+        //         // navigate("/login");
+        //     }
+        // };
+        // fetchUser();
+        // //clean up function
+        // return () => {
+        //     controller.abort();
+        // };
     }, []);
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -60,11 +58,22 @@ const Header = () => {
         setAnchorElUser(null);
         setActive(!isActive);
     };
-    const handleLogOut = () => {
-        setAnchorElUser(null);
-        setActive(!isActive);
-        dispatch(resetUser());
-        // navigate("/login");
+    const handleLogOut = async () => {
+        try {
+            const response = await privateAxios.post(LOGOUT_URL);
+            console.log("Response from logout");
+            if (response.status == 201) {
+                setAnchorElUser(null);
+                dispatch(resetUser());
+                setActive(!isActive);
+                navigate("/login");
+            }
+        } catch (error) {
+            console.log("Error from logout API", error);
+            if (error?.response?.status === 401) {
+                navigate("/login");
+            }
+        }
     };
     return (
         <AppBar position="static" className="header-sect">
@@ -87,7 +96,14 @@ const Header = () => {
                                 </div>
                                 <div className="nav-listblk">
                                     <ul className="nav-list flex-between">
-                                        <li>
+                                        <li
+                                            className={
+                                                location.pathname ==
+                                                "/dashboard"
+                                                    ? "active"
+                                                    : ""
+                                            }
+                                        >
                                             <a
                                                 onClick={() =>
                                                     navigate("/dashboard")
@@ -99,17 +115,42 @@ const Header = () => {
                                                 Dashboard
                                             </a>
                                         </li>
-                                        <li>
-                                            <a href="/#">Members</a>
+                                        <li
+                                            className={
+                                                location.pathname == "/members"
+                                                    ? "active"
+                                                    : ""
+                                            }
+                                        >
+                                            <a hidden={MEMBER_ACCESS} href="/#">
+                                                Members
+                                            </a>
                                         </li>
                                         <li>
-                                            <a href="/#">Operation Members</a>
+                                            <a
+                                                hidden={OPERATION_MEMBER}
+                                                href="/#"
+                                            >
+                                                Operation Members
+                                            </a>
                                         </li>
                                         <li>
                                             <a href="/#">Questionnaires</a>
                                         </li>
-                                        <li>
+                                        <li
+                                            className={
+                                                location.pathname.includes(
+                                                    "/sub-admins"
+                                                )
+                                                    ? "active"
+                                                    : ""
+                                            }
+                                        >
                                             <a
+                                                hidden={
+                                                    CGF_ADMIN_ACCESS ||
+                                                    MEMBER_ACCESS
+                                                }
                                                 onClick={() =>
                                                     navigate("/sub-admins")
                                                 }
@@ -117,11 +158,21 @@ const Header = () => {
                                                     cursor: "pointer",
                                                 }}
                                             >
-                                                Sub Admins
+                                                CGF Admins
                                             </a>
                                         </li>
-                                        <li>
+                                        <li
+                                            className={
+                                                location.pathname == "/roles"
+                                                    ? "active"
+                                                    : ""
+                                            }
+                                        >
                                             <a
+                                                hidden={
+                                                    CGF_ADMIN_ACCESS ||
+                                                    MEMBER_ACCESS
+                                                }
                                                 onClick={() =>
                                                     navigate("/roles")
                                                 }

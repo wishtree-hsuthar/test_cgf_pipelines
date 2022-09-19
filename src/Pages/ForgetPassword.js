@@ -130,10 +130,12 @@ const ForgetPassword = () => {
                                                 error={
                                                     errors.email ? true : false
                                                 }
+                                                helperText={
+                                                    errors.email
+                                                        ? errors.email.message
+                                                        : ""
+                                                }
                                             />
-                                            <p className={`input-error-msg`}>
-                                                {errors.email?.message}
-                                            </p>
                                         </div>
 
                                         <div class="form-btn flex-between">

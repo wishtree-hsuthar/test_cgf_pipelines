@@ -12,6 +12,8 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
+// import deleteIcon from "../../public/images/delete-icon.svg";
+import Radio from "@mui/material/Radio";
 
 import "./TableComponent.css";
 import { MenuItem, Pagination, Select, Stack, Tooltip } from "@mui/material";
@@ -108,6 +110,9 @@ export default function TableComponent({
     order = "asc",
     setOrder,
     setCheckBoxes = true,
+    setSingleSelect = false,
+    handleSingleUserSelect,
+    selectedUser,
 }) {
     const handleRequestSort = (_event, property) => {
         const isAsc = orderBy === property && order === "asc";
@@ -142,10 +147,16 @@ export default function TableComponent({
         }
         setSelected(newSelected);
     };
+    console.log("selected from multi select", selected);
 
     const handleChangePage = (_event, newPage) => {
         // console.log("page",event.target.value)
         handleChangePage1(newPage);
+    };
+
+    const handleSingleSelect = (id) => {
+        console.log("id in table component for radio click", id);
+        handleSingleUserSelect(id);
     };
 
     const handleChangeRowsPerPage = (event) => {
@@ -231,6 +242,30 @@ export default function TableComponent({
                                                         />
                                                     </TableCell>
                                                 )}
+                                                {setSingleSelect && (
+                                                    <TableCell>
+                                                        <div className="radio-btn-field">
+                                                            <Radio
+                                                                className="radio-btn"
+                                                                color="primary"
+                                                                value={row._id}
+                                                                onChange={() =>
+                                                                    handleSingleSelect(
+                                                                        row._id
+                                                                    )
+                                                                }
+                                                                checked={
+                                                                    selectedUser ==
+                                                                    row._id
+                                                                }
+                                                                inputProps={{
+                                                                    "aria-labelledby":
+                                                                        labelId,
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    </TableCell>
+                                                )}
                                                 {Object.keys(row).map(
                                                     (cell, _id) => {
                                                         // console.log(
@@ -299,40 +334,52 @@ export default function TableComponent({
                                                         }
                                                     }
                                                 )}
-                                                <TableCell
-                                                // width={`${100 / (tableHead ? tableHead.length : 1)}%`}
-                                                >
-                                                    {icons.includes(
-                                                        "visibility"
-                                                    ) && (
-                                                        <span className="icon">
-                                                            <Tooltip title="View">
-                                                                <VisibilityOutlinedIcon
-                                                                    onClick={() =>
-                                                                        onClickVisibilityIconHandler(
-                                                                            row._id
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </Tooltip>
-                                                        </span>
-                                                    )}
-                                                    {icons.includes(
-                                                        "delete"
-                                                    ) && (
-                                                        <span className="icon">
-                                                            <Tooltip title="Delete">
-                                                                <DeleteIcon
-                                                                    onClick={() =>
-                                                                        onClickDeleteIconHandler(
-                                                                            row._id
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </Tooltip>
-                                                        </span>
-                                                    )}
-                                                </TableCell>
+                                                {icons?.length > 0 && (
+                                                    <TableCell
+                                                    // width={`${100 / (tableHead ? tableHead.length : 1)}%`}
+                                                    >
+                                                        {icons.includes(
+                                                            "visibility"
+                                                        ) && (
+                                                            <span className="icon">
+                                                                <Tooltip title="View">
+                                                                    <VisibilityOutlinedIcon
+                                                                        onClick={() =>
+                                                                            onClickVisibilityIconHandler(
+                                                                                row._id
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </Tooltip>
+                                                            </span>
+                                                        )}
+                                                        {icons.includes(
+                                                            "delete"
+                                                        ) && (
+                                                            <span className="icon">
+                                                                <Tooltip title="Delete">
+                                                                    {/* <DeleteIcon
+                                                                        onClick={() =>
+                                                                            onClickDeleteIconHandler(
+                                                                                row._id
+                                                                            )
+                                                                        }
+                                                                    /> */}
+                                                                    <img
+                                                                        src={
+                                                                            "/images/delete-icon.svg"
+                                                                        }
+                                                                        onClick={() =>
+                                                                            onClickDeleteIconHandler(
+                                                                                row._id
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </Tooltip>
+                                                            </span>
+                                                        )}
+                                                    </TableCell>
+                                                )}
                                             </TableRow>
                                         );
                                     })}

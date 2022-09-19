@@ -238,9 +238,7 @@ const ResetPassword = () => {
                                                     }
                                                     {...register("newPassword")}
                                                 />
-                                                <p
-                                                    className={`input-error-msg`}
-                                                >
+                                                <p className={`password-error`}>
                                                     {
                                                         errors.newPassword
                                                             ?.message
@@ -312,9 +310,7 @@ const ResetPassword = () => {
                                                         "confirmPassword"
                                                     )}
                                                 />
-                                                <p
-                                                    className={`input-error-msg`}
-                                                >
+                                                <p className={`password-error`}>
                                                     {
                                                         errors.confirmPassword
                                                             ?.message
