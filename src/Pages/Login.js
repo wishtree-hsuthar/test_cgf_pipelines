@@ -16,18 +16,13 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/UserSlice";
 import useCallbackState from "../utils/useCallBackState";
+import { privateAxios, publicAxios } from "../api/axios";
 const loginFormSchema = yup.object().shape({
     email: yup
         .string()
         .email("Please enter valid email")
         .required("Email address required"),
-    password: yup
-        .string()
-        .matches(
-            /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-            "Password must contain at least 8 characters, one uppercase, one number and one special case character"
-        )
-        .required("Password required"),
+    password: yup.string().required("Password required"),
 });
 const Login = (prop) => {
     const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -52,6 +47,7 @@ const Login = (prop) => {
     });
     useEffect(() => {
         document.body.classList.add("login-page");
+        return () => document.body.classList.remove("login-page");
     }, []);
 
     const [values, setValues] = React.useState({
@@ -72,41 +68,50 @@ const Login = (prop) => {
     const navigateToforgetPasswordPage = () => {
         navigate("/forget-password");
     };
-    const submitLoginData = (data) => {
+    const submitLoginData = async (data) => {
         console.log(data);
-        toasterRef.current();
-        // "http://localhost:3000/api/auth/login",
-        axios
-            .post(LOGIN_URL, data, { withCredentials: true })
-            .then((response) => {
-                console.log(
-                    "response from login",
-                    response?.data?.access_token
-                );
-                localStorage.setItem("a_token", response?.data?.access_token);
-                localStorage.setItem("uuid", response?.data?.user?.uuid);
+        try {
+            const response = await publicAxios.post(LOGIN_URL, data, {
+                withCredentials: true,
+            });
+            if (response.status == 201) {
                 console.log("DATA", response?.data?.user);
                 dispatch(setUser(response?.data?.user));
                 navigate("/dashboard");
-            });
+            }
+        } catch (error) {
+            console.log("error from submit login method", error);
+
+            if (error.response.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Invalid Credentials",
+                        descriptionMessage: "Incorrect email or password",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+            }
+            if (error.response.status == 400) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Session Active",
+                        descriptionMessage: error?.response?.data?.error,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+            }
+        }
     };
-    useEffect(() => {
-        setToasterDetails(
-            {
-                titleMessage: "Success",
-                descriptionMessage: "this is demo",
-                messageType: "success",
-            },
-            () => toasterRef.current()
-        );
-    }, []);
+
     return (
         <div class="page-wrapper login-page-wrap">
             <Toaster
                 myRef={toasterRef}
-                titleMessage={"Success"}
-                descriptionMessage={"Login successful"}
-                messageType={"success"}
+                titleMessage={toasterDetails.titleMessage}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                messageType={toasterDetails.messageType}
             />
             <div class="login-section">
                 <div class="container">
@@ -135,7 +140,7 @@ const Login = (prop) => {
                                     >
                                         <div class="form-group">
                                             <label for="emailid">
-                                                Email Id{" "}
+                                                Username or Email Id{" "}
                                                 <span class="mandatory">*</span>
                                             </label>
                                             <TextField
@@ -153,7 +158,6 @@ const Login = (prop) => {
                                                         : ""
                                                 }
                                             />
-                                            {/* <p className={`input-error-msg`}>{errors.email?.message}</p> */}
                                         </div>
                                         <div class="form-group">
                                             <label for="password">
@@ -187,7 +191,7 @@ const Login = (prop) => {
                                                                 edge="end"
                                                                 className="eye-btn"
                                                             >
-                                                                {values.showPassword ? (
+                                                                {!values.showPassword ? (
                                                                     <img
                                                                         src={
                                                                             process
@@ -215,9 +219,7 @@ const Login = (prop) => {
                                                     }
                                                     {...register("password")}
                                                 />
-                                                <p
-                                                    className={`input-error-msg`}
-                                                >
+                                                <p className={`password-error`}>
                                                     {errors.password?.message}
                                                 </p>
                                             </div>

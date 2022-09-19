@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Slider from "./Slider";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -6,9 +6,13 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
+import { privateAxios, publicAxios } from "../api/axios";
+import { CONFIRM_PASSWORD, SET_PASSWORD_VERIFY_TOKEN } from "../api/Url";
+import Toaster from "../components/Toaster";
+import useCallbackState from "../utils/useCallBackState";
+import { useNavigate, useParams } from "react-router-dom";
 const schema = yup.object().shape({
-    newPassword: yup
+    password: yup
         .string()
         .matches(
             /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
@@ -18,7 +22,7 @@ const schema = yup.object().shape({
     confirmPassword: yup
         .string()
         .required("Please enter confirm password")
-        .oneOf([yup.ref("newPassword"), null], "Passwords don't match."),
+        .oneOf([yup.ref("password"), null], "Passwords don't match."),
 });
 const SetPassword = () => {
     const {
@@ -28,27 +32,101 @@ const SetPassword = () => {
     } = useForm({
         resolver: yupResolver(schema),
     });
+    // useEffect(() => {
+    //     try {
+    //         console.log("In set password");
+    //     } catch (error) {}
+    // }, []);
     useEffect(() => {
-        document.body.classList.add("login-page");
+        let controller = new AbortController();
+        const verifyForgotToken = async () => {
+            try {
+                const { response } = await publicAxios.get(
+                    SET_PASSWORD_VERIFY_TOKEN + params.id,
+                    {
+                        signal: controller.signal,
+                    }
+                );
+                if (response?.status == 200) {
+                    return null;
+                }
+            } catch (error) {
+                console.log("error from verify token", error);
+                if (error?.response?.status == 400) {
+                    console.log("Invalid Token");
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message,
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                }
+            }
+        };
+        verifyForgotToken();
+        return () => {
+            controller.abort();
+        };
     }, []);
-
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "",
+    });
     const [values, setValues] = React.useState({
-        newPassword: "",
+        password: "",
         showNewPassword: false,
         confirmPassword: "",
         showConfirmPassword: false,
     });
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
+    const navigate = useNavigate();
+    const toasterRef = useRef();
+    const params = useParams();
     const handleClickShowNewPassword = () => {
         setValues({
             ...values,
             showNewPassword: !values.showNewPassword,
         });
     };
-    const submitForm = (data) => {
-        console.log(data);
+    const submitForm = async (data) => {
+        try {
+            const response = await privateAxios.post(
+                CONFIRM_PASSWORD + params.id,
+                data
+            );
+            console.log("response from confirm passowrd", response);
+            if (response.status == 201) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Hurray!",
+                        descriptionMessage: response.data.message,
+                        messageType: "success",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            }
+        } catch (error) {
+            console.log("error from confirm password", error);
+            setToasterDetails(
+                {
+                    titleMessage: "Oops!",
+                    descriptionMessage: error?.response?.data?.error,
+                    messageType: "error",
+                },
+                () => toasterRef.current()
+            );
+            setTimeout(() => {
+                navigate("/login");
+            }, 3000);
+        }
     };
     const handleClickShowConfirmPassword = () => {
         setValues({
@@ -62,6 +140,12 @@ const SetPassword = () => {
 
     return (
         <div class="page-wrapper login-page-wrap">
+            <Toaster
+                myRef={toasterRef}
+                titleMessage={toasterDetails.titleMessage}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                messageType={toasterDetails.messageType}
+            />
             <div class="login-section">
                 <div class="container">
                     <div class="login-wrapper">
@@ -101,11 +185,11 @@ const SetPassword = () => {
                                                             ? "text"
                                                             : "password"
                                                     }
-                                                    // value={values.newPassword}
-                                                    // onChange={handleChange('newPassword')}
+                                                    // value={values.password}
+                                                    // onChange={handleChange('password')}
                                                     placeholder="Enter password"
                                                     className={`input-field ${
-                                                        errors.newPassword &&
+                                                        errors.password &&
                                                         "input-error"
                                                     }`}
                                                     endAdornment={
@@ -121,7 +205,7 @@ const SetPassword = () => {
                                                                 edge="end"
                                                                 className="eye-btn"
                                                             >
-                                                                {values.showNewPassword ? (
+                                                                {!values.showNewPassword ? (
                                                                     <img
                                                                         src={
                                                                             process
@@ -147,18 +231,16 @@ const SetPassword = () => {
                                                             </IconButton>
                                                         </InputAdornment>
                                                     }
-                                                    {...register("newPassword")}
+                                                    {...register("password")}
                                                     error={
-                                                        errors.newPassword
+                                                        errors.password
                                                             ? true
                                                             : false
                                                     }
                                                 />
-                                                <p
-                                                    className={`input-error-msg`}
-                                                >
-                                                    {errors.newPassword
-                                                        ? errors.newPassword
+                                                <p className={`password-error`}>
+                                                    {errors.password
+                                                        ? errors.password
                                                               .message
                                                         : " "}
                                                 </p>
@@ -198,7 +280,7 @@ const SetPassword = () => {
                                                                 edge="end"
                                                                 className="eye-btn"
                                                             >
-                                                                {values.showConfirmPassword ? (
+                                                                {!values.showConfirmPassword ? (
                                                                     <img
                                                                         src={
                                                                             process
@@ -233,9 +315,7 @@ const SetPassword = () => {
                                                             : false
                                                     }
                                                 />
-                                                <p
-                                                    className={`input-error-msg`}
-                                                >
+                                                <p className={`password-error`}>
                                                     {errors.confirmPassword
                                                         ? errors.confirmPassword
                                                               .message

@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "../Pages/Layout";
-import SubAdminList from "../Pages/SubAdminList";
-import AddSubAdmin from "../Pages/AddSubAdmin";
-import ViewSubAdmin from "../Pages/ViewSubAdmin";
-import EditSubAdmin from "../Pages/EditSubAdmin";
-import ReplaceSubAdmin from "../Pages/ReplaceSubAdmin";
+import SubAdminList from "../Pages/subAdminManagement/SubAdminList";
+import AddSubAdmin from "../Pages/subAdminManagement/AddSubAdmin";
+import ViewSubAdmin from "../Pages/subAdminManagement/ViewSubAdmin";
+import EditSubAdmin from "../Pages/subAdminManagement/EditSubAdmin";
+import ReplaceSubAdmin from "../Pages/subAdminManagement/ReplaceSubAdmin";
 import { Dashboard } from "../Pages/Dashboard";
 import RequireAuth from "./RequireAuth";
 import RolesList from "../Pages/roleManagement/RolesList";
@@ -34,15 +34,15 @@ const ProtectedPages = () => {
                 }
             />
             <Route
-                path="/sub-admins/view-sub-admin"
+                path="/sub-admins/view-sub-admin/:id"
                 element={<ViewSubAdmin />}
             />
             <Route
-                path="/sub-admins/edit-sub-admin"
+                path="/sub-admins/edit-sub-admin/:id"
                 element={<EditSubAdmin />}
             />
             <Route
-                path="/sub-admins/replace-sub-admin"
+                path="/sub-admins/replace-sub-admin/:id"
                 element={<ReplaceSubAdmin />}
             />
             {/* Role Management Routes */}

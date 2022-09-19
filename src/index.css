@@ -1064,3 +1064,23 @@ input[type=checkbox]:checked:before {
 .phone-field.PhoneInput--disabled .PhoneInputCountry:hover {
     border-color: rgba(30, 30, 30, 0.5);
 }
+
+/* Password error */
+.password-error {
+    margin-left: 4%;
+    color: #e53850;
+    font-size: 12px;
+    margin-top: 1%;
+}
+
+/* css by madhav for autocomplete in phone number */
+.phone-number-field {
+    display: flex;
+    align-items: center;
+}
+.radio-btn-field .MuiRadio-root {
+    background: none !important;
+}
+.radio-btn-field .MuiTouchRipple-root {
+    /* display: none; */
+}
