@@ -1,12 +1,20 @@
-import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
-import { REGIONS } from "../../api/Url";
+import { COUNTRIES, MEMBER, REGIONS } from "../../api/Url";
 import axios from "axios";
 import { useState } from "react";
+import useCallbackState from "../../utils/useCallBackState";
+import Toaster from "../../components/Toaster";
 
 //CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
@@ -57,12 +65,14 @@ const myHelper = {
     minLength: "Input must contain atleast 3 characters",
     pattern: "Invalid Input",
   },
-  // countryCode: {},
+  countryCode: {
+    validate: "Invalid input",
+  },
   phoneNumber: {
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
     pattern: "Invalid Input",
-    validate: "Invalid Input"
+    validate: "Invalid Input",
   },
   websiteUrl: {
     maxLength: "Max char limit exceed",
@@ -116,28 +126,37 @@ const myHelper = {
     pattern: "Invalid Input",
   },
   memberContactEmail: {
-    required: true,
+    required: "Enter the email",
     minLength: "Input must contain atleast 3 charcters",
     maxLength: "Max char limit exceed",
-    validate: "Invalid Input"
+    validate: "Invalid Input",
   },
   memberContactCountryCode: {},
   memberContactPhoneNuber: {
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
     pattern: "Invalid Input",
-    validate: "Invalid Input"
+    validate: "Invalid Input",
   },
 };
 const AddMember = () => {
+  const navigate = useNavigate();
+  // Refr for Toaster
+  const myRef = React.useRef();
+  //Toaster Message setter
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
+  });
   const defaultValues = {
     memberCompany: "",
-    companyType: "internal",
+    companyType: "Internal",
     parentCompany: "",
     cgfCategory: "Manufacturer",
     cgfActivity: "",
     corporateEmail: "",
-    countryCode: "+91",
+    countryCode: "",
     phoneNumber: "",
     websiteUrl: "",
     region: "",
@@ -145,71 +164,238 @@ const AddMember = () => {
     state: "",
     city: "",
     address: "",
-    cgfOfficeRegion: "Africa",
+    cgfOfficeRegion: "",
+    cgfOfficeCountry: "",
     cgfOffice: "",
     memberContactSalutation: "Mr.",
     memberContactFullName: "",
     title: "",
     department: "",
-    memberContactCountryCode: "+91",
+    memberContactCountryCode: "",
     memberContactEmail: "",
     memberContactPhoneNuber: "",
   };
+  //to hold all regions
   const [arrOfRegions, setArrOfRegions] = useState([]);
+
+  //to hold array of countries for perticular region for Company Adress
   const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
-  const { control, reset, setValue, watch, handleSubmit } = useForm({
+  const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
+
+  //to hold array of countries for perticular region for CGF Office details
+  const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
+    useState([]);
+  const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
+    reValidateMode: "onChange",
     defaultValues: defaultValues,
   });
+  const onSubmitFunctionCall = async (data) => {
+    try {
+      let backendObject = {
+        parentCompany: data.parentCompany,
+        countryCode: data.countryCode,
+        phoneNumber: parseInt(data.phoneNumber),
+        website: data.websiteUrl,
+        state: data.state,
+        city: data.state,
+        companyName: data.memberCompany,
+        companyType: data.companyType,
+        cgfCategory: data.cgfCategory,
+        cgfActivity: data.cgfActivity,
+        corporateEmail: data.corporateEmail,
+        region: data.region,
+        country: data.country,
+        address: data.address,
+        cgfOfficeRegion: data.cgfOfficeRegion,
+        cgfOfficeCountry: data.cgfOfficeCountry,
+        cgfOffice: data.cgfOffice,
+        memberRepresentative: {
+          title: data.title,
+          department: data.department,
+          salutation: data.memberContactSalutation,
+          name: data.memberContactFullName,
+          email: data.memberContactEmail,
+          countryCode: data.memberContactCountryCode,
+          phoneNumber: parseInt(data.memberContactPhoneNuber),
+        },
+      };
+      const response = await axios.post(MEMBER, { ...backendObject });
+      console.log("response : ", response);
+      setToasterDetails(
+        {
+          titleMessage: "Success!",
+          descriptionMessage: "New member added successfully!",
+          messageType: "success",
+        },
+        () => myRef.current()
+      );
+      console.log("Default values: ", defaultValues);
+      reset({ defaultValues });
+    } catch (error) {
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something Went Wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+    }
+  };
   const onSubmit = (data) => {
     console.log("data", data);
+    onSubmitFunctionCall(data);
+    setTimeout(() => navigate("/members"), 3000);
   };
-  const updateRegionCountries = (regionCountries) => {
-    console.log("region countries must fire on change ",regionCountries);
-    const arrOfCountryRegionsTemp = JSON.parse(
-      JSON.stringify(arrOfCountryRegions)
+  //method to handle on add more button click handler
+  const onAddMoreButtonClickHandler = (data) => {
+    onSubmitFunctionCall(data);
+  };
+  //method to handle region change for cgf office
+
+  const formatRegionCountries = (regionCountries) => {
+    regionCountries.forEach(
+      (country, id) => (regionCountries[id] = country.name)
     );
-    regionCountries.data.forEach(
-      (country, id) => (arrOfCountryRegionsTemp[id] = country.name)
+    console.log("arr of country ", regionCountries);
+    return regionCountries;
+  };
+
+  //method to handle country change
+  const onCountryChangeHandler = (e) => {
+    console.log("Inside Country Change ", e.target.value);
+    setValue("country", e.target.value);
+    setValue("state", "");
+    trigger("country");
+  };
+  //method to handle office Region Change Handler
+  const cgfOfficeRegionChangeHandler = async (e) => {
+    setValue("cgfOfficeRegion", e.target.value);
+    setValue("cgfOfficeCountry", "");
+    trigger("cgfOfficeRegion");
+    const countriesOnRegion = await getCountries(watch("region"));
+    const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries(
+      countriesOnRegion.data
     );
-    console.log("arr of country ", arrOfCountryRegionsTemp);
-    setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
+    setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
   };
   //method to set region and update other fields accordingly
   const onRegionChangeHandler = async (e) => {
     console.log("region: ", e.target.value);
+    setValue("country", "");
+    setValue("state", "");
+    setValue("city", "");
     setValue("region", e.target.value);
-    const regionCountries = await axios.get(REGIONS + `/${watch("region")}`);
-    updateRegionCountries(regionCountries);
-    console.log("Response for countries", regionCountries.data);
-    // console.log("regions: ", regions.data);
+    trigger("region");
+    const countriesOnRegion = await getCountries(watch("region"));
+    console.log("countries", countriesOnRegion);
+    const arrOfCountryRegionsTemp = formatRegionCountries(
+      countriesOnRegion.data
+    );
+    setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
   };
 
-  const getMasterData = async (isMounted, controller) => {
-    const regions = await axios.get(REGIONS, { signal: controller.signal });
-    setArrOfRegions(regions.data);
-    console.log("region values ", watch("region"));
-    if (watch("region")) {
-      console.log("inside watch function");
-      const regionCountries = await axios.get(REGIONS + `/${watch("region")}`);
-      updateRegionCountries(regionCountries);
-      console.log("Response for countries", regionCountries.data);
-      console.log("regions: ", regions.data);
-      // setArrOfCountryRegions(regionCountries.data.name)
+  const getCountryCode = async (controller) => {
+    try {
+      const response = await axios.get(COUNTRIES, {
+        signal: controller.signal,
+      });
+      let arrOfCountryCodeTemp = [];
+      response.data.forEach((code, id) => {
+        if (!code.countryCode) return;
+        arrOfCountryCodeTemp.push(code.countryCode);
+      });
+      const countryCodeSet = new Set(arrOfCountryCodeTemp);
+      setArrOfCountryCode([...countryCodeSet]);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something Went Wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
     }
+  };
+  const getCountries = async (region) => {
+    try {
+      const regionCountries = await axios.get(REGIONS + `/${region}`);
+      return regionCountries;
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something Went Wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+      return [];
+    }
+  };
+  const getRegions = async (controller) => {
+    try {
+      const regions = await axios.get(REGIONS, { signal: controller.signal });
+      // console.log("regions ", regions.data);
+      setArrOfRegions(regions.data);
+      return arrOfRegions;
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something Went Wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+      return [];
+    }
+  };
+
+  //prevent form submission on press of enter key
+  const checkKeyDown = (e) => {
+    if (e.code === "Enter") e.preventDefault();
   };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    getMasterData(isMounted, controller);
+    arrOfRegions.length === 0 && getRegions(controller);
+    arrOfCountryCode.length === 0 && getCountryCode(controller);
 
     return () => {
-      isMounted = false;
+      // isMounted = false;
       controller.abort();
     };
   }, [watch]);
-  console.log("Region", watch("region"));
+  // console.log("selected Region", watch("region"));
   return (
     <div className="page-wrapper">
+      <Toaster
+        myRef={myRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
       <div className="breadcrumb-wrapper">
         <div className="container">
           <ul className="breadcrumb">
@@ -229,11 +415,19 @@ const AddMember = () => {
                 <span className="addmore-icon">
                   <i className="fa fa-plus"></i>
                 </span>
-                <span className="addmore-txt">Save & Add More</span>
+                <span
+                  className="addmore-txt"
+                  onClick={handleSubmit(onAddMoreButtonClickHandler)}
+                >
+                  Save & Add More
+                </span>
               </div>
             </div>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            onKeyDown={(e) => checkKeyDown(e)}
+          >
             <div className="card-wrapper">
               <div className="card-inner-wrap">
                 <h2 className="sub-heading1">Company Details</h2>
@@ -274,12 +468,12 @@ const AddMember = () => {
                               className="radio-btn"
                             >
                               <FormControlLabel
-                                value="internal"
+                                value="Internal"
                                 control={<Radio />}
                                 label="Internal"
                               />
                               <FormControlLabel
-                                value="external"
+                                value="External"
                                 control={<Radio />}
                                 label="External"
                               />
@@ -292,16 +486,62 @@ const AddMember = () => {
                   <div className="card-form-field">
                     <div className="form-group">
                       <label htmlFor="parentCompany">Parent Company</label>
-                      <Input
-                        control={control}
+                      <Controller
                         name="parentCompany"
-                        placeholder="Enter parent company"
-                        myHelper={myHelper}
-                        rules={{
-                          minLength: 3,
-                          maxLength: 50,
-                          pattern: /^[A-Za-z]+[A-Za-z ]*$/,
-                        }}
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                          <Autocomplete
+                            onSubmit={() => setValue("parentCompany", "")}
+                            onChange={(event, newValue) => {
+                              console.log("new Value ", newValue);
+                              if (newValue) {
+                                typeof newValue === "object"
+                                  ? setValue("parentCompany", newValue.name)
+                                  : setValue("parentCompany", newValue);
+                              }
+                            }}
+                            selectOnFocus
+                            handleHomeEndKeys
+                            id="free-solo-with-text-demo"
+                            options={[
+                              "Google",
+                              "MicroSoft",
+                              "Nike",
+                              "Adobe",
+                              "Falcon",
+                              "Apple",
+                              "TSMC",
+                              "Relience",
+                              "Adani",
+                              "Ford",
+                              "Uber",
+                              "wishtree",
+                            ]}
+                            getOptionLabel={(option) => {
+                              // Value selected with enter, right from the input
+                              if (typeof option === "string") {
+                                // console.log("option inside type string",option)
+                                return option;
+                              }
+                              return option;
+                            }}
+                            renderOption={(props, option) => (
+                              <li {...props}>{option}</li>
+                            )}
+                            //   sx={{ width: 300 }}
+                            freeSolo
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                onChange={(e) =>
+                                  setValue("parentCompany", e.target.value)
+                                }
+                                onSubmit={() => setValue("parentCompany", "")}
+                                placeholder="Please select city"
+                              />
+                            )}
+                          />
+                        )}
                       />
                     </div>
                   </div>
@@ -370,23 +610,75 @@ const AddMember = () => {
                   <div className="card-form-field">
                     <div className="form-group">
                       <label htmlFor="phoneNumber">Phone Number</label>
-                      <Dropdown
-                        control={control}
-                        name="countryCode"
-                        placeholder="+91"
-                        options={["+91", "+92", "+404"]}
-                      />
-                      <Input
-                        control={control}
-                        name="phoneNumber"
-                        placeholder="Enter phone number"
-                        myHelper={myHelper}
-                        rules={{
-                          maxLength: 15,
-                          minLength: 3,
-                          validate : (value) => {if(value && !Number(value)) return "Invalid Input"},
-                        }}
-                      />
+                      <div className="phone-number-field">
+                        <div className="select-field country-code">
+                          <Controller
+                            control={control}
+                            name="countryCode"
+                            // rules={{
+                            //   validate: () => {
+                            //     if (watch("phoneNumber") && !watch("countryCode"))
+                            //       return "Invalid Input";
+                            //   },
+                            // }}
+                            render={({ field, fieldState: { error } }) => (
+                              <Autocomplete
+                                onChange={(event, newValue) => {
+                                  console.log("inside autocomplete onchange");
+                                  console.log("new Value ", newValue);
+                                  newValue && typeof newValue === "object"
+                                    ? setValue("countryCode", newValue.name)
+                                    : setValue("countryCode", newValue);
+                                  trigger("phoneNumber");
+                                }}
+                                sx={{ width: 200 }}
+                                options={arrOfCountryCode}
+                                autoHighlight
+                                // placeholder="Select country code"
+                                // getOptionLabel={(country) => country.name + " " + country}
+                                renderOption={(props, option) => (
+                                  <li {...props}>{option}</li>
+                                )}
+                                renderInput={(params) => (
+                                  <TextField
+                                    // className={`input-field ${
+                                    //   error && "input-error"
+                                    // }`}
+                                    {...params}
+                                    inputProps={{
+                                      ...params.inputProps,
+                                    }}
+                                    onChange={() => trigger("phoneNumber")}
+                                    onSubmit={() => setValue("countryCode", "")}
+                                    placeholder={"Select country code"}
+                                    helperText={
+                                      error
+                                        ? myHelper.countryCode["validate"]
+                                        : " "
+                                    }
+                                  />
+                                )}
+                              />
+                            )}
+                          />
+                        </div>
+                        <Input
+                          control={control}
+                          name="phoneNumber"
+                          placeholder="Enter phone number"
+                          myHelper={myHelper}
+                          rules={{
+                            maxLength: 15,
+                            minLength: 3,
+                            validate: (value) => {
+                              if (watch("phoneNumber") && !watch("countryCode"))
+                                return "Invalid input";
+                              else if (value && !Number(value))
+                                return "Invalid Input";
+                            },
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className="card-form-field">
@@ -400,7 +692,8 @@ const AddMember = () => {
                         rules={{
                           maxLength: 50,
                           minLength: 3,
-                          pattern: /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
+                          pattern:
+                            /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
                         }}
                       />
                     </div>
@@ -422,7 +715,7 @@ const AddMember = () => {
                         placeholder="Select region"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={arrOfRegions ? arrOfRegions : []}
+                        options={arrOfRegions}
                       />
                     </div>
                   </div>
@@ -435,10 +728,11 @@ const AddMember = () => {
                         isDisabled={!watch("region")}
                         control={control}
                         name="country"
+                        myOnChange={onCountryChangeHandler}
                         placeholder="Select country"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={arrOfCountryRegions ? arrOfCountryRegions : []}
+                        options={arrOfCountryRegions}
                       />
                     </div>
                   </div>
@@ -461,12 +755,63 @@ const AddMember = () => {
                   <div className="card-form-field">
                     <div className="form-group">
                       <label htmlFor="city">City</label>
-                      <Input
-                        control={control}
-                        myHelper={myHelper}
-                        rules={{ maxLength: 50, minLength: 3 }}
+                      <Controller
                         name="city"
-                        placeholder="Enter state"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                          <Autocomplete
+                            disabled={!watch("state")}
+                            onSubmit={() => setValue("city", "")}
+                            onChange={(event, newValue) => {
+                              console.log("new Value ", newValue);
+                              if (newValue) {
+                                typeof newValue === "object"
+                                  ? setValue("city", newValue.name)
+                                  : setValue("city", newValue);
+                              }
+                            }}
+                            selectOnFocus
+                            handleHomeEndKeys
+                            id="free-solo-with-text-demo"
+                            options={[
+                              "Mumbai",
+                              "Paris",
+                              "London",
+                              "New york",
+                              "Sydney",
+                              "Melbourne",
+                              "Perth",
+                              "Toronto",
+                              "Vancour",
+                              "Texas",
+                              "Delhi",
+                              "Tokyo",
+                            ]}
+                            getOptionLabel={(option) => {
+                              // Value selected with enter, right from the input
+                              if (typeof option === "string") {
+                                // console.log("option inside type string",option)
+                                return option;
+                              }
+                              return option;
+                            }}
+                            renderOption={(props, option) => (
+                              <li {...props}>{option}</li>
+                            )}
+                            //   sx={{ width: 300 }}
+                            freeSolo
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                onChange={(e) =>
+                                  setValue("city", e.target.value)
+                                }
+                                onSubmit={() => setValue("city", "")}
+                                placeholder="Please select city"
+                              />
+                            )}
+                          />
+                        )}
                       />
                     </div>
                   </div>
@@ -520,10 +865,11 @@ const AddMember = () => {
                       <Dropdown
                         control={control}
                         name="cgfOfficeRegion"
+                        myOnChange={cgfOfficeRegionChangeHandler}
                         placeholder="Select Region"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={["Asia", "Africa", "Europe"]}
+                        options={arrOfRegions}
                       />
                     </div>
                   </div>
@@ -533,12 +879,13 @@ const AddMember = () => {
                         Country <span className="mandatory">*</span>
                       </label>
                       <Dropdown
+                        isDisabled={!watch("cgfOfficeRegion")}
                         control={control}
                         name="cgfOfficeCountry"
                         placeholder="Select country"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={["Canda", "USA", "India"]}
+                        options={arrOfCgfOfficeCountryRegions}
                       />
                     </div>
                   </div>
@@ -624,7 +971,13 @@ const AddMember = () => {
                       <Input
                         control={control}
                         myHelper={myHelper}
-                        rules={{ required: true, maxLength: 50, minLength: 3, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ }}
+                        rules={{
+                          required: true,
+                          maxLength: 50,
+                          minLength: 3,
+                          pattern:
+                            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                        }}
                         name="memberContactEmail"
                         placeholder="Enter email"
                       />
@@ -635,12 +988,52 @@ const AddMember = () => {
                       <label htmlFor="memberContactPhoneNumber">
                         Phone Number
                       </label>
-                      <Dropdown
+                      <div className='phone-number-field'>
+                      <div className="select-field country-code">
+                      <Controller
                         control={control}
                         name="memberContactCountryCode"
-                        placeholder="+91"
-                        options={["+91", "+92", "+404"]}
+                        render={({ field }) => (
+                          <Autocomplete
+                            onChange={(event, newValue) => {
+                              newValue && typeof newValue === "object"
+                                ? setValue(
+                                    "memberContactCountryCode",
+                                    newValue.name
+                                  )
+                                : setValue(
+                                    "memberContactCountryCode",
+                                    newValue
+                                  );
+                              trigger("memberContactPhoneNuber");
+                            }}
+                            sx={{ width: 200 }}
+                            options={arrOfCountryCode}
+                            autoHighlight
+                            placeholder="Select country code"
+                            // getOptionLabel={(country) => country.name + " " + country}
+                            renderOption={(props, option) => (
+                              <li {...props}>{option}</li>
+                            )}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                }}
+                                onChange={() =>
+                                  trigger("memberContactPhoneNuber")
+                                }
+                                onSubmit={() =>
+                                  setValue("memberContactCountryCode", "")
+                                }
+                                placeholder={"Select country code"}
+                              />
+                            )}
+                          />
+                        )}
                       />
+                      </div>
                       <Input
                         control={control}
                         name="memberContactPhoneNuber"
@@ -648,10 +1041,19 @@ const AddMember = () => {
                         rules={{
                           maxLength: 15,
                           minLength: 3,
-                          validate : (value) => {if(value && !Number(value)) return "Invalid Input"},
+                          validate: (value) => {
+                            if (
+                              watch("memberContactPhoneNuber") &&
+                              !watch("memberContactCountryCode")
+                            )
+                              return "Invalid Input";
+                            else if (value && !Number(value))
+                              return "Invalid input";
+                          },
                         }}
                         placeholder="Enter phone number"
                       />
+                      </div>
                     </div>
                   </div>
                 </div>

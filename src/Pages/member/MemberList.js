@@ -3,7 +3,10 @@ import DownloadIcon from "@mui/icons-material/Download";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import TableTester from "../../components/TableTester";
-import {useNavigate} from 'react-router-dom'
+import TableComponent from "../../components/TableComponent";
+import { useNavigate } from "react-router-dom";
+import { MEMBER } from "../../api/Url";
+import axios from "axios";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,10 +49,70 @@ const memberCompanies = [
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
+const tableHead = [
+  {
+    id: "companyName",
+    // width: "10%",
+    disablePadding: false,
+    label: "Member Company",
+  },
+  {
+    id: "memberName",
+    disablePadding: false,
+    label: "Member Name",
+  },
+  {
+    id: "memberEmail",
+    disablePadding: false,
+    // width: "20%",
+    label: "Email",
+  },
+  {
+    id: "companyType",
+    disablePadding: false,
+    label: "Company Type",
+  },
+  {
+    id: "operationMembers",
+    disablePadding: false,
+    // width: "5%",
+    label: "Operation Members",
+  },
+  {
+    id: "createdBy",
+    disablePadding: false,
+    // width: "20%",
+    label: "Created By",
+  },
+  {
+    id: "createdAt",
+    disablePadding: false,
+    label: "Onboarded On",
+  },
+  {
+    id: "is Active",
+    disablePadding: false,
+    // width: "15%",
+    label: "Status",
+  },
+  {
+    id: "action",
+    disablePadding: false,
+    label: "Action",
+  },
+];
+
 const MemberList = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   //state to hold which tab to show
-  const [value, setValue] = React.useState(0);
+
+  // state to manage loader
+  const [isLoading, setIsLoading] = useState(false);
+
+  //state to hold search timeout delay
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  //state to hold wheather to make api call or not
+  const [makeApiCall, setMakeApiCall] = useState(true);
 
   //state to hold search keyword
   const [search, setSearch] = useState("");
@@ -59,6 +122,26 @@ const MemberList = () => {
     companyType: "none",
     status: "none",
   });
+  const keysOrder = [
+    "_id",
+    "companyName",
+    "memberName",
+    "memberEmail",
+    "companyType",
+    "operationMembers",
+    "createdBy",
+    "createdAt",
+    "isActive",
+  ];
+  //code of tablecomponent
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [order, setOrder] = useState("desc");
+  const [orderBy, setOrderBy] = useState("createdAt");
+  const [records, setRecords] = useState([]);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [selected, setSelected] =useState([]);
+
   //State to hold selected memberCompnies
   const [selectedMemberCompnies, setSelectedMemberCompnies] = useState([
     "none",
@@ -75,19 +158,60 @@ const MemberList = () => {
     selectedCreatedBy.length > 1 &&
     selectedCreatedBy.length - 1 === allMembers.length;
 
+  //format records as backend requires
+  const updateRecords = (data) => {
+    data.forEach((object) => {
+      delete object["address"];
+      delete object["cgfActivity"];
+      delete object["cgfCategory"];
+      delete object["cgfOffice"];
+      delete object["cgfOfficeCountry"];
+      delete object["cgfOfficeRegion"];
+      delete object["city"];
+      delete object["corporateEmail"];
+      delete object["country"];
+      delete object["countryCode"];
+      delete object["memberRepresentativeId"];
+      delete object["parentCompany"];
+      delete object["phoneNumber"];
+      delete object["region"];
+      delete object["state"];
+      delete object["updatedAt"];
+      delete object["updatedBy"];
+      delete object["website"];
+      delete object["isDeleted"];
+      delete object["__v"];
+      object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
+        "en-GB"
+      );
+      object.memberEmail = "patel@gmail.com";
+      object.memberName = "Erin";
+      object.operationMembers = "123";
+      keysOrder.forEach((k) => {
+        const v = object[k];
+        delete object[k];
+        object[k] = v;
+      });
+    });
+    setRecords([...data]);
+  };
   const onFilterFocusHandler = (filterValue) => {
     setShowFilterPlaceholder(filterValue);
   };
 
-  //handle tab change
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   //method for time based searching
   const onSearchChangeHandler = (e) => {
+    console.log("event", e.key);
+    if (searchTimeout) clearTimeout(searchTimeout);
+    setMakeApiCall(false);
+    console.log("search values", e.target.value);
     setSearch(e.target.value);
-    console.log(search);
+    setSearchTimeout(
+      setTimeout(() => {
+        setMakeApiCall(true);
+        setPage(1);
+      }, 1000)
+    );
   };
   //handle sigle select filters
   const onFilterChangehandler = (e) => {
@@ -118,14 +242,55 @@ const MemberList = () => {
         : setSelectedMemberCompnies(["none", ...memberCompanies]);
     setSelectedMemberCompnies([...value]);
   };
-
+  const handleTablePageChange = (newPage) => {
+    setPage(newPage);
+  };
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(1);
+  };
+  const onClickVisibilityIconHandler = (id) => {
+    console.log("id", id);
+    return navigate(`view-role/${id}`);
+  };
+  const generateUrl = () => {
+    console.log("filters", filters);
+    let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+    if (search?.length >= 3)
+      url = url + `&search=${search}`;
+    if (filters?.status !== "all" && filters?.status !== "none")
+      url = url + `&status=${filters.status}`;
+    if (
+      search?.length >= 3 &&
+      filters?.status !== "all" &&
+      filters?.status !== "none"
+    )
+      url = url + `&search=${search}&status=${filters.status}`;
+    return url;
+  };
+  const getMembers = async (isMounted, controller) => {
+    try {
+      let url = generateUrl();
+      const response = await axios.get(url, { signal: controller.signal });
+      setTotalRecords(parseInt(response.headers["x-total-count"]));
+      console.log("response from backend", response);
+      updateRecords(response.data);
+    } catch (error) {
+      console.log("Error from backend", error);
+    }
+  };
   useEffect(() => {
-    console.log("selected members companies: ", selectedMemberCompnies);
-    console.log("Created By", selectedCreatedBy);
-    console.log("Filters: ", filters);
-
-    return () => {};
-  }, [filters, selectedCreatedBy, selectedMemberCompnies]);
+    let isMounted = true;
+    const controller = new AbortController();
+    makeApiCall && getMembers(isMounted, controller);
+    return () => {
+      isMounted = false;
+      // clearTimeout(searchTimeout);
+      controller.abort();
+    };
+  }, [page, rowsPerPage, orderBy, order, filters, makeApiCall]);
+  // console.log("records: ", records);
+  console.log("filters: ",filters)
   return (
     <div className="page-wrapper">
       <section>
@@ -133,7 +298,7 @@ const MemberList = () => {
           <div className="form-header member-form-header flex-between">
             <div className="form-header-left-blk flex-start">
               <h2 className="heading2 mr-40">Members</h2>
-              <div className="member-tab-wrapper">
+              {/* <div className="member-tab-wrapper">
                 <Box
                   sx={{ borderBottom: 1, borderColor: "divider" }}
                   className="tabs-sect"
@@ -157,7 +322,7 @@ const MemberList = () => {
                     />
                   </Tabs>
                 </Box>
-              </div>
+              </div> */}
             </div>
             <div className="form-header-right-txt">
               <div className="tertiary-btn-blk mr-20">
@@ -167,7 +332,11 @@ const MemberList = () => {
                 Download
               </div>
               <div className="form-btn">
-                <button type="submit" className="primary-button add-button" onClick={() => navigate('/members/add-member')}>
+                <button
+                  type="submit"
+                  className="primary-button add-button"
+                  onClick={() => navigate("/members/add-member")}
+                >
                   Add Member
                 </button>
               </div>
@@ -182,6 +351,7 @@ const MemberList = () => {
                     value={search}
                     name="search"
                     placeholder="Search member name, email and member company"
+                    onKeyDown={(e) => e.key === "Enter" && setMakeApiCall(true)}
                     onChange={onSearchChangeHandler}
                   />
                   <button type="submit">
@@ -342,12 +512,23 @@ const MemberList = () => {
             </div>
           </div>
           <div className="member-info-wrapper table-content-wrap">
-            <TabPanel value={value} index={0}>
-              <TableTester />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <TableTester />
-            </TabPanel>
+            <TableComponent
+              tableHead={tableHead}
+              records={records}
+              handleChangePage1={handleTablePageChange}
+              handleChangeRowsPerPage1={handleRowsPerPageChange}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              selected={selected}
+              setSelected={setSelected}
+              totalRecords={totalRecords}
+              orderBy={orderBy}
+              icons={["visibility"]}
+              onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
+              order={order}
+              setOrder={setOrder}
+              setOrderBy={setOrderBy}
+            />
           </div>
         </div>
       </section>

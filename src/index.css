@@ -1077,3 +1077,13 @@ input[type=checkbox]:checked:before {
 .phone-field.PhoneInput--disabled .PhoneInputCountry:hover {
     border-color: rgba(30, 30, 30, 0.5);
 }
+
+
+
+
+/* phone number and country code csss */
+.phone-number-field{display: flex;align-items: center;}
+.country-code{margin-right: 10px;}
+.phone-number-field .MuiSelect-select{padding: 0 40px 0 15px !important;}
+.phone-number-field fieldset{border-color:rgba(30, 30, 30, 0.5);font-family: 'ProximaNova-Regular';}
+.Mui-focused .MuiOutlinedInput-notchedOutline {border-width: 1px !important;}

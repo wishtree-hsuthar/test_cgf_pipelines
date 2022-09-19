@@ -233,10 +233,10 @@ export default function TableComponent({
                                                 )}
                                                 {Object.keys(row).map(
                                                     (cell, _id) => {
-                                                        console.log(
-                                                            "Row cell",
-                                                            row[cell]
-                                                        );
+                                                        // console.log(
+                                                        //     "Row cell",
+                                                        //     row[cell]
+                                                        // );
                                                         if (
                                                             cell !== "_id" &&
                                                             cell !== "isActive"
