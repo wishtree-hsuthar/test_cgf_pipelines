@@ -14,10 +14,11 @@ import Layout from "./Pages/Layout";
 import { privateAxios } from "./api/axios";
 import AuthOutlet from "./Pages/AuthOutlet";
 import Footer from "./components/Footer";
+import { useNavigate } from "react-router-dom";
 axios.defaults.withCredentials = true;
 function App() {
     const [userPresent, setUserPresent] = useState(false);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const controller = new AbortController();
         const fetchUser = async () => {
@@ -26,11 +27,12 @@ function App() {
                     withCredentials: true,
                     signal: controller.signal,
                 });
-                console.log("data from app fetcuser method", data);
+                console.log("data from app fetcuser method app file", data);
                 setUserPresent(true);
             } catch (error) {
                 setUserPresent(false);
                 console.log("Error from app file useEffect", error);
+                // navigate("/login");
             }
         };
         fetchUser();
@@ -57,27 +59,9 @@ function App() {
                         )
                     }
                 />
-                <Route path="auth/*" element={<AuthOutlet />} />
-                <Route
-                    path="auth/confirm/:id"
-                    element={
-                        userPresent ? (
-                            <Navigate to={"/dashboard"} />
-                        ) : (
-                            <SetPassword />
-                        )
-                    }
-                />
-                <Route
-                    path="auth/forgot/:id"
-                    element={
-                        userPresent ? (
-                            <Navigate to={"/dashboard"} />
-                        ) : (
-                            <ResetPassword />
-                        )
-                    }
-                />
+                {/* <Route path="auth/*" element={<AuthOutlet />} /> */}
+                <Route path="auth/confirm/:id" element={<SetPassword />} />
+                <Route path="auth/forgot/:id" element={<ResetPassword />} />
                 <Route path="/" element={<Layout />}>
                     <Route
                         path={"/*"}

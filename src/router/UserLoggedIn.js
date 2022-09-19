@@ -15,10 +15,16 @@ const UserLoggedIn = ({ children }) => {
     const fetchUser = async () => {
         try {
             const { data } = await privateAxios.get(GET_USER);
-            console.log("data from app fetcuser method", data);
+            console.log(
+                "data from app fetcuser method UserLoggedIn file",
+                data
+            );
             dispatch(setUser(data));
         } catch (error) {
-            console.log("Error from app file useEffect", error);
+            console.log(
+                "Error from app file useEffect UserLoggedIn file",
+                error
+            );
             navigate("/login");
         }
     };
