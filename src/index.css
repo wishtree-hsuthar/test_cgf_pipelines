@@ -1,658 +1,757 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Login css */
+.login-page {
+    background: #fff;
 }
-html { overflow-y: scroll; }
+.login-section {
+    padding: 78px 0;
+}
+.login-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.login-leftblk {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+.login-rightblk {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding: 0 115px;
+}
+.login-slide-img {
+    width: 62%;
+    margin: 0 auto;
+}
+.login-slider .owl-theme .owl-dots .owl-dot.active span {
+    background: #f7a823;
+    border-color: #f7a823;
+}
+.login-slider .owl-theme .owl-dots .owl-dot span {
+    background: #fff;
+    border: 1px solid #1e1e1e;
+    margin: 5px;
+}
+.login-slider .owl-theme .owl-nav.disabled + .owl-dots {
+    margin-top: 40px;
+}
+.login-slider .owl-theme .owl-dots .owl-dot:hover span {
+    background: #f7a823;
+}
+.login-form {
+    margin: 40px 0 0;
+}
+.forgot-password-txt {
+    color: #f7a823;
+    font-family: "Proxima Nova Semibold";
+    padding-right: 10px;
+}
+.eye-btn {
+    padding: 14px !important;
+    margin-right: -5px !important;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html {
+    overflow-y: scroll;
+}
 
 body {
-
-  font-size: 14px;
-  font-family: 'ProximaNova-Regular', serif, sans-serif;  color: #1E1E1E;
-  background: #F4F7FC;
-  scrollbar-gutter: 'stable both-edges';
-
+    font-size: 14px;
+    font-family: "ProximaNova-Regular", serif, sans-serif;
+    color: #1e1e1e;
+    background: #f4f7fc;
+    scrollbar-gutter: "stable both-edges";
 }
 
 img {
-  vertical-align: top !important;
-  display: inline-block !important;
-  max-width: 100%;
+    vertical-align: top !important;
+    display: inline-block !important;
+    max-width: 100%;
 }
 
 h2 {
-  font-weight: 600;
-  font-size: 22px;
-  line-height: 27px;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 27px;
 }
 
 h3 {
-
-  font-weight: 600;
-  font-size: 22px;
-  line-height: 33px;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 33px;
 }
 
 .container {
-
-  max-width: 1170px;
-  margin: 0 auto;
-  padding: 0 15px;
+    max-width: 1170px;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 
 .text-center {
-  text-align: center;
+    text-align: center;
 }
 
 .img-fluid {
-  max-width: 100%;
-  height: auto;
+    max-width: 100%;
+    height: auto;
 }
 
 .text-uppercase {
-  text-transform: uppercase;
+    text-transform: uppercase;
 }
 .flex-start {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
 }
 .flex-between {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 @font-face {
-  font-family: 'ProximaNova-Regular';  src: url('./assets/fonts/ProximaNova-Regular.eot');
-  src: url('./assets/fonts/ProximaNova-Regular.eot?#iefix') format('embedded-opentype'),
-    url('./assets/fonts/ProximaNova-Regular.svg#ProximaNova-Regular') format('svg'),
-    url('./assets/fonts/ProximaNova-Regular.ttf') format('truetype'),
-    url('./assets/fonts/ProximaNova-Regular.woff') format('woff'),
-    url('./assets/fonts/ProximaNova-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
+    font-family: "ProximaNova-Regular";
+    src: url("./assets/fonts/ProximaNova-Regular.eot");
+    src: url("./assets/fonts/ProximaNova-Regular.eot?#iefix")
+            format("embedded-opentype"),
+        url("./assets/fonts/ProximaNova-Regular.svg#ProximaNova-Regular")
+            format("svg"),
+        url("./assets/fonts/ProximaNova-Regular.ttf") format("truetype"),
+        url("./assets/fonts/ProximaNova-Regular.woff") format("woff"),
+        url("./assets/fonts/ProximaNova-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'Proxima Nova Semibold';
-  src: url('./assets/fonts/Proxima Nova Semibold.eot');
-  src: url('./assets/fonts/Proxima Nova Semibold.eot?#iefix') format('embedded-opentype'),
-    url('./assets/fonts/Proxima Nova Semibold.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
+    font-family: "Proxima Nova Semibold";
+    src: url("./assets/fonts/Proxima Nova Semibold.eot");
+    src: url("./assets/fonts/Proxima Nova Semibold.eot?#iefix")
+            format("embedded-opentype"),
+        url("./assets/fonts/Proxima Nova Semibold.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'ProximaNova-Semibold';
-  src: url('./assets/fonts/ProximaNova-Semibold.svg#ProximaNova-Semibold') format('svg'),
-    url('./assets/fonts/ProximaNova-Semibold.ttf') format('truetype'),
-    url('./assets/fonts/ProximaNova-Semibold.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
+    font-family: "ProximaNova-Semibold";
+    src: url("./assets/fonts/ProximaNova-Semibold.svg#ProximaNova-Semibold")
+            format("svg"),
+        url("./assets/fonts/ProximaNova-Semibold.ttf") format("truetype"),
+        url("./assets/fonts/ProximaNova-Semibold.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'ProximaNova-Bold';
-  src: url('./assets/fonts/ProximaNova-Bold.eot');
-  src: url('./assets/fonts/ProximaNova-Bold.eot?#iefix') format('embedded-opentype'),
-    url('./assets/fonts/ProximaNova-Bold.svg#ProximaNova-Bold') format('svg'),
-    url('./assets/fonts/ProximaNova-Bold.ttf') format('truetype'),
-    url('./assets/fonts/ProximaNova-Bold.woff') format('woff'),
-    url('./assets/fonts/ProximaNova-Bold.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
+    font-family: "ProximaNova-Bold";
+    src: url("./assets/fonts/ProximaNova-Bold.eot");
+    src: url("./assets/fonts/ProximaNova-Bold.eot?#iefix")
+            format("embedded-opentype"),
+        url("./assets/fonts/ProximaNova-Bold.svg#ProximaNova-Bold")
+            format("svg"),
+        url("./assets/fonts/ProximaNova-Bold.ttf") format("truetype"),
+        url("./assets/fonts/ProximaNova-Bold.woff") format("woff"),
+        url("./assets/fonts/ProximaNova-Bold.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
 }
 
 ::-webkit-input-placeholder {
-  /* Edge */
-  color: rgba(30, 30, 30, 0.5) !important;
-  opacity: 1 !important;
+    /* Edge */
+    color: rgba(30, 30, 30, 0.5) !important;
+    opacity: 1 !important;
 }
 
 :-ms-input-placeholder {
-  /* Internet Explorer */
-  color: rgba(30, 30, 30, 0.5) !important;
-  opacity: 1 !important;
+    /* Internet Explorer */
+    color: rgba(30, 30, 30, 0.5) !important;
+    opacity: 1 !important;
 }
 
 ::placeholder {
-  color: rgba(30, 30, 30, 0.5) !important;
-  opacity: 1 !important;
+    color: rgba(30, 30, 30, 0.5) !important;
+    opacity: 1 !important;
 }
 
 .primary-button {
-  background: #F7A823;
-  color: #fff;
-  padding: 14px 28px;
-  font-size: 14px;
-  line-height: 14px;
-  height: 45px;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
-  text-transform: capitalize;
-  font-family: 'Proxima Nova Semibold',serif,sans-serif;
-  border: 1px solid #F7A823;
-  cursor: pointer;
+    background: #f7a823;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 14px;
+    line-height: 14px;
+    height: 40px;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+    text-transform: capitalize;
+    font-family: "Proxima Nova Semibold", serif, sans-serif;
+    border: 1px solid #f7a823;
+    cursor: pointer;
 }
 
 .primary-button:hover {
-  background: #D98C08;
-  color: #F4F7FC;
+    background: #d98c08;
+    color: #f4f7fc;
 }
 
 .secondary-button {
-  background: #E0E0E0;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05);
-  color: #707070;
-  padding: 14px 28px;
-  font-size: 14px;
-  line-height: 14px;
-  height: 45px;
-  border-radius: 3px;
-  text-transform: capitalize;
-  font-family: 'Proxima Nova Semibold',serif,sans-serif;
-  border: none;
-  cursor: pointer;
+    background: #e0e0e0;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05);
+    color: #707070;
+    padding: 12px 24px;
+    font-size: 14px;
+    line-height: 14px;
+    height: 40px;
+    border-radius: 3px;
+    text-transform: capitalize;
+    font-family: "Proxima Nova Semibold", serif, sans-serif;
+    border: none;
+    cursor: pointer;
 }
 
 .secondary-button:hover {
-  background: #CCCCCC;
+    background: #cccccc;
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0
-  }
+    0% {
+        opacity: 0;
+    }
 
-  100% {
-    opacity: 1
-  }
+    100% {
+        opacity: 1;
+    }
 }
 
 .owl-carousel .fadeIn {
-  animation-name: fadeIn
+    animation-name: fadeIn;
 }
 
 .logo {
-  width: 160px;
-  margin-bottom: 40px;
+    width: 160px;
+    margin-bottom: 40px;
 }
 
 .heading1 {
-  color: #F7A823;
-  font-family: 'ProximaNova-Bold',serif,sans-serif;
-  font-size: 18px;
-  line-height: 18px;
+    color: #f7a823;
+    font-family: "ProximaNova-Bold", serif, sans-serif;
+    font-size: 18px;
+    line-height: 18px;
 }
 
 .heading2 {
-  font-family: 'ProximaNova-Semibold', serif,sans-serif;
-  margin: 0;
-  font-size: 18px;line-height: 18px;
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+    margin: 0;
+    font-size: 18px;
+    line-height: 18px;
 }
 
-
 .form-header {
-  padding: 0 0 30px;
-  border-bottom: 1px solid #1E1E1E;
+    padding: 0 0 20px;
+    border-bottom: 1px solid #1e1e1e;
 }
 
 .form-header-right-txt {
-  /* color: #F7A823;
+    /* color: #F7A823;
   font-family: 'ProximaNova-Semibold';
   font-size: 16px; */
-  position: relative;
-  display: flex;align-items: center;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 .download-icon {
-  margin: 5px 0 0;
+    margin: 5px 0 0;
 }
 .download-icon svg {
-  font-size: 16px;
-  margin-right: 3px;
+    font-size: 16px;
+    margin-right: 3px;
 }
 .tertiary-btn-blk {
-  display: flex;
-  align-items: center;
-  color: #F7A823;
-  font-family: 'ProximaNova-Semibold', serif,sans-serif;
-  font-size: 14px;cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #f7a823;
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
 }
-.tertiary-btn-blk:hover{color: #D98C08;}
+.tertiary-btn-blk:hover {
+    color: #d98c08;
+}
 .card-wrapper {
-  background: #FFFFFF;
-  box-shadow: 0px 3px 15px #00000029;
-  border-radius: 3px;
-  padding: 30px;
-  margin: 30px 0;
+    background: #ffffff;
+    box-shadow: 0px 3px 15px #00000029;
+    border-radius: 3px;
+    padding: 20px;
+    margin: 20px 0px 50px;
+    /* margin: 20px 0; */
 }
 
 .card-form-field {
-  flex: 0 0 46%;
-  max-width: 46%;
+    flex: 0 0 46%;
+    max-width: 46%;
 }
-.pb-0{padding-bottom: 0 !important;}
+.pb-0 {
+    padding-bottom: 0 !important;
+}
 .mr-10 {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 .mr-20 {
-  margin-right: 20px;
+    margin-right: 20px;
 }
-.mr-40{margin-right: 40px;}
-.mt-30{margin-top: 30px;}
+.mr-40 {
+    margin-right: 40px;
+}
+.mt-30 {
+    margin-top: 30px;
+}
 /* .card-blk .primary-button {
   padding: 0 20px;
 } */
 
-.add-members-btn {
-  justify-content: flex-end;
-  flex: 0 0 100%;
-  max-width: 100%;
+.MuiFormHelperText-contained {
+    color: #e53850 !important;
+    font-size: 12px !important;
 }
 
-.form-group>select {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  display: block;
-  background-color: transparent;
-  outline: 0;
-  width: 100%;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  border-radius: 3px;
-  line-height: inherit;
-  background-image: none;
-  padding: 0 15px;
-  height: 45px;
-  border: 1px solid rgba(30, 30, 30, 0.15);
-  font-size: 14px;
-  color: #1E1E1E80;
+.add-members-btn {
+    justify-content: flex-end;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.form-group > select {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    background-color: transparent;
+    outline: 0;
+    width: 100%;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 3px;
+    line-height: inherit;
+    background-image: none;
+    padding: 0 15px;
+    height: 45px;
+    border: 1px solid rgba(30, 30, 30, 0.15);
+    font-size: 14px;
+    color: #1e1e1e80;
 }
 
 .select-field select {
-  width: 100%;
-  padding: 0 15px;
-  border-radius: 3px;
-  background: transparent;
-  height: 45px;
-  border: 1px solid rgba(30, 30, 30, 0.15);
-  font-size: 14px;
-  color: #1E1E1E80;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  outline: none;
+    width: 100%;
+    padding: 0 15px;
+    border-radius: 3px;
+    background: transparent;
+    height: 45px;
+    border: 1px solid rgba(30, 30, 30, 0.15);
+    font-size: 14px;
+    color: #1e1e1e80;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    outline: none;
 }
 
 input:disabled,
-select:disabled, textarea:disabled {
-  background: rgba(30, 30, 30, 0.1) !important;
-  border-color: rgba(30, 30, 30, 0.1) !important;
+select:disabled,
+textarea:disabled {
+    background: rgba(30, 30, 30, 0.1) !important;
+    border-color: rgba(30, 30, 30, 0.1) !important;
 }
 /* .input-textarea .Mui-disabled{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;} */
 .select-field {
-  position: relative;
+    position: relative;
 }
 
 .select-field::before {
-  font-size: 14px;
-  content: '\f078';
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  font-family: "FontAwesome", serif, sans-serif;
-  pointer-events: none;
-  z-index: 1;
+    font-size: 14px;
+    content: "\f078";
+    position: absolute;
+    top: 13px;
+    right: 15px;
+    font-family: "FontAwesome", serif, sans-serif;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .addmore-icon {
-  width: 17px;
-  height: 17px;
-  border: 1px solid #F7A823;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 10px;
+    width: 17px;
+    height: 17px;
+    border: 1px solid #f7a823;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
 }
 
 .addmore-icon i {
-  font-size: 11px;
+    font-size: 11px;
 }
 
 /* Login */
 .form-group {
-  padding: 0;
-  margin-bottom: 19px;
+    padding: 0;
+    margin-bottom: 19px;
 }
 
 .mandatory {
-  color: #E53850;
+    color: #e53850;
 }
 
-.form-group>label {
-  display: block;
-  width: 100%;
-  font-weight: 400;
-  line-height: 15px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 10px;
-  position: relative;
-  color: #1E1E1E;
-  font-size: 14px;
+.form-group > label {
+    display: block;
+    width: 100%;
+    font-weight: 400;
+    line-height: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 10px;
+    position: relative;
+    color: #1e1e1e;
+    font-size: 14px;
 }
 
-.form-group>input {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  display: block;
-  background-color: transparent;
-  outline: 0;
-  width: 100%;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  border-radius: 3px;
-  line-height: inherit;
-  background-image: none;
-  padding: 0 15px;
-  height: 45px;
-  border: 1px solid rgba(30, 30, 30, 0.15);
-  font-size: 14px;
-  color: #1E1E1E80;
+.form-group > input {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    background-color: transparent;
+    outline: 0;
+    width: 100%;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 3px;
+    line-height: inherit;
+    background-image: none;
+    padding: 0 15px;
+    height: 45px;
+    border: 1px solid rgba(30, 30, 30, 0.15);
+    font-size: 14px;
+    color: #1e1e1e80;
 }
-
 
 /* Breadcrumb css */
 ul.breadcrumb {
-  padding: 30px 15px 30px 0;
-  list-style: none;
+    padding: 20px 15px 20px 0;
+    list-style: none;
 }
 
 ul.breadcrumb li {
-  display: inline;
-  font-size: 14px;
-  font-family: 'ProximaNova-Semibold', serif, sans-serif;
-  color: #1D354D;
+    display: inline;
+    font-size: 14px;
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+    color: #1d354d;
 }
 
-ul.breadcrumb li+li:before {
-  padding: 10px 6px;
-  color: #1D354D;
-  content: "\f054";
-  font-family: "FontAwesome" ,serif ,sans-serif;
-  font-size: 11px;
+ul.breadcrumb li + li:before {
+    padding: 10px 6px;
+    color: #1d354d;
+    content: "\f054";
+    font-family: "FontAwesome", serif, sans-serif;
+    font-size: 11px;
 }
 
 ul.breadcrumb li a {
-  color: #1D354D;
-  text-decoration: none;
-  font-family: 'ProximaNova-Regular', serif, sans-serif;
+    color: #1d354d;
+    text-decoration: none;
+    font-family: "ProximaNova-Regular", serif, sans-serif;
 }
 
 ul.breadcrumb li a:hover {
-  color: #1D354D;
-  text-decoration: none;
+    color: #1d354d;
+    text-decoration: none;
 }
 
-
 .MuiTextField-root {
-  width: 100%;
+    width: 100%;
 }
 
 .MuiInputBase-input {
-  height: 45px !important;
-  padding: 0 15px !important;
-  font-size: 14px !important;
-  color: #1E1E1E !important;font-family: 'ProximaNova-Regular', serif,sans-serif !important;
+    height: 40px !important;
+    padding: 0 15px !important;
+    font-size: 14px !important;
+    color: #1e1e1e !important;
+    font-family: "ProximaNova-Regular", serif, sans-serif !important;
 }
 
 .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
-  transform: translate(18px, 13px) scale(1) !important;
-  font-size: 14px !important;
+    transform: translate(18px, 13px) scale(1) !important;
+    font-size: 14px !important;
 }
 
 .Mui-focused {
-  transform: initial !important;
-  /* font-size: 14px !important; */
-  border-width: 0 !important;
+    transform: initial !important;
+    /* font-size: 14px !important; */
+    border-width: 0 !important;
 }
 
-.input-field fieldset, .dropdown-field fieldset {
-  top: -5px !important;
-  border-width: 1px !important;
-  bottom: auto !important;
-  height: 50px;
-  left: 0 !important;
-  width: 100%;
-  overflow: visible !important;
-  border-radius: 3px !important;
-  border-color: rgba(30, 30, 30, 0.5) !important;
+.input-field fieldset,
+.dropdown-field fieldset {
+    top: -5px !important;
+    border-width: 1px !important;
+    bottom: auto !important;
+    height: 45px;
+    left: 0 !important;
+    width: 100%;
+    overflow: visible !important;
+    border-radius: 3px !important;
+    border-color: rgba(30, 30, 30, 0.5) !important;
 }
 
 /* Added by Rajkumar */
 .input-error fieldset {
-  /* border-width: 1px !important; */
-  border-color: #E53850 !important;
+    /* border-width: 1px !important; */
+    border-color: #e53850 !important;
 }
-.MuiFormHelperText-contained{
-  color: #E53850 !important;
-  font-size: 12px !important;
-  line-height: 18px !important;
-  font-family: 'ProximaNova-Regular', serif,sans-serif !important;
-  margin-left: 15px !important;
+.MuiFormHelperText-contained {
+    color: #e53850 !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
+    font-family: "ProximaNova-Regular", serif, sans-serif !important;
+    margin-left: 15px !important;
 }
-.card-blk{
-  align-items: flex-start;
+.card-blk {
+    align-items: flex-start;
 }
 
-.fullwidth{
-  flex:100%;
-  max-width: 100%;
+.fullwidth {
+    flex: 100%;
+    max-width: 100%;
 }
-.input-textarea .MuiInputBase-root{
-  height: 90px;
-  padding: 0 !important;
+.input-textarea .MuiInputBase-root {
+    height: 80px;
+    padding: 0 !important;
 }
 
 .input-textarea textarea {
-  height: 90px !important;
-  padding: 15px !important;
-  line-height: 14px;
-  box-sizing: border-box;
+    height: 80px !important;
+    padding: 15px !important;
+    line-height: 14px;
+    box-sizing: border-box;
 }
 
-.input-textarea textarea .MuiInputBase-input{
-  padding: 0px 15px;
+.input-textarea textarea .MuiInputBase-input {
+    padding: 0px 15px;
 }
 
-.input-textarea fieldset{border-color:rgba(30, 30, 30, 0.5)}
-.input-textarea .MuiInputBase-root.Mui-focused fieldset{border-width: 1px;}
-.input-textarea-error fieldset{border-color: #E53850;}
-.table-blk-role .MuiTableCell-head{
-  padding: 15px !important;
+.input-textarea fieldset {
+    border-color: rgba(30, 30, 30, 0.5);
+}
+.input-textarea .MuiInputBase-root.Mui-focused fieldset {
+    border-width: 1px;
+}
+.input-textarea-error fieldset {
+    border-color: #e53850;
+}
+.table-blk-role .MuiTableCell-head {
+    padding: 15px !important;
 }
 .loader-blk {
-  text-align: center;
-  width: 200px;
-  margin: 0 auto;
+    text-align: center;
+    width: 200px;
+    margin: 0 auto;
 }
-.loader-blk img{
-  width: 100%;
+.loader-blk img {
+    width: 100%;
 }
-
-
-
-
-
-
-
-
-
-
+.select-reusable{
+    width: 100%;
+}
+.sub-heading1{
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+    margin: 0;
+    font-size: 16px;
+    line-height: 16px;
+    margin-bottom: 20px;
+}
+.card-inner-wrap{
+    margin-bottom: 20px;
+}
 .Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #4596D1 !important;
+    border-color: #4596d1 !important;border-width: 1px !important;
 }
 
 .input-field:hover fieldset {
-  border-color: rgba(30, 30, 30, 0.8)!important;
+    border-color: rgba(30, 30, 30, 0.8) !important;
 }
 .input-field:hover .Mui-disabled fieldset {
-  border-color: rgba(30, 30, 30, 0.15) !important
+    border-color: rgba(30, 30, 30, 0.15) !important;
 }
 
 .MuiSelect-select {
-  display: flex !important;
-  flex-direction: column;
-  justify-content: center;
-  color: #1E1E1E !important;
-  background: #fff !important;font-family: 'ProximaNova-Regular', serif,sans-serif !important;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    color: #1e1e1e !important;
+    background: #fff !important;
+    font-family: "ProximaNova-Regular", serif, sans-serif !important;
 }
 
 .select-field .MuiInputBase-root {
-  width: 100%;
+    width: 100%;
 }
 
 .css-yf8vq0-MuiSelect-nativeInput {
-  height: 45px;
+    height: 45px;
 }
 
 .Mui-disabled {
-  border-color: rgba(30, 30, 30, 0.15) !important;
-  /* cursor: not-allowed !important; */
+    border-color: rgba(30, 30, 30, 0.15) !important;
+    /* cursor: not-allowed !important; */
 }
-.Mui-disabled > fieldset{border-color: rgba(30, 30, 30, 0.15) !important;}
+.Mui-disabled > fieldset {
+    border-color: rgba(30, 30, 30, 0.15) !important;
+}
 
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root {
-  font-size: 14px !important;
-  padding: 5px 15px !important;
+    font-size: 14px !important;
+    padding: 5px 15px !important;
+    font-family: 'ProximaNova-Regular' !important;
 }
 
 .css-6hp17o-MuiList-root-MuiMenu-list {
-  padding: 15px 0 0 !important;
+    padding: 15px 0 0 !important;
 }
 
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root.Mui-selected {
-  background: #e1e1e1 !important;
+    background: #e1e1e1 !important;
 }
 
 .MuiPaper-root {
-  box-shadow: 0px 3px 15px #0000004D !important;
+    box-shadow: 0px 3px 15px #0000004d !important;
 }
 
 .select-field svg {
-  display: none;
+    display: none;
 }
 
 select:focus {
-  border: 1px solid #4596D1;
+    border: 1px solid #4596d1;
 }
 
-
 /* Member css */
-.member-form-header{padding: 0;border-bottom: none; margin:30px 0px}
-.tabs-sect{border-bottom: none !important;}
+.member-form-header {
+    padding: 0;
+    border-bottom: none;
+    margin: 20px 0px;
+}
+.tabs-sect {
+    border-bottom: none !important;
+}
 .tabs-sect .css-1ujnqem-MuiTabs-root {
-  border: none;
-  background: transparent;
-  font-family: 'ProximaNova-Bold', serif,sans-serif;
-  min-height: 21px !important;
+    border: none;
+    background: transparent;
+    font-family: "ProximaNova-Bold", serif, sans-serif;
+    min-height: 21px !important;
 }
 
 .tabs-sect .css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
-  margin-right: 15px;
-  padding: 13px 0 !important;
-  font-size: 14px !important;
-  line-height: 14px !important;
-  text-transform: capitalize !important;
-  min-height: 21px !important;font-family:'ProximaNova-Bold', serif,sans-serif !important;color: rgba(30, 30, 30, 0.5);
+    margin-right: 15px;
+    padding: 13px 0 !important;
+    font-size: 14px !important;
+    line-height: 14px !important;
+    text-transform: capitalize !important;
+    min-height: 21px !important;
+    font-family: "ProximaNova-Bold", serif, sans-serif !important;
+    color: rgba(30, 30, 30, 0.5);
 }
 .tabs-sect .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  
-  color: #F7A823 !important;
+    color: #f7a823 !important;
 }
-.tabs-sect .css-1aquho2-MuiTabs-indicator{background-color: #F7A823;}
+.tabs-sect .css-1aquho2-MuiTabs-indicator {
+    background-color: #f7a823;
+}
 
 .tabs-sect .css-1gsv261 {
-  border-bottom: none !important;
+    border-bottom: none !important;
 }
 
 .filter-select-field .css-hfutr2-MuiSvgIcon-root-MuiSelect-icon {
-  color: #1E1E1E99;
+    color: #1e1e1e99;
 }
 
 .member-filter-left {
-  flex: 0 0 50%;
-  max-width: 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
 }
 
 .member-filter-right {
-  flex: 0 0 50%;
-  max-width: 50%;
-  display: flex;
-  justify-content: flex-end;
+    flex: 0 0 50%;
+    max-width: 50%;
+    display: flex;
+    justify-content: flex-end;
 }
 .filter-select-wrap {
-  justify-content: flex-start;
+    justify-content: flex-start;
 }
-.filter-select-field{margin-right: 10px;}
-.filter-select-field:last-child{margin-right: 0;}
+.filter-select-field {
+    margin-right: 10px;
+}
+.filter-select-field:last-child {
+    margin-right: 0;
+}
 .filter-select-field .MuiInputBase-input {
-  padding: 0px 35px 0 14px !important;
-  color: #1E1E1E80 !important;
+    padding: 0px 35px 0 14px !important;
+    color: #1e1e1e80 !important;
 }
 
 .member-info-wrapper .css-19kzrtu {
-  padding: 0;
+    padding: 0;
 }
 
-
-
 .searchbar {
-  flex: 0 0 65%;
-  max-width: 65%;
-  position: relative;
-  margin-right: 10px;
+    flex: 0 0 65%;
+    max-width: 65%;
+    position: relative;
+    margin-right: 10px;
 }
 
 .searchbar input {
-  width: 100%;
-  height: 45px;
-  padding: 0 15px 0 34px;
-  border: 1px solid rgba(30, 30, 30, 0.5);
-  border-radius: 3px;
-  font-size: 14px;
-  outline: none;
-  color: #1E1E1E;
-  font-family: 'ProximaNova-Regular', serif, sans-serif;
+    width: 100%;
+    height: 40px;
+    padding: 0 15px 0 34px;
+    border: 1px solid rgba(30, 30, 30, 0.5);
+    border-radius: 3px;
+    font-size: 14px;
+    outline: none;
+    color: #1e1e1e;
+    font-family: "ProximaNova-Regular", serif, sans-serif;
 }
 
 .searchbar input:focus {
-  border-color: #4596D1;
+    border-color: #4596d1;
 }
 
 .searchbar button {
-  position: absolute;
-  left: 4px;
-  top: 5px;
-  height: 38px;
-  width: 26px;
-  appearance: none;
-  background: transparent;
-  border: none;
+    position: absolute;
+    left: 4px;
+    top: 5px;
+    height: 30px;
+    width: 26px;
+    appearance: none;
+    background: transparent;
+    border: none;
 }
 
 .searchbar .fa-search {
-  color: #1E1E1E99;
+    color: #1e1e1e99;
 }
 
 /* .member-filter-wrap {
   margin: 30px 0;
 } */
-.mb-30{
-  margin-bottom: 30px;
+.mb-30 {
+    margin-bottom: 30px;
 }
 
 /* Checkbox css */
@@ -681,129 +780,347 @@ input[type=checkbox]:checked:before {
 	color: #4596D1;
 } */
 
-
 /* View member css */
-.card-form-three-field {flex: 0 0 31.5%;max-width: 31.5%;}
-.crud-operation{width: 26px;height: 26px;display: flex;justify-content: center;align-items: center;cursor: pointer;}
-.crud-operation:hover{background: rgba(30, 30, 30, 0.2);border-radius: 100%;}
-.crud-operation-active{background: rgba(30, 30, 30, 0.2);border-radius: 100%;}
-.crud-operation svg{color: #1E1E1E;font-size: 20px;}
-.crud-toggle-wrap{width: 110px;background: #fff;box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.302);padding: 11px 0;display: none;top: 35px;position: absolute;left: -84px;}
-.crud-toggle-list li{font-size: 14px;color: #1E1E1E;font-family: 'ProximaNova-Regular', serif,sans-serif;list-style-type: none;padding: 4px 15px;cursor: pointer;}
-.crud-toggle-list li:hover{background: rgba(0, 0, 0, 0.3)}
-.form-header-link{display: flex;align-items: center;cursor: pointer;}
-.view-member-filter .searchbar{flex: 0 0 58%;max-width: 58%;}
+.card-form-three-field {
+    flex: 0 0 31.5%;
+    max-width: 31.5%;
+}
+.crud-operation {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.crud-operation:hover {
+    background: rgba(30, 30, 30, 0.2);
+    border-radius: 100%;
+}
+.crud-operation-active {
+    background: rgba(30, 30, 30, 0.2);
+    border-radius: 100%;
+}
+.crud-operation svg {
+    color: #1e1e1e;
+    font-size: 20px;
+}
+.crud-toggle-wrap {
+    width: 110px;
+    background: #fff;
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.302);
+    padding: 11px 0;
+    display: none;
+    top: 35px;
+    position: absolute;
+    left: -84px;
+}
+.crud-toggle-list li {
+    font-size: 14px;
+    color: #1e1e1e;
+    font-family: "ProximaNova-Regular", serif, sans-serif;
+    list-style-type: none;
+    padding: 4px 15px;
+    cursor: pointer;
+}
+.crud-toggle-list li:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+.form-header-link {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.view-member-filter .searchbar {
+    flex: 0 0 58%;
+    max-width: 58%;
+}
 /* Popup css */
-.popup-box{width: 734px !important;background: #fff;box-shadow: 0px 3px 15px #00000029;border-radius: 10px;border: none !important;padding: 0 !important;outline: none;}
-.popup-ttl{font-size: 18px !important;line-height: 18px !important;color: #1D354D;text-align: center;font-family: 'ProximaNova-Bold', serif,sans-serif !important;}
-.popup-body{padding: 30px;}
-.popup-content-blk p{font-size: 14px;color: #1E1E1E;margin: 0 auto 30px;max-width: 85%;}
-.popup-ttl-blk{border-bottom: 1px solid rgba(30, 30, 30, 0.5);padding: 30px 0;position: relative;outline: none;}
-.popup-close-icon {position: absolute;top: 27px;right: 30px;cursor: pointer;}
-.popup-blk .css-sox5kk-MuiBackdrop-root{background-color: rgba(0, 0, 0, 0.6);}
+.popup-box {
+    width: 734px !important;
+    background: #fff;
+    box-shadow: 0px 3px 15px #00000029;
+    border-radius: 10px;
+    border: none !important;
+    padding: 0 !important;
+    outline: none;
+}
+.popup-ttl {
+    font-size: 18px !important;
+    line-height: 18px !important;
+    color: #1d354d;
+    text-align: center;
+    font-family: "ProximaNova-Bold", serif, sans-serif !important;
+}
+.popup-body {
+    padding: 30px;
+}
+.popup-content-blk p {
+    font-size: 14px;
+    color: #1e1e1e;
+    margin: 0 auto 30px;
+    max-width: 85%;
+}
+.popup-ttl-blk {
+    border-bottom: 1px solid rgba(30, 30, 30, 0.5);
+    padding: 30px 0;
+    position: relative;
+    outline: none;
+}
+.popup-close-icon {
+    position: absolute;
+    top: 27px;
+    right: 30px;
+    cursor: pointer;
+}
+.popup-blk .css-sox5kk-MuiBackdrop-root {
+    background-color: rgba(0, 0, 0, 0.6);
+}
 
-.popup-content-blk p:first-child{margin-bottom: 15px;}
+.popup-content-blk p:first-child {
+    margin-bottom: 15px;
+}
 
 /* Radio button css */
 .radio-btn {
-  display: flex !important;
-  flex-direction: row !important;
+    display: flex !important;
+    flex-direction: row !important;
 }
-.radio-btn .MuiFormControlLabel-label{font-family: 'ProximaNova-Regular', serif,sans-serif;font-size: 14px;
-  color: rgba(30, 30, 30, 0.5);}
-.radio-btn .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked{color: #4596D1;}
-.radio-btn .css-vqmohf-MuiButtonBase-root-MuiRadio-root{color: #707070;}
-.radio-btn svg{font-size: 16px;}
-.radio-btn svg:first-child path{color: #707070 ;}
-.radio-btn label{margin-right: 30px;}
-.checkbox-mui{color: #0082C9;}
-
+.radio-btn .MuiFormControlLabel-label {
+    font-family: "ProximaNova-Regular", serif, sans-serif;
+    font-size: 14px;
+    color: rgba(30, 30, 30, 0.5);
+}
+.radio-btn .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
+    color: #4596d1;
+}
+.radio-btn .css-vqmohf-MuiButtonBase-root-MuiRadio-root {
+    color: #707070;
+}
+.radio-btn svg {
+    font-size: 16px;
+}
+.radio-btn svg:first-child path {
+    color: #707070;
+}
+.radio-btn label {
+    margin-right: 30px;
+}
+.checkbox-mui {
+    color: #0082c9;
+}
 
 /* Header css */
-.nav-list li{list-style-type: none;padding: 0 15px;font-family: 'ProximaNova-Semibold', serif,sans-serif;font-size: 14px;}
-.nav-list li a{color: #1E1E1E;text-decoration: none;}
-.nav-list li.active a{color: #F7A823;position: relative;}
-.nav-list li.active a::before{width: 100%;
-  height: 5px;
-  background: #F7A823;
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  content: '';}
-.nav-list li a:hover{text-decoration: none;}
+.nav-list li {
+    list-style-type: none;
+    padding: 0 15px;
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+    font-size: 14px;
+}
+.nav-list li a {
+    color: #1e1e1e;
+    text-decoration: none;
+}
+.nav-list li.active a {
+    color: #f7a823;
+    position: relative;
+}
+.nav-list li.active a::before {
+    width: 100%;
+    height: 5px;
+    background: #f7a823;
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    content: "";
+}
+.nav-list li a:hover {
+    text-decoration: none;
+}
 .logo-blk {
-  width: 115px;
+    width: 115px;
 }
 
 .nav {
-  background-color: #FFFFFF;
-  width: 100%;
+    background-color: #ffffff;
+    width: 100%;
 }
 .header-left {
-  flex: 0 0 79%;
-  max-width: 79%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;justify-content: space-between;
+    flex: 0 0 79%;
+    max-width: 79%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
 }
 .header-wrapper {
-  display: flex;align-items: center;justify-content: space-between;
-  height: 100px;
-  width: 100%;
-  color: #1E1E1E;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    width: 100%;
+    color: #1e1e1e;
 }
-.header-sect{box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.02) !important;}
-.profile-menu-item p{font-size: 14px;color:#1E1E1E;font-family: 'ProximaNova-Regular', serif,sans-serif;}
-.profile-menu-item .css-6hp17o-MuiList-root-MuiMenu-list{padding: 0 !important;}
+.header-sect {
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.02) !important;
+}
+.profile-menu-item p {
+    font-size: 14px;
+    color: #1e1e1e;
+    font-family: "ProximaNova-Regular", serif, sans-serif;
+}
+.profile-menu-item .css-6hp17o-MuiList-root-MuiMenu-list {
+    padding: 0 !important;
+}
 .nav-list-right {
-  flex: 0 0 25%;
-  max-width: 25%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
+    flex: 0 0 25%;
+    max-width: 25%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
 }
-.user-img{width: 48px;height: 48px;border-radius: 100%;margin-right: 10px;background: #4d6073;display: flex;justify-content: center;align-items: center;box-shadow: 0 3px 6px rgba(0,0,0,0.16);}
-.user-name-txt{color: #FFFFFF;font-size: 14px;font-family: 'ProximaNova-Semibold', serif,sans-serif;text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);}
-.user-info span{display: flex;align-items: center;line-height: 10px;cursor: pointer;}
-.user-name{color: #1D354D;font-family: 'ProximaNova-Bold', serif,sans-serif;}
-.user-info {margin: 8px 0 0;}
-.super-admin-arrow svg{transition: 0.5s ease;}
-.super-admin-arrow.active svg{transform: rotate(180deg);}
+.user-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 100%;
+    margin-right: 10px;
+    background: #4d6073;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+.user-name-txt {
+    color: #ffffff;
+    font-size: 14px;
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+}
+.user-info span {
+    display: flex;
+    align-items: center;
+    line-height: 10px;
+    cursor: pointer;
+}
+.user-name {
+    color: #1d354d;
+    font-family: "ProximaNova-Bold", serif, sans-serif;
+}
+.user-info {
+    margin: 8px 0 0;
+}
+.super-admin-arrow svg {
+    transition: 0.5s ease;
+}
+.super-admin-arrow.active svg {
+    transform: rotate(180deg);
+}
 
 /* Phone field css */
-.phone-field input{-webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  display: block;
-  background-color: transparent;
-  outline: 0;
-  width: 100%;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  border-radius: 3px;
-  line-height: inherit;
-  background-image: none;
-  padding: 0 15px;
-  height: 45px;
-  border: 1px solid rgba(30, 30, 30, 0.5);
-  font-size: 14px;
-  color: #1E1E1E80;}
-.phone-field .PhoneInputCountry{border: 1px solid rgba(30, 30, 30, 0.5);
-  padding: 0 15px;
-  margin-right: 10px;border-radius: 3px;}
-  .phone-field .PhoneInputCountrySelectArrow {
+.phone-field input {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    background-color: transparent;
+    outline: 0;
+    width: 100%;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 3px;
+    line-height: inherit;
+    background-image: none;
+    padding: 0 15px;
+    height: 45px;
+    border: 1px solid rgba(30, 30, 30, 0.5);
+    font-size: 14px;
+    color: #1e1e1e80;
+}
+.phone-field .PhoneInputCountry {
+    border: 1px solid rgba(30, 30, 30, 0.5);
+    padding: 0 15px;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+.phone-field .PhoneInputCountrySelectArrow {
     margin-left: 10px;
     color: #000;
     width: 6px;
     height: 6px;
     margin-top: -1px;
 }
-.phone-field .PhoneInputCountryIcon{box-shadow: none;width: 18px;height: 12px;}
-.phone-field .PhoneInputCountrySelect:focus + .PhoneInputCountryIcon--border{box-shadow: none;}
-.phone-field .PhoneInputCountrySelect:focus + .PhoneInputCountryIcon + .PhoneInputCountrySelectArrow{color: #1E1E1E;}
-.phone-field.PhoneInput--disabled .PhoneInputCountry{background: rgba(30, 30, 30, 0.1);cursor: not-allowed;}
-.phone-field.PhoneInput--disabled .PhoneInputCountry select, .phone-field.PhoneInput--disabled input{cursor: not-allowed;}
-.phone-field input:hover, .phone-field .PhoneInputCountry:hover{border-color: rgba(30, 30, 30, 0.8);}
-.phone-field.PhoneInput--disabled .PhoneInputCountry:hover{border-color: rgba(30, 30, 30, 0.5);}
+.phone-field .PhoneInputCountryIcon {
+    box-shadow: none;
+    width: 18px;
+    height: 12px;
+}
+.phone-field .PhoneInputCountrySelect:focus + .PhoneInputCountryIcon--border {
+    box-shadow: none;
+}
+.phone-field
+    .PhoneInputCountrySelect:focus
+    + .PhoneInputCountryIcon
+    + .PhoneInputCountrySelectArrow {
+    color: #1e1e1e;
+}
+.phone-field.PhoneInput--disabled .PhoneInputCountry {
+    background: rgba(30, 30, 30, 0.1);
+    cursor: not-allowed;
+}
+.phone-field.PhoneInput--disabled .PhoneInputCountry select,
+.phone-field.PhoneInput--disabled input {
+    cursor: not-allowed;
+}
+.phone-field input:hover,
+.phone-field .PhoneInputCountry:hover {
+    border-color: rgba(30, 30, 30, 0.8);
+}
+.phone-field.PhoneInput--disabled .PhoneInputCountry:hover {
+    border-color: rgba(30, 30, 30, 0.5);
+}
+
+/* Password error */
+.password-error {
+    margin-left: 4%;
+    color: #e53850;
+    font-size: 12px;
+    margin-top: 1%;
+}
+
+/* css by madhav for autocomplete in phone number */
+.phone-number-field {
+    display: flex;
+    align-items: center;
+}
+.radio-btn-field .MuiRadio-root {
+    background: none !important;
+}
+.radio-btn-field .MuiTouchRipple-root {
+    /* display: none; */
+}
 
 
+
+
+/* phone number and country code csss */
+.phone-number-field{display: flex;align-items: flex-start;}
+.country-code{margin-right: 10px;width: 130px;}
+.phone-number-field .MuiSelect-select{padding: 0 40px 0 15px !important;}
+.phone-number-field fieldset{border-color:rgba(30, 30, 30, 0.5);font-family: 'ProximaNova-Regular';}
+.Mui-focused .MuiOutlinedInput-notchedOutline {border-width: 1px !important;}
+.country-code .MuiInputBase-root{height: 40px;padding: 0 20px 0 0 !important;}
+.country-code input{height: 15px !important;}
+
+.salutation-wrap{display: flex;align-items: flex-start;}
+.salutation-blk{margin-right: 10px;width: 80px;}
+.salutation-wrap label{margin-bottom: 10px;display: inline-block;}
+.salutation-inputblk{flex: 1;}
+
+.select-field-error fieldset{border-color: #e53850 !important;}
+.searchable-input fieldset{height: 45px;}
+.searchable-input .MuiInputBase-root{height: 40px;padding: 0 !important;}
+.searchable-inputlist{font-size: 14px !important;font-family: 'ProximaNova-Regular' !important;}
+
+.select-field .Mui-disabled{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;}
+.select-field .MuiInputBase-root.Mui-disabled{background: none !important;}
+.phone-number-disable{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;}
