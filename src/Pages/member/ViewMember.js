@@ -1161,6 +1161,7 @@ const ViewMember = () => {
                     <div className="filter-select-field">
                       <div className="dropdown-field">
                         <Select
+                          sx={{display: "none"}}
                           name="createdBy"
                           multiple
                           value={selectedCreatedBy}
@@ -1208,6 +1209,7 @@ const ViewMember = () => {
                     <div className="filter-select-field">
                       <div className="dropdown-field">
                         <Select
+                          sx={{display:"none"}}
                           name="status"
                           value={filters.status}
                           onChange={onFilterChangehandler}
