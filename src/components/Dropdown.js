@@ -20,7 +20,7 @@ function Dropdown({ control, name, myOnChange, myHelper, placeholder, rules, opt
   // console.log("options",options)
   return (
     <FormControl className="select-reusable" disabled={isDisabled}>
-       <div className="select-field">
+       <div className={`select-field ${error && 'select-field-error'}`}>
        <Select
         displayEmpty
         value={value}
@@ -38,7 +38,7 @@ function Dropdown({ control, name, myOnChange, myHelper, placeholder, rules, opt
         >
           {placeholder}
         </MenuItem>
-        {options.map((option) => (
+        {options && options.map((option) => (
           <MenuItem key={option} value={option}>
             {option}
           </MenuItem>

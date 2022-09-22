@@ -1,50 +1,10 @@
-import { Box, Checkbox, MenuItem, Select, Tab, Tabs } from "@mui/material";
+import { Checkbox, MenuItem, Select } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import TableTester from "../../components/TableTester";
 import TableComponent from "../../components/TableComponent";
 import { useNavigate } from "react-router-dom";
 import { MEMBER } from "../../api/Url";
 import axios from "axios";
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
-//Ideally get those from backend
-const memberCompanies = [
-  "Kit Kat",
-  "Puma",
-  "Nike",
-  "Adidas",
-  "Campus",
-  "Mahindaras",
-];
 
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
@@ -57,14 +17,14 @@ const tableHead = [
     label: "Member Company",
   },
   {
-    id: "memberName",
+    id: "name",
     disablePadding: false,
     label: "Member Name",
   },
   {
-    id: "memberEmail",
+    id: "email",
     disablePadding: false,
-    // width: "20%",
+    // width: "30%",
     label: "Email",
   },
   {
@@ -73,7 +33,7 @@ const tableHead = [
     label: "Company Type",
   },
   {
-    id: "operationMembers",
+    id: "totalOperationMembers",
     disablePadding: false,
     // width: "5%",
     label: "Operation Members",
@@ -90,7 +50,7 @@ const tableHead = [
     label: "Onboarded On",
   },
   {
-    id: "is Active",
+    id: "isActive",
     disablePadding: false,
     // width: "15%",
     label: "Status",
@@ -125,10 +85,10 @@ const MemberList = () => {
   const keysOrder = [
     "_id",
     "companyName",
-    "memberName",
-    "memberEmail",
+    "name",
+    "email",
     "companyType",
-    "operationMembers",
+    "totalOperationMembers",
     "createdBy",
     "createdAt",
     "isActive",
@@ -140,20 +100,12 @@ const MemberList = () => {
   const [orderBy, setOrderBy] = useState("createdAt");
   const [records, setRecords] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
-  const [selected, setSelected] =useState([]);
+  const [selected, setSelected] = useState([]);
 
-  //State to hold selected memberCompnies
-  const [selectedMemberCompnies, setSelectedMemberCompnies] = useState([
-    "none",
-  ]);
   //State to hold selected Created by Member filter
   const [selectedCreatedBy, setSelectedCreatedBy] = useState(["none"]);
   //state to hold wheather to show placeholder or not
   const [showFilterPlaceholder, setShowFilterPlaceholder] = useState("");
-  //variable to hold wheater all Member company Details selected or not
-  const isAllMembersSelected =
-    selectedMemberCompnies.length > 1 &&
-    selectedMemberCompnies.length - 1 === memberCompanies.length;
   const isAllCreatedByMemberSelected =
     selectedCreatedBy.length > 1 &&
     selectedCreatedBy.length - 1 === allMembers.length;
@@ -171,7 +123,6 @@ const MemberList = () => {
       delete object["corporateEmail"];
       delete object["country"];
       delete object["countryCode"];
-      delete object["memberRepresentativeId"];
       delete object["parentCompany"];
       delete object["phoneNumber"];
       delete object["region"];
@@ -184,9 +135,25 @@ const MemberList = () => {
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
         "en-GB"
       );
-      object.memberEmail = "patel@gmail.com";
-      object.memberName = "Erin";
-      object.operationMembers = "123";
+      if (typeof object["createdBy"] === "object") {
+        object.createdBy = object["createdBy"]["name"];
+      } else {
+        object.createdBy = "NA";
+      }
+      if (object["representative"].length > 0) {
+        object['isActive'] = object['representative'][0]['isActive']
+        object.email = object["representative"][0]?.email ?? "NA";
+        object.name = object["representative"][0]?.name ?? "NA";
+      } else {
+        object['isActive'] = false
+        object.email = "NA";
+        object.name = "NA";
+      }
+
+      object.totalOperationMembers = object["totalOperationMembers"].toString();
+      delete object["representative"];
+      // delete object["createdBy"];
+      delete object["memberRepresentativeId"];
       keysOrder.forEach((k) => {
         const v = object[k];
         delete object[k];
@@ -232,16 +199,6 @@ const MemberList = () => {
         : setSelectedCreatedBy(["none", ...allMembers]);
     setSelectedCreatedBy([...value]);
   };
-  //const handle memberCompany select
-  const handleMemberCompanyFilter = (e) => {
-    const { name, value } = e.target;
-    console.log("name", name, "value", value);
-    if (value[value.length - 1] === "")
-      return selectedMemberCompnies.length - 1 === memberCompanies.length
-        ? setSelectedMemberCompnies(["none"])
-        : setSelectedMemberCompnies(["none", ...memberCompanies]);
-    setSelectedMemberCompnies([...value]);
-  };
   const handleTablePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -251,21 +208,28 @@ const MemberList = () => {
   };
   const onClickVisibilityIconHandler = (id) => {
     console.log("id", id);
-    return navigate(`view-role/${id}`);
+    return navigate(`/members/view-member/${id}`);
   };
   const generateUrl = () => {
     console.log("filters", filters);
-    let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
-    if (search?.length >= 3)
-      url = url + `&search=${search}`;
+
+    const namesMappings = {
+      companyName: 'name',
+      name: 'representativeName',
+      email: 'representativeEmail',
+      companyType: 'companyType',
+      totalOperationMembers: 'operationMembersCount',
+      createdBy: 'createdBy',
+      createdAt: 'createdAt',
+      isActive: 'status',
+    }
+
+    let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${namesMappings[orderBy]}&order=${order}`;
+    if (search?.length >= 3) url = url + `&search=${search}`;
     if (filters?.status !== "all" && filters?.status !== "none")
       url = url + `&status=${filters.status}`;
-    if (
-      search?.length >= 3 &&
-      filters?.status !== "all" &&
-      filters?.status !== "none"
-    )
-      url = url + `&search=${search}&status=${filters.status}`;
+    if (filters?.companyType !== "none")
+      url = url + `&companyType=${filters.companyType}`;
     return url;
   };
   const getMembers = async (isMounted, controller) => {
@@ -285,12 +249,12 @@ const MemberList = () => {
     makeApiCall && getMembers(isMounted, controller);
     return () => {
       isMounted = false;
-      // clearTimeout(searchTimeout);
+      clearTimeout(searchTimeout);
       controller.abort();
     };
   }, [page, rowsPerPage, orderBy, order, filters, makeApiCall]);
-  // console.log("records: ", records);
-  console.log("filters: ",filters)
+  console.log("records: ", records);
+  console.log("filters: ", filters);
   return (
     <div className="page-wrapper">
       <section>
@@ -298,31 +262,6 @@ const MemberList = () => {
           <div className="form-header member-form-header flex-between">
             <div className="form-header-left-blk flex-start">
               <h2 className="heading2 mr-40">Members</h2>
-              {/* <div className="member-tab-wrapper">
-                <Box
-                  sx={{ borderBottom: 1, borderColor: "divider" }}
-                  className="tabs-sect"
-                >
-                  <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="basic tabs example"
-                  >
-                    <Tab
-                      label="Onboarded"
-                      {...a11yProps(0)}
-                      id="simple-tab-0"
-                      aria-controls="simple-tabpanel-0"
-                    />
-                    <Tab
-                      label="Pending"
-                      {...a11yProps(1)}
-                      id="simple-tab-0"
-                      aria-controls="simple-tabpanel-0"
-                    />
-                  </Tabs>
-                </Box>
-              </div> */}
             </div>
             <div className="form-header-right-txt">
               <div className="tertiary-btn-blk mr-20">
@@ -364,61 +303,7 @@ const MemberList = () => {
                   <div className="filter-select-field">
                     <div className="dropdown-field">
                       <Select
-                        name="memberCompany"
-                        multiple
-                        value={selectedMemberCompnies}
-                        onChange={handleMemberCompanyFilter}
-                        onFocus={(e) => onFilterFocusHandler("memberCompany")}
-                        renderValue={(val) =>
-                          selectedMemberCompnies.length > 1
-                            ? val.slice(1).join(", ")
-                            : "Member Company"
-                        }
-                      >
-                        <MenuItem
-                          value="none"
-                          name="memberCompanyTitle"
-                          selected
-                          sx={{
-                            display:
-                              showFilterPlaceholder === "memberCompany" &&
-                              "none",
-                          }}
-                        >
-                          Member Company
-                        </MenuItem>
-                        <MenuItem value="">
-                          <Checkbox
-                            className="table-checkbox"
-                            checked={isAllMembersSelected}
-                            indeterminate={
-                              selectedMemberCompnies.length > 1 &&
-                              selectedMemberCompnies.length <
-                                memberCompanies.length
-                            }
-                          />
-                          Select All
-                        </MenuItem>
-                        {memberCompanies.map((member) => (
-                          <MenuItem key={member} value={member}>
-                            <Checkbox
-                              className="table-checkbox"
-                              checked={
-                                selectedMemberCompnies.indexOf(member) > -1
-                              }
-                            />
-                            {member}
-                          </MenuItem>
-                        ))}
-                        {/* <MenuItem value="iom3">IOM</MenuItem>
-                        <MenuItem value="iom2">Kit Kat</MenuItem>
-                        <MenuItem value="iom1">Google</MenuItem> */}
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="filter-select-field">
-                    <div className="dropdown-field">
-                      <Select
+                        sx={{display: "none"}}
                         name="companyType"
                         value={filters.companyType}
                         onChange={onFilterChangehandler}
@@ -441,6 +326,7 @@ const MemberList = () => {
                   <div className="filter-select-field">
                     <div className="dropdown-field">
                       <Select
+                        sx={{display:"none"}}
                         name="createdBy"
                         multiple
                         value={selectedCreatedBy}
@@ -488,6 +374,7 @@ const MemberList = () => {
                   <div className="filter-select-field">
                     <div className="dropdown-field">
                       <Select
+                        sx={{display:"none"}}
                         name="status"
                         value={filters.status}
                         onChange={onFilterChangehandler}
@@ -511,7 +398,7 @@ const MemberList = () => {
               </div>
             </div>
           </div>
-          <div className="member-info-wrapper table-content-wrap">
+          <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
             <TableComponent
               tableHead={tableHead}
               records={records}

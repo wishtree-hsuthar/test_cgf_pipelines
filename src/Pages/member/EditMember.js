@@ -5,28 +5,18 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Input from "../../components/Input";
-import Dropdown from "../../components/Dropdown";
-import { COUNTRIES, MEMBER, REGIONS } from "../../api/Url";
 import axios from "axios";
-import { useState } from "react";
-import useCallbackState from "../../utils/useCallBackState";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { COUNTRIES, MEMBER, REGIONS } from "../../api/Url";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
+import useCallbackState from "../../utils/useCallBackState";
 
 //CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
-
-//Suggestion from het implement it later
-// const categories = {
-//   "Manufacture": ["Activity 1", "Activity 2"],
-//   "Retauiler": []
-// }
-
-// Object.keys(categories)
-// categories[category] = Array of activities[]
 const cgfActivitiesManufacturer = [
   "None",
   "Apparel",
@@ -44,21 +34,14 @@ const cgfActivitiesRetailer = [
   "Non food retailer",
   "Wholesaler",
 ];
-
 const myHelper = {
   memberCompany: {
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
     required: "Enter member company",
   },
-  parentCompany: {
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    pattern: "Invalid Input",
-  },
   cgfActivity: {
     required: "Select Activity",
-    validate: "Select activity",
   },
   corporateEmail: {
     required: "Enter Email",
@@ -98,15 +81,6 @@ const myHelper = {
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
   },
-  cgfOfficeRegion: {
-    required: "Select the Region",
-  },
-  cgfOfficeCountry: {
-    required: "Select the Country",
-  },
-  cgfOffice: {
-    required: "Select the office",
-  },
   memberContactSalutation: {
     required: "Select the Salutation",
   },
@@ -126,12 +100,6 @@ const myHelper = {
     maxLength: "Max char limit exceed",
     pattern: "Invalid Input",
   },
-  memberContactEmail: {
-    required: "Enter the email",
-    minLength: "Input must contain atleast 3 charcters",
-    maxLength: "Max char limit exceed",
-    validate: "Invalid Input",
-  },
   memberContactCountryCode: {},
   memberContactPhoneNuber: {
     maxLength: "Max char limit exceed",
@@ -140,7 +108,35 @@ const myHelper = {
     validate: "Invalid Input",
   },
 };
-const AddMember = () => {
+const defaultValues = {
+  memberCompany: "",
+  companyType: "Internal",
+  parentCompany: "",
+  cgfCategory: "Manufacturer",
+  cgfActivity: "",
+  corporateEmail: "",
+  countryCode: "",
+  phoneNumber: "",
+  websiteUrl: "",
+  region: "",
+  country: "",
+  state: "",
+  city: "",
+  address: "",
+  cgfOfficeRegion: "",
+  cgfOfficeCountry: "",
+  cgfOffice: "",
+  memberContactSalutation: "Mr.",
+  memberContactFullName: "",
+  title: "",
+  department: "",
+  memberContactCountryCode: "",
+  memberContactEmail: "",
+  memberContactPhoneNuber: "",
+  status: "active",
+};
+const EditMember = () => {
+  const params = useParams();
   const navigate = useNavigate();
   // Refr for Toaster
   const myRef = React.useRef();
@@ -150,41 +146,15 @@ const AddMember = () => {
     descriptionMessage: "",
     messageType: "success",
   });
-  const defaultValues = {
-    memberCompany: "",
-    companyType: "Internal",
-    parentCompany: "",
-    cgfCategory: "Manufacturer",
-    cgfActivity: "",
-    corporateEmail: "",
-    countryCode: "",
-    phoneNumber: "",
-    websiteUrl: "",
-    region: "",
-    country: "",
-    state: "",
-    city: "",
-    address: "",
-    cgfOfficeRegion: "",
-    cgfOfficeCountry: "",
-    cgfOffice: "",
-    memberContactSalutation: "Mr.",
-    memberContactFullName: "",
-    title: "",
-    department: "",
-    memberContactCountryCode: "",
-    memberContactEmail: "",
-    memberContactPhoneNuber: "",
-  };
   //to hold all regions
   const [arrOfRegions, setArrOfRegions] = useState([]);
   //to hold array of countries for perticular region for Company Adress
   const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
-  const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
-
   //to hold array of countries for perticular region for CGF Office details
   const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
     useState([]);
+  const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
+  const [member, setMember] = useState({});
   const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
     reValidateMode: "onChange",
     defaultValues: defaultValues,
@@ -195,14 +165,14 @@ const AddMember = () => {
       let backendObject = {
         parentCompany: data.parentCompany,
         countryCode: data.countryCode,
-        phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
-        website: data.websiteUrl ? data.websiteUrl : undefined,
+        phoneNumber: parseInt(data.phoneNumber),
+        website: data.websiteUrl,
         state: data.state,
         city: data.state,
         companyName: data.memberCompany,
         companyType: data.companyType,
         cgfCategory: data.cgfCategory,
-        cgfActivity: data.cgfActivity ? data.cgfActivity : "NA",
+        cgfActivity: data.cgfActivity,
         corporateEmail: data.corporateEmail,
         region: data.region,
         country: data.country,
@@ -210,31 +180,35 @@ const AddMember = () => {
         cgfOfficeRegion: data.cgfOfficeRegion,
         cgfOfficeCountry: data.cgfOfficeCountry,
         cgfOffice: data.cgfOffice,
-        memberRepresentative: {
+        memberRepresentativeId: {
+          id: member?.memberRepresentativeId?._id,
           title: data.title,
           department: data.department,
           salutation: data.memberContactSalutation,
           name: data.memberContactFullName,
           email: data.memberContactEmail,
           countryCode: data.memberContactCountryCode,
-          phoneNumber: data.memberContactPhoneNuber
-            ? parseInt(data.memberContactPhoneNuber)
-            : "",
+          phoneNumber: parseInt(data.memberContactPhoneNuber),
+          isActive: data.status === "active" ? true : false,
         },
       };
-      const response = await axios.post(MEMBER, { ...backendObject });
-      console.log("response : ", response);
+
+      console.log("Member Representative Id", member.createdBy);
+
+      const response = await axios.put(MEMBER + `/${params.id}`, {
+        ...backendObject,
+      });
+      // console.log("response : ", response);
       setToasterDetails(
         {
           titleMessage: "Success!",
-          descriptionMessage: "New member added successfully!",
+          descriptionMessage: "Member updated successfully!",
           messageType: "success",
         },
         () => myRef.current()
       );
-      console.log("Default values: ", defaultValues);
+      // console.log("Default values: ", defaultValues);
       reset({ defaultValues });
-      return true;
     } catch (error) {
       setToasterDetails(
         {
@@ -248,7 +222,6 @@ const AddMember = () => {
         },
         () => myRef.current()
       );
-      return false;
     }
   };
   // On Click cancel handler
@@ -256,60 +229,47 @@ const AddMember = () => {
     reset({ defaultValues });
     navigate("/members");
   };
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     console.log("data", data);
-    const isSubmited = await onSubmitFunctionCall(data);
-    console.log("is Submited", isSubmited);
-    isSubmited && setTimeout(() => navigate("/members"), 3000);
-  };
-  //method to handle on add more button click handler
-  const onAddMoreButtonClickHandler = (data) => {
     onSubmitFunctionCall(data);
+    setTimeout(() => navigate("/members"), 3000);
   };
-  //method to handle region change for cgf office
-
   const formatRegionCountries = (regionCountries) => {
     regionCountries.forEach(
       (country, id) => (regionCountries[id] = country.name)
     );
-    console.log("arr of country ", regionCountries);
+    // console.log("arr of country ", regionCountries);
     return regionCountries;
   };
 
   //method to handle country change
   const onCountryChangeHandler = (e) => {
-    console.log("Inside Country Change ", e.target.value);
+    // console.log("Inside Country Change ", e.target.value);
     setValue("country", e.target.value);
     setValue("state", "");
     trigger("country");
   };
-  //method to handle office Region Change Handler
-  const cgfOfficeRegionChangeHandler = async (e) => {
-    setValue("cgfOfficeRegion", e.target.value);
-    setValue("cgfOfficeCountry", "");
-    trigger("cgfOfficeRegion");
-    const countriesOnRegion = await getCountries(watch("cgfOfficeRegion"));
-    const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries(
-      countriesOnRegion.data
-    );
-    setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
-  };
+
   //method to set region and update other fields accordingly
   const onRegionChangeHandler = async (e) => {
-    console.log("region: ", e.target.value);
+    // console.log("region: ", e.target.value);
     setValue("country", "");
     setValue("state", "");
     setValue("city", "");
     setValue("region", e.target.value);
     trigger("region");
     const countriesOnRegion = await getCountries(watch("region"));
-    console.log("countries", countriesOnRegion);
+    // console.log("countries", countriesOnRegion);
     const arrOfCountryRegionsTemp = formatRegionCountries(
       countriesOnRegion.data
     );
     setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
   };
 
+  const categoryChangeHandler = (e) => {
+    setValue("cgfCategory", e.target.value);
+    setValue("cgfActivity", "");
+  };
   const getCountryCode = async (controller) => {
     try {
       const response = await axios.get(COUNTRIES, {
@@ -364,6 +324,20 @@ const AddMember = () => {
       const regions = await axios.get(REGIONS, { signal: controller.signal });
       // console.log("regions ", regions.data);
       setArrOfRegions(regions.data);
+      const countriesOnRegion1 = await getCountries(watch("region"));
+      // console.log("countries", countriesOnRegion1);
+      const arrOfCountryRegionsTemp1 = formatRegionCountries(
+        countriesOnRegion1.data
+      );
+      setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
+      const countriesOnRegion2 = await getCountries(watch("cgfOfficeRegion"));
+      console.log("countriesOnRegion2", countriesOnRegion2);
+      const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries(
+        countriesOnRegion2.data
+      );
+      setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp1]);
+
+      // getCountries()
       return arrOfRegions;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
@@ -382,28 +356,67 @@ const AddMember = () => {
       return [];
     }
   };
-
+  const getCgfOfficeCountryRegion = async () => {
+    console.log("Inside office change function: ", watch("cgfOfficeRegion"));
+    const countriesOnRegion = await getCountries(watch("cgfOfficeRegion"));
+    console.log("countries region", countriesOnRegion);
+    const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries(
+      countriesOnRegion.data
+    );
+    setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
+  };
+  const getMemberByID = async () => {
+    const response = await axios.get(MEMBER + `/${params.id}`);
+    // console.log("response for member: ", response);
+    const data = response.data;
+    reset({
+      memberCompany: data?.companyName,
+      companyType: data?.companyType,
+      parentCompany: data?.parentCompany,
+      cgfCategory: data?.cgfCategory,
+      cgfActivity: data?.cgfActivity,
+      corporateEmail: data?.corporateEmail,
+      countryCode: data?.countryCode,
+      phoneNumber: data?.phoneNumber.toString(),
+      websiteUrl: data?.website,
+      region: data?.region,
+      country: data?.country,
+      state: data?.state,
+      city: data?.city,
+      address: data?.address,
+      cgfOfficeRegion: data?.cgfOfficeRegion,
+      cgfOfficeCountry: data?.cgfOfficeCountry,
+      cgfOffice: data?.cgfOffice,
+      memberContactSalutation: "Mr.",
+      memberContactFullName: data?.memberRepresentativeId?.name,
+      title: data?.memberRepresentativeId?.title,
+      department: data?.memberRepresentativeId?.department,
+      memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
+      memberContactEmail: data?.memberRepresentativeId?.email,
+      memberContactPhoneNuber:
+        data?.memberRepresentativeId?.phoneNumber?.toString(),
+      status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
+    });
+    setMember(response.data);
+  };
   //prevent form submission on press of enter key
   const checkKeyDown = (e) => {
     if (e.code === "Enter") e.preventDefault();
-  };
-
-  const categoryChangeHandler = (e) => {
-    setValue("cgfCategory", e.target.value);
-    setValue("cgfActivity", "");
   };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
     arrOfRegions.length === 0 && getRegions(controller);
     arrOfCountryCode.length === 0 && getCountryCode(controller);
+    isMounted && getMemberByID();
+    // console.log("member",member)
 
     return () => {
-      // isMounted = false;
+      isMounted = false;
       controller.abort();
     };
   }, [watch]);
-  // console.log("selected Region", watch("region"));
+  console.log("member: ", member);
   return (
     <div className="page-wrapper">
       <Toaster
@@ -418,27 +431,17 @@ const AddMember = () => {
             <li>
               <Link to="/members">Members</Link>
             </li>
-            <li>Add Member</li>
+            <li>
+              <Link to={`/members/view-member/${params.id}`}>View Member</Link>
+            </li>
+            <li>Edit Member</li>
           </ul>
         </div>
       </div>
       <section>
         <div className="container">
           <div className="form-header flex-between">
-            <h2 className="heading2">Add Member</h2>
-            <div className="form-header-right-txt">
-              <div className="tertiary-btn-blk">
-                <span className="addmore-icon">
-                  <i className="fa fa-plus"></i>
-                </span>
-                <span
-                  className="addmore-txt"
-                  onClick={handleSubmit(onAddMoreButtonClickHandler)}
-                >
-                  Save & Add More
-                </span>
-              </div>
-            </div>
+            <h2 className="heading2">Edit Member</h2>
           </div>
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -484,11 +487,13 @@ const AddMember = () => {
                               className="radio-btn"
                             >
                               <FormControlLabel
+                                disabled
                                 value="Internal"
                                 control={<Radio />}
                                 label="Internal"
                               />
                               <FormControlLabel
+                                disabled
                                 value="External"
                                 control={<Radio />}
                                 label="External"
@@ -507,12 +512,9 @@ const AddMember = () => {
                         control={control}
                         render={({ field, fieldState: { error } }) => (
                           <Autocomplete
-                            disableClearable
-                            // open={true}
-                            // openOnFocus={true}
-                            // noOptionsText={"No options"}
-                            {...field}
+                            disabled
                             className="searchable-input"
+                            {...field}
                             onSubmit={() => setValue("parentCompany", "")}
                             onChange={(event, newValue) => {
                               console.log("new Value ", newValue);
@@ -548,9 +550,7 @@ const AddMember = () => {
                               return option;
                             }}
                             renderOption={(props, option) => (
-                              <li className="searchable-inputlist" {...props}>
-                                {option}
-                              </li>
+                              <li {...props}>{option}</li>
                             )}
                             //   sx={{ width: 300 }}
                             freeSolo
@@ -561,7 +561,7 @@ const AddMember = () => {
                                   setValue("parentCompany", e.target.value)
                                 }
                                 onSubmit={() => setValue("parentCompany", "")}
-                                placeholder="Please select parent Company"
+                                placeholder="Please select parent company"
                               />
                             )}
                           />
@@ -596,16 +596,7 @@ const AddMember = () => {
                         name="cgfActivity"
                         placeholder="Select activity"
                         myHelper={myHelper}
-                        rules={{
-                          validate: (value) => {
-                            if (
-                              !value &&
-                              (watch("cgfCategory") === "Manufacturer" ||
-                                watch("cgfCategory") === "Retailer")
-                            )
-                              return "Select activity";
-                          },
-                        }}
+                        rules={{ required: true }}
                         options={
                           watch("cgfCategory") === "Manufacturer"
                             ? cgfActivitiesManufacturer
@@ -666,6 +657,7 @@ const AddMember = () => {
                                     : setValue("countryCode", newValue);
                                   trigger("phoneNumber");
                                 }}
+                                // sx={{ width: 200 }}
                                 options={arrOfCountryCode}
                                 autoHighlight
                                 // placeholder="Select country code"
@@ -684,7 +676,7 @@ const AddMember = () => {
                                     }}
                                     onChange={() => trigger("phoneNumber")}
                                     // onSubmit={() => setValue("countryCode", "")}
-                                    placeholder={"eg. +91"}
+                                    placeholder={"Select country code"}
                                     helperText={
                                       error
                                         ? myHelper.countryCode["validate"]
@@ -794,8 +786,8 @@ const AddMember = () => {
                         control={control}
                         render={({ field, fieldState: { error } }) => (
                           <Autocomplete
-                            className="searchable-input"
                             {...field}
+                            className="searchable-input"
                             disabled={!watch("state")}
                             onSubmit={() => setValue("city", "")}
                             onChange={(event, newValue) => {
@@ -899,9 +891,10 @@ const AddMember = () => {
                         Region <span className="mandatory">*</span>
                       </label>
                       <Dropdown
+                        isDisabled
                         control={control}
                         name="cgfOfficeRegion"
-                        myOnChange={cgfOfficeRegionChangeHandler}
+                        // myOnChange={cgfOfficeRegionChangeHandler}
                         placeholder="Select Region"
                         myHelper={myHelper}
                         rules={{ required: true }}
@@ -915,7 +908,7 @@ const AddMember = () => {
                         Country <span className="mandatory">*</span>
                       </label>
                       <Dropdown
-                        isDisabled={!watch("cgfOfficeRegion")}
+                        isDisabled
                         control={control}
                         name="cgfOfficeCountry"
                         placeholder="Select country"
@@ -931,6 +924,7 @@ const AddMember = () => {
                         Office <span className="mandatory">*</span>
                       </label>
                       <Dropdown
+                        isDisabled
                         control={control}
                         name="cgfOffice"
                         placeholder="Select office"
@@ -1011,6 +1005,7 @@ const AddMember = () => {
                         Email <span className="mandatory">*</span>
                       </label>
                       <Input
+                        isDisabled
                         control={control}
                         myHelper={myHelper}
                         rules={{
@@ -1053,7 +1048,7 @@ const AddMember = () => {
                                 // sx={{ width: 200 }}
                                 options={arrOfCountryCode}
                                 autoHighlight
-                                placeholder="+91"
+                                placeholder="Select country code"
                                 // getOptionLabel={(country) => country.name + " " + country}
                                 renderOption={(props, option) => (
                                   <li {...props}>{option}</li>
@@ -1070,7 +1065,7 @@ const AddMember = () => {
                                     // onSubmit={() =>
                                     //   setValue("memberContactCountryCode", "")
                                     // }
-                                    placeholder={"eg. +91"}
+                                    placeholder={"Select country code"}
                                   />
                                 )}
                               />
@@ -1099,6 +1094,38 @@ const AddMember = () => {
                       </div>
                     </div>
                   </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="status">
+                        Status <span className="mandatory">*</span>
+                      </label>
+                      <div className="radio-btn-field">
+                        <Controller
+                          name="status"
+                          control={control}
+                          render={({ field }) => (
+                            <RadioGroup
+                              {...field}
+                              aria-labelledby="demo-radio-buttons-group-label"
+                              name="radio-buttons-group"
+                              className="radio-btn"
+                            >
+                              <FormControlLabel
+                                value="active"
+                                control={<Radio />}
+                                label="Active"
+                              />
+                              <FormControlLabel
+                                value="inactive"
+                                control={<Radio />}
+                                label="Inactive"
+                              />
+                            </RadioGroup>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="form-btn flex-between add-members-btn">
@@ -1114,7 +1141,7 @@ const AddMember = () => {
                   //   onClick={}
                   className="primary-button add-button"
                 >
-                  Add
+                  Edit
                 </button>
               </div>
             </div>
@@ -1125,4 +1152,4 @@ const AddMember = () => {
   );
 };
 
-export default AddMember;
+export default EditMember;

@@ -1,7 +1,7 @@
 import React from 'react'
 import { TextField } from '@mui/material'
 import { useController, useForm } from 'react-hook-form'
-const Input = ({control, name,myHelper,placeholder,rules,onBlur,multiline}) => {
+const Input = ({control, name,myHelper,placeholder,rules,onBlur,multiline,isDisabled}) => {
     const {
         field : {onChange, value, ref},
         fieldState: { error },
@@ -14,6 +14,7 @@ const Input = ({control, name,myHelper,placeholder,rules,onBlur,multiline}) => {
     // console.log("error on text inputs: ",myHelper)
   return (
     <TextField
+      disabled={isDisabled}
       className={`input-field ${error && 'input-error'}`}
       placeholder={placeholder}
       onChange={onChange} // send value to hook form 

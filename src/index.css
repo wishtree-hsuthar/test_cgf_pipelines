@@ -290,7 +290,8 @@ h3 {
     box-shadow: 0px 3px 15px #00000029;
     border-radius: 3px;
     padding: 20px;
-    margin: 20px 0;
+    margin: 20px 0px 50px;
+    /* margin: 20px 0; */
 }
 
 .card-form-field {
@@ -1102,8 +1103,24 @@ input[type=checkbox]:checked:before {
 
 
 /* phone number and country code csss */
-.phone-number-field{display: flex;align-items: center;}
-.country-code{margin-right: 10px;}
+.phone-number-field{display: flex;align-items: flex-start;}
+.country-code{margin-right: 10px;width: 130px;}
 .phone-number-field .MuiSelect-select{padding: 0 40px 0 15px !important;}
 .phone-number-field fieldset{border-color:rgba(30, 30, 30, 0.5);font-family: 'ProximaNova-Regular';}
 .Mui-focused .MuiOutlinedInput-notchedOutline {border-width: 1px !important;}
+.country-code .MuiInputBase-root{height: 40px;padding: 0 20px 0 0 !important;}
+.country-code input{height: 15px !important;}
+
+.salutation-wrap{display: flex;align-items: flex-start;}
+.salutation-blk{margin-right: 10px;width: 80px;}
+.salutation-wrap label{margin-bottom: 10px;display: inline-block;}
+.salutation-inputblk{flex: 1;}
+
+.select-field-error fieldset{border-color: #e53850 !important;}
+.searchable-input fieldset{height: 45px;}
+.searchable-input .MuiInputBase-root{height: 40px;padding: 0 !important;}
+.searchable-inputlist{font-size: 14px !important;font-family: 'ProximaNova-Regular' !important;}
+
+.select-field .Mui-disabled{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;}
+.select-field .MuiInputBase-root.Mui-disabled{background: none !important;}
+.phone-number-disable{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;}
