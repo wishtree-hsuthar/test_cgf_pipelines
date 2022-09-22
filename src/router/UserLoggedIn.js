@@ -8,7 +8,7 @@ import { privateAxios } from "../api/axios";
 const UserLoggedIn = ({ children }) => {
     const authUser = useSelector((state) => state.user.userObj);
     const navigate = useNavigate();
-    console.log("auth user from check user -----------", authUser);
+    // console.log("auth user from check user -----------", authUser);
 
     const dispatch = useDispatch();
 
@@ -29,9 +29,9 @@ const UserLoggedIn = ({ children }) => {
         }
     };
 
-    console.log("after useEFFECT", authUser);
+    // console.log("after useEFFECT", authUser);
 
-    console.log("authuser from checkuser======", authUser);
+    // console.log("authuser from checkuser======", authUser);
     if (authUser == undefined) {
         fetchUser();
     } else {
