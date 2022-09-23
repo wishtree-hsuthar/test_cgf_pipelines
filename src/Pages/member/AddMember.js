@@ -10,7 +10,7 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
-import { COUNTRIES, MEMBER, REGIONS } from "../../api/Url";
+import { COUNTRIES, MEMBER, REGIONCOUNTRIES, REGIONS } from "../../api/Url";
 import axios from "axios";
 import { useState } from "react";
 import useCallbackState from "../../utils/useCallBackState";
@@ -270,7 +270,7 @@ const AddMember = () => {
 
   const formatRegionCountries = (regionCountries) => {
     regionCountries.forEach(
-      (country, id) => (regionCountries[id] = country.name)
+      (country, id) => (regionCountries[id] = country.hasOwnProperty('_id') ? country.name : country)
     );
     console.log("arr of country ", regionCountries);
     return regionCountries;
@@ -340,7 +340,8 @@ const AddMember = () => {
   };
   const getCountries = async (region) => {
     try {
-      const regionCountries = await axios.get(REGIONS + `/${region}`);
+      const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
+      console.log("Region countries in get Countries ",regionCountries)
       return regionCountries;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
@@ -403,7 +404,7 @@ const AddMember = () => {
       controller.abort();
     };
   }, [watch]);
-  // console.log("selected Region", watch("region"));
+  console.log("region Countries",arrOfCountryRegions);
   return (
     <div className="page-wrapper">
       <Toaster

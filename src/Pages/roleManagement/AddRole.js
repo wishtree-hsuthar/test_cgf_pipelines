@@ -22,8 +22,9 @@ import axios from "axios";
 //internal packages
 import Toaster from "../../components/Toaster";
 import "../../components/TableComponent.css";
-import { backendBase } from "../../utils/urls";
+// import { backendBase } from "../../utils/urls";
 import useCallbackState from "../../utils/useCallBackState";
+import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 
 const AddRole = () => {
   const navigate = useNavigate();
@@ -109,7 +110,7 @@ const AddRole = () => {
     // console.log("previleges : ", previlegesForBackend);
     //backend call
     try {
-      await axios.post(backendBase + "roles", {
+      await axios.post(REACT_APP_API_ENDPOINT + "roles", {
         name: data.roleName,
         description: data.description,
         isActive: data.status === "active" ? true : false,
@@ -154,7 +155,7 @@ const AddRole = () => {
 
     //backend call
     try {
-      await axios.post(backendBase + "roles", {
+      await axios.post(REACT_APP_API_ENDPOINT + "roles", {
         name: data.roleName,
         description: data.description,
         isActive: data.status === "active" ? true : false,
@@ -194,7 +195,7 @@ const AddRole = () => {
     const controller = new AbortController();
     (async () => {
       try {
-        const { data } = await axios.get(backendBase + "system-modules", {
+        const { data } = await axios.get(REACT_APP_API_ENDPOINT + "system-modules", {
           signal: controller.signal,
         });
         isMounted && createModules(data);

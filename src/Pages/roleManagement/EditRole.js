@@ -22,9 +22,9 @@ import axios from "axios";
 //Internal Imports
 import Toaster from "../../components/Toaster";
 import "../../components/TableComponent.css";
-import { backendBase } from "../../utils/urls";
 import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
+import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 
 const titleMessage = "";
 const descriptionMessage = "";
@@ -76,7 +76,7 @@ const EditRole = () => {
         delete previlegesForBackend[p_key]["name"];
       });
       console.log("previleges : ", previlegesForBackend);
-      const response = await axios.put(backendBase + `roles/${params.id}`, {
+      const response = await axios.put(REACT_APP_API_ENDPOINT + `roles/${params.id}`, {
         description: data.description,
         isActive: data.status === "active" ? true : false,
         privileges: previlegesForBackend,
@@ -86,8 +86,7 @@ const EditRole = () => {
         ? setToasterDetails(
             {
               titleMessage: "Alert!",
-              descriptionMessage:
-                "The Assistant Manager is the bridge that connects top management with employees. They ensure operational excellence by performing managerial tasks such as scheduling",
+              descriptionMessage: "Role details updated successfully!",
               messageType: "success",
             },
             () => myRef.current()
@@ -164,7 +163,7 @@ const EditRole = () => {
     (async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(backendBase + `roles/${params.id}`, {
+        const response = await axios.get(REACT_APP_API_ENDPOINT + `roles/${params.id}`, {
           signal: controller.signal,
         });
         console.log("response: ", response);

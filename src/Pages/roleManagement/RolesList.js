@@ -7,10 +7,11 @@ import axios from "axios";
 //Internal imports
 import "../../components/TableComponent.css";
 import TableComponent from "../../components/TableComponent";
-import { backendBase } from "../../utils/urls";
+// import { backendBase } from "../../utils/urls";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import Loader2 from "../../assets/Loader/Loader2.svg";
+import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 
 const tableHead = [
   {
@@ -19,11 +20,11 @@ const tableHead = [
     disablePadding: false,
     label: "Role",
   },
-  // {
-  //   id: "subAdmins",
-  //   disablePadding: false,
-  //   label: "Sub Admins",
-  // },
+  {
+    id: "totalCgfAdmins",
+    disablePadding: false,
+    label: "CGF Admins",
+  },
   {
     id: "createdAt",
     disablePadding: false,
@@ -61,7 +62,7 @@ const RolesList = () => {
 
   const navigate = useNavigate();
   //order in which records needs to show
-  const keysOrder = ["_id", "name", "createdAt", "isActive"];
+  const keysOrder = ["_id", "name","totalCgfAdmins", "createdAt", "isActive"];
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
     status: "none",
@@ -106,6 +107,8 @@ const RolesList = () => {
       delete object["description"];
       delete object["isDeleted"];
       delete object["__v"];
+      delete object["cgfAdmins"]
+      object.totalCgfAdmins =  object["totalCgfAdmins"].toString()
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
         "en-US"
       );
@@ -130,17 +133,17 @@ const RolesList = () => {
   };
   const generateUrl = () => {
     console.log("filters", filters);
-    let url = `${backendBase}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+    let url = `${REACT_APP_API_ENDPOINT}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
     if (search?.length >= 3)
-      url = `${backendBase}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+      url = url + `&search=${search}`;
     if (filters?.status !== "none" && filters?.status !== "all")
-      url = `${backendBase}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&status=${filters.status}`;
-    if (
-      search?.length >= 3 &&
-      filters?.status !== "none" &&
-      filters?.status !== "all"
-    )
-      url = `${backendBase}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}&status=${filters.status}`;
+      url = url + `&status=${filters.status}`;
+    // if (
+    //   search?.length >= 3 &&
+    //   filters?.status !== "none" &&
+    //   filters?.status !== "all"
+    // )
+    //   url = `${backendBase}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}&status=${filters.status}`;
     return url;
   };
   const getRoles = async (
@@ -153,6 +156,7 @@ const RolesList = () => {
       const response = await axios.get(url, {
         signal: controller.signal,
       });
+      console.log("Response: ",response)
       setTotalRecords(parseInt(response.headers["x-total-count"]));
       updateRecords(response.data);
       setIsLoading(false);
@@ -188,7 +192,7 @@ const RolesList = () => {
     };
   }, [page, rowsPerPage, orderBy, order, filters, makeApiCall]);
   {
-    console.log("makeApiCall outside UseEffect ", makeApiCall);
+    console.log("Records: ", records);
   }
   return (
     <div className="page-wrapper">
@@ -238,6 +242,7 @@ const RolesList = () => {
                   <div className="filter-select-field">
                     <div className="dropdown-field">
                       <Select
+                        sx={{display: "none"}}
                         displayEmpty
                         name="status"
                         value={filters.status}

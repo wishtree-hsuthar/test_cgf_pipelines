@@ -25,10 +25,10 @@ import axios from "axios";
 //Internal Imports
 import TableComponent from "../../components/TableComponent";
 import DialogBox from "../../components/DialogBox";
-import { backendBase } from "../../utils/urls";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
+import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 
 const tableHead = [
   {
@@ -260,12 +260,12 @@ const ViewRole = () => {
     roleName: "",
     status: "",
     description: "",
-    subAdmin: 18,
+    subAdmin: "",
   });
   const [openDialog, setOpenDialog] = useState(false);
   const onDialogPrimaryButtonClickHandler = async () => {
     try {
-      await axios.delete(backendBase + `roles/${params.id}`);
+      await axios.delete(REACT_APP_API_ENDPOINT + `roles/${params.id}`);
       setToasterDetails(
         {
           titleMessage: "Success",
@@ -387,11 +387,12 @@ const ViewRole = () => {
     setTemp(privileges);
   };
   const updateFileds = (data) => {
+    console.log("data",data)
     setFieldValues({
       roleName: data?.name,
       description: data?.description,
       status: data?.isActive ? "active" : "inactive",
-      subAdmin: 18,
+      subAdmin: data?.totalCgfAdmins ?? 0 ,
     });
     createPrevileges(data.privileges);
   };
@@ -401,7 +402,7 @@ const ViewRole = () => {
     (async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(backendBase + `roles/${params.id}`);
+        const response = await axios.get(REACT_APP_API_ENDPOINT + `roles/${params.id}`);
         isMounted && updateFileds(response?.data);
         setIsLoading(false);
       } catch (error) {
@@ -555,13 +556,13 @@ const ViewRole = () => {
                 <div className="card-form-field">
                   <div className="form-group">
                     <label htmlFor="roleName">
-                      Sub Admin <span className="mandatory">*</span>
+                      CGF Admin <span className="mandatory">*</span>
                     </label>
                     <TextField
                       disabled
                       className="input-field"
                       id="outlined-basic"
-                      placeholder="Enter sub admin"
+                      placeholder="Enter CGF admin"
                       value={fieldValues && fieldValues.subAdmin}
                       variant="outlined"
                       helperText=" "

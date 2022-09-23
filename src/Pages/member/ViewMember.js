@@ -20,7 +20,7 @@ import Dropdown from "../../components/Dropdown";
 import { useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import axios from "axios";
-import { COUNTRIES, MEMBER, REGIONS } from "../../api/Url";
+import { COUNTRIES, MEMBER, REGIONCOUNTRIES, REGIONS } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 
 //Ideally get those from backend
@@ -163,6 +163,7 @@ const ViewMember = () => {
       delete object["updatedBy"];
       delete object["website"];
       delete object["isDeleted"];
+      delete object["isReplaced"]
       delete object["__v"];
 
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
@@ -362,11 +363,11 @@ const ViewMember = () => {
   });
   const formatRegionCountries = (regionCountries) => {
     regionCountries.forEach(
-      (country, id) => (regionCountries[id] = country.name)
+      (country, id) => (regionCountries[id] = country.hasOwnProperty('_id') ? country.name : country)
     );
-    // console.log("arr of country ", regionCountries);
+    console.log("arr of country ", regionCountries);
     return regionCountries;
-  };
+     };
 
   const getCountryCode = async (controller) => {
     try {
@@ -399,7 +400,7 @@ const ViewMember = () => {
 
   const getCountries = async (region) => {
     try {
-      const regionCountries = await axios.get(REGIONS + `/${region}`);
+      const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
       return regionCountries;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;

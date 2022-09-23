@@ -174,13 +174,13 @@ function PendingCGFAdmins({ makeApiCall, setMakeApiCall, search, filters }) {
     const generateUrlForPendingTab = () => {
         console.log("filters", filters);
         console.log("Search", search);
-        let url = `http://localhost:3000/api/users/subadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
+        let url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
         if (search?.length >= 3)
-            url = `http://localhost:3000/api/users/subadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&search=${search}`;
+            url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&search=${search}`;
         if (filters?.status !== "all")
-            url = `http://localhost:3000/api/users/subadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&status=${filters.status}`;
+            url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&status=${filters.status}`;
         if (search?.length >= 3 && filters?.status !== "all")
-            url = `http://localhost:3000/api/users/subadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&search=${search}&status=${filters.status}`;
+            url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&search=${search}&status=${filters.status}`;
         return url;
     };
 

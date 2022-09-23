@@ -9,7 +9,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { COUNTRIES, MEMBER, REGIONS } from "../../api/Url";
+import { COUNTRIES, MEMBER, REGIONCOUNTRIES, REGIONS } from "../../api/Url";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
@@ -236,9 +236,9 @@ const EditMember = () => {
   };
   const formatRegionCountries = (regionCountries) => {
     regionCountries.forEach(
-      (country, id) => (regionCountries[id] = country.name)
+      (country, id) => (regionCountries[id] = country.hasOwnProperty('_id') ? country.name : country)
     );
-    // console.log("arr of country ", regionCountries);
+    console.log("arr of country ", regionCountries);
     return regionCountries;
   };
 
@@ -300,7 +300,7 @@ const EditMember = () => {
   };
   const getCountries = async (region) => {
     try {
-      const regionCountries = await axios.get(REGIONS + `/${region}`);
+      const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
       return regionCountries;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;

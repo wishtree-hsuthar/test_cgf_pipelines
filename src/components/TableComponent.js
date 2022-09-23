@@ -251,10 +251,10 @@ export default function TableComponent({
                                 enterDelay={1000}
                                 title={row[cell]}
                               >
-                                <TableCell key={cell}>{`${row[cell].slice(
+                                <TableCell key={cell}>{typeof row[cell] === 'string'? `${row[cell].slice(
                                   0,
                                   30
-                                )}...`}</TableCell>
+                                )}...` : row[cell]}</TableCell>
                               </Tooltip>
                             );
                           } else if (cell === "isActive") {
