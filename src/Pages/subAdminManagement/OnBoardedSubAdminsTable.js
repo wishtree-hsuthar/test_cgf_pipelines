@@ -121,20 +121,20 @@ function OnBoardedSubAdminsTable({
     const generateUrl = () => {
         console.log("filters in onboarded table----", filters);
         console.log("Search", search);
-        let url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&role=${filters.role}`;
+        let url = `http://localhost:3000/api/users/cgfadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
-            url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}&role=${filters.role}`;
-        if (filters?.status !== "all")
-            url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&status=${filters.status}&role=${filters.role}`;
+            url =url+ `&search=${search}`;
+        // if (filters?.status !== "all")
+        //     url = `&status=${filters.status}&role=${filters.role}`;
 
-        if (filters?.role.length > 0)
-            url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&role=${filters.role}`;
-        if (
-            search?.length >= 3 &&
-            filters?.status !== "all" &&
-            filters.role.length != 0
-        )
-            url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}&status=${filters.status}&role=${filters.role}`;
+        // if (filters?.role.length > 0)
+        //     url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&role=${filters.role}`;
+        // if (
+        //     search?.length >= 3 &&
+        //     filters?.status !== "all" &&
+        //     filters.role.length != 0
+        // )
+        //     url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}&status=${filters.status}&role=${filters.role}`;
         return url;
     };
     const getSubAdmin = async (

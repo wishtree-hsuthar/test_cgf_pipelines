@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 import { privateAxios } from "../../api/axios";
-import { ADD_SUB_ADMIN, FETCH_ROLES } from "../../api/Url";
+import { ADD_SUB_ADMIN, COUNTRIES, FETCH_ROLES } from "../../api/Url";
 import { useSelector } from "react-redux";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
@@ -81,7 +81,7 @@ const AddSubAdmin = () => {
         let fetchCountries = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:3000/api/countries",
+                    COUNTRIES,
                     {
                         signal: controller.signal,
                     }

@@ -163,6 +163,7 @@ const ViewMember = () => {
       delete object["updatedBy"];
       delete object["website"];
       delete object["isDeleted"];
+      delete object["isReplaced"]
       delete object["__v"];
 
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
@@ -368,7 +369,7 @@ const ViewMember = () => {
     );
     console.log("arr of country ", regionCountries);
     return regionCountries;
-  };
+     };
 
   const getCountryCode = async (controller) => {
     try {

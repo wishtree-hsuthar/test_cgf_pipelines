@@ -25,10 +25,10 @@ import axios from "axios";
 //Internal Imports
 import TableComponent from "../../components/TableComponent";
 import DialogBox from "../../components/DialogBox";
-import { backendBase } from "../../utils/urls";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
+import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 
 const tableHead = [
   {
@@ -70,170 +70,170 @@ const rows = [
     subAdmin: "jeff Hall",
     email: "jeffbezoz@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "2",
     subAdmin: "Edward Meaning",
     email: "EdwardMeaning53@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "3",
     subAdmin: "William Johnsan bhai",
     email: "WillianJohnbhai4509@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "4",
     subAdmin: "harry robot son",
     email: "harrykakaji3209@zero.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "5",
     subAdmin: "joe biden",
     email: "joeBidenladen@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "6",
     subAdmin: "Vladimir Putin",
     email: "vladputin007@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "7",
     subAdmin: "Anderson James",
     email: "Andersonvir@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "8",
     subAdmin: "Virat Kohli",
     email: "ViratRunMachicne@icc.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "9",
     subAdmin: "Sachin Tendulkar",
     email: "SachinMumbaikar123@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "10",
     subAdmin: "Mahendra Singh Dhoni",
     email: "Mahikmatvalie@csk.com",
     assessments: "external",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "11",
     subAdmin: "SRK",
     email: "srkverse@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "12",
     subAdmin: "salman khan",
     email: "blackbug123@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "13",
     subAdmin: "Rishabh Pant",
     email: "rishabhPant234@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "14",
     subAdmin: "Jasprit Bumrah",
     email: "yorkerking007@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "15",
     subAdmin: "Mohammad Shami",
     email: "mohammadshami002@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "16",
     subAdmin: "Rohit Sharma",
     email: "rosuperhitsharma234@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
   {
     _id: "17",
     subAdmin: "Ravindra Jadeja",
     email: "sirjadeja123@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-GB"),
+    onboardedOn: new Date().toLocaleDateString("en-US"),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-GB"),
+    assignedOn: new Date().toLocaleDateString("en-US"),
   },
 ];
 
@@ -260,12 +260,12 @@ const ViewRole = () => {
     roleName: "",
     status: "",
     description: "",
-    subAdmin: 18,
+    subAdmin: "",
   });
   const [openDialog, setOpenDialog] = useState(false);
   const onDialogPrimaryButtonClickHandler = async () => {
     try {
-      await axios.delete(backendBase + `roles/${params.id}`);
+      await axios.delete(REACT_APP_API_ENDPOINT + `roles/${params.id}`);
       setToasterDetails(
         {
           titleMessage: "Success",
@@ -283,9 +283,9 @@ const ViewRole = () => {
         {
           titleMessage: "Error",
           descriptionMessage:
-            error?.response?.data?.error &&
-            typeof error.response.data.error === "string"
-              ? error.response.data.error
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
               : "Something Went Wrong!",
           messageType: "error",
         },
@@ -387,11 +387,12 @@ const ViewRole = () => {
     setTemp(privileges);
   };
   const updateFileds = (data) => {
+    console.log("data",data)
     setFieldValues({
       roleName: data?.name,
       description: data?.description,
       status: data?.isActive ? "active" : "inactive",
-      subAdmin: 18,
+      subAdmin: data?.totalCgfAdmins ?? 0 ,
     });
     createPrevileges(data.privileges);
   };
@@ -401,7 +402,7 @@ const ViewRole = () => {
     (async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(backendBase + `roles/${params.id}`);
+        const response = await axios.get(REACT_APP_API_ENDPOINT + `roles/${params.id}`);
         isMounted && updateFileds(response?.data);
         setIsLoading(false);
       } catch (error) {
@@ -411,9 +412,9 @@ const ViewRole = () => {
             {
               titleMessage: "Error",
               descriptionMessage:
-                error?.response?.data?.error &&
-                typeof error.response.data.error === "string"
-                  ? error.response.data.error
+                error?.response?.data?.message &&
+                typeof error.response.data.message === "string"
+                  ? error.response.data.message
                   : "Something Went Wrong!",
               messageType: "error",
             },
@@ -555,13 +556,13 @@ const ViewRole = () => {
                 <div className="card-form-field">
                   <div className="form-group">
                     <label htmlFor="roleName">
-                      Sub Admin <span className="mandatory">*</span>
+                      CGF Admin <span className="mandatory">*</span>
                     </label>
                     <TextField
                       disabled
                       className="input-field"
                       id="outlined-basic"
-                      placeholder="Enter sub admin"
+                      placeholder="Enter CGF admin"
                       value={fieldValues && fieldValues.subAdmin}
                       variant="outlined"
                       helperText=" "
@@ -587,7 +588,7 @@ const ViewRole = () => {
                         aria-controls="simple-tabpanel-0"
                       />
                       <Tab
-                        label="Sub Admins"
+                        label="CGF Admins"
                         // {...a11yProps(1)}
                         id="simple-tab-0"
                         aria-controls="simple-tabpanel-0"

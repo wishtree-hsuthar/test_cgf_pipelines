@@ -411,7 +411,7 @@ const AddMember = () => {
       controller.abort();
     };
   }, [watch]);
-  // console.log("selected Region", watch("region"));
+  console.log("region Countries",arrOfCountryRegions);
   return (
     <div className="page-wrapper">
       <Toaster
