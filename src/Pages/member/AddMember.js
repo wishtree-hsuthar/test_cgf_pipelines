@@ -413,6 +413,7 @@ const AddMember = () => {
         setValue("cgfCategory", e.target.value);
         setValue("cgfActivity", "");
     };
+
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();

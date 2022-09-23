@@ -25,7 +25,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>
@@ -237,11 +237,9 @@ const SubAdminList = () => {
         console.log("filters", filters);
         console.log("Search", search);
         let url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
+
         if (search?.length >= 3) url += `&search=${search}`;
-        // if (filters?.status !== "all")
-        //     url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&status=${filters.status}`;
-        // if (search?.length >= 3 && filters?.status !== "all")
-        //     url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&search=${search}&status=${filters.status}`;
+       
         return url;
     };
 
@@ -336,7 +334,7 @@ const SubAdminList = () => {
     console.log("Search text---", searchText);
 
     return (
-        <div class="page-wrapper">
+        <div className="page-wrapper">
             <DialogBox
                 title={`Withdraw CGF Admin Invitation`}
                 info1={
@@ -394,7 +392,7 @@ const SubAdminList = () => {
                         </div>
                         <div className="form-header-right-txt">
                             <div className="tertiary-btn-blk mr-20">
-                                <span class="download-icon">
+                                <span className="download-icon">
                                     <DownloadIcon />
                                 </span>
                                 Download
@@ -421,7 +419,7 @@ const SubAdminList = () => {
                                     name="search"
                                 />
                                 <button type="submit">
-                                    <i class="fa fa-search"></i>
+                                    <i className="fa fa-search"></i>
                                 </button>
                             </div>
                         </div>

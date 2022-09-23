@@ -1,4 +1,4 @@
-const { REACT_APP_API_ENDPOINT } = process.env;
+export const { REACT_APP_API_ENDPOINT } = process.env;
 //login
 export const LOGIN_URL = `${REACT_APP_API_ENDPOINT}auth/login`;
 export const LOGOUT_URL = `${REACT_APP_API_ENDPOINT}auth/logout`;
