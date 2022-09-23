@@ -97,173 +97,46 @@ const Header = () => {
                                 </div>
                                 <div className="nav-listblk">
                                     <ul className="nav-list flex-between">
-                                        <li
+                                        {/* <li
                                             className={
                                                 location.pathname ==
                                                 "/dashboard"
+                                            }>
                                             <a hidden={MEMBER_ACCESS} style={{
-226
- 
                                                     cursor: "pointer",
-227
- 
                                                 }} onClick={() => navigate("/members")}>
-228
- 
                                                 Members
-229
- 
                                             </a>
-230
- 
-                                        </li>
-231
- 
+                                        </li> */}
                                         <li>
-232
- 
                                             <a
-233
- 
                                                 hidden={OPERATION_MEMBER}
-234
- 
+
                                                 href="/#"
-235
- 
                                                 style={{
-236
- 
                                                     cursor: "pointer",
-237
- 
                                                 }}
-238
- 
                                             >
-239
- 
                                                 Operation Members
-240
- 
                                             </a>
-241
- 
                                         </li>
-242
- 
                                         <li>
-243
- 
                                             <a href="/#">Questionnaires</a>
-244
- 
                                         </li>
-245
- 
+                                       
                                         <li
-246
- 
                                             className={
-247
- 
-                                                location.pathname.includes(
-248
- 
-                                                    "/sub-admins"
-249
- 
-                                                )
-250
- 
-                                                    ? "active"
-251
- 
-                                                    : ""
-252
- 
-                                            }
-253
- 
-                                        >
-254
- 
-                                            <a
-255
- 
-                                                hidden={
-256
- 
-                                                    CGF_ADMIN_ACCESS ||
-257
- 
-                                                    MEMBER_ACCESS
-258
- 
-                                                }
-259
- 
-                                                onClick={() =>
-260
- 
-                                                    navigate("/sub-admins")
-261
- 
-                                                }
-262
- 
-                                                style={{
-263
- 
-                                                    cursor: "pointer",
-264
- 
-                                                }}
-265
- 
-                                            >
-266
- 
-                                                CGF Admins
-267
- 
-                                            </a>
-268
- 
-                                        </li>
-269
- 
-                                        <li
-270
- 
-                                            className={
-271
- 
                                                 location.pathname == "/roles"
-272
- 
                                                     ? "active"
-273
- 
                                                     : ""
-274
- 
                                             }
-275
- 
                                         >
-276
- 
                                             <a
-277
- 
                                                 hidden={
-278
- 
-                                                    CGF_ADMIN_ACCESS ||                                          ? "active"
-                                                    : ""
+                                                    CGF_ADMIN_ACCESS ? "active": ""
                                             }
                                         >
+                                            </a>
                                             <a 
                                                 onClick={() =>
                                                     navigate("/dashboard")
@@ -288,20 +161,7 @@ const Header = () => {
                                                 Members
                                             </a>
                                         </li>
-                                        <li>
-                                            <a
-                                                hidden={OPERATION_MEMBER}
-                                                href="/#"
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                Operation Members
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="/#">Questionnaires</a>
-                                        </li>
+                                       
                                         <li
                                             className={
                                                 location.pathname.includes(
@@ -416,7 +276,7 @@ const Header = () => {
                     </Toolbar>
                 </div>
               </div>
-              <div className="header-right">
+              {/* <div className="header-right">
                 <Box>
                   <Tooltip title="Open settings">
                     <div className="user-blk flex-between">
@@ -468,12 +328,8 @@ const Header = () => {
                     </MenuItem>
                   </Menu>
                 </Box>
-              </div>
-            </div>
-          </Toolbar>
-        </div>
-      </div>
-    </AppBar>
+              </div> */}
+              </AppBar>      
   );
 };
 
