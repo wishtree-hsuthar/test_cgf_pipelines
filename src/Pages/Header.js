@@ -104,7 +104,7 @@ const Header = () => {
                                                     : ""
                                             }
                                         >
-                                            <a
+                                            <a 
                                                 onClick={() =>
                                                     navigate("/dashboard")
                                                 }
@@ -122,7 +122,9 @@ const Header = () => {
                                                     : ""
                                             }
                                         >
-                                            <a hidden={MEMBER_ACCESS} href="/#">
+                                            <a hidden={MEMBER_ACCESS} style={{
+                                                    cursor: "pointer",
+                                                }} onClick={() => navigate("/members")}>
                                                 Members
                                             </a>
                                         </li>
@@ -130,6 +132,9 @@ const Header = () => {
                                             <a
                                                 hidden={OPERATION_MEMBER}
                                                 href="/#"
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
                                             >
                                                 Operation Members
                                             </a>
@@ -176,6 +181,9 @@ const Header = () => {
                                                 onClick={() =>
                                                     navigate("/roles")
                                                 }
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
                                             >
                                                 Roles and Privileges
                                             </a>

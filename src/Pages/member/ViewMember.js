@@ -20,7 +20,7 @@ import Dropdown from "../../components/Dropdown";
 import { useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import axios from "axios";
-import { COUNTRIES, MEMBER, REGIONS } from "../../api/Url";
+import { COUNTRIES, MEMBER, REGIONCOUNTRIES, REGIONS, STATES } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 
 //Ideally get those from backend
@@ -351,6 +351,8 @@ const ViewMember = () => {
   const [arrOfRegions, setArrOfRegions] = useState([]);
   //to hold array of countries for perticular region for Company Adress
   const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
+  //to hold array of Country states
+  const [arrOfStateCountry, setArrOfStateCountry] = useState([])
   const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
 
   //to hold array of countries for perticular region for CGF Office details
@@ -362,9 +364,9 @@ const ViewMember = () => {
   });
   const formatRegionCountries = (regionCountries) => {
     regionCountries.forEach(
-      (country, id) => (regionCountries[id] = country.name)
+      (country, id) => (regionCountries[id] = country.hasOwnProperty('_id') ? country.name : country)
     );
-    // console.log("arr of country ", regionCountries);
+    console.log("arr of country ", regionCountries);
     return regionCountries;
   };
 
@@ -399,7 +401,7 @@ const ViewMember = () => {
 
   const getCountries = async (region) => {
     try {
-      const regionCountries = await axios.get(REGIONS + `/${region}`);
+      const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
       return regionCountries;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
@@ -429,6 +431,14 @@ const ViewMember = () => {
         countriesOnRegion1.data
       );
       setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
+      try {
+        const stateCountries = await axios.get(STATES+`/${watch("country")}`)
+        setArrOfStateCountry(stateCountries.data)   
+      } catch (error) {
+        console.log("error")
+      }
+     
+    
       const countriesOnRegion2 = await getCountries(watch("cgfOfficeRegion"));
       console.log("countriesOnRegion2", countriesOnRegion2);
       const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries(
@@ -739,7 +749,7 @@ const ViewMember = () => {
                         <Autocomplete
                           className="phone-number-disable"
                           readOnly
-                          options={arrOfCountryCode}
+                          options={arrOfCountryCode ? arrOfCountryCode : []}
                           autoHighlight
                           value={member?.countryCode ? member.countryCode : ""}
                           renderOption={(props, option) => (
@@ -793,7 +803,7 @@ const ViewMember = () => {
                       control={control}
                       name="region"
                       placeholder="Select region"
-                      options={arrOfRegions}
+                      options={arrOfRegions ? arrOfRegions : []}
                     />
                   </div>
                 </div>
@@ -808,7 +818,7 @@ const ViewMember = () => {
                       name="country"
                       placeholder="Select country"
                       myHelper={myHelper}
-                      options={arrOfCountryRegions}
+                      options={arrOfCountryRegions ? arrOfCountryRegions : []}
                     />
                   </div>
                 </div>
@@ -822,7 +832,7 @@ const ViewMember = () => {
                       control={control}
                       name="state"
                       placeholder="Enter state"
-                      options={["Gujrat", "Maharashtra", "Ontario", "Texas"]}
+                      options={arrOfStateCountry ? arrOfStateCountry : []}
                     />
                   </div>
                 </div>
@@ -908,7 +918,7 @@ const ViewMember = () => {
                       isDisabled
                       control={control}
                       name="cgfOfficeRegion"
-                      options={arrOfRegions}
+                      options={arrOfRegions ? arrOfRegions : []}
                     />
                   </div>
                 </div>
@@ -922,7 +932,7 @@ const ViewMember = () => {
                       control={control}
                       name="cgfOfficeCountry"
                       placeholder="Select country"
-                      options={arrOfCgfOfficeCountryRegions}
+                      options={arrOfCgfOfficeCountryRegions ? arrOfCgfOfficeCountryRegions : []}
                     />
                   </div>
                 </div>
@@ -1024,7 +1034,7 @@ const ViewMember = () => {
                               ? member.memberRepresentativeId.countryCode
                               : ""
                           }
-                          options={arrOfCountryCode}
+                          options={arrOfCountryCode ? arrOfCountryCode : []}
                           autoHighlight
                           placeholder="Select country code"
                           renderOption={(props, option) => (

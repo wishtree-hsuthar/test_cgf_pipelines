@@ -9,7 +9,13 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { COUNTRIES, MEMBER, REGIONS } from "../../api/Url";
+import {
+  COUNTRIES,
+  MEMBER,
+  REGIONCOUNTRIES,
+  REGIONS,
+  STATES,
+} from "../../api/Url";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
@@ -150,6 +156,8 @@ const EditMember = () => {
   const [arrOfRegions, setArrOfRegions] = useState([]);
   //to hold array of countries for perticular region for Company Adress
   const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
+  //to hold array of Country states
+  const [arrOfStateCountry, setArrOfStateCountry] = useState([]);
   //to hold array of countries for perticular region for CGF Office details
   const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
     useState([]);
@@ -236,18 +244,27 @@ const EditMember = () => {
   };
   const formatRegionCountries = (regionCountries) => {
     regionCountries.forEach(
-      (country, id) => (regionCountries[id] = country.name)
+      (country, id) =>
+        (regionCountries[id] = country.hasOwnProperty("_id")
+          ? country.name
+          : country)
     );
-    // console.log("arr of country ", regionCountries);
+    console.log("arr of country ", regionCountries);
     return regionCountries;
   };
 
   //method to handle country change
-  const onCountryChangeHandler = (e) => {
+  const onCountryChangeHandler = async (e) => {
     // console.log("Inside Country Change ", e.target.value);
     setValue("country", e.target.value);
     setValue("state", "");
     trigger("country");
+    try {
+      const stateCountries = await axios.get(STATES + `/${watch("country")}`);
+      setArrOfStateCountry(stateCountries.data);
+    } catch (error) {
+      console.log("error");
+    }
   };
 
   //method to set region and update other fields accordingly
@@ -300,7 +317,7 @@ const EditMember = () => {
   };
   const getCountries = async (region) => {
     try {
-      const regionCountries = await axios.get(REGIONS + `/${region}`);
+      const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
       return regionCountries;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
@@ -336,6 +353,9 @@ const EditMember = () => {
         countriesOnRegion2.data
       );
       setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp1]);
+      const stateCountries = await axios.get(STATES + `/${watch("country")}`);
+      console.log("stateCountries",stateCountries,"country",watch("country"))
+      setArrOfStateCountry(stateCountries.data);
 
       // getCountries()
       return arrOfRegions;
@@ -561,7 +581,7 @@ const EditMember = () => {
                                   setValue("parentCompany", e.target.value)
                                 }
                                 onSubmit={() => setValue("parentCompany", "")}
-                                placeholder="Please select parent company"
+                                placeholder="NA"
                               />
                             )}
                           />
@@ -713,7 +733,7 @@ const EditMember = () => {
                       <Input
                         control={control}
                         name="websiteUrl"
-                        placeholder="Enter website URL"
+                        placeholder="NA"
                         myHelper={myHelper}
                         rules={{
                           maxLength: 50,
@@ -741,7 +761,7 @@ const EditMember = () => {
                         placeholder="Select region"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={arrOfRegions}
+                        options={arrOfRegions ? arrOfRegions : []}
                       />
                     </div>
                   </div>
@@ -758,7 +778,7 @@ const EditMember = () => {
                         placeholder="Select country"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={arrOfCountryRegions}
+                        options={arrOfCountryRegions ? arrOfCountryRegions : []}
                       />
                     </div>
                   </div>
@@ -774,7 +794,7 @@ const EditMember = () => {
                         placeholder="Enter state"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={["Gujrat", "Maharashtra", "Ontario", "Texas"]}
+                        options={arrOfStateCountry ? arrOfStateCountry : []}
                       />
                     </div>
                   </div>
@@ -835,7 +855,7 @@ const EditMember = () => {
                                   setValue("city", e.target.value)
                                 }
                                 onSubmit={() => setValue("city", "")}
-                                placeholder="Please select city"
+                                placeholder="NA"
                               />
                             )}
                           />
@@ -898,7 +918,7 @@ const EditMember = () => {
                         placeholder="Select Region"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={arrOfRegions}
+                        options={arrOfRegions ? arrOfRegions : []}
                       />
                     </div>
                   </div>
@@ -914,7 +934,7 @@ const EditMember = () => {
                         placeholder="Select country"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={arrOfCgfOfficeCountryRegions}
+                        options={arrOfCgfOfficeCountryRegions ? arrOfCgfOfficeCountryRegions : []}
                       />
                     </div>
                   </div>
@@ -969,7 +989,7 @@ const EditMember = () => {
                               pattern: /^[A-Za-z]+[A-Za-z ]*$/,
                             }}
                             name="memberContactFullName"
-                            placeholder="Enter full name"
+                            placeholder="NA"
                           />
                         </div>
                       </div>
@@ -983,7 +1003,7 @@ const EditMember = () => {
                         myHelper={myHelper}
                         rules={{ maxLength: 50, minLength: 3 }}
                         name="title"
-                        placeholder="Enter title"
+                        placeholder="NA"
                       />
                     </div>
                   </div>
@@ -995,7 +1015,7 @@ const EditMember = () => {
                         myHelper={myHelper}
                         rules={{ maxLength: 50, minLength: 3 }}
                         name="department"
-                        placeholder="Enter department"
+                        placeholder="NA"
                       />
                     </div>
                   </div>
@@ -1016,7 +1036,7 @@ const EditMember = () => {
                             /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                         }}
                         name="memberContactEmail"
-                        placeholder="Enter email"
+                        placeholder="NA"
                       />
                     </div>
                   </div>
@@ -1065,7 +1085,7 @@ const EditMember = () => {
                                     // onSubmit={() =>
                                     //   setValue("memberContactCountryCode", "")
                                     // }
-                                    placeholder={"Select country code"}
+                                    placeholder={"NA"}
                                   />
                                 )}
                               />
@@ -1089,7 +1109,7 @@ const EditMember = () => {
                                 return "Invalid input";
                             },
                           }}
-                          placeholder="Enter phone number"
+                          placeholder="NA"
                         />
                       </div>
                     </div>

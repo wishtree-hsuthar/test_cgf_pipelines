@@ -9,8 +9,10 @@ export const FORGOT_PASSWORD_VERIFY_TOKEN = `${REACT_APP_API_ENDPOINT}auth/verif
 export const SET_PASSWORD_VERIFY_TOKEN = `${REACT_APP_API_ENDPOINT}auth/verify/set/`;
 export const CONFIRM_PASSWORD = `${REACT_APP_API_ENDPOINT}auth/confirm/`;
 export const RESET_PASSWORD = `${REACT_APP_API_ENDPOINT}auth/reset/`;
-export const REGIONS = `${REACT_APP_API_ENDPOINT}countries/regions`
-export const COUNTRIES = `${REACT_APP_API_ENDPOINT}countries`
+export const REGIONS = `${REACT_APP_API_ENDPOINT}master/region/list`
+export const REGIONCOUNTRIES = `${REACT_APP_API_ENDPOINT}master/region`
+export const COUNTRIES = `${REACT_APP_API_ENDPOINT}master/country/list`
+export const STATES = `${REACT_APP_API_ENDPOINT}master/country`
 export const MEMBER = `${REACT_APP_API_ENDPOINT}members`
 
 
