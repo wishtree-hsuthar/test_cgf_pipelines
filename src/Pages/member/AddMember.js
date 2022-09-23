@@ -10,7 +10,7 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
-import { COUNTRIES, MEMBER, REGIONS } from "../../api/Url";
+import { COUNTRIES, MEMBER, REGIONCOUNTRIES, REGIONS, STATES } from "../../api/Url";
 import axios from "axios";
 import { useState } from "react";
 import useCallbackState from "../../utils/useCallBackState";
@@ -67,12 +67,14 @@ const myHelper = {
     pattern: "Invalid Input",
   },
   countryCode: {
+    required: "Select country code",
     validate: "Invalid input",
   },
   phoneNumber: {
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
     pattern: "Invalid Input",
+    required: "Enter PhoneNumber",
     validate: "Invalid Input",
   },
   websiteUrl: {
@@ -132,8 +134,9 @@ const myHelper = {
     maxLength: "Max char limit exceed",
     validate: "Invalid Input",
   },
-  memberContactCountryCode: {},
+  memberContactCountryCode: {required: "Select country code"},
   memberContactPhoneNuber: {
+    required: "Enter phone number",
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
     pattern: "Invalid Input",
@@ -180,6 +183,8 @@ const AddMember = () => {
   const [arrOfRegions, setArrOfRegions] = useState([]);
   //to hold array of countries for perticular region for Company Adress
   const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
+  //to hold array of Country states
+  const [arrOfStateCountry, setArrOfStateCountry] = useState([])
   const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
 
   //to hold array of countries for perticular region for CGF Office details
@@ -270,16 +275,19 @@ const AddMember = () => {
 
   const formatRegionCountries = (regionCountries) => {
     regionCountries.forEach(
-      (country, id) => (regionCountries[id] = country.name)
+      (country, id) => (regionCountries[id] = country.hasOwnProperty('_id') ? country.name : country)
     );
     console.log("arr of country ", regionCountries);
     return regionCountries;
   };
 
   //method to handle country change
-  const onCountryChangeHandler = (e) => {
+  const onCountryChangeHandler = async(e) => {
     console.log("Inside Country Change ", e.target.value);
     setValue("country", e.target.value);
+    const stateCountries = await axios.get(STATES+`/${e.target.value}`)
+    setArrOfStateCountry(stateCountries.data)
+    console.log("state countries: ",stateCountries)
     setValue("state", "");
     trigger("country");
   };
@@ -340,7 +348,7 @@ const AddMember = () => {
   };
   const getCountries = async (region) => {
     try {
-      const regionCountries = await axios.get(REGIONS + `/${region}`);
+      const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
       return regionCountries;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
@@ -643,18 +651,19 @@ const AddMember = () => {
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
-                      <label htmlFor="phoneNumber">Phone Number</label>
+                      <label htmlFor="phoneNumber">Phone Number <span className="mandatory">*</span></label>
                       <div className="phone-number-field">
                         <div className="select-field country-code">
                           <Controller
                             control={control}
                             name="countryCode"
-                            // rules={{
-                            //   validate: () => {
-                            //     if (watch("phoneNumber") && !watch("countryCode"))
-                            //       return "Invalid Input";
-                            //   },
-                            // }}
+                            rules={{
+                              required: true
+                              // validate: () => {
+                              //   if (watch("phoneNumber") && !watch("countryCode"))
+                              //     return "Invalid Input";
+                              // },
+                            }}
                             render={({ field, fieldState: { error } }) => (
                               <Autocomplete
                                 {...field}
@@ -664,7 +673,7 @@ const AddMember = () => {
                                   newValue && typeof newValue === "object"
                                     ? setValue("countryCode", newValue.name)
                                     : setValue("countryCode", newValue);
-                                  trigger("phoneNumber");
+                                  trigger("countryCode");
                                 }}
                                 options={arrOfCountryCode}
                                 autoHighlight
@@ -682,12 +691,12 @@ const AddMember = () => {
                                     inputProps={{
                                       ...params.inputProps,
                                     }}
-                                    onChange={() => trigger("phoneNumber")}
+                                    // onChange={() => trigger("phoneNumber")}
                                     // onSubmit={() => setValue("countryCode", "")}
                                     placeholder={"eg. +91"}
                                     helperText={
                                       error
-                                        ? myHelper.countryCode["validate"]
+                                        ? myHelper.countryCode[error?.type]
                                         : " "
                                     }
                                   />
@@ -704,12 +713,13 @@ const AddMember = () => {
                           rules={{
                             maxLength: 15,
                             minLength: 3,
-                            validate: (value) => {
-                              if (watch("phoneNumber") && !watch("countryCode"))
-                                return "Invalid input";
-                              else if (value && !Number(value))
-                                return "Invalid Input";
-                            },
+                            required: true,
+                            // validate: (value) => {
+                            //   if (watch("phoneNumber") && !watch("countryCode"))
+                            //     return "Invalid input";
+                            //   else if (value && !Number(value))
+                            //     return "Invalid Input";
+                            // },
                           }}
                         />
                       </div>
@@ -782,7 +792,7 @@ const AddMember = () => {
                         placeholder="Enter state"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={["Gujrat", "Maharashtra", "Ontario", "Texas"]}
+                        options={arrOfStateCountry}
                       />
                     </div>
                   </div>
@@ -1028,14 +1038,15 @@ const AddMember = () => {
                   <div className="card-form-field">
                     <div className="form-group">
                       <label htmlFor="memberContactPhoneNumber">
-                        Phone Number
+                        Phone Number <span className="mandatory">*</span>
                       </label>
                       <div className="phone-number-field">
                         <div className="select-field country-code">
                           <Controller
                             control={control}
                             name="memberContactCountryCode"
-                            render={({ field }) => (
+                            rules={{required: true}}
+                            render={({ field,fieldState: { error }  }) => (
                               <Autocomplete
                                 {...field}
                                 onChange={(event, newValue) => {
@@ -1048,12 +1059,12 @@ const AddMember = () => {
                                         "memberContactCountryCode",
                                         newValue
                                       );
-                                  trigger("memberContactPhoneNuber");
+                                  trigger("memberContactCountryCode");
                                 }}
                                 // sx={{ width: 200 }}
                                 options={arrOfCountryCode}
                                 autoHighlight
-                                placeholder="+91"
+                                placeholder="eg. +91"
                                 // getOptionLabel={(country) => country.name + " " + country}
                                 renderOption={(props, option) => (
                                   <li {...props}>{option}</li>
@@ -1065,12 +1076,17 @@ const AddMember = () => {
                                       ...params.inputProps,
                                     }}
                                     onChange={() =>
-                                      trigger("memberContactPhoneNuber")
+                                      trigger("memberContactCountryCode")
                                     }
                                     // onSubmit={() =>
                                     //   setValue("memberContactCountryCode", "")
                                     // }
                                     placeholder={"eg. +91"}
+                                    helperText={
+                                      error
+                                        ? myHelper.countryCode[error?.type]
+                                        : " "
+                                    }
                                   />
                                 )}
                               />
@@ -1084,15 +1100,16 @@ const AddMember = () => {
                           rules={{
                             maxLength: 15,
                             minLength: 3,
-                            validate: (value) => {
-                              if (
-                                watch("memberContactPhoneNuber") &&
-                                !watch("memberContactCountryCode")
-                              )
-                                return "Invalid Input";
-                              else if (value && !Number(value))
-                                return "Invalid input";
-                            },
+                            required: true,
+                            // validate: (value) => {
+                            //   if (
+                            //     watch("memberContactPhoneNuber") &&
+                            //     !watch("memberContactCountryCode")
+                            //   )
+                            //     return "Invalid Input";
+                            //   else if (value && !Number(value))
+                            //     return "Invalid input";
+                            // },
                           }}
                           placeholder="Enter phone number"
                         />

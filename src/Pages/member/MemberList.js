@@ -131,6 +131,7 @@ const MemberList = () => {
       delete object["updatedBy"];
       delete object["website"];
       delete object["isDeleted"];
+      delete object["isReplaced"]
       delete object["__v"];
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
         "en-GB"
