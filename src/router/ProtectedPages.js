@@ -12,8 +12,11 @@ import RolesList from "../Pages/roleManagement/RolesList";
 import AddRole from "../Pages/roleManagement/AddRole";
 import EditRole from "../Pages/roleManagement/EditRole";
 import ViewRole from "../Pages/roleManagement/ViewRole";
+import AddOperationMember from "../Pages/operationMember/AddOperationMember";
+import OperationMemberList from "../Pages/operationMember/OperationMemberList";
+import FallBackUI from "../Pages/FallBackUI";
 import MemberList from "../Pages/member/MemberList";
-import AddMember from "../Pages/member/AddMember"
+import AddMember from "../Pages/member/AddMember";
 import EditMember from "../Pages/member/EditMember";
 import ViewMember from "../Pages/member/ViewMember";
 const ProtectedPages = () => {
@@ -56,13 +59,29 @@ const ProtectedPages = () => {
             <Route path="roles/edit-role/:id" element={<EditRole />} />
 
             {/* Member Pages */}
-            <Route path="/members" element={<MemberList/>}></Route>
-            <Route path="/members/add-member" element={<AddMember/>}></Route>
-            <Route path={"/members/edit-member/:id"} element={<EditMember/>}></Route>
-            <Route path={"/members/view-member/:id"} element={<ViewMember/>}></Route>
-
+            <Route path="/members" element={<MemberList />}></Route>
+            <Route path="/members/add-member" element={<AddMember />}></Route>
+            <Route
+                path={"/members/edit-member/:id"}
+                element={<EditMember />}
+            ></Route>
+            <Route
+                path={"/members/view-member/:id"}
+                element={<ViewMember />}
+            ></Route>
 
             {/* </Route> */}
+
+            {/* Operation Members */}
+            <Route
+                path="/operation_members"
+                element={<OperationMemberList />}
+            />
+            <Route
+                path="/operation_members/add_operation_member"
+                element={<AddOperationMember />}
+            />
+            <Route path="*" element={<FallBackUI />} />
         </Routes>
     );
 };

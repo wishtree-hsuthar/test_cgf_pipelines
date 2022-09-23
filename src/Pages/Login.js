@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Logger } from "../Logger/Logger";
 import Toaster from "../components/Toaster";
-import { LOGIN_URL } from "../api/Url";
+import { GET_USER, LOGIN_URL } from "../api/Url";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/UserSlice";
@@ -47,7 +47,35 @@ const Login = (prop) => {
     });
     useEffect(() => {
         document.body.classList.add("login-page");
-        return () => document.body.classList.remove("login-page");
+
+        let isMounted = true;
+        const controller = new AbortController();
+        const fetchUser = async () => {
+            try {
+                const { status, data } = await axios.get(GET_USER, {
+                    withCredentials: true,
+                    signal: controller.signal,
+                });
+                console.log("data from app fetcuser method app file", data);
+                if (status == 200) {
+                    navigate("/dashboard");
+                }
+                // isMounted && setUserPresent(true);
+            } catch (error) {
+                if (error?.response?.status == 401) {
+                    // setUserPresent(false);
+                    console.log("Error from app file useEffect", error);
+                    // navigate("/login");
+                }
+            }
+        };
+        fetchUser();
+
+        return () => {
+            document.body.classList.remove("login-page");
+            isMounted = false;
+            controller.abort();
+        };
     }, []);
 
     const [values, setValues] = React.useState({
@@ -96,7 +124,7 @@ const Login = (prop) => {
                 setToasterDetails(
                     {
                         titleMessage: "Session Active",
-                        descriptionMessage: error?.response?.data?.error,
+                        descriptionMessage: error?.response?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()

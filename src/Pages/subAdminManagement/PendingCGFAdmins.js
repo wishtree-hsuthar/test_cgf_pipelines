@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import { FETCH_ROLES, WITHDRAW_SUB_ADMIN } from "../../api/Url";
+import DialogBox from "../../components/DialogBox";
 import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 const pendingTableColumnHead = [
@@ -38,15 +39,16 @@ const pendingTableColumnHead = [
     },
 ];
 
-function PendingCGFAdmins({ makeApiCall, setMakeApiCall, search, filters }) {
-    //Refr for Toaster
-    const myRef = React.useRef();
-    //Toaster Message setter
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
+function PendingCGFAdmins({
+    makeApiCall,
+    setMakeApiCall,
+    search,
+    filters,
+
+    myRef,
+    toasterDetails,
+    setToasterDetails,
+}) {
     const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
     const [withdrawInviteid, setWithdrawInviteid] = useState("");
 
@@ -87,6 +89,7 @@ function PendingCGFAdmins({ makeApiCall, setMakeApiCall, search, filters }) {
             delete object["data"]["description"];
             delete object["data"]["countryCode"];
             delete object["data"]["isDeleted"];
+            delete object["data"]["isReplaced"];
             delete object["__v"];
             delete object["data"]["password"];
             delete object["data"]["roleId"];
@@ -105,12 +108,13 @@ function PendingCGFAdmins({ makeApiCall, setMakeApiCall, search, filters }) {
             // object["role"] = object["data"]["subRoleId"].name;
             // object["role"] = object["data"]["subRole"][0].name;
             object["role"] = object["subRole"][0].name;
-            object["name"] = object["data"].name;
+            object["name"] = object["data"]["name"];
             object["email"] = object["data"].email;
             object["_id"] = object["_id"];
             object["createdAt"] = object["createdAt"];
             // delete object["data"]["subRoleId"];
             // delete object["data"]["subRole"][0].name;
+            delete object["createdBy"];
             delete object["subRole"];
             delete object["data"];
             delete object["memberData"];
@@ -175,12 +179,9 @@ function PendingCGFAdmins({ makeApiCall, setMakeApiCall, search, filters }) {
         console.log("filters", filters);
         console.log("Search", search);
         let url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
-        if (search?.length >= 3)
-            url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&search=${search}`;
-        if (filters?.status !== "all")
-            url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&status=${filters.status}`;
-        if (search?.length >= 3 && filters?.status !== "all")
-            url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&search=${search}&status=${filters.status}`;
+
+        if (search?.length >= 3) url += `&search=${search}`;
+
         return url;
     };
 
@@ -217,9 +218,9 @@ function PendingCGFAdmins({ makeApiCall, setMakeApiCall, search, filters }) {
                     {
                         titleMessage: "Error",
                         descriptionMessage:
-                            error?.response?.data?.error &&
-                            typeof error.response.data.error === "string"
-                                ? error.response.data.error
+                            error?.response?.data?.message &&
+                            typeof error.response.data.message === "string"
+                                ? error.response.data.message
                                 : "Something Went Wrong!",
 
                         messageType: "error",
@@ -258,6 +259,23 @@ function PendingCGFAdmins({ makeApiCall, setMakeApiCall, search, filters }) {
     }
     return (
         <>
+            <DialogBox
+                title={`Withdraw CGF Admin Invitation`}
+                info1={
+                    "On withdrawal, cgf admin will not be able to verify their account?"
+                }
+                info2={"Do you want to withdraw the invitation?"}
+                primaryButtonText={"Yes"}
+                secondaryButtonText={"No"}
+                onPrimaryModalButtonClickHandler={() => {
+                    withdrawInviteById();
+                }}
+                onSecondaryModalButtonClickHandler={() => {
+                    setOpenDeleteDialogBox(false);
+                }}
+                openModal={openDeleteDialogBox}
+                setOpenModal={setOpenDeleteDialogBox}
+            />
             <TableComponent
                 tableHead={pendingTableColumnHead}
                 records={recordsForPendingTab}

@@ -564,21 +564,22 @@ ul.breadcrumb li a:hover {
 .loader-blk img {
     width: 100%;
 }
-.select-reusable{
+.select-reusable {
     width: 100%;
 }
-.sub-heading1{
+.sub-heading1 {
     font-family: "ProximaNova-Semibold", serif, sans-serif;
     margin: 0;
     font-size: 16px;
     line-height: 16px;
     margin-bottom: 20px;
 }
-.card-inner-wrap{
+.card-inner-wrap {
     margin-bottom: 20px;
 }
 .Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: #4596d1 !important;border-width: 1px !important;
+    border-color: #4596d1 !important;
+    border-width: 1px !important;
 }
 
 .input-field:hover fieldset {
@@ -616,7 +617,7 @@ ul.breadcrumb li a:hover {
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root {
     font-size: 14px !important;
     padding: 5px 15px !important;
-    font-family: 'ProximaNova-Regular' !important;
+    font-family: "ProximaNova-Regular" !important;
 }
 
 .css-6hp17o-MuiList-root-MuiMenu-list {
@@ -1099,28 +1100,88 @@ input[type=checkbox]:checked:before {
     /* display: none; */
 }
 
-
-
-
 /* phone number and country code csss */
-.phone-number-field{display: flex;align-items: flex-start;}
-.country-code{margin-right: 10px;width: 130px;}
-.phone-number-field .MuiSelect-select{padding: 0 40px 0 15px !important;}
-.phone-number-field fieldset{border-color:rgba(30, 30, 30, 0.5);font-family: 'ProximaNova-Regular';}
-.Mui-focused .MuiOutlinedInput-notchedOutline {border-width: 1px !important;}
-.country-code .MuiInputBase-root{height: 40px;padding: 0 20px 0 0 !important;}
-.country-code input{height: 15px !important;}
+.phone-number-field {
+    display: flex;
+    align-items: flex-start;
+}
+.country-code {
+    margin-right: 10px;
+    width: 130px;
+}
 
-.salutation-wrap{display: flex;align-items: flex-start;}
-.salutation-blk{margin-right: 10px;width: 80px;}
-.salutation-wrap label{margin-bottom: 10px;display: inline-block;}
-.salutation-inputblk{flex: 1;}
+.phone-number-field .MuiSelect-select {
+    padding: 0 40px 0 15px !important;
+}
+.phone-number-field fieldset {
+    border-color: rgba(30, 30, 30, 0.5);
+    font-family: "ProximaNova-Regular";
+}
+.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-width: 1px !important;
+}
+.country-code .MuiInputBase-root {
+    height: 40px;
+    padding: 0 20px 0 0 !important;
+}
+.country-code input {
+    height: 15px !important;
+}
 
-.select-field-error fieldset{border-color: #e53850 !important;}
-.searchable-input fieldset{height: 45px;}
-.searchable-input .MuiInputBase-root{height: 40px;padding: 0 !important;}
-.searchable-inputlist{font-size: 14px !important;font-family: 'ProximaNova-Regular' !important;}
+.salutation-wrap {
+    display: flex;
+    align-items: flex-start;
+}
+.salutation-blk {
+    margin-right: 10px;
+    width: 80px;
+}
+.salutation-wrap label {
+    margin-bottom: 10px;
+    display: inline-block;
+}
+.salutation-inputblk {
+    flex: 1;
+}
 
-.select-field .Mui-disabled{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;}
-.select-field .MuiInputBase-root.Mui-disabled{background: none !important;}
-.phone-number-disable{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;}
+.select-field-error fieldset {
+    border-color: #e53850 !important;
+}
+.searchable-input fieldset {
+    height: 45px;
+}
+.searchable-input .MuiInputBase-root {
+    height: 40px;
+    padding: 0 !important;
+}
+.searchable-inputlist {
+    font-size: 14px !important;
+    font-family: "ProximaNova-Regular" !important;
+}
+
+.select-field .Mui-disabled {
+    background: rgba(30, 30, 30, 0.1) !important;
+    border-color: rgba(30, 30, 30, 0.1) !important;
+}
+.select-field .MuiInputBase-root.Mui-disabled {
+    background: none !important;
+}
+.phone-number-disable {
+    background: rgba(30, 30, 30, 0.1) !important;
+    border-color: rgba(30, 30, 30, 0.1) !important;
+}
+.select-reusable {
+    width: 100%;
+}
+
+/* Auto complete for member company */
+.country-code-auto-search {
+    margin-right: 10px;
+}
+.country-code-auto-search .MuiInputBase-root {
+    height: 40px;
+    padding: 0 20px 0 0 !important;
+}
+.country-code-auto-search input {
+    height: 15px !important;
+}

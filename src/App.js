@@ -15,35 +15,16 @@ import { privateAxios } from "./api/axios";
 import AuthOutlet from "./Pages/AuthOutlet";
 import Footer from "./components/Footer";
 import { useNavigate } from "react-router-dom";
+import FallBackUI from "./Pages/FallBackUI";
 axios.defaults.withCredentials = true;
 function App() {
-    const [userPresent, setUserPresent] = useState(false);
-    const navigate = useNavigate();
-    useEffect(() => {
-        const controller = new AbortController();
-        const fetchUser = async () => {
-            try {
-                const { data } = await axios.get(GET_USER, {
-                    withCredentials: true,
-                    signal: controller.signal,
-                });
-                console.log("data from app fetcuser method app file", data);
-                setUserPresent(true);
-            } catch (error) {
-                setUserPresent(false);
-                console.log("Error from app file useEffect", error);
-                // navigate("/login");
-            }
-        };
-        fetchUser();
-        return () => {
-            controller.abort();
-        };
-    }, []);
+    // const [userPresent, setUserPresent] = useState(false);
+    // const navigate = useNavigate();
+
     return (
         <React.Fragment>
             <Routes>
-                <Route
+                {/* <Route
                     path="/login"
                     element={
                         userPresent ? <Navigate to={"/dashboard"} /> : <Login />
@@ -58,7 +39,9 @@ function App() {
                             <ForgetPassword />
                         )
                     }
-                />
+                /> */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/forget-password" element={<ForgetPassword />} />
                 {/* <Route path="auth/*" element={<AuthOutlet />} /> */}
                 <Route path="auth/confirm/:id" element={<SetPassword />} />
                 <Route path="auth/forgot/:id" element={<ResetPassword />} />
@@ -72,6 +55,7 @@ function App() {
                         }
                     />
                 </Route>
+                <Route element={<FallBackUI />} />
             </Routes>
             <Footer />
         </React.Fragment>

@@ -91,9 +91,12 @@ function OnBoardedSubAdminsTable({
         staleData.forEach((object) => {
             console.log("subRole-------", object["subRoleId"].name);
             delete object["updatedAt"];
+            delete object["updatedBy"];
+            delete object["createdBy"];
             delete object["description"];
             delete object["countryCode"];
             delete object["isDeleted"];
+            delete object["isReplaced"];
             delete object["__v"];
             delete object["password"];
             delete object["roleId"];
@@ -122,19 +125,11 @@ function OnBoardedSubAdminsTable({
         console.log("filters in onboarded table----", filters);
         console.log("Search", search);
         let url = `http://localhost:3000/api/users/cgfadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
-        if (search?.length >= 3)
-            url =url+ `&search=${search}`;
-        // if (filters?.status !== "all")
-        //     url = `&status=${filters.status}&role=${filters.role}`;
 
-        // if (filters?.role.length > 0)
-        //     url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&role=${filters.role}`;
-        // if (
-        //     search?.length >= 3 &&
-        //     filters?.status !== "all" &&
-        //     filters.role.length != 0
-        // )
-        //     url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}&status=${filters.status}&role=${filters.role}`;
+        if (search?.length >= 3) url += `&search=${search}`;
+        
+      
+       
         return url;
     };
     const getSubAdmin = async (
@@ -158,19 +153,6 @@ function OnBoardedSubAdminsTable({
             // console.log(toasterDetails);
             console.log("Error from getSubAdmin-------", error);
 
-            // setToasterDetails(
-            //     {
-            //         titleMessage: "Error",
-            //         descriptionMessage:
-            //             error?.response?.data?.error &&
-            //             typeof error.response.data.error === "string"
-            //                 ? error.response.data.error
-            //                 : "Something Went Wrong!",
-
-            //         messageType: "error",
-            //     },
-            //     () => myRef.current()
-            // );
             if (error?.response?.status == 401) {
                 navigate("/login");
             }

@@ -101,9 +101,9 @@ const ReplaceSubAdmin = () => {
     const generateUrl = (multiFilterString) => {
         console.log("Search", search);
 
-        let url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `http://localhost:3000/api/users/cgfadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
-            url = `http://localhost:3000/api/users/subadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+            url = `http://localhost:3000/api/users/cgfadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
         return url;
     };
@@ -342,7 +342,7 @@ const ReplaceSubAdmin = () => {
                             <Link to="/sub-admins">CGF Admin</Link>
                         </li>
                         <li>
-                            <Link to="/sub-admins/view-sub-admin">
+                            <Link to={`/sub-admins/view-sub-admin/${id}`}>
                                 View CGF Admin
                             </Link>
                         </li>

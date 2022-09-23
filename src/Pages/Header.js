@@ -84,7 +84,7 @@ const Header = () => {
                         <div className="header-wrapper">
                             <div className="header-left">
                                 <div className="logo-blk">
-                                    <a href="/#">
+                                    <a href="/dashboard">
                                         <img
                                             src={
                                                 process.env.PUBLIC_URL +
@@ -108,22 +108,6 @@ const Header = () => {
                                                 Members
                                             </a>
                                         </li> */}
-                                        <li>
-                                            <a
-                                                hidden={OPERATION_MEMBER}
-
-                                                href="/#"
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                Operation Members
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="/#">Questionnaires</a>
-                                        </li>
-                                       
                                         <li
                                             className={
                                                 location.pathname == "/roles"
@@ -148,6 +132,34 @@ const Header = () => {
                                                 Dashboard
                                             </a>
                                         </li>
+                                        <li
+                                            className={
+                                                location.pathname.includes(
+                                                    "/operation_members"
+                                                )
+                                                    ? "active"
+                                                    : ""
+                                            }
+                                        >
+                                            <a
+                                                hidden={OPERATION_MEMBER}
+                                                onClick={() =>
+                                                    navigate(
+                                                        "/operation_members"
+                                                    )
+                                                }
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+                                                Operation Members
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/#">Questionnaires</a>
+                                        </li>
+                                       
+                                        
                                         <li
                                             className={
                                                 location.pathname == "/members"

@@ -18,9 +18,13 @@ export const MEMBER = `${REACT_APP_API_ENDPOINT}members`
 
 //sub admin
 export const FETCH_ROLES = `${REACT_APP_API_ENDPOINT}roles`;
-export const ADD_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/subadmin`;
-export const FETCH_SUB_ADMIN_BY_ADMIN = `${REACT_APP_API_ENDPOINT}users/subadmin/`;
-export const UPDATE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/subadmin/`;
+export const ADD_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin`;
+export const FETCH_SUB_ADMIN_BY_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/`;
+export const UPDATE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/`;
 export const WITHDRAW_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}auth/invite/`;
-export const DELETE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/subadmin/`;
+export const DELETE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/`;
 export const REPLACE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}positions/mappings/`;
+
+// add operationn member
+export const ADD_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member`;
+export const FETCH_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/member/`;

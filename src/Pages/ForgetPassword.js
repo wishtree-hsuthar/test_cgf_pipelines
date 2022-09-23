@@ -59,7 +59,7 @@ const ForgetPassword = () => {
             }
         } catch (error) {
             if (error?.response?.status === 400) {
-                let errorMsg = error?.response?.data?.error;
+                let errorMsg = error?.response?.data?.message;
                 console.log("error message", errorMsg);
                 console.log("error body", error.response);
                 setMessageType("error");

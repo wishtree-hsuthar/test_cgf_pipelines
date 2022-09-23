@@ -95,7 +95,7 @@ const SetPassword = () => {
     };
     const submitForm = async (data) => {
         try {
-            const response = await privateAxios.post(
+            const response = await publicAxios.post(
                 CONFIRM_PASSWORD + params.id,
                 data
             );
@@ -118,7 +118,7 @@ const SetPassword = () => {
             setToasterDetails(
                 {
                     titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.error,
+                    descriptionMessage: error?.response?.data?.message,
                     messageType: "error",
                 },
                 () => toasterRef.current()
