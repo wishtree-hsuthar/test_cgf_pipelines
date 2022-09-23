@@ -66,12 +66,14 @@ const Header = () => {
                 setAnchorElUser(null);
                 dispatch(resetUser());
                 setActive(!isActive);
-                navigate("/login");
+                return navigate("/login");
             }
         } catch (error) {
             console.log("Error from logout API", error);
             if (error?.response?.status === 401) {
-                navigate("/login");
+                dispatch(resetUser());
+
+                return navigate("/login");
             }
         }
     };
@@ -126,10 +128,25 @@ const Header = () => {
                                                 Members
                                             </a>
                                         </li>
-                                        <li>
+                                        <li
+                                            className={
+                                                location.pathname.includes(
+                                                    "/operation_members"
+                                                )
+                                                    ? "active"
+                                                    : ""
+                                            }
+                                        >
                                             <a
                                                 hidden={OPERATION_MEMBER}
-                                                href="/#"
+                                                onClick={() =>
+                                                    navigate(
+                                                        "/operation_members"
+                                                    )
+                                                }
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
                                             >
                                                 Operation Members
                                             </a>

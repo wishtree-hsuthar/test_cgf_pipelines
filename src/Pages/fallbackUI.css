@@ -1,0 +1,47 @@
+/* fall back ui css  */
+.error-status {
+    text-align: center;
+    font: normal normal 600 97px/168px Proxima Nova;
+    letter-spacing: 0px;
+    color: #1e1e1e;
+    opacity: 1;
+    margin: 7% 36%;
+    position: absolute;
+}
+.oops {
+    position: absolute;
+    margin: 6% 39%;
+    text-align: center;
+    font: normal normal normal 24px/24px Proxima Nova;
+    letter-spacing: 0px;
+    color: #787878;
+    opacity: 1;
+}
+.page-not-found {
+    text-align: center;
+    font: normal normal normal 24px/29px Proxima Nova;
+    letter-spacing: 0px;
+    color: #787878;
+    opacity: 1;
+    margin-right: 5%;
+}
+
+.section-div {
+    margin: 5% 0%;
+}
+
+.dashboard-button {
+    background: #f7a823;
+    color: #fff;
+    padding: 14px 28px;
+    font-size: 14px;
+    line-height: 14px;
+    height: 45px;
+    box-shadow: 0px 2px 3px rgb(0 0 0 / 5%);
+    border-radius: 3px;
+    text-transform: capitalize;
+    font-family: "Proxima Nova Semibold", serif, sans-serif;
+    border: 1px solid #f7a823;
+    cursor: pointer;
+    margin: 4% 40%;
+}

@@ -12,6 +12,9 @@ import RolesList from "../Pages/roleManagement/RolesList";
 import AddRole from "../Pages/roleManagement/AddRole";
 import EditRole from "../Pages/roleManagement/EditRole";
 import ViewRole from "../Pages/roleManagement/ViewRole";
+import AddOperationMember from "../Pages/operationMember/AddOperationMember";
+import OperationMemberList from "../Pages/operationMember/OperationMemberList";
+import FallBackUI from "../Pages/FallBackUI";
 const ProtectedPages = () => {
     return (
         <Routes>
@@ -52,6 +55,17 @@ const ProtectedPages = () => {
             <Route path="roles/edit-role/:id" element={<EditRole />} />
 
             {/* </Route> */}
+
+            {/* Operation Members */}
+            <Route
+                path="/operation_members"
+                element={<OperationMemberList />}
+            />
+            <Route
+                path="/operation_members/add_operation_member"
+                element={<AddOperationMember />}
+            />
+            <Route path="*" element={<FallBackUI />} />
         </Routes>
     );
 };

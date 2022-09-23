@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import {
-    Box,
-    Tabs,
-    Tab,
-    Typography,
-    MenuItem,
-    Select,
-    InputLabel,
-    Checkbox,
-} from "@mui/material";
+import { Box, Tabs, Tab, Typography, MenuItem, Select } from "@mui/material";
 
 import DownloadIcon from "@mui/icons-material/Download";
-import TableTester from "../../components/TableTester";
 import useCallbackState from "../../utils/useCallBackState";
-import TableComponent from "../../components/TableComponent";
 import { privateAxios } from "../../api/axios";
 import Toaster from "../../components/Toaster";
-import OnBoardedSubAdminsTable from "./OnBoardedSubAdminsTable";
 import { FETCH_ROLES, WITHDRAW_SUB_ADMIN } from "../../api/Url";
 import DialogBox from "../../components/DialogBox";
+import OnBoardedSubAdminsTable from "./OnBoardedSubAdminsTable";
 import PendingCGFAdmins from "./PendingCGFAdmins";
+
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -55,6 +45,7 @@ function a11yProps(index) {
 }
 
 const SubAdminList = () => {
+    // const dispatch = useDispatch();
     const [value, setValue] = React.useState(0);
 
     //Refr for Toaster
@@ -234,19 +225,23 @@ const SubAdminList = () => {
             setRoles(response?.data);
         } catch (error) {
             console.log("error from fetchroles in pending page", error);
+            if (error?.response?.status == 401) {
+                console.log("401 from fetch roles of subadminlist");
+                // dispatch(resetUser());
+                navigate("/login");
+            }
         }
     };
     // url for pending tab
     const generateUrlForPendingTab = () => {
         console.log("filters", filters);
         console.log("Search", search);
-        let url = `http://localhost:3000/api/users/subadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
-        if (search?.length >= 3)
-            url = `http://localhost:3000/api/users/subadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&search=${search}`;
-        if (filters?.status !== "all")
-            url = `http://localhost:3000/api/users/subadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&status=${filters.status}`;
-        if (search?.length >= 3 && filters?.status !== "all")
-            url = `http://localhost:3000/api/users/subadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&search=${search}&status=${filters.status}`;
+        let url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
+        if (search?.length >= 3) url += `&search=${search}`;
+        // if (filters?.status !== "all")
+        //     url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&status=${filters.status}`;
+        // if (search?.length >= 3 && filters?.status !== "all")
+        //     url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}&search=${search}&status=${filters.status}`;
         return url;
     };
 
@@ -431,33 +426,19 @@ const SubAdminList = () => {
                             </div>
                         </div>
                         <div className="member-filter-right">
-                            <div className="filter-select-wrap flex-between">
+                            {/* <div className="filter-select-wrap flex-between">
                                 <div className="filter-select-field">
                                     <div className="dropdown-field">
                                         <Select
                                             value={selectedRoles}
-                                            // multiple
-                                            // value={roles}
+                                           
                                             onChange={(e) =>
                                                 setSelectedRoles(e.target.value)
                                             }
-                                            // renderValue={(role) =>
-                                            //     role.join(", ")
-                                            // }
+                                          
                                             name="role"
                                         >
-                                            {/* <MenuItem value="">
-                                                <Checkbox
-                                                    checked={isAllRolesSelected}
-                                                    indeterminate={
-                                                        selectedRoles.length >
-                                                            0 &&
-                                                        selectedRoles.length <
-                                                            roles.length
-                                                    }
-                                                />
-                                                Select All
-                                            </MenuItem> */}
+                                       
 
                                             {roles.map((role) => (
                                                 <MenuItem
@@ -468,8 +449,7 @@ const SubAdminList = () => {
                                                 </MenuItem>
                                             ))}
 
-                                            {/* <MenuItem value="System-Administrator" selected>System-Administrator</MenuItem>
-                                        <MenuItem value="Co-ordinator">Co-ordinator</MenuItem> */}
+                                       
                                         </Select>
                                     </div>
                                 </div>
@@ -493,7 +473,7 @@ const SubAdminList = () => {
                                         </Select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="member-info-wrapper table-content-wrap">
@@ -518,6 +498,12 @@ const SubAdminList = () => {
                                 filters={filters}
                                 myRef={myRef}
                                 selectedRoles={selectedRoles}
+                                toasterDetails={toasterDetails}
+                                setToasterDetails={setToasterDetails}
+                                // setWithdrawInviteid={setWithdrawInviteid}
+                                // setOpenDeleteDialogBox={setOpenDeleteDialogBox}
+                                // openDeleteDialogBox={openDeleteDialogBox}
+                                // withdrawInviteById={withdrawInviteid}
                             />
                         </TabPanel>
                     </div>

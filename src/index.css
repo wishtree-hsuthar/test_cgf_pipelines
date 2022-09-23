@@ -1084,3 +1084,7 @@ input[type=checkbox]:checked:before {
 .radio-btn-field .MuiTouchRipple-root {
     /* display: none; */
 }
+
+.select-reusable {
+    width: 100%;
+}

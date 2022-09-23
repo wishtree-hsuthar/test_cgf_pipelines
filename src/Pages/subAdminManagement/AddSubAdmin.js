@@ -33,6 +33,8 @@ const AddSubAdmin = () => {
         formState: { errors },
         reset,
         control,
+        trigger,
+        setValue,
     } = useForm({
         resolver: yupResolver(AddSubAdminSchema),
         defaultValues: {
@@ -45,7 +47,7 @@ const AddSubAdmin = () => {
     });
     const location = useLocation();
     console.log(location);
-    const [value, setValue] = useState({});
+    // const [value, setValue] = useState({});
     const [roleSelected, setRoleSelected] = useState("");
     const [countries, setCountries] = useState([]);
     const [roles, setRoles] = useState([]);
@@ -68,7 +70,7 @@ const AddSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.error,
+                        descriptionMessage: error?.response?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -81,19 +83,22 @@ const AddSubAdmin = () => {
         let fetchCountries = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:3000/api/countries",
+                    "http://localhost:3000/api/master/country/list",
                     {
                         signal: controller.signal,
                     }
                 );
-                console.log("response", response);
-                isMounted && setCountries(response.data);
+                console.log("response from countries API-", response);
+                isMounted &&
+                    setCountries(
+                        response?.data.map((country) => country.countryCode)
+                    );
             } catch (error) {
                 console.log("error from countries api", error);
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.error,
+                        descriptionMessage: error?.response?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -135,7 +140,7 @@ const AddSubAdmin = () => {
             setToasterDetails(
                 {
                     titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.error,
+                    descriptionMessage: error?.response?.data?.message,
                     messageType: "error",
                 },
                 () => toasterRef.current()
@@ -269,57 +274,80 @@ const AddSubAdmin = () => {
                                             Phone Number
                                         </label>
                                         <div className="phone-number-field">
-                                            <Autocomplete
-                                                sx={{ width: 200 }}
-                                                options={countries}
-                                                autoHighlight
-                                                placeholder="Select country code"
-                                                getOptionLabel={(country) =>
-                                                    country.name +
-                                                    " " +
-                                                    country.countryCode
-                                                }
-                                                renderOption={(
-                                                    props,
-                                                    option
-                                                ) => (
-                                                    <Box
-                                                        component="li"
-                                                        sx={{
-                                                            "& > img": {
-                                                                mr: 2,
-                                                                flexShrink: 0,
-                                                            },
+                                            <Controller
+                                                control={control}
+                                                name="countryCode"
+                                                rules={{ required: true }}
+                                                render={({
+                                                    field,
+                                                    fieldState: { error },
+                                                }) => (
+                                                    <Autocomplete
+                                                        {...field}
+                                                        onChange={(
+                                                            event,
+                                                            newValue
+                                                        ) => {
+                                                            console.log(
+                                                                "inside autocomplete onchange"
+                                                            );
+                                                            console.log(
+                                                                "new Value ",
+                                                                newValue
+                                                            );
+                                                            newValue &&
+                                                            typeof newValue ===
+                                                                "object"
+                                                                ? setValue(
+                                                                      "countryCode",
+                                                                      newValue.name
+                                                                  )
+                                                                : setValue(
+                                                                      "countryCode",
+                                                                      newValue
+                                                                  );
+                                                            trigger(
+                                                                "countryCode"
+                                                            );
                                                         }}
-                                                        {...props}
-                                                    >
-                                                        {option.name + " "}
-                                                        {option.countryCode}
-                                                    </Box>
-                                                )}
-                                                renderInput={(params) => (
-                                                    <Controller
-                                                        control={control}
-                                                        name="countryCode"
-                                                        render={({ field }) => (
+                                                        sx={{ width: 200 }}
+                                                        options={countries}
+                                                        autoHighlight
+                                                        // placeholder="Select country code"
+                                                        getOptionLabel={(
+                                                            country
+                                                        ) => country}
+                                                        renderOption={(
+                                                            props,
+                                                            option
+                                                        ) => (
+                                                            <li {...props}>
+                                                                {option}
+                                                            </li>
+                                                        )}
+                                                        renderInput={(
+                                                            params
+                                                        ) => (
                                                             <TextField
-                                                                {...field}
+                                                                // className={`input-field ${
+                                                                //   error && "input-error"
+                                                                // }`}
                                                                 {...params}
                                                                 inputProps={{
                                                                     ...params.inputProps,
-                                                                    // autoComplete: "", // disable autocomplete and autofill
                                                                 }}
-                                                                autoComplete={
-                                                                    false
+                                                                onChange={() =>
+                                                                    trigger(
+                                                                        "countryCode"
+                                                                    )
                                                                 }
+                                                                // onSubmit={() => setValue("countryCode", "")}
                                                                 placeholder={
                                                                     "Select country code"
                                                                 }
                                                                 helperText={
-                                                                    errors.countryCode
-                                                                        ? errors
-                                                                              ?.countryCode
-                                                                              .message
+                                                                    error
+                                                                        ? "Select country code"
                                                                         : " "
                                                                 }
                                                             />

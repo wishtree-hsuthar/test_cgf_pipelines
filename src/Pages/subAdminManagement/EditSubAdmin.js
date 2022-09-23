@@ -103,7 +103,7 @@ const EditSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.error,
+                        descriptionMessage: error?.response?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -139,7 +139,7 @@ const EditSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.error,
+                        descriptionMessage: error?.response?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -158,7 +158,7 @@ const EditSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.error,
+                        descriptionMessage: error?.response?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -215,7 +215,7 @@ const EditSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.error,
+                        descriptionMessage: error?.response?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()
