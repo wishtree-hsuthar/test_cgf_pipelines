@@ -88,7 +88,7 @@ const EditSubAdmin = () => {
         let fetchCountries = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:3000/api/countries",
+                    "http://localhost:3000/api/master/country/list",
                     {
                         signal: controller.signal,
                     }
@@ -324,57 +324,63 @@ const EditSubAdmin = () => {
                                             Phone Number
                                         </label>
                                         <div className="phone-number-field">
-                                            <Autocomplete
-                                                sx={{ width: 200 }}
-                                                options={countries}
-                                                // autoHighlight
-                                                autoComplete={false}
-                                                value={value}
-                                                getOptionLabel={(country) =>
-                                                    country["countryCode"]
-                                                        ? country["countryCode"]
-                                                        : country
-                                                }
-                                                renderOption={(
-                                                    props,
-                                                    option
-                                                ) => (
-                                                    <Box
-                                                        component="li"
-                                                        sx={{
-                                                            "& > img": {
-                                                                mr: 2,
-                                                                flexShrink: 0,
-                                                            },
-                                                        }}
-                                                        {...props}
-                                                    >
-                                                        {option.name + " "}
-                                                        {option.countryCode}
-                                                    </Box>
-                                                )}
-                                                onChange={(e, v) => setValue(v)}
-                                                // onSelect={(e, v) => setValue(v)}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                        inputProps={{
-                                                            ...params.inputProps,
-                                                            autoComplete: "", // disable autocomplete and autofill
-                                                        }}
-                                                        // value={value.name}
-                                                        // onChange={(e, v) =>
-                                                        //     setValue(v)
-                                                        // }
-                                                        // onSelect={(e) =>
-                                                        //     setValue(e.target.value)
-                                                        // }
-                                                        {...register(
-                                                            "countryCode"
-                                                        )}
-                                                    />
-                                                )}
-                                            />
+                                            <div className="select-field country-code">
+                                                <Autocomplete
+                                                    options={countries}
+                                                    // autoHighlight
+                                                    autoComplete={false}
+                                                    value={value}
+                                                    getOptionLabel={(country) =>
+                                                        country["countryCode"]
+                                                            ? country[
+                                                                  "countryCode"
+                                                              ]
+                                                            : country
+                                                    }
+                                                    renderOption={(
+                                                        props,
+                                                        option
+                                                    ) => (
+                                                        <Box
+                                                            component="li"
+                                                            sx={{
+                                                                "& > img": {
+                                                                    mr: 2,
+                                                                    flexShrink: 0,
+                                                                },
+                                                            }}
+                                                            {...props}
+                                                        >
+                                                            {option.name + " "}
+                                                            {option.countryCode}
+                                                        </Box>
+                                                    )}
+                                                    onChange={(e, v) =>
+                                                        setValue(v)
+                                                    }
+                                                    // onSelect={(e, v) => setValue(v)}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            inputProps={{
+                                                                ...params.inputProps,
+                                                                autoComplete:
+                                                                    "", // disable autocomplete and autofill
+                                                            }}
+                                                            // value={value.name}
+                                                            // onChange={(e, v) =>
+                                                            //     setValue(v)
+                                                            // }
+                                                            // onSelect={(e) =>
+                                                            //     setValue(e.target.value)
+                                                            // }
+                                                            {...register(
+                                                                "countryCode"
+                                                            )}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
 
                                             <TextField
                                                 className={`input-field ${

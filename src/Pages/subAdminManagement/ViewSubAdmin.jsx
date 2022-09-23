@@ -337,54 +337,55 @@ const ViewSubAdmin = () => {
                                 <div className="form-group">
                                     <label for="emailid">Phone Number</label>
                                     <div className="phone-number-field">
-                                        <Autocomplete
-                                            sx={{ width: 200 }}
-                                            options={countries}
-                                            autoHighlight
-                                            getOptionLabel={(country) =>
-                                                country.name +
-                                                " " +
-                                                country.countryCode
-                                            }
-                                            disabled
-                                            value={value}
-                                            renderOption={(props, option) => (
-                                                <Box
-                                                    component="li"
-                                                    sx={{
-                                                        "& > img": {
-                                                            mr: 2,
-                                                            flexShrink: 0,
-                                                        },
-                                                    }}
-                                                    {...props}
-                                                >
-                                                    {option.name + " "}
-                                                    {option.countryCode}
-                                                </Box>
-                                            )}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    inputProps={{
-                                                        ...params.inputProps,
-                                                        autoComplete: "", // disable autocomplete and autofill
-                                                    }}
-                                                    // value={value}
-                                                    // onChange={(e) =>
-                                                    //     setValue(e.target.value)
-                                                    // }
-                                                    // onSelect={(e) =>
-                                                    //     setValue(e.target.value)
-                                                    // }
-                                                    // {...register("countryCode")}
-                                                    // helperText={
-                                                    //     errors?.countryCode?.message
-                                                    // }
-                                                />
-                                            )}
-                                        />
-
+                                        <div className="select-field country-code">
+                                            <Autocomplete
+                                                options={countries}
+                                                autoHighlight
+                                                getOptionLabel={(country) =>
+                                                    country.countryCode
+                                                }
+                                                disabled
+                                                value={value}
+                                                renderOption={(
+                                                    props,
+                                                    option
+                                                ) => (
+                                                    <Box
+                                                        component="li"
+                                                        sx={{
+                                                            "& > img": {
+                                                                mr: 2,
+                                                                flexShrink: 0,
+                                                            },
+                                                        }}
+                                                        {...props}
+                                                    >
+                                                        {option.name + " "}
+                                                        {option.countryCode}
+                                                    </Box>
+                                                )}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        inputProps={{
+                                                            ...params.inputProps,
+                                                            autoComplete: "", // disable autocomplete and autofill
+                                                        }}
+                                                        // value={value}
+                                                        // onChange={(e) =>
+                                                        //     setValue(e.target.value)
+                                                        // }
+                                                        // onSelect={(e) =>
+                                                        //     setValue(e.target.value)
+                                                        // }
+                                                        // {...register("countryCode")}
+                                                        // helperText={
+                                                        //     errors?.countryCode?.message
+                                                        // }
+                                                    />
+                                                )}
+                                            />
+                                        </div>
                                         <TextField
                                             // className={`input-field ${
                                             //     errors.email && "input-error"

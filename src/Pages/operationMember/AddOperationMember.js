@@ -285,14 +285,15 @@ function AddOperationMember() {
                             <div className="card-blk flex-between">
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <div className="phone-number-field">
-                                            <label htmlFor="salutation">
-                                                Salutation
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
-                                            </label>
-                                            <div className="select-field country-code">
+                                        <div className="salutation-wrap">
+                                            <div className="salutation-blk">
+                                                <label htmlFor="salutation">
+                                                    Salutation
+                                                    <span className="mandatory">
+                                                        *
+                                                    </span>
+                                                </label>
+
                                                 <Dropdown
                                                     control={control}
                                                     name="salutation"
@@ -300,7 +301,9 @@ function AddOperationMember() {
                                                     myHelper={
                                                         helperTextForAddOperationMember
                                                     }
-                                                    rules={{ required: true }}
+                                                    rules={{
+                                                        required: true,
+                                                    }}
                                                     options={[
                                                         "Mr.",
                                                         "Mrs.",
@@ -308,20 +311,24 @@ function AddOperationMember() {
                                                     ]}
                                                 />
                                             </div>
-                                            <label for="name">
-                                                Full Name{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
-                                            </label>
-                                            <Input
-                                                name={"name"}
-                                                control={control}
-                                                myHelper={
-                                                    helperTextForAddOperationMember
-                                                }
-                                                rules={{ required: true }}
-                                            />
+                                            <div className="salutation-inputblk">
+                                                <label for="name">
+                                                    Full Name{" "}
+                                                    <span className="mandatory">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <Input
+                                                    name={"name"}
+                                                    control={control}
+                                                    myHelper={
+                                                        helperTextForAddOperationMember
+                                                    }
+                                                    rules={{
+                                                        required: true,
+                                                    }}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -364,94 +371,96 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="phoneNumber">
+                                        <label htmlfor="phoneNumber">
                                             Phone Number
+                                            <span className="mandatory">*</span>
                                         </label>
                                         <div className="phone-number-field">
-                                            <Controller
-                                                control={control}
-                                                name="countryCode"
-                                                rules={{ required: true }}
-                                                render={({
-                                                    field,
-                                                    fieldState: { error },
-                                                }) => (
-                                                    <Autocomplete
-                                                        {...field}
-                                                        onChange={(
-                                                            event,
-                                                            newValue
-                                                        ) => {
-                                                            console.log(
-                                                                "inside autocomplete onchange"
-                                                            );
-                                                            console.log(
-                                                                "new Value ",
+                                            <div className="select-field country-code">
+                                                <Controller
+                                                    control={control}
+                                                    name="countryCode"
+                                                    rules={{ required: true }}
+                                                    render={({
+                                                        field,
+                                                        fieldState: { error },
+                                                    }) => (
+                                                        <Autocomplete
+                                                            {...field}
+                                                            onChange={(
+                                                                event,
                                                                 newValue
-                                                            );
-                                                            newValue &&
-                                                            typeof newValue ===
-                                                                "object"
-                                                                ? setValue(
-                                                                      "countryCode",
-                                                                      newValue.name
-                                                                  )
-                                                                : setValue(
-                                                                      "countryCode",
-                                                                      newValue
-                                                                  );
-                                                            trigger(
-                                                                "countryCode"
-                                                            );
-                                                        }}
-                                                        sx={{ width: 200 }}
-                                                        options={countries}
-                                                        autoHighlight
-                                                        // placeholder="Select country code"
-                                                        getOptionLabel={(
-                                                            country
-                                                        ) => country}
-                                                        renderOption={(
-                                                            props,
-                                                            option
-                                                        ) => (
-                                                            <li {...props}>
-                                                                {option}
-                                                            </li>
-                                                        )}
-                                                        renderInput={(
-                                                            params
-                                                        ) => (
-                                                            <TextField
-                                                                // className={`input-field ${
-                                                                //   error && "input-error"
-                                                                // }`}
-                                                                {...params}
-                                                                inputProps={{
-                                                                    ...params.inputProps,
-                                                                }}
-                                                                onChange={() =>
-                                                                    trigger(
-                                                                        "countryCode"
-                                                                    )
-                                                                }
-                                                                // onSubmit={() => setValue("countryCode", "")}
-                                                                placeholder={
-                                                                    "Select country code"
-                                                                }
-                                                                helperText={
-                                                                    error
-                                                                        ? helperTextForAddOperationMember
-                                                                              .countryCode[
-                                                                              "required"
-                                                                          ]
-                                                                        : " "
-                                                                }
-                                                            />
-                                                        )}
-                                                    />
-                                                )}
-                                            />
+                                                            ) => {
+                                                                console.log(
+                                                                    "inside autocomplete onchange"
+                                                                );
+                                                                console.log(
+                                                                    "new Value ",
+                                                                    newValue
+                                                                );
+                                                                newValue &&
+                                                                typeof newValue ===
+                                                                    "object"
+                                                                    ? setValue(
+                                                                          "countryCode",
+                                                                          newValue.name
+                                                                      )
+                                                                    : setValue(
+                                                                          "countryCode",
+                                                                          newValue
+                                                                      );
+                                                                trigger(
+                                                                    "countryCode"
+                                                                );
+                                                            }}
+                                                            options={countries}
+                                                            autoHighlight
+                                                            // placeholder="Select country code"
+                                                            getOptionLabel={(
+                                                                country
+                                                            ) => country}
+                                                            renderOption={(
+                                                                props,
+                                                                option
+                                                            ) => (
+                                                                <li {...props}>
+                                                                    {option}
+                                                                </li>
+                                                            )}
+                                                            renderInput={(
+                                                                params
+                                                            ) => (
+                                                                <TextField
+                                                                    // className={`input-field ${
+                                                                    //   error && "input-error"
+                                                                    // }`}
+                                                                    {...params}
+                                                                    inputProps={{
+                                                                        ...params.inputProps,
+                                                                    }}
+                                                                    onChange={() =>
+                                                                        trigger(
+                                                                            "countryCode"
+                                                                        )
+                                                                    }
+                                                                    // onSubmit={() => setValue("countryCode", "")}
+                                                                    placeholder={
+                                                                        "eg. +91"
+                                                                    }
+                                                                    helperText={
+                                                                        error
+                                                                            ? helperTextForAddOperationMember
+                                                                                  .countryCode[
+                                                                                  "required"
+                                                                              ]
+                                                                            : " "
+                                                                    }
+                                                                />
+                                                            )}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
                                             <Input
                                                 name={"phoneNumber"}
                                                 control={control}
@@ -511,96 +520,111 @@ function AddOperationMember() {
                                             Member Company
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <Controller
-                                            control={control}
-                                            name="memberId"
-                                            render={({
-                                                field,
-                                                fieldState: { error },
-                                            }) => (
-                                                <Autocomplete
-                                                    {...field}
-                                                    value={memberCompanies?._id}
-                                                    onChange={(
-                                                        event,
-                                                        newValue
-                                                    ) => {
-                                                        console.log(
-                                                            "inside autocomplete onchange"
-                                                        );
-                                                        console.log(
-                                                            "new Value ",
+                                        <div className="country-code-auto-search">
+                                            <Controller
+                                                control={control}
+                                                name="memberId"
+                                                render={({
+                                                    field,
+                                                    fieldState: { error },
+                                                }) => (
+                                                    <Autocomplete
+                                                        {...field}
+                                                        value={
+                                                            memberCompanies?._id
+                                                        }
+                                                        onChange={(
+                                                            event,
                                                             newValue
-                                                        );
-                                                        setValue(
-                                                            "reportingManager",
-                                                            ""
-                                                        );
-                                                        // call fetch Reporting managers here
-                                                        fetchReportingManagers(
-                                                            newValue._id
-                                                        );
-                                                        setValue(
-                                                            "companyType",
-                                                            newValue.companyType
-                                                        );
+                                                        ) => {
+                                                            console.log(
+                                                                "inside autocomplete onchange"
+                                                            );
+                                                            console.log(
+                                                                "new Value ",
+                                                                newValue
+                                                            );
+                                                            setValue(
+                                                                "reportingManager",
+                                                                ""
+                                                            );
+                                                            // call fetch Reporting managers here
+                                                            fetchReportingManagers(
+                                                                newValue._id
+                                                            );
+                                                            setValue(
+                                                                "companyType",
+                                                                newValue.companyType
+                                                            );
 
-                                                        newValue &&
-                                                        typeof newValue ===
-                                                            "object"
-                                                            ? setValue(
-                                                                  "memberId",
-                                                                  newValue?._id
-                                                              )
-                                                            : setValue(
-                                                                  "memberId",
-                                                                  newValue
-                                                              );
-                                                    }}
-                                                    sx={{ width: 200 }}
-                                                    options={memberCompanies}
-                                                    autoHighlight
-                                                    // placeholder="Select country code"
-                                                    getOptionLabel={(country) =>
-                                                        country.companyName
-                                                    }
-                                                    renderOption={(
-                                                        props,
-                                                        option
-                                                    ) => (
-                                                        <li {...props}>
-                                                            {option.companyName}
-                                                        </li>
-                                                    )}
-                                                    renderInput={(params) => (
-                                                        <TextField
-                                                            // className={`input-field ${
-                                                            //   error && "input-error"
-                                                            // }`}
-                                                            {...params}
-                                                            inputProps={{
-                                                                ...params.inputProps,
-                                                            }}
-                                                            // onChange={() =>
-                                                            //     trigger(
-                                                            //         "phoneNumber"
-                                                            //     )
-                                                            // }
-                                                            // onSubmit={() => setValue("countryCode", "")}
-                                                            placeholder={
-                                                                "Select member company"
-                                                            }
-                                                            helperText={
-                                                                error
-                                                                    ?.helperTextForAddOperationMember?.[
-                                                                    "memberId"
-                                                                ][error.type]
-                                                            }
-                                                        />
-                                                    )}
-                                                />
-                                            )}
-                                        />
+                                                            newValue &&
+                                                            typeof newValue ===
+                                                                "object"
+                                                                ? setValue(
+                                                                      "memberId",
+                                                                      newValue?._id
+                                                                  )
+                                                                : setValue(
+                                                                      "memberId",
+                                                                      newValue
+                                                                  );
+                                                        }}
+                                                        // sx={{ width: 200 }}
+                                                        options={
+                                                            memberCompanies
+                                                        }
+                                                        autoHighlight
+                                                        // placeholder="Select country code"
+                                                        getOptionLabel={(
+                                                            country
+                                                        ) =>
+                                                            country.companyName
+                                                        }
+                                                        renderOption={(
+                                                            props,
+                                                            option
+                                                        ) => (
+                                                            <li {...props}>
+                                                                {
+                                                                    option.companyName
+                                                                }
+                                                            </li>
+                                                        )}
+                                                        renderInput={(
+                                                            params
+                                                        ) => (
+                                                            <TextField
+                                                                // className={`input-field ${
+                                                                //   error && "input-error"
+                                                                // }`}
+                                                                {...params}
+                                                                inputProps={{
+                                                                    ...params.inputProps,
+                                                                }}
+                                                                // onChange={() =>
+                                                                //     trigger(
+                                                                //         "phoneNumber"
+                                                                //     )
+                                                                // }
+                                                                // onSubmit={() => setValue("countryCode", "")}
+                                                                placeholder={
+                                                                    "Select member company"
+                                                                }
+                                                                helperText={
+                                                                    error
+                                                                        ?.helperTextForAddOperationMember?.[
+                                                                        "memberId"
+                                                                    ][
+                                                                        error
+                                                                            .type
+                                                                    ]
+                                                                }
+                                                            />
+                                                        )}
+                                                    />
+                                                )}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="card-form-field">

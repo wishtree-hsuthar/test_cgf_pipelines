@@ -40,9 +40,7 @@ function Toaster({ titleMessage, descriptionMessage, messageType, myRef }) {
             messageType === "success" && "toaster-ttl-success"
           }`}
         >
-          {titleMessage.length >= 30
-            ? `${titleMessage.slice(0, 30)}...`
-            : titleMessage}
+          {titleMessage}
         </div>
         <p>{descriptionMessage}</p>
       </div>

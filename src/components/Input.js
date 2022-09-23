@@ -9,6 +9,7 @@ const Input = ({
     rules,
     onBlur,
     multiline,
+    isDisabled,
 }) => {
     const {
         field: { onChange, value, ref },
@@ -22,6 +23,7 @@ const Input = ({
     // console.log("error on text inputs: ",myHelper)
     return (
         <TextField
+            disabled={isDisabled}
             className={`input-field ${error && "input-error"}`}
             placeholder={placeholder}
             onChange={onChange} // send value to hook form

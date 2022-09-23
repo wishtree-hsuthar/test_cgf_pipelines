@@ -9,7 +9,8 @@
 .table-blk .MuiTableCell-head{padding: 0 !important;text-align: left;}
 /* .table-blk .MuiTableCell-head:nth-child(2){padding: 0 !important;} */
 /* .table-blk .MuiCheckbox-root svg{width: 13px;height: 12px;} */
-.table-blk .MuiTableCell-root{padding: 0;border-bottom: none;font-size: 14px;}
+.table-blk .MuiTableCell-root{padding: 0 10px 0 0;border-bottom: none;font-size: 14px;}
+.table-blk .MuiTableCell-root:last-child{padding-right: 0;}
 .table-blk .MuiCheckbox-root{padding: 16px;}
 .table-blk .MuiTableRow-root .button-style span{color: #E53850;background: #E5385026;padding: 5px;font-size: 14px;width: 67px;display: inline-block;text-align: center;}
 .button-style-success span{color: #6DB02D !important;background: #6DB02D26 !important;}
@@ -28,8 +29,8 @@
     padding: 0px 16px !important;
 }
   
-
-
+.card-wrapper .table-footer{margin-bottom: 0;}
+.table-footer-btm-space .table-footer{margin: 0 0 45px;}
 
 
 
@@ -60,7 +61,7 @@
 .per-page-select-field svg{color: #1D1D23 !important;}
 /* .table-content-wrap .css-19kzrtu{padding: 30px 0 20px;} */
 .table-content-wrap .table-blk {
-    padding: 30px 0;
+    padding: 20px 0;
 }
 /* CSS By Rajkumar */
 /* .table-role-content-wrap .table-blk{padding-bottom: 0;} */

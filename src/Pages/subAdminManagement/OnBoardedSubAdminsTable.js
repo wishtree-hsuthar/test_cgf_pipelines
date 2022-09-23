@@ -91,9 +91,12 @@ function OnBoardedSubAdminsTable({
         staleData.forEach((object) => {
             console.log("subRole-------", object["subRoleId"].name);
             delete object["updatedAt"];
+            delete object["updatedBy"];
+            delete object["createdBy"];
             delete object["description"];
             delete object["countryCode"];
             delete object["isDeleted"];
+            delete object["isReplaced"];
             delete object["__v"];
             delete object["password"];
             delete object["roleId"];

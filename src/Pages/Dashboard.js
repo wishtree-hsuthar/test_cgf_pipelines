@@ -10,8 +10,11 @@ export const Dashboard = (props) => {
                     <img
                         src={
                             process.env.PUBLIC_URL +
-                            "/images/WorkInProgress.jpg"
+                            "/images/WorkInProgress-removebg-preview.png"
                         }
+                        style={{
+                            margin: "0% 25%",
+                        }}
                     />
                 </div>
             </section>

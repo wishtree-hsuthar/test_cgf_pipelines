@@ -44,9 +44,9 @@ const UserLoggedIn = ({ children }) => {
         }
     };
 
-    console.log("after useEFFECT", authUser);
+    // console.log("after useEFFECT", authUser);
 
-    console.log("authuser from checkuser======", authUser);
+    // console.log("authuser from checkuser======", authUser);
     if (authUser == undefined) {
         fetchUser();
         // navigate("/login");

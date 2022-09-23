@@ -132,12 +132,13 @@ function PendingOperationMembers({
             object["operationMember"] = object["data"].name;
             object["email"] = object["data"].email;
             // object["createdAt"] = object["createdAt"];
-            object["memberCompany"] = object["memberData"][0]["companyName"];
-            object["companyType"] = object["memberData"][0]["companyType"];
+            object["memberCompany"] = object["memberData"]["companyName"];
+            object["companyType"] = object["memberData"]["companyType"];
             // object["createdByName"] = object["createdBy"]["name"];
             object["createdOn"] = new Date(
                 object["createdAt"]
             ).toLocaleDateString("en-US");
+            object["createdByName"] = object["createdBy"].name;
 
             // delete object["data"]["subRoleId"];
             // delete object["data"]["subRole"][0].name;

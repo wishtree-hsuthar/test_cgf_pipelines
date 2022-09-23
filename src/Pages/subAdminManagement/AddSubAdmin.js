@@ -274,88 +274,89 @@ const AddSubAdmin = () => {
                                             Phone Number
                                         </label>
                                         <div className="phone-number-field">
-                                            <Controller
-                                                control={control}
-                                                name="countryCode"
-                                                rules={{ required: true }}
-                                                render={({
-                                                    field,
-                                                    fieldState: { error },
-                                                }) => (
-                                                    <Autocomplete
-                                                        {...field}
-                                                        onChange={(
-                                                            event,
-                                                            newValue
-                                                        ) => {
-                                                            console.log(
-                                                                "inside autocomplete onchange"
-                                                            );
-                                                            console.log(
-                                                                "new Value ",
+                                            <div className="select-field country-code">
+                                                <Controller
+                                                    control={control}
+                                                    name="countryCode"
+                                                    rules={{ required: true }}
+                                                    render={({
+                                                        field,
+                                                        fieldState: { error },
+                                                    }) => (
+                                                        <Autocomplete
+                                                            {...field}
+                                                            onChange={(
+                                                                event,
                                                                 newValue
-                                                            );
-                                                            newValue &&
-                                                            typeof newValue ===
-                                                                "object"
-                                                                ? setValue(
-                                                                      "countryCode",
-                                                                      newValue.name
-                                                                  )
-                                                                : setValue(
-                                                                      "countryCode",
-                                                                      newValue
-                                                                  );
-                                                            trigger(
-                                                                "countryCode"
-                                                            );
-                                                        }}
-                                                        sx={{ width: 200 }}
-                                                        options={countries}
-                                                        autoHighlight
-                                                        // placeholder="Select country code"
-                                                        getOptionLabel={(
-                                                            country
-                                                        ) => country}
-                                                        renderOption={(
-                                                            props,
-                                                            option
-                                                        ) => (
-                                                            <li {...props}>
-                                                                {option}
-                                                            </li>
-                                                        )}
-                                                        renderInput={(
-                                                            params
-                                                        ) => (
-                                                            <TextField
-                                                                // className={`input-field ${
-                                                                //   error && "input-error"
-                                                                // }`}
-                                                                {...params}
-                                                                inputProps={{
-                                                                    ...params.inputProps,
-                                                                }}
-                                                                onChange={() =>
-                                                                    trigger(
-                                                                        "countryCode"
-                                                                    )
-                                                                }
-                                                                // onSubmit={() => setValue("countryCode", "")}
-                                                                placeholder={
-                                                                    "Select country code"
-                                                                }
-                                                                helperText={
-                                                                    error
-                                                                        ? "Select country code"
-                                                                        : " "
-                                                                }
-                                                            />
-                                                        )}
-                                                    />
-                                                )}
-                                            />
-
+                                                            ) => {
+                                                                console.log(
+                                                                    "inside autocomplete onchange"
+                                                                );
+                                                                console.log(
+                                                                    "new Value ",
+                                                                    newValue
+                                                                );
+                                                                newValue &&
+                                                                typeof newValue ===
+                                                                    "object"
+                                                                    ? setValue(
+                                                                          "countryCode",
+                                                                          newValue.name
+                                                                      )
+                                                                    : setValue(
+                                                                          "countryCode",
+                                                                          newValue
+                                                                      );
+                                                                trigger(
+                                                                    "countryCode"
+                                                                );
+                                                            }}
+                                                            // sx={{ width: 200 }}
+                                                            options={countries}
+                                                            autoHighlight
+                                                            // placeholder="Select country code"
+                                                            getOptionLabel={(
+                                                                country
+                                                            ) => country}
+                                                            renderOption={(
+                                                                props,
+                                                                option
+                                                            ) => (
+                                                                <li {...props}>
+                                                                    {option}
+                                                                </li>
+                                                            )}
+                                                            renderInput={(
+                                                                params
+                                                            ) => (
+                                                                <TextField
+                                                                    // className={`input-field ${
+                                                                    //   error && "input-error"
+                                                                    // }`}
+                                                                    {...params}
+                                                                    inputProps={{
+                                                                        ...params.inputProps,
+                                                                    }}
+                                                                    onChange={() =>
+                                                                        trigger(
+                                                                            "countryCode"
+                                                                        )
+                                                                    }
+                                                                    // onSubmit={() => setValue("countryCode", "")}
+                                                                    placeholder={
+                                                                        "eg. +91"
+                                                                    }
+                                                                    helperText={
+                                                                        error
+                                                                            ? "Select country code"
+                                                                            : " "
+                                                                    }
+                                                                />
+                                                            )}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
                                             <TextField
                                                 className={`input-field ${
                                                     errors.email &&

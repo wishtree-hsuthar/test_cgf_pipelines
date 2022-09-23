@@ -89,6 +89,7 @@ function PendingCGFAdmins({
             delete object["data"]["description"];
             delete object["data"]["countryCode"];
             delete object["data"]["isDeleted"];
+            delete object["data"]["isReplaced"];
             delete object["__v"];
             delete object["data"]["password"];
             delete object["data"]["roleId"];
@@ -107,12 +108,13 @@ function PendingCGFAdmins({
             // object["role"] = object["data"]["subRoleId"].name;
             // object["role"] = object["data"]["subRole"][0].name;
             object["role"] = object["subRole"][0].name;
-            object["name"] = object["data"].name;
+            object["name"] = object["data"]["name"];
             object["email"] = object["data"].email;
             object["_id"] = object["_id"];
             object["createdAt"] = object["createdAt"];
             // delete object["data"]["subRoleId"];
             // delete object["data"]["subRole"][0].name;
+            delete object["createdBy"];
             delete object["subRole"];
             delete object["data"];
             delete object["memberData"];

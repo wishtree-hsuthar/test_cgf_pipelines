@@ -15,6 +15,10 @@ import ViewRole from "../Pages/roleManagement/ViewRole";
 import AddOperationMember from "../Pages/operationMember/AddOperationMember";
 import OperationMemberList from "../Pages/operationMember/OperationMemberList";
 import FallBackUI from "../Pages/FallBackUI";
+import MemberList from "../Pages/member/MemberList";
+import AddMember from "../Pages/member/AddMember";
+import EditMember from "../Pages/member/EditMember";
+import ViewMember from "../Pages/member/ViewMember";
 const ProtectedPages = () => {
     return (
         <Routes>
@@ -53,6 +57,18 @@ const ProtectedPages = () => {
             <Route path="/roles/add-role" element={<AddRole />} />
             <Route path="/roles/view-role/:id" element={<ViewRole />} />
             <Route path="roles/edit-role/:id" element={<EditRole />} />
+
+            {/* Member Pages */}
+            <Route path="/members" element={<MemberList />}></Route>
+            <Route path="/members/add-member" element={<AddMember />}></Route>
+            <Route
+                path={"/members/edit-member/:id"}
+                element={<EditMember />}
+            ></Route>
+            <Route
+                path={"/members/view-member/:id"}
+                element={<ViewMember />}
+            ></Route>
 
             {/* </Route> */}
 
