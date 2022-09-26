@@ -46,12 +46,12 @@ const OnboardedOperationMemberColumnHeader = [
         disablePadding: false,
         label: "Status",
     },
-    {
-        id: "action",
+    // {
+    //     id: "action",
 
-        disablePadding: false,
-        label: "Action",
-    },
+    //     disablePadding: false,
+    //     label: "Action",
+    // },
 ];
 function OnboardedOperationMember({
     makeApiCall,
@@ -105,8 +105,9 @@ function OnboardedOperationMember({
             "memberCompany",
             "companyType",
             "createdByName",
-            "isActive",
+
             "onBoardedOn",
+            "isActive",
         ];
 
         console.log("data before update----", data);
@@ -140,10 +141,10 @@ function OnboardedOperationMember({
             object["memberCompany"] = object["memberData"]["companyName"];
             object["companyType"] = object["memberData"]["companyType"];
             object["createdByName"] = object["createdBy"]["name"];
-            object["isActive"] = object["isActive"];
             object["onBoardedOn"] = new Date(
                 object["createdAt"]
             ).toLocaleDateString("en-US");
+            object["isActive"] = object["isActive"];
 
             // delete object["data"]["subRoleId"];
             // delete object["data"]["subRole"][0].name;
@@ -159,6 +160,8 @@ function OnboardedOperationMember({
             delete object["subRole"];
             delete object["data"];
             delete object["memberData"];
+            delete object["operationType"];
+            delete object["reportingManager"];
             delete object["memberId"];
 
             onboardedKeysOrder.forEach((k) => {
@@ -255,12 +258,12 @@ function OnboardedOperationMember({
                 rowsPerPage={rowsPerPageForOnboardedOperationMemberTab}
                 totalRecords={totalRecordsForOnboardedOperationMemberTab}
                 orderBy={orderByForOnboardedOperationMember}
-                icons={["visibility"]}
+                // icons={["visibility"]}
                 onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
                 order={orderForOnboardedOperationMemberTab}
                 setOrder={setOrderForOnboardedOperationMemberTab}
                 setOrderBy={setOrderByForOnboardedOperationMemberTab}
-                setCheckBoxes={true}
+                setCheckBoxes={false}
                 setSelected={setSelectedOnboardOperationMember}
                 selected={selectedOnboardOperationMember}
             />
