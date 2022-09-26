@@ -96,11 +96,11 @@ const ViewMember = () => {
       // width: "15%",
       label: "Status",
     },
-    {
-      id: "action",
-      disablePadding: false,
-      label: "Action",
-    },
+    // {
+    //   id: "action",
+    //   disablePadding: false,
+    //   label: "Action",
+    // },
   ];
   const keysOrder = [
     "_id",
@@ -1258,12 +1258,13 @@ const ViewMember = () => {
                 setSelected={setSelected}
                 totalRecords={totalRecords}
                 orderBy={orderBy}
-                icons={["visibility"]}
+                // icons={["visibility"]}
                 onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
                 order={order}
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}
                 setCheckBoxes={false}
+                onRowClick
               />
             </div>
           </div>
