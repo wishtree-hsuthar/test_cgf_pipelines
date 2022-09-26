@@ -14,12 +14,12 @@ const tableHead = [
     id: "companyName",
     // width: "10%",
     disablePadding: false,
-    label: "Member Company",
+    label: "Company",
   },
   {
     id: "name",
     disablePadding: false,
-    label: "Member Name",
+    label: "Name",
   },
   {
     id: "email",
@@ -97,7 +97,7 @@ const MemberList = () => {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [order, setOrder] = useState("desc");
-  const [orderBy, setOrderBy] = useState("createdAt");
+  const [orderBy, setOrderBy] = useState("");
   const [records, setRecords] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [selected, setSelected] = useState([]);
