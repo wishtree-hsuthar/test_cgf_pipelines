@@ -78,7 +78,7 @@ const AddRole = () => {
         edit: false,
         view: false,
         delete: false,
-        assign: false,
+        // assign: false,
         all: false,
       }
     );
@@ -395,13 +395,13 @@ const AddRole = () => {
                           <TableCell align="center" className="tableHeader">
                             Delete
                           </TableCell>
-                          <TableCell
+                          {/* <TableCell
                             align="center"
                             className="tableHeader"
                             width="16%"
                           >
                             Assign to Member
-                          </TableCell>
+                          </TableCell> */}
                           <TableCell align="center" className="tableHeader">
                             All
                           </TableCell>
@@ -494,7 +494,7 @@ const AddRole = () => {
                                   }
                                 />
                               </TableCell>
-                              <TableCell align="center" padding="checkbox">
+                              {/* <TableCell align="center" padding="checkbox">
                                 <Checkbox
                                   className="table-checkbox"
                                   checked={previleges[previleg]["assign"]}
@@ -509,7 +509,7 @@ const AddRole = () => {
                                     }))
                                   }
                                 />
-                              </TableCell>
+                              </TableCell> */}
                               <TableCell align="center" padding="checkbox">
                                 <Checkbox
                                   className="table-checkbox"
@@ -525,7 +525,7 @@ const AddRole = () => {
                                         add: !previous[previleg]["all"],
                                         edit: !previous[previleg]["all"],
                                         delete: !previous[previleg]["all"],
-                                        assign: !previous[previleg]["all"],
+                                        // assign: !previous[previleg]["all"],
                                       },
                                     }))
                                   }

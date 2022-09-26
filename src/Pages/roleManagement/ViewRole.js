@@ -35,7 +35,7 @@ const tableHead = [
     id: "subAdmin",
     disablePadding: false,
     width: "20%",
-    label: "Sub Admin",
+    label: "Name",
   },
   {
     id: "email",
@@ -57,11 +57,11 @@ const tableHead = [
     disablePadding: false,
     label: "Status",
   },
-  {
-    id: "action",
-    disablePadding: false,
-    label: "Action",
-  },
+  // {
+  //   id: "action",
+  //   disablePadding: false,
+  //   label: "Action",
+  // },
 ];
 
 const rows = [
@@ -341,7 +341,7 @@ const ViewRole = () => {
   const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("subAdmin");
+  const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([])
 
   //implemention of pagination on front-end
@@ -369,14 +369,14 @@ const ViewRole = () => {
       // console.log("temp Previ value",tempPrivileges[tempPriv])
       privileges[tempPriv] = {
         add: tempPrivileges[tempPriv]["add"],
-        assign: tempPrivileges[tempPriv]["assign"],
+        // assign: tempPrivileges[tempPriv]["assign"],
         delete: tempPrivileges[tempPriv]["delete"],
         view: tempPrivileges[tempPriv]["view"],
         edit: tempPrivileges[tempPriv]["edit"],
         list: tempPrivileges[tempPriv]["list"],
         all:
           tempPrivileges[tempPriv]["add"] &&
-          tempPrivileges[tempPriv]["assign"] &&
+          // tempPrivileges[tempPriv]["assign"] &&
           tempPrivileges[tempPriv]["delete"] &&
           tempPrivileges[tempPriv]["edit"] &&
           tempPrivileges[tempPriv]["view"] &&
@@ -556,7 +556,7 @@ const ViewRole = () => {
                 <div className="card-form-field">
                   <div className="form-group">
                     <label htmlFor="roleName">
-                      CGF Admin <span className="mandatory">*</span>
+                      No of Users <span className="mandatory">*</span>
                     </label>
                     <TextField
                       disabled
@@ -630,13 +630,13 @@ const ViewRole = () => {
                               <TableCell align="center" className="tableHeader">
                                 Delete
                               </TableCell>
-                              <TableCell
+                              {/* <TableCell
                                 align="center"
                                 className="tableHeader"
                                 width="16%"
                               >
                                 Assign to Member
-                              </TableCell>
+                              </TableCell> */}
                               <TableCell align="center" className="tableHeader">
                                 All
                               </TableCell>
@@ -684,13 +684,13 @@ const ViewRole = () => {
                                       checked={temp[previleg]["delete"]}
                                     />
                                   </TableCell>
-                                  <TableCell align="center" padding="checkbox">
+                                  {/* <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
                                       className="table-checkbox"
                                       checked={temp[previleg]["assign"]}
                                     />
-                                  </TableCell>
+                                  </TableCell> */}
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
@@ -719,12 +719,13 @@ const ViewRole = () => {
                     orderBy={orderBy}
                     selected={selected}
                     setSelected={setSelected}
-                    icons={["visibility"]}
+                    // icons={["visibility"]}
                     onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
                     order={order}
                     setOrder={setOrder}
                     setOrderBy={setOrderBy}
-                    // setCheckBoxes={false}
+                    setCheckBoxes={false}
+                    onRowClick
                   />
                 </TabPanel>
               </div>

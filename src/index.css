@@ -203,14 +203,14 @@ h3 {
 }
 
 .secondary-button {
-    background: #e0e0e0;
-    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05);
-    color: #707070;
+    background: none;
+    /* box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05); */
+    color: #f7a823;
     padding: 12px 24px;
     font-size: 14px;
     line-height: 14px;
     height: 40px;
-    border-radius: 3px;
+    /* border-radius: 3px; */
     text-transform: capitalize;
     font-family: "Proxima Nova Semibold", serif, sans-serif;
     border: none;
@@ -218,7 +218,8 @@ h3 {
 }
 
 .secondary-button:hover {
-    background: #cccccc;
+    background: rgba(247, 168, 35, 0.05);
+    border-radius: 3px;
 }
 
 @keyframes fadeIn {
@@ -287,7 +288,7 @@ h3 {
 }
 .card-wrapper {
     background: #ffffff;
-    box-shadow: 0px 3px 15px #00000029;
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.1);
     border-radius: 3px;
     padding: 20px;
     margin: 20px 0px 50px;
@@ -365,14 +366,16 @@ h3 {
 input:disabled,
 select:disabled,
 textarea:disabled {
-    background: rgba(30, 30, 30, 0.1) !important;
+    background: rgba(30, 30, 30, 0.05) !important;
     border-color: rgba(30, 30, 30, 0.1) !important;
 }
 /* .input-textarea .Mui-disabled{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;} */
 .select-field {
     position: relative;
 }
-
+.select-field fieldset {
+   border-color: rgba(30, 30, 30, 0.5);
+}
 .select-field::before {
     font-size: 14px;
     content: "\f078";
@@ -721,7 +724,7 @@ select:focus {
     width: 100%;
     height: 40px;
     padding: 0 15px 0 34px;
-    border: 1px solid rgba(30, 30, 30, 0.5);
+    border: 1px solid rgba(30, 30, 30, 0.05);
     border-radius: 3px;
     font-size: 14px;
     outline: none;
@@ -754,6 +757,7 @@ select:focus {
 .mb-30 {
     margin-bottom: 30px;
 }
+.mr-20{margin-right: 20px;}
 
 /* Checkbox css */
 /* input[type=checkbox] {
@@ -1149,6 +1153,7 @@ input[type=checkbox]:checked:before {
 }
 .searchable-input fieldset {
     height: 45px;
+    border-color: rgba(30, 30, 30, 0.5);
 }
 .searchable-input .MuiInputBase-root {
     height: 40px;
@@ -1160,7 +1165,7 @@ input[type=checkbox]:checked:before {
 }
 
 .select-field .Mui-disabled {
-    background: rgba(30, 30, 30, 0.1) !important;
+    background: rgba(30, 30, 30, 0.05) !important;
     border-color: rgba(30, 30, 30, 0.1) !important;
 }
 .select-field .MuiInputBase-root.Mui-disabled {

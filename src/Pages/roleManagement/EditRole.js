@@ -131,14 +131,14 @@ const EditRole = () => {
       // console.log("temp Previ value",tempPrivileges[tempPriv])
       temp[tempPriv] = {
         add: tempPrivileges[tempPriv]["add"],
-        assign: tempPrivileges[tempPriv]["assign"],
+        // assign: tempPrivileges[tempPriv]["assign"],
         delete: tempPrivileges[tempPriv]["delete"],
         edit: tempPrivileges[tempPriv]["edit"],
         list: tempPrivileges[tempPriv]["list"],
         view: tempPrivileges[tempPriv]["view"],
         all:
           tempPrivileges[tempPriv]["add"] &&
-          tempPrivileges[tempPriv]["assign"] &&
+          // tempPrivileges[tempPriv]["assign"] &&
           tempPrivileges[tempPriv]["delete"] &&
           tempPrivileges[tempPriv]["edit"] &&
           tempPrivileges[tempPriv]["view"] &&
@@ -348,13 +348,13 @@ const EditRole = () => {
                             <TableCell align="center" className="tableHeader">
                               Delete
                             </TableCell>
-                            <TableCell
+                            {/* <TableCell
                               align="center"
                               className="tableHeader"
                               width="16%"
                             >
                               Assign to Member
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell align="center" className="tableHeader">
                               All
                             </TableCell>
@@ -447,7 +447,7 @@ const EditRole = () => {
                                     }
                                   />
                                 </TableCell>
-                                <TableCell align="center" padding="checkbox">
+                                {/* <TableCell align="center" padding="checkbox">
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges[previleg]["assign"]}
@@ -462,7 +462,7 @@ const EditRole = () => {
                                       }))
                                     }
                                   />
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell align="center" padding="checkbox">
                                   <Checkbox
                                     className="table-checkbox"
