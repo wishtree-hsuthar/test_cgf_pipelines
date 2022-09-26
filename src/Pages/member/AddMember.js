@@ -824,7 +824,7 @@ const AddMember = () => {
                                                                     // onChange={() => trigger("phoneNumber")}
                                                                     // onSubmit={() => setValue("countryCode", "")}
                                                                     placeholder={
-                                                                        "eg. +91"
+                                                                        "+91"
                                                                     }
                                                                     helperText={
                                                                         error
@@ -1336,7 +1336,7 @@ const AddMember = () => {
                                                                     arrOfCountryCode
                                                                 }
                                                                 autoHighlight
-                                                                placeholder="eg. +91"
+                                                                placeholder="+91"
                                                                 // getOptionLabel={(country) => country.name + " " + country}
                                                                 renderOption={(
                                                                     props,
@@ -1365,7 +1365,7 @@ const AddMember = () => {
                                                                         //   setValue("memberContactCountryCode", "")
                                                                         // }
                                                                         placeholder={
-                                                                            "eg. +91"
+                                                                            "+91"
                                                                         }
                                                                         helperText={
                                                                             error

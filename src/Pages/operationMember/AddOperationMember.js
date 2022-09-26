@@ -445,7 +445,7 @@ function AddOperationMember() {
                                                                     }
                                                                     // onSubmit={() => setValue("countryCode", "")}
                                                                     placeholder={
-                                                                        "eg. +91"
+                                                                        "+91"
                                                                     }
                                                                     helperText={
                                                                         error

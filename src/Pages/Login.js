@@ -58,7 +58,7 @@ const Login = (prop) => {
                 });
                 console.log("data from app fetcuser method app file", data);
                 if (status == 200) {
-                    navigate("/dashboard");
+                    navigate("/home");
                 }
                 // isMounted && setUserPresent(true);
             } catch (error) {
@@ -105,7 +105,7 @@ const Login = (prop) => {
             if (response.status == 201) {
                 console.log("DATA", response?.data?.user);
                 dispatch(setUser(response?.data?.user));
-                navigate("/dashboard");
+                navigate("/home");
             }
         } catch (error) {
             console.log("error from submit login method", error);

@@ -34,12 +34,12 @@ const onBoardedTableColumnHead = [
         disablePadding: false,
         label: "Status",
     },
-    {
-        id: "action",
+    // {
+    //     id: "action",
 
-        disablePadding: false,
-        label: "Action",
-    },
+    //     disablePadding: false,
+    //     label: "Action",
+    // },
 ];
 function OnBoardedSubAdminsTable({
     makeApiCall,
@@ -127,9 +127,7 @@ function OnBoardedSubAdminsTable({
         let url = `http://localhost:3000/api/users/cgfadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
 
         if (search?.length >= 3) url += `&search=${search}`;
-        
-      
-       
+
         return url;
     };
     const getSubAdmin = async (
@@ -206,14 +204,15 @@ function OnBoardedSubAdminsTable({
                 rowsPerPage={rowsPerPage}
                 totalRecords={totalRecords}
                 orderBy={orderBy}
-                icons={["visibility"]}
+                // icons={["visibility"]}
                 onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
                 order={order}
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}
-                setCheckBoxes={true}
+                setCheckBoxes={false}
                 setSelected={setSelected}
                 selected={selected}
+                onRowClick={true}
             />
         </>
     );

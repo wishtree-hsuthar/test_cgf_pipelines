@@ -294,6 +294,7 @@ function PendingCGFAdmins({
                 setOrder={setOrderForPendingTab}
                 setOrderBy={setOrderByForPendingTab}
                 setCheckBoxes={false}
+                onRowClick={false}
             />
         </>
     );
