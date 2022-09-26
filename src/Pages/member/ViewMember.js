@@ -384,6 +384,7 @@ const ViewMember = () => {
       const countryCodeSet = new Set(arrOfCountryCodeTemp);
       setArrOfCountryCode([...countryCodeSet]);
     } catch (error) {
+      console.log("error inside get Country code",error)
       if (error?.code === "ERR_CANCELED") return;
       setToasterDetails(
         {
@@ -405,6 +406,7 @@ const ViewMember = () => {
       const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
       return regionCountries;
     } catch (error) {
+      console.log("Error inside get Countres",error)
       if (error?.code === "ERR_CANCELED") return;
       setToasterDetails(
         {
@@ -1261,6 +1263,7 @@ const ViewMember = () => {
                 order={order}
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}
+                setCheckBoxes={false}
               />
             </div>
           </div>

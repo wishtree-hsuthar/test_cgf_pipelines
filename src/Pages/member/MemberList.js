@@ -416,6 +416,7 @@ const MemberList = () => {
               order={order}
               setOrder={setOrder}
               setOrderBy={setOrderBy}
+              setCheckBoxes={false}
             />
           </div>
         </div>
