@@ -19,10 +19,10 @@ function FallBackUI() {
                         <p className="page-not-found">PAGE NOT FOUND</p>
                         <button
                             // type="submit"
-                            onClick={() => navigate("/dashboard")}
+                            onClick={() => navigate("/home")}
                             className="dashboard-button"
                         >
-                            Back to dashboard
+                            Back to Home
                         </button>
                     </div>
                 </div>

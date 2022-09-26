@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import {
-  AppBar,
-  Box,
-  Toolbar,
-  Typography,
-  Menu,
-  Tooltip,
-  MenuItem,
+    AppBar,
+    Box,
+    Toolbar,
+    Typography,
+    Menu,
+    Tooltip,
+    MenuItem,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,48 +16,48 @@ import { GET_USER, LOGOUT_URL } from "../api/Url";
 import axios from "axios";
 import { privateAxios } from "../api/axios";
 const Header = () => {
-  // const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isActive, setActive] = React.useState("false");
-  const userAuth = useSelector((state) => state.user.userObj);
-  const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
-  const MEMBER_ACCESS = userAuth?.roleId?.name == "Member";
-  const OPERATION_MEMBER = userAuth?.roleId?.name == "Operation Member";
+    // const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [isActive, setActive] = React.useState("false");
+    const userAuth = useSelector((state) => state.user.userObj);
+    const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
+    const MEMBER_ACCESS = userAuth?.roleId?.name == "Member";
+    const OPERATION_MEMBER = userAuth?.roleId?.name == "Operation Member";
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const location = useLocation();
-  console.log("location in header", location.pathname);
-  useEffect(() => {
-    // const controller = new AbortController();
-    // const fetchUser = async () => {
-    //     try {
-    //         const { data } = await axios.get(GET_USER);
-    //         dispatch(setUser(data));
-    //     } catch (error) {
-    //         console.log("Error from header file useEffect", error);
-    //         // navigate("/login");
-    //     }
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const location = useLocation();
+    console.log("location in header", location.pathname);
+    useEffect(() => {
+        // const controller = new AbortController();
+        // const fetchUser = async () => {
+        //     try {
+        //         const { data } = await axios.get(GET_USER);
+        //         dispatch(setUser(data));
+        //     } catch (error) {
+        //         console.log("Error from header file useEffect", error);
+        //         // navigate("/login");
+        //     }
+        // };
+        // fetchUser();
+        // //clean up function
+        // return () => {
+        //     controller.abort();
+        // };
+    }, []);
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+        setActive(!isActive);
+    };
+
+    // const handleCloseNavMenu = () => {
+    //   setAnchorElNav(null);
     // };
-    // fetchUser();
-    // //clean up function
-    // return () => {
-    //     controller.abort();
-    // };
-  }, []);
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-    setActive(!isActive);
-  };
 
-  // const handleCloseNavMenu = () => {
-  //   setAnchorElNav(null);
-  // };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-    setActive(!isActive);
-  };
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+        setActive(!isActive);
+    };
 
     const handleLogOut = async () => {
         try {
@@ -84,7 +84,7 @@ const Header = () => {
                         <div className="header-wrapper">
                             <div className="header-left">
                                 <div className="logo-blk">
-                                    <a href="/dashboard">
+                                    <a href="/home">
                                         <img
                                             src={
                                                 process.env.PUBLIC_URL +
@@ -110,26 +110,27 @@ const Header = () => {
                                         </li> */}
                                         <li
                                             className={
-                                                location.pathname == "/roles"
+                                                location.pathname == "/home"
                                                     ? "active"
                                                     : ""
                                             }
                                         >
                                             <a
                                                 hidden={
-                                                    CGF_ADMIN_ACCESS ? "active": ""
-                                            }
-                                        >
-                                            </a>
-                                            <a 
+                                                    CGF_ADMIN_ACCESS
+                                                        ? "active"
+                                                        : ""
+                                                }
+                                            ></a>
+                                            <a
                                                 onClick={() =>
-                                                    navigate("/dashboard")
+                                                    navigate("/home")
                                                 }
                                                 style={{
                                                     cursor: "pointer",
                                                 }}
                                             >
-                                                Dashboard
+                                                Home
                                             </a>
                                         </li>
                                         <li
@@ -158,8 +159,7 @@ const Header = () => {
                                         <li>
                                             <a href="/#">Questionnaires</a>
                                         </li>
-                                       
-                                        
+
                                         <li
                                             className={
                                                 location.pathname == "/members"
@@ -167,13 +167,19 @@ const Header = () => {
                                                     : ""
                                             }
                                         >
-                                            <a hidden={MEMBER_ACCESS} style={{
+                                            <a
+                                                hidden={MEMBER_ACCESS}
+                                                style={{
                                                     cursor: "pointer",
-                                                }} onClick={() => navigate("/members")}>
+                                                }}
+                                                onClick={() =>
+                                                    navigate("/members")
+                                                }
+                                            >
                                                 Members
                                             </a>
                                         </li>
-                                       
+
                                         <li
                                             className={
                                                 location.pathname.includes(
@@ -287,8 +293,8 @@ const Header = () => {
                         </div>
                     </Toolbar>
                 </div>
-              </div>
-              {/* <div className="header-right">
+            </div>
+            {/* <div className="header-right">
                 <Box>
                   <Tooltip title="Open settings">
                     <div className="user-blk flex-between">
@@ -341,8 +347,8 @@ const Header = () => {
                   </Menu>
                 </Box>
               </div> */}
-              </AppBar>      
-  );
+        </AppBar>
+    );
 };
 
 export default Header;

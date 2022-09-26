@@ -23,7 +23,7 @@ const ProtectedPages = () => {
     return (
         <Routes>
             {/* <Route path="/" element={<Layout />}> */}
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/home" element={<Dashboard />} />
             <Route
                 path="/sub-admins"
                 element={
