@@ -588,7 +588,7 @@ const ViewRole = () => {
                         aria-controls="simple-tabpanel-0"
                       />
                       <Tab
-                        label="CGF Admins"
+                        label="Users"
                         // {...a11yProps(1)}
                         id="simple-tab-0"
                         aria-controls="simple-tabpanel-0"

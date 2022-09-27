@@ -213,7 +213,7 @@ function AddOperationMember() {
                 );
                 navigateToListPage === false &&
                     setTimeout(() => {
-                        navigate("/operation_members");
+                        navigate("/users/operation_members");
                     }, 3000);
             }
         } catch (error) {
@@ -254,7 +254,7 @@ function AddOperationMember() {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/operation_members">
+                            <Link to="/users/operation_members">
                                 Operation Members
                             </Link>
                         </li>
@@ -679,7 +679,7 @@ function AddOperationMember() {
                                 <div className="form-btn flex-between add-members-btn">
                                     <button
                                         onClick={() =>
-                                            navigate("/operation_members")
+                                            navigate("/users/operation_members")
                                         }
                                         className="secondary-button mr-10"
                                     >

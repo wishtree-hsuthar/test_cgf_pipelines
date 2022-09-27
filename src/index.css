@@ -2,14 +2,14 @@
 .login-page {
     background: #fff;
 }
-.login-section {
+/* .login-section {
     padding: 78px 0;
-}
+} */
 .login-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: wrap;height: 95vh;
 }
 .login-leftblk {
     flex: 0 0 50%;
@@ -368,6 +368,7 @@ select:disabled,
 textarea:disabled {
     background: rgba(30, 30, 30, 0.05) !important;
     border-color: rgba(30, 30, 30, 0.1) !important;
+    -webkit-text-fill-color: rgba(30, 30, 30, 0.5) !important;
 }
 /* .input-textarea .Mui-disabled{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;} */
 .select-field {
@@ -578,8 +579,11 @@ ul.breadcrumb li a:hover {
     margin-bottom: 20px;
 }
 .card-inner-wrap {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    border-bottom: 2px dotted rgba(30, 30, 30, 0.2);
 }
+.card-inner-wrap:nth-last-child(2){border-bottom: none;margin-bottom: 0;}
+
 .Mui-focused .MuiOutlinedInput-notchedOutline {
     border-color: #4596d1 !important;
     border-width: 1px !important;
@@ -632,7 +636,7 @@ ul.breadcrumb li a:hover {
 }
 
 .MuiPaper-root {
-    box-shadow: 0px 3px 15px #0000004d !important;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .select-field svg {
@@ -660,7 +664,7 @@ select:focus {
 }
 
 .tabs-sect .css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
-    margin-right: 15px;
+    margin-right: 30px;
     padding: 13px 0 !important;
     font-size: 14px !important;
     line-height: 14px !important;
@@ -668,6 +672,7 @@ select:focus {
     min-height: 21px !important;
     font-family: "ProximaNova-Bold", serif, sans-serif !important;
     color: rgba(30, 30, 30, 0.5);
+    min-width: auto;
 }
 .tabs-sect .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
     color: #f7a823 !important;
@@ -683,16 +688,18 @@ select:focus {
 .filter-select-field .css-hfutr2-MuiSvgIcon-root-MuiSelect-icon {
     color: #1e1e1e99;
 }
-
+.member-filter-wrap{justify-content: flex-end;}
 .member-filter-left {
     flex: 0 0 50%;
-    max-width: 50%;
+    max-width: 50%;display: flex;
+    justify-content: end;
 }
 
 .member-filter-right {
     flex: 0 0 50%;
     max-width: 50%;
-    display: flex;
+    /* display: flex; */
+    display: none;
     justify-content: flex-end;
 }
 .filter-select-wrap {
@@ -717,14 +724,13 @@ select:focus {
     flex: 0 0 65%;
     max-width: 65%;
     position: relative;
-    margin-right: 10px;
 }
 
 .searchbar input {
     width: 100%;
     height: 40px;
     padding: 0 15px 0 34px;
-    border: 1px solid rgba(30, 30, 30, 0.05);
+    border: 1px solid rgba(30, 30, 30, 0.2);
     border-radius: 3px;
     font-size: 14px;
     outline: none;
@@ -818,7 +824,7 @@ input[type=checkbox]:checked:before {
     display: none;
     top: 35px;
     position: absolute;
-    left: -84px;
+    left: -84px;z-index: 1;
 }
 .crud-toggle-list li {
     font-size: 14px;
@@ -913,113 +919,6 @@ input[type=checkbox]:checked:before {
 }
 .checkbox-mui {
     color: #0082c9;
-}
-
-/* Header css */
-.nav-list li {
-    list-style-type: none;
-    padding: 0 15px;
-    font-family: "ProximaNova-Semibold", serif, sans-serif;
-    font-size: 14px;
-}
-.nav-list li a {
-    color: #1e1e1e;
-    text-decoration: none;
-}
-.nav-list li.active a {
-    color: #f7a823;
-    position: relative;
-}
-.nav-list li.active a::before {
-    width: 100%;
-    height: 5px;
-    background: #f7a823;
-    position: absolute;
-    bottom: -10px;
-    left: 0;
-    content: "";
-}
-.nav-list li a:hover {
-    text-decoration: none;
-}
-.logo-blk {
-    width: 115px;
-}
-
-.nav {
-    background-color: #ffffff;
-    width: 100%;
-}
-.header-left {
-    flex: 0 0 79%;
-    max-width: 79%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-}
-.header-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 80px;
-    width: 100%;
-    color: #1e1e1e;
-}
-.header-sect {
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.02) !important;
-}
-.profile-menu-item p {
-    font-size: 14px;
-    color: #1e1e1e;
-    font-family: "ProximaNova-Regular", serif, sans-serif;
-}
-.profile-menu-item .css-6hp17o-MuiList-root-MuiMenu-list {
-    padding: 0 !important;
-}
-.nav-list-right {
-    flex: 0 0 25%;
-    max-width: 25%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    align-items: center;
-}
-.user-img {
-    width: 48px;
-    height: 48px;
-    border-radius: 100%;
-    margin-right: 10px;
-    background: #4d6073;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-}
-.user-name-txt {
-    color: #ffffff;
-    font-size: 14px;
-    font-family: "ProximaNova-Semibold", serif, sans-serif;
-    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-}
-.user-info span {
-    display: flex;
-    align-items: center;
-    line-height: 10px;
-    cursor: pointer;
-}
-.user-name {
-    color: #1d354d;
-    font-family: "ProximaNova-Bold", serif, sans-serif;
-}
-.user-info {
-    margin: 8px 0 0;
-}
-.super-admin-arrow svg {
-    transition: 0.5s ease;
-}
-.super-admin-arrow.active svg {
-    transform: rotate(180deg);
 }
 
 /* Phone field css */
@@ -1150,6 +1049,9 @@ input[type=checkbox]:checked:before {
 
 .select-field-error fieldset {
     border-color: #e53850 !important;
+}
+.autocomplete-error fieldset{
+    border-color: #e53850;
 }
 .searchable-input fieldset {
     height: 45px;

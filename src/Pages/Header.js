@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
     AppBar,
     Box,
@@ -15,6 +15,7 @@ import { resetUser, setUser } from "../redux/UserSlice";
 import { GET_USER, LOGOUT_URL } from "../api/Url";
 import axios from "axios";
 import { privateAxios } from "../api/axios";
+import "./Header.css";
 const Header = () => {
     // const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -27,7 +28,26 @@ const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
+    const [activeStateForMembers, setActiveStateForMembers] = useState(false);
+    const [activeStateForOperationMembers, setActiveStateForOperationMembers] =
+        useState(false);
     console.log("location in header", location.pathname);
+    const routeAddress = ["/members", "/operation_members"];
+    const myFunction = (activeState) => {
+        if (activeState === "/members") {
+            console.log("active state==members");
+            return "active";
+        }
+        if (activeState === "/operation_members") {
+            console.log("active state==operation_members");
+
+            return "active";
+        } else {
+            return "";
+        }
+    };
+    console.log("active state", myFunction);
+    // const activeAddress = routeAddress.filter(myFunction);
     useEffect(() => {
         // const controller = new AbortController();
         // const fetchUser = async () => {
@@ -77,7 +97,7 @@ const Header = () => {
         }
     };
     return (
-        <AppBar position="static" className="header-sect">
+        <AppBar position="sticky" className="header-sect">
             <div className="nav">
                 <div className="container">
                     <Toolbar disableGutters>
@@ -111,8 +131,8 @@ const Header = () => {
                                         <li
                                             className={
                                                 location.pathname == "/home"
-                                                    ? "active"
-                                                    : ""
+                                                    ? "list-item active"
+                                                    : "list-item"
                                             }
                                         >
                                             <a
@@ -136,48 +156,61 @@ const Header = () => {
                                         <li
                                             className={
                                                 location.pathname.includes(
-                                                    "/operation_members"
+                                                    "/users"
                                                 )
-                                                    ? "active"
-                                                    : ""
+                                                    ? "list-item active"
+                                                    : "list-item"
                                             }
                                         >
                                             <a
                                                 hidden={OPERATION_MEMBER}
-                                                onClick={() =>
-                                                    navigate(
-                                                        "/operation_members"
-                                                    )
-                                                }
                                                 style={{
                                                     cursor: "pointer",
                                                 }}
                                             >
-                                                Operation Members
+                                                User Management
                                             </a>
+                                            <ul className="header-submenu">
+                                                <li
+                                                    className={
+                                                        location.pathname ===
+                                                        "/users/members"
+                                                            ? "subactive"
+                                                            : ""
+                                                    }
+                                                >
+                                                    <a
+                                                        onClick={() => {
+                                                            navigate(
+                                                                "/users/members"
+                                                            );
+                                                        }}
+                                                    >
+                                                        Members
+                                                    </a>
+                                                </li>
+                                                <li
+                                                    className={
+                                                        location.pathname ===
+                                                        "/users/operation_members"
+                                                            ? "subactive"
+                                                            : ""
+                                                    }
+                                                >
+                                                    <a
+                                                        onClick={() => {
+                                                            navigate(
+                                                                "/users/operation_members"
+                                                            );
+                                                        }}
+                                                    >
+                                                        Operation Members
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </li>
-                                        <li>
+                                        <li className="list-item">
                                             <a href="/#">Questionnaires</a>
-                                        </li>
-
-                                        <li
-                                            className={
-                                                location.pathname == "/members"
-                                                    ? "active"
-                                                    : ""
-                                            }
-                                        >
-                                            <a
-                                                hidden={MEMBER_ACCESS}
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() =>
-                                                    navigate("/members")
-                                                }
-                                            >
-                                                Members
-                                            </a>
                                         </li>
 
                                         <li
@@ -185,8 +218,8 @@ const Header = () => {
                                                 location.pathname.includes(
                                                     "/sub-admins"
                                                 )
-                                                    ? "active"
-                                                    : ""
+                                                    ? "list-item active"
+                                                    : "list-item"
                                             }
                                         >
                                             <a
@@ -194,9 +227,16 @@ const Header = () => {
                                                     CGF_ADMIN_ACCESS ||
                                                     MEMBER_ACCESS
                                                 }
-                                                onClick={() =>
-                                                    navigate("/sub-admins")
-                                                }
+                                                onClick={() => {
+                                                    // setActiveState(false);
+                                                    setActiveStateForMembers(
+                                                        false
+                                                    );
+                                                    setActiveStateForOperationMembers(
+                                                        false
+                                                    );
+                                                    navigate("/sub-admins");
+                                                }}
                                                 style={{
                                                     cursor: "pointer",
                                                 }}
@@ -207,8 +247,8 @@ const Header = () => {
                                         <li
                                             className={
                                                 location.pathname == "/roles"
-                                                    ? "active"
-                                                    : ""
+                                                    ? "list-item active"
+                                                    : "list-item"
                                             }
                                         >
                                             <a

@@ -96,11 +96,11 @@ const ViewMember = () => {
       // width: "15%",
       label: "Status",
     },
-    {
-      id: "action",
-      disablePadding: false,
-      label: "Action",
-    },
+    // {
+    //   id: "action",
+    //   disablePadding: false,
+    //   label: "Action",
+    // },
   ];
   const keysOrder = [
     "_id",
@@ -260,7 +260,7 @@ const ViewMember = () => {
   };
   const onClickVisibilityIconHandler = (id) => {
     console.log("id", id);
-    return navigate(`/members/view-member/${id}`);
+    return navigate(`/users/members/view-member/${id}`);
   };
 
   //code to View Member Fields
@@ -322,7 +322,7 @@ const ViewMember = () => {
           },
           () => myRef.current()
         );
-        return setTimeout(() => navigate("/members"), 3000);
+        return setTimeout(() => navigate("/users/members"), 3000);
       } catch (error) {
         console.log("error on delete", error);
         if (error?.code === "ERR_CANCELED") return;
@@ -344,7 +344,7 @@ const ViewMember = () => {
       }
   };
   const onDialogSecondaryButtonClickHandler = () => {
-    navigate("/members");
+    navigate("/users/members");
   };
   //state to hold member data send by back end
   const [member, setMember] = useState({});
@@ -384,6 +384,7 @@ const ViewMember = () => {
       const countryCodeSet = new Set(arrOfCountryCodeTemp);
       setArrOfCountryCode([...countryCodeSet]);
     } catch (error) {
+      console.log("error inside get Country code",error)
       if (error?.code === "ERR_CANCELED") return;
       setToasterDetails(
         {
@@ -405,6 +406,7 @@ const ViewMember = () => {
       const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
       return regionCountries;
     } catch (error) {
+      console.log("Error inside get Countres",error)
       if (error?.code === "ERR_CANCELED") return;
       setToasterDetails(
         {
@@ -542,7 +544,7 @@ const ViewMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/members">Members</Link>
+              <Link to="/users/members">Members</Link>
             </li>
             <li>View Member</li>
           </ul>
@@ -567,13 +569,13 @@ const ViewMember = () => {
                 <ul className="crud-toggle-list">
                   <li
                     onClick={() =>
-                      navigate(`/members/edit-member/${params.id}`)
+                      navigate(`/users/members/edit-member/${params.id}`)
                     }
                   >
                     Edit
                   </li>
                   <li onClick={() => setOpenDialog(true)}>Delete</li>
-                  <li>Replace</li>
+                  {/* <li>Replace</li> */}
                 </ul>
               </div>
               {/* <CustomModal /> */}
@@ -1141,7 +1143,7 @@ const ViewMember = () => {
                   <button
                     type="submit"
                     className="primary-button add-button"
-                    onClick={() => navigate("/members/add-member")}
+                    onClick={() => navigate("/users/members/add-member")}
                   >
                     Add Operation Member
                   </button>
@@ -1256,11 +1258,13 @@ const ViewMember = () => {
                 setSelected={setSelected}
                 totalRecords={totalRecords}
                 orderBy={orderBy}
-                icons={["visibility"]}
+                // icons={["visibility"]}
                 onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
                 order={order}
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}
+                setCheckBoxes={false}
+                onRowClick
               />
             </div>
           </div>

@@ -265,13 +265,13 @@ const AddMember = () => {
   // On Click cancel handler
   const onClickCancelHandler = () => {
     reset({ defaultValues });
-    navigate("/members");
+    navigate("/users/members");
   };
   const onSubmit = async (data) => {
     console.log("data", data);
     const isSubmited = await onSubmitFunctionCall(data);
     console.log("is Submited", isSubmited);
-    isSubmited && setTimeout(() => navigate("/members"), 3000);
+    isSubmited && setTimeout(() => navigate("/users/members"), 3000);
   };
   //method to handle on add more button click handler
   const onAddMoreButtonClickHandler = (data) => {
@@ -436,7 +436,7 @@ const AddMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/members">Members</Link>
+              <Link to="/users/members">Members</Link>
             </li>
             <li>Add Member</li>
           </ul>
@@ -667,57 +667,58 @@ const AddMember = () => {
                         Phone Number <span className="mandatory">*</span>
                       </label>
                       <div className="phone-number-field">
-                        <div className="select-field country-code">
-                          <Controller
-                            control={control}
-                            name="countryCode"
-                            rules={{
-                              required: true,
-                              // validate: () => {
-                              //   if (watch("phoneNumber") && !watch("countryCode"))
-                              //     return "Invalid Input";
-                              // },
-                            }}
-                            render={({ field, fieldState: { error } }) => (
-                              <Autocomplete
-                                {...field}
-                                onChange={(event, newValue) => {
-                                  console.log("inside autocomplete onchange");
-                                  console.log("new Value ", newValue);
-                                  newValue && typeof newValue === "object"
-                                    ? setValue("countryCode", newValue.name)
-                                    : setValue("countryCode", newValue);
-                                  trigger("countryCode");
-                                }}
-                                options={arrOfCountryCode}
-                                autoHighlight
-                                // placeholder="Select country code"
-                                // getOptionLabel={(country) => country.name + " " + country}
-                                renderOption={(props, option) => (
-                                  <li {...props}>{option}</li>
-                                )}
-                                renderInput={(params) => (
-                                  <TextField
-                                    // className={`input-field ${
-                                    //   error && "input-error"
-                                    // }`}
-                                    {...params}
-                                    inputProps={{
-                                      ...params.inputProps,
-                                    }}
-                                    // onChange={() => trigger("phoneNumber")}
-                                    // onSubmit={() => setValue("countryCode", "")}
-                                    placeholder={"+91"}
-                                    helperText={
-                                      error
-                                        ? myHelper.countryCode[error?.type]
-                                        : " "
-                                    }
-                                  />
-                                )}
-                              />
-                            )}
-                          />
+                      <div className="select-field country-code">
+                        <Controller
+                          control={control}
+                          name="countryCode"
+                          rules={{
+                            required: true,
+                            // validate: () => {
+                            //   if (watch("phoneNumber") && !watch("countryCode"))
+                            //     return "Invalid Input";
+                            // },
+                          }}
+                          render={({ field, fieldState: { error } }) => (
+                            <Autocomplete
+                              {...field}
+                              className={`${error && 'autocomplete-error'}`}
+                              onChange={(event, newValue) => {
+                                console.log("inside autocomplete onchange");
+                                console.log("new Value ", newValue);
+                                newValue && typeof newValue === "object"
+                                  ? setValue("countryCode", newValue.name)
+                                  : setValue("countryCode", newValue);
+                                trigger("countryCode");
+                              }}
+                              options={arrOfCountryCode}
+                              autoHighlight
+                              // placeholder="Select country code"
+                              // getOptionLabel={(country) => country.name + " " + country}
+                              renderOption={(props, option) => (
+                                <li {...props}>{option}</li>
+                              )}
+                              renderInput={(params) => (
+                                <TextField
+                                  // className={`input-field ${
+                                  //   error && "input-error"
+                                  // }`}
+                                  {...params}
+                                  inputProps={{
+                                    ...params.inputProps,
+                                  }}
+                                  // onChange={() => trigger("phoneNumber")}
+                                  // onSubmit={() => setValue("countryCode", "")}
+                                  placeholder={"+91"}
+                                  helperText={
+                                    error
+                                      ? myHelper.countryCode[error?.type]
+                                      : " "
+                                  }
+                                />
+                              )}
+                            />
+                          )}
+                        />
                         </div>
                         <Input
                           control={control}
@@ -1072,6 +1073,7 @@ const AddMember = () => {
                             }}
                             render={({ field, fieldState: { error } }) => (
                               <Autocomplete
+                                className={`${error && 'autocomplete-error'}`}
                                 {...field}
                                 onChange={(event, newValue) => {
                                   newValue && typeof newValue === "object"
@@ -1125,15 +1127,15 @@ const AddMember = () => {
                             maxLength: 15,
                             minLength: 3,
                             required: true,
-                            // validate: (value) => {
-                            //   if (
-                            //     watch("memberContactPhoneNuber") &&
-                            //     !watch("memberContactCountryCode")
-                            //   )
-                            //     return "Invalid Input";
-                            //   else if (value && !Number(value))
-                            //     return "Invalid input";
-                            // },
+                            validate: (value) => {
+                              // if (
+                              //   watch("memberContactPhoneNuber") &&
+                              //   !watch("memberContactCountryCode")
+                              // )
+                              //   return "Invalid Input";
+                              if (value && !Number(value))
+                                return "Invalid input";
+                            },
                           }}
                           placeholder="Enter phone number"
                         />
@@ -1146,7 +1148,7 @@ const AddMember = () => {
                 <button
                   type="reset"
                   onClick={onClickCancelHandler}
-                  className="secondary-button mr-20"
+                  className="secondary-button mr-10"
                 >
                   Cancel
                 </button>
