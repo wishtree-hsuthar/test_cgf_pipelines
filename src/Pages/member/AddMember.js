@@ -265,13 +265,13 @@ const AddMember = () => {
   // On Click cancel handler
   const onClickCancelHandler = () => {
     reset({ defaultValues });
-    navigate("/members");
+    navigate("/users/members");
   };
   const onSubmit = async (data) => {
     console.log("data", data);
     const isSubmited = await onSubmitFunctionCall(data);
     console.log("is Submited", isSubmited);
-    isSubmited && setTimeout(() => navigate("/members"), 3000);
+    isSubmited && setTimeout(() => navigate("/users/members"), 3000);
   };
   //method to handle on add more button click handler
   const onAddMoreButtonClickHandler = (data) => {
@@ -436,7 +436,7 @@ const AddMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/members">Members</Link>
+              <Link to="/users/members">Members</Link>
             </li>
             <li>Add Member</li>
           </ul>

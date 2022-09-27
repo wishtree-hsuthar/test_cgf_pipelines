@@ -210,7 +210,7 @@ const MemberList = () => {
   };
   const onClickVisibilityIconHandler = (id) => {
     console.log("id", id);
-    return navigate(`/members/view-member/${id}`);
+    return navigate(`/users/members/view-member/${id}`);
   };
   const generateUrl = () => {
     console.log("filters", filters);
