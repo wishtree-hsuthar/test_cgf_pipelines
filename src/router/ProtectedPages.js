@@ -59,14 +59,17 @@ const ProtectedPages = () => {
             <Route path="roles/edit-role/:id" element={<EditRole />} />
 
             {/* Member Pages */}
-            <Route path="/members" element={<MemberList />}></Route>
-            <Route path="/members/add-member" element={<AddMember />}></Route>
+            <Route path="/users/members" element={<MemberList />}></Route>
             <Route
-                path={"/members/edit-member/:id"}
+                path="/users/members/add-member"
+                element={<AddMember />}
+            ></Route>
+            <Route
+                path={"/users/members/edit-member/:id"}
                 element={<EditMember />}
             ></Route>
             <Route
-                path={"/members/view-member/:id"}
+                path={"/users/members/view-member/:id"}
                 element={<ViewMember />}
             ></Route>
 
@@ -74,11 +77,11 @@ const ProtectedPages = () => {
 
             {/* Operation Members */}
             <Route
-                path="/operation_members"
+                path="/users/operation_members"
                 element={<OperationMemberList />}
             />
             <Route
-                path="/operation_members/add_operation_member"
+                path="/users/operation_members/add_operation_member"
                 element={<AddOperationMember />}
             />
             <Route path="*" element={<FallBackUI />} />
