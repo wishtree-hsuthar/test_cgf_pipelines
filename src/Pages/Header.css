@@ -1,0 +1,196 @@
+/* Header css */
+.nav-list li {
+    list-style-type: none;
+    padding: 10px 15px;
+    font-family: "ProximaNova-Semibold";
+    font-size: 14px;
+}
+.nav-list li a {
+    color: #1e1e1e;
+    text-decoration: none;
+    padding: 22px 0;
+}
+.list-item.active a {
+    color: #f7a823;
+    position: relative;
+}
+.list-item.active ul li a {
+    color: #1e1e1e;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.list-item.active a::before {
+    width: 100%;
+    height: 5px;
+    background: #f7a823;
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    content: "";
+}
+.nav-list li a:hover {
+    text-decoration: none;
+}
+.logo-blk {
+    width: 93px;
+}
+
+.nav {
+    background-color: #ffffff;
+    width: 100%;
+}
+.header-left {
+    flex: 0 0 63%;
+    max-width: 63%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    width: 100%;
+    color: #1e1e1e;
+}
+.header-sect {
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+.profile-menu-item p {
+    font-size: 14px;
+    color: #1e1e1e;
+    font-family: "ProximaNova-Regular";
+}
+.profile-menu-item .css-6hp17o-MuiList-root-MuiMenu-list {
+    padding: 0 !important;
+}
+.nav-list-right {
+    flex: 0 0 25%;
+    max-width: 25%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+}
+.user-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 100%;
+    margin-right: 10px;
+    background: #4d6073;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+.user-name-txt {
+    color: #ffffff;
+    font-size: 14px;
+    font-family: "ProximaNova-Semibold";
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+}
+.user-info span {
+    display: flex;
+    align-items: center;
+    line-height: 10px;
+    cursor: pointer;
+}
+.user-name {
+    color: #1d354d;
+    font-family: "ProximaNova-Bold";
+}
+.user-info {
+    margin: 8px 0 0;
+}
+.super-admin-arrow svg {
+    transition: 0.5s ease;
+}
+.super-admin-arrow.active svg {
+    transform: rotate(180deg);
+}
+
+/* Header submenu css */
+.nav-list li {
+    position: relative;
+}
+.header-submenu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 0px 6px rgb(0 0 0 / 10%);
+    left: -18px;
+    top: 51px;
+    z-index: 1;
+}
+.nav-list li:hover .header-submenu {
+    display: block;
+}
+
+.nav-list li ul li {
+    padding: 12px 16px;
+    color: #1e1e1e;
+    font-size: 13px;
+    font-family: "ProximaNova-Regular";
+}
+.header-submenu li:hover {
+    background-color: rgba(30, 30, 30, 0.1);
+    color: #4596d1;
+}
+.header-submenu li:hover a {
+    color: #4596d1;
+}
+.header-submenu li a {
+    color: #1e1e1e;
+    text-decoration: none;
+}
+.list-item.active a ~ .header-submenu li a::before {
+    display: none;
+}
+.header-submenu li.subactive a {
+    color: #f7a823 !important;
+    position: relative;
+}
+.header-submenu li.subactive a::before {
+    width: 100%;
+    height: 5px;
+    background: #f7a823;
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    content: "";
+    display: block !important;
+}
+/* Responsive css start */
+@media screen and (max-width: 1200px) {
+    .nav-list li {
+        padding: 10px;
+    }
+    .header-left {
+        flex: 0 0 82%;
+        max-width: 82%;
+        justify-content: flex-start;
+    }
+    .logo-blk {
+        margin-right: 30px;
+    }
+}
+@media screen and (max-width: 1023px) {
+    .header-left {
+        flex: 0 0 79%;
+        max-width: 79%;
+    }
+    .logo-blk {
+        margin-right: 10px;
+    }
+    .nav-list li {
+        padding: 10px;
+        font-size: 12px;
+    }
+    .logo-blk {
+        width: 85px;
+    }
+}
