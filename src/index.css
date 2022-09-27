@@ -2,14 +2,14 @@
 .login-page {
     background: #fff;
 }
-.login-section {
+/* .login-section {
     padding: 78px 0;
-}
+} */
 .login-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: wrap;height: 95vh;
 }
 .login-leftblk {
     flex: 0 0 50%;
@@ -367,6 +367,7 @@ select:disabled,
 textarea:disabled {
     background: rgba(30, 30, 30, 0.1) !important;
     border-color: rgba(30, 30, 30, 0.1) !important;
+    -webkit-text-fill-color: rgba(30, 30, 30, 0.5) !important;
 }
 /* .input-textarea .Mui-disabled{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;} */
 .select-field {
@@ -575,8 +576,11 @@ ul.breadcrumb li a:hover {
     margin-bottom: 20px;
 }
 .card-inner-wrap {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    border-bottom: 2px dotted rgba(30, 30, 30, 0.2);
 }
+.card-inner-wrap:nth-last-child(2){border-bottom: none;margin-bottom: 0;}
+
 .Mui-focused .MuiOutlinedInput-notchedOutline {
     border-color: #4596d1 !important;
     border-width: 1px !important;
@@ -629,7 +633,7 @@ ul.breadcrumb li a:hover {
 }
 
 .MuiPaper-root {
-    box-shadow: 0px 3px 15px #0000004d !important;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .select-field svg {
@@ -657,7 +661,7 @@ select:focus {
 }
 
 .tabs-sect .css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
-    margin-right: 15px;
+    margin-right: 30px;
     padding: 13px 0 !important;
     font-size: 14px !important;
     line-height: 14px !important;
@@ -665,6 +669,7 @@ select:focus {
     min-height: 21px !important;
     font-family: "ProximaNova-Bold", serif, sans-serif !important;
     color: rgba(30, 30, 30, 0.5);
+    min-width: auto;
 }
 .tabs-sect .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
     color: #f7a823 !important;
@@ -680,16 +685,18 @@ select:focus {
 .filter-select-field .css-hfutr2-MuiSvgIcon-root-MuiSelect-icon {
     color: #1e1e1e99;
 }
-
+.member-filter-wrap{justify-content: flex-end;}
 .member-filter-left {
     flex: 0 0 50%;
-    max-width: 50%;
+    max-width: 50%;display: flex;
+    justify-content: end;
 }
 
 .member-filter-right {
     flex: 0 0 50%;
     max-width: 50%;
-    display: flex;
+    /* display: flex; */
+    display: none;
     justify-content: flex-end;
 }
 .filter-select-wrap {
@@ -714,14 +721,13 @@ select:focus {
     flex: 0 0 65%;
     max-width: 65%;
     position: relative;
-    margin-right: 10px;
 }
 
 .searchbar input {
     width: 100%;
     height: 40px;
     padding: 0 15px 0 34px;
-    border: 1px solid rgba(30, 30, 30, 0.5);
+    border: 1px solid rgba(30, 30, 30, 0.2);
     border-radius: 3px;
     font-size: 14px;
     outline: none;
@@ -814,7 +820,7 @@ input[type=checkbox]:checked:before {
     display: none;
     top: 35px;
     position: absolute;
-    left: -84px;
+    left: -84px;z-index: 1;
 }
 .crud-toggle-list li {
     font-size: 14px;
@@ -1039,6 +1045,9 @@ input[type=checkbox]:checked:before {
 
 .select-field-error fieldset {
     border-color: #e53850 !important;
+}
+.autocomplete-error fieldset{
+    border-color: #e53850;
 }
 .searchable-input fieldset {
     height: 45px;

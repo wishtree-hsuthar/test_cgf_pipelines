@@ -56,9 +56,11 @@ const myHelper = {
     pattern: "Invalid Input",
   },
   countryCode: {
+    required: "select country code",
     validate: "Invalid input",
   },
   phoneNumber: {
+    required: "Enter phone number",
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
     pattern: "Invalid Input",
@@ -106,8 +108,11 @@ const myHelper = {
     maxLength: "Max char limit exceed",
     pattern: "Invalid Input",
   },
-  memberContactCountryCode: {},
+  memberContactCountryCode: {
+    required: "sekect country code"
+  },
   memberContactPhoneNuber: {
+    required: "Enter country code",
     maxLength: "Max char limit exceed",
     minLength: "Input must contain atleast 3 characters",
     pattern: "Invalid Input",
@@ -188,7 +193,7 @@ const EditMember = () => {
         cgfOfficeRegion: data.cgfOfficeRegion,
         cgfOfficeCountry: data.cgfOfficeCountry,
         cgfOffice: data.cgfOffice,
-        memberRepresentativeId: {
+        memberRepresentative: {
           id: member?.memberRepresentativeId?._id,
           title: data.title,
           department: data.department,
@@ -235,12 +240,12 @@ const EditMember = () => {
   // On Click cancel handler
   const onClickCancelHandler = () => {
     reset({ defaultValues });
-    navigate("/members");
+    navigate("/users/members");
   };
   const onSubmit = (data) => {
     console.log("data", data);
     onSubmitFunctionCall(data);
-    setTimeout(() => navigate("/members"), 3000);
+    setTimeout(() => navigate("/users/members"), 3000);
   };
   const formatRegionCountries = (regionCountries) => {
     regionCountries.forEach(
@@ -449,10 +454,10 @@ const EditMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/members">Members</Link>
+              <Link to="/users/members">Members</Link>
             </li>
             <li>
-              <Link to={`/members/view-member/${params.id}`}>View Member</Link>
+              <Link to={`/users/members/view-member/${params.id}`}>View Member</Link>
             </li>
             <li>Edit Member</li>
           </ul>
@@ -654,12 +659,13 @@ const EditMember = () => {
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
-                      <label htmlFor="phoneNumber">Phone Number</label>
+                      <label htmlFor="phoneNumber">Phone Number <span className="mandatory">*</span></label>
                       <div className="phone-number-field">
                         <div className="select-field country-code">
                           <Controller
                             control={control}
                             name="countryCode"
+                            rules={{required: true}}
                             // rules={{
                             //   validate: () => {
                             //     if (watch("phoneNumber") && !watch("countryCode"))
@@ -669,13 +675,14 @@ const EditMember = () => {
                             render={({ field, fieldState: { error } }) => (
                               <Autocomplete
                                 {...field}
+                                className={`${error && 'autocomplete-error'}`}
                                 onChange={(event, newValue) => {
                                   console.log("inside autocomplete onchange");
                                   console.log("new Value ", newValue);
                                   newValue && typeof newValue === "object"
                                     ? setValue("countryCode", newValue.name)
                                     : setValue("countryCode", newValue);
-                                  trigger("phoneNumber");
+                                  trigger("countryCode");
                                 }}
                                 // sx={{ width: 200 }}
                                 options={arrOfCountryCode}
@@ -694,12 +701,12 @@ const EditMember = () => {
                                     inputProps={{
                                       ...params.inputProps,
                                     }}
-                                    onChange={() => trigger("phoneNumber")}
+                                    onChange={() => trigger("countryCode")}
                                     // onSubmit={() => setValue("countryCode", "")}
                                     placeholder={"Select country code"}
                                     helperText={
                                       error
-                                        ? myHelper.countryCode["validate"]
+                                        ? myHelper.countryCode[error?.type]
                                         : " "
                                     }
                                   />
@@ -714,12 +721,13 @@ const EditMember = () => {
                           placeholder="Enter phone number"
                           myHelper={myHelper}
                           rules={{
+                            required: true,
                             maxLength: 15,
                             minLength: 3,
                             validate: (value) => {
-                              if (watch("phoneNumber") && !watch("countryCode"))
-                                return "Invalid input";
-                              else if (value && !Number(value))
+                              // if (watch("phoneNumber") && !watch("countryCode"))
+                              //   return "Invalid input";
+                              if (value && !Number(value))
                                 return "Invalid Input";
                             },
                           }}
@@ -1043,16 +1051,20 @@ const EditMember = () => {
                   <div className="card-form-field">
                     <div className="form-group">
                       <label htmlFor="memberContactPhoneNumber">
-                        Phone Number
+                        Phone Number <span className="mandatory">*</span>
                       </label>
                       <div className="phone-number-field">
                         <div className="select-field country-code">
                           <Controller
                             control={control}
                             name="memberContactCountryCode"
-                            render={({ field }) => (
+                            rules={{
+                              required: true
+                            }}
+                            render={({ field,fieldState: { error } }) => (
                               <Autocomplete
                                 {...field}
+                                className={`${error && 'autocomplete-error'}`}
                                 onChange={(event, newValue) => {
                                   newValue && typeof newValue === "object"
                                     ? setValue(
@@ -1063,7 +1075,7 @@ const EditMember = () => {
                                         "memberContactCountryCode",
                                         newValue
                                       );
-                                  trigger("memberContactPhoneNuber");
+                                  trigger("memberContactCountryCode");
                                 }}
                                 // sx={{ width: 200 }}
                                 options={arrOfCountryCode}
@@ -1086,6 +1098,11 @@ const EditMember = () => {
       //   setValue("memberContactCountryCode", "")
                                     // }
                                     placeholder={"NA"}
+                                    helperText={
+                                      error
+                                        ? myHelper.countryCode[error?.type]
+                                        : " "
+                                    }
                                   />
                                 )}
                               />
@@ -1097,15 +1114,16 @@ const EditMember = () => {
                           name="memberContactPhoneNuber"
                           myHelper={myHelper}
                           rules={{
+                            required: true,
                             maxLength: 15,
                             minLength: 3,
                             validate: (value) => {
-                              if (
-                                watch("memberContactPhoneNuber") &&
-                                !watch("memberContactCountryCode")
-                              )
-                                return "Invalid Input";
-                              else if (value && !Number(value))
+                              // if (
+                              //   watch("memberContactPhoneNuber") &&
+                              //   !watch("memberContactCountryCode")
+                              // )
+                              //   return "Invalid Input";
+                              if (value && !Number(value))
                                 return "Invalid input";
                             },
                           }}
