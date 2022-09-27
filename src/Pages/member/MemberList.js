@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import TableComponent from "../../components/TableComponent";
 import { useNavigate } from "react-router-dom";
 import { MEMBER } from "../../api/Url";
+import Loader2 from "../../assets/Loader/Loader2.svg";
 import axios from "axios";
 
 //Ideally get those from backend
@@ -131,7 +132,7 @@ const MemberList = () => {
       delete object["updatedBy"];
       delete object["website"];
       delete object["isDeleted"];
-      delete object["isReplaced"]
+      delete object["isReplaced"];
       delete object["__v"];
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
         "en-GB"
@@ -142,11 +143,11 @@ const MemberList = () => {
         object.createdBy = "NA";
       }
       if (object["representative"].length > 0) {
-        object['isActive'] = object['representative'][0]['isActive']
+        object["isActive"] = object["representative"][0]["isActive"];
         object.email = object["representative"][0]?.email ?? "NA";
         object.name = object["representative"][0]?.name ?? "NA";
       } else {
-        object['isActive'] = false
+        object["isActive"] = false;
         object.email = "NA";
         object.name = "NA";
       }
@@ -215,15 +216,15 @@ const MemberList = () => {
     console.log("filters", filters);
 
     const namesMappings = {
-      companyName: 'name',
-      name: 'representativeName',
-      email: 'representativeEmail',
-      companyType: 'companyType',
-      totalOperationMembers: 'operationMembersCount',
-      createdBy: 'createdBy',
-      createdAt: 'createdAt',
-      isActive: 'status',
-    }
+      companyName: "name",
+      name: "representativeName",
+      email: "representativeEmail",
+      companyType: "companyType",
+      totalOperationMembers: "operationMembersCount",
+      createdBy: "createdBy",
+      createdAt: "createdAt",
+      isActive: "status",
+    };
 
     let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${namesMappings[orderBy]}&order=${order}`;
     if (search?.length >= 3) url = url + `&search=${search}`;
@@ -236,11 +237,14 @@ const MemberList = () => {
   const getMembers = async (isMounted, controller) => {
     try {
       let url = generateUrl();
+      setIsLoading(true);
       const response = await axios.get(url, { signal: controller.signal });
       setTotalRecords(parseInt(response.headers["x-total-count"]));
       console.log("response from backend", response);
+      setIsLoading(false);
       updateRecords(response.data);
     } catch (error) {
+      setIsLoading(false);
       console.log("Error from backend", error);
     }
   };
@@ -254,8 +258,8 @@ const MemberList = () => {
       controller.abort();
     };
   }, [page, rowsPerPage, orderBy, order, filters, makeApiCall]);
-  console.log("records: ", records);
-  console.log("filters: ", filters);
+  // console.log("records: ", records);
+  // console.log("filters: ", filters);
   return (
     <div className="page-wrapper">
       <section>
@@ -275,7 +279,7 @@ const MemberList = () => {
                 <button
                   type="submit"
                   className="primary-button add-button"
-                  onClick={() => navigate("/members/add-member")}
+                  onClick={() => navigate("/users/members/add-member")}
                 >
                   Add Member
                 </button>
@@ -304,7 +308,7 @@ const MemberList = () => {
                   <div className="filter-select-field">
                     <div className="dropdown-field">
                       <Select
-                        sx={{display: "none"}}
+                        sx={{ display: "none" }}
                         name="companyType"
                         value={filters.companyType}
                         onChange={onFilterChangehandler}
@@ -327,7 +331,7 @@ const MemberList = () => {
                   <div className="filter-select-field">
                     <div className="dropdown-field">
                       <Select
-                        sx={{display:"none"}}
+                        sx={{ display: "none" }}
                         name="createdBy"
                         multiple
                         value={selectedCreatedBy}
@@ -375,7 +379,7 @@ const MemberList = () => {
                   <div className="filter-select-field">
                     <div className="dropdown-field">
                       <Select
-                        sx={{display:"none"}}
+                        sx={{ display: "none" }}
                         name="status"
                         value={filters.status}
                         onChange={onFilterChangehandler}
@@ -400,25 +404,31 @@ const MemberList = () => {
             </div>
           </div>
           <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
-            <TableComponent
-              tableHead={tableHead}
-              records={records}
-              handleChangePage1={handleTablePageChange}
-              handleChangeRowsPerPage1={handleRowsPerPageChange}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              selected={selected}
-              setSelected={setSelected}
-              totalRecords={totalRecords}
-              orderBy={orderBy}
-              // icons={["visibility"]}
-              onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
-              order={order}
-              setOrder={setOrder}
-              setOrderBy={setOrderBy}
-              setCheckBoxes={false}
-              onRowClick
-            />
+            {isLoading ? (
+              <div className="loader-blk">
+                <img src={Loader2} alt="Loading" />
+              </div>
+            ) : (
+              <TableComponent
+                tableHead={tableHead}
+                records={records}
+                handleChangePage1={handleTablePageChange}
+                handleChangeRowsPerPage1={handleRowsPerPageChange}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                selected={selected}
+                setSelected={setSelected}
+                totalRecords={totalRecords}
+                orderBy={orderBy}
+                // icons={["visibility"]}
+                onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
+                order={order}
+                setOrder={setOrder}
+                setOrderBy={setOrderBy}
+                setCheckBoxes={false}
+                onRowClick
+              />
+            )}
           </div>
         </div>
       </section>

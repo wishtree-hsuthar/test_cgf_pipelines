@@ -2,14 +2,14 @@
 .login-page {
     background: #fff;
 }
-.login-section {
+/* .login-section {
     padding: 78px 0;
-}
+} */
 .login-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: wrap;height: 95vh;
 }
 .login-leftblk {
     flex: 0 0 50%;
@@ -367,6 +367,7 @@ select:disabled,
 textarea:disabled {
     background: rgba(30, 30, 30, 0.1) !important;
     border-color: rgba(30, 30, 30, 0.1) !important;
+    -webkit-text-fill-color: rgba(30, 30, 30, 0.5) !important;
 }
 /* .input-textarea .Mui-disabled{background: rgba(30, 30, 30, 0.1) !important;border-color: rgba(30, 30, 30, 0.1) !important;} */
 .select-field {
@@ -575,8 +576,11 @@ ul.breadcrumb li a:hover {
     margin-bottom: 20px;
 }
 .card-inner-wrap {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    border-bottom: 2px dotted rgba(30, 30, 30, 0.2);
 }
+.card-inner-wrap:nth-last-child(2){border-bottom: none;margin-bottom: 0;}
+
 .Mui-focused .MuiOutlinedInput-notchedOutline {
     border-color: #4596d1 !important;
     border-width: 1px !important;
@@ -629,7 +633,7 @@ ul.breadcrumb li a:hover {
 }
 
 .MuiPaper-root {
-    box-shadow: 0px 3px 15px #0000004d !important;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .select-field svg {
@@ -1148,6 +1152,9 @@ input[type=checkbox]:checked:before {
 
 .select-field-error fieldset {
     border-color: #e53850 !important;
+}
+.autocomplete-error fieldset{
+    border-color: #e53850;
 }
 .searchable-input fieldset {
     height: 45px;
