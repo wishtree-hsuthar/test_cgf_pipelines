@@ -35,7 +35,7 @@ const tableHead = [
     id: "subAdmin",
     disablePadding: false,
     width: "20%",
-    label: "Sub Admin",
+    label: "Name",
   },
   {
     id: "email",
@@ -57,11 +57,11 @@ const tableHead = [
     disablePadding: false,
     label: "Status",
   },
-  {
-    id: "action",
-    disablePadding: false,
-    label: "Action",
-  },
+  // {
+  //   id: "action",
+  //   disablePadding: false,
+  //   label: "Action",
+  // },
 ];
 
 const rows = [
@@ -70,170 +70,170 @@ const rows = [
     subAdmin: "jeff Hall",
     email: "jeffbezoz@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "2",
     subAdmin: "Edward Meaning",
     email: "EdwardMeaning53@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "3",
     subAdmin: "William Johnsan bhai",
     email: "WillianJohnbhai4509@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "4",
     subAdmin: "harry robot son",
     email: "harrykakaji3209@zero.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "5",
     subAdmin: "joe biden",
     email: "joeBidenladen@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "6",
     subAdmin: "Vladimir Putin",
     email: "vladputin007@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "7",
     subAdmin: "Anderson James",
     email: "Andersonvir@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "8",
     subAdmin: "Virat Kohli",
     email: "ViratRunMachicne@icc.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "9",
     subAdmin: "Sachin Tendulkar",
     email: "SachinMumbaikar123@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "10",
     subAdmin: "Mahendra Singh Dhoni",
     email: "Mahikmatvalie@csk.com",
     assessments: "external",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "11",
     subAdmin: "SRK",
     email: "srkverse@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "12",
     subAdmin: "salman khan",
     email: "blackbug123@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "13",
     subAdmin: "Rishabh Pant",
     email: "rishabhPant234@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "14",
     subAdmin: "Jasprit Bumrah",
     email: "yorkerking007@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "15",
     subAdmin: "Mohammad Shami",
     email: "mohammadshami002@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "16",
     subAdmin: "Rohit Sharma",
     email: "rosuperhitsharma234@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
   {
     _id: "17",
     subAdmin: "Ravindra Jadeja",
     email: "sirjadeja123@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US"),
+    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US"),
+    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
   },
 ];
 
@@ -341,7 +341,7 @@ const ViewRole = () => {
   const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("subAdmin");
+  const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([])
 
   //implemention of pagination on front-end
@@ -369,14 +369,14 @@ const ViewRole = () => {
       // console.log("temp Previ value",tempPrivileges[tempPriv])
       privileges[tempPriv] = {
         add: tempPrivileges[tempPriv]["add"],
-        assign: tempPrivileges[tempPriv]["assign"],
+        // assign: tempPrivileges[tempPriv]["assign"],
         delete: tempPrivileges[tempPriv]["delete"],
         view: tempPrivileges[tempPriv]["view"],
         edit: tempPrivileges[tempPriv]["edit"],
         list: tempPrivileges[tempPriv]["list"],
         all:
           tempPrivileges[tempPriv]["add"] &&
-          tempPrivileges[tempPriv]["assign"] &&
+          // tempPrivileges[tempPriv]["assign"] &&
           tempPrivileges[tempPriv]["delete"] &&
           tempPrivileges[tempPriv]["edit"] &&
           tempPrivileges[tempPriv]["view"] &&
@@ -556,7 +556,7 @@ const ViewRole = () => {
                 <div className="card-form-field">
                   <div className="form-group">
                     <label htmlFor="roleName">
-                      CGF Admin <span className="mandatory">*</span>
+                      No of Users <span className="mandatory">*</span>
                     </label>
                     <TextField
                       disabled
@@ -588,7 +588,7 @@ const ViewRole = () => {
                         aria-controls="simple-tabpanel-0"
                       />
                       <Tab
-                        label="CGF Admins"
+                        label="Users"
                         // {...a11yProps(1)}
                         id="simple-tab-0"
                         aria-controls="simple-tabpanel-0"
@@ -630,13 +630,13 @@ const ViewRole = () => {
                               <TableCell align="center" className="tableHeader">
                                 Delete
                               </TableCell>
-                              <TableCell
+                              {/* <TableCell
                                 align="center"
                                 className="tableHeader"
                                 width="16%"
                               >
                                 Assign to Member
-                              </TableCell>
+                              </TableCell> */}
                               <TableCell align="center" className="tableHeader">
                                 All
                               </TableCell>
@@ -684,13 +684,13 @@ const ViewRole = () => {
                                       checked={temp[previleg]["delete"]}
                                     />
                                   </TableCell>
-                                  <TableCell align="center" padding="checkbox">
+                                  {/* <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
                                       className="table-checkbox"
                                       checked={temp[previleg]["assign"]}
                                     />
-                                  </TableCell>
+                                  </TableCell> */}
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
@@ -719,12 +719,13 @@ const ViewRole = () => {
                     orderBy={orderBy}
                     selected={selected}
                     setSelected={setSelected}
-                    icons={["visibility"]}
+                    // icons={["visibility"]}
                     onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
                     order={order}
                     setOrder={setOrder}
                     setOrderBy={setOrderBy}
-                    // setCheckBoxes={false}
+                    setCheckBoxes={false}
+                    onRowClick
                   />
                 </TabPanel>
               </div>

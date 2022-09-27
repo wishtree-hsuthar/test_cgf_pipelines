@@ -667,6 +667,7 @@ const AddMember = () => {
                         Phone Number <span className="mandatory">*</span>
                       </label>
                       <div className="phone-number-field">
+                      <div className="select-field country-code">
                         <Controller
                           control={control}
                           name="countryCode"
@@ -718,7 +719,7 @@ const AddMember = () => {
                             />
                           )}
                         />
-
+                        </div>
                         <Input
                           control={control}
                           name="phoneNumber"

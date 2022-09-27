@@ -23,7 +23,7 @@ const tableHead = [
   {
     id: "totalCgfAdmins",
     disablePadding: false,
-    label: "CGF Admins",
+    label: "Users",
   },
   {
     id: "createdAt",
@@ -35,11 +35,11 @@ const tableHead = [
     disablePadding: false,
     label: "Status",
   },
-  {
-    id: "action",
-    disablePadding: false,
-    label: "Action",
-  },
+  // {
+  //   id: "action",
+  //   disablePadding: false,
+  //   label: "Action",
+  // },
 ];
 
 const RolesList = () => {
@@ -95,7 +95,7 @@ const RolesList = () => {
   const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState("desc");
-  const [orderBy, setOrderBy] = React.useState("createdAt");
+  const [orderBy, setOrderBy] = React.useState("");
   const [records, setRecords] = React.useState([]);
   const [totalRecords, setTotalRecords] = React.useState(0);
 
@@ -109,9 +109,7 @@ const RolesList = () => {
       delete object["__v"];
       delete object["cgfAdmins"]
       object.totalCgfAdmins =  object["totalCgfAdmins"].toString()
-      object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
-        "en-US"
-      );
+      object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"});
       keysOrder.forEach((k) => {
         const v = object[k];
         delete object[k];
@@ -287,12 +285,13 @@ const RolesList = () => {
                   rowsPerPage={rowsPerPage}
                   totalRecords={totalRecords}
                   orderBy={orderBy}
-                  icons={["visibility"]}
+                  // icons={["visibility"]}
                   onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
                   order={order}
                   setOrder={setOrder}
                   setOrderBy={setOrderBy}
                   setCheckBoxes={false}
+                  onRowClick
                 />
               </div>
             )}

@@ -4,7 +4,7 @@
 }
 .table-blk .MuiTableRow-head{height: 58px;background: #4596D11A;white-space: nowrap;padding: 0 10px;}
 .table-header span{font-size: 14px;color: #1E1E1E !important;font-family: 'ProximaNova-Semibold',serif, sans-serif;}
-.table-blk .MuiPaper-root{box-shadow: 0px 3px 6px #00000029 !important;margin-bottom: 0;}
+.table-blk .MuiPaper-root{box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1) !important;margin-bottom: 0;}
 .table-blk .css-177gid-MuiTableCell-root{font-family: 'ProximaNova-Regular',serif, sans-serif;font-size: 14px;}
 .table-blk .MuiTableCell-head{padding: 0 !important;text-align: left;}
 /* .table-blk .MuiTableCell-head:nth-child(2){padding: 0 !important;} */
