@@ -322,8 +322,10 @@ const EditMember = () => {
   };
   const getCountries = async (region) => {
     try {
-      const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
-      return regionCountries;
+      if(region){
+        const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
+        return regionCountries;
+      }
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setToasterDetails(
@@ -1179,7 +1181,7 @@ const EditMember = () => {
                   //   onClick={}
                   className="primary-button add-button"
                 >
-                  Edit
+                  Update
                 </button>
               </div>
             </div>

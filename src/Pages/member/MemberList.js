@@ -13,7 +13,7 @@ const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 const tableHead = [
   {
     id: "companyName",
-    // width: "10%",
+    width: "30%",
     disablePadding: false,
     label: "Company",
   },
@@ -134,9 +134,7 @@ const MemberList = () => {
       delete object["isDeleted"];
       delete object["isReplaced"];
       delete object["__v"];
-      object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
-        "en-GB"
-      );
+      object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"} );
       if (typeof object["createdBy"] === "object") {
         object.createdBy = object["createdBy"]["name"];
       } else {
@@ -294,7 +292,7 @@ const MemberList = () => {
                     type="text"
                     value={search}
                     name="search"
-                    placeholder="Search member name, email and member company"
+                    placeholder="Search"
                     onKeyDown={(e) => e.key === "Enter" && setMakeApiCall(true)}
                     onChange={onSearchChangeHandler}
                   />

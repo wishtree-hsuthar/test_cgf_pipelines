@@ -9,7 +9,7 @@ function Toaster({ titleMessage, descriptionMessage, messageType, myRef }) {
   const showToasts = () => {
     toast(customMsg, {
       position: "top-right",
-      autoClose: 3000,
+      autoClose: false,
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: true,

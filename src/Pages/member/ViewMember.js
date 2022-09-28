@@ -403,8 +403,10 @@ const ViewMember = () => {
 
   const getCountries = async (region) => {
     try {
-      const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
-      return regionCountries;
+      if(region){
+        const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
+        return regionCountries;
+      }
     } catch (error) {
       console.log("Error inside get Countres",error)
       if (error?.code === "ERR_CANCELED") return;
@@ -530,9 +532,9 @@ const ViewMember = () => {
         messageType={toasterDetails.messageType}
       />
       <DialogBox
-        title={`Delete Member ${member.companyName}`}
-        info1={`We recommend you to replace this member with the new one because deleting all the statistics & records would get deleted and this will be an irreversible action`}
-        info2={`Are you sure want to delete ${member.companyName} !`}
+        title={<p>Delete Member "{member?.companyName ? member.companyName : "Member"}"</p>}
+        info1={<p>We recommend you to replace this member with the new one because deleting all the statistics & records would get deleted and this will be an irreversible action</p>}
+        info2={<p>Are you sure you want to delete <b>{member.companyName}</b>?</p>}
         primaryButtonText="Delete"
         secondaryButtonText="Cancel"
         onPrimaryModalButtonClickHandler={onDialogPrimaryButtonClickHandler}

@@ -246,10 +246,10 @@ export default function TableComponent({
                           </TableCell>
                         )}
                         {Object.keys(row).map((cell, _id) => {
-                          console.log("Row cell", row[cell]);
+                          console.log("Row cell", row[cell],"cell: ",cell);
                           if (cell !== "_id" && cell !== "isActive") {
                             return row[cell].length <= 30 ? (
-                              <TableCell key={cell}> {typeof row[cell] === "string" ? row[cell][0].toUpperCase() + row[cell].slice(1) : row[cell]}</TableCell>
+                              <TableCell key={cell}> {(typeof row[cell] === "string" && cell !== "email") ? row[cell][0].toUpperCase() + row[cell].slice(1) : row[cell]}</TableCell>
                             ) : (
                               <Tooltip
                                 key={cell}
@@ -258,9 +258,9 @@ export default function TableComponent({
                                 title={row[cell]}
                               >
                                 <TableCell key={cell}>
-                                  {typeof row[cell] === "string"
-                                    ? `${row[cell].slice(0, 30)}...`
-                                    : row[cell]}
+                                  {(typeof row[cell] === "string" && cell !== "email")
+                                    ? row[cell][0].toUpperCase() + `${row[cell].slice(1, 30)}...`
+                                    : `${row[cell].slice(0, 30)}...`}
                                 </TableCell>
                               </Tooltip>
                             );
@@ -342,7 +342,7 @@ export default function TableComponent({
                       10
                     </MenuItem>
                     <MenuItem value="20">20</MenuItem>
-                    <MenuItem value="50">50</MenuItem>
+                    {/* <MenuItem value="50">50</MenuItem> */}
                   </Select>
                 </div>
               </div>
