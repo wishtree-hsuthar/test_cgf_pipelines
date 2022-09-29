@@ -32,7 +32,7 @@ import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 
 const tableHead = [
   {
-    id: "subAdmin",
+    id: "name",
     disablePadding: false,
     width: "20%",
     label: "Name",
@@ -43,25 +43,15 @@ const tableHead = [
     label: "Email",
   },
   {
-    id: "onboardedOn",
+    id: "createdAt",
     disablePadding: false,
-    label: "Onboarded On",
-  },
-  {
-    id: "assignedOn",
-    disablePadding: false,
-    label: "Assigned On",
+    label: "Created At",
   },
   {
     id: "isActive",
     disablePadding: false,
     label: "Status",
-  },
-  // {
-  //   id: "action",
-  //   disablePadding: false,
-  //   label: "Action",
-  // },
+  }
 ];
 
 const rows = [
@@ -70,176 +60,314 @@ const rows = [
     subAdmin: "jeff Hall",
     email: "jeffbezoz@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "2",
     subAdmin: "Edward Meaning",
     email: "EdwardMeaning53@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "3",
     subAdmin: "William Johnsan bhai",
     email: "WillianJohnbhai4509@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "4",
     subAdmin: "harry robot son",
     email: "harrykakaji3209@zero.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "5",
     subAdmin: "joe biden",
     email: "joeBidenladen@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "6",
     subAdmin: "Vladimir Putin",
     email: "vladputin007@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "7",
     subAdmin: "Anderson James",
     email: "Andersonvir@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "8",
     subAdmin: "Virat Kohli",
     email: "ViratRunMachicne@icc.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "9",
     subAdmin: "Sachin Tendulkar",
     email: "SachinMumbaikar123@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "10",
     subAdmin: "Mahendra Singh Dhoni",
     email: "Mahikmatvalie@csk.com",
     assessments: "external",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "11",
     subAdmin: "SRK",
     email: "srkverse@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "12",
     subAdmin: "salman khan",
     email: "blackbug123@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "13",
     subAdmin: "Rishabh Pant",
     email: "rishabhPant234@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "14",
     subAdmin: "Jasprit Bumrah",
     email: "yorkerking007@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "15",
     subAdmin: "Mohammad Shami",
     email: "mohammadshami002@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "16",
     subAdmin: "Rohit Sharma",
     email: "rosuperhitsharma234@gmail.com",
     assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "Inactive",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
   {
     _id: "17",
     subAdmin: "Ravindra Jadeja",
     email: "sirjadeja123@gmail.com",
     assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    onboardedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
     status: "active",
     createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"}),
+    assignedOn: new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
   },
 ];
 
 const ViewRole = () => {
   //Refr for Toaster
   const myRef = React.useRef();
+  //order in which records needs to show
+  const keysOrder = ["_id", "name","email", "createdAt", "isActive"];
   //Toaster Message setter
   const [toasterDetails, setToasterDetails] = useCallbackState({
     titleMessage: "",
@@ -339,19 +467,16 @@ const ViewRole = () => {
   const [temp, setTemp] = useState({});
   //code of tablecomponent
   const [page, setPage] = React.useState(1);
+  const [records, setRecords] = React.useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
-  const [selected, setSelected] = React.useState([])
+  const [selected, setSelected] = React.useState([]);
+  const [totalRecords, setTotalRecords] = React.useState(0);
 
   //implemention of pagination on front-end
-  let records = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-  const tempRows = [...records];
-
-  tempRows.forEach((object) => {
-    delete object["createdBy"];
-    delete object["assessments"];
-  });
+  // let records = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+  // const tempRows = [...records];
 
   const handleTablePageChange = (newPage) => {
     setPage(newPage);
@@ -362,6 +487,7 @@ const ViewRole = () => {
   };
   const onClickVisibilityIconHandler = (id) => {
     console.log("id", id);
+    return navigate(`/sub-admins/view-sub-admin/${id}`)
   };
   const createPrevileges = (tempPrivileges) => {
     console.log("temp data", tempPrivileges);
@@ -386,13 +512,41 @@ const ViewRole = () => {
     });
     setTemp(privileges);
   };
+  const updateUsers = (data) => {
+    const users = data?.cgfAdmins
+    console.log("Users: ",users)
+    users.forEach(object => {
+      delete object["countryCode"]
+      delete object["createdBy"]
+      delete object["isDeleted"]
+      delete object["isReplaced"]
+      delete object["password"]
+      delete object["phoneNumber"]
+      delete object["roleId"]
+      delete object["salt"]
+      delete object["subRoleId"]
+      delete object["updatedAt"]
+      delete object["updatedBy"]
+      delete object["uuid"]
+      delete object["__v"]
+      object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"});
+      keysOrder.forEach((k) => {
+        const v = object[k];
+        delete object[k];
+        object[k] = v;
+      });
+    })
+    setRecords([...users])
+  }
   const updateFileds = (data) => {
-    console.log("data",data)
+    console.log("data", data);
+    updateUsers(data)
+    setTotalRecords(data?.totalCgfAdmins ?? 0)
     setFieldValues({
       roleName: data?.name,
       description: data?.description,
       status: data?.isActive ? "active" : "inactive",
-      subAdmin: data?.totalCgfAdmins ?? 0 ,
+      subAdmin: data?.totalCgfAdmins ?? 0,
     });
     createPrevileges(data.privileges);
   };
@@ -402,7 +556,9 @@ const ViewRole = () => {
     (async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(REACT_APP_API_ENDPOINT + `roles/${params.id}`);
+        const response = await axios.get(
+          REACT_APP_API_ENDPOINT + `roles/${params.id}`
+        );
         isMounted && updateFileds(response?.data);
         setIsLoading(false);
       } catch (error) {
@@ -437,11 +593,21 @@ const ViewRole = () => {
         messageType={toasterDetails.messageType}
       />
       <DialogBox
-        title={`Delete role "${fieldValues ? fieldValues.roleName : "Role"}"!`}
-        info1={`On deleting all the sub admins to whoom this role the access for the system would get deleted and this will be irreversible action.`}
-        info2={`Are you sure you want to delete ${
-          fieldValues ? fieldValues.roleName : "Role"
-        }?`}
+        title={
+          <p>Delete role "{fieldValues ? fieldValues.roleName : "Role"}"!</p>
+        }
+        info1={
+          <p>
+            On deleting all the sub admins to whoom this role the access for the
+            system would get deleted and this will be irreversible action.
+          </p>
+        }
+        info2={
+          <p>
+            Are you sure you want to delete{" "}
+            <b>{fieldValues ? fieldValues.roleName : "Role"}</b>?
+          </p>
+        }
         primaryButtonText="Delete"
         secondaryButtonText="Cancel"
         onPrimaryModalButtonClickHandler={onDialogPrimaryButtonClickHandler}
@@ -487,8 +653,8 @@ const ViewRole = () => {
           </div>
           {isLoading ? (
             <div className="loader-blk">
-            <img src={Loader2} alt="Loading" />
-          </div>
+              <img src={Loader2} alt="Loading" />
+            </div>
           ) : (
             <div className="card-wrapper">
               <div className="card-blk flex-between">
@@ -715,7 +881,7 @@ const ViewRole = () => {
                     handleChangeRowsPerPage1={handleRowsPerPageChange}
                     page={page}
                     rowsPerPage={rowsPerPage}
-                    totalRecords={rows.length}
+                    totalRecords={totalRecords}
                     orderBy={orderBy}
                     selected={selected}
                     setSelected={setSelected}
