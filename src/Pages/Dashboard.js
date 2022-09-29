@@ -6,16 +6,16 @@ export const Dashboard = (props) => {
         <div className="page-wrapper">
             <section>
                 <div className="container">
-                    <h1>Dashboard in progress</h1>
-                    <img
-                        src={
-                            process.env.PUBLIC_URL +
-                            "/images/WorkInProgress-removebg-preview.png"
-                        }
-                        style={{
-                            margin: "0% 25%",
-                        }}
-                    />
+                    <div className="dashboard-sect">
+                        <img
+                            src={
+                                process.env.PUBLIC_URL +
+                                "/images/WorkInProgress-removebg-preview.png"
+                            }
+                            className="mb-30"
+                        />
+                        <h1 className="coming-soon-txt">Coming Soon!</h1>
+                    </div>
                 </div>
             </section>
         </div>
