@@ -35,10 +35,10 @@ const pendingOperationMemberTableColumnHeader = [
         label: "Created By",
     },
     {
-        id: "createdOn",
+        id: "createdAt",
         width: "30%",
         disablePadding: false,
-        label: "Created On",
+        label: "Created At",
     },
     {
         id: "action",
@@ -99,7 +99,7 @@ function PendingOperationMembers({
         "memberCompany",
         "companyType",
         "createdByName",
-        "createdOn",
+        "createdAt",
         // "token",
     ];
 
@@ -135,15 +135,19 @@ function PendingOperationMembers({
             object["memberCompany"] = object["memberData"]["companyName"];
             object["companyType"] = object["memberData"]["companyType"];
             // object["createdByName"] = object["createdBy"]["name"];
-            object["createdOn"] = new Date(
+            object["createdAt"] = new Date(
                 object["createdAt"]
-            ).toLocaleDateString("en-US");
+            ).toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
             object["createdByName"] = object["createdBy"].name;
 
             // delete object["data"]["subRoleId"];
             // delete object["data"]["subRole"][0].name;
             delete object["createdBy"];
-            delete object["createdAt"];
+            // delete object["createdAt"];
             delete object["subRole"];
             delete object["data"];
             delete object["memberData"];
