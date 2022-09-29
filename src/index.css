@@ -1,56 +1,4 @@
-/* Login css */
-.login-page {
-    background: #fff;
-}
-/* .login-section {
-    padding: 78px 0;
-} */
-.login-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;height: 95vh;
-}
-.login-leftblk {
-    flex: 0 0 50%;
-    max-width: 50%;
-}
-.login-rightblk {
-    flex: 0 0 50%;
-    max-width: 50%;
-    padding: 0 115px;
-}
-.login-slide-img {
-    width: 62%;
-    margin: 0 auto;
-}
-.login-slider .owl-theme .owl-dots .owl-dot.active span {
-    background: #f7a823;
-    border-color: #f7a823;
-}
-.login-slider .owl-theme .owl-dots .owl-dot span {
-    background: #fff;
-    border: 1px solid #1e1e1e;
-    margin: 5px;
-}
-.login-slider .owl-theme .owl-nav.disabled + .owl-dots {
-    margin-top: 40px;
-}
-.login-slider .owl-theme .owl-dots .owl-dot:hover span {
-    background: #f7a823;
-}
-.login-form {
-    margin: 40px 0 0;
-}
-.forgot-password-txt {
-    color: #f7a823;
-    font-family: "Proxima Nova Semibold";
-    padding-right: 10px;
-}
-.eye-btn {
-    padding: 14px !important;
-    margin-right: -5px !important;
-}
+
 * {
     margin: 0;
     padding: 0;
@@ -612,6 +560,7 @@ ul.breadcrumb li a:hover {
 .css-yf8vq0-MuiSelect-nativeInput {
     height: 45px;
 }
+.select-field fieldset{border-color: rgba(30, 30, 30, 0.5) !important;}
 
 .Mui-disabled {
     border-color: rgba(30, 30, 30, 0.15) !important;
@@ -835,7 +784,7 @@ input[type=checkbox]:checked:before {
     cursor: pointer;
 }
 .crud-toggle-list li:hover {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(30, 30, 30, 0.1);
 }
 .form-header-link {
     display: flex;
@@ -848,7 +797,7 @@ input[type=checkbox]:checked:before {
 }
 /* Popup css */
 .popup-box {
-    width: 734px !important;
+    width: 570px !important;
     background: #fff;
     box-shadow: 0px 3px 15px #00000029;
     border-radius: 10px;
@@ -862,6 +811,9 @@ input[type=checkbox]:checked:before {
     color: #1d354d;
     text-align: center;
     font-family: "ProximaNova-Bold", serif, sans-serif !important;
+    display: inline-block;
+    border-bottom: 1px solid rgba(30, 30, 30, 0.5);
+    padding-bottom: 10px;
 }
 .popup-body {
     padding: 30px;
@@ -870,13 +822,14 @@ input[type=checkbox]:checked:before {
     font-size: 14px;
     color: #1e1e1e;
     margin: 0 auto 30px;
-    max-width: 85%;
+    max-width: 99%;
 }
 .popup-ttl-blk {
-    border-bottom: 1px solid rgba(30, 30, 30, 0.5);
-    padding: 30px 0;
+    /* border-bottom: 1px solid rgba(30, 30, 30, 0.5); */
+    padding: 30px 0 10px;
     position: relative;
     outline: none;
+    text-align: center;
 }
 .popup-close-icon {
     position: absolute;
@@ -889,7 +842,7 @@ input[type=checkbox]:checked:before {
 }
 
 .popup-content-blk p:first-child {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 /* Radio button css */
@@ -900,7 +853,7 @@ input[type=checkbox]:checked:before {
 .radio-btn .MuiFormControlLabel-label {
     font-family: "ProximaNova-Regular", serif, sans-serif;
     font-size: 14px;
-    color: rgba(30, 30, 30, 0.5);
+    color: rgba(30, 30, 30, 1);
 }
 .radio-btn .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
     color: #4596d1;
@@ -1025,7 +978,7 @@ input[type=checkbox]:checked:before {
 }
 .country-code .MuiInputBase-root {
     height: 40px;
-    padding: 0 20px 0 0 !important;
+    padding: 0 30px 0 0 !important;
 }
 .country-code input {
     height: 15px !important;
@@ -1074,9 +1027,10 @@ input[type=checkbox]:checked:before {
     background: none !important;
 }
 .phone-number-disable {
-    background: rgba(30, 30, 30, 0.1) !important;
+    background: rgba(30, 30, 30, 0.05) !important;
     border-color: rgba(30, 30, 30, 0.1) !important;
 }
+.phone-number-disable input{-webkit-text-fill-color: rgba(30, 30, 30, 0.5) !important;}
 .select-reusable {
     width: 100%;
 }
@@ -1092,3 +1046,94 @@ input[type=checkbox]:checked:before {
 .country-code-auto-search input {
     height: 15px !important;
 }
+
+/* 28th sept new css add */
+.country-code .MuiAutocomplete-endAdornment{right: 0 !important;
+    width: 40px;
+    height: 40px;
+    top: 0;}
+.country-code .MuiAutocomplete-endAdornment button{width: 40px;height: 40px;}
+.country-code .css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator:hover{background: none !important;}
+.country-code .MuiButtonBase-root[aria-label="Clear"]{display: none;}
+/* .country-code .MuiAutocomplete-popupIndicatorOpen{background: none !important;} */
+
+.table-checkbox.Mui-disabled svg{color: rgba(30, 30, 30, 0.5);}
+.table-checkbox.Mui-checked.Mui-disabled svg{color: rgba(30, 30, 30, 0.5);}
+
+.radio-btn .MuiFormControlLabel-label.Mui-disabled{color: rgba(30, 30, 30, 0.5) !important;}
+.radio-btn .Mui-checked.Mui-disabled svg{color: rgba(30, 30, 30, 0.5);}
+
+.radio-btn .MuiButtonBase-root.Mui-checked ~ .MuiFormControlLabel-label{color: rgba(30, 30, 30, 1) !important;}
+.radio-btn .Mui-disabled svg:first-child path{color: rgba(30, 30, 30, 0.2);}
+
+
+.dashboard-sect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 85vh;
+}
+.coming-soon-txt{font-size: 24px;line-height:24px;color: #f7a823;font-family: 'ProximaNova-Bold';}
+.phone-number-disable fieldset{border-color: rgba(30, 30, 30, 0.15) !important;}
+/* .select-field.country-code .Mui-disabled.MuiAutocomplete-popupIndicator{background: none !important;}
+
+.select-field.country-code .MuiInputBase-root.Mui-disabled{background: rgba(30, 30, 30, 0.15) !important;} */
+
+
+/* Login css start*/
+.login-page {
+    background: #fff;
+}
+/* .login-section {
+    padding: 78px 0;
+} */
+.login-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;height: 95vh;
+}
+.login-leftblk {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+.login-rightblk {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding: 0 115px;
+}
+.login-slide-img {
+    width: 62%;
+    margin: 0 auto;
+}
+.login-slider .owl-theme .owl-dots .owl-dot.active span {
+    background: #f7a823;
+    border-color: #f7a823;
+}
+.login-slider .owl-theme .owl-dots .owl-dot span {
+    background: #fff;
+    border: 1px solid #1e1e1e;
+    margin: 5px;
+}
+.login-slider .owl-theme .owl-nav.disabled + .owl-dots {
+    margin-top: 40px;
+}
+.login-slider .owl-theme .owl-dots .owl-dot:hover span {
+    background: #f7a823;
+}
+.login-form {
+    margin: 40px 0 0;
+}
+.forgot-password-txt {
+    color: #f7a823;
+    font-family: "Proxima Nova Semibold";
+    padding-right: 10px;
+}
+.eye-btn {
+    padding: 14px !important;
+    margin-right: -5px !important;
+}
+/* Login css end */
+
+.mb-40{margin-bottom: 40px;}

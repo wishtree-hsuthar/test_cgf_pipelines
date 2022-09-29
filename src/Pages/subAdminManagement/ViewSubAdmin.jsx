@@ -339,12 +339,13 @@ const ViewSubAdmin = () => {
                                     <div className="phone-number-field">
                                         <div className="select-field country-code">
                                             <Autocomplete
+                                            className="phone-number-disable"
                                                 options={countries}
                                                 autoHighlight
                                                 getOptionLabel={(country) =>
                                                     country.countryCode
                                                 }
-                                                disabled
+                                                readOnly
                                                 value={value}
                                                 renderOption={(
                                                     props,
@@ -478,11 +479,13 @@ const ViewSubAdmin = () => {
                                                 value={"active"}
                                                 control={<Radio />}
                                                 label="Active"
+                                                disabled
                                             />
                                             <FormControlLabel
                                                 value={"inactive"}
                                                 control={<Radio />}
                                                 label="Inactive"
+                                                disabled
                                             />
                                         </RadioGroup>
                                     </div>

@@ -275,7 +275,7 @@ const RolesList = () => {
                 <img src={Loader2} alt="Loading" />
               </div>
             ) : (
-              <div className="member-info-wrapper table-content-wrap table-content-width">
+              <div className="member-info-wrapper table-content-wrap table-content-width table-footer-btm-space">
                 <TableComponent
                   tableHead={tableHead}
                   records={records}
