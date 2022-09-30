@@ -128,6 +128,9 @@ const ReplaceSubAdmin = () => {
             delete object["subRole"];
             delete object["subRoleId"];
             delete object["isActive"];
+            delete object["createdBy"];
+            delete object["updatedBy"];
+            delete object["isReplaced"];
 
             replaceHeaderKeyOrder.forEach((k) => {
                 const v = object[k];
@@ -353,9 +356,8 @@ const ReplaceSubAdmin = () => {
             <section>
                 <div className="container">
                     <div className="form-header flex-between ">
-                        <h2 className="heading2">
-                            Select any one cgf admin to replace john doe
-                        </h2>
+                        <h2 className="heading2">Replace</h2>
+                        <h4>Replace sub-admin with following:</h4>
                         <div
                             className="form-header-right-txt 
         member-filter-right

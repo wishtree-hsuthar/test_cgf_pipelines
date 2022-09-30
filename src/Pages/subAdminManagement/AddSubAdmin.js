@@ -205,7 +205,10 @@ const AddSubAdmin = () => {
             </div>
             <section>
                 <div className="container">
-                    <form onSubmit={handleSubmit(handleOnSubmit)}>
+                    <form
+                        onSubmit={handleSubmit(handleOnSubmit)}
+                        // onKeyDown={handleSubmit(handleOnSubmit)}
+                    >
                         <div className="form-header flex-between">
                             <h2 className="heading2">Add CGF Admin</h2>
                             <div className="form-header-right-txt">
@@ -435,6 +438,7 @@ const AddSubAdmin = () => {
 
                                 <div className="form-btn flex-between add-members-btn">
                                     <button
+                                        type="reset"
                                         onClick={handleCancel}
                                         className="secondary-button mr-10"
                                     >

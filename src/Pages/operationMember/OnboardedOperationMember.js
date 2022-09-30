@@ -143,7 +143,11 @@ function OnboardedOperationMember({
             object["createdByName"] = object["createdBy"]["name"];
             object["onBoardedOn"] = new Date(
                 object["createdAt"]
-            ).toLocaleDateString("en-US");
+            ).toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
             object["isActive"] = object["isActive"];
 
             // delete object["data"]["subRoleId"];

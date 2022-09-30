@@ -476,12 +476,14 @@ const ViewSubAdmin = () => {
                                             }
                                         >
                                             <FormControlLabel
+                                                disabled
                                                 value={"active"}
                                                 control={<Radio />}
                                                 label="Active"
                                                 disabled
                                             />
                                             <FormControlLabel
+                                                disabled
                                                 value={"inactive"}
                                                 control={<Radio />}
                                                 label="Inactive"
