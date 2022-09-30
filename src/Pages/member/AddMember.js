@@ -48,7 +48,7 @@ const cgfActivitiesRetailer = [
   "Grocery",
   "Health/beaty drugstore",
   "Non food retailer",
-  "Wholesaler",
+  "Wholesaler"
 ];
 
 const myHelper = {
@@ -609,7 +609,7 @@ const AddMember = () => {
                     <div className="form-group">
                       {/* <div className="select-field"> */}
                       <label htmlFor="cgfActivity">
-                        CGF Activity <span className="mandatory">*</span>
+                        CGF Activity {watch("cgfCategory") !== "Other" && <span className="mandatory">*</span>} 
                       </label>
                       <Dropdown
                         control={control}
@@ -980,7 +980,7 @@ const AddMember = () => {
                           <Dropdown
                             control={control}
                             name="memberContactSalutation"
-                            placeholder="Mr."
+                            // placeholder="Mr."
                             myHelper={myHelper}
                             rules={{
                               required: true,
@@ -1101,9 +1101,9 @@ const AddMember = () => {
                                     inputProps={{
                                       ...params.inputProps,
                                     }}
-                                    onChange={() =>
-                                      trigger("memberContactCountryCode")
-                                    }
+                                    // onChange={() =>
+                                      // trigger("memberContactCountryCode")
+                                    // }
                                     // onSubmit={() =>
                                     //   setValue("memberContactCountryCode", "")
                                     // }

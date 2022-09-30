@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DownloadIcon from "@mui/icons-material/Download";
+import Loader2 from "../../assets/Loader/Loader2.svg";
 
 import DialogBox from "../../components/DialogBox";
 import Toaster from "../../components/Toaster";
@@ -20,7 +21,13 @@ import Dropdown from "../../components/Dropdown";
 import { useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import axios from "axios";
-import { COUNTRIES, MEMBER, REGIONCOUNTRIES, REGIONS, STATES } from "../../api/Url";
+import {
+  COUNTRIES,
+  MEMBER,
+  REGIONCOUNTRIES,
+  REGIONS,
+  STATES,
+} from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 
 //Ideally get those from backend
@@ -137,6 +144,8 @@ const ViewMember = () => {
 
   //state to hold search keyword
   const [search, setSearch] = useState("");
+ // state to manage loader
+ const [isLoading, setIsLoading] = useState(false);
 
   //State to hold filter values
   const [filters, setFilters] = useState({
@@ -163,7 +172,7 @@ const ViewMember = () => {
       delete object["updatedBy"];
       delete object["website"];
       delete object["isDeleted"];
-      delete object["isReplaced"]
+      delete object["isReplaced"];
       delete object["__v"];
 
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
@@ -313,35 +322,35 @@ const ViewMember = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const onDialogPrimaryButtonClickHandler = async () => {
     try {
-        await axios.delete(MEMBER+`/${params.id}`);
-        setToasterDetails(
-          {
-            titleMessage: "Success",
-            descriptionMessage: `${member?.companyName || "Member"} deleted!`,
-            messageType: "success",
-          },
-          () => myRef.current()
-        );
-        return setTimeout(() => navigate("/users/members"), 3000);
-      } catch (error) {
-        console.log("error on delete", error);
-        if (error?.code === "ERR_CANCELED") return;
-        console.log(toasterDetails);
-        setToasterDetails(
-          {
-            titleMessage: "Error",
-            descriptionMessage:
-              error?.response?.data?.error &&
-              typeof error.response.data.error === "string"
-                ? error.response.data.error
-                : "Something Went Wrong!",
-            messageType: "error",
-          },
-          () => myRef.current()
-        );
-      } finally {
-        setOpenDialog(false);
-      }
+      await axios.delete(MEMBER + `/${params.id}`);
+      setToasterDetails(
+        {
+          titleMessage: "Success",
+          descriptionMessage: `${member?.companyName || "Member"} deleted!`,
+          messageType: "success",
+        },
+        () => myRef.current()
+      );
+      return setTimeout(() => navigate("/users/members"), 3000);
+    } catch (error) {
+      console.log("error on delete", error);
+      if (error?.code === "ERR_CANCELED") return;
+      console.log(toasterDetails);
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.error &&
+            typeof error.response.data.error === "string"
+              ? error.response.data.error
+              : "Something Went Wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+    } finally {
+      setOpenDialog(false);
+    }
   };
   const onDialogSecondaryButtonClickHandler = () => {
     navigate("/users/members");
@@ -353,7 +362,7 @@ const ViewMember = () => {
   //to hold array of countries for perticular region for Company Adress
   const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
   //to hold array of Country states
-  const [arrOfStateCountry, setArrOfStateCountry] = useState([])
+  const [arrOfStateCountry, setArrOfStateCountry] = useState([]);
   const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
 
   //to hold array of countries for perticular region for CGF Office details
@@ -365,11 +374,14 @@ const ViewMember = () => {
   });
   const formatRegionCountries = (regionCountries) => {
     regionCountries.forEach(
-      (country, id) => (regionCountries[id] = country.hasOwnProperty('_id') ? country.name : country)
+      (country, id) =>
+        (regionCountries[id] = country.hasOwnProperty("_id")
+          ? country.name
+          : country)
     );
     console.log("arr of country ", regionCountries);
     return regionCountries;
-     };
+  };
 
   const getCountryCode = async (controller) => {
     try {
@@ -384,7 +396,7 @@ const ViewMember = () => {
       const countryCodeSet = new Set(arrOfCountryCodeTemp);
       setArrOfCountryCode([...countryCodeSet]);
     } catch (error) {
-      console.log("error inside get Country code",error)
+      console.log("error inside get Country code", error);
       if (error?.code === "ERR_CANCELED") return;
       setToasterDetails(
         {
@@ -403,12 +415,12 @@ const ViewMember = () => {
 
   const getCountries = async (region) => {
     try {
-      if(region){
+      if (region) {
         const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
         return regionCountries;
       }
     } catch (error) {
-      console.log("Error inside get Countres",error)
+      console.log("Error inside get Countres", error);
       if (error?.code === "ERR_CANCELED") return;
       setToasterDetails(
         {
@@ -437,13 +449,12 @@ const ViewMember = () => {
       );
       setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
       try {
-        const stateCountries = await axios.get(STATES+`/${watch("country")}`)
-        setArrOfStateCountry(stateCountries.data)   
+        const stateCountries = await axios.get(STATES + `/${watch("country")}`);
+        setArrOfStateCountry(stateCountries.data);
       } catch (error) {
-        console.log("error")
+        console.log("error");
       }
-     
-    
+
       const countriesOnRegion2 = await getCountries(watch("cgfOfficeRegion"));
       console.log("countriesOnRegion2", countriesOnRegion2);
       const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries(
@@ -470,42 +481,62 @@ const ViewMember = () => {
       return [];
     }
   };
-  const getMemberByID = async () => {
-    const response = await axios.get(MEMBER + `/${params.id}`);
+  const getMemberByID = async (isMounted) => {
+    try {
+      setIsLoading(true)
+      const response = await axios.get(MEMBER + `/${params.id}`);
+      const data = response.data;
+      setIsLoading(false)
+      reset({
+        memberCompany: data?.companyName,
+        companyType: data?.companyType,
+        parentCompany: data?.parentCompany,
+        cgfCategory: data?.cgfCategory,
+        cgfActivity: data?.cgfActivity,
+        replacedMember: "Kit Kat",
+        corporateEmail: data?.corporateEmail,
+        countryCode: data?.countryCode,
+        phoneNumber: data?.phoneNumber.toString(),
+        websiteUrl: data?.website,
+        region: data?.region,
+        country: data?.country,
+        state: data?.state,
+        city: data?.city,
+        address: data?.address,
+        cgfOfficeRegion: data?.cgfOfficeRegion,
+        cgfOfficeCountry: data?.cgfOfficeCountry,
+        cgfOffice: data?.cgfOffice,
+        memberContactSalutation: "Mr.",
+        memberContactFullName: data?.memberRepresentativeId?.name,
+        title: data?.memberRepresentativeId?.title,
+        department: data?.memberRepresentativeId?.department,
+        memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
+        memberContactEmail: data?.memberRepresentativeId?.email,
+        memberContactPhoneNuber:
+          data?.memberRepresentativeId?.phoneNumber?.toString(),
+        status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
+        totalOperationMembers: "124",
+        createdBy: data?.createdBy,
+      });
+      setMember(response.data);
+    } catch (error) {
+      setIsLoading(false)
+      if (error?.code === "ERR_CANCELED") return;
+      isMounted &&
+        setToasterDetails(
+          {
+            titleMessage: "Error",
+            descriptionMessage:
+              error?.response?.data?.message &&
+              typeof error.response.data.message === "string"
+                ? error.response.data.message
+                : "Something Went Wrong!",
+            messageType: "error",
+          },
+          () => myRef.current()
+        );
+    }
     // console.log("response for member: ", response);
-    const data = response.data;
-    reset({
-      memberCompany: data?.companyName,
-      companyType: data?.companyType,
-      parentCompany: data?.parentCompany,
-      cgfCategory: data?.cgfCategory,
-      cgfActivity: data?.cgfActivity,
-      replacedMember: "Kit Kat",
-      corporateEmail: data?.corporateEmail,
-      countryCode: data?.countryCode,
-      phoneNumber: data?.phoneNumber.toString(),
-      websiteUrl: data?.website,
-      region: data?.region,
-      country: data?.country,
-      state: data?.state,
-      city: data?.city,
-      address: data?.address,
-      cgfOfficeRegion: data?.cgfOfficeRegion,
-      cgfOfficeCountry: data?.cgfOfficeCountry,
-      cgfOffice: data?.cgfOffice,
-      memberContactSalutation: "Mr.",
-      memberContactFullName: data?.memberRepresentativeId?.name,
-      title: data?.memberRepresentativeId?.title,
-      department: data?.memberRepresentativeId?.department,
-      memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
-      memberContactEmail: data?.memberRepresentativeId?.email,
-      memberContactPhoneNuber:
-        data?.memberRepresentativeId?.phoneNumber?.toString(),
-      status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
-      totalOperationMembers: "124",
-      createdBy: data?.createdBy,
-    });
-    setMember(response.data);
   };
 
   useEffect(() => {
@@ -532,9 +563,24 @@ const ViewMember = () => {
         messageType={toasterDetails.messageType}
       />
       <DialogBox
-        title={<p>Delete Member "{member?.companyName ? member.companyName : "Member"}"</p>}
-        info1={<p>We recommend you to replace this member with the new one because deleting all the statistics & records would get deleted and this will be an irreversible action</p>}
-        info2={<p>Are you sure you want to delete <b>{member.companyName}</b>?</p>}
+        title={
+          <p>
+            Delete Member "{member?.companyName ? member.companyName : "Member"}
+            "
+          </p>
+        }
+        info1={
+          <p>
+            We recommend you to replace this member with the new one because
+            deleting all the statistics & records would get deleted and this
+            will be an irreversible action
+          </p>
+        }
+        info2={
+          <p>
+            Are you sure you want to delete <b>{member.companyName}</b>?
+          </p>
+        }
         primaryButtonText="Delete"
         secondaryButtonText="Cancel"
         onPrimaryModalButtonClickHandler={onDialogPrimaryButtonClickHandler}
@@ -583,693 +629,704 @@ const ViewMember = () => {
               {/* <CustomModal /> */}
             </span>
           </div>
-          <div className="card-wrapper">
-            <div className="card-inner-wrap">
-              <h2 className="sub-heading1">Company Details</h2>
-              <div className="card-blk flex-between">
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="memberCompany">
-                      Member Company <span className="mandatory">*</span>
-                    </label>
-                    <Input
-                      isDisabled
-                      control={control}
-                      name="memberCompany"
-                      placeholder="Enter member company"
-                    />
-                  </div>
-                </div>
-
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="companyType">
-                      Company Type <span className="mandatory">*</span>
-                    </label>
-                    <div className="radio-btn-field">
-                      <RadioGroup
-                        value={member?.companyType ? member.companyType : ""}
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        name="radio-buttons-group"
-                        className="radio-btn"
-                      >
-                        <FormControlLabel
-                          disabled
-                          value="Internal"
-                          control={<Radio />}
-                          label="Internal"
-                        />
-                        <FormControlLabel
-                          disabled
-                          value="External"
-                          control={<Radio />}
-                          label="External"
-                        />
-                      </RadioGroup>
-                    </div>
-                  </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="parentCompany">Parent Company</label>
-                    <Autocomplete
-                      disabled
-                      className="searchable-input"
-                      value={
-                        member?.parentCompany ? member.parentCompany : "NA"
-                      }
-                      selectOnFocus
-                      handleHomeEndKeys
-                      id="free-solo-with-text-demo"
-                      options={[
-                        "Google",
-                        "MicroSoft",
-                        "Nike",
-                        "Adobe",
-                        "Falcon",
-                        "Apple",
-                        "TSMC",
-                        "Relience",
-                        "Adani",
-                        "Ford",
-                        "Uber",
-                        "wishtree",
-                      ]}
-                      getOptionLabel={(option) => {
-                        // Value selected with enter, right from the input
-                        if (typeof option === "string") {
-                          // console.log("option inside type string",option)
-                          return option;
-                        }
-                        return option;
-                      }}
-                      renderOption={(props, option) => (
-                        <li {...props}>{option}</li>
-                      )}
-                      //   sx={{ width: 300 }}
-                      freeSolo
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          placeholder="NA"
-                        />
-                      )}
-                    />
-                  </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    {/* <div className="select-field"> */}
-                    <label htmlFor="cgfCategory">
-                      CGF Category <span className="mandatory">*</span>
-                    </label>
-                    <Dropdown
-                      isDisabled
-                      control={control}
-                      name="cgfCategory"
-                      placeholder="Select category"
-                      options={cgfCategories}
-                    />
-                  </div>
-                  {/* </div> */}
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    {/* <div className="select-field"> */}
-                    <label htmlFor="cgfActivity">
-                      CGF Activity <span className="mandatory">*</span>
-                    </label>
-                    <Dropdown
-                      isDisabled
-                      control={control}
-                      name="cgfActivity"
-                      placeholder="Select activity"
-                      options={
-                        watch("cgfCategory") === "Manufacturer"
-                          ? cgfActivitiesManufacturer
-                          : cgfActivitiesRetailer
-                      }
-                    />
-                  </div>
-                  {/* </div> */}
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    {/* <div className="select-field"> */}
-                    <label htmlFor="replacedMember">
-                      Replaced Member <span className="mandatory">*</span>
-                    </label>
-                    <Input
-                      isDisabled
-                      control={control}
-                      name="replacedMember"
-                      placeholder="Enter replaced company"
-                    />
-                  </div>
-                  {/* </div> */}
-                </div>
-              </div>
+          {isLoading ? (
+            <div className="loader-blk">
+              <img src={Loader2} alt="Loading" />
             </div>
-            <div className="card-inner-wrap">
-              <h2 className="sub-heading1">Contact Details</h2>
-              <div className="flex-between card-blk">
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="corporateEmail">
-                      Corporate Email <span className="mandatory">*</span>
-                    </label>
-                    <Input
-                      isDisabled
-                      control={control}
-                      name="corporateEmail"
-                      placeholder="Enter email"
-                    />
-                  </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="phoneNumber">Phone Number</label>
-                    <div className="phone-number-field">
-                      <div className="select-field country-code">
-                        <Autocomplete
-                          className="phone-number-disable"
-                          readOnly
-                          options={arrOfCountryCode ? arrOfCountryCode : []}
-                          autoHighlight
-                          value={member?.countryCode ? member.countryCode : ""}
-                          renderOption={(props, option) => (
-                            <li {...props}>{option}</li>
-                          )}
-                          renderInput={(params) => (
-                            <TextField
-                              className={`input-field`}
-                              {...params}
-                              inputProps={{
-                                ...params.inputProps,
-                              }}
-                              placeholder={"NA"}
-                            />
-                          )}
-                        />
-                      </div>
+          ) : (
+            <div className="card-wrapper">
+              <div className="card-inner-wrap">
+                <h2 className="sub-heading1">Company Details</h2>
+                <div className="card-blk flex-between">
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="memberCompany">
+                        Member Company <span className="mandatory">*</span>
+                      </label>
                       <Input
                         isDisabled
                         control={control}
-                        name="phoneNumber"
-                        placeholder="Enter phone number"
+                        name="memberCompany"
+                        placeholder="Enter member company"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="companyType">
+                        Company Type <span className="mandatory">*</span>
+                      </label>
+                      <div className="radio-btn-field">
+                        <RadioGroup
+                          value={member?.companyType ? member.companyType : ""}
+                          aria-labelledby="demo-radio-buttons-group-label"
+                          name="radio-buttons-group"
+                          className="radio-btn"
+                        >
+                          <FormControlLabel
+                            disabled
+                            value="Internal"
+                            control={<Radio />}
+                            label="Internal"
+                          />
+                          <FormControlLabel
+                            disabled
+                            value="External"
+                            control={<Radio />}
+                            label="External"
+                          />
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="parentCompany">Parent Company</label>
+                      <Autocomplete
+                        disabled
+                        className="searchable-input"
+                        value={
+                          member?.parentCompany ? member.parentCompany : "NA"
+                        }
+                        selectOnFocus
+                        handleHomeEndKeys
+                        id="free-solo-with-text-demo"
+                        options={[
+                          "Google",
+                          "MicroSoft",
+                          "Nike",
+                          "Adobe",
+                          "Falcon",
+                          "Apple",
+                          "TSMC",
+                          "Relience",
+                          "Adani",
+                          "Ford",
+                          "Uber",
+                          "wishtree",
+                        ]}
+                        getOptionLabel={(option) => {
+                          // Value selected with enter, right from the input
+                          if (typeof option === "string") {
+                            // console.log("option inside type string",option)
+                            return option;
+                          }
+                          return option;
+                        }}
+                        renderOption={(props, option) => (
+                          <li {...props}>{option}</li>
+                        )}
+                        //   sx={{ width: 300 }}
+                        freeSolo
+                        renderInput={(params) => (
+                          <TextField {...params} placeholder="NA" />
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      {/* <div className="select-field"> */}
+                      <label htmlFor="cgfCategory">
+                        CGF Category <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        isDisabled
+                        control={control}
+                        name="cgfCategory"
+                        placeholder="Select category"
+                        options={cgfCategories}
+                      />
+                    </div>
+                    {/* </div> */}
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      {/* <div className="select-field"> */}
+                      <label htmlFor="cgfActivity">
+                        CGF Activity <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        isDisabled
+                        control={control}
+                        name="cgfActivity"
+                        placeholder="Select activity"
+                        options={
+                          watch("cgfCategory") === "Manufacturer"
+                            ? cgfActivitiesManufacturer
+                            : cgfActivitiesRetailer
+                        }
+                      />
+                    </div>
+                    {/* </div> */}
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      {/* <div className="select-field"> */}
+                      <label htmlFor="replacedMember">
+                        Replaced Member <span className="mandatory">*</span>
+                      </label>
+                      <Input
+                        isDisabled
+                        control={control}
+                        name="replacedMember"
+                        placeholder="Enter replaced company"
+                      />
+                    </div>
+                    {/* </div> */}
+                  </div>
+                </div>
+              </div>
+              <div className="card-inner-wrap">
+                <h2 className="sub-heading1">Contact Details</h2>
+                <div className="flex-between card-blk">
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="corporateEmail">
+                        Corporate Email <span className="mandatory">*</span>
+                      </label>
+                      <Input
+                        isDisabled
+                        control={control}
+                        name="corporateEmail"
+                        placeholder="Enter email"
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="phoneNumber">Phone Number</label>
+                      <div className="phone-number-field">
+                        <div className="select-field country-code">
+                          <Autocomplete
+                            className="phone-number-disable"
+                            readOnly
+                            options={arrOfCountryCode ? arrOfCountryCode : []}
+                            autoHighlight
+                            value={
+                              member?.countryCode ? member.countryCode : ""
+                            }
+                            renderOption={(props, option) => (
+                              <li {...props}>{option}</li>
+                            )}
+                            renderInput={(params) => (
+                              <TextField
+                                className={`input-field`}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                }}
+                                placeholder={"NA"}
+                              />
+                            )}
+                          />
+                        </div>
+                        <Input
+                          isDisabled
+                          control={control}
+                          name="phoneNumber"
+                          placeholder="Enter phone number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="websiteUrl">Website URL</label>
+                      <Input
+                        isDisabled
+                        control={control}
+                        name="websiteUrl"
+                        placeholder="NA"
+                        myHelper={myHelper}
                       />
                     </div>
                   </div>
                 </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="websiteUrl">Website URL</label>
-                    <Input
-                      isDisabled
-                      control={control}
-                      name="websiteUrl"
-                      placeholder="NA"
-                      myHelper={myHelper}
-                    />
-                  </div>
-                </div>
               </div>
-            </div>
-            <div className="card-inner-wrap">
-              <h2 className="sub-heading1">Company Address Details</h2>
-              <div className="flex-between card-blk">
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="region">
-                      Region <span className="mandatory">*</span>
-                    </label>
-                    <Dropdown
-                      isDisabled
-                      control={control}
-                      name="region"
-                      placeholder="Select region"
-                      options={arrOfRegions ? arrOfRegions : []}
-                    />
+              <div className="card-inner-wrap">
+                <h2 className="sub-heading1">Company Address Details</h2>
+                <div className="flex-between card-blk">
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="region">
+                        Region <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        isDisabled
+                        control={control}
+                        name="region"
+                        placeholder="Select region"
+                        options={arrOfRegions ? arrOfRegions : []}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="country">
-                      Conuntry <span className="mandatory">*</span>
-                    </label>
-                    <Dropdown
-                      isDisabled
-                      control={control}
-                      name="country"
-                      placeholder="Select country"
-                      myHelper={myHelper}
-                      options={arrOfCountryRegions ? arrOfCountryRegions : []}
-                    />
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="country">
+                        Conuntry <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        isDisabled
+                        control={control}
+                        name="country"
+                        placeholder="Select country"
+                        myHelper={myHelper}
+                        options={arrOfCountryRegions ? arrOfCountryRegions : []}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="state">
-                      State <span className="mandatory">*</span>
-                    </label>
-                    <Dropdown
-                      isDisabled
-                      control={control}
-                      name="state"
-                      placeholder="Enter state"
-                      options={arrOfStateCountry ? arrOfStateCountry : []}
-                    />
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="state">
+                        State <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        isDisabled
+                        control={control}
+                        name="state"
+                        placeholder="Enter state"
+                        options={arrOfStateCountry ? arrOfStateCountry : []}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="city">City</label>
-                    <Autocomplete
-                      disabled
-                      className="searchable-input"
-                      handleHomeEndKeys
-                      value={member?.city ? member.city : ""}
-                      id="free-solo-with-text-demo"
-                      options={[
-                        "Mumbai",
-                        "Paris",
-                        "London",
-                        "New york",
-                        "Sydney",
-                        "Melbourne",
-                        "Perth",
-                        "Toronto",
-                        "Vancour",
-                        "Texas",
-                        "Delhi",
-                        "Tokyo",
-                      ]}
-                      getOptionLabel={(option) => {
-                        // Value selected with enter, right from the input
-                        if (typeof option === "string") {
-                          // console.log("option inside type string",option)
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="city">City</label>
+                      <Autocomplete
+                        disabled
+                        className="searchable-input"
+                        handleHomeEndKeys
+                        value={member?.city ? member.city : ""}
+                        id="free-solo-with-text-demo"
+                        options={[
+                          "Mumbai",
+                          "Paris",
+                          "London",
+                          "New york",
+                          "Sydney",
+                          "Melbourne",
+                          "Perth",
+                          "Toronto",
+                          "Vancour",
+                          "Texas",
+                          "Delhi",
+                          "Tokyo",
+                        ]}
+                        getOptionLabel={(option) => {
+                          // Value selected with enter, right from the input
+                          if (typeof option === "string") {
+                            // console.log("option inside type string",option)
+                            return option;
+                          }
                           return option;
-                        }
-                        return option;
-                      }}
-                      renderOption={(props, option) => (
-                        <li {...props}>{option}</li>
-                      )}
-                      //   sx={{ width: 300 }}
-                      freeSolo
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          placeholder="NA"
-                        />
-                      )}
-                    />
+                        }}
+                        renderOption={(props, option) => (
+                          <li {...props}>{option}</li>
+                        )}
+                        //   sx={{ width: 300 }}
+                        freeSolo
+                        renderInput={(params) => (
+                          <TextField {...params} placeholder="NA" />
+                        )}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="address">
-                      Address <span className="mandatory">*</span>
-                    </label>
-                    <TextField
-                      disabled
-                      multiline
-                      value={member?.address ? member.address : ""}
-                      //   {...field}
-                      inputProps={{
-                        maxLength: 250,
-                      }}
-                      className={`input-textarea`}
-                      id="outlined-basic"
-                      placeholder="Enter address"
-                      variant="outlined"
-                    />
-                    {/* Add Address Text Area field here */}
-                    {/* <Input control={control} name="city" placeholder="Enter state"/> */}
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="address">
+                        Address <span className="mandatory">*</span>
+                      </label>
+                      <TextField
+                        disabled
+                        multiline
+                        value={member?.address ? member.address : ""}
+                        //   {...field}
+                        inputProps={{
+                          maxLength: 250,
+                        }}
+                        className={`input-textarea`}
+                        id="outlined-basic"
+                        placeholder="Enter address"
+                        variant="outlined"
+                        helperText=" "
+                      />
+                      {/* Add Address Text Area field here */}
+                      {/* <Input control={control} name="city" placeholder="Enter state"/> */}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="card-inner-wrap">
-              <h2 className="sub-heading1">CGF Office Details</h2>
-              <div className="flex-between card-blk">
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="cgfOfficeRegion">
-                      Region <span className="mandatory">*</span>
-                    </label>
-                    <Dropdown
-                      isDisabled
-                      control={control}
-                      name="cgfOfficeRegion"
-                      options={arrOfRegions ? arrOfRegions : []}
-                    />
+              <div className="card-inner-wrap">
+                <h2 className="sub-heading1">CGF Office Details</h2>
+                <div className="flex-between card-blk">
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="cgfOfficeRegion">
+                        Region <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        isDisabled
+                        control={control}
+                        name="cgfOfficeRegion"
+                        options={arrOfRegions ? arrOfRegions : []}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="cgfOfficeCountry">
-                      Country <span className="mandatory">*</span>
-                    </label>
-                    <Dropdown
-                      isDisabled
-                      control={control}
-                      name="cgfOfficeCountry"
-                      placeholder="Select country"
-                      options={arrOfCgfOfficeCountryRegions ? arrOfCgfOfficeCountryRegions : []}
-                    />
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="cgfOfficeCountry">
+                        Country <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        isDisabled
+                        control={control}
+                        name="cgfOfficeCountry"
+                        placeholder="Select country"
+                        options={
+                          arrOfCgfOfficeCountryRegions
+                            ? arrOfCgfOfficeCountryRegions
+                            : []
+                        }
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="cgfOffice">
-                      Office <span className="mandatory">*</span>
-                    </label>
-                    <Dropdown
-                      isDisabled
-                      control={control}
-                      name="cgfOffice"
-                      placeholder="Select office"
-                      options={["Mumbai", "Delhi", "Vadodara"]}
-                    />
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="cgfOffice">
+                        Office <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        isDisabled
+                        control={control}
+                        name="cgfOffice"
+                        placeholder="Select office"
+                        options={["Mumbai", "Delhi", "Vadodara"]}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="card-inner-wrap">
-              <h2 className="sub-heading1">Member Contact Details</h2>
-              <div className="flex-between card-blk">
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <div className="salutation-wrap">
-                      <div className="salutation-blk">
-                        <label htmlFor="memberContactSalutation">
-                          Salutation <span className="mandatory">*</span>
-                        </label>
-                        <Dropdown
-                          isDisabled
-                          control={control}
-                          name="memberContactSalutation"
-                          placeholder="Mr."
-                          options={["Mr.", "Mrs.", "Ms."]}
-                        />
+              <div className="card-inner-wrap">
+                <h2 className="sub-heading1">Member Contact Details</h2>
+                <div className="flex-between card-blk">
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <div className="salutation-wrap">
+                        <div className="salutation-blk">
+                          <label htmlFor="memberContactSalutation">
+                            Salutation <span className="mandatory">*</span>
+                          </label>
+                          <Dropdown
+                            isDisabled
+                            control={control}
+                            name="memberContactSalutation"
+                            placeholder="Mr."
+                            options={["Mr.", "Mrs.", "Ms."]}
+                          />
+                        </div>
+                        <div className="salutation-inputblk">
+                          <label htmlFor="memberContactFullName">
+                            Full Name <span className="mandatory">*</span>
+                          </label>
+                          <Input
+                            isDisabled
+                            control={control}
+                            name="memberContactFullName"
+                            placeholder="Enter full name"
+                          />
+                        </div>
                       </div>
-                      <div className="salutation-inputblk">
-                        <label htmlFor="memberContactFullName">
-                          Full Name <span className="mandatory">*</span>
-                        </label>
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="title">Title</label>
+                      <Input
+                        isDisabled
+                        control={control}
+                        name="title"
+                        placeholder="NA"
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="department">Department</label>
+                      <Input
+                        isDisabled
+                        control={control}
+                        name="department"
+                        placeholder="NA"
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="memberContactEmail">
+                        Email <span className="mandatory">*</span>
+                      </label>
+                      <Input
+                        isDisabled
+                        control={control}
+                        name="memberContactEmail"
+                        placeholder="NA"
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="memberContactPhoneNumber">
+                        Phone Number
+                      </label>
+                      <div className="phone-number-field">
+                        <div className="select-field country-code">
+                          <Autocomplete
+                            className="phone-number-disable"
+                            readOnly
+                            value={
+                              member?.memberRepresentativeId?.countryCode
+                                ? member.memberRepresentativeId.countryCode
+                                : ""
+                            }
+                            options={arrOfCountryCode ? arrOfCountryCode : []}
+                            autoHighlight
+                            placeholder="Select country code"
+                            renderOption={(props, option) => (
+                              <li {...props}>{option}</li>
+                            )}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                }}
+                                onChange={() =>
+                                  trigger("memberContactPhoneNuber")
+                                }
+                                placeholder={"NA"}
+                              />
+                            )}
+                          />
+                        </div>
                         <Input
                           isDisabled
                           control={control}
-                          name="memberContactFullName"
-                          placeholder="Enter full name"
+                          name="memberContactPhoneNuber"
+                          placeholder="NA"
                         />
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="title">Title</label>
-                    <Input
-                      isDisabled
-                      control={control}
-                      name="title"
-                      placeholder="NA"
-                    />
-                  </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="department">Department</label>
-                    <Input
-                      isDisabled
-                      control={control}
-                      name="department"
-                      placeholder="NA"
-                    />
-                  </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="memberContactEmail">
-                      Email <span className="mandatory">*</span>
-                    </label>
-                    <Input
-                      isDisabled
-                      control={control}
-                      name="memberContactEmail"
-                      placeholder="NA"
-                    />
-                  </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="memberContactPhoneNumber">
-                      Phone Number
-                    </label>
-                    <div className="phone-number-field">
-                      <div className="select-field country-code">
-                        <Autocomplete
-                          className="phone-number-disable"
-                          readOnly
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="status">
+                        Status <span className="mandatory">*</span>
+                      </label>
+                      <div className="radio-btn-field">
+                        <RadioGroup
                           value={
-                            member?.memberRepresentativeId?.countryCode
-                              ? member.memberRepresentativeId.countryCode
-                              : ""
+                            member?.memberRepresentativeId?.isActive
+                              ? "active"
+                              : "inactive"
                           }
-                          options={arrOfCountryCode ? arrOfCountryCode : []}
-                          autoHighlight
-                          placeholder="Select country code"
-                          renderOption={(props, option) => (
-                            <li {...props}>{option}</li>
-                          )}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              inputProps={{
-                                ...params.inputProps,
-                              }}
-                              onChange={() =>
-                                trigger("memberContactPhoneNuber")
-                              }
-                              placeholder={"NA"}
-                            />
-                          )}
-                        />
+                          // {...field}
+                          aria-labelledby="demo-radio-buttons-group-label"
+                          name="radio-buttons-group"
+                          className="radio-btn"
+                        >
+                          <FormControlLabel
+                            disabled
+                            value="active"
+                            control={<Radio />}
+                            label="Active"
+                          />
+                          <FormControlLabel
+                            disabled
+                            value="inactive"
+                            control={<Radio />}
+                            label="Inactive"
+                          />
+                        </RadioGroup>
                       </div>
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="totalOperationMembers">
+                        Toatal Operation Member{" "}
+                        <span className="mandatory">*</span>
+                      </label>
                       <Input
                         isDisabled
                         control={control}
-                        name="memberContactPhoneNuber"
+                        name="totalOperationMembers"
+                        placeholder="NA"
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="createdBy">
+                        Created By <span className="mandatory">*</span>
+                      </label>
+                      <Input
+                        isDisabled
+                        control={control}
+                        name="createdBy"
                         placeholder="NA"
                       />
                     </div>
                   </div>
                 </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="status">
-                      Status <span className="mandatory">*</span>
-                    </label>
-                    <div className="radio-btn-field">
-                      <RadioGroup
-                        value={
-                          member?.memberRepresentativeId?.isActive
-                            ? "active"
-                            : "inactive"
-                        }
-                        // {...field}
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        name="radio-buttons-group"
-                        className="radio-btn"
-                      >
-                        <FormControlLabel
-                          disabled
-                          value="active"
-                          control={<Radio />}
-                          label="Active"
-                        />
-                        <FormControlLabel
-                          disabled
-                          value="inactive"
-                          control={<Radio />}
-                          label="Inactive"
-                        />
-                      </RadioGroup>
-                    </div>
-                  </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="totalOperationMembers">
-                      Toatal Operation Member{" "}
-                      <span className="mandatory">*</span>
-                    </label>
-                    <Input
-                      isDisabled
-                      control={control}
-                      name="totalOperationMembers"
-                      placeholder="NA"
-                    />
-                  </div>
-                </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label htmlFor="createdBy">
-                      Created By <span className="mandatory">*</span>
-                    </label>
-                    <Input
-                      isDisabled
-                      control={control}
-                      name="createdBy"
-                      placeholder="NA"
-                    />
-                  </div>
-                </div>
               </div>
-            </div>
-            <div className="form-header member-form-header flex-between">
-              <div className="form-header-left-blk flex-start">
-                {/* <h2 className="heading2 mr-40">Members</h2> */}
-              </div>
-              <div className="form-header-right-txt">
-                <div className="tertiary-btn-blk mr-20">
-                  <span className="download-icon">
-                    <DownloadIcon />
-                  </span>
-                  Download
+              <div className="form-header member-form-header flex-between">
+                <div className="form-header-left-blk flex-start">
+                  {/* <h2 className="heading2 mr-40">Members</h2> */}
                 </div>
-                <div className="form-btn">
-                  <button
-                    type="submit"
-                    className="primary-button add-button"
-                    onClick={() => navigate("/users/members/add-member")}
-                  >
-                    Add Operation Member
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="member-filter-sect">
-              <div className="member-filter-wrap flex-between">
-                <div className="member-filter-left">
-                  <div className="searchbar">
-                    <input
-                      type="text"
-                      value={search}
-                      name="search"
-                      placeholder="Search member name, email and member company"
-                      onKeyDown={(e) =>
-                        e.key === "Enter" && setMakeApiCall(true)
-                      }
-                      onChange={onSearchChangeHandler}
-                    />
-                    <button type="submit">
-                      <i className="fa fa-search"></i>
+                <div className="form-header-right-txt">
+                  <div className="tertiary-btn-blk mr-20">
+                    <span className="download-icon">
+                      <DownloadIcon />
+                    </span>
+                    Download
+                  </div>
+                  <div className="form-btn">
+                    <button
+                      type="submit"
+                      className="primary-button add-button"
+                      onClick={() => navigate("/users/members/add-member")}
+                    >
+                      Add Operation Member
                     </button>
                   </div>
                 </div>
-                <div className="member-filter-right">
-                  <div className="filter-select-wrap flex-between">
-                    <div className="filter-select-field">
-                      <div className="dropdown-field">
-                        <Select
-                          sx={{display: "none"}}
-                          name="createdBy"
-                          multiple
-                          value={selectedCreatedBy}
-                          onChange={handleCreatedByFilter}
-                          onFocus={(e) => onFilterFocusHandler("createdBy")}
-                          renderValue={(val) =>
-                            selectedCreatedBy.length > 1
-                              ? val.slice(1).join(", ")
-                              : "Created By"
-                          }
-                        >
-                          <MenuItem
-                            value="none"
-                            sx={{
-                              display:
-                                showFilterPlaceholder === "createdBy" && "none",
-                            }}
+              </div>
+              <div className="member-filter-sect">
+                <div className="member-filter-wrap flex-between">
+                  <div className="member-filter-left">
+                    <div className="searchbar">
+                      <input
+                        type="text"
+                        value={search}
+                        name="search"
+                        placeholder="Search member name, email and member company"
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && setMakeApiCall(true)
+                        }
+                        onChange={onSearchChangeHandler}
+                      />
+                      <button type="submit">
+                        <i className="fa fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="member-filter-right">
+                    <div className="filter-select-wrap flex-between">
+                      <div className="filter-select-field">
+                        <div className="dropdown-field">
+                          <Select
+                            sx={{ display: "none" }}
+                            name="createdBy"
+                            multiple
+                            value={selectedCreatedBy}
+                            onChange={handleCreatedByFilter}
+                            onFocus={(e) => onFilterFocusHandler("createdBy")}
+                            renderValue={(val) =>
+                              selectedCreatedBy.length > 1
+                                ? val.slice(1).join(", ")
+                                : "Created By"
+                            }
                           >
-                            Created By
-                          </MenuItem>
+                            <MenuItem
+                              value="none"
+                              sx={{
+                                display:
+                                  showFilterPlaceholder === "createdBy" &&
+                                  "none",
+                              }}
+                            >
+                              Created By
+                            </MenuItem>
 
-                          <MenuItem value="">
-                            <Checkbox
-                              className="table-checkbox"
-                              checked={isAllCreatedByMemberSelected}
-                              indeterminate={
-                                selectedCreatedBy.length > 1 &&
-                                selectedCreatedBy.length - 1 < allMembers.length
-                              }
-                            />
-                            Select All
-                          </MenuItem>
-                          {allMembers.map((member) => (
-                            <MenuItem key={member} value={member}>
+                            <MenuItem value="">
                               <Checkbox
                                 className="table-checkbox"
-                                checked={selectedCreatedBy.indexOf(member) > -1}
+                                checked={isAllCreatedByMemberSelected}
+                                indeterminate={
+                                  selectedCreatedBy.length > 1 &&
+                                  selectedCreatedBy.length - 1 <
+                                    allMembers.length
+                                }
                               />
-                              {member}
+                              Select All
                             </MenuItem>
-                          ))}
-                        </Select>
+                            {allMembers.map((member) => (
+                              <MenuItem key={member} value={member}>
+                                <Checkbox
+                                  className="table-checkbox"
+                                  checked={
+                                    selectedCreatedBy.indexOf(member) > -1
+                                  }
+                                />
+                                {member}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </div>
                       </div>
-                    </div>
-                    <div className="filter-select-field">
-                      <div className="dropdown-field">
-                        <Select
-                          sx={{display:"none"}}
-                          name="status"
-                          value={filters.status}
-                          onChange={onFilterChangehandler}
-                          onFocus={(e) => onFilterFocusHandler("status")}
-                        >
-                          <MenuItem
-                            value="none"
-                            sx={{
-                              display:
-                                showFilterPlaceholder === "status" && "none",
-                            }}
+                      <div className="filter-select-field">
+                        <div className="dropdown-field">
+                          <Select
+                            sx={{ display: "none" }}
+                            name="status"
+                            value={filters.status}
+                            onChange={onFilterChangehandler}
+                            onFocus={(e) => onFilterFocusHandler("status")}
                           >
-                            Status
-                          </MenuItem>
-                          <MenuItem value="active">Active</MenuItem>
-                          <MenuItem value="inactive">Inactive</MenuItem>
-                        </Select>
+                            <MenuItem
+                              value="none"
+                              sx={{
+                                display:
+                                  showFilterPlaceholder === "status" && "none",
+                              }}
+                            >
+                              Status
+                            </MenuItem>
+                            <MenuItem value="active">Active</MenuItem>
+                            <MenuItem value="inactive">Inactive</MenuItem>
+                          </Select>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div className="member-info-wrapper table-content-wrap">
+                <TableComponent
+                  tableHead={tableHead}
+                  records={records}
+                  handleChangePage1={handleTablePageChange}
+                  handleChangeRowsPerPage1={handleRowsPerPageChange}
+                  page={page}
+                  rowsPerPage={rowsPerPage}
+                  selected={selected}
+                  setSelected={setSelected}
+                  totalRecords={totalRecords}
+                  orderBy={orderBy}
+                  // icons={["visibility"]}
+                  onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
+                  order={order}
+                  setOrder={setOrder}
+                  setOrderBy={setOrderBy}
+                  setCheckBoxes={false}
+                  onRowClick
+                />
+              </div>
             </div>
-            <div className="member-info-wrapper table-content-wrap">
-              <TableComponent
-                tableHead={tableHead}
-                records={records}
-                handleChangePage1={handleTablePageChange}
-                handleChangeRowsPerPage1={handleRowsPerPageChange}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                selected={selected}
-                setSelected={setSelected}
-                totalRecords={totalRecords}
-                orderBy={orderBy}
-                // icons={["visibility"]}
-                onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
-                order={order}
-                setOrder={setOrder}
-                setOrderBy={setOrderBy}
-                setCheckBoxes={false}
-                onRowClick
-              />
-            </div>
-          </div>
+          )}
         </div>
       </section>
     </div>

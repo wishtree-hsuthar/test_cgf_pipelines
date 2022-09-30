@@ -166,7 +166,7 @@ const Login = (prop) => {
                                     <form
                                         onSubmit={handleSubmit(submitLoginData)}
                                     >
-                                        <div class="form-group">
+                                        <div class="form-group mb-40">
                                             <label for="emailid">
                                                 Username or Email Id{" "}
                                                 <span class="mandatory">*</span>
@@ -187,7 +187,7 @@ const Login = (prop) => {
                                                 }
                                             />
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group mb-40">
                                             <label for="password">
                                                 Password{" "}
                                                 <span class="mandatory">*</span>

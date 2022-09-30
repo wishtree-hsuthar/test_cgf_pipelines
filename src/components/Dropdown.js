@@ -28,7 +28,7 @@ function Dropdown({
       },
     },
   };
-  const [showPlaceholder, setShowPlaceholder] = useState(true);
+  // const [showPlaceholder, setShowPlaceholder] = useState(true);
   console.log("options", options);
   return (
     <FormControl className="select-reusable" disabled={isDisabled}>
@@ -39,20 +39,20 @@ function Dropdown({
           value={value}
           placeholder={placeholder}
           onChange={myOnChange ? myOnChange : onChange} // send value to hook form
-          onFocus={(e) => setShowPlaceholder(false)}
+          // onFocus={(e) => setShowPlaceholder(false)}
           inputRef={ref}
           fullWidth={true}
         >
           <MenuItem
             selected
             value=""
-            sx={{
-              display: !showPlaceholder && "none",
-            }}
+            // sx={{
+            //   display: !showPlaceholder && "none",
+            // }}
           >
             {placeholder}
           </MenuItem>
-          {options?.map((option) => (
+          {options && options?.map((option) => (
             <MenuItem
               key={option.hasOwnProperty("_id") ? option?._id : option}
               value={option.hasOwnProperty("_id") ? option?._id : option}

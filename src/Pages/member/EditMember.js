@@ -109,7 +109,7 @@ const myHelper = {
     pattern: "Invalid Input",
   },
   memberContactCountryCode: {
-    required: "sekect country code"
+    required: "sekect country code",
   },
   memberContactPhoneNuber: {
     required: "Enter country code",
@@ -322,7 +322,7 @@ const EditMember = () => {
   };
   const getCountries = async (region) => {
     try {
-      if(region){
+      if (region) {
         const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
         return regionCountries;
       }
@@ -361,7 +361,12 @@ const EditMember = () => {
       );
       setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp1]);
       const stateCountries = await axios.get(STATES + `/${watch("country")}`);
-      console.log("stateCountries",stateCountries,"country",watch("country"))
+      console.log(
+        "stateCountries",
+        stateCountries,
+        "country",
+        watch("country")
+      );
       setArrOfStateCountry(stateCountries.data);
 
       // getCountries()
@@ -392,39 +397,56 @@ const EditMember = () => {
     );
     setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
   };
-  const getMemberByID = async () => {
-    const response = await axios.get(MEMBER + `/${params.id}`);
-    // console.log("response for member: ", response);
-    const data = response.data;
-    reset({
-      memberCompany: data?.companyName,
-      companyType: data?.companyType,
-      parentCompany: data?.parentCompany,
-      cgfCategory: data?.cgfCategory,
-      cgfActivity: data?.cgfActivity,
-      corporateEmail: data?.corporateEmail,
-      countryCode: data?.countryCode,
-      phoneNumber: data?.phoneNumber.toString(),
-      websiteUrl: data?.website,
-      region: data?.region,
-      country: data?.country,
-      state: data?.state,
-      city: data?.city,
-      address: data?.address,
-      cgfOfficeRegion: data?.cgfOfficeRegion,
-      cgfOfficeCountry: data?.cgfOfficeCountry,
-      cgfOffice: data?.cgfOffice,
-      memberContactSalutation: "Mr.",
-      memberContactFullName: data?.memberRepresentativeId?.name,
-      title: data?.memberRepresentativeId?.title,
-      department: data?.memberRepresentativeId?.department,
-      memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
-      memberContactEmail: data?.memberRepresentativeId?.email,
-      memberContactPhoneNuber:
-        data?.memberRepresentativeId?.phoneNumber?.toString(),
-      status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
-    });
-    setMember(response.data);
+  const getMemberByID = async (isMounted) => {
+    try {
+      const response = await axios.get(MEMBER + `/${params.id}`);
+      // console.log("response for member: ", response);
+      const data = response.data;
+      reset({
+        memberCompany: data?.companyName,
+        companyType: data?.companyType,
+        parentCompany: data?.parentCompany,
+        cgfCategory: data?.cgfCategory,
+        cgfActivity: data?.cgfActivity,
+        corporateEmail: data?.corporateEmail,
+        countryCode: data?.countryCode,
+        phoneNumber: data?.phoneNumber.toString(),
+        websiteUrl: data?.website,
+        region: data?.region,
+        country: data?.country,
+        state: data?.state,
+        city: data?.city,
+        address: data?.address,
+        cgfOfficeRegion: data?.cgfOfficeRegion,
+        cgfOfficeCountry: data?.cgfOfficeCountry,
+        cgfOffice: data?.cgfOffice,
+        memberContactSalutation: "Mr.",
+        memberContactFullName: data?.memberRepresentativeId?.name,
+        title: data?.memberRepresentativeId?.title,
+        department: data?.memberRepresentativeId?.department,
+        memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
+        memberContactEmail: data?.memberRepresentativeId?.email,
+        memberContactPhoneNuber:
+          data?.memberRepresentativeId?.phoneNumber?.toString(),
+        status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
+      });
+      setMember(response.data);
+    } catch (error) {
+      console.log("error",error)
+      if (error?.code === "ERR_CANCELED") return;
+      isMounted && setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something Went Wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+    }
   };
   //prevent form submission on press of enter key
   const checkKeyDown = (e) => {
@@ -435,7 +457,7 @@ const EditMember = () => {
     const controller = new AbortController();
     arrOfRegions.length === 0 && getRegions(controller);
     arrOfCountryCode.length === 0 && getCountryCode(controller);
-    isMounted && getMemberByID();
+    isMounted && getMemberByID(isMounted);
     // console.log("member",member)
 
     return () => {
@@ -459,7 +481,9 @@ const EditMember = () => {
               <Link to="/users/members">Members</Link>
             </li>
             <li>
-              <Link to={`/users/members/view-member/${params.id}`}>View Member</Link>
+              <Link to={`/users/members/view-member/${params.id}`}>
+                View Member
+              </Link>
             </li>
             <li>Edit Member</li>
           </ul>
@@ -616,14 +640,26 @@ const EditMember = () => {
                     <div className="form-group">
                       {/* <div className="select-field"> */}
                       <label htmlFor="cgfActivity">
-                        CGF Activity <span className="mandatory">*</span>
+                        CGF Activity{" "}
+                        {watch("cgfCategory") !== "Other" && (
+                          <span className="mandatory">*</span>
+                        )}
                       </label>
                       <Dropdown
                         control={control}
                         name="cgfActivity"
                         placeholder="Select activity"
                         myHelper={myHelper}
-                        rules={{ required: true }}
+                        rules={{
+                          validate: (value) => {
+                            if (
+                              !value &&
+                              (watch("cgfCategory") === "Manufacturer" ||
+                                watch("cgfCategory") === "Retailer")
+                            )
+                              return "Select activity";
+                          },
+                        }}
                         options={
                           watch("cgfCategory") === "Manufacturer"
                             ? cgfActivitiesManufacturer
@@ -661,13 +697,15 @@ const EditMember = () => {
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
-                      <label htmlFor="phoneNumber">Phone Number <span className="mandatory">*</span></label>
+                      <label htmlFor="phoneNumber">
+                        Phone Number <span className="mandatory">*</span>
+                      </label>
                       <div className="phone-number-field">
                         <div className="select-field country-code">
                           <Controller
                             control={control}
                             name="countryCode"
-                            rules={{required: true}}
+                            rules={{ required: true }}
                             // rules={{
                             //   validate: () => {
                             //     if (watch("phoneNumber") && !watch("countryCode"))
@@ -677,7 +715,7 @@ const EditMember = () => {
                             render={({ field, fieldState: { error } }) => (
                               <Autocomplete
                                 {...field}
-                                className={`${error && 'autocomplete-error'}`}
+                                className={`${error && "autocomplete-error"}`}
                                 onChange={(event, newValue) => {
                                   console.log("inside autocomplete onchange");
                                   console.log("new Value ", newValue);
@@ -944,7 +982,11 @@ const EditMember = () => {
                         placeholder="Select country"
                         myHelper={myHelper}
                         rules={{ required: true }}
-                        options={arrOfCgfOfficeCountryRegions ? arrOfCgfOfficeCountryRegions : []}
+                        options={
+                          arrOfCgfOfficeCountryRegions
+                            ? arrOfCgfOfficeCountryRegions
+                            : []
+                        }
                       />
                     </div>
                   </div>
@@ -979,7 +1021,7 @@ const EditMember = () => {
                           <Dropdown
                             control={control}
                             name="memberContactSalutation"
-                            placeholder="Mr."
+                            placeholder=""
                             myHelper={myHelper}
                             rules={{ required: true }}
                             options={["Mr.", "Mrs.", "Ms."]}
@@ -1061,12 +1103,12 @@ const EditMember = () => {
                             control={control}
                             name="memberContactCountryCode"
                             rules={{
-                              required: true
+                              required: true,
                             }}
-                            render={({ field,fieldState: { error } }) => (
+                            render={({ field, fieldState: { error } }) => (
                               <Autocomplete
                                 {...field}
-                                className={`${error && 'autocomplete-error'}`}
+                                className={`${error && "autocomplete-error"}`}
                                 onChange={(event, newValue) => {
                                   newValue && typeof newValue === "object"
                                     ? setValue(
@@ -1097,7 +1139,7 @@ const EditMember = () => {
                                       trigger("memberContactPhoneNuber")
                                     }
                                     // onSubmit={() =>
-      //   setValue("memberContactCountryCode", "")
+                                    //   setValue("memberContactCountryCode", "")
                                     // }
                                     placeholder={"NA"}
                                     helperText={

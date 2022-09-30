@@ -24,14 +24,15 @@ const Header = () => {
     const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
     const MEMBER_ACCESS = userAuth?.roleId?.name == "Member";
     const OPERATION_MEMBER = userAuth?.roleId?.name == "Operation Member";
-
+    
+    console.log("user Auth",userAuth)
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const [activeStateForMembers, setActiveStateForMembers] = useState(false);
     const [activeStateForOperationMembers, setActiveStateForOperationMembers] =
         useState(false);
-    console.log("location in header", location.pathname);
+    // console.log("location in header", location.pathname);
     const routeAddress = ["/members", "/operation_members"];
     const myFunction = (activeState) => {
         if (activeState === "/members") {
@@ -46,7 +47,7 @@ const Header = () => {
             return "";
         }
     };
-    console.log("active state", myFunction);
+    // console.log("active state", myFunction);
     // const activeAddress = routeAddress.filter(myFunction);
     useEffect(() => {
         // const controller = new AbortController();

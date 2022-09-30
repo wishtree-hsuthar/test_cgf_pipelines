@@ -39,6 +39,7 @@ const SetPassword = () => {
     // }, []);
     useEffect(() => {
         let controller = new AbortController();
+        document.body.classList.add("login-page");
         const verifyForgotToken = async () => {
             try {
                 const { response } = await publicAxios.get(
@@ -70,6 +71,7 @@ const SetPassword = () => {
         };
         verifyForgotToken();
         return () => {
+            document.body.classList.remove("login-page");
             controller.abort();
         };
     }, []);
@@ -171,7 +173,7 @@ const SetPassword = () => {
                                 </h2>
                                 <div class="login-form">
                                     <form onSubmit={handleSubmit(submitForm)}>
-                                        <div class="form-group">
+                                        <div class="form-group mb-40">
                                             <label for="password">
                                                 New Password{" "}
                                                 <span class="mandatory">*</span>
@@ -246,7 +248,7 @@ const SetPassword = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group mb-40">
                                             <label for="password">
                                                 Confirm Password{" "}
                                                 <span class="mandatory">*</span>

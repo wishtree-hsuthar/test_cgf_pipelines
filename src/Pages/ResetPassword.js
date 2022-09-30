@@ -79,6 +79,7 @@ const ResetPassword = () => {
         verifyForgotToken();
         return () => {
             controller.abort();
+            document.body.classList.remove("login-page");
         };
     }, []);
 
@@ -176,7 +177,7 @@ const ResetPassword = () => {
                                 </h2>
                                 <div class="login-form">
                                     <form onSubmit={handleSubmit(submitForm)}>
-                                        <div class="form-group">
+                                        <div class="form-group mb-40">
                                             <label for="password">
                                                 New Password{" "}
                                                 <span class="mandatory">*</span>
@@ -246,7 +247,7 @@ const ResetPassword = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group mb-40">
                                             <label for="password">
                                                 Confirm Password{" "}
                                                 <span class="mandatory">*</span>
