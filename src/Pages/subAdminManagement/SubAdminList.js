@@ -474,7 +474,7 @@ const SubAdminList = () => {
                             </div> */}
                         </div>
                     </div>
-                    <div className="member-info-wrapper table-content-wrap">
+                    <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
                         <TabPanel value={value} index={0}>
                             {value === 0 && (
                                 <OnBoardedSubAdminsTable

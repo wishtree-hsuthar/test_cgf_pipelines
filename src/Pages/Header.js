@@ -21,6 +21,7 @@ const Header = () => {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [isActive, setActive] = React.useState("false");
     const userAuth = useSelector((state) => state.user.userObj);
+    let initials = userAuth?.name?.split(" ");
     const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
     const MEMBER_ACCESS = userAuth?.roleId?.name == "Member";
     const OPERATION_MEMBER = userAuth?.roleId?.name == "Operation Member";
@@ -276,18 +277,26 @@ const Header = () => {
                                         <div className="user-blk flex-between">
                                             <div className="user-img">
                                                 <span className="user-name-txt">
-                                                    ER
+                                                    {initials?.length >= 1 &&
+                                                        initials[0].slice(
+                                                            0,
+                                                            1
+                                                        ) +
+                                                            initials[1]?.slice(
+                                                                0,
+                                                                1
+                                                            )}
                                                 </span>
                                             </div>
                                             <div className="user-info">
                                                 <span className="user-name">
-                                                    Erin
+                                                    {userAuth?.name}
                                                 </span>
                                                 <span
                                                     className="user-type"
                                                     onClick={handleOpenUserMenu}
                                                 >
-                                                    Super Admin{" "}
+                                                    {userAuth?.roleId?.name}
                                                     <span
                                                         className={
                                                             isActive

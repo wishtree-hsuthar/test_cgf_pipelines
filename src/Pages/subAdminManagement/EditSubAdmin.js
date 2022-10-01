@@ -474,6 +474,7 @@ const EditSubAdmin = () => {
                                 <div className="form-btn flex-between add-members-btn">
                                     <button
                                         onClick={handleCancel}
+                                        type={"reset"}
                                         className="secondary-button mr-10"
                                     >
                                         Cancel

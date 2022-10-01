@@ -1,0 +1,12 @@
+@media screen and (max-width: 1200px) {
+    .assessment-tab-wrap .MuiTab-root{padding: 30px 15px;}
+    .card-form-three-field {flex: 0 0 31.3%;max-width: 31.3%;}
+}
+@media screen and (max-width: 1024px) {
+    .login-rightblk{padding: 0 30px;}
+}
+
+@media screen and (max-width: 768px) {
+    .assessment-tab-wrap .MuiTabs-flexContainer{flex-wrap: wrap;}
+    
+}

@@ -106,7 +106,7 @@ const ForgetPassword = () => {
                                         class="img-fluid"
                                     />
                                 </div>
-                                <h2 class="heading1 text-uppercase">
+                                <h2 class="heading1 text-uppercase mb-40">
                                     Forget password
                                 </h2>
                                 <p className="forget-password-message">
@@ -116,7 +116,7 @@ const ForgetPassword = () => {
                                 </p>
                                 <div class="login-form">
                                     <form onSubmit={handleSubmit(submitEmail)}>
-                                        <div class="form-group">
+                                        <div class="form-group mb-40">
                                             <label for="emailid">
                                                 Email Id{" "}
                                                 <span class="mandatory">*</span>

@@ -106,7 +106,11 @@ function OnBoardedSubAdminsTable({
             // delete object["_id"];
             object["createdAt"] = new Date(
                 object["createdAt"]
-            ).toLocaleDateString("en-US");
+            ).toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
             object["role"] = object["subRole"][0].name;
             delete object["subRole"];
             delete object["subRoleId"];
