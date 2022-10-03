@@ -183,7 +183,7 @@ const Login = (prop) => {
                                                 helperText={
                                                     errors.email
                                                         ? errors.email.message
-                                                        : ""
+                                                        : " "
                                                 }
                                             />
                                         </div>
@@ -248,7 +248,7 @@ const Login = (prop) => {
                                                     {...register("password")}
                                                 />
                                                 <p className={`password-error`}>
-                                                    {errors.password?.message}
+                                                    {errors?.password ? errors.password?.message : <span>&nbsp;</span>}
                                                 </p>
                                             </div>
                                         </div>

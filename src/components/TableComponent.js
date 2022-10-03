@@ -30,7 +30,7 @@ function EnhancedTableHead(props) {
     setCheckBoxes,
   } = props;
   const createSortHandler = (property) => (event) => {
-    console.log("property", property, "event", event.target);
+    // console.log("property", property, "event", event.target);
 
     onRequestSort(event, property);
   };
@@ -144,7 +144,7 @@ export default function TableComponent({
     }
     setSelected(newSelected);
   };
-  console.log("selected from multi select", selected);
+  // console.log("selected from multi select", selected);
 
   const handleChangePage = (_event, newPage) => {
     // console.log("page",event.target.value)
@@ -152,7 +152,7 @@ export default function TableComponent({
   };
 
   const handleSingleSelect = (id) => {
-    console.log("id in table component for radio click", id);
+    // console.log("id in table component for radio click", id);
     handleSingleUserSelect(id);
   };
 
@@ -182,7 +182,7 @@ export default function TableComponent({
       >
         <Paper sx={{ width: "100%", mb: 2 }}>
           <TableContainer>
-            {records.length > 0 ? (
+            {records?.length > 0 ? (
               <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                 <EnhancedTableHead
                   numSelected={selected.length}
@@ -246,10 +246,10 @@ export default function TableComponent({
                           </TableCell>
                         )}
                         {Object.keys(row).map((cell, _id) => {
-                          console.log("Row cell", row[cell]);
+                          // console.log("Row cell", row[cell],"cell: ",cell);
                           if (cell !== "_id" && cell !== "isActive") {
-                            return row[cell].length <= 30 ? (
-                              <TableCell key={cell}> {typeof row[cell] === "string" ? row[cell][0].toUpperCase() + row[cell].slice(1) : row[cell]}</TableCell>
+                            return row[cell]?.length <= 30 ? (
+                              <TableCell key={cell}> {(typeof row[cell] === "string" && cell !== "email") ? row[cell][0].toUpperCase() + row[cell].slice(1) : row[cell]}</TableCell>
                             ) : (
                               <Tooltip
                                 key={cell}
@@ -258,9 +258,9 @@ export default function TableComponent({
                                 title={row[cell]}
                               >
                                 <TableCell key={cell}>
-                                  {typeof row[cell] === "string"
-                                    ? `${row[cell].slice(0, 30)}...`
-                                    : row[cell]}
+                                  {(typeof row[cell] === "string" && cell !== "email")
+                                    ? row[cell][0].toUpperCase() + `${row[cell].slice(1, 30)}...`
+                                    : `${row[cell].slice(0, 30)}...`}
                                 </TableCell>
                               </Tooltip>
                             );
@@ -326,7 +326,7 @@ export default function TableComponent({
           </TableContainer>
         </Paper>
       </Box>
-      {records.length > 0 && (
+      {records?.length > 0 && (
         <div className="table-footer flex-between">
           <div className="table-footer-left">
             <div className="per-page-blk">
@@ -342,14 +342,14 @@ export default function TableComponent({
                       10
                     </MenuItem>
                     <MenuItem value="20">20</MenuItem>
-                    <MenuItem value="50">50</MenuItem>
+                    {/* <MenuItem value="50">50</MenuItem> */}
                   </Select>
                 </div>
               </div>
             </div>
             <div className="show-entries-txt">
               Showing {(page - 1) * rowsPerPage + 1} to{" "}
-              {(page - 1) * rowsPerPage + records.length} of {totalRecords}{" "}
+              {(page - 1) * rowsPerPage + records?.length} of {totalRecords}{" "}
               Entries
             </div>
           </div>

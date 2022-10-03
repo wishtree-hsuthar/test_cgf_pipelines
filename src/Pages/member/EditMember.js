@@ -6,6 +6,7 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
+import Loader2 from "../../assets/Loader/Loader2.svg";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -20,17 +21,18 @@ import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
+import {memberHelper} from "../../utils/helpertext"
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
 //CGF Categories (Ideally get from backend)
-const cgfCategories = ["Manufacturer", "Retailer", "Other"];
-const cgfActivitiesManufacturer = [
+const cgfCategories1 = ["Manufacturer", "Retailer", "Other"];
+const cgfActivitiesManufacturer1 = [
   "None",
   "Apparel",
   "Food Manufacturer",
   "Personal care & beauty",
 ];
-const cgfActivitiesRetailer = [
+const cgfActivitiesRetailer1 = [
   "Department Store",
   "Ecommerce",
   "Food/Non food retailer",
@@ -41,114 +43,37 @@ const cgfActivitiesRetailer = [
   "Non food retailer",
   "Wholesaler",
 ];
-const myHelper = {
-  memberCompany: {
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    required: "Enter member company",
-  },
-  cgfActivity: {
-    required: "Select Activity",
-  },
-  corporateEmail: {
-    required: "Enter Email",
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    pattern: "Invalid Input",
-  },
-  countryCode: {
-    required: "select country code",
-    validate: "Invalid input",
-  },
-  phoneNumber: {
-    required: "Enter phone number",
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    pattern: "Invalid Input",
-    validate: "Invalid Input",
-  },
-  websiteUrl: {
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    pattern: "Invalid Input",
-  },
-  region: {
-    required: "Select region",
-  },
-  country: {
-    required: "Select country",
-  },
-  state: {
-    required: "Select state",
-  },
-  city: {
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 charcters",
-  },
-  address: {
-    required: "Enter the address",
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-  },
-  memberContactSalutation: {
-    required: "Select the Salutation",
-  },
-  memberContactFullName: {
-    required: "Enter the name",
-    minLength: "Input must contain atleast 3 charcters",
-    maxLength: "Max char limit exceed",
-    pattern: "Invalid Input",
-  },
-  title: {
-    minLength: "Input must contain atleast 3 charcters",
-    maxLength: "Max char limit exceed",
-    pattern: "Invalid Input",
-  },
-  department: {
-    minLength: "Input must contain atleast 3 charcters",
-    maxLength: "Max char limit exceed",
-    pattern: "Invalid Input",
-  },
-  memberContactCountryCode: {
-    required: "sekect country code"
-  },
-  memberContactPhoneNuber: {
-    required: "Enter country code",
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    pattern: "Invalid Input",
-    validate: "Invalid Input",
-  },
-};
-const defaultValues = {
-  memberCompany: "",
-  companyType: "Internal",
-  parentCompany: "",
-  cgfCategory: "Manufacturer",
-  cgfActivity: "",
-  corporateEmail: "",
-  countryCode: "",
-  phoneNumber: "",
-  websiteUrl: "",
-  region: "",
-  country: "",
-  state: "",
-  city: "",
-  address: "",
-  cgfOfficeRegion: "",
-  cgfOfficeCountry: "",
-  cgfOffice: "",
-  memberContactSalutation: "Mr.",
-  memberContactFullName: "",
-  title: "",
-  department: "",
-  memberContactCountryCode: "",
-  memberContactEmail: "",
-  memberContactPhoneNuber: "",
-  status: "active",
-};
+
 const EditMember = () => {
-  const params = useParams();
+  const defaultValues1 = {
+    memberCompany: "",
+    companyType: "Internal",
+    parentCompany: "",
+    cgfCategory: "Manufacturer",
+    cgfActivity: "",
+    corporateEmail: "",
+    countryCode: "",
+    phoneNumber: "",
+    websiteUrl: "",
+    region: "",
+    country: "",
+    state: "",
+    city: "",
+    address: "",
+    cgfOfficeRegion: "",
+    cgfOfficeCountry: "",
+    cgfOffice: "",
+    memberContactSalutation: "Mr.",
+    memberContactFullName: "",
+    title: "",
+    department: "",
+    memberContactCountryCode: "",
+    memberContactEmail: "",
+    memberContactPhoneNuber: "",
+    status: "active",
+  };
+
+  const param = useParams();
   const navigate = useNavigate();
   // Refr for Toaster
   const myRef = React.useRef();
@@ -158,6 +83,22 @@ const EditMember = () => {
     descriptionMessage: "",
     messageType: "success",
   });
+  //method to call all error toaster from this method
+  const setErrorToaster1 = (error) => {
+    console.log("error", error);
+    setToasterDetails(
+      {
+        titleMessage: "Error",
+        descriptionMessage:
+          error?.response?.data?.message &&
+          typeof error.response.data.message === "string"
+            ? error.response.data.message
+            : "Something Went Wrong!",
+        messageType: "error",
+      },
+      () => myRef.current()
+    );
+  };
   //to hold all regions
   const [arrOfRegions, setArrOfRegions] = useState([]);
   //to hold array of countries for perticular region for Company Adress
@@ -167,11 +108,13 @@ const EditMember = () => {
   //to hold array of countries for perticular region for CGF Office details
   const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
     useState([]);
+  // state to manage loader
+  const [isLoading, setIsLoading] = useState(false);
   const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
   const [member, setMember] = useState({});
   const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
     reValidateMode: "onChange",
-    defaultValues: defaultValues,
+    defaultValues: defaultValues1,
   });
   const onSubmitFunctionCall = async (data) => {
     console.log("data", data);
@@ -208,10 +151,10 @@ const EditMember = () => {
       };
 
       console.log("Member Representative Id", member.createdBy);
-
-      const response = await axios.put(MEMBER + `/${params.id}`, {
+      await axios.put(MEMBER + `/${param.id}`, {
         ...backendObject,
       });
+      reset(defaultValues1);
       // console.log("response : ", response);
       setToasterDetails(
         {
@@ -221,26 +164,14 @@ const EditMember = () => {
         },
         () => myRef.current()
       );
-      // console.log("Default values: ", defaultValues);
-      reset({ defaultValues });
+      console.log("Default values: ", defaultValues1);
     } catch (error) {
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      setErrorToaster1(error);
     }
   };
   // On Click cancel handler
   const onClickCancelHandler = () => {
-    reset({ defaultValues });
+    reset({ defaultValues1 });
     navigate("/users/members");
   };
   const onSubmit = (data) => {
@@ -248,8 +179,8 @@ const EditMember = () => {
     onSubmitFunctionCall(data);
     setTimeout(() => navigate("/users/members"), 3000);
   };
-  const formatRegionCountries = (regionCountries) => {
-    regionCountries.forEach(
+  const formatRegionCountries1 = (regionCountries) => {
+   regionCountries && regionCountries.forEach(
       (country, id) =>
         (regionCountries[id] = country.hasOwnProperty("_id")
           ? country.name
@@ -260,40 +191,43 @@ const EditMember = () => {
   };
 
   //method to handle country change
-  const onCountryChangeHandler = async (e) => {
+  const onCountryChangeHandler1 = async (e) => {
     // console.log("Inside Country Change ", e.target.value);
     setValue("country", e.target.value);
     setValue("state", "");
     trigger("country");
     try {
-      const stateCountries = await axios.get(STATES + `/${watch("country")}`);
-      setArrOfStateCountry(stateCountries.data);
+      if(watch("country")){
+        const stateCountries = await axios.get(STATES + `/${watch("country")}`);
+        setArrOfStateCountry(stateCountries.data);
+      }
     } catch (error) {
       console.log("error");
     }
   };
 
   //method to set region and update other fields accordingly
-  const onRegionChangeHandler = async (e) => {
+  const onRegionChangeHandler1= async (e) => {
     // console.log("region: ", e.target.value);
     setValue("country", "");
     setValue("state", "");
     setValue("city", "");
     setValue("region", e.target.value);
     trigger("region");
-    const countriesOnRegion = await getCountries(watch("region"));
+    const countriesOnRegion = await getCountries1(watch("region"));
     // console.log("countries", countriesOnRegion);
-    const arrOfCountryRegionsTemp = formatRegionCountries(
-      countriesOnRegion.data
+    const arrOfCountryRegionsTemp = formatRegionCountries1(
+      countriesOnRegion?.data
     );
-    setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
+    arrOfCountryRegionsTemp && setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
   };
 
-  const categoryChangeHandler = (e) => {
+  const categoryChangeHandler1 = (e) => {
     setValue("cgfCategory", e.target.value);
+    trigger("cgfCategory")
     setValue("cgfActivity", "");
   };
-  const getCountryCode = async (controller) => {
+  const getCountryCode1 = async (controller) => {
     try {
       const response = await axios.get(COUNTRIES, {
         signal: controller.signal,
@@ -307,123 +241,105 @@ const EditMember = () => {
       setArrOfCountryCode([...countryCodeSet]);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      setErrorToaster1(error);
     }
   };
-  const getCountries = async (region) => {
+  const getCountries1 = async (region) => {
     try {
-      const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
-      return regionCountries;
+      if (region) {
+        return await axios.get(REGIONCOUNTRIES + `/${region}`);
+      }
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      setErrorToaster1(error);
       return [];
     }
   };
-  const getRegions = async (controller) => {
+  const getRegions1 = async (controller) => {
     try {
       const regions = await axios.get(REGIONS, { signal: controller.signal });
       // console.log("regions ", regions.data);
       setArrOfRegions(regions.data);
-      const countriesOnRegion1 = await getCountries(watch("region"));
+      const countriesOnRegion1 = await getCountries1(watch("region"));
       // console.log("countries", countriesOnRegion1);
-      const arrOfCountryRegionsTemp1 = formatRegionCountries(
+      const arrOfCountryRegionsTemp1 = formatRegionCountries1(
         countriesOnRegion1.data
       );
       setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
-      const countriesOnRegion2 = await getCountries(watch("cgfOfficeRegion"));
+      const countriesOnRegion2 = await getCountries1(watch("cgfOfficeRegion"));
       console.log("countriesOnRegion2", countriesOnRegion2);
-      const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries(
+      const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries1(
         countriesOnRegion2.data
       );
       setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp1]);
       const stateCountries = await axios.get(STATES + `/${watch("country")}`);
-      console.log("stateCountries",stateCountries,"country",watch("country"))
+      console.log(
+        "stateCountries",
+        stateCountries,
+        "country",
+        watch("country")
+      );
       setArrOfStateCountry(stateCountries.data);
 
-      // getCountries()
+      // getCountries1()
       return arrOfRegions;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      setErrorToaster1(error);
       return [];
     }
   };
-  const getCgfOfficeCountryRegion = async () => {
-    console.log("Inside office change function: ", watch("cgfOfficeRegion"));
-    const countriesOnRegion = await getCountries(watch("cgfOfficeRegion"));
-    console.log("countries region", countriesOnRegion);
-    const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries(
-      countriesOnRegion.data
-    );
-    setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
-  };
-  const getMemberByID = async () => {
-    const response = await axios.get(MEMBER + `/${params.id}`);
-    // console.log("response for member: ", response);
-    const data = response.data;
-    reset({
-      memberCompany: data?.companyName,
-      companyType: data?.companyType,
-      parentCompany: data?.parentCompany,
-      cgfCategory: data?.cgfCategory,
-      cgfActivity: data?.cgfActivity,
-      corporateEmail: data?.corporateEmail,
-      countryCode: data?.countryCode,
-      phoneNumber: data?.phoneNumber.toString(),
-      websiteUrl: data?.website,
-      region: data?.region,
-      country: data?.country,
-      state: data?.state,
-      city: data?.city,
-      address: data?.address,
-      cgfOfficeRegion: data?.cgfOfficeRegion,
-      cgfOfficeCountry: data?.cgfOfficeCountry,
-      cgfOffice: data?.cgfOffice,
-      memberContactSalutation: "Mr.",
-      memberContactFullName: data?.memberRepresentativeId?.name,
-      title: data?.memberRepresentativeId?.title,
-      department: data?.memberRepresentativeId?.department,
-      memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
-      memberContactEmail: data?.memberRepresentativeId?.email,
-      memberContactPhoneNuber:
-        data?.memberRepresentativeId?.phoneNumber?.toString(),
-      status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
-    });
-    setMember(response.data);
+  // const getCgfOfficeCountryRegion = async () => {
+  //   console.log("Inside office change function: ", watch("cgfOfficeRegion"));
+  //   const countriesOnRegion = await getCountries1(watch("cgfOfficeRegion"));
+  //   console.log("countries region", countriesOnRegion);
+  //   const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries1(
+  //     countriesOnRegion.data
+  //   );
+  //   setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
+  // };
+  const getMemberByID1 = async (isMounted) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(MEMBER + `/${param.id}`);
+      // console.log("response for member: ", response);
+      const data = response.data;
+      reset({
+        memberCompany: data?.companyName,
+        companyType: data?.companyType,
+        parentCompany: data?.parentCompany,
+        cgfCategory: data?.cgfCategory,
+        cgfActivity: data?.cgfActivity,
+        corporateEmail: data?.corporateEmail,
+        countryCode: data?.countryCode,
+        phoneNumber: data?.phoneNumber.toString(),
+        websiteUrl: data?.website,
+        region: data?.region,
+        country: data?.country,
+        state: data?.state,
+        city: data?.city,
+        address: data?.address,
+        cgfOfficeRegion: data?.cgfOfficeRegion,
+        cgfOfficeCountry: data?.cgfOfficeCountry,
+        cgfOffice: data?.cgfOffice,
+        memberContactSalutation: "Mr.",
+        memberContactFullName: data?.memberRepresentativeId?.name,
+        title: data?.memberRepresentativeId?.title,
+        department: data?.memberRepresentativeId?.department,
+        memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
+        memberContactEmail: data?.memberRepresentativeId?.email,
+        memberContactPhoneNuber:
+          data?.memberRepresentativeId?.phoneNumber?.toString(),
+        status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
+      });
+      setMember(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log("error", error);
+      if (error?.code === "ERR_CANCELED") return;
+      isMounted && setErrorToaster1(error);
+    }
   };
   //prevent form submission on press of enter key
   const checkKeyDown = (e) => {
@@ -432,9 +348,11 @@ const EditMember = () => {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    arrOfRegions.length === 0 && getRegions(controller);
-    arrOfCountryCode.length === 0 && getCountryCode(controller);
-    isMounted && getMemberByID();
+    (async () => {
+      isMounted && (await getMemberByID1(isMounted));
+      isMounted && (await getRegions1(controller));
+      isMounted && (await getCountryCode1(controller));
+    })();
     // console.log("member",member)
 
     return () => {
@@ -458,7 +376,9 @@ const EditMember = () => {
               <Link to="/users/members">Members</Link>
             </li>
             <li>
-              <Link to={`/users/members/view-member/${params.id}`}>View Member</Link>
+              <Link to={`/users/members/view-member/${param.id}`}>
+                View Member
+              </Link>
             </li>
             <li>Edit Member</li>
           </ul>
@@ -473,719 +393,741 @@ const EditMember = () => {
             onSubmit={handleSubmit(onSubmit)}
             onKeyDown={(e) => checkKeyDown(e)}
           >
-            <div className="card-wrapper">
-              <div className="card-inner-wrap">
-                <h2 className="sub-heading1">Company Details</h2>
-                <div className="card-blk flex-between">
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="memberCompany">
-                        Member Company <span className="mandatory">*</span>
-                      </label>
-                      <Input
-                        control={control}
-                        name="memberCompany"
-                        placeholder="Enter member company"
-                        myHelper={myHelper}
-                        rules={{
-                          required: true,
-                          maxLength: 50,
-                          minLength: 3,
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="companyType">
-                        Company Type <span className="mandatory">*</span>
-                      </label>
-                      <div className="radio-btn-field">
-                        <Controller
-                          name="companyType"
+            {isLoading ? (
+              <div className="loader-blk">
+                <img src={Loader2} alt="Loading" />
+              </div>
+            ) : (
+              <div className="card-wrapper">
+                <div className="card-inner-wrap">
+                  <h2 className="sub-heading1">Company Details</h2>
+                  <div className="card-blk flex-between">
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="memberCompany">
+                          Member Company <span className="mandatory">*</span>
+                        </label>
+                        <Input
                           control={control}
-                          render={({ field }) => (
-                            <RadioGroup
+                          name="memberCompany"
+                          placeholder="Enter member company"
+                          myHelper={memberHelper}
+                          rules={{
+                            required: true,
+                            maxLength: 50,
+                            minLength: 3,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="companyType">
+                          Company Type <span className="mandatory">*</span>
+                        </label>
+                        <div className="radio-btn-field">
+                          <Controller
+                            name="companyType"
+                            control={control}
+                            render={({ field }) => (
+                              <RadioGroup
+                                {...field}
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="radio-buttons-group"
+                                className="radio-btn"
+                              >
+                                <FormControlLabel
+                                  disabled
+                                  value="Internal"
+                                  control={<Radio />}
+                                  label="Internal"
+                                />
+                                <FormControlLabel
+                                  disabled
+                                  value="External"
+                                  control={<Radio />}
+                                  label="External"
+                                />
+                              </RadioGroup>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="parentCompany">Parent Company</label>
+                        <Controller
+                          name="parentCompany"
+                          control={control}
+                          render={({ field, fieldState: { error } }) => (
+                            <Autocomplete
+                              disabled
+                              className="searchable-input"
                               {...field}
-                              aria-labelledby="demo-radio-buttons-group-label"
-                              name="radio-buttons-group"
-                              className="radio-btn"
-                            >
-                              <FormControlLabel
-                                disabled
-                                value="Internal"
-                                control={<Radio />}
-                                label="Internal"
-                              />
-                              <FormControlLabel
-                                disabled
-                                value="External"
-                                control={<Radio />}
-                                label="External"
-                              />
-                            </RadioGroup>
+                              onSubmit={() => setValue("parentCompany", "")}
+                              onChange={(event, newValue) => {
+                                console.log("new Value ", newValue);
+                                if (newValue) {
+                                  typeof newValue === "object"
+                                    ? setValue("parentCompany", newValue.name)
+                                    : setValue("parentCompany", newValue);
+                                }
+                              }}
+                              selectOnFocus
+                              handleHomeEndKeys
+                              id="free-solo-with-text-demo"
+                              options={[
+                                "Google",
+                                "MicroSoft",
+                                "Nike",
+                                "Adobe",
+                                "Falcon",
+                                "Apple",
+                                "TSMC",
+                                "Relience",
+                                "Adani",
+                                "Ford",
+                                "Uber",
+                                "wishtree",
+                              ]}
+                              // getOptionLabel={(option) => {
+                              //   // Value selected with enter, right from the input
+                              //   if (typeof option === "string") {
+                              //     // console.log("option inside type string",option)
+                              //     return option;
+                              //   }
+                              //   return option;
+                              // }}
+                              renderOption={(props, option) => (
+                                <li {...props}>{option}</li>
+                              )}
+                              //   sx={{ width: 300 }}
+                              freeSolo
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  onChange={(e) =>
+                                    setValue("parentCompany", e.target.value)
+                                  }
+                                  onSubmit={() => setValue("parentCompany", "")}
+                                  placeholder="NA"
+                                />
+                              )}
+                            />
                           )}
                         />
                       </div>
                     </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="parentCompany">Parent Company</label>
-                      <Controller
-                        name="parentCompany"
-                        control={control}
-                        render={({ field, fieldState: { error } }) => (
-                          <Autocomplete
-                            disabled
-                            className="searchable-input"
-                            {...field}
-                            onSubmit={() => setValue("parentCompany", "")}
-                            onChange={(event, newValue) => {
-                              console.log("new Value ", newValue);
-                              if (newValue) {
-                                typeof newValue === "object"
-                                  ? setValue("parentCompany", newValue.name)
-                                  : setValue("parentCompany", newValue);
-                              }
-                            }}
-                            selectOnFocus
-                            handleHomeEndKeys
-                            id="free-solo-with-text-demo"
-                            options={[
-                              "Google",
-                              "MicroSoft",
-                              "Nike",
-                              "Adobe",
-                              "Falcon",
-                              "Apple",
-                              "TSMC",
-                              "Relience",
-                              "Adani",
-                              "Ford",
-                              "Uber",
-                              "wishtree",
-                            ]}
-                            getOptionLabel={(option) => {
-                              // Value selected with enter, right from the input
-                              if (typeof option === "string") {
-                                // console.log("option inside type string",option)
-                                return option;
-                              }
-                              return option;
-                            }}
-                            renderOption={(props, option) => (
-                              <li {...props}>{option}</li>
-                            )}
-                            //   sx={{ width: 300 }}
-                            freeSolo
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                onChange={(e) =>
-                                  setValue("parentCompany", e.target.value)
-                                }
-                                onSubmit={() => setValue("parentCompany", "")}
-                                placeholder="NA"
-                              />
-                            )}
-                          />
-                        )}
-                      />
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        {/* <div className="select-field"> */}
+                        <label htmlFor="cgfCategory">
+                          CGF Category <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          control={control}
+                          name="cgfCategory"
+                          placeholder="Select category"
+                          myHelper={memberHelper}
+                          rules={{required:true}}
+                          myOnChange={categoryChangeHandler1}
+                          options={cgfCategories1}
+                        />
+                      </div>
+                      {/* </div> */}
                     </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      {/* <div className="select-field"> */}
-                      <label htmlFor="cgfCategory">
-                        CGF Category <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        control={control}
-                        name="cgfCategory"
-                        placeholder="Select category"
-                        myOnChange={categoryChangeHandler}
-                        options={cgfCategories}
-                      />
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        {/* <div className="select-field"> */}
+                        <label htmlFor="cgfActivity">
+                          CGF Activity{" "}
+                          {watch("cgfCategory") !== "Other" && (
+                            <span className="mandatory">*</span>
+                          )}
+                        </label>
+                        <Dropdown
+                          control={control}
+                          name="cgfActivity"
+                          placeholder="Select activity"
+                          myHelper={memberHelper}
+                          rules={{
+                            validate: (value) => {
+                              if (
+                                !value &&
+                                (watch("cgfCategory") === "Manufacturer" ||
+                                  watch("cgfCategory") === "Retailer")
+                              )
+                                return "Select activity";
+                            },
+                          }}
+                          options={
+                            watch("cgfCategory") === "Manufacturer"
+                              ? cgfActivitiesManufacturer1
+                              : cgfActivitiesRetailer1
+                          }
+                          isDisabled={watch("cgfCategory") === "Other"}
+                        />
+                      </div>
+                      {/* </div> */}
                     </div>
-                    {/* </div> */}
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      {/* <div className="select-field"> */}
-                      <label htmlFor="cgfActivity">
-                        CGF Activity <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        control={control}
-                        name="cgfActivity"
-                        placeholder="Select activity"
-                        myHelper={myHelper}
-                        rules={{ required: true }}
-                        options={
-                          watch("cgfCategory") === "Manufacturer"
-                            ? cgfActivitiesManufacturer
-                            : cgfActivitiesRetailer
-                        }
-                        isDisabled={watch("cgfCategory") === "Other"}
-                      />
-                    </div>
-                    {/* </div> */}
                   </div>
                 </div>
-              </div>
-              <div className="card-inner-wrap">
-                <h2 className="sub-heading1">Contact Details</h2>
-                <div className="flex-between card-blk">
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="corporateEmail">
-                        Corporate Email <span className="mandatory">*</span>
-                      </label>
-                      <Input
-                        control={control}
-                        name="corporateEmail"
-                        placeholder="Enter email"
-                        myHelper={myHelper}
-                        rules={{
-                          required: "true",
-                          maxLength: 50,
-                          minLength: 3,
-                          pattern:
-                            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="phoneNumber">Phone Number <span className="mandatory">*</span></label>
-                      <div className="phone-number-field">
-                        <div className="select-field country-code">
-                          <Controller
-                            control={control}
-                            name="countryCode"
-                            rules={{required: true}}
-                            // rules={{
-                            //   validate: () => {
-                            //     if (watch("phoneNumber") && !watch("countryCode"))
-                            //       return "Invalid Input";
-                            //   },
-                            // }}
-                            render={({ field, fieldState: { error } }) => (
-                              <Autocomplete
-                              popupIcon={<KeyboardArrowDownRoundedIcon />}
-                                {...field}
-                                className={`${error && 'autocomplete-error'}`}
-                                onChange={(event, newValue) => {
-                                  console.log("inside autocomplete onchange");
-                                  console.log("new Value ", newValue);
-                                  newValue && typeof newValue === "object"
-                                    ? setValue("countryCode", newValue.name)
-                                    : setValue("countryCode", newValue);
-                                  trigger("countryCode");
-                                }}
-                                // sx={{ width: 200 }}
-                                options={arrOfCountryCode}
-                                autoHighlight
-                                // placeholder="Select country code"
-                                // getOptionLabel={(country) => country.name + " " + country}
-                                renderOption={(props, option) => (
-                                  <li {...props}>{option}</li>
-                                )}
-                                renderInput={(params) => (
-                                  <TextField
-                                    // className={`input-field ${
-                                    //   error && "input-error"
-                                    // }`}
-                                    {...params}
-                                    inputProps={{
-                                      ...params.inputProps,
-                                    }}
-                                    onChange={() => trigger("countryCode")}
-                                    // onSubmit={() => setValue("countryCode", "")}
-                                    placeholder={"Select country code"}
-                                    helperText={
-                                      error
-                                        ? myHelper.countryCode[error?.type]
-                                        : " "
-                                    }
-                                  />
-                                )}
-                              />
-                            )}
-                          />
-                        </div>
+                <div className="card-inner-wrap">
+                  <h2 className="sub-heading1">Contact Details</h2>
+                  <div className="flex-between card-blk">
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="corporateEmail">
+                          Corporate Email <span className="mandatory">*</span>
+                        </label>
                         <Input
                           control={control}
-                          name="phoneNumber"
-                          placeholder="Enter phone number"
-                          myHelper={myHelper}
+                          name="corporateEmail"
+                          placeholder="Enter email"
+                          myHelper={memberHelper}
                           rules={{
-                            required: true,
-                            maxLength: 15,
+                            required: "true",
+                            maxLength: 50,
                             minLength: 3,
-                            validate: (value) => {
-                              // if (watch("phoneNumber") && !watch("countryCode"))
-                              //   return "Invalid input";
-                              if (value && !Number(value))
-                                return "Invalid Input";
-                            },
+                            pattern:
+                              /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="phoneNumber">
+                          Phone Number <span className="mandatory">*</span>
+                        </label>
+                        <div className="phone-number-field">
+                          <div className="select-field country-code">
+                            <Controller
+                              control={control}
+                              name="countryCode"
+                              rules={{ required: true }}
+                              // rules={{
+                              //   validate: () => {
+                              //     if (watch("phoneNumber") && !watch("countryCode"))
+                              //       return "Invalid Input";
+                              //   },
+                              // }}
+                              render={({ field, fieldState: { error } }) => (
+                                <Autocomplete
+                                popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                {...field}
+                                  className={`${error && "autocomplete-error"}`}
+                                  onChange={(event, newValue) => {
+                                    console.log("inside autocomplete onchange");
+                                    console.log("new Value ", newValue);
+                                    newValue && typeof newValue === "object"
+                                      ? setValue("countryCode", newValue.name)
+                                      : setValue("countryCode", newValue);
+                                    trigger("countryCode");
+                                  }}
+                                  // sx={{ width: 200 }}
+                                  options={arrOfCountryCode}
+                                  autoHighlight
+                                  // placeholder="Select country code"
+                                  // getOptionLabel={(country) => country.name + " " + country}
+                                  renderOption={(props, option) => (
+                                    <li {...props}>{option}</li>
+                                  )}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      // className={`input-field ${
+                                      //   error && "input-error"
+                                      // }`}
+                                      {...params}
+                                      inputProps={{
+                                        ...params.inputProps,
+                                      }}
+                                      onChange={() => trigger("countryCode")}
+                                      // onSubmit={() => setValue("countryCode", "")}
+                                      placeholder={"Select country code"}
+                                      helperText={
+                                        error
+                                          ? memberHelper.countryCode[error?.type]
+                                          : " "
+                                      }
+                                    />
+                                  )}
+                                />
+                              )}
+                            />
+                          </div>
+                          <Input
+                            control={control}
+                            name="phoneNumber"
+                            placeholder="Enter phone number"
+                            myHelper={memberHelper}
+                            rules={{
+                              required: true,
+                              maxLength: 15,
+                              minLength: 3,
+                              validate: (value) => {
+                                // if (watch("phoneNumber") && !watch("countryCode"))
+                                //   return "Invalid input";
+                                if (value && !Number(value))
+                                  return "Invalid Input";
+                              },
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="websiteUrl">Website URL</label>
+                        <Input
+                          control={control}
+                          name="websiteUrl"
+                          placeholder="NA"
+                          myHelper={memberHelper}
+                          rules={{
+                            maxLength: 50,
+                            minLength: 3,
+                            pattern:
+                              /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
                           }}
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="websiteUrl">Website URL</label>
-                      <Input
-                        control={control}
-                        name="websiteUrl"
-                        placeholder="NA"
-                        myHelper={myHelper}
-                        rules={{
-                          maxLength: 50,
-                          minLength: 3,
-                          pattern:
-                            /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
-                        }}
-                      />
-                    </div>
-                  </div>
                 </div>
-              </div>
-              <div className="card-inner-wrap">
-                <h2 className="sub-heading1">Company Address Details</h2>
-                <div className="flex-between card-blk">
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="region">
-                        Region <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        control={control}
-                        myOnChange={onRegionChangeHandler}
-                        name="region"
-                        placeholder="Select region"
-                        myHelper={myHelper}
-                        rules={{ required: true }}
-                        options={arrOfRegions ? arrOfRegions : []}
-                      />
+                <div className="card-inner-wrap">
+                  <h2 className="sub-heading1">Company Address Details</h2>
+                  <div className="flex-between card-blk">
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="region">
+                          Region <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          control={control}
+                          myOnChange={onRegionChangeHandler1}
+                          name="region"
+                          placeholder="Select region"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          options={arrOfRegions}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="country">
-                        Conuntry <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        isDisabled={!watch("region")}
-                        control={control}
-                        name="country"
-                        myOnChange={onCountryChangeHandler}
-                        placeholder="Select country"
-                        myHelper={myHelper}
-                        rules={{ required: true }}
-                        options={arrOfCountryRegions ? arrOfCountryRegions : []}
-                      />
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="country">
+                          Conuntry <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          isDisabled={!watch("region")}
+                          control={control}
+                          name="country"
+                          myOnChange={onCountryChangeHandler1}
+                          placeholder="Select country"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          options={arrOfCountryRegions}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="state">
-                        State <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        isDisabled={!watch("country")}
-                        control={control}
-                        name="state"
-                        placeholder="Enter state"
-                        myHelper={myHelper}
-                        rules={{ required: true }}
-                        options={arrOfStateCountry ? arrOfStateCountry : []}
-                      />
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="state">State</label>
+                        <Dropdown
+                          isDisabled={!watch("country")}
+                          control={control}
+                          name="state"
+                          placeholder="Enter state"
+                          myHelper={memberHelper}
+                          options={arrOfStateCountry}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="city">City</label>
-                      <Controller
-                        name="city"
-                        control={control}
-                        render={({ field, fieldState: { error } }) => (
-                          <Autocomplete
-                            {...field}
-                            className="searchable-input"
-                            disabled={!watch("state")}
-                            onSubmit={() => setValue("city", "")}
-                            onChange={(event, newValue) => {
-                              console.log("new Value ", newValue);
-                              if (newValue) {
-                                typeof newValue === "object"
-                                  ? setValue("city", newValue.name)
-                                  : setValue("city", newValue);
-                              }
-                            }}
-                            selectOnFocus
-                            handleHomeEndKeys
-                            id="free-solo-with-text-demo"
-                            options={[
-                              "Mumbai",
-                              "Paris",
-                              "London",
-                              "New york",
-                              "Sydney",
-                              "Melbourne",
-                              "Perth",
-                              "Toronto",
-                              "Vancour",
-                              "Texas",
-                              "Delhi",
-                              "Tokyo",
-                            ]}
-                            getOptionLabel={(option) => {
-                              // Value selected with enter, right from the input
-                              if (typeof option === "string") {
-                                // console.log("option inside type string",option)
-                                return option;
-                              }
-                              return option;
-                            }}
-                            renderOption={(props, option) => (
-                              <li {...props}>{option}</li>
-                            )}
-                            //   sx={{ width: 300 }}
-                            freeSolo
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                onChange={(e) =>
-                                  setValue("city", e.target.value)
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="city">City</label>
+                        <Controller
+                          name="city"
+                          control={control}
+                          render={({ field, fieldState: { error } }) => (
+                            <Autocomplete
+                              {...field}
+                              className="searchable-input"
+                              disabled={!watch("state")}
+                              onSubmit={() => setValue("city", "")}
+                              onChange={(event, newValue) => {
+                                console.log("new Value ", newValue);
+                                if (newValue) {
+                                  typeof newValue === "object"
+                                    ? setValue("city", newValue.name)
+                                    : setValue("city", newValue);
                                 }
-                                onSubmit={() => setValue("city", "")}
-                                placeholder="NA"
-                              />
-                            )}
-                          />
-                        )}
-                      />
+                              }}
+                              selectOnFocus
+                              handleHomeEndKeys
+                              id="free-solo-with-text-demo"
+                              options={[
+                                "Mumbai",
+                                "Paris",
+                                "London",
+                                "New york",
+                                "Sydney",
+                                "Melbourne",
+                                "Perth",
+                                "Toronto",
+                                "Vancour",
+                                "Texas",
+                                "Delhi",
+                                "Tokyo",
+                              ]}
+                              // getOptionLabel={(option) => {
+                              //   // Value selected with enter, right from the input
+                              //   if (typeof option === "string") {
+                              //     // console.log("option inside type string",option)
+                              //     return option;
+                              //   }
+                              //   return option;
+                              // }}
+                              renderOption={(props, option) => (
+                                <li {...props}>{option}</li>
+                              )}
+                              //   sx={{ width: 300 }}
+                              freeSolo
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  onChange={(e) =>
+                                    setValue("city", e.target.value)
+                                  }
+                                  onSubmit={() => setValue("city", "")}
+                                  placeholder="NA"
+                                />
+                              )}
+                            />
+                          )}
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="address">
-                        Address <span className="mandatory">*</span>
-                      </label>
-                      <Controller
-                        name="address"
-                        control={control}
-                        rules={{
-                          required: true,
-                          minLength: 3,
-                          maxLength: 250,
-                        }}
-                        render={({ field, fieldState: { error } }) => (
-                          <TextField
-                            multiline
-                            {...field}
-                            inputProps={{
-                              maxLength: 250,
-                            }}
-                            className={`input-textarea ${
-                              error && "input-textarea-error"
-                            }`}
-                            id="outlined-basic"
-                            placeholder="Enter address"
-                            helperText={
-                              error ? myHelper.address[error.type] : " "
-                            }
-                            variant="outlined"
-                          />
-                        )}
-                      />
-                      {/* Add Address Text Area field here */}
-                      {/* <Input control={control} name="city" placeholder="Enter state"/> */}
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="address">
+                          Address <span className="mandatory">*</span>
+                        </label>
+                        <Controller
+                          name="address"
+                          control={control}
+                          rules={{
+                            required: true,
+                            minLength: 3,
+                            maxLength: 250,
+                          }}
+                          render={({ field, fieldState: { error } }) => (
+                            <TextField
+                              multiline
+                              {...field}
+                              inputProps={{
+                                maxLength: 250,
+                              }}
+                              className={`input-textarea ${
+                                error && "input-textarea-error"
+                              }`}
+                              id="outlined-basic"
+                              placeholder="Enter address"
+                              helperText={
+                                error ? memberHelper.address[error.type] : " "
+                              }
+                              variant="outlined"
+                            />
+                          )}
+                        />
+                        {/* Add Address Text Area field here */}
+                        {/* <Input control={control} name="city" placeholder="Enter state"/> */}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="card-inner-wrap">
-                <h2 className="sub-heading1">CGF Office Details</h2>
-                <div className="flex-between card-blk">
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="cgfOfficeRegion">
-                        Region <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        isDisabled
-                        control={control}
-                        name="cgfOfficeRegion"
-                        // myOnChange={cgfOfficeRegionChangeHandler}
-                        placeholder="Select Region"
-                        myHelper={myHelper}
-                        rules={{ required: true }}
-                        options={arrOfRegions ? arrOfRegions : []}
-                      />
+                <div className="card-inner-wrap">
+                  <h2 className="sub-heading1">CGF Office Details</h2>
+                  <div className="flex-between card-blk">
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="cgfOfficeRegion">
+                          Region <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          isDisabled
+                          control={control}
+                          name="cgfOfficeRegion"
+                          // myOnChange={cgfOfficeRegionChangeHandler}
+                          placeholder="Select Region"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          options={arrOfRegions}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="cgfOfficeCountry">
-                        Country <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        isDisabled
-                        control={control}
-                        name="cgfOfficeCountry"
-                        placeholder="Select country"
-                        myHelper={myHelper}
-                        rules={{ required: true }}
-                        options={arrOfCgfOfficeCountryRegions ? arrOfCgfOfficeCountryRegions : []}
-                      />
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="cgfOfficeCountry">
+                          Country <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          isDisabled
+                          control={control}
+                          name="cgfOfficeCountry"
+                          placeholder="Select country"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          options={
+                            arrOfCgfOfficeCountryRegions
+                              ? arrOfCgfOfficeCountryRegions
+                              : []
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="cgfOffice">
-                        Office <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        isDisabled
-                        control={control}
-                        name="cgfOffice"
-                        placeholder="Select office"
-                        myHelper={myHelper}
-                        rules={{ required: true }}
-                        options={["Mumbai", "Delhi", "Vadodara"]}
-                      />
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="cgfOffice">
+                          Office <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          isDisabled
+                          control={control}
+                          name="cgfOffice"
+                          placeholder="Select office"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          options={["Mumbai", "Delhi", "Vadodara"]}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="card-inner-wrap">
-                <h2 className="sub-heading1">Member Contact Details</h2>
-                <div className="flex-between card-blk">
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <div className="salutation-wrap">
-                        <div className="salutation-blk">
-                          <label htmlFor="memberContactSalutation">
-                            Salutation <span className="mandatory">*</span>
-                          </label>
-                          <Dropdown
-                            control={control}
-                            name="memberContactSalutation"
-                            placeholder="Mr."
-                            myHelper={myHelper}
-                            rules={{ required: true }}
-                            options={["Mr.", "Mrs.", "Ms."]}
-                          />
+                <div className="card-inner-wrap">
+                  <h2 className="sub-heading1">Member Contact Details</h2>
+                  <div className="flex-between card-blk">
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <div className="salutation-wrap">
+                          <div className="salutation-blk">
+                            <label htmlFor="memberContactSalutation">
+                              Salutation <span className="mandatory">*</span>
+                            </label>
+                            <Dropdown
+                              control={control}
+                              name="memberContactSalutation"
+                              placeholder=""
+                              myHelper={memberHelper}
+                              rules={{ required: true }}
+                              options={["Mr.", "Mrs.", "Ms."]}
+                            />
+                          </div>
+                          <div className="salutation-inputblk">
+                            <label htmlFor="memberContactFullName">
+                              Full Name <span className="mandatory">*</span>
+                            </label>
+                            <Input
+                              control={control}
+                              myHelper={memberHelper}
+                              rules={{
+                                required: true,
+                                maxLength: 50,
+                                minLength: 3,
+                                pattern: /^[A-Za-z]+[A-Za-z ]*$/,
+                              }}
+                              name="memberContactFullName"
+                              placeholder="NA"
+                            />
+                          </div>
                         </div>
-                        <div className="salutation-inputblk">
-                          <label htmlFor="memberContactFullName">
-                            Full Name <span className="mandatory">*</span>
-                          </label>
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="title">Title</label>
+                        <Input
+                          control={control}
+                          myHelper={memberHelper}
+                          rules={{ maxLength: 50, minLength: 3 }}
+                          name="title"
+                          placeholder="NA"
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="department">Department</label>
+                        <Input
+                          control={control}
+                          myHelper={memberHelper}
+                          rules={{ maxLength: 50, minLength: 3 }}
+                          name="department"
+                          placeholder="NA"
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="memberContactEmail">
+                          Email <span className="mandatory">*</span>
+                        </label>
+                        <Input
+                          isDisabled
+                          control={control}
+                          myHelper={memberHelper}
+                          rules={{
+                            required: true,
+                            maxLength: 50,
+                            minLength: 3,
+                            pattern:
+                              /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                          }}
+                          name="memberContactEmail"
+                          placeholder="NA"
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="memberContactPhoneNumber">
+                          Phone Number <span className="mandatory">*</span>
+                        </label>
+                        <div className="phone-number-field">
+                          <div className="select-field country-code">
+                            <Controller
+                              control={control}
+                              name="memberContactCountryCode"
+                              rules={{
+                                required: true,
+                              }}
+                              render={({ field, fieldState: { error } }) => (
+                                <Autocomplete
+                                  {...field}
+                                  className={`${error && "autocomplete-error"}`}
+                                  onChange={(event, newValue) => {
+                                    newValue && typeof newValue === "object"
+                                      ? setValue(
+                                          "memberContactCountryCode",
+                                          newValue.name
+                                        )
+                                      : setValue(
+                                          "memberContactCountryCode",
+                                          newValue
+                                        );
+                                    trigger("memberContactCountryCode");
+                                  }}
+                                  // sx={{ width: 200 }}
+                                  options={arrOfCountryCode}
+                                  autoHighlight
+                                  placeholder="Select country code"
+                                  // getOptionLabel={(country) => country.name + " " + country}
+                                  renderOption={(props, option) => (
+                                    <li {...props}>{option}</li>
+                                  )}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      inputProps={{
+                                        ...params.inputProps,
+                                      }}
+                                      onChange={() =>
+                                        trigger("memberContactPhoneNuber")
+                                      }
+                                      // onSubmit={() =>
+                                      //   setValue("memberContactCountryCode", "")
+                                      // }
+                                      placeholder={"NA"}
+                                      helperText={
+                                        error
+                                          ? memberHelper.countryCode[error?.type]
+                                          : " "
+                                      }
+                                    />
+                                  )}
+                                />
+                              )}
+                            />
+                          </div>
                           <Input
                             control={control}
-                            myHelper={myHelper}
+                            name="memberContactPhoneNuber"
+                            myHelper={memberHelper}
                             rules={{
                               required: true,
-                              maxLength: 50,
+                              maxLength: 15,
                               minLength: 3,
-                              pattern: /^[A-Za-z]+[A-Za-z ]*$/,
+                              validate: (value) => {
+                                // if (
+                                //   watch("memberContactPhoneNuber") &&
+                                //   !watch("memberContactCountryCode")
+                                // )
+                                //   return "Invalid Input";
+                                if (value && !Number(value))
+                                  return "Invalid input";
+                              },
                             }}
-                            name="memberContactFullName"
                             placeholder="NA"
                           />
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="title">Title</label>
-                      <Input
-                        control={control}
-                        myHelper={myHelper}
-                        rules={{ maxLength: 50, minLength: 3 }}
-                        name="title"
-                        placeholder="NA"
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="department">Department</label>
-                      <Input
-                        control={control}
-                        myHelper={myHelper}
-                        rules={{ maxLength: 50, minLength: 3 }}
-                        name="department"
-                        placeholder="NA"
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="memberContactEmail">
-                        Email <span className="mandatory">*</span>
-                      </label>
-                      <Input
-                        isDisabled
-                        control={control}
-                        myHelper={myHelper}
-                        rules={{
-                          required: true,
-                          maxLength: 50,
-                          minLength: 3,
-                          pattern:
-                            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                        }}
-                        name="memberContactEmail"
-                        placeholder="NA"
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="memberContactPhoneNumber">
-                        Phone Number <span className="mandatory">*</span>
-                      </label>
-                      <div className="phone-number-field">
-                        <div className="select-field country-code">
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="status">
+                          Status <span className="mandatory">*</span>
+                        </label>
+                        <div className="radio-btn-field">
                           <Controller
+                            name="status"
                             control={control}
-                            name="memberContactCountryCode"
-                            rules={{
-                              required: true
-                            }}
-                            render={({ field,fieldState: { error } }) => (
-                              <Autocomplete
-                              popupIcon={<KeyboardArrowDownRoundedIcon />}
+                            render={({ field }) => (
+                              <RadioGroup
                                 {...field}
-                                className={`${error && 'autocomplete-error'}`}
-                                onChange={(event, newValue) => {
-                                  newValue && typeof newValue === "object"
-                                    ? setValue(
-                                        "memberContactCountryCode",
-                                        newValue.name
-                                      )
-                                    : setValue(
-                                        "memberContactCountryCode",
-                                        newValue
-                                      );
-                                  trigger("memberContactCountryCode");
-                                }}
-                                // sx={{ width: 200 }}
-                                options={arrOfCountryCode}
-                                autoHighlight
-                                placeholder="Select country code"
-                                // getOptionLabel={(country) => country.name + " " + country}
-                                renderOption={(props, option) => (
-                                  <li {...props}>{option}</li>
-                                )}
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    inputProps={{
-                                      ...params.inputProps,
-                                    }}
-                                    onChange={() =>
-                                      trigger("memberContactPhoneNuber")
-                                    }
-                                    // onSubmit={() =>
-      //   setValue("memberContactCountryCode", "")
-                                    // }
-                                    placeholder={"NA"}
-                                    helperText={
-                                      error
-                                        ? myHelper.countryCode[error?.type]
-                                        : " "
-                                    }
-                                  />
-                                )}
-                              />
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="radio-buttons-group"
+                                className="radio-btn"
+                              >
+                                <FormControlLabel
+                                  value="active"
+                                  control={<Radio />}
+                                  label="Active"
+                                />
+                                <FormControlLabel
+                                  value="inactive"
+                                  control={<Radio />}
+                                  label="Inactive"
+                                />
+                              </RadioGroup>
                             )}
                           />
                         </div>
-                        <Input
-                          control={control}
-                          name="memberContactPhoneNuber"
-                          myHelper={myHelper}
-                          rules={{
-                            required: true,
-                            maxLength: 15,
-                            minLength: 3,
-                            validate: (value) => {
-                              // if (
-                              //   watch("memberContactPhoneNuber") &&
-                              //   !watch("memberContactCountryCode")
-                              // )
-                              //   return "Invalid Input";
-                              if (value && !Number(value))
-                                return "Invalid input";
-                            },
-                          }}
-                          placeholder="NA"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="status">
-                        Status <span className="mandatory">*</span>
-                      </label>
-                      <div className="radio-btn-field">
-                        <Controller
-                          name="status"
-                          control={control}
-                          render={({ field }) => (
-                            <RadioGroup
-                              {...field}
-                              aria-labelledby="demo-radio-buttons-group-label"
-                              name="radio-buttons-group"
-                              className="radio-btn"
-                            >
-                              <FormControlLabel
-                                value="active"
-                                control={<Radio />}
-                                label="Active"
-                              />
-                              <FormControlLabel
-                                value="inactive"
-                                control={<Radio />}
-                                label="Inactive"
-                              />
-                            </RadioGroup>
-                          )}
-                        />
                       </div>
                     </div>
                   </div>
                 </div>
+                <div className="form-btn flex-between add-members-btn">
+                  <button
+                    type="reset"
+                    onClick={onClickCancelHandler}
+                    className="secondary-button mr-10"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    //   onClick={}
+                    className="primary-button add-button"
+                  >
+                    Update
+                  </button>
+                </div>
               </div>
-              <div className="form-btn flex-between add-members-btn">
-                <button
-                  type="reset"
-                  onClick={onClickCancelHandler}
-                  className="secondary-button mr-10"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  //   onClick={}
-                  className="primary-button add-button"
-                >
-                  Edit
-                </button>
-              </div>
-            </div>
+            )}
           </form>
         </div>
       </section>
