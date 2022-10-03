@@ -409,6 +409,11 @@ const AddMember = () => {
                             // openOnFocus={true}
                             // noOptionsText={"No options"}
                             {...field}
+                            PaperComponent={({ children }) => (
+                              <Paper className="autocomplete-option-txt">
+                                {children}
+                              </Paper>
+                            )}
                             className="searchable-input"
                             onSubmit={() => setValue("parentCompany", "")}
                             onChange={(event, newValue) => {
@@ -575,7 +580,7 @@ const AddMember = () => {
                                   trigger("countryCode");
                                 }}
                                 PaperComponent={({ children }) => (
-                                  <Paper style={{ fontSize: "14px", fontFamily: '"ProximaNova-Regular", serif, sans-serif' }}>
+                                  <Paper className="autocomplete-option-txt">
                                     {children}
                                   </Paper>
                                 )}
@@ -707,6 +712,11 @@ const AddMember = () => {
                           <Autocomplete
                             className="searchable-input"
                             {...field}
+                            PaperComponent={({ children }) => (
+                              <Paper className="autocomplete-option-txt">
+                                {children}
+                              </Paper>
+                            )}
                             disabled={!watch("state")}
                             onSubmit={() => setValue("city", "")}
                             onChange={(event, newValue) => {
@@ -961,6 +971,11 @@ const AddMember = () => {
                               <Autocomplete
                                 popupIcon={<KeyboardArrowDownRoundedIcon />}
                                 className={`${error && "autocomplete-error"}`}
+                                PaperComponent={({ children }) => (
+                                  <Paper className="autocomplete-option-txt">
+                                    {children}
+                                  </Paper>
+                                )}
                                 {...field}
                                 onChange={(event, newValue) => {
                                   newValue && typeof newValue === "object"

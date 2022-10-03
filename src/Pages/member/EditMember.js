@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   FormControlLabel,
+  Paper,
   Radio,
   RadioGroup,
   TextField,
@@ -617,6 +618,11 @@ const EditMember = () => {
                               render={({ field, fieldState: { error } }) => (
                                 <Autocomplete
                                 popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                PaperComponent={({ children }) => (
+                                  <Paper className="autocomplete-option-txt">
+                                    {children}
+                                  </Paper>
+                                )}
                                 {...field}
                                   className={`${error && "autocomplete-error"}`}
                                   onChange={(event, newValue) => {
@@ -1009,6 +1015,12 @@ const EditMember = () => {
                                 <Autocomplete
                                   {...field}
                                   className={`${error && "autocomplete-error"}`}
+                                  popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                  PaperComponent={({ children }) => (
+                                    <Paper className="autocomplete-option-txt">
+                                      {children}
+                                    </Paper>
+                                  )}
                                   onChange={(event, newValue) => {
                                     newValue && typeof newValue === "object"
                                       ? setValue(
