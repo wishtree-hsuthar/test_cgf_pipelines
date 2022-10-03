@@ -217,7 +217,7 @@ const Header = () => {
                                                 <li
                                                     className={
                                                         location.pathname ===
-                                                        "/users/operation_members"
+                                                        "/users/operation-members"
                                                             ? "subactive"
                                                             : ""
                                                     }
@@ -232,7 +232,7 @@ const Header = () => {
                                                     <a
                                                         onClick={() => {
                                                             navigate(
-                                                                "/users/operation_members"
+                                                                "/users/operation-members"
                                                             );
                                                         }}
                                                     >

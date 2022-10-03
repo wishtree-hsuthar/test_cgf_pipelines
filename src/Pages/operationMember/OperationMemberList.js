@@ -151,7 +151,7 @@ function OperationMemberList() {
                                     <button
                                         onClick={() =>
                                             navigate(
-                                                "/users/operation_members/add_operation_member"
+                                                "/users/operation-members/add-operation-member"
                                             )
                                         }
                                         className="primary-button add-button"

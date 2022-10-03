@@ -346,7 +346,7 @@ function EditOperationMember() {
                 );
 
                 setTimeout(() => {
-                    navigate("/users/operation_members");
+                    navigate("/users/operation-members");
                 }, 3000);
             }
         } catch (error) {
@@ -393,7 +393,7 @@ function EditOperationMember() {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/users/operation_members">
+                            <Link to="/users/operation-members">
                                 Operation Members
                             </Link>
                         </li>
@@ -472,6 +472,9 @@ function EditOperationMember() {
                                                     }
                                                     rules={{
                                                         required: true,
+                                                        pattern:
+                                                            /^[A-Za-z]+[A-Za-z ]*$/,
+                                                        maxLength: 50,
                                                     }}
                                                 />
                                             </div>
@@ -484,6 +487,9 @@ function EditOperationMember() {
                                         <Input
                                             name={"title"}
                                             control={control}
+                                            rules={{
+                                                maxLength: 50,
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -496,6 +502,9 @@ function EditOperationMember() {
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
+                                            rules={{
+                                                maxLength: 50,
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -859,7 +868,7 @@ function EditOperationMember() {
                                     <button
                                         type={"reset"}
                                         onClick={() =>
-                                            navigate("/users/operation_members")
+                                            navigate("/users/operation-members")
                                         }
                                         className="secondary-button mr-10"
                                     >

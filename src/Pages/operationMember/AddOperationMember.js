@@ -229,7 +229,7 @@ function AddOperationMember() {
                 );
                 navigateToListPage === false &&
                     setTimeout(() => {
-                        navigate("/users/operation_members");
+                        navigate("/users/operation-members");
                     }, 3000);
             }
         } catch (error) {
@@ -270,7 +270,7 @@ function AddOperationMember() {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/users/operation_members">
+                            <Link to="/users/operation-members">
                                 Operation Members
                             </Link>
                         </li>
@@ -345,6 +345,9 @@ function AddOperationMember() {
                                                     }
                                                     rules={{
                                                         required: true,
+                                                        maxLength: 50,
+                                                        pattern:
+                                                            /^[A-Za-z]+[A-Za-z ]*$/,
                                                     }}
                                                 />
                                             </div>
@@ -353,17 +356,22 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="email">Title </label>
+                                        <label for="title">Title </label>
                                         <Input
                                             name={"title"}
                                             control={control}
                                             placeholder={"Enter title"}
+                                            rules={{
+                                                maxLength: 50,
+                                            }}
                                         />
                                     </div>
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="email">Department </label>
+                                        <label for="department">
+                                            Department{" "}
+                                        </label>
                                         <Input
                                             name={"department"}
                                             control={control}
@@ -373,6 +381,9 @@ function AddOperationMember() {
                                             placeholder={
                                                 "Enter departnment name"
                                             }
+                                            rules={{
+                                                maxLength: 50,
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -389,7 +400,13 @@ function AddOperationMember() {
                                                 helperTextForAddOperationMember
                                             }
                                             placeholder={"Enter email address"}
-                                            rules={{ required: true }}
+                                            rules={{
+                                                required: "true",
+                                                maxLength: 50,
+                                                minLength: 3,
+                                                pattern:
+                                                    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -718,7 +735,7 @@ function AddOperationMember() {
                                     <button
                                         type={"reset"}
                                         onClick={() =>
-                                            navigate("/users/operation_members")
+                                            navigate("/users/operation-members")
                                         }
                                         className="secondary-button mr-10"
                                     >

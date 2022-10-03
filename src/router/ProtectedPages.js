@@ -100,7 +100,7 @@ const ProtectedPages = () => {
 
                 {/* Operation Members */}
                 <Route
-                    path="/users/operation_members"
+                    path="/users/operation-members"
                     element={
                         <RequireAuth
                             page={"list"}
@@ -111,7 +111,7 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
-                    path="/users/operation_members/add_operation_member"
+                    path="/users/operation-members/add-operation-member"
                     element={
                         <RequireAuth
                             page={"add"}
