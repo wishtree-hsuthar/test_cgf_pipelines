@@ -182,18 +182,18 @@ export default function TableComponent({
       >
         <Paper sx={{ width: "100%", mb: 2 }}>
           <TableContainer>
-            {records?.length > 0 ? (
-              <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                <EnhancedTableHead
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  tableHead={tableHead}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={records.length}
-                  setCheckBoxes={setCheckBoxes}
-                />
+            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                tableHead={tableHead}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={records.length}
+                setCheckBoxes={setCheckBoxes}
+              />
+              {records?.length > 0 ? (
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                    records.slice().sort(getComparator(order, orderBy)) */}
@@ -249,7 +249,14 @@ export default function TableComponent({
                           // console.log("Row cell", row[cell],"cell: ",cell);
                           if (cell !== "_id" && cell !== "isActive") {
                             return row[cell]?.length <= 30 ? (
-                              <TableCell key={cell}> {(typeof row[cell] === "string" && cell !== "email") ? row[cell][0].toUpperCase() + row[cell].slice(1) : row[cell]}</TableCell>
+                              <TableCell key={cell}>
+                                {" "}
+                                {typeof row[cell] === "string" &&
+                                cell !== "email"
+                                  ? row[cell][0].toUpperCase() +
+                                    row[cell].slice(1)
+                                  : row[cell]}
+                              </TableCell>
                             ) : (
                               <Tooltip
                                 key={cell}
@@ -258,8 +265,10 @@ export default function TableComponent({
                                 title={row[cell]}
                               >
                                 <TableCell key={cell}>
-                                  {(typeof row[cell] === "string" && cell !== "email")
-                                    ? row[cell][0].toUpperCase() + `${row[cell].slice(1, 30)}...`
+                                  {typeof row[cell] === "string" &&
+                                  cell !== "email"
+                                    ? row[cell][0].toUpperCase() +
+                                      `${row[cell].slice(1, 30)}...`
                                     : `${row[cell].slice(0, 30)}...`}
                                 </TableCell>
                               </Tooltip>
@@ -272,7 +281,7 @@ export default function TableComponent({
                                 }`}
                                 key={cell}
                               >
-                                <span>{row[cell] ? "active" : "inactive"}</span>
+                                <span>{row[cell] ? "Active" : "Inactive"}</span>
                               </TableCell>
                             );
                           }
@@ -317,12 +326,18 @@ export default function TableComponent({
                     );
                   })}
                 </TableBody>
-              </Table>
-            ) : (
-              <div className="no-records-blk">
-                <h2 className="heading2">No Records available</h2>
-              </div>
-            )}
+              ) : (
+                <TableBody>
+                  <tr>
+                    <td colSpan="10">
+                      <div className="no-records-blk">
+                        <h2 className="heading2">No records available</h2>
+                      </div>
+                    </td>
+                  </tr>
+                </TableBody>
+              )}
+            </Table>
           </TableContainer>
         </Paper>
       </Box>
