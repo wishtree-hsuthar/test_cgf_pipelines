@@ -8,7 +8,7 @@ import "./Toaster.css";
 function Toaster({ titleMessage, descriptionMessage, messageType, myRef }) {
   const showToasts = () => {
     toast(customMsg, {
-      position: "top-right",
+      position: "bottom-center",
       autoClose: 3000,
       hideProgressBar: true,
       closeOnClick: false,
@@ -35,13 +35,13 @@ function Toaster({ titleMessage, descriptionMessage, messageType, myRef }) {
         </div>
       </div>
       <div className="toaster-right">
-        <div
+        {/* <div
           className={`toaster-ttl ${
             messageType === "success" && "toaster-ttl-success"
           }`}
         >
           {titleMessage}
-        </div>
+        </div> */}
         <p>{descriptionMessage}</p>
       </div>
     </div>

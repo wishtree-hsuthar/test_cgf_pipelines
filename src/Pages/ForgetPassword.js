@@ -113,7 +113,7 @@ const ForgetPassword = () => {
                                 </p>
                                 <div class="login-form">
                                     <form onSubmit={handleSubmit(submitEmail)}>
-                                        <div class="form-group mb-40">
+                                        <div class="form-group">
                                             <label for="emailid">
                                                 Email Id{" "}
                                                 <span class="mandatory">*</span>

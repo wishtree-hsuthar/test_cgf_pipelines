@@ -20,6 +20,7 @@ import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
 //CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
@@ -674,6 +675,7 @@ const EditMember = () => {
                             // }}
                             render={({ field, fieldState: { error } }) => (
                               <Autocomplete
+                              popupIcon={<KeyboardArrowDownRoundedIcon />}
                                 {...field}
                                 className={`${error && 'autocomplete-error'}`}
                                 onChange={(event, newValue) => {
@@ -1063,6 +1065,7 @@ const EditMember = () => {
                             }}
                             render={({ field,fieldState: { error } }) => (
                               <Autocomplete
+                              popupIcon={<KeyboardArrowDownRoundedIcon />}
                                 {...field}
                                 className={`${error && 'autocomplete-error'}`}
                                 onChange={(event, newValue) => {
