@@ -64,9 +64,11 @@ const ReplaceSubAdmin = () => {
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [isLoading, setIsLoading] = useState(false);
+    const [cgfAdmin, setCgfAdmin] = useState({});
     const { id } = useParams();
     //state to hold search timeout delay
     const [searchTimeout, setSearchTimeout] = useState(null);
+
     //array to get array of selected rows ids
     const [selected, setSelected] = React.useState([]);
     const [order, setOrder] = React.useState("asc");
@@ -192,6 +194,7 @@ const ReplaceSubAdmin = () => {
                 FETCH_SUB_ADMIN_BY_ADMIN + id
             );
             console.log("response from fetch sub admin by id", response);
+            setCgfAdmin(response.data);
         } catch (error) {
             if (error?.response?.status == 500) {
                 console.log(
@@ -328,9 +331,21 @@ const ReplaceSubAdmin = () => {
                 titleMessage={toasterDetails.titleMessage}
             />
             <DialogBox
-                title="Replace CGF admin "
-                info1={`On replacing a cgf admin, all the statistics and record would get transfer to the new member.`}
-                info2={`Are you sure you want to replace ${"coco-cola"}?`}
+                title={<p> Replace CGF admin {cgfAdmin.name} </p>}
+                info1={
+                    <p>
+                        {" "}
+                        On replacing a cgf admin, all the statistics and record
+                        would get transfer to the new member.
+                    </p>
+                }
+                info2={
+                    <p>
+                        {" "}
+                        Are you sure you want to replace{" "}
+                        <b> {cgfAdmin.name} </b>?{" "}
+                    </p>
+                }
                 primaryButtonText="Yes"
                 secondaryButtonText="No"
                 onPrimaryModalButtonClickHandler={handleYes}

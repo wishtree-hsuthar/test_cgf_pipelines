@@ -266,11 +266,24 @@ const ViewOperationMembers = () => {
                 titleMessage={toasterDetails.titleMessage}
             />
             <DialogBox
-                title={"Delete CGF Admin"}
-                info1={
-                    "We recommend you to replace this sub admin with the new one because deleting all the details which sub admin has added will get deleted and this will be an irreversible action"
+                title={
+                    <p>Delete CGF Admin {fetchOperationMemberDetaills.name}</p>
                 }
-                info2={`Are you you want to delete${fetchOperationMemberDetaills.name}?`}
+                info1={
+                    <p>
+                        We recommend you to replace this sub admin with the new
+                        one because deleting all the details which sub admin has
+                        added will get deleted and this will be an irreversible
+                        action
+                    </p>
+                }
+                info2={
+                    <p>
+                        {" "}
+                        Are you you want to delete{" "}
+                        <b>{fetchOperationMemberDetaills.name}</b>?
+                    </p>
+                }
                 onPrimaryModalButtonClickHandler={handleDeleteOperationMember}
                 onSecondaryModalButtonClickHandler={() => {
                     setOpenDeleteDialog(false);

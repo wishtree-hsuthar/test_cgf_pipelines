@@ -239,11 +239,21 @@ const ViewSubAdmin = () => {
                 titleMessage={toasterDetails.titleMessage}
             />
             <DialogBox
-                title={"Delete CGF Admin"}
+                title={<p> Delete CGF Admin {fetchedSubAdminDetails?.name} </p>}
                 info1={
-                    "We recommend you to replace this sub admin with the new one because deleting all the details which sub admin has added will get deleted and this will be an irreversible action"
+                    <p>
+                        We recommend you to replace this sub admin with the new
+                        one because deleting all the details which sub admin has
+                        added will get deleted and this will be an irreversible
+                        action
+                    </p>
                 }
-                info2={`Are you you want to delete${fetchedSubAdminDetails?.name}?`}
+                info2={
+                    <p>
+                        Are you you want to delete{" "}
+                        <b>{fetchedSubAdminDetails?.name}</b>?
+                    </p>
+                }
                 onPrimaryModalButtonClickHandler={handleDeleteSubAdmin}
                 onSecondaryModalButtonClickHandler={() => {
                     setOpenDeleteDialog(false);
