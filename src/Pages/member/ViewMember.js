@@ -148,7 +148,7 @@ const ViewMember = () => {
                 delete: data.delete,
             },
         }));
-        console.log("module access member in view member",moduleAccesForMember[0].member)
+        // console.log("module access member in view member",moduleAccesForMember[0]?.member)
   
   //format records as backend requires
   const updateRecords = (data) => {
@@ -603,7 +603,7 @@ const ViewMember = () => {
           <div className="form-header flex-between">
             <h2 className="heading2">View Member</h2>
             <span className="form-header-right-txt" onClick={handleToggle}>
-              {(SUPER_ADMIN===true||moduleAccesForMember[0].member.edit==true||moduleAccesForMember[0].member.delete==true)&&
+              {(SUPER_ADMIN===true||moduleAccesForMember[0]?.member.edit==true||moduleAccesForMember[0]?.member.delete==true)&&
               <span
                 className={`crud-operation ${
                   isActive && "crud-operation-active"
@@ -617,7 +617,7 @@ const ViewMember = () => {
               >
                 <ul className="crud-toggle-list">
                   <li
-                  hidden={(SUPER_ADMIN?false:!moduleAccesForMember[0].member.edit)}
+                  hidden={(SUPER_ADMIN?false:!moduleAccesForMember[0]?.member.edit)}
                     onClick={() =>
                       navigate(`/users/members/edit-member/${param.id}`)
                     }
@@ -625,7 +625,7 @@ const ViewMember = () => {
                     Edit
                   </li>
                   <li 
-                  hidden={(SUPER_ADMIN?false:!moduleAccesForMember[0].member.delete)}
+                  hidden={(SUPER_ADMIN?false:!moduleAccesForMember[0]?.member.delete)}
                   
                   onClick={() => setOpenDialog(true)}>Delete</li>
                   {/* <li>Replace</li> */}
