@@ -13,6 +13,7 @@ import Dropdown from "../../components/Dropdown";
 import PendingOperationMembers from "./PendingOperationMembers";
 import OnBoardedSubAdminsTable from "../subAdminManagement/OnBoardedSubAdminsTable";
 import OnboardedOperationMember from "./OnboardedOperationMember";
+import { useSelector } from "react-redux";
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -55,7 +56,24 @@ function OperationMemberList() {
     const [value, setValue] = React.useState(0);
     const [makeApiCall, setMakeApiCall] = useState(true);
     const [searchTimeout, setSearchTimeout] = useState(null);
-
+    const privilege = useSelector((state) => state.user?.privilege);
+    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
+    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+    let moduleAccessForOperationMember = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Operation Members")
+        .map((data) => ({
+            operationMember: {
+                list: data.list,
+                view: data.view,
+                edit: data.edit,
+                delete: data.delete,
+                add: data.add,
+            },
+        }));
+    console.log(
+        "member operation privilege",
+        moduleAccessForOperationMember[0]?.operationMember
+    );
     const onSearchChangeHandler = (e) => {
         console.log("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
@@ -123,18 +141,22 @@ function OperationMemberList() {
                                     </span>
                                     Download
                                 </div>
-                                <div className="form-btn">
-                                    <button
-                                        onClick={() =>
-                                            navigate(
-                                                "/users/operation-members/add-operation-member"
-                                            )
-                                        }
-                                        className="primary-button add-button"
-                                    >
-                                        Add Operation Member
-                                    </button>
-                                </div>
+                                {(SUPER_ADMIN === true ||
+                                    moduleAccessForOperationMember[0]
+                                        .operationMember.add === true) && (
+                                    <div className="form-btn">
+                                        <button
+                                            onClick={() =>
+                                                navigate(
+                                                    "/users/operation-members/add-operation-member"
+                                                )
+                                            }
+                                            className="primary-button add-button"
+                                        >
+                                            Add Operation Member
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className="member-filter-wrap flex-between">

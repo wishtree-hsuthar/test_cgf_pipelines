@@ -28,6 +28,7 @@ import DialogBox from "../../components/DialogBox";
 import { Controller, useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
+import { useSelector } from "react-redux";
 const defaultValues = {
     memberCompany: "",
     companyType: "Internal",
@@ -68,7 +69,24 @@ const ViewOperationMembers = () => {
     const [fetchOperationMemberDetaills, setFetchOperationMemberDetaills] =
         useState({});
     const [open, setOpen] = React.useState(false);
-
+    const privilege = useSelector((state) => state.user?.privilege);
+    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
+    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+    let moduleAccessForOperationMember = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Operation Members")
+        .map((data) => ({
+            operationMember: {
+                list: data.list,
+                view: data.view,
+                edit: data.edit,
+                delete: data.delete,
+                add: data.add,
+            },
+        }));
+    console.log(
+        "member operation privilege",
+        moduleAccessForOperationMember[0]?.operationMember
+    );
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -246,14 +264,24 @@ const ViewOperationMembers = () => {
         {
             id: 1,
             action: "Edit",
+            hide:
+                SUPER_ADMIN === true
+                    ? false
+                    : !moduleAccessForOperationMember[0]?.operationMember.edit,
         },
         {
             id: 2,
             action: "Replace",
+            hide: !SUPER_ADMIN,
         },
         {
             id: 3,
             action: "Delete",
+            hide:
+                SUPER_ADMIN === true
+                    ? false
+                    : !moduleAccessForOperationMember[0]?.operationMember
+                          .delete,
         },
     ];
 
@@ -315,9 +343,15 @@ const ViewOperationMembers = () => {
                             className="form-header-right-txt"
                             onClick={handleToggle}
                         >
-                            <span className="crud-operation">
-                                <MoreVertIcon />
-                            </span>
+                            {(SUPER_ADMIN === true ||
+                                moduleAccessForOperationMember[0]
+                                    .operationMember.edit == true ||
+                                moduleAccessForOperationMember[0]
+                                    .operationMember.delete == true) && (
+                                <span className="crud-operation">
+                                    <MoreVertIcon />
+                                </span>
+                            )}
                             <div
                                 className="crud-toggle-wrap"
                                 style={{ display: isActive ? "none" : "block" }}
@@ -327,6 +361,7 @@ const ViewOperationMembers = () => {
                                         <li
                                             onClick={() => handleOpen(index)}
                                             key={index}
+                                            hidden={d.hide}
                                         >
                                             {d.action}
                                         </li>
