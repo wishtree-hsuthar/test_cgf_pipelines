@@ -383,6 +383,8 @@ const EditRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           add: !previous[previleg]["add"],
+                                          list: !previous[previleg]["add"],
+                                          view: !previous[previleg]["add"],
                                           all: false,
                                         },
                                       }))
@@ -399,6 +401,8 @@ const EditRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           edit: !previous[previleg]["edit"],
+                                          list: !previous[previleg]["edit"],
+                                          view: !previous[previleg]["edit"],
                                           all: false,
                                         },
                                       }))
@@ -415,6 +419,7 @@ const EditRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           view: !previous[previleg]["view"],
+                                          list: !previous[previleg]["view"],
                                           all: false,
                                         },
                                       }))
@@ -431,6 +436,9 @@ const EditRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           delete: !previous[previleg]["delete"],
+                                          list: !previous[previleg]["delete"],
+                                          edit: !previous[previleg]["delete"],
+                                          view: !previous[previleg]["delete"],
                                           all: false,
                                         },
                                       }))
