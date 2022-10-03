@@ -30,7 +30,7 @@ import {
   STATES,
 } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
-
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -782,7 +782,9 @@ const ViewMember = () => {
                       <div className="phone-number-field">
                         <div className="select-field country-code">
                           <Autocomplete
-                            className="phone-number-disable"
+                            disabled
+                          popupIcon={<KeyboardArrowDownRoundedIcon />}
+                          className="phone-number-disable"
                             readOnly
                             options={arrOfCountryCode}
                             autoHighlight
@@ -1064,7 +1066,9 @@ const ViewMember = () => {
                       <div className="phone-number-field">
                         <div className="select-field country-code">
                           <Autocomplete
-                            className="phone-number-disable"
+                          disabled
+                        popupIcon={<KeyboardArrowDownRoundedIcon />}
+                          className="phone-number-disable"
                             readOnly
                             value={
                               member?.memberRepresentativeId?.countryCode

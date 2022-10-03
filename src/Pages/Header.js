@@ -311,7 +311,7 @@ const Header = () => {
                                         </div>
                                     </Tooltip>
                                     <Menu
-                                        sx={{ mt: "35px" }}
+                                        sx={{ mt: "35px", mr: "35px" }}
                                         id="menu-appbar"
                                         anchorEl={anchorElUser}
                                         anchorOrigin={{
@@ -327,7 +327,7 @@ const Header = () => {
                                         onClose={handleCloseUserMenu}
                                         className="profile-menu-item"
                                     >
-                                        <MenuItem onClick={handleCloseUserMenu}>
+                                        <MenuItem onClick={handleCloseUserMenu} sx={{width: "135px"}}>
                                             <Typography textAlign="center">
                                                 Profile
                                             </Typography>

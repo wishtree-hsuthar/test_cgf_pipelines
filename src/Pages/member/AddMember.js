@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import {
   COUNTRIES,
   MEMBER,
@@ -331,7 +332,7 @@ const AddMember = () => {
                   className="addmore-txt"
                   onClick={handleSubmit(onAddMoreButtonClickHandler)}
                 >
-                  Save & Add More
+                  Add More
                 </span>
               </div>
             </div>
@@ -562,7 +563,8 @@ const AddMember = () => {
                             }}
                             render={({ field, fieldState: { error } }) => (
                               <Autocomplete
-                                {...field}
+                                popupIcon={<KeyboardArrowDownRoundedIcon />}
+                              {...field}
                                 className={`${error && "autocomplete-error"}`}
                                 onChange={(event, newValue) => {
                                   console.log("inside autocomplete onchange");
@@ -957,6 +959,7 @@ const AddMember = () => {
                             }}
                             render={({ field, fieldState: { error } }) => (
                               <Autocomplete
+                                popupIcon={<KeyboardArrowDownRoundedIcon />}
                                 className={`${error && "autocomplete-error"}`}
                                 {...field}
                                 onChange={(event, newValue) => {
@@ -1041,7 +1044,7 @@ const AddMember = () => {
                   //   onClick={}
                   className="primary-button add-button"
                 >
-                  Add
+                  Save
                 </button>
               </div>
             </div>

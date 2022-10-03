@@ -22,6 +22,7 @@ import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import {memberHelper} from "../../utils/helpertext"
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
 //CGF Categories (Ideally get from backend)
 const cgfCategories1 = ["Manufacturer", "Retailer", "Other"];
@@ -615,7 +616,8 @@ const EditMember = () => {
                               // }}
                               render={({ field, fieldState: { error } }) => (
                                 <Autocomplete
-                                  {...field}
+                                popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                {...field}
                                   className={`${error && "autocomplete-error"}`}
                                   onChange={(event, newValue) => {
                                     console.log("inside autocomplete onchange");
