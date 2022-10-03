@@ -13,7 +13,7 @@ const pendingTableColumnHead = [
         label: "CGF Admin Name",
     },
     {
-        id: "email",
+        id: "Email Address",
 
         disablePadding: false,
         label: "Email",

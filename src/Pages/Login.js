@@ -14,7 +14,7 @@ import Toaster from "../components/Toaster";
 import { GET_USER, LOGIN_URL } from "../api/Url";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setUser } from "../redux/UserSlice";
+import { setUser, setPrivileges } from "../redux/UserSlice";
 import useCallbackState from "../utils/useCallBackState";
 import { privateAxios, publicAxios } from "../api/axios";
 const loginFormSchema = yup.object().shape({
@@ -105,6 +105,7 @@ const Login = (prop) => {
             if (response.status == 201) {
                 console.log("DATA", response?.data?.user);
                 dispatch(setUser(response?.data?.user));
+                dispatch(setPrivileges(response?.data?.user?.role));
                 navigate("/home");
             }
         } catch (error) {
@@ -166,9 +167,9 @@ const Login = (prop) => {
                                     <form
                                         onSubmit={handleSubmit(submitLoginData)}
                                     >
-                                        <div class="form-group mb-40">
+                                        <div class="form-group">
                                             <label for="emailid">
-                                                Username or Email Id{" "}
+                                                Username or Email Address{" "}
                                                 <span class="mandatory">*</span>
                                             </label>
                                             <TextField
@@ -183,11 +184,11 @@ const Login = (prop) => {
                                                 helperText={
                                                     errors.email
                                                         ? errors.email.message
-                                                        : ""
+                                                        : " "
                                                 }
                                             />
                                         </div>
-                                        <div class="form-group mb-40">
+                                        <div class="form-group">
                                             <label for="password">
                                                 Password{" "}
                                                 <span class="mandatory">*</span>
@@ -248,7 +249,7 @@ const Login = (prop) => {
                                                     {...register("password")}
                                                 />
                                                 <p className={`password-error`}>
-                                                    {errors.password?.message}
+                                                    {errors?.password ? errors.password?.message : <span>&nbsp;</span>}
                                                 </p>
                                             </div>
                                         </div>

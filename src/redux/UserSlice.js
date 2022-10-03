@@ -9,9 +9,12 @@ export const userSlice = createSlice({
         resetUser: (state) => {
             return {};
         },
+        setPrivileges: (state, action) => {
+            state.privilege = { ...state, ...action.payload };
+        },
     },
 });
 // this is for dispatch action
-export const { setUser, resetUser } = userSlice.actions;
+export const { setUser, resetUser, setPrivileges } = userSlice.actions;
 // this for config store
 export default userSlice.reducer;

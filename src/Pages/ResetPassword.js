@@ -241,8 +241,8 @@ const ResetPassword = () => {
                                                 />
                                                 <p className={`password-error`}>
                                                     {
-                                                        errors.newPassword
-                                                            ?.message
+                                                       errors?.newPassword ? errors.newPassword
+                                                            ?.message : <span>&nbsp;</span>
                                                     }
                                                 </p>
                                             </div>
@@ -313,8 +313,7 @@ const ResetPassword = () => {
                                                 />
                                                 <p className={`password-error`}>
                                                     {
-                                                        errors.confirmPassword
-                                                            ?.message
+                                                        errors?.confirmPassword ? errors.confirmPassword.message : <span>&nbsp;</span>
                                                     }
                                                 </p>
                                             </div>

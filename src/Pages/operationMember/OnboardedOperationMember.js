@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
+import { useSelector } from "react-redux";
 const OnboardedOperationMemberColumnHeader = [
     {
         id: "name",
@@ -69,6 +70,25 @@ function OnboardedOperationMember({
     //     setOpenDeleteDialogBoxOnboardedOperationMember,
     // ] = useState(false);
 
+    const privilege = useSelector((state) => state.user?.privilege);
+    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
+    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+    let moduleAccessForOperationMember = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Operation Members")
+        .map((data) => ({
+            operationMember: {
+                list: data.list,
+                view: data.view,
+                edit: data.edit,
+                delete: data.delete,
+                add: data.add,
+            },
+        }));
+    console.log(
+        "member operation privilege",
+        moduleAccessForOperationMember[0]?.operationMember
+    );
+
     const navigate = useNavigate();
     const [
         pageForOnboardedOperationMemberTab,
@@ -128,7 +148,7 @@ function OnboardedOperationMember({
             delete object["token"];
             delete object["tokenExpiry"];
             delete object["tokenType"];
-
+            delete object["address"];
             // delete object["isActive"];
 
             // object["role"] = object["data"]["subRoleId"].name;
@@ -228,7 +248,7 @@ function OnboardedOperationMember({
     // on click eye icon to  navigate view page
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
-        return navigate(`view-sub-admin/${id}`);
+        return navigate(`/users/operation_member/view-operation-member/${id}`);
     };
     useEffect(() => {
         let isMounted = true;
@@ -270,6 +290,12 @@ function OnboardedOperationMember({
                 setCheckBoxes={false}
                 setSelected={setSelectedOnboardOperationMember}
                 selected={selectedOnboardOperationMember}
+                onRowClick={
+                    SUPER_ADMIN === true
+                        ? true
+                        : moduleAccessForOperationMember[0]?.operationMember
+                              .view
+                }
             />
         </>
     );

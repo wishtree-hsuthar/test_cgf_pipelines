@@ -241,10 +241,10 @@ const SetPassword = () => {
                                                     }
                                                 />
                                                 <p className={`password-error`}>
-                                                    {errors.password
+                                                    {errors?.password
                                                         ? errors.password
                                                               .message
-                                                        : " "}
+                                                        : <span>&nbsp;</span>}
                                                 </p>
                                             </div>
                                         </div>
@@ -318,10 +318,10 @@ const SetPassword = () => {
                                                     }
                                                 />
                                                 <p className={`password-error`}>
-                                                    {errors.confirmPassword
+                                                    {errors?.confirmPassword
                                                         ? errors.confirmPassword
                                                               .message
-                                                        : " "}
+                                                        : <span>&nbsp;</span>}
                                                 </p>
                                             </div>
                                         </div>
