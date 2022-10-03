@@ -573,7 +573,7 @@ ul.breadcrumb li a:hover {
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root {
     font-size: 14px !important;
     padding: 5px 15px !important;
-    font-family: "ProximaNova-Regular" !important;
+    font-family: "ProximaNova-Regular", serif, sans-serif !important;
 }
 
 .css-6hp17o-MuiList-root-MuiMenu-list {
@@ -971,7 +971,7 @@ input[type=checkbox]:checked:before {
 }
 .phone-number-field fieldset {
     border-color: rgba(30, 30, 30, 0.5);
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
 }
 .Mui-focused .MuiOutlinedInput-notchedOutline {
     border-width: 1px !important;
@@ -1016,7 +1016,7 @@ input[type=checkbox]:checked:before {
 }
 .searchable-inputlist {
     font-size: 14px !important;
-    font-family: "ProximaNova-Regular" !important;
+    font-family: "ProximaNova-Regular", serif, sans-serif !important;
 }
 
 .select-field .Mui-disabled {
@@ -1074,7 +1074,7 @@ input[type=checkbox]:checked:before {
     flex-direction: column;
     height: 85vh;
 }
-.coming-soon-txt{font-size: 24px;line-height:24px;color: #f7a823;font-family: 'ProximaNova-Bold';}
+.coming-soon-txt{font-size: 24px;line-height:24px;color: #f7a823;font-family: 'ProximaNova-Bold', serif, sans-serif;}
 .phone-number-disable fieldset{border-color: rgba(30, 30, 30, 0.15) !important;}
 /* .select-field.country-code .Mui-disabled.MuiAutocomplete-popupIndicator{background: none !important;}
 
@@ -1127,7 +1127,7 @@ input[type=checkbox]:checked:before {
 }
 .forgot-password-txt {
     color: #f7a823;
-    font-family: "Proxima Nova Semibold";
+    font-family: "Proxima Nova Semibold", serif, sans-serif;
     padding-right: 10px;
 }
 .eye-btn {

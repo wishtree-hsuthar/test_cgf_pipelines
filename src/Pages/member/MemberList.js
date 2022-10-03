@@ -1,11 +1,16 @@
+//Third party imports
 import { Checkbox, MenuItem, Select } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import React, { useEffect, useState } from "react";
-import TableComponent from "../../components/TableComponent";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+//Internal Imports
+import TableComponent from "../../components/TableComponent";
 import { MEMBER } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
-import axios from "axios";
+import useCallbackState from "../../utils/useCallBackState";
+import Toaster from "../../components/Toaster";
 
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
@@ -25,7 +30,6 @@ const tableHead = [
   {
     id: "email",
     disablePadding: false,
-    // width: "30%",
     label: "Email",
   },
   {
@@ -36,7 +40,6 @@ const tableHead = [
   {
     id: "totalOperationMembers",
     disablePadding: false,
-    // width: "5%",
     label: "Operation Members",
   },
   {
@@ -55,17 +58,20 @@ const tableHead = [
     disablePadding: false,
     // width: "15%",
     label: "Status",
-  },
-  // {
-  //   id: "action",
-  //   disablePadding: false,
-  //   label: "Action",
-  // },
+  }
 ];
 
 const MemberList = () => {
   const navigate = useNavigate();
-  //state to hold which tab to show
+  //Refr for Toaster
+  const myRef = React.useRef();
+  //Toaster Message setter
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
+  });
+
 
   // state to manage loader
   const [isLoading, setIsLoading] = useState(false);
@@ -243,7 +249,21 @@ const MemberList = () => {
       updateRecords(response.data);
     } catch (error) {
       setIsLoading(false);
-      console.log("Error from backend", error);
+      if (error?.code === "ERR_CANCELED") return;
+      isMounted &&
+        setToasterDetails(
+          {
+            titleMessage: "Error",
+            descriptionMessage:
+              error?.response?.data?.message &&
+              typeof error.response.data.message === "string"
+                ? error.response.data.message
+                : "Something Went Wrong!",
+
+            messageType: "error",
+          },
+          () => myRef.current()
+        );
     }
   };
   useEffect(() => {
@@ -260,6 +280,12 @@ const MemberList = () => {
   // console.log("filters: ", filters);
   return (
     <div className="page-wrapper">
+      <Toaster
+        myRef={myRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
       <section>
         <div className="container">
           <div className="form-header member-form-header flex-between">

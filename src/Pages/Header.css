@@ -2,7 +2,7 @@
 .nav-list li {
     list-style-type: none;
     padding: 10px 15px;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
     font-size: 14px;
 }
 .nav-list li a {
@@ -62,7 +62,7 @@
 .profile-menu-item p {
     font-size: 14px;
     color: #1e1e1e;
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
 }
 .profile-menu-item .css-6hp17o-MuiList-root-MuiMenu-list {
     padding: 0 !important;
@@ -89,7 +89,7 @@
 .user-name-txt {
     color: #ffffff;
     font-size: 14px;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
     text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
 }
 .user-info span {
@@ -100,7 +100,7 @@
 }
 .user-name {
     color: #1d354d;
-    font-family: "ProximaNova-Bold";
+    font-family: "ProximaNova-Bold", serif, sans-serif;
 }
 .user-info {
     margin: 8px 0 0;
@@ -134,7 +134,7 @@
     padding: 0;
     color: #1e1e1e;
     font-size: 13px;
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
 }
 .header-submenu li:hover {
     background-color: rgba(30, 30, 30, 0.1);
@@ -157,7 +157,7 @@
 .header-submenu li.subactive a {
     color: #f7a823 !important;
     position: relative;
-    font-family: 'ProximaNova-Semibold';
+    font-family: 'ProximaNova-Semibold', serif, sans-serif;
 }
 /* .header-submenu li.subactive a::before {
     width: 100%;

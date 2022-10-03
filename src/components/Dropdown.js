@@ -29,7 +29,7 @@ function Dropdown({
     },
   };
   // const [showPlaceholder, setShowPlaceholder] = useState(true);
-  console.log("options", options);
+  // console.log("options", options);
   return (
     <FormControl className="select-reusable" disabled={isDisabled}>
       <div className={`select-field ${error && "select-field-error"}`}>

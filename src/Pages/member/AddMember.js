@@ -1,12 +1,13 @@
 import {
   Autocomplete,
   FormControlLabel,
+  Paper,
   Radio,
   RadioGroup,
   TextField,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
@@ -18,9 +19,9 @@ import {
   STATES,
 } from "../../api/Url";
 import axios from "axios";
-import { useState } from "react";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
+import { memberHelper } from "../../utils/helpertext";
 
 //CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
@@ -48,107 +49,9 @@ const cgfActivitiesRetailer = [
   "Grocery",
   "Health/beaty drugstore",
   "Non food retailer",
-  "Wholesaler"
+  "Wholesaler",
 ];
 
-const myHelper = {
-  memberCompany: {
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    required: "Enter member company",
-  },
-  parentCompany: {
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    pattern: "Invalid Input",
-  },
-  cgfActivity: {
-    required: "Select Activity",
-    validate: "Select activity",
-  },
-  corporateEmail: {
-    required: "Enter Email",
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    pattern: "Invalid Input",
-  },
-  countryCode: {
-    required: "Select country code",
-    validate: "Invalid input",
-  },
-  phoneNumber: {
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    pattern: "Invalid Input",
-    required: "Enter PhoneNumber",
-    validate: "Invalid Input",
-  },
-  websiteUrl: {
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    pattern: "Invalid Input",
-  },
-  region: {
-    required: "Select region",
-  },
-  country: {
-    required: "Select country",
-  },
-  state: {
-    required: "Select state",
-  },
-  city: {
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 charcters",
-  },
-  address: {
-    required: "Enter the address",
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-  },
-  cgfOfficeRegion: {
-    required: "Select the Region",
-  },
-  cgfOfficeCountry: {
-    required: "Select the Country",
-  },
-  cgfOffice: {
-    required: "Select the office",
-  },
-  memberContactSalutation: {
-    required: "Select the Salutation",
-  },
-  memberContactFullName: {
-    required: "Enter the name",
-    minLength: "Input must contain atleast 3 charcters",
-    maxLength: "Max char limit exceed",
-    pattern: "Invalid Input",
-  },
-  title: {
-    minLength: "Input must contain atleast 3 charcters",
-    maxLength: "Max char limit exceed",
-    pattern: "Invalid Input",
-  },
-  department: {
-    minLength: "Input must contain atleast 3 charcters",
-    maxLength: "Max char limit exceed",
-    pattern: "Invalid Input",
-  },
-  memberContactEmail: {
-    required: "Enter the email",
-    minLength: "Input must contain atleast 3 charcters",
-    maxLength: "Max char limit exceed",
-    validate: "Invalid Input",
-  },
-  memberContactCountryCode: { required: "Select country code" },
-  memberContactPhoneNuber: {
-    required: "Enter phone number",
-    maxLength: "Max char limit exceed",
-    minLength: "Input must contain atleast 3 characters",
-    pattern: "Invalid Input",
-    validate: "Invalid Input",
-  },
-};
 const AddMember = () => {
   const navigate = useNavigate();
   // Refr for Toaster
@@ -159,6 +62,22 @@ const AddMember = () => {
     descriptionMessage: "",
     messageType: "success",
   });
+  //method to call all error toaster from this method
+  const setErrorToaster = (error) => {
+    console.log("error", error);
+    setToasterDetails(
+      {
+        titleMessage: "Error",
+        descriptionMessage:
+          error?.response?.data?.message &&
+          typeof error.response.data.message === "string"
+            ? error.response.data.message
+            : "Something Went Wrong!",
+        messageType: "error",
+      },
+      () => myRef.current()
+    );
+  };
   const defaultValues = {
     memberCompany: "",
     companyType: "Internal",
@@ -209,7 +128,7 @@ const AddMember = () => {
         phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
         website: data.websiteUrl ? data.websiteUrl : undefined,
         state: data.state,
-        city: data.state,
+        city: data.city,
         companyName: data.memberCompany,
         companyType: data.companyType,
         cgfCategory: data.cgfCategory,
@@ -247,18 +166,7 @@ const AddMember = () => {
       reset({ defaultValues });
       return true;
     } catch (error) {
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      setErrorToaster(error);
       return false;
     }
   };
@@ -341,38 +249,16 @@ const AddMember = () => {
       setArrOfCountryCode([...countryCodeSet]);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      setErrorToaster(error);
     }
   };
   const getCountries = async (region) => {
     try {
-      const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
-      return regionCountries;
+      return await axios.get(REGIONCOUNTRIES + `/${region}`);
+      // return regionCountries;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      setErrorToaster(error);
       return [];
     }
   };
@@ -386,18 +272,7 @@ const AddMember = () => {
       return arrOfRegions;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      setErrorToaster(error);
       return [];
     }
   };
@@ -409,11 +284,12 @@ const AddMember = () => {
 
   const categoryChangeHandler = (e) => {
     setValue("cgfCategory", e.target.value);
+    trigger("cgfCategory");
     setValue("cgfActivity", "");
   };
 
   useEffect(() => {
-    let isMounted = true;
+    // let isMounted = true;
     const controller = new AbortController();
     arrOfRegions.length === 0 && getRegions(controller);
     arrOfCountryCode.length === 0 && getCountryCode(controller);
@@ -477,7 +353,7 @@ const AddMember = () => {
                         control={control}
                         name="memberCompany"
                         placeholder="Enter member company"
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{
                           required: true,
                           maxLength: 50,
@@ -559,14 +435,15 @@ const AddMember = () => {
                               "Uber",
                               "wishtree",
                             ]}
-                            getOptionLabel={(option) => {
-                              // Value selected with enter, right from the input
-                              if (typeof option === "string") {
-                                // console.log("option inside type string",option)
-                                return option;
-                              }
-                              return option;
-                            }}
+                            // getOptionLabel={(option) => {
+
+                            //   // Value selected with enter, right from the input
+                            //   if (typeof option === "string") {
+                            //     // console.log("option inside type string",option)
+                            //     return option;
+                            //   }
+                            //   return option;
+                            // }}
                             renderOption={(props, option) => (
                               <li className="searchable-inputlist" {...props}>
                                 {option}
@@ -599,6 +476,8 @@ const AddMember = () => {
                         control={control}
                         name="cgfCategory"
                         placeholder="Select category"
+                        myHelper={memberHelper}
+                        rules={{ required: true }}
                         myOnChange={categoryChangeHandler}
                         options={cgfCategories}
                       />
@@ -609,13 +488,16 @@ const AddMember = () => {
                     <div className="form-group">
                       {/* <div className="select-field"> */}
                       <label htmlFor="cgfActivity">
-                        CGF Activity {watch("cgfCategory") !== "Other" && <span className="mandatory">*</span>} 
+                        CGF Activity{" "}
+                        {watch("cgfCategory") !== "Other" && (
+                          <span className="mandatory">*</span>
+                        )}
                       </label>
                       <Dropdown
                         control={control}
                         name="cgfActivity"
                         placeholder="Select activity"
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{
                           validate: (value) => {
                             if (
@@ -650,7 +532,7 @@ const AddMember = () => {
                         control={control}
                         name="corporateEmail"
                         placeholder="Enter email"
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{
                           required: "true",
                           maxLength: 50,
@@ -667,64 +549,69 @@ const AddMember = () => {
                         Phone Number <span className="mandatory">*</span>
                       </label>
                       <div className="phone-number-field">
-                      <div className="select-field country-code">
-                        <Controller
-                          control={control}
-                          name="countryCode"
-                          rules={{
-                            required: true,
-                            // validate: () => {
-                            //   if (watch("phoneNumber") && !watch("countryCode"))
-                            //     return "Invalid Input";
-                            // },
-                          }}
-                          render={({ field, fieldState: { error } }) => (
-                            <Autocomplete
-                              {...field}
-                              className={`${error && 'autocomplete-error'}`}
-                              onChange={(event, newValue) => {
-                                console.log("inside autocomplete onchange");
-                                console.log("new Value ", newValue);
-                                newValue && typeof newValue === "object"
-                                  ? setValue("countryCode", newValue.name)
-                                  : setValue("countryCode", newValue);
-                                trigger("countryCode");
-                              }}
-                              options={arrOfCountryCode}
-                              autoHighlight
-                              // placeholder="Select country code"
-                              // getOptionLabel={(country) => country.name + " " + country}
-                              renderOption={(props, option) => (
-                                <li {...props}>{option}</li>
-                              )}
-                              renderInput={(params) => (
-                                <TextField
-                                  // className={`input-field ${
-                                  //   error && "input-error"
-                                  // }`}
-                                  {...params}
-                                  inputProps={{
-                                    ...params.inputProps,
-                                  }}
-                                  // onChange={() => trigger("phoneNumber")}
-                                  // onSubmit={() => setValue("countryCode", "")}
-                                  placeholder={"+91"}
-                                  helperText={
-                                    error
-                                      ? myHelper.countryCode[error?.type]
-                                      : " "
-                                  }
-                                />
-                              )}
-                            />
-                          )}
-                        />
+                        <div className="select-field country-code">
+                          <Controller
+                            control={control}
+                            name="countryCode"
+                            rules={{
+                              required: true,
+                              // validate: () => {
+                              //   if (watch("phoneNumber") && !watch("countryCode"))
+                              //     return "Invalid Input";
+                              // },
+                            }}
+                            render={({ field, fieldState: { error } }) => (
+                              <Autocomplete
+                                {...field}
+                                className={`${error && "autocomplete-error"}`}
+                                onChange={(event, newValue) => {
+                                  console.log("inside autocomplete onchange");
+                                  console.log("new Value ", newValue);
+                                  newValue && typeof newValue === "object"
+                                    ? setValue("countryCode", newValue.name)
+                                    : setValue("countryCode", newValue);
+                                  trigger("countryCode");
+                                }}
+                                PaperComponent={({ children }) => (
+                                  <Paper style={{ fontSize: "14px", fontFamily: '"ProximaNova-Regular", serif, sans-serif' }}>
+                                    {children}
+                                  </Paper>
+                                )}
+                                options={arrOfCountryCode}
+                                autoHighlight
+                                // placeholder="Select country code"
+                                // getOptionLabel={(country) => country.name + " " + country}
+                                renderOption={(props, option) => (
+                                  <li {...props}>{option}</li>
+                                )}
+                                renderInput={(params) => (
+                                  <TextField
+                                    // className={`input-field ${
+                                    //   error && "input-error"
+                                    // }`}
+                                    {...params}
+                                    inputProps={{
+                                      ...params.inputProps,
+                                    }}
+                                    // onChange={() => trigger("phoneNumber")}
+                                    // onSubmit={() => setValue("countryCode", "")}
+                                    placeholder={"+91"}
+                                    helperText={
+                                      error
+                                        ? memberHelper.countryCode[error?.type]
+                                        : " "
+                                    }
+                                  />
+                                )}
+                              />
+                            )}
+                          />
                         </div>
                         <Input
                           control={control}
                           name="phoneNumber"
                           placeholder="Enter phone number"
-                          myHelper={myHelper}
+                          myHelper={memberHelper}
                           rules={{
                             maxLength: 15,
                             minLength: 3,
@@ -747,7 +634,7 @@ const AddMember = () => {
                         control={control}
                         name="websiteUrl"
                         placeholder="Enter website URL"
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{
                           maxLength: 50,
                           minLength: 3,
@@ -772,7 +659,7 @@ const AddMember = () => {
                         myOnChange={onRegionChangeHandler}
                         name="region"
                         placeholder="Select region"
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{ required: true }}
                         options={arrOfRegions}
                       />
@@ -789,7 +676,7 @@ const AddMember = () => {
                         name="country"
                         myOnChange={onCountryChangeHandler}
                         placeholder="Select country"
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{ required: true }}
                         options={arrOfCountryRegions}
                       />
@@ -797,16 +684,13 @@ const AddMember = () => {
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
-                      <label htmlFor="state">
-                        State <span className="mandatory">*</span>
-                      </label>
+                      <label htmlFor="state">State</label>
                       <Dropdown
                         isDisabled={!watch("country")}
                         control={control}
                         name="state"
                         placeholder="Enter state"
-                        myHelper={myHelper}
-                        rules={{ required: true }}
+                        myHelper={memberHelper}
                         options={arrOfStateCountry}
                       />
                     </div>
@@ -848,14 +732,14 @@ const AddMember = () => {
                               "Delhi",
                               "Tokyo",
                             ]}
-                            getOptionLabel={(option) => {
-                              // Value selected with enter, right from the input
-                              if (typeof option === "string") {
-                                // console.log("option inside type string",option)
-                                return option;
-                              }
-                              return option;
-                            }}
+                            // getOptionLabel={(option) => {
+                            //   // Value selected with enter, right from the input
+                            //   if (typeof option === "string") {
+                            //     // console.log("option inside type string",option)
+                            //     return option;
+                            //   }
+                            //   return option;
+                            // }}
                             renderOption={(props, option) => (
                               <li {...props}>{option}</li>
                             )}
@@ -903,7 +787,7 @@ const AddMember = () => {
                             id="outlined-basic"
                             placeholder="Enter address"
                             helperText={
-                              error ? myHelper.address[error.type] : " "
+                              error ? memberHelper.address[error.type] : " "
                             }
                             variant="outlined"
                           />
@@ -928,7 +812,7 @@ const AddMember = () => {
                         name="cgfOfficeRegion"
                         myOnChange={cgfOfficeRegionChangeHandler}
                         placeholder="Select Region"
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{ required: true }}
                         options={arrOfRegions}
                       />
@@ -944,7 +828,7 @@ const AddMember = () => {
                         control={control}
                         name="cgfOfficeCountry"
                         placeholder="Select country"
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{ required: true }}
                         options={arrOfCgfOfficeCountryRegions}
                       />
@@ -959,7 +843,7 @@ const AddMember = () => {
                         control={control}
                         name="cgfOffice"
                         placeholder="Select office"
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{ required: true }}
                         options={["Mumbai", "Delhi", "Vadodara"]}
                       />
@@ -981,7 +865,7 @@ const AddMember = () => {
                             control={control}
                             name="memberContactSalutation"
                             // placeholder="Mr."
-                            myHelper={myHelper}
+                            myHelper={memberHelper}
                             rules={{
                               required: true,
                             }}
@@ -994,7 +878,7 @@ const AddMember = () => {
                           </label>
                           <Input
                             control={control}
-                            myHelper={myHelper}
+                            myHelper={memberHelper}
                             rules={{
                               required: true,
                               maxLength: 50,
@@ -1013,7 +897,7 @@ const AddMember = () => {
                       <label htmlFor="title">Title</label>
                       <Input
                         control={control}
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{
                           maxLength: 50,
                           minLength: 3,
@@ -1028,7 +912,7 @@ const AddMember = () => {
                       <label htmlFor="department">Department</label>
                       <Input
                         control={control}
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{
                           maxLength: 50,
                           minLength: 3,
@@ -1045,7 +929,7 @@ const AddMember = () => {
                       </label>
                       <Input
                         control={control}
-                        myHelper={myHelper}
+                        myHelper={memberHelper}
                         rules={{
                           required: true,
                           maxLength: 50,
@@ -1073,7 +957,7 @@ const AddMember = () => {
                             }}
                             render={({ field, fieldState: { error } }) => (
                               <Autocomplete
-                                className={`${error && 'autocomplete-error'}`}
+                                className={`${error && "autocomplete-error"}`}
                                 {...field}
                                 onChange={(event, newValue) => {
                                   newValue && typeof newValue === "object"
@@ -1102,7 +986,7 @@ const AddMember = () => {
                                       ...params.inputProps,
                                     }}
                                     // onChange={() =>
-                                      // trigger("memberContactCountryCode")
+                                    // trigger("memberContactCountryCode")
                                     // }
                                     // onSubmit={() =>
                                     //   setValue("memberContactCountryCode", "")
@@ -1110,7 +994,7 @@ const AddMember = () => {
                                     placeholder={"+91"}
                                     helperText={
                                       error
-                                        ? myHelper.countryCode[error?.type]
+                                        ? memberHelper.countryCode[error?.type]
                                         : " "
                                     }
                                   />
@@ -1122,7 +1006,7 @@ const AddMember = () => {
                         <Input
                           control={control}
                           name="memberContactPhoneNuber"
-                          myHelper={myHelper}
+                          myHelper={memberHelper}
                           rules={{
                             maxLength: 15,
                             minLength: 3,

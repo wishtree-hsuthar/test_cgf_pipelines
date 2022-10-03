@@ -26,7 +26,7 @@ const Header = () => {
     const MEMBER_ACCESS = userAuth?.roleId?.name == "Member";
     const OPERATION_MEMBER = userAuth?.roleId?.name == "Operation Member";
     
-    console.log("user Auth",userAuth)
+    // console.log("user Auth",userAuth)
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
@@ -37,11 +37,11 @@ const Header = () => {
     const routeAddress = ["/members", "/operation_members"];
     const myFunction = (activeState) => {
         if (activeState === "/members") {
-            console.log("active state==members");
+            // console.log("active state==members");
             return "active";
         }
         if (activeState === "/operation_members") {
-            console.log("active state==operation_members");
+            // console.log("active state==operation_members");
 
             return "active";
         } else {

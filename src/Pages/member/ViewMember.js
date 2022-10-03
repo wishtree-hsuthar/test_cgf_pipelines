@@ -24,6 +24,7 @@ import axios from "axios";
 import {
   COUNTRIES,
   MEMBER,
+  MEMBER_OPERATION_MEMBERS,
   REGIONCOUNTRIES,
   REGIONS,
   STATES,
@@ -59,43 +60,32 @@ const ViewMember = () => {
 
   const tableHead = [
     {
-      id: "companyName",
+      id: "name",
       // width: "10%",
       disablePadding: false,
-      label: "Member Company",
-    },
-    {
-      id: "name",
-      disablePadding: false,
-      label: "Member Name",
+      label: "Operation Member",
     },
     {
       id: "email",
       disablePadding: false,
-      //   width: "30%",
       label: "Email",
     },
     {
-      id: "companyType",
+      id: "assessment",
       disablePadding: false,
-      label: "Company Type",
-    },
-    {
-      id: "totalOperationMembers",
-      disablePadding: false,
-      // width: "5%",
-      label: "Operation Members",
+      //   width: "30%",
+      label: "Assessment",
     },
     {
       id: "createdBy",
       disablePadding: false,
-      // width: "20%",
       label: "Created By",
     },
     {
       id: "createdAt",
       disablePadding: false,
-      label: "Onboarded On",
+      // width: "5%",
+      label: "Created At",
     },
     {
       id: "is Active",
@@ -103,19 +93,12 @@ const ViewMember = () => {
       // width: "15%",
       label: "Status",
     },
-    // {
-    //   id: "action",
-    //   disablePadding: false,
-    //   label: "Action",
-    // },
   ];
   const keysOrder = [
     "_id",
-    "companyName",
     "name",
     "email",
-    "companyType",
-    "totalOperationMembers",
+    "assessment",
     "createdBy",
     "createdAt",
     "isActive",
@@ -125,7 +108,7 @@ const ViewMember = () => {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [order, setOrder] = useState("desc");
-  const [orderBy, setOrderBy] = useState("createdAt");
+  const [orderBy, setOrderBy] = useState("");
   const [records, setRecords] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [selected, setSelected] = useState([]);
@@ -144,8 +127,8 @@ const ViewMember = () => {
 
   //state to hold search keyword
   const [search, setSearch] = useState("");
- // state to manage loader
- const [isLoading, setIsLoading] = useState(false);
+  // state to manage loader
+  const [isLoading, setIsLoading] = useState(false);
 
   //State to hold filter values
   const [filters, setFilters] = useState({
@@ -154,47 +137,31 @@ const ViewMember = () => {
   //format records as backend requires
   const updateRecords = (data) => {
     data.forEach((object) => {
-      delete object["address"];
-      delete object["cgfActivity"];
-      delete object["cgfCategory"];
-      delete object["cgfOffice"];
-      delete object["cgfOfficeCountry"];
-      delete object["cgfOfficeRegion"];
-      delete object["city"];
-      delete object["corporateEmail"];
-      delete object["country"];
+      delete object["department"];
+      delete object["memberId"];
+      delete object["operationType"];
+      delete object["password"];
+      delete object["reportingManager"];
+      delete object["roleId"];
+      delete object["salt"];
+      delete object["salutation"];
+      delete object["title"];
       delete object["countryCode"];
-      delete object["parentCompany"];
       delete object["phoneNumber"];
-      delete object["region"];
-      delete object["state"];
       delete object["updatedAt"];
       delete object["updatedBy"];
-      delete object["website"];
       delete object["isDeleted"];
       delete object["isReplaced"];
+      delete object["uuid"];
       delete object["__v"];
+      object.assessment = object["assessment"]?.toString() ?? "0";
 
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
         "en-GB"
       );
-      if (typeof object["createdBy"] === "object") {
-        object.createdBy = object["createdBy"]["name"];
-      } else {
-        object.createdBy = "NA";
-      }
-      if (object["representative"].length > 0) {
-        object.email = object["representative"][0]?.email ?? "NA";
-        object.name = object["representative"][0]?.name ?? "NA";
-      } else {
-        object.email = "NA";
-        object.name = "NA";
-      }
-
-      object.totalOperationMembers = object["totalOperationMembers"].toString();
-      delete object["representative"];
-      // delete object["createdBy"];
-      delete object["memberRepresentativeId"];
+      typeof object["createdBy"] === "object"
+        ? (object.createdBy = object["createdBy"]["name"])
+        : (object.createdBy = "NA");
       keysOrder.forEach((k) => {
         const v = object[k];
         delete object[k];
@@ -204,29 +171,29 @@ const ViewMember = () => {
     setRecords([...data]);
   };
   const generateUrl = () => {
-    console.log("filters", filters);
-    let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+    // console.log("filters", filters);
+    let url = `${MEMBER_OPERATION_MEMBERS}/${param.id}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
     if (search?.length >= 3) url = url + `&search=${search}`;
     if (filters?.status !== "all" && filters?.status !== "none")
       url = url + `&status=${filters.status}`;
     return url;
   };
 
-  const getMembers = async (isMounted, controller) => {
-    try {
-      let url = generateUrl();
-      const response = await axios.get(url, { signal: controller.signal });
-      setTotalRecords(parseInt(response.headers["x-total-count"]));
-      console.log("response from backend", response);
-      updateRecords(response.data);
-    } catch (error) {
-      console.log("Error from backend", error);
-    }
-  };
+  // const getMembers = async (isMounted, controller) => {
+  //   try {
+  //     let url = generateUrl();
+  //     const response = await axios.get(url, { signal: controller.signal });
+  //     setTotalRecords(parseInt(response.headers["x-total-count"]));
+  //     console.log("response from backend", response);
+  //     updateRecords(response.data);
+  //   } catch (error) {
+  //     console.log("Error from backend", error);
+  //   }
+  // };
   //handle createdBy filter change handler
   const handleCreatedByFilter = (e) => {
-    const { name, value } = e.target;
-    console.log("name", name, "value", value);
+    const { value } = e.target;
+    // console.log("name", name, "value", value);
     if (value[value.length - 1] === "")
       return selectedCreatedBy.length - 1 === allMembers.length
         ? setSelectedCreatedBy(["none"])
@@ -254,7 +221,7 @@ const ViewMember = () => {
   //handle sigle select filters
   const onFilterChangehandler = (e) => {
     const { name, value } = e.target;
-    console.log("name", name, "Value ", value);
+    // console.log("name", name, "Value ", value);
     setFilters({
       ...filters,
       [name]: value,
@@ -268,8 +235,8 @@ const ViewMember = () => {
     setPage(1);
   };
   const onClickVisibilityIconHandler = (id) => {
-    console.log("id", id);
-    return navigate(`/users/members/view-member/${id}`);
+    // console.log("id", id);
+    return navigate(`/users/operation_members/view_operation_member/${id}`);
   };
 
   //code to View Member Fields
@@ -282,6 +249,22 @@ const ViewMember = () => {
     descriptionMessage: "",
     messageType: "success",
   });
+  //method to call all error toaster from this method
+  const setErrorToaster = (error) => {
+    console.log("error",error)
+    setToasterDetails(
+      {
+        titleMessage: "Error",
+        descriptionMessage:
+          error?.response?.data?.message &&
+          typeof error.response.data.message === "string"
+            ? error.response.data.message
+            : "Something Went Wrong!",
+        messageType: "error",
+      },
+      () => myRef.current()
+    );
+  };
   const defaultValues = {
     memberCompany: "",
     companyType: "Internal",
@@ -312,7 +295,7 @@ const ViewMember = () => {
     createdBy: "",
   };
   //code to get id from url
-  const params = useParams();
+  const param = useParams();
   //code form View Member
   const navigate = useNavigate();
   const [isActive, setActive] = useState(false);
@@ -322,7 +305,7 @@ const ViewMember = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const onDialogPrimaryButtonClickHandler = async () => {
     try {
-      await axios.delete(MEMBER + `/${params.id}`);
+      await axios.delete(MEMBER + `/${param.id}`);
       setToasterDetails(
         {
           titleMessage: "Success",
@@ -333,21 +316,22 @@ const ViewMember = () => {
       );
       return setTimeout(() => navigate("/users/members"), 3000);
     } catch (error) {
-      console.log("error on delete", error);
+      // console.log("error on delete", error);
       if (error?.code === "ERR_CANCELED") return;
-      console.log(toasterDetails);
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.error &&
-            typeof error.response.data.error === "string"
-              ? error.response.data.error
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      // console.log(toasterDetails);
+      setErrorToaster(error)
+      // setToasterDetails(
+      //   {
+      //     titleMessage: "Error",
+      //     descriptionMessage:
+      //       error?.response?.data?.error &&
+      //       typeof error.response.data.error === "string"
+      //         ? error.response.data.error
+      //         : "Something Went Wrong!",
+      //     messageType: "error",
+      //   },
+      //   () => myRef.current()
+      // );
     } finally {
       setOpenDialog(false);
     }
@@ -364,26 +348,32 @@ const ViewMember = () => {
   //to hold array of Country states
   const [arrOfStateCountry, setArrOfStateCountry] = useState([]);
   const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
+  // state to hold all operation members associated with member
+  // const [memberOperationMembers, setMemberOperationMembers] = useState([]);
 
   //to hold array of countries for perticular region for CGF Office details
   const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
     useState([]);
 
-  const { control, reset, setValue, watch, trigger } = useForm({
+  const { control, reset, watch, trigger } = useForm({
     defaultValues: defaultValues,
   });
   const formatRegionCountries = (regionCountries) => {
-    regionCountries.forEach(
-      (country, id) =>
-        (regionCountries[id] = country.hasOwnProperty("_id")
-          ? country.name
-          : country)
-    );
-    console.log("arr of country ", regionCountries);
+    regionCountries &&
+      regionCountries.forEach(
+        (country, id) =>
+          (regionCountries[id] = country.hasOwnProperty("_id")
+            ? country.name
+            : country)
+      );
+    // console.log("arr of country ", regionCountries);
     return regionCountries;
   };
 
-  const getCountryCode = async (controller) => {
+  const getCountryCode = async (
+    isMounted = true,
+    controller = new AbortController()
+  ) => {
     try {
       const response = await axios.get(COUNTRIES, {
         signal: controller.signal,
@@ -398,61 +388,48 @@ const ViewMember = () => {
     } catch (error) {
       console.log("error inside get Country code", error);
       if (error?.code === "ERR_CANCELED") return;
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      isMounted && setErrorToaster(error)
     }
   };
 
   const getCountries = async (region) => {
+    let controller = new AbortController();
     try {
+      console.log("region: ", region);
       if (region) {
-        const regionCountries = await axios.get(REGIONCOUNTRIES + `/${region}`);
-        return regionCountries;
+        return await axios.get(
+          REGIONCOUNTRIES + `/${region}`,
+          { signal: controller.signal }
+        );
       }
+      return [];
     } catch (error) {
       console.log("Error inside get Countres", error);
       if (error?.code === "ERR_CANCELED") return;
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      setErrorToaster(error)
       return [];
     }
   };
-  const getRegions = async (controller) => {
+  const getRegions = async (
+    isMounted = true,
+    controller = new AbortController()
+  ) => {
     try {
-      const regions = await axios.get(REGIONS, { signal: controller.signal });
-      // console.log("regions ", regions.data);
-      setArrOfRegions(regions.data);
+      const regions = await axios.get(REGIONS, {
+        signal: controller.signal,
+      });
+      console.log("regions ", regions);
+      setArrOfRegions(regions?.data ?? []);
       const countriesOnRegion1 = await getCountries(watch("region"));
-      // console.log("countries", countriesOnRegion1);
+      console.log("countries", countriesOnRegion1);
       const arrOfCountryRegionsTemp1 = formatRegionCountries(
-        countriesOnRegion1.data
+        countriesOnRegion1?.data
       );
-      setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
-      try {
+      arrOfCountryRegionsTemp1 &&
+        setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
+      if (watch("country")) {
         const stateCountries = await axios.get(STATES + `/${watch("country")}`);
         setArrOfStateCountry(stateCountries.data);
-      } catch (error) {
-        console.log("error");
       }
 
       const countriesOnRegion2 = await getCountries(watch("cgfOfficeRegion"));
@@ -460,33 +437,29 @@ const ViewMember = () => {
       const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries(
         countriesOnRegion2.data
       );
-      setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp1]);
+      arrOfCgfOfficeCountryRegionsTemp1 &&
+        setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp1]);
 
       // getCountries()
       return arrOfRegions;
     } catch (error) {
+      console.log("Inside get Regions catch", error);
       if (error?.code === "ERR_CANCELED") return;
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something Went Wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      isMounted && setErrorToaster(error)
       return [];
     }
   };
-  const getMemberByID = async (isMounted) => {
+  const getMemberByID = async (
+    isMounted = true,
+    controller = new AbortController()
+  ) => {
     try {
-      setIsLoading(true)
-      const response = await axios.get(MEMBER + `/${params.id}`);
+      setIsLoading(true);
+      const response = await axios.get(MEMBER + `/${param.id}`, {
+        signal: controller.signal,
+      });
       const data = response.data;
-      setIsLoading(false)
+      
       reset({
         memberCompany: data?.companyName,
         companyType: data?.companyType,
@@ -515,37 +488,46 @@ const ViewMember = () => {
         memberContactPhoneNuber:
           data?.memberRepresentativeId?.phoneNumber?.toString(),
         status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
-        totalOperationMembers: "124",
+        totalOperationMembers: totalRecords.toString(),
         createdBy: data?.createdBy,
       });
       setMember(response.data);
+      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
       if (error?.code === "ERR_CANCELED") return;
-      isMounted &&
-        setToasterDetails(
-          {
-            titleMessage: "Error",
-            descriptionMessage:
-              error?.response?.data?.message &&
-              typeof error.response.data.message === "string"
-                ? error.response.data.message
-                : "Something Went Wrong!",
-            messageType: "error",
-          },
-          () => myRef.current()
-        );
+      isMounted && setErrorToaster(error)
     }
     // console.log("response for member: ", response);
   };
-
+  const getOperationMemberByMemberId = async (controller) => {
+    try {
+      let url = generateUrl();
+      // setIsLoading(true);
+      const response = await axios.get(url);
+      // setIsLoading(false);
+      // console.log("response from operation member Id", response);
+      setTotalRecords(parseInt(response.headers["x-total-count"]));
+      updateRecords(response.data);
+    } catch (error) {
+      // setIsLoading(false);
+      if (error?.code === "ERR_CANCELED") return;
+      setErrorToaster(error)
+    }
+  };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    arrOfRegions.length === 0 && getRegions(controller);
-    arrOfCountryCode.length === 0 && getCountryCode(controller);
-    isMounted && getMemberByID();
-    makeApiCall && getMembers(isMounted, controller);
+    (async () => {
+      isMounted && makeApiCall && (await getMemberByID(isMounted, controller));
+      isMounted && (await getCountryCode(isMounted, controller));
+      isMounted && (await getRegions(isMounted, controller));
+      // getRegions(controller)
+      isMounted &&
+        makeApiCall &&
+        (await getOperationMemberByMemberId(controller));
+    })();
+    // makeApiCall && getMembers(isMounted, controller);
     return () => {
       isMounted = false;
       clearTimeout(searchTimeout);
@@ -553,7 +535,7 @@ const ViewMember = () => {
     };
     // console.log("member",member)
   }, [watch, page, rowsPerPage, orderBy, order, filters, makeApiCall]);
-  console.log("Member", member);
+  // console.log("Member", member);
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
       <Toaster
@@ -617,7 +599,7 @@ const ViewMember = () => {
                 <ul className="crud-toggle-list">
                   <li
                     onClick={() =>
-                      navigate(`/users/members/edit-member/${params.id}`)
+                      navigate(`/users/members/edit-member/${param.id}`)
                     }
                   >
                     Edit
@@ -659,7 +641,7 @@ const ViewMember = () => {
                       </label>
                       <div className="radio-btn-field">
                         <RadioGroup
-                          value={member?.companyType ? member.companyType : ""}
+                          value={member?.companyType ?? ""}
                           aria-labelledby="demo-radio-buttons-group-label"
                           name="radio-buttons-group"
                           className="radio-btn"
@@ -687,7 +669,7 @@ const ViewMember = () => {
                         disabled
                         className="searchable-input"
                         value={
-                          member?.parentCompany ? member.parentCompany : "NA"
+                          member?.parentCompany ?? "NA"
                         }
                         selectOnFocus
                         handleHomeEndKeys
@@ -706,14 +688,14 @@ const ViewMember = () => {
                           "Uber",
                           "wishtree",
                         ]}
-                        getOptionLabel={(option) => {
-                          // Value selected with enter, right from the input
-                          if (typeof option === "string") {
-                            // console.log("option inside type string",option)
-                            return option;
-                          }
-                          return option;
-                        }}
+                        // getOptionLabel={(option) => {
+                        //   // Value selected with enter, right from the input
+                        //   if (typeof option === "string") {
+                        //     // console.log("option inside type string",option)
+                        //     return option;
+                        //   }
+                        //   return option;
+                        // }}
                         renderOption={(props, option) => (
                           <li {...props}>{option}</li>
                         )}
@@ -802,7 +784,7 @@ const ViewMember = () => {
                           <Autocomplete
                             className="phone-number-disable"
                             readOnly
-                            options={arrOfCountryCode ? arrOfCountryCode : []}
+                            options={arrOfCountryCode}
                             autoHighlight
                             value={
                               member?.countryCode ? member.countryCode : ""
@@ -858,7 +840,7 @@ const ViewMember = () => {
                         control={control}
                         name="region"
                         placeholder="Select region"
-                        options={arrOfRegions ? arrOfRegions : []}
+                        options={arrOfRegions}
                       />
                     </div>
                   </div>
@@ -873,21 +855,19 @@ const ViewMember = () => {
                         name="country"
                         placeholder="Select country"
                         myHelper={myHelper}
-                        options={arrOfCountryRegions ? arrOfCountryRegions : []}
+                        options={arrOfCountryRegions}
                       />
                     </div>
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
-                      <label htmlFor="state">
-                        State <span className="mandatory">*</span>
-                      </label>
+                      <label htmlFor="state">State</label>
                       <Dropdown
                         isDisabled
                         control={control}
                         name="state"
                         placeholder="Enter state"
-                        options={arrOfStateCountry ? arrOfStateCountry : []}
+                        options={arrOfStateCountry}
                       />
                     </div>
                   </div>
@@ -898,7 +878,7 @@ const ViewMember = () => {
                         disabled
                         className="searchable-input"
                         handleHomeEndKeys
-                        value={member?.city ? member.city : ""}
+                        value={member?.city ?? ""}
                         id="free-solo-with-text-demo"
                         options={[
                           "Mumbai",
@@ -971,7 +951,7 @@ const ViewMember = () => {
                         isDisabled
                         control={control}
                         name="cgfOfficeRegion"
-                        options={arrOfRegions ? arrOfRegions : []}
+                        options={arrOfRegions}
                       />
                     </div>
                   </div>
@@ -1035,7 +1015,7 @@ const ViewMember = () => {
                             isDisabled
                             control={control}
                             name="memberContactFullName"
-                            placeholder="Enter full name"
+                            placeholder="NA"
                           />
                         </div>
                       </div>
