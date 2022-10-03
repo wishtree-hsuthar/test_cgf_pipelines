@@ -102,6 +102,7 @@ const Header = () => {
         try {
             const response = await privateAxios.post(LOGOUT_URL);
             console.log("Response from logout");
+            
             if (response.status == 201) {
                 setAnchorElUser(null);
                 dispatch(resetUser());
