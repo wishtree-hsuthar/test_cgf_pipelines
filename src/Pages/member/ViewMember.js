@@ -236,7 +236,7 @@ const ViewMember = () => {
   };
   const onClickVisibilityIconHandler = (id) => {
     // console.log("id", id);
-    return navigate(`/users/operation_members/view_operation_member/${id}`);
+    return navigate(`/users/operation-members/view-operation-member/${id}`);
   };
 
   //code to View Member Fields
