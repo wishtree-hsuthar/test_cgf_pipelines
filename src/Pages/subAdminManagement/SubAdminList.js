@@ -364,8 +364,31 @@ const SubAdminList = () => {
 
                     <div className="form-header member-form-header flex-between">
                         <div className="form-header-left-blk flex-start">
-                            <h2 className="heading2 mr-40">CGF Admins</h2>
-                            <div className="member-tab-wrapper">
+                            <h2 className="heading2">CGF Admins</h2>
+                            
+                        </div>
+                        <div className="form-header-right-txt">
+                            <div className="tertiary-btn-blk mr-20">
+                                <span className="download-icon">
+                                    <DownloadIcon />
+                                </span>
+                                Download
+                            </div>
+                            <div className="form-btn">
+                                <button
+                                    onClick={() =>
+                                        navigate("/sub-admins/add-sub-admin")
+                                    }
+                                    className="primary-button add-button"
+                                >
+                                    Add CGF Admin
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="member-filter-wrap flex-between">
+                        <div className="member-tab-left">
+                        <div className="member-tab-wrapper">
                                 <Box
                                     sx={{
                                         borderBottom: 1,
@@ -390,26 +413,6 @@ const SubAdminList = () => {
                                 </Box>
                             </div>
                         </div>
-                        <div className="form-header-right-txt">
-                            <div className="tertiary-btn-blk mr-20">
-                                <span className="download-icon">
-                                    <DownloadIcon />
-                                </span>
-                                Download
-                            </div>
-                            <div className="form-btn">
-                                <button
-                                    onClick={() =>
-                                        navigate("/sub-admins/add-sub-admin")
-                                    }
-                                    className="primary-button add-button"
-                                >
-                                    Add CGF Admin
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="member-filter-wrap flex-between">
                         <div className="member-filter-left">
                             <div className="searchbar">
                                 <input

@@ -22,7 +22,7 @@ import Input from "../../components/Input";
 import axios from "axios";
 import { COUNTRIES, MEMBER, REGIONCOUNTRIES, REGIONS, STATES } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
-
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -750,6 +750,8 @@ const ViewMember = () => {
                     <div className="phone-number-field">
                       <div className="select-field country-code">
                         <Autocomplete
+                          disabled
+                          popupIcon={<KeyboardArrowDownRoundedIcon />}
                           className="phone-number-disable"
                           readOnly
                           options={arrOfCountryCode ? arrOfCountryCode : []}
@@ -1030,6 +1032,8 @@ const ViewMember = () => {
                     <div className="phone-number-field">
                       <div className="select-field country-code">
                         <Autocomplete
+                        disabled
+                        popupIcon={<KeyboardArrowDownRoundedIcon />}
                           className="phone-number-disable"
                           readOnly
                           value={

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FormControl, FormHelperText, MenuItem, Select } from "@mui/material";
 import { useController } from "react-hook-form";
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+
 function Dropdown({
   control,
   name,
@@ -34,6 +36,7 @@ function Dropdown({
     <FormControl className="select-reusable" disabled={isDisabled}>
       <div className={`select-field ${error && "select-field-error"}`}>
         <Select
+          IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props}/>}
           MenuProps={MenuProps}
           displayEmpty
           value={value}
