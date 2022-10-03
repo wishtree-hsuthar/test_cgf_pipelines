@@ -31,6 +31,7 @@ import {
 } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import { useSelector } from "react-redux";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -134,6 +135,21 @@ const ViewMember = () => {
   const [filters, setFilters] = useState({
     status: "none",
   });
+  const privilege = useSelector((state) => state.user?.privilege);
+    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
+    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+    let moduleAccesForMember = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Members")
+        .map((data) => ({
+            member: {
+                list: data.list,
+                view: data.view,
+                edit: data.edit,
+                delete: data.delete,
+            },
+        }));
+        console.log("module access member in view member",moduleAccesForMember[0].member)
+  
   //format records as backend requires
   const updateRecords = (data) => {
     data.forEach((object) => {
@@ -151,17 +167,19 @@ const ViewMember = () => {
       delete object["updatedAt"];
       delete object["updatedBy"];
       delete object["isDeleted"];
+      delete object["address"]
       delete object["isReplaced"];
       delete object["uuid"];
       delete object["__v"];
+      // delete object["createdBy"]
       object.assessment = object["assessment"]?.toString() ?? "0";
-
+      console.log("type of created By",typeof object["createdBy"],"createdBy",object["createdBy"])
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
         "en-GB"
       );
       typeof object["createdBy"] === "object"
         ? (object.createdBy = object["createdBy"]["name"])
-        : (object.createdBy = "NA");
+        : (object.createdBy = object["createdBy"]);
       keysOrder.forEach((k) => {
         const v = object[k];
         delete object[k];
@@ -489,7 +507,7 @@ const ViewMember = () => {
           data?.memberRepresentativeId?.phoneNumber?.toString(),
         status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
         totalOperationMembers: totalRecords.toString(),
-        createdBy: data?.createdBy,
+        createdBy: data?.createdBy["name"],
       });
       setMember(response.data);
       setIsLoading(false);
@@ -585,26 +603,31 @@ const ViewMember = () => {
           <div className="form-header flex-between">
             <h2 className="heading2">View Member</h2>
             <span className="form-header-right-txt" onClick={handleToggle}>
+              {(SUPER_ADMIN===true||moduleAccesForMember[0].member.edit==true||moduleAccesForMember[0].member.delete==true)&&
               <span
                 className={`crud-operation ${
                   isActive && "crud-operation-active"
                 }`}
               >
                 <MoreVertIcon />
-              </span>
+              </span>}
               <div
                 className="crud-toggle-wrap"
                 style={{ display: isActive ? "block" : "none" }}
               >
                 <ul className="crud-toggle-list">
                   <li
+                  hidden={(SUPER_ADMIN?false:!moduleAccesForMember[0].member.edit)}
                     onClick={() =>
                       navigate(`/users/members/edit-member/${param.id}`)
                     }
                   >
                     Edit
                   </li>
-                  <li onClick={() => setOpenDialog(true)}>Delete</li>
+                  <li 
+                  hidden={(SUPER_ADMIN?false:!moduleAccesForMember[0].member.delete)}
+                  
+                  onClick={() => setOpenDialog(true)}>Delete</li>
                   {/* <li>Replace</li> */}
                 </ul>
               </div>

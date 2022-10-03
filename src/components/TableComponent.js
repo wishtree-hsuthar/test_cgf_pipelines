@@ -281,7 +281,7 @@ export default function TableComponent({
                                 }`}
                                 key={cell}
                               >
-                                <span>{row[cell] ? "active" : "inactive"}</span>
+                                <span>{row[cell] ? "Active" : "Inactive"}</span>
                               </TableCell>
                             );
                           }

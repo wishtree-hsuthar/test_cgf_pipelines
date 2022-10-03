@@ -11,6 +11,7 @@ import { MEMBER } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
+import { useSelector } from "react-redux";
 
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
@@ -72,6 +73,21 @@ const MemberList = () => {
     messageType: "success",
   });
 
+  const privilege = useSelector((state) => state.user?.privilege);
+    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
+    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+    let moduleAccesForMember = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Members")
+        .map((data) => ({
+            member: {
+                list: data.list,
+                view: data.view,
+                edit: data.edit,
+                delete: data.delete,
+                add:data.add
+            },
+        }));
+        console.log("module access member in view member",moduleAccesForMember[0]?.member)
 
   // state to manage loader
   const [isLoading, setIsLoading] = useState(false);
@@ -299,6 +315,7 @@ const MemberList = () => {
                 </span>
                 Download
               </div>
+              {(SUPER_ADMIN==true||moduleAccesForMember[0].member.add)&&
               <div className="form-btn">
                 <button
                   type="submit"
@@ -307,7 +324,7 @@ const MemberList = () => {
                 >
                   Add Member
                 </button>
-              </div>
+              </div>}
             </div>
           </div>
           <div className="member-filter-sect">
@@ -450,7 +467,7 @@ const MemberList = () => {
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}
                 setCheckBoxes={false}
-                onRowClick
+                onRowClick={SUPER_ADMIN?true:moduleAccesForMember[0]?.member.view}
               />
             )}
           </div>
