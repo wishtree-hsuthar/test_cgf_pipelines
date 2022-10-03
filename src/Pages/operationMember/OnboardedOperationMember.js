@@ -128,7 +128,7 @@ function OnboardedOperationMember({
             delete object["token"];
             delete object["tokenExpiry"];
             delete object["tokenType"];
-
+            delete object["address"];
             // delete object["isActive"];
 
             // object["role"] = object["data"]["subRoleId"].name;
@@ -228,7 +228,7 @@ function OnboardedOperationMember({
     // on click eye icon to  navigate view page
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
-        return navigate(`view-sub-admin/${id}`);
+        return navigate(`/users/operation_member/view-operation-member/${id}`);
     };
     useEffect(() => {
         let isMounted = true;
@@ -270,6 +270,7 @@ function OnboardedOperationMember({
                 setCheckBoxes={false}
                 setSelected={setSelectedOnboardOperationMember}
                 selected={selectedOnboardOperationMember}
+                onRowClick={true}
             />
         </>
     );

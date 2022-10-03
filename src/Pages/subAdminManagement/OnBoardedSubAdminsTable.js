@@ -11,7 +11,7 @@ const onBoardedTableColumnHead = [
         label: "CGF Admin Name",
     },
     {
-        id: "email",
+        id: "Email Address",
 
         disablePadding: false,
         label: "Email",
@@ -156,7 +156,7 @@ function OnBoardedSubAdminsTable({
             console.log("Error from getSubAdmin-------", error);
 
             if (error?.response?.status == 401) {
-                navigate("/login");
+                // navigate("/login");
             }
             setIsLoading(false);
         }

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
+import { WITHDRAW_OPERATION_MEMBER } from "../../api/Url";
 const pendingOperationMemberTableColumnHeader = [
     {
         id: "operationMember",
@@ -189,7 +190,7 @@ function PendingOperationMembers({
     const withdrawInviteById = async () => {
         try {
             const response = await privateAxios.delete(
-                "" + withdrawInviteidOfOperationMember
+                WITHDRAW_OPERATION_MEMBER + withdrawInviteidOfOperationMember
             );
             if (response.status == 200) {
                 console.log("operation member  invite withdrawn successfully");
@@ -202,6 +203,7 @@ function PendingOperationMembers({
                     () => myRef.current()
                 );
                 // call getPendingOperationMember below
+                getPendingOperationMember();
                 setOpenDeleteDialogBoxPendingOperationMember(false);
             }
         } catch (error) {

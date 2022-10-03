@@ -14,7 +14,7 @@ import Toaster from "../components/Toaster";
 import { GET_USER, LOGIN_URL } from "../api/Url";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setUser } from "../redux/UserSlice";
+import { setUser, setPrivileges } from "../redux/UserSlice";
 import useCallbackState from "../utils/useCallBackState";
 import { privateAxios, publicAxios } from "../api/axios";
 const loginFormSchema = yup.object().shape({
@@ -105,6 +105,7 @@ const Login = (prop) => {
             if (response.status == 201) {
                 console.log("DATA", response?.data?.user);
                 dispatch(setUser(response?.data?.user));
+                dispatch(setPrivileges(response?.data?.user?.role));
                 navigate("/home");
             }
         } catch (error) {
@@ -168,7 +169,7 @@ const Login = (prop) => {
                                     >
                                         <div class="form-group">
                                             <label for="emailid">
-                                                Username or Email Id{" "}
+                                                Username or Email Address{" "}
                                                 <span class="mandatory">*</span>
                                             </label>
                                             <TextField

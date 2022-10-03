@@ -115,7 +115,6 @@ function OperationMemberList() {
                                 <h2 className="heading2 mr-40">
                                     Operation Members
                                 </h2>
-                                
                             </div>
                             <div className="form-header-right-txt">
                                 <div className="tertiary-btn-blk mr-20">
@@ -128,7 +127,7 @@ function OperationMemberList() {
                                     <button
                                         onClick={() =>
                                             navigate(
-                                                "/users/operation_members/add_operation_member"
+                                                "/users/operation-members/add-operation-member"
                                             )
                                         }
                                         className="primary-button add-button"
@@ -140,7 +139,7 @@ function OperationMemberList() {
                         </div>
                         <div className="member-filter-wrap flex-between">
                             <div className="member-tab-left">
-                            <div className="member-tab-wrapper">
+                                <div className="member-tab-wrapper">
                                     <Box
                                         sx={{
                                             borderBottom: 1,
@@ -338,6 +337,8 @@ function OperationMemberList() {
                                     filters={filters}
                                     setSearch={setSearch}
                                     setFilters={setFilters}
+                                    setToasterDetails={setToasterDetails}
+                                    myRef={toasterRef}
                                 />
                             </TabPanel>
                         </div>

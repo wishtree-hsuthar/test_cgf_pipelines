@@ -1,5 +1,8 @@
 import {
     Autocomplete,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
     // FormControlLabel,
     // MenuItem,
     // Radio,
@@ -8,7 +11,7 @@ import {
     TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 // import { Controller } from "react-hook-form";
 import { useForm, Controller } from "react-hook-form";
 import Input from "../../components/Input";
@@ -18,8 +21,35 @@ import { privateAxios } from "../../api/axios";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import axios from "axios";
-import { ADD_OPERATION_MEMBER, FETCH_OPERATION_MEMBER } from "../../api/Url";
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import {
+    ADD_OPERATION_MEMBER,
+    FETCH_OPERATION_MEMBER,
+    FETCH_REPORTING_MANAGER,
+    GET_OPERATION_MEMBER_BY_ID,
+    UPDATE_OPERATION_MEMBER,
+} from "../../api/Url";
+const defaultValues = {
+    memberCompany: "",
+    companyType: "Internal",
+    countryCode: "",
+    phoneNumber: "",
+    salutation: "",
+    title: "",
+    department: "",
+    email: "",
+    operationType: "",
+    memberId: {
+        _id: "",
+        companyName: "",
+        companyType: "",
+    },
+    address: "",
+    reportingManager: {
+        _id: "",
+        name: "",
+    },
+    isActive: "",
+};
 const helperTextForAddOperationMember = {
     salutation: {
         required: "Select salutation",
@@ -43,7 +73,7 @@ const helperTextForAddOperationMember = {
         pattern: "Invalid format",
     },
     email: {
-        required: "Enter email addrees",
+        required: "Enter email id",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         pattern: "Invalid format",
@@ -93,7 +123,7 @@ const helperTextForAddOperationMember = {
         // pattern: "Invalid format",
     },
 };
-function AddOperationMember() {
+function EditOperationMember() {
     const {
         register,
         handleSubmit,
@@ -104,97 +134,25 @@ function AddOperationMember() {
         trigger,
         watch,
     } = useForm({
-        defaultValues: {
-            salutation: "Mr.",
-            memberId: {
-                _id: "",
-                companyName: "",
-            },
-        },
+        defaultValues: defaultValues,
     });
-
+    // watch('')
     const navigate = useNavigate();
-    const [memberCompanies, setMemberCompanies] = useState();
+    const params = useParams();
+    const [memberCompanies, setMemberCompanies] = useState([]);
     const [disableReportingManager, setDisableReportingManager] =
         useState(true);
-    const [countries, setCountries] = useState();
-    const [reportingManagers, setReportingManagers] = useState();
+    const [countries, setCountries] = useState([]);
+    const [reportingManagers, setReportingManagers] = useState([]);
+    const [operationMember, setOperationMember] = useState({});
     const toasterRef = useRef();
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
         descriptionMessage: "",
         messageType: "error",
     });
-    useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
-        const fetchMemberComapany = async () => {
-            try {
-                const response = await privateAxios.get(
-                    "http://localhost:3000/api/members",
-                    {
-                        signal: controller.signal,
-                    }
-                );
-                console.log(
-                    "member company---",
-                    response.data.map((data) => {
-                        console.log("member company=", data.companyName);
-                    })
-                );
 
-                if ((response.status = 200)) {
-                    isMounted &&
-                        setMemberCompanies(
-                            response.data.map((data) => ({
-                                _id: data._id,
-                                companyName: data.companyName,
-                                companyType: data.companyType,
-                            }))
-                        );
-                }
-
-                console.log("member company---", memberCompanies);
-            } catch (error) {
-                console.log("error from fetch member company", error);
-            }
-        };
-        let fetchCountries = async () => {
-            try {
-                const response = await privateAxios.get(
-                    "http://localhost:3000/api/master/country/list",
-                    {
-                        signal: controller.signal,
-                    }
-                );
-                console.log("response", response);
-                isMounted &&
-                    setCountries(
-                        response.data.map((country) => country.countryCode)
-                    );
-            } catch (error) {
-                console.log("error from countries api", error);
-                if (error?.response?.status == 401) {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message,
-                            messageType: "error",
-                        },
-                        () => toasterRef.current()
-                    );
-                    navigate("/login");
-                }
-            }
-        };
-        fetchCountries();
-        fetchMemberComapany();
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        };
-    }, []);
+    console.log("watch country code", watch("countryCode"));
     const fetchReportingManagers = async (id) => {
         try {
             const response = await privateAxios.get(
@@ -207,19 +165,177 @@ function AddOperationMember() {
                         name: data.name,
                     }))
                 );
+                console.log(
+                    "reporting managersssss",
+                    response.data.map((data) => ({
+                        _id: data._id,
+                        name: data.name,
+                    }))
+                );
             }
         } catch (error) {
             console.log("error from fetching reporting managers", error);
         }
     };
-    const addOperationMember = async (data, navigateToListPage) => {
-        data = { ...data, phoneNumber: Number(data.phoneNumber) };
+    // fetch all countries and its objects
+    const fetchCountries = async (controller) => {
         try {
-            const response = await privateAxios.post(
-                ADD_OPERATION_MEMBER,
+            const response = await privateAxios.get(
+                "http://localhost:3000/api/master/country/list",
+                {
+                    signal: controller.signal,
+                }
+            );
+            console.log("response from countries", response);
+            // isMounted &&
+            setCountries(response.data.map((country) => country.countryCode));
+        } catch (error) {
+            console.log("error from countries api", error);
+            if (error?.response?.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                navigate("/login");
+            }
+        }
+    };
+    // Fetch all member comapanies
+    const fetchMemberComapany = async (controller) => {
+        try {
+            const response = await privateAxios.get(
+                "http://localhost:3000/api/members",
+                {
+                    signal: controller.signal,
+                }
+            );
+            console.log(
+                "member company---",
+                response.data.map((data) => {
+                    console.log("member company=", data.companyName);
+                })
+            );
+
+            if (response.status == 200) {
+                // isMounted &&
+                setMemberCompanies(
+                    response.data.map((data) => ({
+                        _id: data._id,
+                        companyName: data.companyName,
+                        companyType: data.companyType,
+                    }))
+                );
+            }
+
+            console.log("member company---", memberCompanies);
+        } catch (error) {
+            console.log("error from fetch member company", error);
+        }
+    };
+
+    // Fetch reporting managers of all member companies
+    const fetchRm = async (id) => {
+        console.log("operation member----", operationMember);
+        try {
+            const response = await privateAxios.get(
+                FETCH_REPORTING_MANAGER +
+                    id +
+                    // operationMember?.memberId?._id +
+                    "/rm"
+            );
+            console.log("response from rm", response);
+            setReportingManagers(
+                response.data.map((data) => ({
+                    _id: data._id,
+                    name: data.name,
+                }))
+            );
+        } catch (error) {
+            console.log("Error from fetching rm reporting manager", error);
+        }
+    };
+
+    // fetch operation member by id
+
+    const fetchOperationMember = async (controller, isMounted) => {
+        try {
+            const response = await privateAxios.get(
+                GET_OPERATION_MEMBER_BY_ID + params.id,
+                {
+                    signal: controller.signal,
+                }
+            );
+            isMounted &&
+                reset({
+                    memberId: {
+                        _id: response?.data?.memberId?._id,
+                        companyName: response?.data?.memberId?.companyName,
+                        companyType: response?.data?.memberId?.companyType,
+                    },
+                    companyType: response?.data?.memberId?.companyType,
+                    countryCode: response?.data?.countryCode,
+                    phoneNumber: response?.data?.phoneNumber,
+                    address: response?.data?.address,
+                    title: response.data.title ? response.data.title : "N/A",
+                    department: response?.data?.department
+                        ? response?.data?.department
+                        : "N/A",
+                    email: response?.data?.email,
+                    operationType: response?.data?.operationType
+                        ? response?.data?.operationType
+                        : "N/A",
+                    reportingManager: response?.data?.reportingManager?._id,
+                    salutation: response?.data?.salutation,
+                    name: response?.data?.name,
+                    isActive: response?.data?.isActive,
+                    // reportingManagerId:
+                    //     response?.data?.reportingManager?._id,
+                });
+            setOperationMember(response.data);
+            console.log("response data ----", operationMember);
+            fetchRm(response?.data?.memberId?._id);
+            // fetchReportingManagers(operationMember?.memberId?._id);
+        } catch (error) {
+            console.log("error from edit operation members", error);
+        }
+    };
+
+    useEffect(() => {
+        let isMounted = true;
+        const controller = new AbortController();
+
+        countries.length === 0 && fetchCountries(controller);
+        memberCompanies.length === 0 && fetchMemberComapany(controller);
+
+        fetchOperationMember(controller, isMounted);
+
+        // fetchReportingManagers(operationMember?.memberId?._id);
+        // fetchRm();
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
+    }, []);
+    console.log("countries----", countries);
+    console.log("members companies----", memberCompanies);
+
+    const editOperationMember = async (data, navigateToListPage) => {
+        data = {
+            ...data,
+            phoneNumber: Number(data.phoneNumber),
+            isActive: data.isActive === "true" ? true : false,
+        };
+        try {
+            const response = await privateAxios.put(
+                UPDATE_OPERATION_MEMBER + params.id,
                 data
             );
-            if (response.status == 201) {
+            if (response.status == 200) {
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
@@ -228,10 +344,10 @@ function AddOperationMember() {
                     },
                     () => toasterRef.current()
                 );
-                navigateToListPage === false &&
-                    setTimeout(() => {
-                        navigate("/users/operation-members");
-                    }, 3000);
+
+                setTimeout(() => {
+                    navigate("/users/operation-members");
+                }, 3000);
             }
         } catch (error) {
             console.log(
@@ -246,16 +362,22 @@ function AddOperationMember() {
                 },
                 () => toasterRef.current()
             );
+            if (error?.response?.status == 401) {
+                navigate("/login");
+            }
         }
     };
 
     const handleOnSubmit = async (data) => {
         console.log("data from onsubmit", data);
-        addOperationMember(data, false);
+        // addOperationMember(data, false);
+        editOperationMember(data);
     };
     const handleSaveAndMore = (data) => {
         console.log("data from handleSaveAndMore", data);
-        addOperationMember(data, true);
+
+        editOperationMember(data);
+
         reset();
     };
 
@@ -275,7 +397,14 @@ function AddOperationMember() {
                                 Operation Members
                             </Link>
                         </li>
-                        <li>Add Operation Member</li>
+                        <li>
+                            <Link
+                                to={`/users/operation_member/view-operation-member/${params.id}`}
+                            >
+                                View Operation Members
+                            </Link>
+                        </li>
+                        <li>Edit Operation Member</li>
                     </ul>
                 </div>
             </div>
@@ -283,9 +412,9 @@ function AddOperationMember() {
                 <div className="container">
                     <form onSubmit={handleSubmit(handleOnSubmit)}>
                         <div className="form-header flex-between">
-                            <h2 className="heading2">Add Operation Member</h2>
+                            <h2 className="heading2">Edit Operation Member</h2>
                             <div className="form-header-right-txt">
-                                <div
+                                {/* <div
                                     className="tertiary-btn-blk"
                                     onClick={handleSubmit(handleSaveAndMore)}
                                 >
@@ -293,9 +422,9 @@ function AddOperationMember() {
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
-                                        Add More
+                                        Save & Add More
                                     </span>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className="card-wrapper">
@@ -305,7 +434,7 @@ function AddOperationMember() {
                                         <div className="salutation-wrap">
                                             <div className="salutation-blk">
                                                 <label htmlFor="salutation">
-                                                    Salutation{" "}
+                                                    Salutation
                                                     <span className="mandatory">
                                                         *
                                                     </span>
@@ -338,17 +467,14 @@ function AddOperationMember() {
                                                 <Input
                                                     name={"name"}
                                                     control={control}
-                                                    placeholder={
-                                                        "Enter full name"
-                                                    }
                                                     myHelper={
                                                         helperTextForAddOperationMember
                                                     }
                                                     rules={{
                                                         required: true,
-                                                        maxLength: 50,
                                                         pattern:
                                                             /^[A-Za-z]+[A-Za-z ]*$/,
+                                                        maxLength: 50,
                                                     }}
                                                 />
                                             </div>
@@ -357,11 +483,10 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="title">Title </label>
+                                        <label for="email">Title </label>
                                         <Input
                                             name={"title"}
                                             control={control}
-                                            placeholder={"Enter title"}
                                             rules={{
                                                 maxLength: 50,
                                             }}
@@ -370,17 +495,12 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="department">
-                                            Department{" "}
-                                        </label>
+                                        <label for="email">Department </label>
                                         <Input
                                             name={"department"}
                                             control={control}
                                             myHelper={
                                                 helperTextForAddOperationMember
-                                            }
-                                            placeholder={
-                                                "Enter departnment name"
                                             }
                                             rules={{
                                                 maxLength: 50,
@@ -391,30 +511,24 @@ function AddOperationMember() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label for="email">
-                                            Email Address{" "}
+                                            Email Id{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Input
                                             name={"email"}
                                             control={control}
+                                            isDisabled
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
-                                            placeholder={"Enter email address"}
-                                            rules={{
-                                                required: "true",
-                                                maxLength: 50,
-                                                minLength: 3,
-                                                pattern:
-                                                    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                                            }}
+                                            rules={{ required: true }}
                                         />
                                     </div>
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label htmlfor="phoneNumber">
-                                            Phone Number{" "}
+                                            Phone Number
                                             <span className="mandatory">*</span>
                                         </label>
                                         <div className="phone-number-field">
@@ -428,7 +542,6 @@ function AddOperationMember() {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
-                                                            popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                             {...field}
                                                             onChange={(
                                                                 event,
@@ -456,12 +569,17 @@ function AddOperationMember() {
                                                                     "countryCode"
                                                                 );
                                                             }}
-                                                            options={countries}
+                                                            options={
+                                                                countries.length >
+                                                                0
+                                                                    ? countries
+                                                                    : ["+916"]
+                                                            }
                                                             autoHighlight
                                                             // placeholder="Select country code"
-                                                            getOptionLabel={(
-                                                                country
-                                                            ) => country}
+                                                            // getOptionLabel={(
+                                                            //     country
+                                                            // ) => country}
                                                             renderOption={(
                                                                 props,
                                                                 option
@@ -478,6 +596,7 @@ function AddOperationMember() {
                                                                     //   error && "input-error"
                                                                     // }`}
                                                                     {...params}
+                                                                    // name="countryCode"
                                                                     inputProps={{
                                                                         ...params.inputProps,
                                                                     }}
@@ -488,13 +607,14 @@ function AddOperationMember() {
                                                                     }
                                                                     // onSubmit={() => setValue("countryCode", "")}
                                                                     placeholder={
-                                                                        "+91"
+                                                                        "+91111"
                                                                     }
                                                                     helperText={
                                                                         error
                                                                             ? helperTextForAddOperationMember
                                                                                   .countryCode[
-                                                                                  "required"
+                                                                                  error
+                                                                                      .type
                                                                               ]
                                                                             : " "
                                                                     }
@@ -510,29 +630,10 @@ function AddOperationMember() {
                                                 myHelper={
                                                     helperTextForAddOperationMember
                                                 }
-                                                placeholder={
-                                                    "Enter phone nummber"
-                                                }
                                                 rules={{
                                                     required: true,
                                                     maxLength: 15,
                                                     minLength: 3,
-                                                    // validate: (value) => {
-                                                    //     if (
-                                                    //         watch(
-                                                    //             "phoneNumber"
-                                                    //         ) &&
-                                                    //         !watch(
-                                                    //             "countryCode"
-                                                    //         )
-                                                    //     )
-                                                    //         return "Enter Country code";
-                                                    // else if (
-                                                    //     value &&
-                                                    //     !Number(value)
-                                                    // )
-                                                    //     return "Please enter valid phone number";
-                                                    // },
                                                 }}
                                             />
                                         </div>
@@ -541,7 +642,7 @@ function AddOperationMember() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label for="">
-                                            Operation Type{" "}
+                                            Operation Type
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
@@ -549,9 +650,6 @@ function AddOperationMember() {
                                             name="operationType"
                                             myHelper={
                                                 helperTextForAddOperationMember
-                                            }
-                                            placeholder={
-                                                "Select operation type"
                                             }
                                             rules={{ required: true }}
                                             options={[
@@ -566,10 +664,10 @@ function AddOperationMember() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label for="">
-                                            Member Company{" "}
+                                            Member Company
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <div className="country-code-auto-search add-member-comp-field">
+                                        <div className="country-code-auto-search">
                                             <Controller
                                                 control={control}
                                                 name="memberId"
@@ -579,13 +677,12 @@ function AddOperationMember() {
                                                     fieldState: { error },
                                                 }) => (
                                                     <Autocomplete
-                                                    popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                         {...field}
-                                                        value={
-                                                            memberCompanies?._id
-                                                        }
-                                                        // clearIcon={false}
                                                         disableClearable
+                                                        disabled
+                                                        // value={
+                                                        //     memberCompanies?._id
+                                                        // }
                                                         onChange={(
                                                             event,
                                                             newValue
@@ -595,7 +692,11 @@ function AddOperationMember() {
                                                                 "object"
                                                                 ? setValue(
                                                                       "memberId",
-                                                                      newValue?._id
+                                                                      {
+                                                                          _id: newValue?._id,
+                                                                          companyName:
+                                                                              newValue.companyName,
+                                                                      }
                                                                   )
                                                                 : setValue(
                                                                       "memberId",
@@ -690,14 +791,13 @@ function AddOperationMember() {
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
-                                            placeholder={"Company type"}
                                         />
                                     </div>
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label for="">
-                                            Address{" "}
+                                            Address
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Input
@@ -707,14 +807,13 @@ function AddOperationMember() {
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
-                                            placeholder={"Enter address"}
                                         />
                                     </div>
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label for="">
-                                            Reporting Manager{" "}
+                                            Reporting Manager
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
@@ -724,13 +823,44 @@ function AddOperationMember() {
                                             placeholder={
                                                 "Select reporting manager "
                                             }
-                                            isDisabled={disableReportingManager}
+                                            // isDisabled={disableReportingManager}
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
                                             rules={{ required: true }}
                                             options={reportingManagers}
                                         />
+                                    </div>
+                                </div>
+                                <div className="card-form-field">
+                                    <div className="form-group">
+                                        <label htmlFor="status">Status</label>
+                                        <div className="radio-btn-field">
+                                            <Controller
+                                                name="isActive"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <RadioGroup
+                                                        {...field}
+                                                        // value={editDefault && editDefault.status}
+                                                        aria-labelledby="demo-radio-buttons-group-label"
+                                                        name="radio-buttons-group"
+                                                        className="radio-btn"
+                                                    >
+                                                        <FormControlLabel
+                                                            value="true"
+                                                            control={<Radio />}
+                                                            label="Active"
+                                                        />
+                                                        <FormControlLabel
+                                                            value="false"
+                                                            control={<Radio />}
+                                                            label="Inactive"
+                                                        />
+                                                    </RadioGroup>
+                                                )}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -748,7 +878,7 @@ function AddOperationMember() {
                                         type="submit"
                                         className="primary-button add-button"
                                     >
-                                        Save
+                                        Update
                                     </button>
                                 </div>
                             </div>
@@ -760,4 +890,4 @@ function AddOperationMember() {
     );
 }
 
-export default AddOperationMember;
+export default EditOperationMember;

@@ -25,37 +25,21 @@ function App() {
     return (
         <React.Fragment>
             <Routes>
-                {/* <Route
-                    path="/login"
-                    element={
-                        userPresent ? <Navigate to={"/dashboard"} /> : <Login />
-                    }
-                />
-                <Route
-                    path="/forget-password"
-                    element={
-                        userPresent ? (
-                            <Navigate to={"/dashboard"} />
-                        ) : (
-                            <ForgetPassword />
-                        )
-                    }
-                /> */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/forget-password" element={<ForgetPassword />} />
                 {/* <Route path="auth/*" element={<AuthOutlet />} /> */}
                 <Route path="auth/confirm/:id" element={<SetPassword />} />
                 <Route path="auth/forgot/:id" element={<ResetPassword />} />
-                <Route path="/" element={<Layout />}>
-                    <Route
-                        path={"/*"}
-                        element={
-                            <UserLoggedIn>
-                                <ProtectedPages />
-                            </UserLoggedIn>
-                        }
-                    />
-                </Route>
+                {/* <Route path="/*" element={<Layout />}> */}
+                <Route
+                    path={"/*"}
+                    element={
+                        <UserLoggedIn>
+                            <ProtectedPages />
+                        </UserLoggedIn>
+                    }
+                />
+                {/* </Route> */}
                 <Route element={<FallBackUI />} />
             </Routes>
             <Footer />
