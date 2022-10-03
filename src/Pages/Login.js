@@ -166,7 +166,7 @@ const Login = (prop) => {
                                     <form
                                         onSubmit={handleSubmit(submitLoginData)}
                                     >
-                                        <div class="form-group mb-40">
+                                        <div class="form-group">
                                             <label for="emailid">
                                                 Username or Email Id{" "}
                                                 <span class="mandatory">*</span>
@@ -183,11 +183,11 @@ const Login = (prop) => {
                                                 helperText={
                                                     errors.email
                                                         ? errors.email.message
-                                                        : ""
+                                                        : " "
                                                 }
                                             />
                                         </div>
-                                        <div class="form-group mb-40">
+                                        <div class="form-group">
                                             <label for="password">
                                                 Password{" "}
                                                 <span class="mandatory">*</span>
@@ -248,7 +248,7 @@ const Login = (prop) => {
                                                     {...register("password")}
                                                 />
                                                 <p className={`password-error`}>
-                                                    {errors.password?.message}
+                                                    {errors?.password ? errors.password?.message : <span>&nbsp;</span>}
                                                 </p>
                                             </div>
                                         </div>
