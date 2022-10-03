@@ -1,4 +1,5 @@
 import "./index.css";
+import "./responsive.css";
 import React, { useState, useEffect } from "react";
 
 import Login from "./Pages/Login";

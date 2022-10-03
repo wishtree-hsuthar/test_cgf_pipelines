@@ -26,6 +26,7 @@ import { useRef } from "react";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import DialogBox from "../../components/DialogBox";
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
 const ViewSubAdmin = () => {
     const history = useNavigate();
@@ -339,12 +340,15 @@ const ViewSubAdmin = () => {
                                     <div className="phone-number-field">
                                         <div className="select-field country-code">
                                             <Autocomplete
+                                            disabled
+                                            popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                            className="phone-number-disable"
                                                 options={countries}
                                                 autoHighlight
                                                 getOptionLabel={(country) =>
                                                     country.countryCode
                                                 }
-                                                disabled
+                                                readOnly
                                                 value={value}
                                                 renderOption={(
                                                     props,
@@ -475,14 +479,18 @@ const ViewSubAdmin = () => {
                                             }
                                         >
                                             <FormControlLabel
+                                                disabled
                                                 value={"active"}
                                                 control={<Radio />}
                                                 label="Active"
+                                                
                                             />
                                             <FormControlLabel
+                                                disabled
                                                 value={"inactive"}
                                                 control={<Radio />}
                                                 label="Inactive"
+                                                
                                             />
                                         </RadioGroup>
                                     </div>

@@ -1,0 +1,80 @@
+export const memberHelper = {
+    memberCompany: {
+      maxLength: "Max char limit exceed",
+      minLength: "Input must contain atleast 3 characters",
+      required: "Enter member company",
+    },
+    cgfCategory:{
+      required: "Select Category"
+    },
+    cgfActivity: {
+      required: "Select Activity",
+    },
+    corporateEmail: {
+      required: "Enter Email",
+      maxLength: "Max char limit exceed",
+      minLength: "Input must contain atleast 3 characters",
+      pattern: "Invalid Input",
+    },
+    countryCode: {
+      required: "select country code",
+      validate: "Invalid input",
+    },
+    phoneNumber: {
+      required: "Enter phone number",
+      maxLength: "Max char limit exceed",
+      minLength: "Input must contain atleast 3 characters",
+      pattern: "Invalid Input",
+      validate: "Invalid Input",
+    },
+    websiteUrl: {
+      maxLength: "Max char limit exceed",
+      minLength: "Input must contain atleast 3 characters",
+      pattern: "Invalid Input",
+    },
+    region: {
+      required: "Select region",
+    },
+    country: {
+      required: "Select country",
+    },
+    state: {},
+    city: {
+      maxLength: "Max char limit exceed",
+      minLength: "Input must contain atleast 3 charcters",
+    },
+    address: {
+      required: "Enter the address",
+      maxLength: "Max char limit exceed",
+      minLength: "Input must contain atleast 3 characters",
+    },
+    memberContactSalutation: {
+      required: "Select the Salutation",
+    },
+    memberContactFullName: {
+      required: "Enter the name",
+      minLength: "Input must contain atleast 3 charcters",
+      maxLength: "Max char limit exceed",
+      pattern: "Invalid Input",
+    },
+    title: {
+      minLength: "Input must contain atleast 3 charcters",
+      maxLength: "Max char limit exceed",
+      pattern: "Invalid Input",
+    },
+    department: {
+      minLength: "Input must contain atleast 3 charcters",
+      maxLength: "Max char limit exceed",
+      pattern: "Invalid Input",
+    },
+    memberContactCountryCode: {
+      required: "sekect country code",
+    },
+    memberContactPhoneNuber: {
+      required: "Enter country code",
+      maxLength: "Max char limit exceed",
+      minLength: "Input must contain atleast 3 characters",
+      pattern: "Invalid Input",
+      validate: "Invalid Input",
+    },
+  };

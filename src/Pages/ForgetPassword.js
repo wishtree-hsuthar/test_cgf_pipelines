@@ -28,7 +28,10 @@ const ForgetPassword = () => {
         },
     });
     useEffect(() => {
-        // document.body.classList.add("login-page");
+        document.body.classList.add("login-page");
+        return () => {
+            document.body.classList.remove("login-page");
+        };
     }, []);
     const toasterRef = useRef();
     const [messageType, setMessageType] = useState("");
@@ -103,7 +106,7 @@ const ForgetPassword = () => {
                                         class="img-fluid"
                                     />
                                 </div>
-                                <h2 class="heading1 text-uppercase">
+                                <h2 class="heading1 text-uppercase mb-40">
                                     Forget password
                                 </h2>
                                 <p className="forget-password-message">
@@ -133,7 +136,7 @@ const ForgetPassword = () => {
                                                 helperText={
                                                     errors.email
                                                         ? errors.email.message
-                                                        : ""
+                                                        : " "
                                                 }
                                             />
                                         </div>

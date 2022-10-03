@@ -19,7 +19,11 @@ import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import axios from "axios";
 import { ADD_OPERATION_MEMBER, FETCH_OPERATION_MEMBER } from "../../api/Url";
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 const helperTextForAddOperationMember = {
+    salutation: {
+        required: "Select salutation",
+    },
     name: {
         required: "Enter the full name",
         maxLength: "Max char limit exceed",
@@ -54,6 +58,9 @@ const helperTextForAddOperationMember = {
         minLength: "Number must contain atleast 3 digits",
         // validate: "Enter country code first",
         // pattern: "Invalid format",
+    },
+    memberCompany: {
+        required: "Select member company",
     },
     operationType: {
         required: "Enter operation type ",
@@ -96,10 +103,20 @@ function AddOperationMember() {
         setValue,
         trigger,
         watch,
-    } = useForm({});
+    } = useForm({
+        defaultValues: {
+            salutation: "Mr.",
+            memberCompany: {
+                _id: "",
+                companyName: "",
+            },
+        },
+    });
 
     const navigate = useNavigate();
     const [memberCompanies, setMemberCompanies] = useState();
+    const [disableReportingManager, setDisableReportingManager] =
+        useState(true);
     const [countries, setCountries] = useState();
     const [reportingManagers, setReportingManagers] = useState();
     const toasterRef = useRef();
@@ -276,7 +293,7 @@ function AddOperationMember() {
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
-                                        Save & Add More
+                                        Add More
                                     </span>
                                 </div>
                             </div>
@@ -386,6 +403,7 @@ function AddOperationMember() {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
+                                                            popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                             {...field}
                                                             onChange={(
                                                                 event,
@@ -520,23 +538,38 @@ function AddOperationMember() {
                                             Member Company
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <div className="country-code-auto-search">
+                                        <div className="country-code-auto-search add-member-comp-field">
                                             <Controller
                                                 control={control}
-                                                name="memberId"
+                                                name="memberCompany"
+                                                rules={{ required: true }}
                                                 render={({
                                                     field,
                                                     fieldState: { error },
                                                 }) => (
                                                     <Autocomplete
+                                                    popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                         {...field}
                                                         value={
                                                             memberCompanies?._id
                                                         }
+                                                        // clearIcon={false}
+                                                        disableClearable
                                                         onChange={(
                                                             event,
                                                             newValue
                                                         ) => {
+                                                            newValue &&
+                                                            typeof newValue ===
+                                                                "object"
+                                                                ? setValue(
+                                                                      "memberCompany",
+                                                                      newValue?._id
+                                                                  )
+                                                                : setValue(
+                                                                      "memberCompany",
+                                                                      newValue
+                                                                  );
                                                             console.log(
                                                                 "inside autocomplete onchange"
                                                             );
@@ -548,6 +581,12 @@ function AddOperationMember() {
                                                                 "reportingManager",
                                                                 ""
                                                             );
+                                                            trigger(
+                                                                "memberCompany"
+                                                            );
+                                                            setDisableReportingManager(
+                                                                false
+                                                            );
                                                             // call fetch Reporting managers here
                                                             fetchReportingManagers(
                                                                 newValue._id
@@ -556,29 +595,16 @@ function AddOperationMember() {
                                                                 "companyType",
                                                                 newValue.companyType
                                                             );
-
-                                                            newValue &&
-                                                            typeof newValue ===
-                                                                "object"
-                                                                ? setValue(
-                                                                      "memberId",
-                                                                      newValue?._id
-                                                                  )
-                                                                : setValue(
-                                                                      "memberId",
-                                                                      newValue
-                                                                  );
                                                         }}
                                                         // sx={{ width: 200 }}
                                                         options={
                                                             memberCompanies
                                                         }
-                                                        autoHighlight
-                                                        // placeholder="Select country code"
+                                                        placeholder="Select country code"
                                                         getOptionLabel={(
-                                                            country
+                                                            company
                                                         ) =>
-                                                            country.companyName
+                                                            company.companyName
                                                         }
                                                         renderOption={(
                                                             props,
@@ -594,30 +620,26 @@ function AddOperationMember() {
                                                             params
                                                         ) => (
                                                             <TextField
-                                                                // className={`input-field ${
-                                                                //   error && "input-error"
-                                                                // }`}
                                                                 {...params}
                                                                 inputProps={{
                                                                     ...params.inputProps,
                                                                 }}
-                                                                // onChange={() =>
-                                                                //     trigger(
-                                                                //         "phoneNumber"
-                                                                //     )
-                                                                // }
-                                                                // onSubmit={() => setValue("countryCode", "")}
                                                                 placeholder={
                                                                     "Select member company"
                                                                 }
+                                                                onChange={() =>
+                                                                    trigger(
+                                                                        "memberCompany"
+                                                                    )
+                                                                }
                                                                 helperText={
                                                                     error
-                                                                        ?.helperTextForAddOperationMember?.[
-                                                                        "memberId"
-                                                                    ][
-                                                                        error
-                                                                            .type
-                                                                    ]
+                                                                        ? helperTextForAddOperationMember
+                                                                              .memberCompany[
+                                                                              error
+                                                                                  ?.type
+                                                                          ]
+                                                                        : " "
                                                                 }
                                                             />
                                                         )}
@@ -633,6 +655,7 @@ function AddOperationMember() {
                                             Company Type
                                         </label>
                                         <Input
+                                            isDisabled={true}
                                             name={"companyType"}
                                             control={control}
                                             myHelper={
@@ -667,6 +690,10 @@ function AddOperationMember() {
                                             control={control}
                                             name="reportingManager"
                                             // myHelper={myHelper}
+                                            placeholder={
+                                                "Select reporting manager "
+                                            }
+                                            isDisabled={disableReportingManager}
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
@@ -678,6 +705,7 @@ function AddOperationMember() {
 
                                 <div className="form-btn flex-between add-members-btn">
                                     <button
+                                        type={"reset"}
                                         onClick={() =>
                                             navigate("/users/operation_members")
                                         }
@@ -689,7 +717,7 @@ function AddOperationMember() {
                                         type="submit"
                                         className="primary-button add-button"
                                     >
-                                        Add
+                                        Save
                                     </button>
                                 </div>
                             </div>

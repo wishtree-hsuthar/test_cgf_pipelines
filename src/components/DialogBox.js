@@ -58,6 +58,7 @@ const DialogBox = ({
         <Box sx={style} className="popup-box">
           <div id="transition-modal-title" className="popup-ttl-blk">
             <h2 className="popup-ttl heading2">
+              {/* {title} */}
               {title}
             </h2>
             <span className="popup-close-icon" onClick={handleClose}>
@@ -66,8 +67,9 @@ const DialogBox = ({
           </div>
           <div id="transition-modal-description" className="popup-body">
             <div className="popup-content-blk text-center">
-              {info2 && <p>{info1}</p>}
-              {info2 && <p>{info2}</p>}
+              {info2 && info1}
+              {info2 && info2}
+              {/* {info2 && <p>{info2}</p>} */}
               <div className="form-btn flex-center">
                 <button
                   type="submit"

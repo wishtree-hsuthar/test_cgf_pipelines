@@ -183,7 +183,7 @@ const Login = (prop) => {
                                                 helperText={
                                                     errors.email
                                                         ? errors.email.message
-                                                        : ""
+                                                        : " "
                                                 }
                                             />
                                         </div>
@@ -225,7 +225,7 @@ const Login = (prop) => {
                                                                             process
                                                                                 .env
                                                                                 .PUBLIC_URL +
-                                                                            "/images/non-visibleicon.png"
+                                                                            "/images/non-visibleicon.svg"
                                                                         }
                                                                         alt=""
                                                                         class="img-fluid"
@@ -236,7 +236,7 @@ const Login = (prop) => {
                                                                             process
                                                                                 .env
                                                                                 .PUBLIC_URL +
-                                                                            "/images/visibleicon.png"
+                                                                            "/images/visibleicon.svg"
                                                                         }
                                                                         alt=""
                                                                         class="img-fluid"
@@ -248,7 +248,7 @@ const Login = (prop) => {
                                                     {...register("password")}
                                                 />
                                                 <p className={`password-error`}>
-                                                    {errors.password?.message}
+                                                    {errors?.password ? errors.password?.message : <span>&nbsp;</span>}
                                                 </p>
                                             </div>
                                         </div>

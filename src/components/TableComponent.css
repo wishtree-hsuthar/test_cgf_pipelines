@@ -1,15 +1,15 @@
-.table-blk .css-1q1u3t4-MuiTableRow-root{height: 58px;}
+.table-blk .css-1q1u3t4-MuiTableRow-root{height: 54px;}
 .table-blk .css-1q1u3t4-MuiTableRow-root.MuiTableRow-hover:hover {
     background-color: #ABB8C326;
 }
-.table-blk .MuiTableRow-head{height: 58px;background: #4596D11A;white-space: nowrap;padding: 0 10px;}
+.table-blk .MuiTableRow-head{height: 54px;background: #4596D11A;white-space: nowrap;padding: 0 10px;}
 .table-header span{font-size: 14px;color: #1E1E1E !important;font-family: 'ProximaNova-Semibold',serif, sans-serif;}
-.table-blk .MuiPaper-root{box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1) !important;margin-bottom: 0;}
+.table-blk .MuiPaper-root{box-shadow: 0px 0 6px rgba(0, 0, 0, 0.1) !important;margin-bottom: 0;}
 .table-blk .css-177gid-MuiTableCell-root{font-family: 'ProximaNova-Regular',serif, sans-serif;font-size: 14px;}
 .table-blk .MuiTableCell-head{padding: 0 !important;text-align: left;}
 /* .table-blk .MuiTableCell-head:nth-child(2){padding: 0 !important;} */
 /* .table-blk .MuiCheckbox-root svg{width: 13px;height: 12px;} */
-.table-blk .MuiTableCell-root{padding: 0 10px 0 0;border-bottom: none;font-size: 14px;text-transform: capitalize;}
+.table-blk .MuiTableCell-root{padding: 0 10px 0 0;border-bottom: none;font-size: 14px;}
 .table-blk .MuiTableCell-root:last-child{padding-right: 0;}
 .table-blk .MuiCheckbox-root{padding: 16px;}
 .table-blk .MuiTableRow-root .button-style span{color: #E53850;background: #E5385026;padding: 5px;font-size: 14px;width: 67px;display: inline-block;text-align: center;}
@@ -19,18 +19,18 @@
 
 /* CSS added by Rajkumar */
 .table-blk th{font-family: 'ProximaNova-Semibold',serif, sans-serif;}
-.table-blk td {font-family: 'ProximaNova-Regular',serif, sans-serif;}
+.table-blk td {font-family: 'ProximaNova-Regular',serif, sans-serif;white-space: nowrap;}
 .no-records-blk{padding: 30px; text-align: center;}
 
 .table-blk-without-checkbox .MuiTableCell-head{
-    padding: 0px 16px !important;
+    padding: 0px 10px !important;
   }
 .table-blk-without-checkbox .MuiTableCell-root{
-    padding: 0px 16px !important;
+    padding: 0px 10px !important;
 }
   
 .card-wrapper .table-footer{margin-bottom: 0;}
-.table-footer-btm-space .table-footer{margin: 0 0 45px;}
+.table-footer-btm-space .table-footer{margin: 0 0 60px;}
 
 
 
@@ -75,7 +75,9 @@
     color: #1E1E1E !important;
     font-size: 18px;
 }
-.table-checkbox svg{font-size: 16px;color: #707070;}
+.table-checkbox svg{font-size: 18px;color: #707070;}
+.table-blk-role .table-checkbox svg{font-size: 20px;}
+
 .table-checkbox .Mui-checked svg{font-size: 16px;color: #0082C9;}
 .table-checkbox.MuiCheckbox-root.Mui-checked{color: #0082C9;}
 .table-checkbox.MuiCheckbox-root.Mui-checked svg{color: #0082C9;}

@@ -203,11 +203,26 @@ const RolesList = () => {
       <section>
         <div className="container">
           <div className="member-filter-sect">
-            <div className="form-header member-form-header flex-between">
+            <div className="form-header member-form-header flex-between mb-0">
               <div className="form-header-left-blk flex-start">
                 <h2 className="heading2 mr-40">Roles</h2>
               </div>
-              <div className="form-header-right-txt">
+              <div className="form-header-right-txt search-and-btn-field-right">
+                <div className="search-and-btn-field-blk">
+                  <div className="searchbar">
+                    <input
+                      type="text"
+                      placeholder="Search for role"
+                      onChange={onSearchChangeHandler}
+                      onKeyDown={(e) => e.key === "Enter" && setMakeApiCall(true)}
+                      value={search}
+                      name="search"
+                    />
+                    <button type="submit">
+                      <i className="fa fa-search"></i>
+                    </button>
+                  </div>
+                </div>
                 <div className="form-btn">
                   <button
                     type="submit"
@@ -220,7 +235,7 @@ const RolesList = () => {
               </div>
             </div>
             <div className="member-filter-wrap flex-between">
-              <div className="member-filter-left">
+              {/* <div className="member-filter-left">
                 <div className="searchbar">
                   <input
                     type="text"
@@ -234,7 +249,7 @@ const RolesList = () => {
                     <i className="fa fa-search"></i>
                   </button>
                 </div>
-              </div>
+              </div> */}
               <div className="member-filter-right">
                 <div className="filter-select-wrap flex-between">
                   <div className="filter-select-field">
@@ -275,7 +290,7 @@ const RolesList = () => {
                 <img src={Loader2} alt="Loading" />
               </div>
             ) : (
-              <div className="member-info-wrapper table-content-wrap table-content-width">
+              <div className="member-info-wrapper table-content-wrap table-content-width table-footer-btm-space">
                 <TableComponent
                   tableHead={tableHead}
                   records={records}

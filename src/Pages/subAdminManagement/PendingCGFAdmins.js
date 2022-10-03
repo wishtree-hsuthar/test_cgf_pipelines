@@ -103,7 +103,11 @@ function PendingCGFAdmins({
             // delete object["isActive"];
             object["createdAt"] = new Date(
                 object["createdAt"]
-            ).toLocaleDateString("en-US");
+            ).toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
 
             // object["role"] = object["data"]["subRoleId"].name;
             // object["role"] = object["data"]["subRole"][0].name;

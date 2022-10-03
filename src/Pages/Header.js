@@ -21,32 +21,34 @@ const Header = () => {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [isActive, setActive] = React.useState("false");
     const userAuth = useSelector((state) => state.user.userObj);
+    let initials = userAuth?.name?.split(" ");
     const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
     const MEMBER_ACCESS = userAuth?.roleId?.name == "Member";
     const OPERATION_MEMBER = userAuth?.roleId?.name == "Operation Member";
-
+    
+    // console.log("user Auth",userAuth)
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const [activeStateForMembers, setActiveStateForMembers] = useState(false);
     const [activeStateForOperationMembers, setActiveStateForOperationMembers] =
         useState(false);
-    console.log("location in header", location.pathname);
+    // console.log("location in header", location.pathname);
     const routeAddress = ["/members", "/operation_members"];
     const myFunction = (activeState) => {
         if (activeState === "/members") {
-            console.log("active state==members");
+            // console.log("active state==members");
             return "active";
         }
         if (activeState === "/operation_members") {
-            console.log("active state==operation_members");
+            // console.log("active state==operation_members");
 
             return "active";
         } else {
             return "";
         }
     };
-    console.log("active state", myFunction);
+    // console.log("active state", myFunction);
     // const activeAddress = routeAddress.filter(myFunction);
     useEffect(() => {
         // const controller = new AbortController();
@@ -275,18 +277,26 @@ const Header = () => {
                                         <div className="user-blk flex-between">
                                             <div className="user-img">
                                                 <span className="user-name-txt">
-                                                    ER
+                                                    {initials?.length >= 1 &&
+                                                        initials[0].slice(
+                                                            0,
+                                                            1
+                                                        ) +
+                                                            initials[1]?.slice(
+                                                                0,
+                                                                1
+                                                            )}
                                                 </span>
                                             </div>
                                             <div className="user-info">
                                                 <span className="user-name">
-                                                    Erin
+                                                    {userAuth?.name}
                                                 </span>
                                                 <span
                                                     className="user-type"
                                                     onClick={handleOpenUserMenu}
                                                 >
-                                                    Super Admin{" "}
+                                                    {userAuth?.roleId?.name}
                                                     <span
                                                         className={
                                                             isActive
@@ -301,7 +311,7 @@ const Header = () => {
                                         </div>
                                     </Tooltip>
                                     <Menu
-                                        sx={{ mt: "35px" }}
+                                        sx={{ mt: "35px", mr: "35px" }}
                                         id="menu-appbar"
                                         anchorEl={anchorElUser}
                                         anchorOrigin={{
@@ -317,7 +327,7 @@ const Header = () => {
                                         onClose={handleCloseUserMenu}
                                         className="profile-menu-item"
                                     >
-                                        <MenuItem onClick={handleCloseUserMenu}>
+                                        <MenuItem onClick={handleCloseUserMenu} sx={{width: "135px"}}>
                                             <Typography textAlign="center">
                                                 Profile
                                             </Typography>

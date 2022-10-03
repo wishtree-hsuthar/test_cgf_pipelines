@@ -14,6 +14,7 @@ export const REGIONCOUNTRIES = `${REACT_APP_API_ENDPOINT}master/region`
 export const COUNTRIES = `${REACT_APP_API_ENDPOINT}master/country/list`
 export const STATES = `${REACT_APP_API_ENDPOINT}master/country`
 export const MEMBER = `${REACT_APP_API_ENDPOINT}members`
+export const MEMBER_OPERATION_MEMBERS = `${REACT_APP_API_ENDPOINT}operation-member/member`
 
 
 //sub admin
