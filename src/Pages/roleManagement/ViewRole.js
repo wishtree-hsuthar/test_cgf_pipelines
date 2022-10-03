@@ -532,6 +532,9 @@ const ViewRole = () => {
       delete object["title"]
       delete object["department"]
       delete object["salutation"]
+      delete object['reportingManager']
+      delete object['operationType']
+      delete object['address']
 
       delete object["__v"]
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"});
