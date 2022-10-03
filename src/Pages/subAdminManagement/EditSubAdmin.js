@@ -24,6 +24,8 @@ import {
     UPDATE_SUB_ADMIN,
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+
 const editSubAdminSchema = yup.object().shape({
     subAdminName: yup.string().required("Sub admin name required"),
     email: yup
@@ -326,6 +328,7 @@ const EditSubAdmin = () => {
                                         <div className="phone-number-field">
                                             <div className="select-field country-code">
                                                 <Autocomplete
+                                                popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                     options={countries}
                                                     // autoHighlight
                                                     autoComplete={false}
@@ -412,6 +415,7 @@ const EditSubAdmin = () => {
                                                 control={control}
                                                 render={({ field }) => (
                                                     <Select
+                                                    IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props}/>}
                                                         {...field}
                                                         // value={
                                                         //     fetchSubAdminDetailsForEdit

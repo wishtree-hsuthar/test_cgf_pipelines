@@ -252,7 +252,7 @@ const AddRole = () => {
                   className="addmore-txt"
                   onClick={handleSubmit(onSubmitAddMoreClickHandler)}
                 >
-                  Save & Add More
+                  Add More
                 </span>
               </div>
             </div>
@@ -554,7 +554,7 @@ const AddRole = () => {
                   className="primary-button"
                   style={{ marginTop: "30px" }}
                 >
-                  Add
+                  Save
                 </button>
               </div>
             </div>

@@ -12,6 +12,8 @@ import { ADD_SUB_ADMIN, COUNTRIES, FETCH_ROLES } from "../../api/Url";
 import { useSelector } from "react-redux";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+
 const AddSubAdminSchema = yup.object().shape({
     name: yup.string().required("Sub admin name required"),
     email: yup
@@ -220,7 +222,7 @@ const AddSubAdmin = () => {
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
-                                        Save & Add More
+                                        Add More
                                     </span>
                                 </div>
                             </div>
@@ -287,6 +289,7 @@ const AddSubAdmin = () => {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
+                                                        popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                             {...field}
                                                             onChange={(
                                                                 event,
@@ -396,6 +399,7 @@ const AddSubAdmin = () => {
                                                 }) => (
                                                     <>
                                                         <Select
+                                                        IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props}/>}
                                                             {...field}
                                                             className={`input-field ${
                                                                 errors.subRoleId &&
@@ -448,7 +452,7 @@ const AddSubAdmin = () => {
                                         type="submit"
                                         className="primary-button add-button"
                                     >
-                                        Add
+                                        Save
                                     </button>
                                 </div>
                             </div>

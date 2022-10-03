@@ -115,6 +115,30 @@ function OperationMemberList() {
                                 <h2 className="heading2 mr-40">
                                     Operation Members
                                 </h2>
+                            </div>
+                            <div className="form-header-right-txt">
+                                <div className="tertiary-btn-blk mr-20">
+                                    <span class="download-icon">
+                                        <DownloadIcon />
+                                    </span>
+                                    Download
+                                </div>
+                                <div className="form-btn">
+                                    <button
+                                        onClick={() =>
+                                            navigate(
+                                                "/users/operation-members/add-operation-member"
+                                            )
+                                        }
+                                        className="primary-button add-button"
+                                    >
+                                        Add Operation Member
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="member-filter-wrap flex-between">
+                            <div className="member-tab-left">
                                 <div className="member-tab-wrapper">
                                     <Box
                                         sx={{
@@ -140,28 +164,6 @@ function OperationMemberList() {
                                     </Box>
                                 </div>
                             </div>
-                            <div className="form-header-right-txt">
-                                <div className="tertiary-btn-blk mr-20">
-                                    <span class="download-icon">
-                                        <DownloadIcon />
-                                    </span>
-                                    Download
-                                </div>
-                                <div className="form-btn">
-                                    <button
-                                        onClick={() =>
-                                            navigate(
-                                                "/users/operation-members/add-operation-member"
-                                            )
-                                        }
-                                        className="primary-button add-button"
-                                    >
-                                        Add Operation Member
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="member-filter-wrap flex-between">
                             <div className="member-filter-left">
                                 <div className="searchbar">
                                     <input

@@ -2,8 +2,9 @@
 .nav-list li {
     list-style-type: none;
     padding: 10px 15px;
-    font-family: "ProximaNova-Semibold";
-    font-size: 14px;
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.2px;
 }
 .nav-list li a {
     color: #1e1e1e;
@@ -22,10 +23,10 @@
 
 .list-item.active a::before {
     width: 100%;
-    height: 5px;
+    height: 3px;
     background: #f7a823;
     position: absolute;
-    bottom: 8px;
+    bottom: 15px;
     left: 0;
     content: "";
 }
@@ -34,6 +35,7 @@
 }
 .logo-blk {
     width: 93px;
+    margin: 0 80px 0 0;
 }
 
 .nav {
@@ -41,12 +43,12 @@
     width: 100%;
 }
 .header-left {
-    flex: 0 0 63%;
-    max-width: 63%;
+    flex: 0 0 70%;
+    max-width: 70%;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 .header-wrapper {
     display: flex;
@@ -62,7 +64,7 @@
 .profile-menu-item p {
     font-size: 14px;
     color: #1e1e1e;
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
 }
 .profile-menu-item .css-6hp17o-MuiList-root-MuiMenu-list {
     padding: 0 !important;
@@ -88,8 +90,8 @@
 }
 .user-name-txt {
     color: #ffffff;
-    font-size: 14px;
-    font-family: "ProximaNova-Semibold";
+    font-size: 13px;
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
     text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
 }
 .user-info span {
@@ -100,10 +102,11 @@
 }
 .user-name {
     color: #1d354d;
-    font-family: "ProximaNova-Bold";
+    font-family: "ProximaNova-Bold", serif, sans-serif;
 }
 .user-info {
     margin: 8px 0 0;
+    font-size: 13px;
 }
 .super-admin-arrow svg {
     transition: 0.5s ease;
@@ -119,10 +122,10 @@
 .header-submenu {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
+    background-color: #fff;
+    min-width: 152px;
     box-shadow: 0px 0px 6px rgb(0 0 0 / 10%);
-    left: -8px;
+    left: 15px;
     top: 51px;
     z-index: 1;
 }
@@ -134,14 +137,15 @@
     padding: 0;
     color: #1e1e1e;
     font-size: 13px;
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
 }
 .header-submenu li:hover {
-    background-color: rgba(30, 30, 30, 0.1);
+    background-color: rgba(247, 168, 35, 0.07);
     color: #f7a823;
+    font-family: 'ProximaNova-Semibold';
 }
 .header-submenu li:hover a {
-    color: #f7a823;
+    color: #f7a823 !important;
 }
 .header-submenu li a {
     color: #1e1e1e;
@@ -157,7 +161,7 @@
 .header-submenu li.subactive a {
     color: #f7a823 !important;
     position: relative;
-    font-family: 'ProximaNova-Semibold';
+    font-family: 'ProximaNova-Semibold', serif, sans-serif;
 }
 /* .header-submenu li.subactive a::before {
     width: 100%;
@@ -170,8 +174,10 @@
     display: block !important;
 } */
 
-.profile-menu-item .MuiMenuItem-gutters{padding: 5px 30px !important;}
-
+.profile-menu-item .MuiMenuItem-gutters{padding: 5px 32px !important;}
+.profile-menu-item .MuiMenuItem-gutters.Mui-focusVisible{background: none;}
+.profile-menu-item .MuiMenuItem-gutters:hover{background:rgba(247, 168, 35, 0.07) !important}
+.profile-menu-item .MuiMenuItem-gutters:hover p{color: #f7a823;font-family: 'ProximaNova-Semibold';}
 /* Responsive css start */
 @media screen and (max-width: 1200px) {
     .nav-list li {
@@ -182,9 +188,9 @@
         max-width: 82%;
         justify-content: flex-start;
     }
-    .logo-blk {
+    /* .logo-blk {
         margin-right: 30px;
-    }
+    } */
 }
 @media screen and (max-width: 1023px) {
     .header-left {

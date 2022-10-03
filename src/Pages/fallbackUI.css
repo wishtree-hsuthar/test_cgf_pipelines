@@ -1,47 +1,43 @@
 /* fall back ui css  */
 .error-status {
     text-align: center;
-    font: normal normal 600 97px/168px Proxima Nova;
+    font-family: 'ProximaNova-Semibold';
     letter-spacing: 0px;
     color: #1e1e1e;
     opacity: 1;
-    margin: 7% 36%;
-    position: absolute;
+    font-size: 80px;
+    line-height: 60px;
+    margin: 0 0 20px;
 }
 .oops {
-    position: absolute;
-    margin: 6% 39%;
+    
     text-align: center;
-    font: normal normal normal 24px/24px Proxima Nova;
+    font-family: 'ProximaNova-Regular';
     letter-spacing: 0px;
     color: #787878;
     opacity: 1;
+    font-size: 24px;
+    line-height: 24px;
+    margin: 0 0 20px;
 }
 .page-not-found {
     text-align: center;
-    font: normal normal normal 24px/29px Proxima Nova;
+    font-family: 'ProximaNova-Regular';
     letter-spacing: 0px;
     color: #787878;
     opacity: 1;
-    margin-right: 5%;
+    font-size: 24px;
+    line-height: 24px;
+    margin: 0 0 20px;
 }
 
-.section-div {
-    margin: 5% 0%;
+.fallbackUI-sect {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 85vh;
 }
 
-.dashboard-button {
-    background: #f7a823;
-    color: #fff;
-    padding: 14px 28px;
-    font-size: 14px;
-    line-height: 14px;
-    height: 45px;
-    box-shadow: 0px 2px 3px rgb(0 0 0 / 5%);
-    border-radius: 3px;
-    text-transform: capitalize;
-    font-family: "Proxima Nova Semibold", serif, sans-serif;
-    border: 1px solid #f7a823;
-    cursor: pointer;
-    margin: 4% 40%;
-}
+.fallbackUI-imgblk{position: relative;}
+.fallbackUI-txtblk{position: absolute;top: 58px;left: 0;right: 0;margin: 0 auto;}

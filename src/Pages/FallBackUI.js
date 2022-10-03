@@ -1,29 +1,43 @@
 import "../Pages/fallbackUI.css";
-
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+
+
 function FallBackUI() {
+    
+    useEffect(() => {
+        document.body.classList.add("login-page");
+        return () => {
+            document.body.classList.remove("login-page");
+        };
+    }, []);
+
     const navigate = useNavigate();
     return (
         <div className="page-wrapper">
             <section>
                 <div className="container">
-                    <div className="section-div">
-                        <p className="oops">OOPS...</p>
-                        <p className="error-status">404</p>
-
+                    <div className="fallbackUI-sect">
+                    <div className="fallbackUI-imgblk">
                         <img
                             src={process.env.PUBLIC_URL + "/images/404.svg"}
-                            style={{ margin: "0% 25%" }}
                         />
-                        <p className="page-not-found">PAGE NOT FOUND</p>
-                        <button
-                            // type="submit"
-                            onClick={() => navigate("/home")}
-                            className="dashboard-button"
-                        >
-                            Back to Home
-                        </button>
+                        <div className="fallbackUI-txtblk">
+                            <p className="oops">OOPS...</p>
+                            <p className="error-status">404</p>
+                            <p className="page-not-found">PAGE NOT FOUND</p>
+                            <div class="form-btn text-center">
+                            <button
+                                // type="submit"
+                                onClick={() => navigate("/home")}
+                                className="primary-button"
+                            >
+                                Back to Home
+                            </button>
+                            </div>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </section>

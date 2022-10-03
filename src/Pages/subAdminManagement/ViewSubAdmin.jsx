@@ -22,6 +22,7 @@ import { DELETE_SUB_ADMIN, FETCH_SUB_ADMIN_BY_ADMIN } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import DialogBox from "../../components/DialogBox";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 const ViewSubAdmin = () => {
     const history = useNavigate();
@@ -347,6 +348,10 @@ const ViewSubAdmin = () => {
                                     <div className="phone-number-field">
                                         <div className="select-field country-code">
                                             <Autocomplete
+                                                disabled
+                                                popupIcon={
+                                                    <KeyboardArrowDownRoundedIcon />
+                                                }
                                                 className="phone-number-disable"
                                                 options={countries}
                                                 autoHighlight
@@ -491,13 +496,11 @@ const ViewSubAdmin = () => {
                                                 value={"active"}
                                                 control={<Radio />}
                                                 label="Active"
-                                                disabled
                                             />
                                             <FormControlLabel
                                                 value={"inactive"}
                                                 control={<Radio />}
                                                 label="Inactive"
-                                                disabled
                                             />
                                         </RadioGroup>
                                     </div>

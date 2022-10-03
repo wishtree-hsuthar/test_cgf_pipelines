@@ -28,7 +28,10 @@ const ForgetPassword = () => {
         },
     });
     useEffect(() => {
-        // document.body.classList.add("login-page");
+        document.body.classList.add("login-page");
+        return () => {
+            document.body.classList.remove("login-page");
+        };
     }, []);
     const toasterRef = useRef();
     const [messageType, setMessageType] = useState("");
@@ -113,7 +116,7 @@ const ForgetPassword = () => {
                                 </p>
                                 <div class="login-form">
                                     <form onSubmit={handleSubmit(submitEmail)}>
-                                        <div class="form-group mb-40">
+                                        <div class="form-group">
                                             <label for="emailid">
                                                 Email Id{" "}
                                                 <span class="mandatory">*</span>
@@ -133,7 +136,7 @@ const ForgetPassword = () => {
                                                 helperText={
                                                     errors.email
                                                         ? errors.email.message
-                                                        : ""
+                                                        : " "
                                                 }
                                             />
                                         </div>

@@ -19,6 +19,7 @@ import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import axios from "axios";
 import { ADD_OPERATION_MEMBER, FETCH_OPERATION_MEMBER } from "../../api/Url";
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 const helperTextForAddOperationMember = {
     salutation: {
         required: "Select salutation",
@@ -292,7 +293,7 @@ function AddOperationMember() {
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
-                                        Save & Add More
+                                        Add More
                                     </span>
                                 </div>
                             </div>
@@ -427,6 +428,7 @@ function AddOperationMember() {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
+                                                            popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                             {...field}
                                                             onChange={(
                                                                 event,
@@ -567,7 +569,7 @@ function AddOperationMember() {
                                             Member Company{" "}
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <div className="country-code-auto-search">
+                                        <div className="country-code-auto-search add-member-comp-field">
                                             <Controller
                                                 control={control}
                                                 name="memberId"
@@ -577,6 +579,7 @@ function AddOperationMember() {
                                                     fieldState: { error },
                                                 }) => (
                                                     <Autocomplete
+                                                    popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                         {...field}
                                                         value={
                                                             memberCompanies?._id
@@ -745,7 +748,7 @@ function AddOperationMember() {
                                         type="submit"
                                         className="primary-button add-button"
                                     >
-                                        Add
+                                        Save
                                     </button>
                                 </div>
                             </div>
