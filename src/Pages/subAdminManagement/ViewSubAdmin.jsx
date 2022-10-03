@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-// import { TextField, Select, MenuItem} from '@mui/material';
 import {
     TextField,
     Backdrop,
@@ -17,12 +16,9 @@ import {
 
 import "react-phone-number-input/style.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import CloseIcon from "@mui/icons-material/Close";
-
-import { Controller } from "react-hook-form";
 import { privateAxios } from "../../api/axios";
 import { DELETE_SUB_ADMIN, FETCH_SUB_ADMIN_BY_ADMIN } from "../../api/Url";
-import { useRef } from "react";
+
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import DialogBox from "../../components/DialogBox";
@@ -176,63 +172,63 @@ const ViewSubAdmin = () => {
         boxShadow: 24,
         p: 4,
     };
-    const CustomModal = () => {
-        return modalData ? (
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                    timeout: 500,
-                }}
-                className="popup-blk"
-            >
-                <Fade in={open}>
-                    <Box sx={style} className="popup-box">
-                        <div
-                            id="transition-modal-title"
-                            className="popup-ttl-blk"
-                        >
-                            <h2 className="popup-ttl heading2">
-                                {modalData.title}
-                            </h2>
-                            <span
-                                class="popup-close-icon"
-                                onClick={handleClose}
-                            >
-                                <CloseIcon />
-                            </span>
-                        </div>
-                        <div
-                            id="transition-modal-description"
-                            className="popup-body"
-                        >
-                            <div className="popup-content-blk text-center">
-                                <p>open{modalData.info}</p>
-                                <div className="form-btn flex-center">
-                                    <button
-                                        type="submit"
-                                        className="secondary-button mr-10"
-                                    >
-                                        {modalData.secondarybtn}
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="primary-button"
-                                    >
-                                        {modalData.primarybtn}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </Box>
-                </Fade>
-            </Modal>
-        ) : null;
-    };
+    // const CustomModal = () => {
+    //     return modalData ? (
+    //         <Modal
+    //             aria-labelledby="transition-modal-title"
+    //             aria-describedby="transition-modal-description"
+    //             open={open}
+    //             onClose={handleClose}
+    //             closeAfterTransition
+    //             BackdropComponent={Backdrop}
+    //             BackdropProps={{
+    //                 timeout: 500,
+    //             }}
+    //             className="popup-blk"
+    //         >
+    //             <Fade in={open}>
+    //                 <Box sx={style} className="popup-box">
+    //                     <div
+    //                         id="transition-modal-title"
+    //                         className="popup-ttl-blk"
+    //                     >
+    //                         <h2 className="popup-ttl heading2">
+    //                             {modalData.title}
+    //                         </h2>
+    //                         <span
+    //                             class="popup-close-icon"
+    //                             onClick={handleClose}
+    //                         >
+    //                             <CloseIcon />
+    //                         </span>
+    //                     </div>
+    //                     <div
+    //                         id="transition-modal-description"
+    //                         className="popup-body"
+    //                     >
+    //                         <div className="popup-content-blk text-center">
+    //                             <p>open{modalData.info}</p>
+    //                             <div className="form-btn flex-center">
+    //                                 <button
+    //                                     type="submit"
+    //                                     className="secondary-button mr-10"
+    //                                 >
+    //                                     {modalData.secondarybtn}
+    //                                 </button>
+    //                                 <button
+    //                                     type="submit"
+    //                                     className="primary-button"
+    //                                 >
+    //                                     {modalData.primarybtn}
+    //                                 </button>
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                 </Box>
+    //             </Fade>
+    //         </Modal>
+    //     ) : null;
+    // };
 
     return (
         <div className="page-wrapper">
@@ -295,7 +291,7 @@ const ViewSubAdmin = () => {
                                     ))}
                                 </ul>
                             </div>
-                            <CustomModal />
+                            {/* <CustomModal /> */}
                             {/* <ReplaceSubAdminModal /> */}
                         </span>
                     </div>
@@ -314,6 +310,7 @@ const ViewSubAdmin = () => {
                                         className={`input-field`}
                                         disabled={true}
                                         value={fetchedSubAdminDetails?.name}
+                                        helperText={" "}
                                     />
                                 </div>
                             </div>
@@ -330,6 +327,7 @@ const ViewSubAdmin = () => {
                                         variant="outlined"
                                         disabled={true}
                                         value={fetchedSubAdminDetails?.email}
+                                        helperText={" "}
                                     />
                                 </div>
                             </div>
@@ -339,7 +337,7 @@ const ViewSubAdmin = () => {
                                     <div className="phone-number-field">
                                         <div className="select-field country-code">
                                             <Autocomplete
-                                            className="phone-number-disable"
+                                                className="phone-number-disable"
                                                 options={countries}
                                                 autoHighlight
                                                 getOptionLabel={(country) =>
@@ -383,6 +381,7 @@ const ViewSubAdmin = () => {
                                                         // helperText={
                                                         //     errors?.countryCode?.message
                                                         // }
+                                                        // helperText={" "}
                                                     />
                                                 )}
                                             />
@@ -399,6 +398,7 @@ const ViewSubAdmin = () => {
                                             value={
                                                 fetchedSubAdminDetails?.phoneNumber
                                             }
+                                            helperText={" "}
                                         />
                                     </div>
                                 </div>
@@ -441,6 +441,7 @@ const ViewSubAdmin = () => {
                                                 fetchedSubAdminDetails
                                                     ?.subRoleId?.name
                                             }
+                                            // helperText={" "}
                                         />
                                     </div>
                                 </div>
@@ -458,6 +459,7 @@ const ViewSubAdmin = () => {
                                         variant="outlined"
                                         disabled={true}
                                         value={"N/A"}
+                                        helperText={" "}
                                     />
                                 </div>
                             </div>
@@ -476,14 +478,12 @@ const ViewSubAdmin = () => {
                                             }
                                         >
                                             <FormControlLabel
-                                                disabled
                                                 value={"active"}
                                                 control={<Radio />}
                                                 label="Active"
                                                 disabled
                                             />
                                             <FormControlLabel
-                                                disabled
                                                 value={"inactive"}
                                                 control={<Radio />}
                                                 label="Inactive"

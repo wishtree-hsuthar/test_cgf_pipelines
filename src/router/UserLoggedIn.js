@@ -1,7 +1,7 @@
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { setUser, resetUser } from "../redux/UserSlice";
+import { setUser, resetUser, setPrivileges } from "../redux/UserSlice";
 import { GET_USER } from "../api/Url";
 import { privateAxios } from "../api/axios";
 import { useState } from "react";
@@ -21,7 +21,12 @@ const UserLoggedIn = ({ children }) => {
                 "data from app fetcuser method UserLoggedIn file",
                 response.data
             );
+            console.log(
+                "response from UserLoggedIn file in ",
+                response.data?.role
+            );
             dispatch(setUser(response.data));
+            dispatch(setPrivileges(response.data?.role));
         } catch (error) {
             console.log(
                 "Error from app file useEffect UserLoggedIn file",
@@ -39,7 +44,7 @@ const UserLoggedIn = ({ children }) => {
                 //     />
                 // );
                 setRequestRetry(true);
-                navigate("/login");
+                return navigate("/login");
             }
         }
     };

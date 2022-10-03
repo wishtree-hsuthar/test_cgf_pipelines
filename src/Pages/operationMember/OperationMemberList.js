@@ -335,6 +335,8 @@ function OperationMemberList() {
                                     filters={filters}
                                     setSearch={setSearch}
                                     setFilters={setFilters}
+                                    setToasterDetails={setToasterDetails}
+                                    myRef={toasterRef}
                                 />
                             </TabPanel>
                         </div>

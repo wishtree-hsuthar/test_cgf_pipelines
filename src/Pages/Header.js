@@ -21,11 +21,13 @@ const Header = () => {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [isActive, setActive] = React.useState("false");
     const userAuth = useSelector((state) => state.user.userObj);
+    const privilege = useSelector((state) => state.user?.privilege);
+    // const privilege = useSelector((state) => state.user?.privilege);
     let initials = userAuth?.name?.split(" ");
     const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
     const MEMBER_ACCESS = userAuth?.roleId?.name == "Member";
     const OPERATION_MEMBER = userAuth?.roleId?.name == "Operation Member";
-
+    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
@@ -33,53 +35,69 @@ const Header = () => {
     const [activeStateForOperationMembers, setActiveStateForOperationMembers] =
         useState(false);
     console.log("location in header", location.pathname);
-    const routeAddress = ["/members", "/operation_members"];
-    const myFunction = (activeState) => {
-        if (activeState === "/members") {
-            console.log("active state==members");
-            return "active";
-        }
-        if (activeState === "/operation_members") {
-            console.log("active state==operation_members");
+    console.log("suoer admin in header", SUPER_ADMIN);
+    console.log("privilege in header", privilege);
 
-            return "active";
-        } else {
-            return "";
-        }
-    };
-    console.log("active state", myFunction);
-    // const activeAddress = routeAddress.filter(myFunction);
-    useEffect(() => {
-        // const controller = new AbortController();
-        // const fetchUser = async () => {
-        //     try {
-        //         const { data } = await axios.get(GET_USER);
-        //         dispatch(setUser(data));
-        //     } catch (error) {
-        //         console.log("Error from header file useEffect", error);
-        //         // navigate("/login");
-        //     }
-        // };
-        // fetchUser();
-        // //clean up function
-        // return () => {
-        //     controller.abort();
-        // };
-    }, []);
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
         setActive(!isActive);
     };
 
-    // const handleCloseNavMenu = () => {
-    //   setAnchorElNav(null);
-    // };
-
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
         setActive(!isActive);
     };
+    // console.log("privilege", );
+    // console.log("privilege entries", );
+    console.log("privilege from ", privilege);
+    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
 
+    let modifiedPrivilegeArrayKeys = privilegeArray.map(
+        (privilege, index) => privilege?.moduleId?.name
+    );
+    let moduleAccesForMember = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Members")
+        .map((data) => ({
+            member: {
+                list: data.list,
+                view: data.view,
+                edit: data.edit,
+                delete: data.delete,
+            },
+        }));
+    let moduleAccessForOperationMember = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Operation Members")
+        .map((data) => ({
+            operationMember: {
+                list: data.list,
+                view: data.view,
+                edit: data.edit,
+                delete: data.delete,
+            },
+        }));
+    let moduleAccessForQuestionnaire = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Questionnaire")
+        .map((data) => ({
+            operationMember: {
+                list: data.list,
+                view: data.view,
+                edit: data.edit,
+                delete: data.delete,
+            },
+        }));
+    console.log(
+        "module access for member",
+        moduleAccesForMember[0]?.member?.list
+    );
+    console.log(
+        "module access for member",
+        moduleAccesForMember[0]?.member?.list
+    );
+    console.log(
+        "module access for operation member",
+        moduleAccessForOperationMember[0]?.operationMember?.list
+    );
+    console.log("modified Privilege array", modifiedPrivilegeArrayKeys);
     const handleLogOut = async () => {
         try {
             const response = await privateAxios.post(LOGOUT_URL);
@@ -173,6 +191,12 @@ const Header = () => {
                                             </a>
                                             <ul className="header-submenu">
                                                 <li
+                                                    hidden={
+                                                        SUPER_ADMIN === true
+                                                            ? false
+                                                            : !moduleAccesForMember[0]
+                                                                  ?.member?.list
+                                                    }
                                                     className={
                                                         location.pathname ===
                                                         "/users/members"
@@ -197,6 +221,13 @@ const Header = () => {
                                                             ? "subactive"
                                                             : ""
                                                     }
+                                                    hidden={
+                                                        SUPER_ADMIN === true
+                                                            ? false
+                                                            : !moduleAccessForOperationMember[0]
+                                                                  ?.operationMember
+                                                                  ?.list
+                                                    }
                                                 >
                                                     <a
                                                         onClick={() => {
@@ -211,7 +242,13 @@ const Header = () => {
                                             </ul>
                                         </li>
                                         <li className="list-item">
-                                            <a href="/#">Questionnaires</a>
+                                            <a
+                                                onClick={() =>
+                                                    navigate("/questionnaires")
+                                                }
+                                            >
+                                                Questionnaires
+                                            </a>
                                         </li>
 
                                         <li
@@ -224,10 +261,7 @@ const Header = () => {
                                             }
                                         >
                                             <a
-                                                hidden={
-                                                    CGF_ADMIN_ACCESS ||
-                                                    MEMBER_ACCESS
-                                                }
+                                                hidden={!SUPER_ADMIN}
                                                 onClick={() => {
                                                     // setActiveState(false);
                                                     setActiveStateForMembers(
@@ -253,10 +287,7 @@ const Header = () => {
                                             }
                                         >
                                             <a
-                                                hidden={
-                                                    CGF_ADMIN_ACCESS ||
-                                                    MEMBER_ACCESS
-                                                }
+                                                hidden={!SUPER_ADMIN}
                                                 onClick={() =>
                                                     navigate("/roles")
                                                 }
@@ -295,7 +326,7 @@ const Header = () => {
                                                     className="user-type"
                                                     onClick={handleOpenUserMenu}
                                                 >
-                                                    {userAuth?.roleId?.name}
+                                                    {userAuth?.role?.name}
                                                     <span
                                                         className={
                                                             isActive
