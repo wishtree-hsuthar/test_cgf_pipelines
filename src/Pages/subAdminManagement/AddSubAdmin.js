@@ -276,7 +276,7 @@ const AddSubAdmin = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label for="phoneNumber">
-                                            Phone Number
+                                            Phone Number <span className="mandatory">*</span>
                                         </label>
                                         <div className="phone-number-field">
                                             <div className="select-field country-code">
@@ -289,6 +289,7 @@ const AddSubAdmin = () => {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
+                                                        className={`${error && "autocomplete-error"}`}
                                                         popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                             {...field}
                                                             onChange={(
@@ -389,7 +390,7 @@ const AddSubAdmin = () => {
                                             <span className="mandatory">*</span>
                                         </label>
 
-                                        <div className="select-field">
+                                        <div >
                                             <Controller
                                                 name="subRoleId"
                                                 control={control}
@@ -397,12 +398,13 @@ const AddSubAdmin = () => {
                                                     field,
                                                     fieldState: { error },
                                                 }) => (
-                                                    <>
+                                                    <div className={`select-field ${error && "select-field-error"}`}>
                                                         <Select
+
                                                         IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props}/>}
                                                             {...field}
                                                             className={`input-field ${
-                                                                errors.subRoleId &&
+                                                                error?.subRoleId &&
                                                                 "input-error"
                                                             }`}
                                                             // {...register(
@@ -429,7 +431,7 @@ const AddSubAdmin = () => {
                                                                 )
                                                             )}
                                                         </Select>
-                                                    </>
+                                                    </div>
                                                 )}
                                             />
 
