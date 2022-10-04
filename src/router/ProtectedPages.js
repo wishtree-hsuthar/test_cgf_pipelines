@@ -122,7 +122,7 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
-                    path="/users/operation_member/view-operation-member/:id"
+                    path="/users/operation-member/view-operation-member/:id"
                     element={
                         <RequireAuth
                             page={"view"}
@@ -133,7 +133,7 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
-                    path="/users/operation_member/edit-operation-member/:id"
+                    path="/users/operation-member/edit-operation-member/:id"
                     element={
                         <RequireAuth
                             page={"edit"}

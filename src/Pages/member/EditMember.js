@@ -139,7 +139,7 @@ const EditMember = () => {
         cgfOfficeCountry: data.cgfOfficeCountry,
         cgfOffice: data.cgfOffice,
         memberRepresentative: {
-          id: member?.memberRepresentativeId?._id,
+          id: member?.memberRepresentativeId[0]?._id,
           title: data.title,
           department: data.department,
           salutation: data.memberContactSalutation,
@@ -324,14 +324,14 @@ const EditMember = () => {
         cgfOfficeCountry: data?.cgfOfficeCountry,
         cgfOffice: data?.cgfOffice,
         memberContactSalutation: "Mr.",
-        memberContactFullName: data?.memberRepresentativeId?.name,
-        title: data?.memberRepresentativeId?.title,
-        department: data?.memberRepresentativeId?.department,
-        memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
-        memberContactEmail: data?.memberRepresentativeId?.email,
+        memberContactFullName: data?.memberRepresentativeId[0]?.name,
+        title: data?.memberRepresentativeId[0]?.title,
+        department: data?.memberRepresentativeId[0]?.department,
+        memberContactCountryCode: data?.memberRepresentativeId[0]?.countryCode,
+        memberContactEmail: data?.memberRepresentativeId[0]?.email,
         memberContactPhoneNuber:
-          data?.memberRepresentativeId?.phoneNumber?.toString(),
-        status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
+          data?.memberRepresentativeId[0]?.phoneNumber?.toString(),
+        status: data?.memberRepresentativeId[0]?.isActive ? "active" : "inactive",
       });
       setMember(response.data);
       setIsLoading(false);

@@ -218,7 +218,7 @@ const ViewOperationMembers = () => {
                 );
                 setOpenDeleteDialog(false);
                 setTimeout(() => {
-                    navigate("/users/operation_member");
+                    navigate("/users/operation-member");
                 }, 2000);
             }
         } catch (error) {
@@ -245,13 +245,13 @@ const ViewOperationMembers = () => {
         if (index === 0) {
             setOpen(false);
             navigate(
-                `/users/operation_member/edit-operation-member/${params.id}`
+                `/users/operation-member/edit-operation-member/${params.id}`
             );
         }
         if (index === 1) {
             setOpen(false);
             navigate(
-                `/users/operation_member/replace-operation-member/${params.id}`
+                `/users/operation-member/replace-operation-member/${params.id}`
             );
         }
         if (index === 2) {

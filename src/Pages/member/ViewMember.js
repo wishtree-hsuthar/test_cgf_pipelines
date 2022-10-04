@@ -135,20 +135,19 @@ const ViewMember = () => {
   const [filters, setFilters] = useState({
     status: "none",
   });
-  const privilege = useSelector((state) => state.user?.privilege);
+  const privilege = useSelector((state) => state?.user?.privilege);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
     let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
     let moduleAccesForMember = privilegeArray
         .filter((data) => data?.moduleId?.name === "Members")
         .map((data) => ({
             member: {
-                list: data.list,
-                view: data.view,
-                edit: data.edit,
-                delete: data.delete,
+                list: data?.list,
+                view: data?.view,
+                edit: data?.edit,
+                delete: data?.delete,
             },
         }));
-        // console.log("module access member in view member",moduleAccesForMember[0]?.member)
   
   //format records as backend requires
   const updateRecords = (data) => {
@@ -477,7 +476,8 @@ const ViewMember = () => {
         signal: controller.signal,
       });
       const data = response.data;
-      
+      console.log("Code: ",data)
+      setMember({...data});
       reset({
         memberCompany: data?.companyName,
         companyType: data?.companyType,
@@ -498,18 +498,17 @@ const ViewMember = () => {
         cgfOfficeCountry: data?.cgfOfficeCountry,
         cgfOffice: data?.cgfOffice,
         memberContactSalutation: "Mr.",
-        memberContactFullName: data?.memberRepresentativeId?.name,
-        title: data?.memberRepresentativeId?.title,
-        department: data?.memberRepresentativeId?.department,
-        memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
-        memberContactEmail: data?.memberRepresentativeId?.email,
+        memberContactFullName: data?.memberRepresentativeId[0]?.name,
+        title: data?.memberRepresentativeId[0]?.title,
+        department: data?.memberRepresentativeId[0]?.department,
+        memberContactCountryCode: data?.memberRepresentativeId[0]?.countryCode,
+        memberContactEmail: data?.memberRepresentativeId[0]?.email,
         memberContactPhoneNuber:
-          data?.memberRepresentativeId?.phoneNumber?.toString(),
-        status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
-        totalOperationMembers: totalRecords.toString(),
+          data?.memberRepresentativeId[0]?.phoneNumber?.toString(),
+        status: data?.memberRepresentativeId[0]?.isActive ? "active" : "inactive",
+        totalOperationMembers: totalRecords?.toString(),
         createdBy: data?.createdBy["name"],
       });
-      setMember(response.data);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -553,7 +552,7 @@ const ViewMember = () => {
     };
     // console.log("member",member)
   }, [watch, page, rowsPerPage, orderBy, order, filters, makeApiCall]);
-  // console.log("Member", member);
+  console.log("Member", member);
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
       <Toaster
@@ -1094,11 +1093,11 @@ const ViewMember = () => {
                           className="phone-number-disable"
                             readOnly
                             value={
-                              member?.memberRepresentativeId?.countryCode
-                                ? member.memberRepresentativeId.countryCode
+                              member?.memberRepresentativeId
+                                ? member?.memberRepresentativeId[0]?.countryCode
                                 : ""
                             }
-                            options={arrOfCountryCode ? arrOfCountryCode : []}
+                            options={arrOfCountryCode}
                             autoHighlight
                             placeholder="Select country code"
                             renderOption={(props, option) => (
@@ -1134,12 +1133,10 @@ const ViewMember = () => {
                       </label>
                       <div className="radio-btn-field">
                         <RadioGroup
-                          value={
-                            member?.memberRepresentativeId?.isActive
-                              ? "active"
-                              : "inactive"
-                          }
                           // {...field}
+                          value={
+                            member?.memberRepresentativeId &&  member?.memberRepresentativeId[0]?.isActive ? "active" : "inactive"
+                          }
                           aria-labelledby="demo-radio-buttons-group-label"
                           name="radio-buttons-group"
                           className="radio-btn"

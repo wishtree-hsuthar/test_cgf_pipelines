@@ -160,16 +160,16 @@ function EditOperationMember() {
             );
             if (response.status == 200) {
                 setReportingManagers(
-                    response.data.map((data) => ({
-                        _id: data._id,
-                        name: data.name,
+                    response?.data.map((data) => ({
+                        _id: data?._id,
+                        name: data?.name,
                     }))
                 );
                 console.log(
                     "reporting managersssss",
-                    response.data.map((data) => ({
-                        _id: data._id,
-                        name: data.name,
+                    response?.data.map((data) => ({
+                        _id: data?._id,
+                        name: data?.name,
                     }))
                 );
             }
@@ -188,7 +188,7 @@ function EditOperationMember() {
             );
             console.log("response from countries", response);
             // isMounted &&
-            setCountries(response.data.map((country) => country.countryCode));
+            setCountries(response.data.map((country) => country?.countryCode));
         } catch (error) {
             console.log("error from countries api", error);
             if (error?.response?.status == 401) {
@@ -216,7 +216,7 @@ function EditOperationMember() {
             console.log(
                 "member company---",
                 response.data.map((data) => {
-                    console.log("member company=", data.companyName);
+                    console.log("member company=", data?.companyName);
                 })
             );
 
@@ -224,9 +224,9 @@ function EditOperationMember() {
                 // isMounted &&
                 setMemberCompanies(
                     response.data.map((data) => ({
-                        _id: data._id,
-                        companyName: data.companyName,
-                        companyType: data.companyType,
+                        _id: data?._id,
+                        companyName: data?.companyName,
+                        companyType: data?.companyType,
                     }))
                 );
             }
@@ -250,8 +250,8 @@ function EditOperationMember() {
             console.log("response from rm", response);
             setReportingManagers(
                 response.data.map((data) => ({
-                    _id: data._id,
-                    name: data.name,
+                    _id: data?._id,
+                    name: data?.name,
                 }))
             );
         } catch (error) {
@@ -280,7 +280,7 @@ function EditOperationMember() {
                     countryCode: response?.data?.countryCode,
                     phoneNumber: response?.data?.phoneNumber,
                     address: response?.data?.address,
-                    title: response.data.title ? response.data.title : "N/A",
+                    title: response?.data?.title ? response.data.title : "N/A",
                     department: response?.data?.department
                         ? response?.data?.department
                         : "N/A",
@@ -327,8 +327,8 @@ function EditOperationMember() {
     const editOperationMember = async (data, navigateToListPage) => {
         data = {
             ...data,
-            phoneNumber: Number(data.phoneNumber),
-            isActive: data.isActive === "true" ? true : false,
+            phoneNumber: Number(data?.phoneNumber),
+            isActive: data?.isActive === "true" ? true : false,
         };
         try {
             const response = await privateAxios.put(
@@ -357,7 +357,7 @@ function EditOperationMember() {
             setToasterDetails(
                 {
                     titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data.message,
+                    descriptionMessage: error?.response?.data?.message,
                     messageType: "error",
                 },
                 () => toasterRef.current()
@@ -399,7 +399,7 @@ function EditOperationMember() {
                         </li>
                         <li>
                             <Link
-                                to={`/users/operation_member/view-operation-member/${params.id}`}
+                                to={`/users/operation-member/view-operation-member/${params.id}`}
                             >
                                 View Operation Members
                             </Link>
@@ -467,6 +467,7 @@ function EditOperationMember() {
                                                 <Input
                                                     name={"name"}
                                                     control={control}
+                                                    placeholder="NA"
                                                     myHelper={
                                                         helperTextForAddOperationMember
                                                     }
@@ -486,6 +487,7 @@ function EditOperationMember() {
                                         <label for="email">Title </label>
                                         <Input
                                             name={"title"}
+                                            placeholder="NA"
                                             control={control}
                                             rules={{
                                                 maxLength: 50,
@@ -498,6 +500,7 @@ function EditOperationMember() {
                                         <label for="email">Department </label>
                                         <Input
                                             name={"department"}
+                                            placeholder="NA"
                                             control={control}
                                             myHelper={
                                                 helperTextForAddOperationMember
@@ -517,6 +520,7 @@ function EditOperationMember() {
                                         <Input
                                             name={"email"}
                                             control={control}
+                                            placeholder="NA"
                                             isDisabled
                                             myHelper={
                                                 helperTextForAddOperationMember
@@ -627,6 +631,7 @@ function EditOperationMember() {
                                             <Input
                                                 name={"phoneNumber"}
                                                 control={control}
+                                                placeholder="NA"
                                                 myHelper={
                                                     helperTextForAddOperationMember
                                                 }
@@ -648,6 +653,7 @@ function EditOperationMember() {
                                         <Dropdown
                                             control={control}
                                             name="operationType"
+                                            placeholder="NA"
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
@@ -787,6 +793,7 @@ function EditOperationMember() {
                                         <Input
                                             isDisabled={true}
                                             name={"companyType"}
+                                            placeholder="NA"
                                             control={control}
                                             myHelper={
                                                 helperTextForAddOperationMember
@@ -803,6 +810,7 @@ function EditOperationMember() {
                                         <Input
                                             control={control}
                                             name={"address"}
+                                            placeholder="NA"
                                             rules={{ required: true }}
                                             myHelper={
                                                 helperTextForAddOperationMember

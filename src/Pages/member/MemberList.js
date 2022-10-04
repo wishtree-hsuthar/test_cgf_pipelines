@@ -73,7 +73,7 @@ const MemberList = () => {
     messageType: "success",
   });
 
-  const privilege = useSelector((state) => state.user?.privilege);
+  const privilege = useSelector((state) => state?.user?.privilege);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
     let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
     let moduleAccesForMember = privilegeArray
@@ -409,7 +409,7 @@ const MemberList = () => {
                           <MenuItem key={member} value={member}>
                             <Checkbox
                               className="table-checkbox"
-                              checked={selectedCreatedBy.indexOf(member) > -1}
+                              checked={selectedCreatedBy?.indexOf(member) > -1}
                             />
                             {member}
                           </MenuItem>
@@ -467,7 +467,7 @@ const MemberList = () => {
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}
                 setCheckBoxes={false}
-                onRowClick={SUPER_ADMIN?true:moduleAccesForMember[0]?.member.view}
+                onRowClick={SUPER_ADMIN?true:moduleAccesForMember[0]?.member?.view}
               />
             )}
           </div>

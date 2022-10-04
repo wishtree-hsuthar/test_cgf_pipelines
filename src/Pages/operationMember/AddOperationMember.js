@@ -141,17 +141,17 @@ function AddOperationMember() {
                 console.log(
                     "member company---",
                     response.data.map((data) => {
-                        console.log("member company=", data.companyName);
+                        console.log("member company=", data?.companyName);
                     })
                 );
 
                 if ((response.status = 200)) {
                     isMounted &&
                         setMemberCompanies(
-                            response.data.map((data) => ({
-                                _id: data._id,
-                                companyName: data.companyName,
-                                companyType: data.companyType,
+                            response?.data.map((data) => ({
+                                _id: data?._id,
+                                companyName: data?.companyName,
+                                companyType: data?.companyType,
                             }))
                         );
                 }
@@ -172,7 +172,7 @@ function AddOperationMember() {
                 console.log("response", response);
                 isMounted &&
                     setCountries(
-                        response.data.map((country) => country.countryCode)
+                        response.data.map((country) => country?.countryCode)
                     );
             } catch (error) {
                 console.log("error from countries api", error);
@@ -205,8 +205,8 @@ function AddOperationMember() {
             if (response.status == 200) {
                 setReportingManagers(
                     response.data.map((data) => ({
-                        _id: data._id,
-                        name: data.name,
+                        _id: data?._id,
+                        name: data?.name,
                     }))
                 );
             }
@@ -215,7 +215,7 @@ function AddOperationMember() {
         }
     };
     const addOperationMember = async (data, navigateToListPage) => {
-        data = { ...data, phoneNumber: Number(data.phoneNumber) };
+        data = { ...data, phoneNumber: Number(data?.phoneNumber) };
         try {
             const response = await privateAxios.post(
                 ADD_OPERATION_MEMBER,
@@ -225,7 +225,7 @@ function AddOperationMember() {
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage: response.data.message,
+                        descriptionMessage: response?.data?.message,
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -243,7 +243,7 @@ function AddOperationMember() {
             setToasterDetails(
                 {
                     titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data.message,
+                    descriptionMessage: error?.response?.data?.message,
                     messageType: "error",
                 },
                 () => toasterRef.current()
