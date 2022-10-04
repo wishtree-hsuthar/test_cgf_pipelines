@@ -14,7 +14,7 @@ const onBoardedTableColumnHead = [
         id: "Email Address",
 
         disablePadding: false,
-        label: "Email",
+        label: "Email Address",
     },
     {
         id: "role",

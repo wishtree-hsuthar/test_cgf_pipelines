@@ -21,6 +21,9 @@
 .table-blk th{font-family: 'ProximaNova-Semibold',serif, sans-serif;}
 .table-blk td {font-family: 'ProximaNova-Regular',serif, sans-serif;white-space: nowrap;}
 .no-records-blk{padding: 30px; text-align: center;}
+.table-checkbox.Mui-disabled svg{color: rgba(30, 30, 30, 0.5) !important;}
+.table-checkbox.Mui-checked.Mui-disabled svg{color: rgba(30, 30, 30, 0.5) !important;}
+
 
 .table-blk-without-checkbox .MuiTableCell-head{
     padding: 0px 10px !important;
