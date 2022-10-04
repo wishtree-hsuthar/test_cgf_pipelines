@@ -146,7 +146,7 @@ const EditMember = () => {
           name: data.memberContactFullName,
           email: data.memberContactEmail,
           countryCode: data.memberContactCountryCode,
-          phoneNumber: parseInt(data.memberContactPhoneNuber),
+          phoneNumber: parseInt(data?.memberContactPhoneNuber ?? 0),
           isActive: data.status === "active" ? true : false,
         },
       };
@@ -184,7 +184,7 @@ const EditMember = () => {
    regionCountries && regionCountries.forEach(
       (country, id) =>
         (regionCountries[id] = country.hasOwnProperty("_id")
-          ? country.name
+          ? country?.name
           : country)
     );
     console.log("arr of country ", regionCountries);
@@ -260,7 +260,7 @@ const EditMember = () => {
     try {
       const regions = await axios.get(REGIONS, { signal: controller.signal });
       // console.log("regions ", regions.data);
-      setArrOfRegions(regions.data);
+      setArrOfRegions(regions?.data);
       const countriesOnRegion1 = await getCountries1(watch("region"));
       // console.log("countries", countriesOnRegion1);
       const arrOfCountryRegionsTemp1 = formatRegionCountries1(
@@ -313,7 +313,7 @@ const EditMember = () => {
         cgfActivity: data?.cgfActivity,
         corporateEmail: data?.corporateEmail,
         countryCode: data?.countryCode,
-        phoneNumber: data?.phoneNumber.toString(),
+        phoneNumber: data?.phoneNumber?.toString(),
         websiteUrl: data?.website,
         region: data?.region,
         country: data?.country,
