@@ -22,7 +22,6 @@ import axios from "axios";
 //internal packages
 import Toaster from "../../components/Toaster";
 import "../../components/TableComponent.css";
-// import { backendBase } from "../../utils/urls";
 import useCallbackState from "../../utils/useCallBackState";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 
@@ -37,7 +36,6 @@ const AddRole = () => {
     descriptionMessage: "",
     messageType: "success",
   });
-
   //array to hold modules available
   let modules = []
   console.log("modules",modules)
@@ -125,6 +123,7 @@ const AddRole = () => {
         () => myRef.current()
       );
       reset({ defaultValues });
+      getSystemModules()
       setTimeout(() => navigate("/roles"), 3000);
     } catch (error) {
       console.log("error", error);
@@ -170,6 +169,7 @@ const AddRole = () => {
         () => myRef.current()
       );
       reset({defaultValues})
+      getSystemModules()
     } catch (error) {
       setToasterDetails(
         {
@@ -190,31 +190,31 @@ const AddRole = () => {
     reset({defaultValues})
     return navigate("/roles");
   };
+  const getSystemModules = async() => {
+    try {
+      const { data } = await axios.get(REACT_APP_API_ENDPOINT + "system-modules");
+      createModules(data);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something Went Wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+    }
+  }
+  
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    (async () => {
-      try {
-        const { data } = await axios.get(REACT_APP_API_ENDPOINT + "system-modules", {
-          signal: controller.signal,
-        });
-        isMounted && createModules(data);
-      } catch (error) {
-        if (error?.code === "ERR_CANCELED") return;
-        setToasterDetails(
-          {
-            titleMessage: "Error",
-            descriptionMessage:
-              error?.response?.data?.message &&
-              typeof error.response.data.message === "string"
-                ? error.response.data.message
-                : "Something Went Wrong!",
-            messageType: "error",
-          },
-          () => myRef.current()
-        );
-      }
-    })();
+    isMounted && getSystemModules()
     return () => {
       isMounted = false;
       controller.abort();
@@ -252,7 +252,7 @@ const AddRole = () => {
                   className="addmore-txt"
                   onClick={handleSubmit(onSubmitAddMoreClickHandler)}
                 >
-                  Add More
+                  Save & Add More
                 </span>
               </div>
             </div>
@@ -440,6 +440,8 @@ const AddRole = () => {
                                       [previleg]: {
                                         ...previous[previleg],
                                         add: !previous[previleg]["add"],
+                                        list: !previous[previleg]["add"],
+                                        view: !previous[previleg]["add"],
                                         all: false,
                                       },
                                     }))
@@ -456,6 +458,8 @@ const AddRole = () => {
                                       [previleg]: {
                                         ...previous[previleg],
                                         edit: !previous[previleg]["edit"],
+                                        list: !previous[previleg]["edit"],
+                                        view: !previous[previleg]["edit"],
                                         all: false,
                                       },
                                     }))
@@ -472,6 +476,7 @@ const AddRole = () => {
                                       [previleg]: {
                                         ...previous[previleg],
                                         view: !previous[previleg]["view"],
+                                        list: !previous[previleg]["view"],
                                         all: false,
                                       },
                                     }))
@@ -488,6 +493,9 @@ const AddRole = () => {
                                       [previleg]: {
                                         ...previous[previleg],
                                         delete: !previous[previleg]["delete"],
+                                        list: !previous[previleg]["delete"],
+                                        edit: !previous[previleg]["delete"],
+                                        view: !previous[previleg]["delete"],
                                         all: false,
                                       },
                                     }))

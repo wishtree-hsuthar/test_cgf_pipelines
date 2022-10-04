@@ -239,7 +239,7 @@ const RolesList = () => {
                 <div className="searchbar">
                   <input
                     type="text"
-                    placeholder="Search for role"
+                    placeholder="Search"
                     onChange={onSearchChangeHandler}
                     onKeyDown={(e) => e.key === "Enter" && setMakeApiCall(true)}
                     value={search}

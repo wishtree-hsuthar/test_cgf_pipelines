@@ -82,30 +82,21 @@ const EditRole = () => {
         privileges: previlegesForBackend,
       });
       console.log("response", response);
-      data.status === "inactive"
-        ? setToasterDetails(
+      setToasterDetails(
             {
-              titleMessage: "Alert!",
+              titleMessage: "Success!",
               descriptionMessage: "Role details updated successfully!",
               messageType: "success",
             },
             () => myRef.current()
           )
-        : setToasterDetails(
-            {
-              titleMessage: "Success",
-              descriptionMessage: "Role details updated successfully!",
-              messageType: "success",
-            },
-            () => myRef.current()
-          );
       console.log("Default Values", editDefault);
       reset({
         roleName : "",
         status: "active",
         description: ""
       });
-      setTimeout(() => navigate("/roles"), 3000);
+      setTimeout(() => navigate(`/roles/view-role/${params.id}`), 3000);
     } catch (error) {
       console.log("error", error);
       setToasterDetails(
@@ -157,36 +148,35 @@ const EditRole = () => {
     });
     createPrevileges(data.privileges);
   };
+  const getRoleById = async() => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(REACT_APP_API_ENDPOINT + `roles/${params.id}`);
+      console.log("response: ", response);
+      updateEditFields(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error", error);
+      if (error?.code === "ERR_CANCELED") return;
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something Went Wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+      setIsLoading(false);
+    }
+  }
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    (async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.get(REACT_APP_API_ENDPOINT + `roles/${params.id}`, {
-          signal: controller.signal,
-        });
-        console.log("response: ", response);
-        isMounted && updateEditFields(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.log("Error", error);
-        if (error?.code === "ERR_CANCELED") return;
-        setToasterDetails(
-          {
-            titleMessage: "Error",
-            descriptionMessage:
-              error?.response?.data?.message &&
-              typeof error.response.data.message === "string"
-                ? error.response.data.message
-                : "Something Went Wrong!",
-            messageType: "error",
-          },
-          () => myRef.current()
-        );
-        setIsLoading(false);
-      }
-    })();
+    isMounted && getRoleById()
     return () => {
       isMounted = false;
       controller.abort();
@@ -393,6 +383,8 @@ const EditRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           add: !previous[previleg]["add"],
+                                          list: !previous[previleg]["add"],
+                                          view: !previous[previleg]["add"],
                                           all: false,
                                         },
                                       }))
@@ -409,6 +401,8 @@ const EditRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           edit: !previous[previleg]["edit"],
+                                          list: !previous[previleg]["edit"],
+                                          view: !previous[previleg]["edit"],
                                           all: false,
                                         },
                                       }))
@@ -425,6 +419,7 @@ const EditRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           view: !previous[previleg]["view"],
+                                          list: !previous[previleg]["view"],
                                           all: false,
                                         },
                                       }))
@@ -441,6 +436,9 @@ const EditRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           delete: !previous[previleg]["delete"],
+                                          list: !previous[previleg]["delete"],
+                                          edit: !previous[previleg]["delete"],
+                                          view: !previous[previleg]["delete"],
                                           all: false,
                                         },
                                       }))
@@ -507,7 +505,7 @@ const EditRole = () => {
                     className="primary-button"
                     style={{ marginTop: "30px" }}
                   >
-                    Edit
+                    Update
                   </button>
                 </div>
               </div>

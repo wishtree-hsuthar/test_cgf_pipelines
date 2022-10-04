@@ -947,10 +947,11 @@ input[type=checkbox]:checked:before {
 
 /* Password error */
 .password-error {
-    margin-left: 4%;
+    margin-left: 15px;
     color: #e53850;
     font-size: 12px;
-    margin-top: 1%;
+    margin-top: 3px;
+    line-height: 18px;
 }
 
 /* css by madhav for autocomplete in phone number */
@@ -1049,12 +1050,12 @@ input[type=checkbox]:checked:before {
 .country-code-auto-search {
     margin-right: 10px;
 }
-.add-member-comp-field fieldset{border: 1px solid rgba(30, 30, 30, 0.5) !important;}
-.add-member-comp-field .MuiAutocomplete-root:hover fieldset {
+/* .add-member-comp-field fieldset{border: 1px solid rgba(30, 30, 30, 0.5) !important;} */
+/* .add-member-comp-field .MuiAutocomplete-root:hover fieldset {
     border-color: rgba(30, 30, 30, 0.8) !important;
 }
 .add-member-comp-field{margin-right: 0;}
-.add-member-comp-field .MuiAutocomplete-endAdornment svg{color: #1e1e1e; font-size: 26px;}
+.add-member-comp-field .MuiAutocomplete-endAdornment svg{color: #1e1e1e; font-size: 26px;} */
 .country-code-auto-search .MuiInputBase-root {
     height: 40px;
     padding: 0 20px 0 0 !important;
@@ -1073,8 +1074,6 @@ input[type=checkbox]:checked:before {
 .country-code .MuiButtonBase-root[aria-label="Clear"]{display: none;}
 /* .country-code .MuiAutocomplete-popupIndicatorOpen{background: none !important;} */
 
-.table-checkbox.Mui-disabled svg{color: rgba(30, 30, 30, 0.5);}
-.table-checkbox.Mui-checked.Mui-disabled svg{color: rgba(30, 30, 30, 0.5);}
 
 .radio-btn .MuiFormControlLabel-label.Mui-disabled{color: rgba(30, 30, 30, 0.5) !important;}
 .radio-btn .Mui-checked.Mui-disabled svg{color: rgba(30, 30, 30, 0.5);}

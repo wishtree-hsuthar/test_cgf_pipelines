@@ -148,7 +148,7 @@ const ViewMember = () => {
                 delete: data.delete,
             },
         }));
-        console.log("module access member in view member",moduleAccesForMember[0]?.member)
+        // console.log("module access member in view member",moduleAccesForMember[0]?.member)
   
   //format records as backend requires
   const updateRecords = (data) => {
@@ -254,7 +254,7 @@ const ViewMember = () => {
   };
   const onClickVisibilityIconHandler = (id) => {
     // console.log("id", id);
-    return navigate(`/users/operation_members/view_operation_member/${id}`);
+    return navigate(`/users/operation-members/view-operation-member/${id}`);
   };
 
   //code to View Member Fields

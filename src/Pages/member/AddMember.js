@@ -332,7 +332,7 @@ const AddMember = () => {
                   className="addmore-txt"
                   onClick={handleSubmit(onAddMoreButtonClickHandler)}
                 >
-                  Add More
+                  Save & Add More
                 </span>
               </div>
             </div>
