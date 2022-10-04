@@ -507,7 +507,7 @@ const EditRole = () => {
                     className="primary-button"
                     style={{ marginTop: "30px" }}
                   >
-                    Edit
+                    Update
                   </button>
                 </div>
               </div>

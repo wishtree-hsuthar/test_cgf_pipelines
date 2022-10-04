@@ -252,7 +252,7 @@ const AddRole = () => {
                   className="addmore-txt"
                   onClick={handleSubmit(onSubmitAddMoreClickHandler)}
                 >
-                  Add More
+                  Save & Add More
                 </span>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import {
     Autocomplete,
+    Paper,
     // FormControlLabel,
     // MenuItem,
     // Radio,
@@ -70,6 +71,7 @@ const helperTextForAddOperationMember = {
     },
     memberId: {
         required: "Enter member company",
+        validate: "Enter member company"
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
@@ -293,7 +295,7 @@ function AddOperationMember() {
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
-                                        Add More
+                                       Save & Add More
                                     </span>
                                 </div>
                             </div>
@@ -428,6 +430,7 @@ function AddOperationMember() {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
+                                                        className={`${error && "autocomplete-error"}`}
                                                             popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                             {...field}
                                                             onChange={(
@@ -569,16 +572,24 @@ function AddOperationMember() {
                                             Member Company{" "}
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <div className="country-code-auto-search add-member-comp-field">
+                                        <div className="country-code-auto-search">
                                             <Controller
                                                 control={control}
                                                 name="memberId"
-                                                rules={{ required: true }}
+                                                rules={{ required: true, validate : (value) =>{
+                                                    if(!value?._id) return "Invalid Input"
+                                                }}}
                                                 render={({
                                                     field,
                                                     fieldState: { error },
                                                 }) => (
                                                     <Autocomplete
+                                                    PaperComponent={({ children }) => (
+                                                        <Paper className="autocomplete-option-txt">
+                                                          {children}
+                                                        </Paper>
+                                                      )}
+                                                      className={`${error && "autocomplete-error"}`}
                                                     popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                         {...field}
                                                         value={

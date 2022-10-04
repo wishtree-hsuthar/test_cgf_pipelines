@@ -222,7 +222,7 @@ const AddSubAdmin = () => {
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
-                                        Add More
+                                    Save & Add More
                                     </span>
                                 </div>
                             </div>

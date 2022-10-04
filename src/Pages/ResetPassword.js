@@ -287,7 +287,7 @@ const ResetPassword = () => {
                                                                             process
                                                                                 .env
                                                                                 .PUBLIC_URL +
-                                                                            "/images/non-visibleicon.png"
+                                                                            "/images/non-visibleicon.svg"
                                                                         }
                                                                         alt=""
                                                                         class="img-fluid"
@@ -298,7 +298,7 @@ const ResetPassword = () => {
                                                                             process
                                                                                 .env
                                                                                 .PUBLIC_URL +
-                                                                            "/images/visibleicon.png"
+                                                                            "/images/visibleicon.svg"
                                                                         }
                                                                         alt=""
                                                                         class="img-fluid"
