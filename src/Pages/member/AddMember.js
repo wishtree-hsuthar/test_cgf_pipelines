@@ -623,12 +623,12 @@ const AddMember = () => {
                             maxLength: 15,
                             minLength: 3,
                             required: true,
-                            // validate: (value) => {
-                            //   if (watch("phoneNumber") && !watch("countryCode"))
-                            //     return "Invalid input";
-                            //   else if (value && !Number(value))
-                            //     return "Invalid Input";
-                            // },
+                            validate: (value) => {
+                              if (watch("phoneNumber") && !watch("countryCode"))
+                                return "Invalid input";
+                              else if (value && !Number(value))
+                                return "Invalid Input";
+                            },
                           }}
                         />
                       </div>

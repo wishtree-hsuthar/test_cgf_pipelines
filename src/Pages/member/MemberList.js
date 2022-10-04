@@ -73,18 +73,18 @@ const MemberList = () => {
     messageType: "success",
   });
 
-  const privilege = useSelector((state) => state.user?.privilege);
+  const privilege = useSelector((state) => state?.user?.privilege);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
     let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
     let moduleAccesForMember = privilegeArray
         .filter((data) => data?.moduleId?.name === "Members")
         .map((data) => ({
             member: {
-                list: data.list,
-                view: data.view,
-                edit: data.edit,
-                delete: data.delete,
-                add:data.add
+                list: data?.list,
+                view: data?.view,
+                edit: data?.edit,
+                delete: data?.delete,
+                add:data?.add
             },
         }));
         console.log("module access member in view member",moduleAccesForMember[0]?.member)
@@ -156,7 +156,7 @@ const MemberList = () => {
       delete object["isDeleted"];
       delete object["isReplaced"];
       delete object["__v"];
-      object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"} );
+      object["createdAt"] = new Date(object["createdAt"])?.toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"} );
       if (typeof object["createdBy"] === "object") {
         object.createdBy = object["createdBy"]["name"];
       } else {
@@ -172,7 +172,7 @@ const MemberList = () => {
         object.name = "NA";
       }
 
-      object.totalOperationMembers = object["totalOperationMembers"].toString();
+      object.totalOperationMembers = object["totalOperationMembers"]?.toString();
       delete object["representative"];
       // delete object["createdBy"];
       delete object["memberRepresentativeId"];
@@ -262,7 +262,7 @@ const MemberList = () => {
       setTotalRecords(parseInt(response.headers["x-total-count"]));
       console.log("response from backend", response);
       setIsLoading(false);
-      updateRecords(response.data);
+      updateRecords(response?.data);
     } catch (error) {
       setIsLoading(false);
       if (error?.code === "ERR_CANCELED") return;
@@ -315,7 +315,7 @@ const MemberList = () => {
                 </span>
                 Download
               </div>
-              {(SUPER_ADMIN==true||moduleAccesForMember[0].member.add)&&
+              {(SUPER_ADMIN==true||moduleAccesForMember[0]?.member?.add)&&
               <div className="form-btn">
                 <button
                   type="submit"
@@ -409,7 +409,7 @@ const MemberList = () => {
                           <MenuItem key={member} value={member}>
                             <Checkbox
                               className="table-checkbox"
-                              checked={selectedCreatedBy.indexOf(member) > -1}
+                              checked={selectedCreatedBy?.indexOf(member) > -1}
                             />
                             {member}
                           </MenuItem>
@@ -467,7 +467,7 @@ const MemberList = () => {
                 setOrder={setOrder}
                 setOrderBy={setOrderBy}
                 setCheckBoxes={false}
-                onRowClick={SUPER_ADMIN?true:moduleAccesForMember[0]?.member.view}
+                onRowClick={SUPER_ADMIN?true:moduleAccesForMember[0]?.member?.view}
               />
             )}
           </div>

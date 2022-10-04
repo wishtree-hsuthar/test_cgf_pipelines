@@ -173,7 +173,7 @@ const SetPassword = () => {
                                 </h2>
                                 <div class="login-form">
                                     <form onSubmit={handleSubmit(submitForm)}>
-                                        <div class="form-group mb-40">
+                                        <div class="form-group">
                                             <label for="password">
                                                 New Password{" "}
                                                 <span class="mandatory">*</span>
@@ -213,7 +213,7 @@ const SetPassword = () => {
                                                                             process
                                                                                 .env
                                                                                 .PUBLIC_URL +
-                                                                            "/images/non-visibleicon.png"
+                                                                            "/images/non-visibleicon.svg"
                                                                         }
                                                                         alt=""
                                                                         class="img-fluid"
@@ -224,7 +224,7 @@ const SetPassword = () => {
                                                                             process
                                                                                 .env
                                                                                 .PUBLIC_URL +
-                                                                            "/images/visibleicon.png"
+                                                                            "/images/visibleicon.svg"
                                                                         }
                                                                         alt=""
                                                                         class="img-fluid"
@@ -248,7 +248,7 @@ const SetPassword = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="form-group mb-40">
+                                        <div class="form-group">
                                             <label for="password">
                                                 Confirm Password{" "}
                                                 <span class="mandatory">*</span>

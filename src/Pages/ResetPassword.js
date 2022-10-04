@@ -177,7 +177,7 @@ const ResetPassword = () => {
                                 </h2>
                                 <div class="login-form">
                                     <form onSubmit={handleSubmit(submitForm)}>
-                                        <div class="form-group mb-40">
+                                        <div class="form-group">
                                             <label for="password">
                                                 New Password{" "}
                                                 <span class="mandatory">*</span>
@@ -247,7 +247,7 @@ const ResetPassword = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="form-group mb-40">
+                                        <div class="form-group">
                                             <label for="password">
                                                 Confirm Password{" "}
                                                 <span class="mandatory">*</span>

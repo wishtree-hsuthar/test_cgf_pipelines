@@ -70,18 +70,18 @@ function OnboardedOperationMember({
     //     setOpenDeleteDialogBoxOnboardedOperationMember,
     // ] = useState(false);
 
-    const privilege = useSelector((state) => state.user?.privilege);
+    const privilege = useSelector((state) => state?.user?.privilege);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
     let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
     let moduleAccessForOperationMember = privilegeArray
         .filter((data) => data?.moduleId?.name === "Operation Members")
         .map((data) => ({
             operationMember: {
-                list: data.list,
-                view: data.view,
-                edit: data.edit,
-                delete: data.delete,
-                add: data.add,
+                list: data?.list,
+                view: data?.view,
+                edit: data?.edit,
+                delete: data?.delete,
+                add: data?.add,
             },
         }));
     console.log(
@@ -248,7 +248,7 @@ function OnboardedOperationMember({
     // on click eye icon to  navigate view page
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
-        return navigate(`/users/operation_member/view-operation-member/${id}`);
+        return navigate(`/users/operation-member/view-operation-member/${id}`);
     };
     useEffect(() => {
         let isMounted = true;

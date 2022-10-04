@@ -139,14 +139,14 @@ const EditMember = () => {
         cgfOfficeCountry: data.cgfOfficeCountry,
         cgfOffice: data.cgfOffice,
         memberRepresentative: {
-          id: member?.memberRepresentativeId?._id,
+          id: member?.memberRepresentativeId[0]?._id,
           title: data.title,
           department: data.department,
           salutation: data.memberContactSalutation,
           name: data.memberContactFullName,
           email: data.memberContactEmail,
           countryCode: data.memberContactCountryCode,
-          phoneNumber: parseInt(data.memberContactPhoneNuber),
+          phoneNumber: parseInt(data?.memberContactPhoneNuber ?? 0),
           isActive: data.status === "active" ? true : false,
         },
       };
@@ -184,7 +184,7 @@ const EditMember = () => {
    regionCountries && regionCountries.forEach(
       (country, id) =>
         (regionCountries[id] = country.hasOwnProperty("_id")
-          ? country.name
+          ? country?.name
           : country)
     );
     console.log("arr of country ", regionCountries);
@@ -260,7 +260,7 @@ const EditMember = () => {
     try {
       const regions = await axios.get(REGIONS, { signal: controller.signal });
       // console.log("regions ", regions.data);
-      setArrOfRegions(regions.data);
+      setArrOfRegions(regions?.data);
       const countriesOnRegion1 = await getCountries1(watch("region"));
       // console.log("countries", countriesOnRegion1);
       const arrOfCountryRegionsTemp1 = formatRegionCountries1(
@@ -313,7 +313,7 @@ const EditMember = () => {
         cgfActivity: data?.cgfActivity,
         corporateEmail: data?.corporateEmail,
         countryCode: data?.countryCode,
-        phoneNumber: data?.phoneNumber.toString(),
+        phoneNumber: data?.phoneNumber?.toString(),
         websiteUrl: data?.website,
         region: data?.region,
         country: data?.country,
@@ -324,14 +324,14 @@ const EditMember = () => {
         cgfOfficeCountry: data?.cgfOfficeCountry,
         cgfOffice: data?.cgfOffice,
         memberContactSalutation: "Mr.",
-        memberContactFullName: data?.memberRepresentativeId?.name,
-        title: data?.memberRepresentativeId?.title,
-        department: data?.memberRepresentativeId?.department,
-        memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
-        memberContactEmail: data?.memberRepresentativeId?.email,
+        memberContactFullName: data?.memberRepresentativeId[0]?.name,
+        title: data?.memberRepresentativeId[0]?.title,
+        department: data?.memberRepresentativeId[0]?.department,
+        memberContactCountryCode: data?.memberRepresentativeId[0]?.countryCode,
+        memberContactEmail: data?.memberRepresentativeId[0]?.email,
         memberContactPhoneNuber:
-          data?.memberRepresentativeId?.phoneNumber?.toString(),
-        status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
+          data?.memberRepresentativeId[0]?.phoneNumber?.toString(),
+        status: data?.memberRepresentativeId[0]?.isActive ? "active" : "inactive",
       });
       setMember(response.data);
       setIsLoading(false);
