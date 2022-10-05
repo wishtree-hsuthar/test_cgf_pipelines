@@ -576,9 +576,8 @@ function AddOperationMember() {
                                             <Controller
                                                 control={control}
                                                 name="memberId"
-                                                rules={{ required: true, validate : (value) =>{
-                                                    if(!value?._id) return "Invalid Input"
-                                                }}}
+                                                rules={{ required: true
+                                                }}
                                                 render={({
                                                     field,
                                                     fieldState: { error },
