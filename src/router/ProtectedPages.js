@@ -21,6 +21,9 @@ import EditMember from "../Pages/member/EditMember";
 import ViewMember from "../Pages/member/ViewMember";
 import ViewOperationMembers from "../Pages/operationMember/ViewOperationMembers";
 import EditOperationMember from "../Pages/operationMember/EditOperationMember";
+import AddQuestionnaires from "../Pages/questionnaires/AddQuestionnaires"
+import Preview from "../Pages/questionnaires/Preview"
+
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -56,6 +59,10 @@ const ProtectedPages = () => {
                     path="/sub-admins/replace-sub-admin/:id"
                     element={<ReplaceSubAdmin />}
                 />
+
+                <Route path="/questionnaires/add-questionnaires" element={<AddQuestionnaires />} />
+                <Route path="/questionnaires/preview" element={<Preview />} />
+
                 {/* Role Management Routes */}
                 <Route path="/roles" element={<RolesList />} />
                 <Route path="/roles/add-role" element={<AddRole />} />
