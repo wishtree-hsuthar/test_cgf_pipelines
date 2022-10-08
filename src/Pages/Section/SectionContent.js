@@ -3,64 +3,16 @@ import {
     FormHelperText,
     MenuItem,
     Select,
-    Switch,
     TextField,
 } from "@mui/material";
 import React, { useState } from "react";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import Dropdown from "../../components/Dropdown";
-import Input from "../../components/Input";
-import { styled } from "@mui/material/styles";
-import { set, useForm } from "react-hook-form";
+
 import { privateAxios } from "../../api/axios";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import { useParams } from "react-router-dom";
 import DialogBox from "../../components/DialogBox";
 
-const AntSwitch = styled(Switch)(({ theme }) => ({
-    width: 28,
-    height: 16,
-    padding: 0,
-    display: "flex",
-    "&:active": {
-        "& .MuiSwitch-thumb": {
-            width: 15,
-        },
-        "& .MuiSwitch-switchBase.Mui-checked": {
-            transform: "translateX(9px)",
-        },
-    },
-    "& .MuiSwitch-switchBase": {
-        padding: 2,
-        "&.Mui-checked": {
-            transform: "translateX(12px)",
-            color: "#fff",
-            "& + .MuiSwitch-track": {
-                opacity: 1,
-                backgroundColor:
-                    theme.palette.mode === "dark" ? "#177ddc" : "#1890ff",
-            },
-        },
-    },
-    "& .MuiSwitch-thumb": {
-        boxShadow: "0 2px 4px 0 rgb(0 35 11 / 20%)",
-        width: 12,
-        height: 12,
-        borderRadius: 6,
-        transition: theme.transitions.create(["width"], {
-            duration: 200,
-        }),
-    },
-    "& .MuiSwitch-track": {
-        borderRadius: 16 / 2,
-        opacity: 1,
-        backgroundColor:
-            theme.palette.mode === "dark"
-                ? "rgba(255,255,255,.35)"
-                : "rgba(0,0,0,.25)",
-        boxSizing: "border-box",
-    },
-})); //
 const SectionContent = ({
     value,
     questionnaire,
@@ -84,12 +36,18 @@ const SectionContent = ({
     };
 
     console.log("global title error", globalSectionTitleError);
+
+    // delete method on click of primary button
     const onDialogPrimaryButtonClickHandler = () => {
         deleteSection(uuid);
     };
+
+    // close dailog box of delete
     const onDialogSecondaryButtonClickHandler = () => {
         setOpenDialog(false);
     };
+
+    // delete section method
     const deleteSection = (uuid) => {
         let tempQuestionnare = { ...questionnaire };
 
@@ -118,12 +76,13 @@ const SectionContent = ({
     const [titleError, setTitleError] = useState({
         errorMsg: "",
     });
+
+    // validate section method
     const validateSection = () => {
         console.log("questionnaire", questionnaire);
         let countError = 0;
 
         for (let i = 0; i < questionnaire.sections.length; i++) {
-            // const element = array[i];
             console.log(
                 "section title in for loop",
                 questionnaire.sections[i].sectionTitle
@@ -141,16 +100,9 @@ const SectionContent = ({
         if (countError == 0) {
             return true;
         }
-        // if (section?.sectionTitle === "") {
-        //     setTitleError("Section title required");
-        //     return false;
-        // } else {
-        //     setTitleError("");
-
-        //     return true;
-        // }
     };
 
+    // onchange method for section description,title,layout,status
     const handleInputSection = (e) => {
         const { name, value } = e.target;
         let tempQuestionnare = { ...questionnaire };
@@ -160,19 +112,9 @@ const SectionContent = ({
         console.log("Name ", name);
         console.log("Value ", value);
     };
+
+    // submit section
     const handleSubmitSection = (e) => {
-        // data = {
-        //     ...data,
-        //     isActive: data.isActive === "Inactive" ? false : true,
-        //     layout: data.layout === "Form" ? "form" : "table",
-        // };
-        // let tempSections = [...questionnaire.sections];
-        // tempSections[index] = data;
-        // setQuestionnaire({
-        //     ...questionnaire,
-        //     // sections: [...questionnaire.sections, sectionObj],
-        //     sections: tempSections,
-        // });
         e.preventDefault();
         validateSection() && saveSection();
         console.log(
@@ -181,9 +123,11 @@ const SectionContent = ({
         );
     };
 
+    // params for fetching is from url
     const params = useParams();
     const [openDialog, setOpenDialog] = useState(false);
 
+    // save section method
     const saveSection = async (questionnaireObj) => {
         try {
             const response = await privateAxios.post(
@@ -212,30 +156,16 @@ const SectionContent = ({
             console.log("error from section component", error);
         }
     };
-    const [sectionObj, setSectionObj] = useState({ ...section });
-    // console.log("questionnaire after submiting questionnaire", sectionObj);
+    // const [sectionObj, setSectionObj] = useState({ ...section });
 
-    const helperTextForSectionForm = {
-        sectionTitle: {
-            required: "Enter section title",
-        },
-        isActive: {
-            required: "Select status",
-        },
-        layout: {
-            required: "Select layout",
-        },
-    };
-
-    const { reset, handleSubmit, control } = useForm({
-        defaultValues: {
-            ...sectionObj,
-            isActive: sectionObj.isActive === "true" ? "Active" : "Inactive",
-            layout: sectionObj.layout === "form" ? "Form" : "Table",
-        },
-    });
+    // const { reset, handleSubmit, control } = useForm({
+    //     defaultValues: {
+    //         ...sectionObj,
+    //         isActive: sectionObj.isActive === "true" ? "Active" : "Inactive",
+    //         layout: sectionObj.layout === "form" ? "Form" : "Table",
+    //     },
+    // });
     return (
-        // <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
         <div className="sect-form-card-wrapper">
             <DialogBox
                 title={<p>Delete Section "{section?.sectionTitle}"</p>}
@@ -361,16 +291,6 @@ const SectionContent = ({
                                                     {" "}
                                                 </FormHelperText>
                                             </FormControl>
-                                            {/* <Dropdown
-                                            name={"layout"}
-                                            control={control}
-                                            placeholder={"Select layout"}
-                                            options={["Form", "Table"]}
-                                            rules={{
-                                                required: true,
-                                            }}
-                                            myHelper={helperTextForSectionForm}
-                                        /> */}
                                         </div>
                                     </div>
                                     <div className="form-group">
@@ -404,16 +324,6 @@ const SectionContent = ({
                                                     {" "}
                                                 </FormHelperText>
                                             </FormControl>
-                                            {/* <Dropdown
-                                            name={"isActive"}
-                                            control={control}
-                                            options={["Active", "Inactive"]}
-                                            placeholder={"Select status"}
-                                            rules={{
-                                                required: true,
-                                            }}
-                                            myHelper={helperTextForSectionForm}
-                                        /> */}
                                         </div>
                                     </div>
                                 </div>
@@ -431,13 +341,10 @@ const SectionContent = ({
                                             onChange={handleInputSection}
                                             name={"description"}
                                             value={section.description}
-                                            // multiline
                                         />
                                     </div>
                                 </div>
                             </div>
-                            {/* <button onClick={handleSubmit}>Submit</button> */}
-                            {/* Question content component over here */}
                         </div>
                     </form>
                 </div>
@@ -455,7 +362,6 @@ const SectionContent = ({
                 </button>
             </div>
         </div>
-        // </div>
     );
 };
 

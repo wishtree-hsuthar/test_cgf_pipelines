@@ -31,7 +31,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import SectionContent from "./Section/SectionContent";
 import { v4 as uuidv4 } from "uuid";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../api/axios";
 
 function TabPanel(props) {
@@ -247,14 +247,14 @@ function AddNewQuestionnaire() {
     };
 
     console.log("questionnaire---", questionnaire.sections);
-
+    const navigate = useNavigate();
     return (
         <div className="page-wrapper">
             <div className="breadcrumb-wrapper">
                 <div className="container">
                     <ul className="breadcrumb">
-                        <li>
-                            <a href="/questionnaires">Questionnaire</a>
+                        <li onClick={() => navigate("/questionnaires")}>
+                            <a>Questionnaire</a>
                         </li>
                         <li>Add Questionnaire</li>
                     </ul>
