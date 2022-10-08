@@ -1,13 +1,21 @@
-import { MenuItem, Select, Switch, TextField } from "@mui/material";
+import {
+    FormControl,
+    FormHelperText,
+    MenuItem,
+    Select,
+    Switch,
+    TextField,
+} from "@mui/material";
 import React, { useState } from "react";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import { styled } from "@mui/material/styles";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { privateAxios } from "../../api/axios";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import { useParams } from "react-router-dom";
+import DialogBox from "../../components/DialogBox";
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 28,
@@ -52,7 +60,7 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
                 : "rgba(0,0,0,.25)",
         boxSizing: "border-box",
     },
-}));
+})); //
 const SectionContent = ({
     value,
     questionnaire,
@@ -62,6 +70,8 @@ const SectionContent = ({
     index,
     section,
     id,
+    globalSectionTitleError,
+    setGlobalSectionTitleError,
 }) => {
     const ITEM_HEIGHT = 22;
 
@@ -71,6 +81,14 @@ const SectionContent = ({
                 maxHeight: ITEM_HEIGHT * 4.5,
             },
         },
+    };
+
+    console.log("global title error", globalSectionTitleError);
+    const onDialogPrimaryButtonClickHandler = () => {
+        deleteSection(uuid);
+    };
+    const onDialogSecondaryButtonClickHandler = () => {
+        setOpenDialog(false);
     };
     const deleteSection = (uuid) => {
         let tempQuestionnare = { ...questionnaire };
@@ -86,8 +104,51 @@ const SectionContent = ({
             ...tempQuestionnare,
             sections: tempSections,
         });
-        // saveSection();
+        let newObj = {
+            ...tempQuestionnare,
+            sections: tempSections,
+        };
+
+        saveSection(newObj);
+
         setValue(0);
+        setOpenDialog(false);
+    };
+
+    const [titleError, setTitleError] = useState({
+        errorMsg: "",
+    });
+    const validateSection = () => {
+        console.log("questionnaire", questionnaire);
+        let countError = 0;
+
+        for (let i = 0; i < questionnaire.sections.length; i++) {
+            // const element = array[i];
+            console.log(
+                "section title in for loop",
+                questionnaire.sections[i].sectionTitle
+            );
+            if (questionnaire.sections[i].sectionTitle === "") {
+                setGlobalSectionTitleError({
+                    errMsg: "Section title required",
+                });
+                console.log("in validate section for block");
+                setValue(i);
+                countError++;
+                return false;
+            }
+        }
+        if (countError == 0) {
+            return true;
+        }
+        // if (section?.sectionTitle === "") {
+        //     setTitleError("Section title required");
+        //     return false;
+        // } else {
+        //     setTitleError("");
+
+        //     return true;
+        // }
     };
 
     const handleInputSection = (e) => {
@@ -113,7 +174,7 @@ const SectionContent = ({
         //     sections: tempSections,
         // });
         e.preventDefault();
-        saveSection();
+        validateSection() && saveSection();
         console.log(
             "questionnaire after submiting questionnaire",
             questionnaire
@@ -121,12 +182,13 @@ const SectionContent = ({
     };
 
     const params = useParams();
+    const [openDialog, setOpenDialog] = useState(false);
 
-    const saveSection = async () => {
+    const saveSection = async (questionnaireObj) => {
         try {
             const response = await privateAxios.post(
                 ADD_QUESTIONNAIRE,
-                questionnaire
+                questionnaireObj ? questionnaireObj : questionnaire
             );
             console.log("response from save section", response);
             if (response.status === 201) {
@@ -173,80 +235,133 @@ const SectionContent = ({
         },
     });
     return (
-        <div className="sect-form-card-info active">
-            <div className="sect-form-innercard-blk">
-                <div className="sect-ttl-blk flex-between">
-                    <div className="sect-leftblk">
-                        <h2 cla All OperatiossName="subheading">
-                            {`Section ${value}`}{" "}
-                        </h2>
-                    </div>
-                    <div className="sect-rightblk">
-                        <div className="sect-ttl-right-iconblk">
-                            <span className="sect-icon-blk add-sect-iconblk mr-40">
-                                <img
-                                    src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/add-section-icon.svg"
-                                    }
-                                    alt=""
-                                />
-                            </span>
-                            {questionnaire.sections.length > 1 && (
-                                <span className="sect-icon-blk delete-iconblk">
+        // <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
+        <div className="sect-form-card-wrapper">
+            <DialogBox
+                title={<p>Delete Section "{section?.sectionTitle}"</p>}
+                info1={
+                    <p>
+                        On deleting all the details of this section would get
+                        deleted and this will be an irreversible action, Are you
+                        want to remove the section name?
+                    </p>
+                }
+                info2={
+                    <p>
+                        Are you sure you want to delete{" "}
+                        <b>{section?.sectionTitle}</b>?
+                    </p>
+                }
+                primaryButtonText="Delete"
+                secondaryButtonText="Cancel"
+                onPrimaryModalButtonClickHandler={
+                    onDialogPrimaryButtonClickHandler
+                }
+                onSecondaryModalButtonClickHandler={
+                    onDialogSecondaryButtonClickHandler
+                }
+                openModal={openDialog}
+                setOpenModal={setOpenDialog}
+            />
+            <div className="sect-form-card-info active">
+                <div className="sect-form-innercard-blk">
+                    <div className="sect-ttl-blk flex-between">
+                        <div className="sect-leftblk">
+                            {/* <h2 className="subheading">
+                                {`Section ${value}`}{" "}
+                            </h2> */}
+                        </div>
+                        <div className="sect-rightblk">
+                            <div className="sect-ttl-right-iconblk">
+                                {/* <span className="sect-icon-blk add-sect-iconblk mr-40">
                                     <img
-                                        onClick={() => deleteSection(uuid)}
                                         src={
                                             process.env.PUBLIC_URL +
-                                            "/images/delete-icon.svg"
+                                            "/images/add-section-icon.svg"
                                         }
                                         alt=""
                                     />
-                                </span>
-                            )}
+                                </span> */}
+                                {questionnaire.sections.length > 1 && (
+                                    <span className="sect-icon-blk delete-iconblk">
+                                        <img
+                                            onClick={() => setOpenDialog(true)}
+                                            src={
+                                                process.env.PUBLIC_URL +
+                                                "/images/delete-icon.svg"
+                                            }
+                                            alt=""
+                                        />
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <form onSubmit={handleSubmitSection}>
-                    <div className="sect-form-card-blk">
-                        <div className="sect-form-card-innerblk flex-between">
-                            <div className="sect-card-form-leftfield">
-                                <div className="form-group">
-                                    <label for="emailid">Section Title</label>
-                                    <TextField
-                                        className="input-field"
-                                        id="outlined-basic"
-                                        placeholder="Enter section title"
-                                        variant="outlined"
-                                        onChange={handleInputSection}
-                                        value={section.sectionTitle}
-                                        name={"sectionTitle"}
-                                    />
-                                </div>
-                            </div>
-                            <div className="sect-card-form-rightfield flex-between">
-                                <div className="form-group">
-                                    <label for="layout">Layout</label>
-                                    <div className="select-field">
-                                        <Select
-                                            IconComponent={(props) => (
-                                                <KeyboardArrowDownRoundedIcon
-                                                    {...props}
-                                                />
-                                            )}
-                                            value={section.layout}
+                    <form>
+                        <div className="sect-form-card-blk">
+                            <div className="sect-form-card-innerblk flex-between">
+                                <div className="sect-card-form-leftfield">
+                                    <div className="form-group">
+                                        <label for="title">Section Title</label>
+                                        <TextField
+                                            className={`input-field ${
+                                                section.sectionTitle === "" &&
+                                                globalSectionTitleError?.errMsg &&
+                                                "input-error"
+                                            }`}
+                                            id="outlined-basic"
+                                            placeholder="Enter section title"
+                                            variant="outlined"
+                                            // error={
+                                            //     section.sectionTitle.length !=
+                                            //     ""
+                                            // }
+                                            inputProps={{ maxLength: 250 }}
                                             onChange={handleInputSection}
-                                            MenuProps={MenuProps}
-                                            name={"layout"}
-                                        >
-                                            <MenuItem value="form">
-                                                Form
-                                            </MenuItem>
-                                            <MenuItem value="table" selected>
-                                                Table
-                                            </MenuItem>
-                                        </Select>
-                                        {/* <Dropdown
+                                            value={section.sectionTitle}
+                                            name={"sectionTitle"}
+                                            helperText={
+                                                section.sectionTitle === "" &&
+                                                globalSectionTitleError?.errMsg
+                                                    ? globalSectionTitleError.errMsg
+                                                    : " "
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                                <div className="sect-card-form-rightfield flex-between">
+                                    <div className="form-group">
+                                        <label for="layout">Layout</label>
+                                        <div className="select-field">
+                                            <FormControl>
+                                                <Select
+                                                    IconComponent={(props) => (
+                                                        <KeyboardArrowDownRoundedIcon
+                                                            {...props}
+                                                        />
+                                                    )}
+                                                    value={section.layout}
+                                                    onChange={
+                                                        handleInputSection
+                                                    }
+                                                    MenuProps={MenuProps}
+                                                    name={"layout"}
+                                                >
+                                                    <MenuItem value="form">
+                                                        Form
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        value="table"
+                                                        selected
+                                                    >
+                                                        Table
+                                                    </MenuItem>
+                                                </Select>
+                                                <FormHelperText>
+                                                    {" "}
+                                                </FormHelperText>
+                                            </FormControl>
+                                            {/* <Dropdown
                                             name={"layout"}
                                             control={control}
                                             placeholder={"Select layout"}
@@ -256,30 +371,40 @@ const SectionContent = ({
                                             }}
                                             myHelper={helperTextForSectionForm}
                                         /> */}
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="form-group">
-                                    <label for="status">Status</label>
-                                    <div className="select-field">
-                                        <Select
-                                            IconComponent={(props) => (
-                                                <KeyboardArrowDownRoundedIcon
-                                                    {...props}
-                                                />
-                                            )}
-                                            value={section.isActive}
-                                            onChange={handleInputSection}
-                                            MenuProps={MenuProps}
-                                            name={"isActive"}
-                                        >
-                                            <MenuItem value={"true"} selected>
-                                                Active
-                                            </MenuItem>
-                                            <MenuItem value={"false"}>
-                                                Inactive
-                                            </MenuItem>
-                                        </Select>
-                                        {/* <Dropdown
+                                    <div className="form-group">
+                                        <label for="status">Status</label>
+                                        <div className="select-field">
+                                            <FormControl>
+                                                <Select
+                                                    IconComponent={(props) => (
+                                                        <KeyboardArrowDownRoundedIcon
+                                                            {...props}
+                                                        />
+                                                    )}
+                                                    value={section.isActive}
+                                                    onChange={
+                                                        handleInputSection
+                                                    }
+                                                    MenuProps={MenuProps}
+                                                    name={"isActive"}
+                                                >
+                                                    <MenuItem
+                                                        value={"true"}
+                                                        selected
+                                                    >
+                                                        Active
+                                                    </MenuItem>
+                                                    <MenuItem value={"false"}>
+                                                        Inactive
+                                                    </MenuItem>
+                                                </Select>
+                                                <FormHelperText>
+                                                    {" "}
+                                                </FormHelperText>
+                                            </FormControl>
+                                            {/* <Dropdown
                                             name={"isActive"}
                                             control={control}
                                             options={["Active", "Inactive"]}
@@ -289,32 +414,48 @@ const SectionContent = ({
                                             }}
                                             myHelper={helperTextForSectionForm}
                                         /> */}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="sect-form-card-innerblk">
-                            <div className="sect-card-form-leftfield full-width">
-                                <div className="form-group mb-0">
-                                    <label for="emailid">Description</label>
-                                    <TextField
-                                        className="input-field"
-                                        id="outlined-basic"
-                                        placeholder="Enter description"
-                                        variant="outlined"
-                                        onChange={handleInputSection}
-                                        name={"description"}
-                                        value={section.description}
-                                    />
+                            <div className="sect-form-card-innerblk">
+                                <div className="sect-card-form-leftfield full-width">
+                                    <div className="form-group mb-0">
+                                        <label for="emailid">Description</label>
+                                        <TextField
+                                            className="input-field"
+                                            id="outlined-basic"
+                                            placeholder="Enter description"
+                                            variant="outlined"
+                                            onChange={handleInputSection}
+                                            name={"description"}
+                                            value={section.description}
+                                            // multiline
+                                        />
+                                    </div>
                                 </div>
                             </div>
+                            {/* <button onClick={handleSubmit}>Submit</button> */}
+                            {/* Question content component over here */}
                         </div>
-                        <button onClick={handleSubmit}>Submit</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
+            </div>
+            <div className="form-btn flex-between add-members-btn que-page-btn">
+                <button type="reset" className="secondary-button mr-10">
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    onClick={handleSubmitSection}
+                    className="primary-button add-button"
+                >
+                    Save
+                </button>
             </div>
         </div>
+        // </div>
     );
 };
 

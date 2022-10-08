@@ -23,6 +23,7 @@ import ViewOperationMembers from "../Pages/operationMember/ViewOperationMembers"
 import EditOperationMember from "../Pages/operationMember/EditOperationMember";
 import AddQuestionnaires from "../Pages/questionnaires/AddQuestionnaires";
 import QuestionnairesList from "../Pages/questionnaires/QuestionnairesList";
+import AddNewQuestionnaire from "../Pages/AddNewQuestionnaire";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -151,7 +152,8 @@ const ProtectedPages = () => {
                 />
                 <Route
                     path="/questionnaires/add-questionnaire/:id"
-                    element={<AddQuestionnaires />}
+                    element={<AddNewQuestionnaire />}
+                    // element={<AddQuestionnaires />}
                 />
                 <Route path="*" element={<FallBackUI />} />
             </Route>
