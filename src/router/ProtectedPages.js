@@ -21,6 +21,9 @@ import EditMember from "../Pages/member/EditMember";
 import ViewMember from "../Pages/member/ViewMember";
 import ViewOperationMembers from "../Pages/operationMember/ViewOperationMembers";
 import EditOperationMember from "../Pages/operationMember/EditOperationMember";
+import AddQuestionnaires from "../Pages/questionnaires/AddQuestionnaires";
+import QuestionnairesList from "../Pages/questionnaires/QuestionnairesList";
+import AddNewQuestionnaire from "../Pages/AddNewQuestionnaire";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -142,6 +145,15 @@ const ProtectedPages = () => {
                             <EditOperationMember />
                         </RequireAuth>
                     }
+                />
+                <Route
+                    path="/questionnaires"
+                    element={<QuestionnairesList />}
+                />
+                <Route
+                    path="/questionnaires/add-questionnaire/:id"
+                    element={<AddNewQuestionnaire />}
+                    // element={<AddQuestionnaires />}
                 />
                 <Route path="*" element={<FallBackUI />} />
             </Route>

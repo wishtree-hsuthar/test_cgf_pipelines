@@ -102,7 +102,7 @@ const Header = () => {
         try {
             const response = await privateAxios.post(LOGOUT_URL);
             console.log("Response from logout");
-            
+
             if (response.status == 201) {
                 setAnchorElUser(null);
                 dispatch(resetUser());
@@ -242,7 +242,15 @@ const Header = () => {
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li className="list-item">
+                                        <li
+                                            className={
+                                                location.pathname.includes(
+                                                    "/questionnaires"
+                                                )
+                                                    ? "list-item active"
+                                                    : "list-item"
+                                            }
+                                        >
                                             <a
                                                 onClick={() =>
                                                     navigate("/questionnaires")
