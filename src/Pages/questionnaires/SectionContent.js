@@ -186,6 +186,14 @@ const SectionContent = ({
         ADD_QUESTIONNAIRE,
         questionnaireObj ? questionnaireObj : questionnaire
       );
+      setToasterDetails(
+        {
+          titleMessage: "Success!",
+          descriptionMessage: "Section details saved successfully!!",
+          messageType: "success",
+        },
+        () => myRef.current()
+      );
       // console.log("response from save section", response);
       if (response.status === 201) {
         const fetch = async () => {
@@ -223,7 +231,7 @@ const SectionContent = ({
         messageType={toasterDetails.messageType}
       />
       <DialogBox
-        title={<p>Delete Section "{section?.sectionTitle}"</p>}
+        title={<p>Delete Section  {section?.sectionTitle && '"' + section?.sectionTitle + '"'}</p>}
         info1={
           <p>
             On deleting all the details of this section would get deleted and

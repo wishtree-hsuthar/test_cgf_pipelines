@@ -81,7 +81,7 @@ const Question = ({
     inputType: "singleTextbox",
     validation: "",
     isRequired: true,
-    options: [""],
+    options: ["",""],
   };
   const myHelper = {
     questionTitle: {
@@ -365,7 +365,7 @@ console.log("Error inside question: ",err)
                           className={`input-field que-input-type ${(err?.option && !option) && "input-error"}`}
                           helperText={(err?.option && !option) ?  err?.option : " "}
                           id="outlined-basic"
-                          placeholder="Option 2"
+                          placeholder="Enter option value"
                           variant="outlined"
                         />
                       </div>
@@ -379,7 +379,7 @@ console.log("Error inside question: ",err)
                           checked={false}
                         />
                       )}
-                      {question?.options.length !== 1 && (
+                      {question?.options.length !== 2 && (
                         <div
                           className="que-input-type-close"
                           onClick={(e) =>

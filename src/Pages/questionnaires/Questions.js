@@ -45,7 +45,7 @@ const questionnaireFormat = {
           validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
           defaultValue: "", // Will only be there in case of the inputType which requires the default value
           isRequired: true,
-          options: [""], // multiple values from which user can select
+          options: ["",""], // multiple values from which user can select
         },
       ],
     },
