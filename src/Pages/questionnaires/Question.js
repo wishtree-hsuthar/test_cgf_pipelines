@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Checkbox,
   FormControl,
@@ -65,8 +65,8 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 const Question = ({
   question,
   questionIdx,
-  questionnare,
-  setQuestionnare,
+  questionnaire,
+  setQuestionnaire,
   sectionIndex,
   // errArray,
   // setErrArray,
@@ -95,6 +95,10 @@ const Question = ({
     {
       _id: "singleTextbox",
       name: "Single textbox",
+    },
+    {
+      _id: "textarea",
+      name: "Textarea"
     },
     {
       _id: "dropdown",
@@ -130,13 +134,13 @@ const Question = ({
 
   //method to handle delete question
   const deleteQuestionHandler = (uuid, questionIdx) => {
-    //deleting question from questionnare
-    let tempQuestionnaire = { ...questionnare };
+    //deleting question from questionnaire
+    let tempQuestionnaire = { ...questionnaire };
     let tempQuestions = tempQuestionnaire?.sections[
       sectionIndex
     ]?.questions.filter((question) => question.uuid !== uuid);
     tempQuestionnaire.sections[sectionIndex].questions = [...tempQuestions];
-    setQuestionnare(tempQuestionnaire);
+    setQuestionnaire(tempQuestionnaire);
 
     // deleting error  object
     // let tempErrArray = [...errArray];
@@ -146,36 +150,36 @@ const Question = ({
   };
   //method to handle switch change
   const onSwichChangeHandler = (e, sectionIdx, questionIdx) => {
-    let tempQuestionnaire = { ...questionnare };
+    let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire.sections[sectionIdx].questions[questionIdx].isRequired =
       e.target.checked;
-    setQuestionnare(tempQuestionnaire);
-    console.log("Questionnare:- ", questionnare);
+    setQuestionnaire(tempQuestionnaire);
+    console.log("questionnaire:- ", questionnaire);
   };
 
   //On + icon click new question will get added
   const addQuestionHandler = () => {
-    let tempQuestionnaire = { ...questionnare };
+    let tempQuestionnaire = { ...questionnaire };
     console.log("default Values", defaultValues);
     tempQuestionnaire.sections[sectionIndex].questions.push({
       ...defaultValues,
     });
-    setQuestionnare(tempQuestionnaire);
+    setQuestionnaire(tempQuestionnaire);
     // let tempErrArray = [...errArray];
     // tempErrArray.push({ questionTitle: "" });
     // setErrArray(tempErrArray);
-    console.log("Questionnare", questionnare);
+    console.log("questionnaire", questionnaire);
   };
 
   //method to handle question change handler
   const onQuestionChangeHandler = (event, questionIdx) => {
     console.log("event", event.target.name);
     const { name, value } = event.target;
-    const tempQuestionnaire = { ...questionnare };
+    const tempQuestionnaire = { ...questionnaire };
     console.log("name", name, "value", value);
     tempQuestionnaire.sections[sectionIndex].questions[questionIdx][name] =
       value;
-    setQuestionnare(tempQuestionnaire);
+    setQuestionnaire(tempQuestionnaire);
   };
   //method to handle question focus
   const onQuestionFocusHandler = (event, questionIdx) => {
@@ -186,31 +190,39 @@ const Question = ({
 
   //method to handle option change
   const onOptionChangeHandler = (e, questionIdx, optionIdx) => {
-    let tempQuestionnaire = { ...questionnare };
+    let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire.sections[sectionIndex].questions[questionIdx].options[
       optionIdx
     ] = e.target.value;
-    setQuestionnare(tempQuestionnaire);
+    setQuestionnaire(tempQuestionnaire);
   };
   //method to handle option deletion
   const onOptionDeleteHandler = (e, questionIdx, optionIdx) => {
-    let tempQuestionnaire = { ...questionnare };
+    let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire?.sections[sectionIndex]?.questions[
       questionIdx
     ]?.options?.splice(optionIdx, 1);
-    setQuestionnare(tempQuestionnaire);
+    setQuestionnaire(tempQuestionnaire);
   };
   //method to handle add option button click
   const addOptionHandler = (questionIdx) => {
-    let tempQuestionnaire = { ...questionnare };
+    let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire.sections[sectionIndex].questions[
       questionIdx
     ].options.push("");
-    setQuestionnare(tempQuestionnaire);
+    setQuestionnaire(tempQuestionnaire);
   };
+// console.log("Error",err)
+useEffect(() => {
+  console.log('Error: ',err)
 
+  return () => {
+    
+  }
+}, [err])
+console.log("Error inside question: ",err)
   return (
-    <div className="que-card-blk" key={question?.uuid}>
+    <div className={`que-card-blk ${questionIdx + 1 === questionsLength && "active"}`} key={question?.uuid}>
       <div className="que-form-blk">
         <div className="que-card-ttl-blk">
           <h2 className="subheading">Question {`${questionIdx + 1}`}</h2>
@@ -218,7 +230,7 @@ const Question = ({
         <div className="que-card-innerblk flex-between">
           <div className="que-card-form-leftfield">
             <div className="form-group">
-              <label htmlFor="questionTitle">Question Title</label>
+              <label htmlFor="questionTitle">Question Title <span className="mandatory">*</span></label>
               <TextField
                 className={`input-field ${
                   (!question?.questionTitle && err?.questionTitle) && "input-error"
@@ -242,7 +254,7 @@ const Question = ({
           </div>
           <div className="que-card-form-rightfield flex-between">
             <div className="form-group">
-              <label htmlFor="inputField">Input Field</label>
+              <label htmlFor="inputField">Input Field <span className="mandatory">*</span></label>
               <FormControl>
                 <div className="select-field">
                   <Select
@@ -272,7 +284,7 @@ const Question = ({
                   <Select
                     disabled={
                       question.inputType !== "singleTextbox" &&
-                      question.inputType !== "multiSelect"
+                      question.inputType !== "textarea"
                     }
                     placeholder="Select Input validation"
                     displayEmpty

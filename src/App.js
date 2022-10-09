@@ -18,7 +18,6 @@ import Footer from "./components/Footer";
 import { useNavigate } from "react-router-dom";
 import FallBackUI from "./Pages/FallBackUI";
 import AddQuestionnaires from "./Pages/questionnaires/AddQuestionnaires";
-import Questions from "./Pages/questionnaires/Questions";
 axios.defaults.withCredentials = true;
 function App() {
     // const [userPresent, setUserPresent] = useState(false);
@@ -28,7 +27,6 @@ function App() {
         <React.Fragment>
             <Routes>
                 <Route path="/questionnare" element={<AddQuestionnaires/>}/>
-                <Route path="/questionnare1" element={<Questions/>}/>
                 <Route path="/login" element={<Login />} />
                 <Route path="/forget-password" element={<ForgetPassword />} />
                 {/* <Route path="auth/*" element={<AuthOutlet />} /> */}

@@ -41,7 +41,6 @@ const questionnaireFormat = {
         {
           uuid: uuidv4(),
           questionTitle: "",
-          srNo: 1, // TBD
           inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings, boolean
           validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
           defaultValue: "", // Will only be there in case of the inputType which requires the default value
@@ -52,13 +51,13 @@ const questionnaireFormat = {
     },
   ],
 };
-const Questions = () => {
+const Questions = ({sectionIndex, questionnaire, setQuestionnaire,err, setErr}) => {
   // const [errArray, setErrArray] = useState([{ questionTitle: "" }]);
-  const [err, setErr] = useState({ questionTitle: "", option: "" });
+  // const [err, setErr] = useState({ questionTitle: "", option: "" });
 
-  const [sectionIndex, setSectionIndex] = useState(0);
+  // const [sectionIndex, setSectionIndex] = useState(0);
 
-  const [questionnare, setQuestionnare] = useState({ ...questionnaireFormat });
+  // const [questionnaire, setQuestionnaire] = useState({ ...questionnaireFormat });
 
   //On click of Save button handler
   const onSectionSubmitHandler = () => {
@@ -66,18 +65,18 @@ const Questions = () => {
       questionTitle: "",
       option: "",
     };
-    questionnare?.sections[sectionIndex]?.questions?.map(
+    questionnaire?.sections[sectionIndex]?.questions?.map(
       (question, questionIdx) => {
         
         if (question?.questionTitle === "") {
-          tempError["questionTitle"] = "Enter question title";
+          tempError.questionTitle = "Enter question title";
         }
         if (
           ["dropdown", "checkbox", "radioGroup"].includes(question?.inputType)
         ) {
           question?.options?.map((option) => {
             if (option === "") {
-              tempError["option"] = "Enter option";
+              tempError.option = "Enter option";
             }
           });
         }
@@ -86,7 +85,7 @@ const Questions = () => {
 
     setErr({ ...tempError });
   };
-
+// console.log("section Index",sectionIndex,"questionnaire",questionnaire)
   return (
     <>
       <div className="page-wrapper">
@@ -96,19 +95,19 @@ const Questions = () => {
             <div className="sect-form-card-wrapper">
               <div className="que-form-card-wrapper">
                 <div className="drag-drop-box"></div>
-                {questionnare &&
-                  questionnare?.sections[sectionIndex]?.questions?.map(
+                {questionnaire &&
+                  questionnaire?.sections[sectionIndex]?.questions?.map(
                     (question, questionIdx) => (
                       <Question
                         key={question?.uuid}
                         question={question}
                         questionsLength={
-                          questionnare?.sections[sectionIndex]?.questions
+                          questionnaire?.sections[sectionIndex]?.questions
                             ?.length
                         }
                         questionIdx={questionIdx}
-                        questionnare={questionnare}
-                        setQuestionnare={setQuestionnare}
+                        questionnaire={questionnaire}
+                        setQuestionnaire={setQuestionnaire}
                         sectionIndex={sectionIndex}
                         err={err}
                         setErr={setErr}
@@ -116,7 +115,7 @@ const Questions = () => {
                     )
                   )}
               </div>
-              <div className="form-btn flex-between add-members-btn">
+              {/* <div className="form-btn flex-between add-members-btn">
                 <button
                   type="reset"
                   //   onClick={onClickCancelHandler}
@@ -131,7 +130,7 @@ const Questions = () => {
                 >
                   Save
                 </button>
-              </div>
+              </div> */}
             </div>
             {/* <CustomModal/> */}
           </div>

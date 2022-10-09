@@ -34,9 +34,9 @@ const Header = () => {
     const [activeStateForMembers, setActiveStateForMembers] = useState(false);
     const [activeStateForOperationMembers, setActiveStateForOperationMembers] =
         useState(false);
-    console.log("location in header", location.pathname);
-    console.log("suoer admin in header", SUPER_ADMIN);
-    console.log("privilege in header", privilege);
+    // console.log("location in header", location.pathname);
+    // console.log("suoer admin in header", SUPER_ADMIN);
+    // console.log("privilege in header", privilege);
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -49,7 +49,7 @@ const Header = () => {
     };
     // console.log("privilege", );
     // console.log("privilege entries", );
-    console.log("privilege from ", privilege);
+    // console.log("privilege from ", privilege);
     let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
 
     let modifiedPrivilegeArrayKeys = privilegeArray.map(
@@ -85,24 +85,24 @@ const Header = () => {
                 delete: data.delete,
             },
         }));
-    console.log(
-        "module access for member",
-        moduleAccesForMember[0]?.member?.list
-    );
-    console.log(
-        "module access for member",
-        moduleAccesForMember[0]?.member?.list
-    );
-    console.log(
-        "module access for operation member",
-        moduleAccessForOperationMember[0]?.operationMember?.list
-    );
-    console.log("modified Privilege array", modifiedPrivilegeArrayKeys);
+    // console.log(
+    //     "module access for member",
+    //     moduleAccesForMember[0]?.member?.list
+    // );
+    // console.log(
+    //     "module access for member",
+    //     moduleAccesForMember[0]?.member?.list
+    // );
+    // console.log(
+    //     "module access for operation member",
+    //     moduleAccessForOperationMember[0]?.operationMember?.list
+    // );
+    // console.log("modified Privilege array", modifiedPrivilegeArrayKeys);
     const handleLogOut = async () => {
         try {
             const response = await privateAxios.post(LOGOUT_URL);
-            console.log("Response from logout");
-            
+            // console.log("Response from logout");
+
             if (response.status == 201) {
                 setAnchorElUser(null);
                 dispatch(resetUser());
@@ -110,7 +110,7 @@ const Header = () => {
                 navigate("/login");
             }
         } catch (error) {
-            console.log("Error from logout API", error);
+            // console.log("Error from logout API", error);
             if (error?.response?.status === 401) {
                 navigate("/login");
             }
@@ -242,8 +242,19 @@ const Header = () => {
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li className="list-item">
+                                        <li
+                                            className={
+                                                location.pathname.includes(
+                                                    "/questionnaires"
+                                                )
+                                                    ? "list-item active"
+                                                    : "list-item"
+                                            }
+                                        >
                                             <a
+                                             style={{
+                                                cursor: "pointer",
+                                            }}
                                                 onClick={() =>
                                                     navigate("/questionnaires")
                                                 }

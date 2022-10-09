@@ -10,31 +10,31 @@ const UserLoggedIn = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [requestRetry, setRequestRetry] = useState(false);
-    console.log("auth user from check user -----------", authUser);
+    // console.log("auth user from check user -----------", authUser);
 
     const dispatch = useDispatch();
 
     const fetchUser = async () => {
         try {
             const response = await privateAxios.get(GET_USER);
-            console.log(
-                "data from app fetcuser method UserLoggedIn file",
-                response.data
-            );
-            console.log(
-                "response from UserLoggedIn file in ",
-                response.data?.role
-            );
+            // console.log(
+            //     "data from app fetcuser method UserLoggedIn file",
+            //     response.data
+            // );
+            // console.log(
+            //     "response from UserLoggedIn file in ",
+            //     response.data?.role
+            // );
             dispatch(setUser(response.data));
             dispatch(setPrivileges(response.data?.role));
         } catch (error) {
-            console.log(
-                "Error from app file useEffect UserLoggedIn file",
-                error
-            );
+            // console.log(
+            //     "Error from app file useEffect UserLoggedIn file",
+            //     error
+            // );
             if (error?.response?.status == 401) {
                 // dispatch(resetUser());
-                console.log("401 from userLoggedIn component");
+                // console.log("401 from userLoggedIn component");
 
                 // return (
                 //     <Navigate
