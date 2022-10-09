@@ -19,8 +19,8 @@ const RequireAuth = ({ children, moduleName, page }) => {
     // console.log("grant access to---------", grantAccess);
 
     // dynamic role based access
-    console.log("privilege array in require auth", privilegeArray);
-    console.log("privilege  in require auth", privilege);
+    // console.log("privilege array in require auth", privilegeArray);
+    // console.log("privilege  in require auth", privilege);
     let moduleAccessByModuleName = privilegeArray
         .filter((data) => data?.moduleId?.name === moduleName)
         .map((data) => ({
@@ -33,12 +33,12 @@ const RequireAuth = ({ children, moduleName, page }) => {
             },
         }));
 
-    console.log("moduleAccess in require auth", moduleAccessByModuleName);
+    // console.log("moduleAccess in require auth", moduleAccessByModuleName);
     let grantAccess =
         authUser.role.name === "Super Admin"
             ? true
             : moduleAccessByModuleName[0]?.[moduleName][page];
-    console.log(`grant access for ${page} and ${moduleName} `, grantAccess);
+    // console.log(`grant access for ${page} and ${moduleName} `, grantAccess);
 
     return grantAccess ? (
         children

@@ -6,6 +6,7 @@ const Input = ({
     name,
     myHelper,
     placeholder,
+    myOnChange,
     rules,
     onBlur,
     multiline,
@@ -26,7 +27,7 @@ const Input = ({
             disabled={isDisabled}
             className={`input-field ${error && "input-error"}`}
             placeholder={placeholder}
-            onChange={onChange} // send value to hook form
+            onChange={myOnChange ? myOnChange : onChange} // send value to hook form
             onBlur={onBlur} // notify when input is touched/blur
             value={value} // input value
             inputRef={ref} // send input ref, so we can focus on input when error appear
