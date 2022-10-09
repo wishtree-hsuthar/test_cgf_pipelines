@@ -1,0 +1,116 @@
+import React from "react";
+import {
+    TextField,
+    Select,
+    MenuItem,
+    FormGroup,
+    Box,
+    Modal,
+    Fade,
+    Backdrop,
+    Checkbox,
+    Radio,
+    FormControlLabel,
+    RadioGroup,
+} from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+
+const ITEM_HEIGHT = 22;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5,
+        },
+    },
+};
+
+const PreviewQuestions = ({ question }) => {
+    const [datevalue, setDateValue] = React.useState(null);
+
+    let questionLabel = (
+        <div class="preview-sect-txt">{question.questionTitle}</div>
+    );
+    console.log("title preview question", questionLabel);
+    console.log("title preview question", question.questionTitle);
+    let questionComponent =
+        question.inputType === "Single Textbox" ? (
+            <TextField placeholder={`Enter ${question.questionTitle}`} />
+        ) : question.inputType === "dropdown" ? (
+            <div className="form-group">
+                <div className="select-field">
+                    <Select
+                        IconComponent={(props) => (
+                            <KeyboardArrowDownRoundedIcon {...props} />
+                        )}
+                        value={`Select ${question.questionTitle}`}
+                        MenuProps={MenuProps}
+                    >
+                        <MenuItem value={`Select ${question.questionTitle}`}>
+                            Select status
+                        </MenuItem>
+                        {question.options.map((option) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </div>
+            </div>
+        ) : question.inputType === "radio-button" ? (
+            <div className="radio-btn-field">
+                <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue="Active"
+                    name="radio-buttons-group"
+                    className="radio-btn radio-btn-vertical"
+                >
+                    {question.options.map((option) => (
+                        <FormControlLabel
+                            value={option}
+                            control={<Radio />}
+                            label={option}
+                        />
+                    ))}
+                </RadioGroup>
+            </div>
+        ) : question.inputType === "checkbox" ? (
+            <div className="checkbox-with-labelblk">
+                {question.options.map((option) => (
+                    <FormControlLabel
+                        className="checkbox-with-label"
+                        control={<Checkbox defaultChecked />}
+                        label={option}
+                    />
+                ))}
+            </div>
+        ) : question.inputType === "Date" ? (
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                    className="datepicker-blk"
+                    components={{
+                        OpenPickerIcon: CalendarMonthOutlinedIcon,
+                    }}
+                    datevalue={datevalue}
+                    onChange={(newValue) => {
+                        setDateValue(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                />
+            </LocalizationProvider>
+        ) : (
+            ""
+        );
+    return (
+        <div className="preview-que-blk">
+            {questionLabel}
+            <div className="form-group">{questionComponent}</div>
+        </div>
+    );
+};
+
+export default PreviewQuestions;

@@ -340,7 +340,14 @@ function AddNewQuestionnaire() {
                                         <span class="preview-icon">
                                             <VisibilityOutlinedIcon />
                                         </span>
-                                        <span className="addmore-txt">
+                                        <span
+                                            onClick={() =>
+                                                navigate(
+                                                    `/questionnaires/preview-questionnaire/${id}`
+                                                )
+                                            }
+                                            className="addmore-txt"
+                                        >
                                             Preview
                                         </span>
                                     </div>

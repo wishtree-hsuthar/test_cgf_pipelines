@@ -1,0 +1,54 @@
+.preview-card-wrapper {
+    background: #ffffff;
+    box-shadow: 0px 0px 6px rgb(0 0 0 / 10%);
+    border-radius: 3px;
+    margin: 20px 0 20px;
+    padding: 20px;
+    position: relative;
+}
+.preview-sect-txt {
+    font-size: 14px;
+    line-height: 14px;
+    color: #1e1e1e;
+    font-family: "ProximaNova-Regular", serif, sans-serif;
+    margin: 0 0 20px;
+}
+.preview-sect-card-ttl-blk {
+    margin-bottom: 20px;
+}
+.preview-que-blk {
+    margin: 0 0 20px;
+}
+.radio-btn-vertical {
+    flex-direction: column !important;
+}
+.preview-incl-padding-space {
+    margin-bottom: 11px;
+}
+.checkbox-with-label {
+    display: block !important;
+}
+.checkbox-with-label .MuiTypography-root {
+    font-size: 14px;
+}
+.checkbox-with-label svg {
+    font-size: 18px;
+    color: rgba(30, 30, 30, 0.5);
+    font-family: "ProximaNova-Regular", serif, sans-serif;
+}
+.checkbox-with-label .MuiCheckbox-root.Mui-checked svg {
+    color: #0082c9;
+}
+.checkbox-with-label .Mui-checked.Mui-disabled svg {
+    color: rgba(30, 30, 30, 0.5) !important;
+}
+.checkbox-with-label .Mui-disabled svg {
+    color: rgba(30, 30, 30, 0.5) !important;
+}
+.preview-que-blk:last-child {
+    margin-bottom: 0;
+}
+.preview-que-blk .form-group {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
