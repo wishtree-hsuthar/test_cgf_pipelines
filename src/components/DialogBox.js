@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 import { Backdrop, Box, Modal, Fade } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -67,8 +67,8 @@ const DialogBox = ({
           </div>
           <div id="transition-modal-description" className="popup-body">
             <div className="popup-content-blk text-center">
-              {info2 && info1}
-              {info2 && info2}
+              {info1}
+              {info2}
               {/* {info2 && <p>{info2}</p>} */}
               <div className="form-btn flex-center">
                 <button
@@ -96,16 +96,14 @@ const DialogBox = ({
 
 export default DialogBox;
 
-
 DialogBox.propTypes = {
-  title : PropTypes.string,
+  title: PropTypes.string,
   info1: PropTypes.string,
   info2: PropTypes.string,
   primaryButtonText: PropTypes.string,
   secondaryButtonText: PropTypes.string,
   onPrimaryModalButtonClickHandler: PropTypes.func,
   onSecondaryModalButtonClickHandler: PropTypes.func,
-  openModal:PropTypes.bool,
-  setOpenModal:PropTypes.func,
+  openModal: PropTypes.bool,
+  setOpenModal: PropTypes.func,
 };
- 
