@@ -208,7 +208,7 @@ export default function TableComponent({
                                     {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                    records.slice().sort(getComparator(order, orderBy)) */}
                                     {records.map((row, index) => {
-                                        console.log("rowsss", row);
+                                        console.log("row", row);
                                         const isItemSelected = isSelected(
                                             row._id
                                         );
@@ -232,7 +232,7 @@ export default function TableComponent({
                                                 role="checkbox"
                                                 aria-checked={isItemSelected}
                                                 tabIndex={-1}
-                                                key={row._id}
+                                                key={row?._id}
                                                 selected={isItemSelected}
                                             >
                                                 {setCheckBoxes && (

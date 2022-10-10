@@ -29,7 +29,7 @@ import PropTypes from "prop-types";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 import CloseIcon from "@mui/icons-material/Close";
-import SectionContent from "./Section/SectionContent";
+import SectionContent from "../Pages/questionnaires/SectionContent";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../api/axios";
@@ -174,7 +174,7 @@ function AddNewQuestionnaire() {
                         uuid: "",
                         questionTitle: "",
                         srNo: "", // TBD
-                        inputType: "", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings,true
+                        inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings,true
                         validations: [], // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
                         defaultValue: "", // Will only be there in case of the inputType which requires the default value
                         options: [], // multiple values from which user can select
@@ -233,7 +233,7 @@ function AddNewQuestionnaire() {
                             uuid: uuidv4(),
                             title: "",
                             srNo: "", // TBD
-                            inputType: "", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings,true
+                            inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings,true
                             validations: [], // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
                             defaultValue: "", // Will only be there in case of the inputType which requires the default value
                             options: [], // multiple values from which user can select

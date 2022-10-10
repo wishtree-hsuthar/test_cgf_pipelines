@@ -179,8 +179,17 @@ function PreviewQuestionnaire() {
             <div className="breadcrumb-wrapper">
                 <div className="container">
                     <ul className="breadcrumb">
-                        <li>
-                            <a href="/#">Questionnaire</a>
+                        <li onClick={() => navigate(`/questionnaire`)}>
+                            <a>Questionnaire</a>
+                        </li>
+                        <li
+                            onClick={() =>
+                                navigate(
+                                    `/questionnaires/add-questionnaire/${params.id}`
+                                )
+                            }
+                        >
+                            <a>Add Questionnaire</a>
                         </li>
                         <li>Preview Questionnaire</li>
                     </ul>
@@ -189,7 +198,7 @@ function PreviewQuestionnaire() {
             <section>
                 <div className="container">
                     <div className="form-header flex-between">
-                        <h2 className="heading2">Add Questionnaire</h2>
+                        <h2 className="heading2">Preview</h2>
                     </div>
                     <div className="que-ttl-blk">
                         <div className="form-group mb-0">

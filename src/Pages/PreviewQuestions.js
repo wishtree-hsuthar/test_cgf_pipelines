@@ -38,7 +38,7 @@ const PreviewQuestions = ({ question }) => {
     console.log("title preview question", questionLabel);
     console.log("title preview question", question.questionTitle);
     let questionComponent =
-        question.inputType === "Single Textbox" ? (
+        question.inputType === "singleTextbox" ? (
             <TextField placeholder={`Enter ${question.questionTitle}`} />
         ) : question.inputType === "dropdown" ? (
             <div className="form-group">
@@ -51,7 +51,7 @@ const PreviewQuestions = ({ question }) => {
                         MenuProps={MenuProps}
                     >
                         <MenuItem value={`Select ${question.questionTitle}`}>
-                            Select status
+                            {`Select ${question.questionTitle}`}
                         </MenuItem>
                         {question.options.map((option) => (
                             <MenuItem key={option} value={option}>
@@ -61,7 +61,7 @@ const PreviewQuestions = ({ question }) => {
                     </Select>
                 </div>
             </div>
-        ) : question.inputType === "radio-button" ? (
+        ) : question.inputType === "radioGroup" ? (
             <div className="radio-btn-field">
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
@@ -88,7 +88,7 @@ const PreviewQuestions = ({ question }) => {
                     />
                 ))}
             </div>
-        ) : question.inputType === "Date" ? (
+        ) : question.inputType === "date" ? (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                     className="datepicker-blk"

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import PreviewQuestions from "./PreviewQuestions";
 function PreviewSection({
     // questionnaire,
@@ -8,6 +9,8 @@ function PreviewSection({
     // index,
     section,
 }) {
+    const navigate = useNavigate();
+    const params = useParams();
     const questions = [
         {
             id: "",
@@ -74,17 +77,33 @@ function PreviewSection({
             </div>
             <div className="preview-card-wrapper">
                 <div className="preview-que-wrap">
-                    {questions.map((question) => (
+                    {section.questions.map((question) => (
                         <PreviewQuestions question={question} />
                     ))}
                 </div>
             </div>
             <div className="form-btn flex-between add-members-btn">
-                <button type="reset" className="secondary-button mr-10">
+                <button
+                    type="reset"
+                    onClick={() =>
+                        navigate(
+                            `/questionnaires/add-questionnaire/${params.id}`
+                        )
+                    }
+                    className="secondary-button mr-10"
+                >
                     Cancel
                 </button>
-                <button type="submit" className="primary-button add-button">
-                    Edit
+                <button
+                    type="submit"
+                    onClick={() =>
+                        navigate(
+                            `/questionnaires/add-questionnaire/${params.id}`
+                        )
+                    }
+                    className="primary-button add-button"
+                >
+                    Update
                 </button>
             </div>
         </>
