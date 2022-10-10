@@ -7,7 +7,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import SectionContent from "./SectionContent";
 import { v4 as uuidv4 } from "uuid";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
@@ -90,6 +90,8 @@ function AddNewQuestionnaire() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const navigate = useNavigate() 
 
   const [questionnaire, setQuestionnaire] = useState({
     uuid: id,
@@ -273,7 +275,11 @@ function AddNewQuestionnaire() {
               </div>
               <div className="section-tab-rightblk">
                 <div className="form-header-right-txt">
-                  <div className="tertiary-btn-blk mr-20">
+                  <div  onClick={() =>
+                                                navigate(
+                                                    `/questionnaires/preview-questionnaire/${id}`
+                                                )
+                                            } className="tertiary-btn-blk mr-20">
                     <span className="preview-icon">
                       <VisibilityOutlinedIcon />
                     </span>

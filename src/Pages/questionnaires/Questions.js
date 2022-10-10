@@ -88,11 +88,7 @@ const Questions = ({sectionIndex, questionnaire, setQuestionnaire,err, setErr}) 
 // console.log("section Index",sectionIndex,"questionnaire",questionnaire)
   return (
     <>
-      <div className="page-wrapper">
-        <section>
-          <div className="container">
-            {/* <div className="section-form-sect"> */}
-            <div className="sect-form-card-wrapper">
+      
               <div className="que-form-card-wrapper">
                 <div className="drag-drop-box"></div>
                 {questionnaire &&
@@ -131,11 +127,7 @@ const Questions = ({sectionIndex, questionnaire, setQuestionnaire,err, setErr}) 
                   Save
                 </button>
               </div> */}
-            </div>
             {/* <CustomModal/> */}
-          </div>
-        </section>
-      </div>
     </>
   );
 };

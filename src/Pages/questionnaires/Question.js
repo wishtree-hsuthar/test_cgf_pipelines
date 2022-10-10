@@ -255,7 +255,7 @@ console.log("Error inside question: ",err)
           <div className="que-card-form-rightfield flex-between">
             <div className="form-group">
               <label htmlFor="inputField">Input Field <span className="mandatory">*</span></label>
-              <FormControl>
+              <FormControl className="fullwidth-field">
                 <div className="select-field">
                   <Select
                     placeholder="Select Input type"
@@ -279,7 +279,7 @@ console.log("Error inside question: ",err)
             </div>
             <div className="form-group">
               <label htmlFor="inputField">Validation</label>
-              <FormControl>
+              <FormControl className="fullwidth-field">
                 <div className="select-field">
                   <Select
                     disabled={
@@ -310,44 +310,7 @@ console.log("Error inside question: ",err)
             </div>
           </div>
         </div>
-        <div className="que-card-icon-sect">
-          <div className="que-card-icon-blk">
-            <div className="que-card-icon add-que-iconblk mr-40">
-              <img
-                onClick={addQuestionHandler}
-                src={process.env.PUBLIC_URL + "/images/add-question-icon.svg"}
-                alt=""
-              />
-            </div>
-            {questionsLength !== 1 && (
-              <div className="que-card-icon delete-iconblk mr-40">
-                <img
-                  onClick={() =>
-                    deleteQuestionHandler(question?.uuid, questionIdx)
-                  }
-                  src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
-                  alt=""
-                />
-              </div>
-            )}
-            <div className="required-toggle-btnblk">
-              <FormGroup>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography>Required</Typography>
-                  <AntSwitch
-                    checked={question.isRequired}
-                    onChange={(e) =>
-                      onSwichChangeHandler(e, sectionIndex, questionIdx)
-                    }
-                    inputProps={{
-                      "aria-label": "controlled",
-                    }}
-                  />
-                </Stack>
-              </FormGroup>
-            </div>
-          </div>
-        </div>
+        
         {["dropdown", "checkbox", "radioGroup"].includes(question?.inputType) &&
           question.options.map((option, optionIdx) => (
             <div className="que-card-innerblk" key={optionIdx}>
@@ -392,7 +355,7 @@ console.log("Error inside question: ",err)
                     </div>
                   </div>
                 </div>
-                <div className="que-card-form-rightfield">
+                <div className="que-card-form-rightfield add-option-blk">
                   {optionIdx + 1 === question?.options?.length && (
                     <div
                       className="tertiary-btn-blk"
@@ -408,6 +371,44 @@ console.log("Error inside question: ",err)
               </div>
             </div>
           ))}
+          <div className="que-card-icon-sect">
+          <div className="que-card-icon-blk">
+            <div className="que-card-icon add-que-iconblk mr-40">
+              <img
+                onClick={addQuestionHandler}
+                src={process.env.PUBLIC_URL + "/images/add-question-icon.svg"}
+                alt=""
+              />
+            </div>
+            {questionsLength !== 1 && (
+              <div className="que-card-icon delete-iconblk mr-40">
+                <img
+                  onClick={() =>
+                    deleteQuestionHandler(question?.uuid, questionIdx)
+                  }
+                  src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
+                  alt=""
+                />
+              </div>
+            )}
+            <div className="required-toggle-btnblk">
+              <FormGroup>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Typography>Required</Typography>
+                  <AntSwitch
+                    checked={question.isRequired}
+                    onChange={(e) =>
+                      onSwichChangeHandler(e, sectionIndex, questionIdx)
+                    }
+                    inputProps={{
+                      "aria-label": "controlled",
+                    }}
+                  />
+                </Stack>
+              </FormGroup>
+            </div>
+          </div>
+        </div>
       </div>
       {/* </div> */}
     </div>

@@ -253,6 +253,7 @@ const SectionContent = ({
       />
       <div className="sect-form-card-info">
         <div className="sect-form-innercard-blk">
+        {questionnaire.sections.length > 1 && (
           <div className="sect-ttl-blk flex-between">
             <div className="sect-leftblk">
               {/* <h2 className="subheading">
@@ -270,7 +271,6 @@ const SectionContent = ({
                                         alt=""
                                     />
                                 </span> */}
-                {questionnaire.sections.length > 1 && (
                   <span className="sect-icon-blk delete-iconblk">
                     <img
                       onClick={() => setOpenDialog(true)}
@@ -278,10 +278,10 @@ const SectionContent = ({
                       alt=""
                     />
                   </span>
-                )}
               </div>
             </div>
           </div>
+          )}
           <form>
             <div className="sect-form-card-blk">
               <div className="sect-form-card-innerblk flex-between">
@@ -322,7 +322,7 @@ const SectionContent = ({
                       Layout <span className="mandatory">*</span>
                     </label>
                     <div className="select-field">
-                      <FormControl>
+                      <FormControl className="fullwidth-field">
                         <Select
                           IconComponent={(props) => (
                             <KeyboardArrowDownRoundedIcon {...props} />
@@ -356,7 +356,7 @@ const SectionContent = ({
                       Status <span className="mandatory">*</span>
                     </label>
                     <div className="select-field">
-                      <FormControl>
+                      <FormControl className="fullwidth-field">
                         <Select
                           IconComponent={(props) => (
                             <KeyboardArrowDownRoundedIcon {...props} />
@@ -400,7 +400,9 @@ const SectionContent = ({
             </div>
           </form>
         </div>
-        {section?.layout === "form" ? (
+        
+      </div>
+      {section?.layout === "form" ? (
           <Questions
             sectionIndex={index}
             questionnaire={questionnaire}
@@ -411,7 +413,6 @@ const SectionContent = ({
         ) : (
           " "
         )}
-      </div>
       <div className="form-btn flex-between add-members-btn que-page-btn">
         <button
           type="reset"
