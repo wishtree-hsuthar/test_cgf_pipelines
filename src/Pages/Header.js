@@ -20,8 +20,8 @@ const Header = () => {
     // const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [isActive, setActive] = React.useState("false");
-    const userAuth = useSelector((state) => state.user.userObj);
-    const privilege = useSelector((state) => state.user?.privilege);
+    const userAuth = useSelector((state) => state?.user?.userObj);
+    const privilege = useSelector((state) => state?.user?.privilege);
     // const privilege = useSelector((state) => state.user?.privilege);
     let initials = userAuth?.name?.split(" ");
     const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
@@ -49,8 +49,11 @@ const Header = () => {
     };
     // console.log("privilege", );
     // console.log("privilege entries", );
-    // console.log("privilege from ", privilege);
-    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+    console.log("privilege from ", privilege);
+    let privilegeArray =
+        userAuth?.roleId?.name === "Super Admin"
+            ? []
+            : Object.values(privilege?.privileges);
 
     let modifiedPrivilegeArrayKeys = privilegeArray.map(
         (privilege, index) => privilege?.moduleId?.name
@@ -252,9 +255,9 @@ const Header = () => {
                                             }
                                         >
                                             <a
-                                             style={{
-                                                cursor: "pointer",
-                                            }}
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
                                                 onClick={() =>
                                                     navigate("/questionnaires")
                                                 }

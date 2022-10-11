@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MenuItem, Select } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import { privateAxios } from "../../api/axios";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { useSelector } from "react-redux";
-
-function DraftedQuestionnaires({
+const PublishedQuestionnaires = ({
     makeApiCall,
     setMakeApiCall,
     search,
     searchTimeout,
     setSearch,
-}) {
+}) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -36,22 +35,23 @@ function DraftedQuestionnaires({
     const keysOrder = ["_id", "title", "uuid", "createdAt"];
 
     //code of tablecomponent
-    const [pageDraftedQuestionnaire, setPageDraftedQuestionnaire] = useState(1);
+    const [pagePublishedQuestionnaire, setPagePublishedQuestionnaire] =
+        useState(1);
     const [
-        rowsPerPageDraftedQuestionnaire,
-        setRowsPerPageDraftedQuestionnaire,
+        rowsPerPagePublishedQuestionnaire,
+        setRowsPerPagePublishedQuestionnaire,
     ] = useState(10);
-    const [orderDraftedQuestionnaire, setOrderDraftedQuestionnaire] =
+    const [orderPublishedQuestionnaire, setOrderPublishedQuestionnaire] =
         useState("desc");
-    const [orderByDraftedQuestionnaire, setOrderByDraftedQuestionnaire] =
+    const [orderByPublishedQuestionnaire, setOrderByPublishedQuestionnaire] =
         useState("");
-    const [recordsDraftedQuestionnaire, setRecordsDraftedQuestionnaire] =
+    const [recordsPublishedQuestionnaire, setRecordsPublishedQuestionnaire] =
         useState([]);
     const [
-        totalRecordsDraftedQuestionnaire,
-        setTotalRecordsDraftedQuestionnaire,
+        totalRecordsPublishedQuestionnaire,
+        setTotalRecordsPublishedQuestionnaire,
     ] = useState(0);
-    const [selectedDraftedQuestionnaire, setSelectedDraftedQuestionnaire] =
+    const [selectedPublishedQuestionnaire, setSelectedPublishedQuestionnaire] =
         useState([]);
 
     const updateRecords = (data) => {
@@ -67,7 +67,6 @@ function DraftedQuestionnaires({
             // delete object["title"];
             // delete object["updatedAt"];
             // object["uuid"] = object["uuid"];
-            // object["creted"]
             object["createdAt"] = new Date(
                 object["createdAt"]
             ).toLocaleDateString("en-US");
@@ -77,19 +76,20 @@ function DraftedQuestionnaires({
                 object[k] = v;
             });
         });
-        setRecordsDraftedQuestionnaire([...data]);
+        setRecordsPublishedQuestionnaire([...data]);
     };
+
     const generateUrl = () => {
         console.log("Search", search);
-        let url = `http://localhost:3000/api/questionnaires/drafted?page=${pageDraftedQuestionnaire}&size=${rowsPerPageDraftedQuestionnaire}&orderBy=${orderByDraftedQuestionnaire}&order=${orderDraftedQuestionnaire}`;
+        let url = `http://localhost:3000/api/questionnaires?page=${pagePublishedQuestionnaire}&size=${rowsPerPagePublishedQuestionnaire}&orderBy=${orderByPublishedQuestionnaire}&order=${orderPublishedQuestionnaire}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
         return url;
     };
 
+    const userAuth = useSelector((state) => state?.user?.userObj);
     const privilege = useSelector((state) => state?.user?.privilege);
 
-    const userAuth = useSelector((state) => state?.user?.userObj);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
     let privilegeArray =
         userAuth?.roleId?.name === "Super Admin"
@@ -112,7 +112,7 @@ function DraftedQuestionnaires({
         moduleAccesForMember[0]?.member
     );
 
-    const getQuestionnaire = async (
+    const getPublishedQuestionnaire = async (
         isMounted = true,
         controller = new AbortController()
     ) => {
@@ -123,7 +123,7 @@ function DraftedQuestionnaires({
                 signal: controller.signal,
             });
             // console.log(response.headers["x-total-count"]);
-            setTotalRecordsDraftedQuestionnaire(
+            setTotalRecordsPublishedQuestionnaire(
                 parseInt(response.headers["x-total-count"])
             );
             console.log("Response from sub admin api get", response);
@@ -142,23 +142,24 @@ function DraftedQuestionnaires({
     };
 
     const handleTablePageChange = (newPage) => {
-        setPageDraftedQuestionnaire(newPage);
+        setPagePublishedQuestionnaire(newPage);
     };
 
     // rows per page method for onboarded tab
     const handleRowsPerPageChange = (event) => {
-        setRowsPerPageDraftedQuestionnaire(parseInt(event.target.value, 10));
-        setPageDraftedQuestionnaire(1);
+        setRowsPerPagePublishedQuestionnaire(parseInt(event.target.value, 10));
+        setPagePublishedQuestionnaire(1);
     };
 
     const onClickVisibilityIconHandler = (uuid) => {
         console.log("id", uuid);
         return navigate(`/questionnaires/add-questionnaire/${uuid}`);
     };
+
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
-        makeApiCall && getQuestionnaire(isMounted, controller);
+        makeApiCall && getPublishedQuestionnaire(isMounted, controller);
         console.log("makeApiCall", makeApiCall);
         console.log("inside use Effect");
         return () => {
@@ -167,15 +168,16 @@ function DraftedQuestionnaires({
             controller.abort();
         };
     }, [
-        pageDraftedQuestionnaire,
-        rowsPerPageDraftedQuestionnaire,
-        orderByDraftedQuestionnaire,
-        orderByDraftedQuestionnaire,
+        pagePublishedQuestionnaire,
+        rowsPerPagePublishedQuestionnaire,
+        orderByPublishedQuestionnaire,
+        orderPublishedQuestionnaire,
 
         makeApiCall,
         setMakeApiCall,
         searchTimeout,
     ]);
+
     return (
         <>
             <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
@@ -186,21 +188,21 @@ function DraftedQuestionnaires({
                 ) : (
                     <TableComponent
                         tableHead={tableHead}
-                        records={recordsDraftedQuestionnaire}
+                        records={recordsPublishedQuestionnaire}
                         handleChangePage1={handleTablePageChange}
                         handleChangeRowsPerPage1={handleRowsPerPageChange}
-                        page={pageDraftedQuestionnaire}
-                        rowsPerPage={rowsPerPageDraftedQuestionnaire}
+                        page={pagePublishedQuestionnaire}
+                        rowsPerPage={rowsPerPagePublishedQuestionnaire}
                         // selected={selected}
-                        totalRecords={totalRecordsDraftedQuestionnaire}
-                        orderBy={orderByDraftedQuestionnaire}
+                        totalRecords={totalRecordsPublishedQuestionnaire}
+                        orderBy={orderByPublishedQuestionnaire}
                         // icons={["visibility"]}
                         onClickVisibilityIconHandler1={
                             onClickVisibilityIconHandler
                         }
-                        order={orderDraftedQuestionnaire}
-                        setOrder={setOrderDraftedQuestionnaire}
-                        setOrderBy={setOrderByDraftedQuestionnaire}
+                        order={orderPublishedQuestionnaire}
+                        setOrder={setOrderPublishedQuestionnaire}
+                        setOrderBy={setOrderByPublishedQuestionnaire}
                         setCheckBoxes={false}
                         onRowClick={
                             SUPER_ADMIN
@@ -213,6 +215,6 @@ function DraftedQuestionnaires({
             </div>
         </>
     );
-}
+};
 
-export default DraftedQuestionnaires;
+export default PublishedQuestionnaires;

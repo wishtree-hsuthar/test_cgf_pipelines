@@ -6,6 +6,7 @@ import TableComponent from "../../components/TableComponent";
 import DraftedQuestionnaires from "./DraftedQuestionnaires";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
+import PublishedQuestionnaires from "./PublishedQuestionnaires";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -62,8 +63,12 @@ function QuestionnairesList() {
     };
 
     const privilege = useSelector((state) => state?.user?.privilege);
+    const userAuth = useSelector((state) => state?.user?.userObj);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+    let privilegeArray =
+        userAuth?.roleId?.name === "Super Admin"
+            ? []
+            : Object.values(privilege?.privileges);
     let moduleAccesForMember = privilegeArray
         .filter((data) => data?.moduleId?.name === "Members")
         .map((data) => ({
@@ -97,7 +102,7 @@ function QuestionnairesList() {
                     <div className="form-header member-form-header flex-between">
                         <div className="form-header-left-blk flex-start">
                             <h2 className="heading2 mr-40">
-                                Questionaire List
+                                Questionnaire List
                             </h2>
                         </div>
                         <div className="form-header-right-txt">
@@ -210,7 +215,15 @@ function QuestionnairesList() {
                                 searchTimeout={searchTimeout}
                             />
                         </TabPanel>
-                        <TabPanel value={value} index={1}></TabPanel>
+                        <TabPanel value={value} index={1}>
+                            <PublishedQuestionnaires
+                                makeApiCall={makeApiCall}
+                                setMakeApiCall={setMakeApiCall}
+                                search={search}
+                                setSearch={setSearch}
+                                searchTimeout={searchTimeout}
+                            />
+                        </TabPanel>
                     </div>
                 </div>
             </section>

@@ -179,17 +179,25 @@ function PreviewQuestionnaire() {
             <div className="breadcrumb-wrapper">
                 <div className="container">
                     <ul className="breadcrumb">
-                        <li onClick={() => navigate(`/questionnaire`)}>
-                            <a>Questionnaire</a>
+                        <li>
+                            <a
+                                onClick={() => navigate(`/questionnaires`)}
+                                style={{ cursor: "pointer" }}
+                            >
+                                Questionnaire
+                            </a>
                         </li>
-                        <li
-                            onClick={() =>
-                                navigate(
-                                    `/questionnaires/add-questionnaire/${params.id}`
-                                )
-                            }
-                        >
-                            <a>Add Questionnaire</a>
+                        <li>
+                            <a
+                                onClick={() =>
+                                    navigate(
+                                        `/questionnaires/add-questionnaire/${params.id}`
+                                    )
+                                }
+                                style={{ cursor: "pointer" }}
+                            >
+                                Add Questionnaire
+                            </a>
                         </li>
                         <li>Preview Questionnaire</li>
                     </ul>
@@ -198,9 +206,9 @@ function PreviewQuestionnaire() {
             <section>
                 <div className="container">
                     <div className="form-header flex-between">
-                        <h2 className="heading2">Preview</h2>
+                        <h2 className="heading2">{questionnaire.title}</h2>
                     </div>
-                    <div className="que-ttl-blk">
+                    {/* <div className="que-ttl-blk">
                         <div className="form-group mb-0">
                             <label for="">
                                 Questionnaire Title{" "}
@@ -214,7 +222,7 @@ function PreviewQuestionnaire() {
                                 variant="outlined"
                             />
                         </div>
-                    </div>
+                    </div> */}
                     <div className="section-form-sect">
                         <div className="section-tab-blk flex-between">
                             <div className="section-tab-leftblk">

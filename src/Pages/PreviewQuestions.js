@@ -40,6 +40,11 @@ const PreviewQuestions = ({ question }) => {
     let questionComponent =
         question.inputType === "singleTextbox" ? (
             <TextField placeholder={`Enter ${question.questionTitle}`} />
+        ) : question.inputType === "textarea" ? (
+            <TextField
+                placeholder={`Enter ${question.questionTitle}`}
+                multiline={5}
+            />
         ) : question.inputType === "dropdown" ? (
             <div className="form-group">
                 <div className="select-field">
@@ -83,7 +88,7 @@ const PreviewQuestions = ({ question }) => {
                 {question.options.map((option) => (
                     <FormControlLabel
                         className="checkbox-with-label"
-                        control={<Checkbox defaultChecked />}
+                        control={<Checkbox />}
                         label={option}
                     />
                 ))}
@@ -107,8 +112,15 @@ const PreviewQuestions = ({ question }) => {
         );
     return (
         <div className="preview-que-blk">
-            {questionLabel}
-            <div className="form-group">{questionComponent}</div>
+            <div className="form-group">
+                <label htmlFor="questionTitle">
+                    {questionLabel}
+                    {question?.isRequired && (
+                        <span className="mandatory">*</span>
+                    )}
+                </label>
+                {questionComponent}
+            </div>
         </div>
     );
 };
