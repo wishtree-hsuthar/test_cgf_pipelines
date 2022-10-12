@@ -26,7 +26,8 @@ import QuestionnairesList from "../Pages/questionnaires/QuestionnairesList";
 import AddNewQuestionnaire from "../Pages/questionnaires/AddNewQuestionnaire";
 import PreviewQuestionnaire from "../Pages/PreviewQuestionnaire";
 import PreviewDemo from "../Pages/PreviewDemo";
-import Preview from "../Pages/questionnaires/Preview"
+import Preview from "../Pages/questionnaires/Preview";
+import AddAssessment from "../AssessmentModule/AddAssessment";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -63,7 +64,10 @@ const ProtectedPages = () => {
                     element={<ReplaceSubAdmin />}
                 />
 
-                <Route path="/questionnaires/add-questionnaires" element={<AddQuestionnaires />} />
+                <Route
+                    path="/questionnaires/add-questionnaires"
+                    element={<AddQuestionnaires />}
+                />
                 <Route path="/questionnaires/preview" element={<Preview />} />
 
                 {/* Role Management Routes */}
@@ -165,6 +169,10 @@ const ProtectedPages = () => {
                 <Route
                     path="/questionnaires/preview-questionnaire/:id"
                     element={<PreviewQuestionnaire />}
+                />
+                <Route
+                    path="/assessments/add-assessment"
+                    element={<AddAssessment />}
                 />
                 <Route path="/preview" element={<PreviewDemo />} />
                 <Route path="*" element={<FallBackUI />} />
