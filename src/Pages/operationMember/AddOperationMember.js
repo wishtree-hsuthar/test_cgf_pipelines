@@ -1,26 +1,14 @@
-import {
-    Autocomplete,
-    Paper,
-    // FormControlLabel,
-    // MenuItem,
-    // Radio,
-    // RadioGroup,
-    // Select,
-    TextField,
-} from "@mui/material";
+import { Autocomplete, Paper, TextField } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { Controller } from "react-hook-form";
 import { useForm, Controller } from "react-hook-form";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { privateAxios } from "../../api/axios";
-// import { useNavigate } from "react-router-dom";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
-import axios from "axios";
 import { ADD_OPERATION_MEMBER, FETCH_OPERATION_MEMBER } from "../../api/Url";
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 const helperTextForAddOperationMember = {
     salutation: {
         required: "Select salutation",
@@ -71,7 +59,7 @@ const helperTextForAddOperationMember = {
     },
     memberId: {
         required: "Enter member company",
-        validate: "Enter member company"
+        validate: "Enter member company",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
@@ -295,7 +283,7 @@ function AddOperationMember() {
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
-                                       Save & Add More
+                                        Save & Add More
                                     </span>
                                 </div>
                             </div>
@@ -430,8 +418,13 @@ function AddOperationMember() {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
-                                                        className={`${error && "autocomplete-error"}`}
-                                                            popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                                            className={`${
+                                                                error &&
+                                                                "autocomplete-error"
+                                                            }`}
+                                                            popupIcon={
+                                                                <KeyboardArrowDownRoundedIcon />
+                                                            }
                                                             {...field}
                                                             onChange={(
                                                                 event,
@@ -576,20 +569,26 @@ function AddOperationMember() {
                                             <Controller
                                                 control={control}
                                                 name="memberId"
-                                                rules={{ required: true
-                                                }}
+                                                rules={{ required: true }}
                                                 render={({
                                                     field,
                                                     fieldState: { error },
                                                 }) => (
                                                     <Autocomplete
-                                                    PaperComponent={({ children }) => (
-                                                        <Paper className="autocomplete-option-txt">
-                                                          {children}
-                                                        </Paper>
-                                                      )}
-                                                      className={`${error && "autocomplete-error"}`}
-                                                    popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                                        PaperComponent={({
+                                                            children,
+                                                        }) => (
+                                                            <Paper className="autocomplete-option-txt">
+                                                                {children}
+                                                            </Paper>
+                                                        )}
+                                                        className={`${
+                                                            error &&
+                                                            "autocomplete-error"
+                                                        }`}
+                                                        popupIcon={
+                                                            <KeyboardArrowDownRoundedIcon />
+                                                        }
                                                         {...field}
                                                         value={
                                                             memberCompanies?._id

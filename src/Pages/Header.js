@@ -265,6 +265,26 @@ const Header = () => {
                                                 Questionnaires
                                             </a>
                                         </li>
+                                        <li
+                                            className={
+                                                location.pathname.includes(
+                                                    "/questionnaires"
+                                                )
+                                                    ? "list-item active"
+                                                    : "list-item"
+                                            }
+                                        >
+                                            <a
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
+                                                onClick={() =>
+                                                    navigate("/assessments")
+                                                }
+                                            >
+                                                Assessments
+                                            </a>
+                                        </li>
 
                                         <li
                                             className={
