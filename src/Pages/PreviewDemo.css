@@ -48,7 +48,8 @@
 .preview-que-blk:last-child {
     margin-bottom: 0;
 }
-.preview-que-blk .form-group {
+/* .preview-que-blk .form-group {
     flex: 0 0 50%;
     max-width: 50%;
-}
+} */
+.que-half-sect{flex: 0 0 50%;max-width: 50%;}
