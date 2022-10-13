@@ -246,7 +246,7 @@ function PreviewQuestionnaire() {
                                                 >
                                                     <Tab
                                                         className="section-tab-item"
-                                                        label={`section - ${
+                                                        label={`section ${
                                                             index + 1
                                                         }`}
                                                         {...a11yProps(index)}

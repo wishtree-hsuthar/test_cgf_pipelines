@@ -14,7 +14,7 @@
     margin: 0 0 20px;
 }
 .preview-sect-card-ttl-blk {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .preview-que-blk {
     margin: 0 0 20px;
@@ -52,4 +52,4 @@
     flex: 0 0 50%;
     max-width: 50%;
 } */
-.que-half-sect{flex: 0 0 50%;max-width: 50%;}
+/* .que-half-sect{flex: 0 0 50%;max-width: 50%;} */
