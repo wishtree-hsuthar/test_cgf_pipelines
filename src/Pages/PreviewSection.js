@@ -30,8 +30,7 @@ function PreviewSection({
                         <PreviewQuestions question={question} />
                     ))}
                 </div>
-            </div>
-            <div className="form-btn flex-between add-members-btn">
+                <div className="form-btn flex-between add-members-btn mt-30">
                 <button
                     type="reset"
                     onClick={() =>
@@ -55,6 +54,8 @@ function PreviewSection({
                     Update
                 </button>
             </div>
+            </div>
+            
         </>
     );
 }

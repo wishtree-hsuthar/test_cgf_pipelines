@@ -32,18 +32,19 @@ const MenuProps = {
 const PreviewQuestions = ({ question }) => {
     const [datevalue, setDateValue] = React.useState(null);
 
-    let questionLabel = (
-        <div class="preview-sect-txt">{question.questionTitle}</div>
-    );
+    let questionLabel = 
+        question.questionTitle
+    
     console.log("title preview question", questionLabel);
     console.log("title preview question", question.questionTitle);
     let questionComponent =
         question.inputType === "singleTextbox" ? (
-            <TextField placeholder={`Enter ${question.questionTitle}`} />
+            <TextField placeholder={`Enter ${question.questionTitle}`}  className="input-field" />
         ) : question.inputType === "textarea" ? (
             <TextField
                 placeholder={`Enter ${question.questionTitle}`}
                 multiline={5}
+                className="input-textarea"
             />
         ) : question.inputType === "dropdown" ? (
             <div className="form-group">
@@ -114,12 +115,16 @@ const PreviewQuestions = ({ question }) => {
         <div className="preview-que-blk">
             <div className="form-group">
                 <label htmlFor="questionTitle">
-                    {questionLabel}
+                    <div class="preview-sect-txt">
+                    {questionLabel} 
                     {question?.isRequired && (
-                        <span className="mandatory">*</span>
+                        <span className="mandatory"> *</span>
                     )}
+                    </div>
                 </label>
+                <div className="que-half-sect">
                 {questionComponent}
+                </div>
             </div>
         </div>
     );

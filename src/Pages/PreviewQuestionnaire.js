@@ -224,7 +224,7 @@ function PreviewQuestionnaire() {
                         </div>
                     </div> */}
                     <div className="section-form-sect">
-                        <div className="section-tab-blk flex-between">
+                        <div className="section-tab-blk flex-between preview-tab-blk">
                             <div className="section-tab-leftblk">
                                 <Box
                                     sx={{
@@ -246,7 +246,7 @@ function PreviewQuestionnaire() {
                                                 >
                                                     <Tab
                                                         className="section-tab-item"
-                                                        label={`section - ${
+                                                        label={`section ${
                                                             index + 1
                                                         }`}
                                                         {...a11yProps(index)}
