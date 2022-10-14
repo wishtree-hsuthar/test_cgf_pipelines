@@ -11,58 +11,7 @@ function PreviewSection({
 }) {
     const navigate = useNavigate();
     const params = useParams();
-    const questions = [
-        {
-            id: "",
-            uuid: "",
-            questionTitle: "Company Name",
-            srNo: "", // TBD
-            inputType: "Single Textbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings,true
-            validations: [], // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
-            defaultValue: "", // Will only be there in case of the inputType which requires the default value
-            options: [""], // multiple values from which user can select
-        },
-        {
-            id: "",
-            uuid: "",
-            questionTitle: "Company type",
-            srNo: "", // TBD
-            inputType: "radio-button", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings,true
-            validations: [], // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
-            defaultValue: "", // Will only be there in case of the inputType which requires the default value
-            options: ["Service Based Company", "Product Based Company"], // multiple values from which user can select
-        },
-        {
-            id: "",
-            uuid: "",
-            questionTitle: "Status",
-            srNo: "", // TBD
-            inputType: "dropdown", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings,true
-            validations: [], // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
-            defaultValue: "", // Will only be there in case of the inputType which requires the default value
-            options: ["Service Based Company", "Product Based Company"], // multiple values from which user can select
-        },
-        {
-            id: "",
-            uuid: "",
-            questionTitle: "Employee Type",
-            srNo: "", // TBD
-            inputType: "checkbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings,true
-            validations: [], // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
-            defaultValue: "", // Will only be there in case of the inputType which requires the default value
-            options: ["Full time", "Part time"], // multiple values from which user can select
-        },
-        {
-            id: "",
-            uuid: "",
-            questionTitle: "Joining date",
-            srNo: "", // TBD
-            inputType: "Date", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings,true
-            validations: [], // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
-            defaultValue: "", // Will only be there in case of the inputType which requires the default value
-            options: ["Full time", "Part time"], // multiple values from which user can select
-        },
-    ];
+
     return (
         <>
             <div className="preview-card-wrapper">
@@ -81,8 +30,7 @@ function PreviewSection({
                         <PreviewQuestions question={question} />
                     ))}
                 </div>
-            </div>
-            <div className="form-btn flex-between add-members-btn">
+                <div className="form-btn flex-between add-members-btn mt-30">
                 <button
                     type="reset"
                     onClick={() =>
@@ -106,6 +54,8 @@ function PreviewSection({
                     Update
                 </button>
             </div>
+            </div>
+            
         </>
     );
 }

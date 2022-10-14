@@ -184,7 +184,7 @@ function AddNewQuestionnaire() {
     setValue(questionnaire.sections.length);
   };
 
-  // console.log("questionnaire---", questionnaire.sections);
+    // console.log("questionnaire---", questionnaire.sections);
 
   return (
     <div className="page-wrapper">
@@ -242,83 +242,103 @@ function AddNewQuestionnaire() {
             </div>
           </div>
 
-          <div className="section-form-sect">
-            <div className="section-tab-blk flex-between">
-              <div className="section-tab-leftblk">
-                <Box
-                  sx={{
-                    borderBottom: 1,
-                    borderColor: "divider",
-                  }}
-                  className="tabs-sect que-tab-sect"
-                >
-                  <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="basic tabs example"
-                  >
-                    {questionnaire.sections.map((section, index, id) => (
-                      <Tooltip
-                        key={section?.uuid}
-                        title={section.sectionTitle}
-                        placement="bottom-start"
-                      >
-                        <Tab
-                          className="section-tab-item"
-                          label={`section - ${index + 1}`}
-                          {...a11yProps(index)}
-                        />
-                      </Tooltip>
-                    ))}
-                  </Tabs>
-                </Box>
-              </div>
-              <div className="section-tab-rightblk">
-                <div className="form-header-right-txt">
-                  <div  onClick={() =>
-                                                navigate(
-                                                    `/questionnaires/preview-questionnaire/${id}`
-                                                )
-                                            } className="tertiary-btn-blk mr-20">
-                    <span className="preview-icon">
-                      <VisibilityOutlinedIcon />
-                    </span>
-                    <span className="addmore-txt">Preview</span>
-                  </div>
-                  <div className="tertiary-btn-blk">
-                    <span className="addmore-icon">
-                      <i className="fa fa-plus"></i>
-                    </span>
-                    <span onClick={addSection} className="addmore-txt">
-                      Add Section
-                    </span>
-                  </div>
+                    <div className="section-form-sect">
+                        <div className="section-tab-blk flex-between">
+                            <div className="section-tab-leftblk">
+                                <Box
+                                    sx={{
+                                        borderBottom: 1,
+                                        borderColor: "divider",
+                                    }}
+                                    className="tabs-sect que-tab-sect"
+                                >
+                                    <Tabs
+                                        value={value}
+                                        onChange={handleChange}
+                                        aria-label="basic tabs example"
+                                    >
+                                        {questionnaire.sections.map(
+                                            (section, index, id) => (
+                                                <Tooltip
+                                                    key={section?.uuid}
+                                                    title={section.sectionTitle}
+                                                    placement="bottom-start"
+                                                >
+                                                    <Tab
+                                                        className="section-tab-item"
+                                                        label={`section ${
+                                                            index + 1
+                                                        }`}
+                                                        {...a11yProps(index)}
+                                                    />
+                                                </Tooltip>
+                                            )
+                                        )}
+                                    </Tabs>
+                                </Box>
+                            </div>
+                            <div className="section-tab-rightblk">
+                                <div className="form-header-right-txt">
+                                    <div
+                                        onClick={() =>
+                                            navigate(
+                                                `/questionnaires/preview-questionnaire/${id}`
+                                            )
+                                        }
+                                        className="tertiary-btn-blk mr-20"
+                                    >
+                                        <span className="preview-icon">
+                                            <VisibilityOutlinedIcon />
+                                        </span>
+                                        <span className="addmore-txt">
+                                            Preview
+                                        </span>
+                                    </div>
+                                    <div className="tertiary-btn-blk">
+                                        <span className="addmore-icon">
+                                            <i className="fa fa-plus"></i>
+                                        </span>
+                                        <span
+                                            onClick={addSection}
+                                            className="addmore-txt"
+                                        >
+                                            Add Section
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="que-tab-data">
+                            {questionnaire.sections.map((section, index) => (
+                                <TabPanel
+                                    key={section?.uuid}
+                                    value={value}
+                                    index={index}
+                                >
+                                    <SectionContent
+                                        setQuestionnaire={setQuestionnaire}
+                                        questionnaire={questionnaire}
+                                        value={section.value}
+                                        uuid={section.uuid}
+                                        setValue={setValue}
+                                        index={index}
+                                        section={section}
+                                        tabChange={handleChange}
+                                        globalSectionTitleError={
+                                            globalSectionTitleError
+                                        }
+                                        setGlobalSectionTitleError={
+                                            setGlobalSectionTitleError
+                                        }
+                                    />
+                                </TabPanel>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-            <div className="que-tab-data">
-              {questionnaire.sections.map((section, index) => (
-                <TabPanel key={section?.uuid} value={value} index={index}>
-                  <SectionContent
-                    setQuestionnaire={setQuestionnaire}
-                    questionnaire={questionnaire}
-                    value={section.value}
-                    uuid={section.uuid}
-                    setValue={setValue}
-                    index={index}
-                    section={section}
-                    tabChange={handleChange}
-                    globalSectionTitleError={globalSectionTitleError}
-                    setGlobalSectionTitleError={setGlobalSectionTitleError}
-                  />
-                </TabPanel>
-              ))}
-            </div>
-          </div>
+            </section>
         </div>
-      </section>
-    </div>
-  );
+    );
 }
 
 export default AddNewQuestionnaire;
