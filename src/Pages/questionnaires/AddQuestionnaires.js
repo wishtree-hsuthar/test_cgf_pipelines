@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextField, Select, MenuItem, FormGroup, Box, Modal, Fade, Backdrop, Checkbox, Radio } from '@mui/material';
+import { TextField, Select, MenuItem, FormGroup, Box, Modal, Fade, Backdrop, Checkbox, Radio, FormControl, InputLabel, ListSubheader } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
@@ -851,7 +851,27 @@ function AddQuestionnaires() {
                                                                         </div>
                                                                     </TableCell>
                                                                     <TableCell>
-                                                                        <div className='que-dropdown'>
+                                                                    <div className='que-dropdown-blk'>
+                                                                            <div className='que-select-field'>
+                                                                                <FormControl fullWidth={true}>
+                                                                                    <InputLabel htmlFor="grouped-select">Select dropdown</InputLabel>
+                                                                                    <Select defaultValue="" id="grouped-select" label="Grouping" IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props}/>}>
+                                                                                    {/* <MenuItem value="">
+                                                                                        <em>None</em>
+                                                                                    </MenuItem> */}
+                                                                                    <Paper className='group-select-blk'>
+                                                                                    <ListSubheader className="que-select-field-body create-custom-list-txt" onClick={handleOpen}>Create custom list</ListSubheader>
+                                                                                    <ListSubheader className='que-select-field-body master-list-label'>Master list</ListSubheader>
+                                                                                    <MenuItem value={3} className="dropdown-item">Country</MenuItem>
+                                                                                    <MenuItem value={4} className="dropdown-item">City</MenuItem>
+                                                                                    </Paper>
+                                                                                    </Select>
+                                                                                </FormControl>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        
+                                                                        {/* <div className='que-dropdown'>
                                                                             <div className='dropdown-header' onClick={toggleDropdown}>
                                                                                 {selectedItem ? items.find(item => item.id == selectedItem).label : "Select dropdown"}
                                                                                 <i className={`fa fa-chevron-down icon ${isOpen && "open"}`}></i>
@@ -867,9 +887,11 @@ function AddQuestionnaires() {
                                                                                     ))}
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
+                                                                        </div> */}
                                                                     </TableCell>
-                                                                    <TableCell></TableCell>
+                                                                    <TableCell>
+                                                                        
+                                                                    </TableCell>
                                                                     <TableCell></TableCell>
                                                                 </TableRow>
                                                                 <TableRow>
