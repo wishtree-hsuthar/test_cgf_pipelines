@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { TextField, Select, MenuItem, Box, Autocomplete } from "@mui/material";
+import { TextField, Select, MenuItem, Box, Autocomplete, Paper } from "@mui/material";
 import "react-phone-number-input/style.css";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -290,6 +290,11 @@ const AddSubAdmin = () => {
                                                     }) => (
                                                         <Autocomplete
                                                         className={`${error && "autocomplete-error"}`}
+                                                        PaperComponent={({ children }) => (
+                                                            <Paper className="autocomplete-option-txt">
+                                                              {children}
+                                                            </Paper>
+                                                          )}
                                                         popupIcon={<KeyboardArrowDownRoundedIcon />}
                                                             {...field}
                                                             onChange={(
