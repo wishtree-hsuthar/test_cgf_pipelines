@@ -48,10 +48,10 @@ function QuestionnairesList() {
     const [value, setValue] = React.useState(0);
 
     const onSearchChangeHandler = (e) => {
-        console.log("event", e.key);
+        // console.log("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
         setMakeApiCall(false);
-        console.log("search values", e.target.value);
+        // console.log("search values", e.target.value);
         setSearch(e.target.value);
         setSearchTimeout(
             setTimeout(() => {
@@ -75,10 +75,10 @@ function QuestionnairesList() {
                 add: data?.add,
             },
         }));
-    console.log(
-        "module access member in view member",
-        moduleAccesForMember[0]?.member
-    );
+    // console.log(
+    //     "module access member in view member",
+    //     moduleAccesForMember[0]?.member
+    // );
 
     const [filters, setFilters] = useState({
         companyType: "",

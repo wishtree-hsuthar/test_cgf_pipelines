@@ -45,13 +45,19 @@ const questionnaireFormat = {
           validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
           defaultValue: "", // Will only be there in case of the inputType which requires the default value
           isRequired: true,
-          options: ["",""], // multiple values from which user can select
+          options: ["", ""], // multiple values from which user can select
         },
       ],
     },
   ],
 };
-const Questions = ({sectionIndex, questionnaire, setQuestionnaire,err, setErr}) => {
+const FormQuestions = ({
+  sectionIndex,
+  questionnaire,
+  setQuestionnaire,
+  err,
+  setErr,
+}) => {
   // const [errArray, setErrArray] = useState([{ questionTitle: "" }]);
   // const [err, setErr] = useState({ questionTitle: "", option: "" });
 
@@ -67,7 +73,6 @@ const Questions = ({sectionIndex, questionnaire, setQuestionnaire,err, setErr}) 
     };
     questionnaire?.sections[sectionIndex]?.questions?.map(
       (question, questionIdx) => {
-        
         if (question?.questionTitle === "") {
           tempError.questionTitle = "Enter question title";
         }
@@ -85,51 +90,35 @@ const Questions = ({sectionIndex, questionnaire, setQuestionnaire,err, setErr}) 
 
     setErr({ ...tempError });
   };
-// console.log("section Index",sectionIndex,"questionnaire",questionnaire)
+  // console.log("section Index",sectionIndex,"questionnaire",questionnaire)
   return (
     <>
-      
-              <div className="que-form-card-wrapper">
-                <div className="drag-drop-box"></div>
-                {questionnaire &&
-                  questionnaire?.sections[sectionIndex]?.questions?.map(
-                    (question, questionIdx) => (
-                      <Question
-                        key={question?.uuid}
-                        question={question}
-                        questionsLength={
-                          questionnaire?.sections[sectionIndex]?.questions
-                            ?.length
-                        }
-                        questionIdx={questionIdx}
-                        questionnaire={questionnaire}
-                        setQuestionnaire={setQuestionnaire}
-                        sectionIndex={sectionIndex}
-                        err={err}
-                        setErr={setErr}
-                      />
-                    )
-                  )}
-              </div>
-              {/* <div className="form-btn flex-between add-members-btn">
-                <button
-                  type="reset"
-                  //   onClick={onClickCancelHandler}
-                  className="secondary-button mr-10"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  onClick={onSectionSubmitHandler}
-                  className="primary-button add-button"
-                >
-                  Save
-                </button>
-              </div> */}
-            {/* <CustomModal/> */}
+      <div className="que-form-card-wrapper">
+        <div className="drag-drop-box"></div>
+        {questionnaire &&
+          questionnaire?.sections[sectionIndex]?.questions?.map(
+            (question, questionIdx) => (
+              <Question
+                key={question?.uuid}
+                question={question}
+                questionsLength={
+                  questionnaire?.sections[sectionIndex]?.questions?.length
+                }
+                questionIdx={questionIdx}
+                questionnaire={questionnaire}
+                setQuestionnaire={setQuestionnaire}
+                sectionIndex={sectionIndex}
+                err={err}
+                setErr={setErr}
+              />
+            )
+          )}
+      </div>
+      {/* <CustomModal/> */}
     </>
   );
 };
 
-export default Questions;
+export default FormQuestions;
+
+

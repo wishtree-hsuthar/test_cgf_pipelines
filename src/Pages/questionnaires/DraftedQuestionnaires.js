@@ -71,7 +71,7 @@ function DraftedQuestionnaires({
         setRecordsDraftedQuestionnaire([...data]);
     };
     const generateUrl = () => {
-        console.log("Search", search);
+        // console.log("Search", search);
         let url = `http://localhost:3000/api/questionnaires/drafted?page=${pageDraftedQuestionnaire}&size=${rowsPerPageDraftedQuestionnaire}&orderBy=${orderByDraftedQuestionnaire}&order=${orderDraftedQuestionnaire}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
@@ -92,10 +92,10 @@ function DraftedQuestionnaires({
                 add: data?.add,
             },
         }));
-    console.log(
-        "module access member in view member",
-        moduleAccesForMember[0]?.member
-    );
+    // console.log(
+    //     "module access member in view member",
+    //     moduleAccesForMember[0]?.member
+    // );
 
     const getQuestionnaire = async (
         isMounted = true,
@@ -111,13 +111,13 @@ function DraftedQuestionnaires({
             setTotalRecordsDraftedQuestionnaire(
                 parseInt(response.headers["x-total-count"])
             );
-            console.log("Response from sub admin api get", response);
+            // console.log("Response from sub admin api get", response);
 
             updateRecords([...response.data]);
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            console.log("Error from questionnaire-------", error);
+            // console.log("Error from questionnaire-------", error);
 
             if (error?.response?.status == 401) {
                 navigate("/login");
@@ -137,15 +137,15 @@ function DraftedQuestionnaires({
     };
 
     const onClickVisibilityIconHandler = (uuid) => {
-        console.log("id", uuid);
+        // console.log("id", uuid);
         return navigate(`/questionnaires/add-questionnaire/${uuid}`);
     };
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
         makeApiCall && getQuestionnaire(isMounted, controller);
-        console.log("makeApiCall", makeApiCall);
-        console.log("inside use Effect");
+        // console.log("makeApiCall", makeApiCall);
+        // console.log("inside use Effect");
         return () => {
             isMounted = false;
             clearTimeout(searchTimeout);

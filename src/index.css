@@ -1510,7 +1510,7 @@ input:-webkit-autofill:active{
   .assessment-tab-item:nth-child(4) .assessment-type-icon{background: rgba(109, 178, 45, 0.17);}
   
 
-.que-table-sect{display: none;}
+/* .que-table-sect{display: none;} */
 .que-checkbox-wrap{position: relative;}
 .que-checkbox{position: absolute !important;top: 2px;left: 5px;}
 .que-checkbox svg{font-size: 18px;color: rgba(30, 30, 30, 0.5);font-family: 'ProximaNova-Regular',serif, sans-serif;}

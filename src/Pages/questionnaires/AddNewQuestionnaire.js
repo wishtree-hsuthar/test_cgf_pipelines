@@ -52,7 +52,7 @@ function AddNewQuestionnaire() {
   });
   //method to call all error toaster from this method
   const setErrorToaster = (error) => {
-    console.log("error",error)
+    // console.log("error",error)
     setToasterDetails(
       {
         titleMessage: "Error",
@@ -138,11 +138,11 @@ function AddNewQuestionnaire() {
             signal: controller.signal,
           }
         );
-        console.log("response from fetch questionnaire", response);
+        // console.log("response from fetch questionnaire", response);
         isMounted && setQuestionnaire({ ...response.data });
       } catch (error) {
         // setErrorToaster(error)
-        console.log("error from fetch questionnaire", error);
+        // console.log("error from fetch questionnaire", error);
       }
     };
     fetch();
@@ -153,7 +153,7 @@ function AddNewQuestionnaire() {
   }, []);
 
   const addSection = () => {
-    console.log("questionnare: ",questionnaire)
+    // console.log("questionnare: ",questionnaire)
     setQuestionnaire({
       ...questionnaire,
       sections: [
@@ -223,9 +223,9 @@ function AddNewQuestionnaire() {
                 id="outlined-basic"
                 value={questionnaire.title}
                 placeholder="Enter questionnaire title"
-                inputProps={{
-                  maxLength: 500,
-                }}
+                // inputProps={{
+                //   maxLength: 500,
+                // }}
                 variant="outlined"
                 onChange={(e) => {
                   setQuestionnaire({
