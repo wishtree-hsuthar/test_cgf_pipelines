@@ -100,95 +100,103 @@ const TableQuestions = ({ sectionIndex, questionnaire, setQuestionnaire }) => {
   }, [questionnaire]);
 
   return (
-    <>
+    <div className="que-column-layout-sect">
       {questionnaire &&
         questionnaire?.sections[sectionIndex]?.columnValues?.map(
           (column, columnId) => (
-            <div key={column?.uuid}>
-              <div>
-                {/* <div className="que-card-icon delete-iconblk"> */}
-                <Tooltip title="Delete column" placement="bottom">
-                  <img
-                    style={{ cursor: "pointer" }}
-                    onClick={(e) => onDeleteIconClickHandler(e, columnId)}
-                    src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
-                    alt=""
-                  />
-                </Tooltip>
-                {/* </div> */}
-                <h2 className="subheading">Column {columnId + 1}</h2>
-                {/* <div className="form-group"> */}
-                <label htmlFor="emailid">Column Title</label>
-                <TextField
-                  className="input-field"
-                  id="outlined-basic"
-                  variant="outlined"
-                  name="title"
-                  value={column?.title}
-                  onChange={(e) => onColumnChangeHandler(e, columnId)}
-                  placeholder="Enter column title"
-                />
-                {/* </div> */}
-              </div>
-              <div className="que-card-form-rightfield">
-                <div className="">
-                  <label htmlFor="emailid">Input type</label>
-                  <div className="select-field">
-                    <Select
-                      IconComponent={(props) => (
-                        <KeyboardArrowDownRoundedIcon {...props} />
-                      )}
-                      displayEmpty
-                      placeholder="Select input type"
-                      name="columnType"
-                      value={column?.columnType}
-                      onChange={(e) => onColumnChangeHandler(e, columnId)}
-                      className="select-dropdown"
-                      MenuProps={MenuProps}
-                    >
-                      <MenuItem disabled value="">
-                        Select input type
-                      </MenuItem>
-                      {inputTypeOptions &&
-                        inputTypeOptions.map((option) => (
-                          <MenuItem key={option?._id} value={option?._id}>
-                            {option?.name}
-                          </MenuItem>
-                        ))}
-                    </Select>
+            <div key={column?.uuid} className="que-column-layout-wrap">
+              <div className="que-column-layout-blk">
+                {/* <div className="que-column-layout-ttlblk flex-between">
+                    
+                </div> */}
+                
+                <div class="que-card-innerblk">
+                  <div className="que-col-form-leftfield flex-between">
+                    <div className="form-group">
+                        <label htmlFor="emailid">Column {columnId + 1} Title</label>
+                        <TextField
+                          className="input-field"
+                          id="outlined-basic"
+                          variant="outlined"
+                          name="title"
+                          value={column?.title}
+                          onChange={(e) => onColumnChangeHandler(e, columnId)}
+                          placeholder="Enter column title"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="emailid">Input type</label>
+                        <div className="select-field">
+                          <Select
+                            IconComponent={(props) => (
+                              <KeyboardArrowDownRoundedIcon {...props} />
+                            )}
+                            displayEmpty
+                            placeholder="Select input type"
+                            name="columnType"
+                            value={column?.columnType}
+                            onChange={(e) => onColumnChangeHandler(e, columnId)}
+                            className="select-dropdown"
+                            MenuProps={MenuProps}
+                          >
+                            <MenuItem disabled value="">
+                              Select input type
+                            </MenuItem>
+                            {inputTypeOptions &&
+                              inputTypeOptions.map((option) => (
+                                <MenuItem key={option?._id} value={option?._id}>
+                                  {option?.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="emailid">Response Validator</label>
+                        <div className="select-field">
+                          <Select
+                            IconComponent={(props) => (
+                              <KeyboardArrowDownRoundedIcon {...props} />
+                            )}
+                            displayEmpty
+                            name="validation"
+                            value={column?.validation}
+                            onChange={(e) => onColumnChangeHandler(e, columnId)}
+                            className="select-dropdown"
+                            MenuProps={MenuProps}
+                          >
+                            <MenuItem disabled value="">
+                              Select Validator
+                            </MenuItem>
+                            {validationOptions &&
+                              validationOptions.map((option) => (
+                                <MenuItem key={option?._id} value={option?._id}>
+                                  {option?.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="que-col-delete delete-iconblk">
+                        <Tooltip title="Delete column" placement="bottom">
+                          <img
+                            style={{ cursor: "pointer" }}
+                            onClick={(e) => onDeleteIconClickHandler(e, columnId)}
+                            src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
+                            alt=""
+                          />
+                        </Tooltip>
+                      </div>
                   </div>
-                </div>
-                <div className="">
-                  <label htmlFor="emailid">Response Validator</label>
-                  <div className="select-field">
-                    <Select
-                      IconComponent={(props) => (
-                        <KeyboardArrowDownRoundedIcon {...props} />
-                      )}
-                      displayEmpty
-                      name="validation"
-                      value={column?.validation}
-                      onChange={(e) => onColumnChangeHandler(e, columnId)}
-                      className="select-dropdown"
-                      MenuProps={MenuProps}
-                    >
-                      <MenuItem disabled value="">
-                        Select Validator
-                      </MenuItem>
-                      {validationOptions &&
-                        validationOptions.map((option) => (
-                          <MenuItem key={option?._id} value={option?._id}>
-                            {option?.name}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </div>
+
+                  
                 </div>
               </div>
+              
             </div>
           )
         )}
-      <div className="add-row-btnblk" onClick={onAddColumnClickHandler}>
+      <div className="add-row-btnblk add-col-btn" onClick={onAddColumnClickHandler}>
         <span className="addmore-icon">
           <i className="fa fa-plus"></i>
         </span>{" "}
@@ -199,7 +207,7 @@ const TableQuestions = ({ sectionIndex, questionnaire, setQuestionnaire }) => {
         setQuestionnaire={setQuestionnaire}
         sectionIndex={sectionIndex}
       />
-    </>
+    </div>
   );
 };
 

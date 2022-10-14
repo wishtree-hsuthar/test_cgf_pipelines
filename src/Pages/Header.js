@@ -338,7 +338,7 @@ const Header = () => {
                             </div>
                             <div className="header-right">
                                 <Box>
-                                    <Tooltip title="Open settings">
+                                    {/* <Tooltip title="Open settings"> */}
                                         <div className="user-blk flex-between">
                                             <div className="user-img">
                                                 <span className="user-name-txt">
@@ -374,7 +374,7 @@ const Header = () => {
                                                 </span>
                                             </div>
                                         </div>
-                                    </Tooltip>
+                                    {/* </Tooltip> */}
                                     <Menu
                                         sx={{ mt: "35px", mr: "35px" }}
                                         id="menu-appbar"

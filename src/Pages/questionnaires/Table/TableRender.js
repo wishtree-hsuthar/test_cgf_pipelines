@@ -55,19 +55,29 @@ const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex }) => {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell width={80}></TableCell>
+                    <TableCell width={75}></TableCell>
                     {questionnaire &&
                       questionnaire?.sections[sectionIndex]?.columnValues?.map(
                         (column, columnId) => (
                           <TableCell key={column?.uuid}>
                             <div className="que-table-column-info">
-                              <div className="que-column-ttlblk flex-between">
-                                <div
+                              <div className="que-column-ttlblk">
+                                <div className="form-group">
+                                    <TextField
+                                      className="input-field column-input-field"
+                                      id="outlined-basic"
+                                      variant="outlined"
+                                      name="title"
+                                      value={column?.title}
+                                      // placeholder="Give column title"
+                                    />
+                                </div>
+                                {/* <div
                                   className="que-table-col-ttl"
                                   contentEditable="true"
                                 >
                                   {column?.title}
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                           </TableCell>

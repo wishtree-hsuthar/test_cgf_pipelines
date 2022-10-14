@@ -458,9 +458,18 @@ const SectionContent = ({
         <button
           type="submit"
           onClick={handleSubmitSection}
-          className="primary-button add-button"
+          className="outlined-button add-button mr-10"
+          
         >
           Save
+        </button>
+        <button
+          type="submit"
+          className="primary-button add-button"
+          // onClick={onCancelClickHandler}
+          
+        >
+          Publish
         </button>
       </div>
     </div>
