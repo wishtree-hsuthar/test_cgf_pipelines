@@ -32,6 +32,8 @@ const SectionContent = ({
   const navigate = useNavigate();
   // state to handle question level erros
   const [err, setErr] = useState({ questionTitle: "", option: "" });
+  // state to handle errors in table layout
+  const [tableErr, setTableErr] = useState("")
   const ITEM_HEIGHT = 22;
 
   const MenuProps = {
@@ -97,8 +99,25 @@ const SectionContent = ({
     setOpenDialog(false);
   };
 
+  const validateTableQuestions = (countError) => {
+    questionnaire?.sections[index]?.columnValues.forEach((column,columnIdx) => {
+      if(column?.title === ""){
+         setTableErr("Error hai")
+         countError++
+      }
+      if(column?.columnType === "prefiled"){
+            questionnaire?.sections[index]?.rowValues?.forEach((row,rowId) => {
+              if(row?.cells[columnIdx]?.value) return
+              countError++
+            })
+      }
+
+    })
+  }
+
   const validateSection = () => {
     let countError = 0;
+    questionnaire?.sections[index]?.layout === "table" && validateTableQuestions(countError)
     //Rajkumar's save section
     let tempError = {
       questionTitle: "",
@@ -162,7 +181,7 @@ const SectionContent = ({
         {
           uuid: initialId,
           title: "",
-          columnType: "",
+          columnType: "textbox",
           options: ["", ""],
           validation: "",
         },
@@ -445,6 +464,8 @@ const SectionContent = ({
           sectionIndex={index}
           questionnaire={questionnaire}
           setQuestionnaire={setQuestionnaire}
+          tableErr={tableErr}
+          setTableErr={setTableErr}
         />
       )}
       <div className="form-btn flex-between add-members-btn que-page-btn">

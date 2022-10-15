@@ -12,7 +12,7 @@ import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import TableLayoutCellComponent from "./TableLayoutCellComponent.js";
 
-const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex }) => {
+const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex, tableErr, setTableErr }) => {
   // on Add Row click handler
   const onAddRowClickHandler = () => {
     let tempQuestionnaire = { ...questionnaire };
@@ -64,7 +64,7 @@ const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex }) => {
                               <div className="que-column-ttlblk flex-between">
                                 <div
                                   className="que-table-col-ttl"
-                                  contentEditable="true"
+                                  // contentEditable="true"
                                 >
                                   {column?.title}
                                 </div>
@@ -102,6 +102,8 @@ const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex }) => {
                                 questionnaire={questionnaire}
                                 setQuestionnaire={setQuestionnaire}
                                 sectionIndex={sectionIndex}
+                                tableErr={tableErr}
+                                setTableErr={setTableErr}
                                 cellId={cellId}
                                 rowId={rowId}
                                 cell={cell}
@@ -127,11 +129,11 @@ const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex }) => {
             </TableContainer>
           </Paper>
         </div>
-        <div className="add-row-btnblk" onClick={onAddRowClickHandler}>
-          <span className="addmore-icon">
+        <div className="add-row-btnblk">
+          <span className="addmore-icon"  onClick={onAddRowClickHandler}>
             <i className="fa fa-plus"></i>
           </span>{" "}
-          Add Row
+          <span onClick={onAddRowClickHandler}>Add Row</span>
         </div>
       </div>
     </div>

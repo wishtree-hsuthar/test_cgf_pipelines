@@ -8,6 +8,8 @@ const TableLayoutCellComponent = ({
   questionnaire,
   setQuestionnaire,
   sectionIndex,
+  tableErr,
+  setTableErr,
   rowId,
   cellId,
   cell,
@@ -28,8 +30,12 @@ const TableLayoutCellComponent = ({
     <>
       {columnFieldType && columnFieldType === "prefilled" && (
         <TextField
+        className={`input-field ${
+          !cell?.value && tableErr && "input-error"
+        }`}
           name="value"
           value={cell?.value}
+          helperText={!cell?.value && tableErr ? "Enter prefiled" : " "}
           onChange={(e) => onCellValueChangeHandler(e, rowId, cellId)}
         />
       )}

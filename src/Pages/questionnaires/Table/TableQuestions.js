@@ -46,7 +46,13 @@ const validationOptions = [
   },
 ];
 
-const TableQuestions = ({ sectionIndex, questionnaire, setQuestionnaire }) => {
+const TableQuestions = ({
+  sectionIndex,
+  questionnaire,
+  setQuestionnaire,
+  tableErr,
+  setTableErr,
+}) => {
   const onColumnChangeHandler = (event, columnId) => {
     console.log("Event: ", event.target.name, "columnId", columnId);
     const { name, value } = event.target;
@@ -65,7 +71,7 @@ const TableQuestions = ({ sectionIndex, questionnaire, setQuestionnaire }) => {
     tempQuestionnaire?.sections[sectionIndex]?.columnValues?.push({
       uuid: initialId,
       title: "",
-      columnType: "",
+      columnType: "textbox",
       options: ["", ""],
       validation: "",
     });
@@ -120,11 +126,14 @@ const TableQuestions = ({ sectionIndex, questionnaire, setQuestionnaire }) => {
                 {/* <div className="form-group"> */}
                 <label htmlFor="emailid">Column Title</label>
                 <TextField
-                  className="input-field"
+                  className={`input-field ${
+                    !column?.title && tableErr && "input-error"
+                  }`}
                   id="outlined-basic"
                   variant="outlined"
                   name="title"
                   value={column?.title}
+                  helperText={!column?.title && tableErr ? "Enter column" : " "}
                   onChange={(e) => onColumnChangeHandler(e, columnId)}
                   placeholder="Enter column title"
                 />
@@ -146,9 +155,6 @@ const TableQuestions = ({ sectionIndex, questionnaire, setQuestionnaire }) => {
                       className="select-dropdown"
                       MenuProps={MenuProps}
                     >
-                      <MenuItem disabled value="">
-                        Select input type
-                      </MenuItem>
                       {inputTypeOptions &&
                         inputTypeOptions.map((option) => (
                           <MenuItem key={option?._id} value={option?._id}>
@@ -198,6 +204,8 @@ const TableQuestions = ({ sectionIndex, questionnaire, setQuestionnaire }) => {
         questionnaire={questionnaire}
         setQuestionnaire={setQuestionnaire}
         sectionIndex={sectionIndex}
+        tableErr={tableErr}
+        setTableErr={setTableErr}
       />
     </>
   );
