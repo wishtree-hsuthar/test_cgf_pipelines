@@ -29,7 +29,12 @@ const MenuProps = {
     },
 };
 
-const PreviewQuestions = ({ question }) => {
+const FillAssessmentQuestion = ({
+    assessmentQuestionnaire,
+    setAssessmentQuestionnaire,
+    question,
+    sectionUUID,
+}) => {
     const [datevalue, setDateValue] = React.useState(null);
 
     let questionLabel = question.questionTitle;
@@ -38,6 +43,25 @@ const PreviewQuestions = ({ question }) => {
         isRequired: question?.isRequired,
         validation: question?.validation,
     };
+
+    console.log("sectionUUID", sectionUUID);
+    let questionUUID = question?.uuid;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        let tempAssessment = { ...assessmentQuestionnaire };
+        // tempAssessment["sectionUUID"]['name'] = value;
+
+        tempAssessment = {
+            [sectionUUID]: {
+                ...assessmentQuestionnaire[sectionUUID],
+                [name]: value,
+            },
+        };
+        setAssessmentQuestionnaire({
+            ...tempAssessment,
+        });
+    };
+    console.log("assessment answer", assessmentQuestionnaire);
     // const helperText = () => {
     //     if (errorObject.isRequired) {
     //         return assessmentUUID.sectionUUID.questionUUID === ""
@@ -71,12 +95,18 @@ const PreviewQuestions = ({ question }) => {
             <TextField
                 placeholder={`Enter ${question.questionTitle}`}
                 // helperText={helperText}
+                value={["sectionUUID"]["questionUUID"]}
+                name={questionUUID}
+                onChange={handleChange}
                 className="input-field"
             />
         ) : question.inputType === "textarea" ? (
             <TextField
                 placeholder={`Enter ${question.questionTitle}`}
                 multiline={5}
+                value={["sectionUUID"]["questionUUID"]}
+                name={questionUUID}
+                onChange={handleChange}
                 className="input-textarea"
             />
         ) : question.inputType === "dropdown" ? (
@@ -86,12 +116,15 @@ const PreviewQuestions = ({ question }) => {
                         IconComponent={(props) => (
                             <KeyboardArrowDownRoundedIcon {...props} />
                         )}
-                        value={`Select ${question.questionTitle}`}
+                        name={questionUUID}
+                        // value={`Select ${question.questionTitle}`}
+                        value={["sectionUUID"]["questionUUID"]}
                         MenuProps={MenuProps}
+                        onChange={handleChange}
                     >
-                        <MenuItem value={`Select ${question.questionTitle}`}>
+                        {/* <MenuItem value={`Select ${question.questionTitle}`}>
                             {`Select ${question.questionTitle}`}
-                        </MenuItem>
+                        </MenuItem> */}
                         {question.options.map((option) => (
                             <MenuItem key={option} value={option}>
                                 {option}
@@ -105,8 +138,10 @@ const PreviewQuestions = ({ question }) => {
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
                     defaultValue="Active"
-                    name="radio-buttons-group"
+                    // name="radio-buttons-group"
                     className="radio-btn radio-btn-vertical"
+                    name={questionUUID}
+                    onChange={handleChange}
                 >
                     {question.options.map((option) => (
                         <FormControlLabel
@@ -161,4 +196,4 @@ const PreviewQuestions = ({ question }) => {
     );
 };
 
-export default PreviewQuestions;
+export default FillAssessmentQuestion;

@@ -176,15 +176,18 @@ const AddAssessment = () => {
     const submitAssessments = async (data) => {
         console.log("data from on submit", data);
 
-        let setUTCHoursForDueDate = new Date(data.dueDate);
-        // let ISOdate = new Date(setUTCHoursForDueDate);
+        let someDate = new Date(data.dueDate);
+        let setUTCHoursForDueDate = new Date(
+            someDate.setDate(someDate.getDate() + 1)
+        );
+        let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
         console.log(
             "data after converting to ISOstring",
-            new Date(setUTCHoursForDueDate).toISOString()
+            new Date(ISOdate).toISOString()
         );
         data = {
             ...data,
-            dueDate: new Date(setUTCHoursForDueDate).toISOString(),
+            dueDate: setUTCHoursForDueDate,
         };
 
         try {

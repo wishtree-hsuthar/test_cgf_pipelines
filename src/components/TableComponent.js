@@ -120,6 +120,7 @@ export default function TableComponent({
     isQuestionnare = false,
     onClickEditAssesmentFunction,
     onClickAssignAssesmentFunction,
+    onClickFillAssessmentFunction,
 }) {
     const handleRequestSort = (_event, property) => {
         const isAsc = orderBy === property && order === "asc";
@@ -181,6 +182,9 @@ export default function TableComponent({
     };
     const onClickAssignAssessmentHandler = (uuid) => {
         onClickAssignAssesmentFunction(uuid);
+    };
+    const onClickFillAssessmentHandler = (uuid) => {
+        onClickFillAssessmentFunction(uuid);
     };
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
@@ -486,8 +490,8 @@ export default function TableComponent({
                                                                 <Tooltip title="Fill Assessment">
                                                                     <PostAddIcon
                                                                         onClick={() =>
-                                                                            console.log(
-                                                                                row._id
+                                                                            onClickFillAssessmentHandler(
+                                                                                row.uuid
                                                                             )
                                                                         }
                                                                     />

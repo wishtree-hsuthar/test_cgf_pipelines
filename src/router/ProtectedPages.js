@@ -31,6 +31,7 @@ import AddAssessment from "../AssessmentModule/AddAssessment";
 import AssessmentList from "../AssessmentModule/AssessmentList";
 import EditAssessment from "../AssessmentModule/EditAssessment";
 import AssignAssessmentToOperationMember from "../AssessmentModule/AssignAssessmentToOperationMember";
+import FillAssessment from "../AssessmentModule/FillAssessment";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -185,6 +186,10 @@ const ProtectedPages = () => {
                 <Route
                     path="/assessment-list/assign-assessment/:id"
                     element={<AssignAssessmentToOperationMember />}
+                />
+                <Route
+                    path="/assessment-list/fill-assessment/:id"
+                    element={<FillAssessment />}
                 />
                 <Route path="/preview" element={<PreviewDemo />} />
                 <Route path="*" element={<FallBackUI />} />

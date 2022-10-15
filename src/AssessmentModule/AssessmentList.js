@@ -121,6 +121,10 @@ const AssessmentList = () => {
         console.log("uuid", uuid);
         return navigate(`/assessment-list/assign-assessment/${uuid}`);
     };
+    const onClickFillAssessmentHandler = (uuid) => {
+        console.log("uuid", uuid);
+        return navigate(`/assessment-list/fill-assessment/${uuid}`);
+    };
 
     const generateUrl = () => {
         console.log("Search", search);
@@ -327,6 +331,9 @@ const AssessmentList = () => {
                                         setCheckBoxes={false}
                                         onClickAssignAssesmentFunction={
                                             onClickAssignAssessmentHandler
+                                        }
+                                        onClickFillAssessmentFunction={
+                                            onClickFillAssessmentHandler
                                         }
                                         // onRowClick={
                                         //     SUPER_ADMIN
