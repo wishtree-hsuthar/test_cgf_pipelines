@@ -33,7 +33,7 @@ const SectionContent = ({
   // state to handle question level erros
   const [err, setErr] = useState({ questionTitle: "", option: "" });
   // state to handle errors in table layout
-  const [tableErr, setTableErr] = useState("")
+  const [tableErr, setTableErr] = useState("");
   const ITEM_HEIGHT = 22;
 
   const MenuProps = {
@@ -100,24 +100,33 @@ const SectionContent = ({
   };
 
   const validateTableQuestions = (countError) => {
-    questionnaire?.sections[index]?.columnValues.forEach((column,columnIdx) => {
-      if(column?.title === ""){
-         setTableErr("Error hai")
-         countError++
+    console.log("inside table question validator");
+    questionnaire?.sections[index]?.columnValues.forEach(
+      (column, columnIdx) => {
+        if (column?.title === "") {
+          setTableErr("Error hai");
+          countError++;
+        }
+        if (column?.columnType === "prefilled") {
+          console.log("inside prefiled")
+          questionnaire?.sections[index]?.rowValues?.forEach((row, rowId) => {
+            if (row?.cells[columnIdx]?.value) return;
+            setTableErr("Error hai")
+            countError++;
+          });
+        }
       }
-      if(column?.columnType === "prefiled"){
-            questionnaire?.sections[index]?.rowValues?.forEach((row,rowId) => {
-              if(row?.cells[columnIdx]?.value) return
-              countError++
-            })
-      }
-
-    })
-  }
+    );
+    console.log("count Error in table validator: ", countError);
+    return countError
+  };
 
   const validateSection = () => {
     let countError = 0;
-    questionnaire?.sections[index]?.layout === "table" && validateTableQuestions(countError)
+    if (questionnaire?.sections[index]?.layout === "table") {
+      countError = validateTableQuestions(countError);
+    }
+    console.log("count Error", countError);
     //Rajkumar's save section
     let tempError = {
       questionTitle: "",

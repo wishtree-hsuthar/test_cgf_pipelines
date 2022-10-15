@@ -22,7 +22,6 @@ const TableLayoutCellComponent = ({
     ] = value;
     setQuestionnaire(tempQuestionnaire);
   };
-  console.log("Questionnaire: ", questionnaire);
   const columnFieldType =
     questionnaire?.sections[sectionIndex]?.columnValues[cellId]?.columnType;
 
@@ -35,12 +34,12 @@ const TableLayoutCellComponent = ({
         }`}
           name="value"
           value={cell?.value}
-          helperText={!cell?.value && tableErr ? "Enter prefiled" : " "}
+          helperText={(!cell?.value && tableErr) ? "Enter prefiled" : " "}
           onChange={(e) => onCellValueChangeHandler(e, rowId, cellId)}
         />
       )}
       {columnFieldType && columnFieldType === "textbox" && (
-        <TextField disabled />
+        <TextField helperText=" " disabled />
       )}
       {columnFieldType && columnFieldType === "date" && (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -52,7 +51,7 @@ const TableLayoutCellComponent = ({
               OpenPickerIcon: CalendarMonthOutlinedIcon,
             }}
             onChange={() => {}}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField {...params} helperText=" " />}
           />
         </LocalizationProvider>
       )}
