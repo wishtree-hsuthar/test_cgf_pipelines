@@ -1,13 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     TextField,
     Select,
     MenuItem,
-    FormGroup,
-    Box,
-    Modal,
-    Fade,
-    Backdrop,
     Checkbox,
     Radio,
     FormControlLabel,
@@ -19,6 +14,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+
+export const AlphaRegEx = /^[a-z]+$/i;
+export const NumericRegEx = /^[0-9]+$/i;
+export const AlphaNumRegEx = /^[a-z0-9]+$/i;
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -33,9 +32,19 @@ const FillAssessmentQuestion = ({
     assessmentQuestionnaire,
     setAssessmentQuestionnaire,
     question,
+    error,
+    setError,
     sectionUUID,
+    // selectedValues,
+    // setSelectedValues,
+    setErrorQuestion,
+    errorQuestion,
+    errorQuestionUUID,
+    setErrorQuestionUUID,
 }) => {
     const [datevalue, setDateValue] = React.useState(null);
+    // const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
+    // const [selectedValues, setSelectedValues] = React.useState([]);
 
     let questionLabel = question.questionTitle;
 
@@ -44,49 +53,133 @@ const FillAssessmentQuestion = ({
         validation: question?.validation,
     };
 
+    const checkNumericValue = (value) => {
+        if (NumericRegEx.test(value)) {
+            setErrorQuestion("");
+            setErrorQuestionUUID();
+            return true;
+        } else {
+            setErrorQuestionUUID(questionUUID);
+            setErrorQuestion("Enter numeric value");
+            return false;
+        }
+    };
+    const checkCharacterValue = (value) => {
+        if (AlphaNumRegEx.test(value)) {
+            setErrorQuestion("");
+            setErrorQuestionUUID();
+            return true;
+        } else {
+            setErrorQuestionUUID(questionUUID);
+            setErrorQuestion("Enter character value");
+            return false;
+        }
+    };
+
     console.log("sectionUUID", sectionUUID);
     let questionUUID = question?.uuid;
     const handleChange = (e) => {
         const { name, value } = e.target;
         let tempAssessment = { ...assessmentQuestionnaire };
-        // tempAssessment["sectionUUID"]['name'] = value;
+        console.log("question uuid: ", questionUUID);
 
+        if (errorObject.validation === "numeric") {
+            checkNumericValue(value);
+        }
+        if (errorObject.validation === "character") {
+            checkCharacterValue(value);
+        }
         tempAssessment = {
+            ...assessmentQuestionnaire,
             [sectionUUID]: {
                 ...assessmentQuestionnaire[sectionUUID],
                 [name]: value,
+            },
+        };
+
+        setAssessmentQuestionnaire({
+            ...tempAssessment,
+        });
+    };
+    const handleDate = (name, newValue) => {
+        let tempAssessment = { ...assessmentQuestionnaire };
+
+        tempAssessment = {
+            ...assessmentQuestionnaire,
+            [sectionUUID]: {
+                ...assessmentQuestionnaire[sectionUUID],
+                [name]: newValue,
             },
         };
         setAssessmentQuestionnaire({
             ...tempAssessment,
         });
     };
-    console.log("assessment answer", assessmentQuestionnaire);
-    // const helperText = () => {
-    //     if (errorObject.isRequired) {
-    //         return assessmentUUID.sectionUUID.questionUUID === ""
-    //             ? setError("required field is empty")
-    //             : setError("  ");
-    //     }
-    //     if (errorObject.validation !== "") {
+    const handleChecked = (e) => {
+        const { name, value, checked } = e.target;
+        let tempAssessment = { ...assessmentQuestionnaire };
+        console.log("question uuid: ", questionUUID);
+        console.log(`VALUE=${value} is ${checked}`);
+        let values =
+            assessmentQuestionnaire[sectionUUID] &&
+            assessmentQuestionnaire[sectionUUID][questionUUID]
+                ? assessmentQuestionnaire[sectionUUID][questionUUID]
+                : [];
+        if (checked) {
+            values.push(value);
+        } else {
+            values = values.filter((v) => v !== value);
+        }
 
-    //         if ( errorObject.validation === "character") {
-    //             return assessmentUUID.sectionUUID.questionUUID.isalnum()
-    //                 ? setError(" ")
-    //                 : setError("required field should be numeric");
-    //         }
-    //         if (errorObject.validation === "numeric") {
-    //             return assessmentUUID.sectionUUID.questionUUID.isalnum()
-    //                 ? setError(" ")
-    //                 : setError("required field should be numeric");
-    //         }
-    //         if (errorObject.validation === "alphabet") {
-    //             return assessmentUUID.sectionUUID.questionUUID.isalpha()
-    //                 ? setError(" ")
-    //                 : setError("required field should be numeric");
-    //         }
-    //     }
-    // };
+        tempAssessment = {
+            ...assessmentQuestionnaire,
+            [sectionUUID]: {
+                ...assessmentQuestionnaire[sectionUUID],
+                [name]:
+                    assessmentQuestionnaire[sectionUUID] &&
+                    assessmentQuestionnaire[sectionUUID][questionUUID]
+                        ? [...values]
+                        : [value],
+            },
+        };
+        setAssessmentQuestionnaire({
+            ...tempAssessment,
+        });
+    };
+    // console.log("values ====", selectedValues);
+
+    console.log("assessment answer", assessmentQuestionnaire);
+    // console.log(
+    //     "assessment answer of selected question",
+
+    //     assessmentQuestionnaire?.sectionUUID?.questionUUID
+    // );
+    const helperText = () => {
+        // if (errorObject.isRequired) {
+        //     return assessmentQuestionnaire.sectionUUID.questionUUID === ""
+        //         ? setError("required field is empty")
+        //         : setError("  ");
+        // }
+        if (errorObject.validation !== "") {
+            if (errorObject.validation === "character") {
+                return assessmentQuestionnaire[sectionUUID] &&
+                    assessmentQuestionnaire[sectionUUID][questionUUID].isalnum()
+                    ? " "
+                    : "required field should be character";
+            }
+            if (errorObject.validation === "numeric") {
+                return assessmentQuestionnaire[sectionUUID] &&
+                    assessmentQuestionnaire[sectionUUID][questionUUID].isalnum()
+                    ? " "
+                    : "required field should be numeric";
+            }
+            if (errorObject.validation === "alpanumeric") {
+                return assessmentQuestionnaire.sectionUUID.questionUUID.isalpha()
+                    ? " "
+                    : "required field should be numeric";
+            }
+        }
+    };
 
     console.log("title preview question", questionLabel);
     console.log("title preview question", question.questionTitle);
@@ -95,19 +188,37 @@ const FillAssessmentQuestion = ({
             <TextField
                 placeholder={`Enter ${question.questionTitle}`}
                 // helperText={helperText}
-                value={["sectionUUID"]["questionUUID"]}
+                value={
+                    assessmentQuestionnaire[sectionUUID] &&
+                    assessmentQuestionnaire[sectionUUID][questionUUID]
+                        ? assessmentQuestionnaire[sectionUUID][questionUUID]
+                        : ""
+                }
+                // helperText={help}
+                // value={assessmentQuestionnaire?.sectionUUID?.questionUUID}
                 name={questionUUID}
                 onChange={handleChange}
                 className="input-field"
+                helperText={errorQuestionUUID === questionUUID && errorQuestion}
             />
         ) : question.inputType === "textarea" ? (
             <TextField
                 placeholder={`Enter ${question.questionTitle}`}
                 multiline={5}
-                value={["sectionUUID"]["questionUUID"]}
+                value={
+                    assessmentQuestionnaire[sectionUUID] &&
+                    assessmentQuestionnaire[sectionUUID][questionUUID]
+                        ? assessmentQuestionnaire[sectionUUID][questionUUID]
+                        : ""
+                }
                 name={questionUUID}
                 onChange={handleChange}
                 className="input-textarea"
+                helperText={
+                    errorQuestion === questionUUID
+                        ? `${question.questionTitle} required.`
+                        : ""
+                }
             />
         ) : question.inputType === "dropdown" ? (
             <div className="form-group">
@@ -118,7 +229,14 @@ const FillAssessmentQuestion = ({
                         )}
                         name={questionUUID}
                         // value={`Select ${question.questionTitle}`}
-                        value={["sectionUUID"]["questionUUID"]}
+                        value={
+                            assessmentQuestionnaire[sectionUUID] &&
+                            assessmentQuestionnaire[sectionUUID][questionUUID]
+                                ? assessmentQuestionnaire[sectionUUID][
+                                      questionUUID
+                                  ]
+                                : ""
+                        }
                         MenuProps={MenuProps}
                         onChange={handleChange}
                     >
@@ -137,16 +255,35 @@ const FillAssessmentQuestion = ({
             <div className="radio-btn-field">
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="Active"
+                    // defaultValue="Active"
                     // name="radio-buttons-group"
                     className="radio-btn radio-btn-vertical"
+                    value={
+                        assessmentQuestionnaire[sectionUUID] &&
+                        assessmentQuestionnaire[sectionUUID][questionUUID]
+                            ? assessmentQuestionnaire[sectionUUID][questionUUID]
+                            : ""
+                    }
                     name={questionUUID}
                     onChange={handleChange}
                 >
                     {question.options.map((option) => (
                         <FormControlLabel
                             value={option}
-                            control={<Radio />}
+                            control={
+                                <Radio
+                                // checked={
+                                //     assessmentQuestionnaire &&
+                                //     assessmentQuestionnaire[sectionUUID] &&
+                                //     assessmentQuestionnaire[sectionUUID][
+                                //         questionUUID
+                                //     ]
+                                //         ? true
+                                //         : false
+                                // }
+                                // value={option}
+                                />
+                            }
                             label={option}
                         />
                     ))}
@@ -154,13 +291,31 @@ const FillAssessmentQuestion = ({
             </div>
         ) : question.inputType === "checkbox" ? (
             <div className="checkbox-with-labelblk">
+                {/* <FormGroup> */}
                 {question.options.map((option) => (
-                    <FormControlLabel
-                        className="checkbox-with-label"
-                        control={<Checkbox />}
-                        label={option}
-                    />
+                    <>
+                        <FormControlLabel
+                            type={"checkbox"}
+                            name={questionUUID}
+                            className="checkbox-with-label"
+                            value={option}
+                            control={<Checkbox />}
+                            checked={
+                                assessmentQuestionnaire[sectionUUID] &&
+                                assessmentQuestionnaire[sectionUUID][
+                                    questionUUID
+                                ]
+                                    ? assessmentQuestionnaire[sectionUUID][
+                                          questionUUID
+                                      ].includes(option)
+                                    : false
+                            }
+                            onChange={handleChecked}
+                        />
+                        <labe>{option}</labe>
+                    </>
                 ))}
+                {/* </FormGroup> */}
             </div>
         ) : question.inputType === "date" ? (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -169,10 +324,13 @@ const FillAssessmentQuestion = ({
                     components={{
                         OpenPickerIcon: CalendarMonthOutlinedIcon,
                     }}
-                    datevalue={datevalue}
-                    onChange={(newValue) => {
-                        setDateValue(newValue);
-                    }}
+                    value={
+                        assessmentQuestionnaire[sectionUUID] &&
+                        assessmentQuestionnaire[sectionUUID][questionUUID]
+                            ? assessmentQuestionnaire[sectionUUID][questionUUID]
+                            : ""
+                    }
+                    onChange={(newValue) => handleDate(questionUUID, newValue)}
                     renderInput={(params) => <TextField {...params} />}
                 />
             </LocalizationProvider>

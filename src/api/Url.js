@@ -40,3 +40,4 @@ export const ADD_QUESTIONNAIRE = `${REACT_APP_API_ENDPOINT}questionnaires`;
 // assessments
 export const FETCH_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const UPDATE_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
+export const SUBMIT_ASSESSMENT_AS_DRAFT = `${REACT_APP_API_ENDPOINT}assessments/`;

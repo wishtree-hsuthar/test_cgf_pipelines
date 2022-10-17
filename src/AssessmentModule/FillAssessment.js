@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import { Tabs, Tab, Tooltip } from "@mui/material";
 
-import PreviewSection from "../Pages/PreviewSection";
+import PreviewSection from "../Pages/questionnaires/Preview";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../api/axios";
 import FillAssesmentSection from "./FillAssessmentSection";
@@ -63,6 +63,9 @@ function FillAssessment() {
     const [assessment, setAssessments] = useState({});
     const [questionnaire, setQuestionnaire] = useState({});
     const [assessmentQuestionnaire, setAssessmentQuestionnaire] = useState({});
+    const [errorQuestion, setErrorQuestion] = useState("");
+    const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
+
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -91,6 +94,10 @@ function FillAssessment() {
                 );
                 console.log("response from fetch assessment", response);
                 isMounted && setAssessments({ ...response.data });
+
+                setAssessmentQuestionnaire({
+                    ...response.data.answers.assessmentQuestionnaire,
+                });
                 fetchQuestionnaire(response?.data?.questionnaireId);
             } catch (error) {
                 console.log("error from fetch assessment", error);
@@ -187,6 +194,12 @@ function FillAssessment() {
                                             setAssessmentQuestionnaire
                                         }
                                         section={section}
+                                        errorQuestion={errorQuestion}
+                                        setErrorQuestion={setErrorQuestion}
+                                        errorQuestionUUID={errorQuestionUUID}
+                                        setErrorQuestionUUID={
+                                            setErrorQuestionUUID
+                                        }
                                     />
                                 </TabPanel>
                             ))}

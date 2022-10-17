@@ -1,15 +1,87 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TableAssessment from "./TableAssesment";
 import FillAssessmentQuestion from "./FillAssessmentQuestions";
+import { privateAxios } from "../api/axios";
+import { SUBMIT_ASSESSMENT_AS_DRAFT } from "../api/Url";
+import useCallbackState from "../utils/useCallBackState";
+import Toaster from "../components/Toaster";
 
 function FillAssesmentSection({
+    // questionnaire,
+    // setQuestionnaire,
+    // uuid,
+    // setValue,
+    // index,
     section,
     setAssessmentQuestionnaire,
     assessmentQuestionnaire,
+    errorQuestion,
+    setErrorQuestion,
+    errorQuestionUUID,
+    setErrorQuestionUUID,
 }) {
+    const [selectedValues, setSelectedValues] = React.useState([]);
+
     const navigate = useNavigate();
     const params = useParams();
+
+    //Toaster Message setter
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
+
+    const myRef = useRef();
+
+    const validateAssessment = async () => {
+        Object.entries(assessmentQuestionnaire).forEach(([key, value]) =>
+            Object.entries(value).forEach(([key, value]) => {
+                if (value.length === 0) {
+                    setErrorQuestion(key);
+                    return false;
+                }
+            })
+        );
+        return true;
+    };
+
+    const saveAssessmentAsDraft = async () => {
+        try {
+            const response =
+                validateAssessment() &&
+                (await privateAxios.post(
+                    SUBMIT_ASSESSMENT_AS_DRAFT + params.id,
+                    {
+                        assessmentQuestionnaire,
+                    }
+                ));
+            console.log("Assessment is saved as draft", response);
+            setToasterDetails(
+                {
+                    titleMessage: "Success",
+                    descriptionMessage: response?.data?.message,
+                    messageType: "success",
+                },
+                () => myRef.current()
+            );
+        } catch (error) {
+            console.log("error from save assessment as draft", error);
+            setToasterDetails(
+                {
+                    titleMessage: "Error",
+                    descriptionMessage:
+                        error?.response?.data?.message &&
+                        typeof error.response.data.message === "string"
+                            ? error.response.data.message
+                            : "Something Went Wrong!",
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
+        }
+    };
 
     const [answers, setAnswers] = useState({
         [section?.uuid]: {},
@@ -57,6 +129,12 @@ function FillAssesmentSection({
 
     return (
         <>
+            <Toaster
+                myRef={myRef}
+                titleMessage={toasterDetails.titleMessage}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                messageType={toasterDetails.messageType}
+            />
             <div className="preview-card-wrapper">
                 <div className="preview-sect-ttl-wrap">
                     <div class="preview-sect-card-ttl-blk">
@@ -80,6 +158,10 @@ function FillAssesmentSection({
                                 }
                                 sectionUUID={section?.uuid}
                                 question={question}
+                                errorQuestion={errorQuestion}
+                                setErrorQuestion={setErrorQuestion}
+                                errorQuestionUUID={errorQuestionUUID}
+                                setErrorQuestionUUID={setErrorQuestionUUID}
                             />
                         ))
                     ) : (
@@ -96,11 +178,7 @@ function FillAssesmentSection({
                 <div className="form-btn flex-between add-members-btn mt-30">
                     <button
                         type="reset"
-                        onClick={() =>
-                            navigate(
-                                `/questionnaires/add-questionnaire/${params.id}`
-                            )
-                        }
+                        onClick={() => navigate(`/assessment-list/`)}
                         className="secondary-button mr-10"
                     >
                         Cancel
@@ -116,7 +194,7 @@ function FillAssesmentSection({
                         }
                         className="primary-button add-button"
                     >
-                        Update
+                        Submit assessment
                     </button>
                 </div>
             </div>
