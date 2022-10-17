@@ -32,6 +32,8 @@ const SectionContent = ({
   const navigate = useNavigate();
   // state to handle question level erros
   const [err, setErr] = useState({ questionTitle: "", option: "" });
+  // state to handle errors in table layout
+  const [tableErr, setTableErr] = useState("");
   const ITEM_HEIGHT = 22;
 
   const MenuProps = {
@@ -97,8 +99,34 @@ const SectionContent = ({
     setOpenDialog(false);
   };
 
+  const validateTableQuestions = (countError) => {
+    console.log("inside table question validator");
+    questionnaire?.sections[index]?.columnValues.forEach(
+      (column, columnIdx) => {
+        if (column?.title === "") {
+          setTableErr("Error hai");
+          countError++;
+        }
+        if (column?.columnType === "prefilled") {
+          console.log("inside prefiled");
+          questionnaire?.sections[index]?.rowValues?.forEach((row, rowId) => {
+            if (row?.cells[columnIdx]?.value) return;
+            setTableErr("Error hai");
+            countError++;
+          });
+        }
+      }
+    );
+    console.log("count Error in table validator: ", countError);
+    return countError;
+  };
+
   const validateSection = () => {
     let countError = 0;
+    if (questionnaire?.sections[index]?.layout === "table") {
+      countError = validateTableQuestions(countError);
+    }
+    console.log("count Error", countError);
     //Rajkumar's save section
     let tempError = {
       questionTitle: "",
@@ -162,12 +190,21 @@ const SectionContent = ({
         {
           uuid: initialId,
           title: "",
-          columnType: "",
+          columnType: "textbox",
           options: ["", ""],
           validation: "",
         },
       ];
       tempQuestionnaire.sections[index].rowValues = [
+        {
+          uuid: uuidv4(),
+          cells: [
+            {
+              columnId: initialId, // UUID of the column
+              value: "",
+            },
+          ],
+        },
         {
           uuid: uuidv4(),
           cells: [
@@ -229,15 +266,6 @@ const SectionContent = ({
         ADD_QUESTIONNAIRE,
         questionnaireObj ? questionnaireObj : questionnaire
       );
-      setToasterDetails(
-        {
-          titleMessage: "Success!",
-          descriptionMessage: "Section details saved successfully!!",
-          messageType: "success",
-        },
-        () => myRef.current()
-      );
-      // console.log("response from save section", response);
       if (response.status === 201) {
         const fetch = async () => {
           try {
@@ -246,6 +274,16 @@ const SectionContent = ({
             );
             // console.log("response from fetch questionnaire", response);
             setQuestionnaire({ ...response.data });
+            setToasterDetails(
+              {
+                titleMessage: "Success!",
+                descriptionMessage: "Section details saved successfully!!",
+                messageType: "success",
+              },
+              () => myRef.current()
+            );
+            setTimeout(() => navigate("/questionnaires"), 3000);
+            // console.log("response from save section", response);
           } catch (error) {
             setErrorToaster(error);
             // console.log("error from fetch questionnaire", error);
@@ -445,6 +483,8 @@ const SectionContent = ({
           sectionIndex={index}
           questionnaire={questionnaire}
           setQuestionnaire={setQuestionnaire}
+          tableErr={tableErr}
+          setTableErr={setTableErr}
         />
       )}
       <div className="form-btn flex-between add-members-btn que-page-btn">
@@ -459,7 +499,6 @@ const SectionContent = ({
           type="submit"
           onClick={handleSubmitSection}
           className="outlined-button add-button mr-10"
-          
         >
           Save
         </button>
@@ -467,7 +506,6 @@ const SectionContent = ({
           type="submit"
           className="primary-button add-button"
           // onClick={onCancelClickHandler}
-          
         >
           Publish
         </button>

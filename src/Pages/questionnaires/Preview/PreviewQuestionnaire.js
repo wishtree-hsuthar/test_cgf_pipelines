@@ -41,8 +41,8 @@ import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined
 import dayjs from "dayjs";
 import PreviewSection from "./PreviewSection";
 import { useNavigate, useParams } from "react-router-dom";
-import { privateAxios } from "../api/axios";
-import "./PreviewDemo.css";
+import { privateAxios } from "../../../api/axios";
+import "../../../Pages/PreviewDemo.css"
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
