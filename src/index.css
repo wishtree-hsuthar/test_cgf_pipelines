@@ -162,10 +162,24 @@ h3 {
     background: #d98c08;
     color: #f4f7fc;
 }
-
-.secondary-button {
+.secondary-button{background: transparent;
+    color: #f7a823;
+    padding: 12px 24px;
+    font-size: 14px;
+    line-height: 14px;
+    height: 40px;
+    /* box-shadow: 0px 2px 3px rgb(0 0 0 / 5%); */
+    border-radius: 3px;
+    text-transform: capitalize;
+    font-family: "Proxima Nova Semibold", serif, sans-serif;
+    border: 1px solid #f7a823;
+    cursor: pointer;}
+.secondary-button:hover {
+    background: rgba(247, 168, 35, 0.1);
+    color: rgba(217, 140, 8, 1);
+}
+/* .secondary-button {
     background: rgba(30, 30, 30, 0.1);
-    /* box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05); */
     color: rgba(30, 30, 30, 0.5);
     padding: 12px 24px;
     font-size: 14px;
@@ -181,7 +195,7 @@ h3 {
 .secondary-button:hover {
     background: rgba(204, 204, 204, 1);
     color: rgba(112, 112, 112, 1);
-}
+} */
 
 @keyframes fadeIn {
     0% {
@@ -833,6 +847,7 @@ input[type=checkbox]:checked:before {
     border: none !important;
     padding: 0 !important;
     outline: none;
+    overflow: auto;
 }
 .popup-ttl {
     font-size: 18px !important;
@@ -1356,7 +1371,7 @@ input:-webkit-autofill:active{
   .que-table-wrap {
     padding: 0 20px 20px;
   }
-  .que-table th{background: rgba(69, 150, 209, 0.1);border-bottom: 1px solid #8E8E8E;padding: 20px 15px;border-right: 1px solid #8E8E8E;font-family: 'ProximaNova-Regular';vertical-align: top;}
+  .que-table th{background: rgba(69, 150, 209, 0.1);border-bottom: 1px solid rgba(142,142,142,0.5);padding: 20px 15px;border-right: 1px solid rgba(142,142,142,0.5);font-family: 'ProximaNova-Regular';vertical-align: top;z-index: 1;position: relative;}
   .que-table th:first-child{background: #fff;border-right: none;}
   .que-table-infoblk{box-shadow: none !important;border-radius: 0 !important;width: 100% !important;padding: 0 0 20px;}
   .que-table-col-ttl{font-size: 14px;color: rgba(30, 30, 30, 1);font-family: 'ProximaNova-Regular';outline: none;width: 195px;}
@@ -1379,8 +1394,8 @@ input:-webkit-autofill:active{
   .que-column-count-txt{font-size: 14px;color: #1E1E1E;font-family: 'ProximaNova-Semibold';}
   .que-column-count .minus-iconblk{width: 12.8px;height: 12.8px;}
   .que-column-count .minus-iconblk i {font-size: 7px;}
-  .que-table td{background: #fff;border-bottom: 1px solid #8E8E8E;border-right: 1px solid #8E8E8E;font-family: 'ProximaNova-Regular';padding: 19px 16px;height: 84px;}
-  .que-table td:first-child{background: rgba(69, 150, 209, 0.1);border-left: 1px solid #8E8E8E;}
+  .que-table td{background: #fff;border-bottom: 1px solid rgba(142,142,142,0.5);border-right: 1px solid rgba(142,142,142,0.5);font-family: 'ProximaNova-Regular';padding: 19px 16px 0;height: 84px;}
+  .que-table td:first-child{background: rgba(69, 150, 209, 0.1);border-left: 1px solid rgba(142,142,142,0.5);}
   .que-column-fieldblk{margin-top: 15px;}
   .que-column-fieldblk .select-field::before{top: 10px;}
   .no-wrap{flex-wrap: nowrap;}
@@ -1455,7 +1470,7 @@ input:-webkit-autofill:active{
   .master-list-label{font-size: 14px;line-height: 14px;color: rgba(30, 30, 30, 0.5);font-family: 'ProximaNova-Regular';margin: 0 0 5px;}
   /* .que-table{padding: 0 0 20px;} */
   
-  .custom-list-sect .form-group{margin-bottom: 20px;}
+  .custom-list-sect .form-group{margin-bottom: 9px;}
   .add-dropdown-btnblk {
     color: #F7A823;
     font-size: 14px;
@@ -1471,7 +1486,7 @@ input:-webkit-autofill:active{
   .mb-20{margin-bottom: 20px;}
   .que-table-wrap{position: relative;}
   .que-table-wrap.active:before{width: 4px;
-    height: 91%;
+    height: 95%;
     background: #F7A823;
     position: absolute;
     left: 0;
@@ -1646,11 +1661,12 @@ input:-webkit-autofill:active{
 .que-table-infoblk tr td:first-child{width: 75px;display: table !important;}
 .que-column-layout-wrap {
     position: relative;
-    margin: 0 0 21px;padding: 0 20px 0;
+    /* margin: 0 0 21px;*/
+    padding: 0 20px 0;
 }
 .que-column-layout-ttlblk{margin: 0 0 20px;}
 /* .que-column-layout-sect{padding: 0 20px 0;} */
-.add-col-btn{margin: 0 0 30px;padding: 0 20px 0;display: inline-block;}
+.add-col-btn{margin: 0 0 20px;padding: 0 20px 0;display: inline-block;}
 
 .column-input-field fieldset{border: none;height: 32px;}
 .column-input-field .MuiInputBase-input{height: auto !important;}
@@ -1674,7 +1690,7 @@ input:-webkit-autofill:active{
 .que-col-form-leftfield .form-group{flex: 0 0 30%;max-width: 30%;}
 .que-column-layout-sect {padding: 20px 0 0;}
 .que-col-form-rightfield{align-items: center;}
-.que-col-delete {margin: 12px 0 0;}
+.que-col-delete {margin: 35px 0 0;}
 .datepicker-blk .Mui-disabled fieldset{background: rgba(30, 30, 30, 0.05) !important;border-color: rgba(30, 30, 30, 0.1) !important;-webkit-text-fill-color: rgba(30, 30, 30, 0.8) !important;}
 .datepicker-blk .Mui-disabled input:disabled{background: none !important;border-color: none !important;-webkit-text-fill-color: none !important;}
 .que-half-sect .datepicker-blk input{background: none !important;box-shadow: none;z-index: 1;}
@@ -1688,4 +1704,23 @@ input:-webkit-autofill:active{
   color: rgba(0, 0, 0, 0.26);
   pointer-events: none;
   cursor: default;
+}
+
+.datepicker-field-error fieldset{border-color: #e53850 !important;}
+.auto-search-blk .MuiInputBase-root {
+    height: 40px;
+    padding: 0 20px 0 0 !important;
+}
+.auto-search-blk input {
+    height: 15px !important;
+}
+.popup-content-blk p.MuiFormHelperText-root{margin-bottom: 0;}
+.que-col-form-leftfield{align-items: flex-start;}
+.edit-dropdown-btn{display: flex;
+    align-items: center;
+    justify-content: flex-end;}
+.edit-dropdown-btn svg{font-size: 15px;}
+.popup-innerblk {
+    height: 350px;
+    overflow: auto;
 }

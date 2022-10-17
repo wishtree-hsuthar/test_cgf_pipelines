@@ -71,6 +71,7 @@ const DropdownOptionModal = ({
     setQuestionnaire(tempQuestionnaire)
     setOpenModal(false)
   }
+  
   // console.log("questionnaire:", questionnaire);
   return (
     <Modal
@@ -84,9 +85,11 @@ const DropdownOptionModal = ({
         timeout: 500,
       }}
       className="popup-blk"
+      style={{ overflow: 'scroll' }}
     >
       <Fade in={true}>
         <Box sx={style} className="popup-box">
+          <div className="popup-innerblk">
           <div id="transition-modal-title" className="popup-ttl-blk">
             <h2 className="popup-ttl heading2">Create Custom List Dropdown</h2>
             {/* <span class="popup-close-icon" onClick={handleClose}><CloseIcon/></span> */}
@@ -136,7 +139,7 @@ const DropdownOptionModal = ({
                   >
                     <i className="fa fa-plus"></i>
                   </span>{" "}
-                  <span onClick={onAddOptionClickHandler}>Add Option...</span>
+                  <span onClick={onAddOptionClickHandler}>Add Dropdown</span>
                 </div>
               </div>
               <div className="form-btn flex-center text-center">
@@ -152,6 +155,7 @@ const DropdownOptionModal = ({
                 </button>
               </div>
             </div>
+          </div>
           </div>
         </Box>
       </Fade>

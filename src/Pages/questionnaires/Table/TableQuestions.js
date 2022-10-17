@@ -13,6 +13,7 @@ import React, { useEffect } from "react";
 import DropdownOptionModal from "./DropdownOptionModal.js";
 import { useState } from "react";
 import { set } from "react-hook-form";
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -244,7 +245,16 @@ const TableQuestions = ({
                           <FormHelperText> </FormHelperText>
                         </FormControl>
                       </div>
+                      {column?.columnType === "dropdown" && (
+                          <div className="add-dropdown-btnblk edit-dropdown-btn">
+                            <span className="addmore-icon" onClick={() => onEditOptionClickHandler(columnId)}>
+                              <ModeEditOutlineOutlinedIcon/>
+                            </span>{" "}
+                            <span onClick={() => onEditOptionClickHandler(columnId)}>Edit Dropdown</span>
+                          </div>
+                        )}
                     </div>
+
                     {questionnaire?.sections[sectionIndex]?.columnValues
                       ?.length > 1 && (
                       <div className="que-col-delete delete-iconblk">
@@ -265,14 +275,7 @@ const TableQuestions = ({
                   </div>
                 </div>
               </div>
-              {column?.columnType === "dropdown" && (
-                          <div className="add-dropdown-btnblk">
-                            <span className="addmore-icon" onClick={() => onEditOptionClickHandler(columnId)}>
-                              <i className="fa fa-plus"></i>
-                            </span>{" "}
-                            <span onClick={() => onEditOptionClickHandler(columnId)}>Edit Option...</span>
-                          </div>
-                        )}
+              
             </div>
           )
         )}
