@@ -36,7 +36,7 @@ const getTransformedRows = (rows) => {
     return transfromedRows;
 };
 
-const FillAssessmentQuestion2 = ({
+const TableAssessment = ({
     columnValues,
     rowValues,
     sectionUUID,
@@ -146,4 +146,4 @@ const FillAssessmentQuestion2 = ({
     );
 };
 
-export default FillAssessmentQuestion2;
+export default TableAssessment;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import FillAssessmentQuestion2 from "./FillAssessmentQuestion2";
+import TableAssessment from "./TableAssesment";
 import FillAssessmentQuestion from "./FillAssessmentQuestions";
 
 function FillAssesmentSection({
@@ -83,7 +83,7 @@ function FillAssesmentSection({
                             />
                         ))
                     ) : (
-                        <FillAssessmentQuestion2
+                        <TableAssessment
                             sectionUUID={section?.uuid}
                             columnValues={section?.columnValues}
                             rowValues={section?.rowValues}
