@@ -227,13 +227,13 @@ useEffect(() => {
   return (
     <div className={`que-card-blk ${questionIdx + 1 === questionsLength && "active"}`} key={question?.uuid}>
       <div className="que-form-blk">
-        <div className="que-card-ttl-blk">
+        {/* <div className="que-card-ttl-blk">
           <h2 className="subheading">Question {`${questionIdx + 1}`}</h2>
-        </div>
+        </div> */}
         <div className="que-card-innerblk flex-between">
           <div className="que-card-form-leftfield">
             <div className="form-group">
-              <label htmlFor="questionTitle">Question Title <span className="mandatory">*</span></label>
+              <label htmlFor="questionTitle">Question{`${questionIdx + 1}`} Title <span className="mandatory">*</span></label>
               <TextField
                 className={`input-field ${
                   (!question?.questionTitle && err?.questionTitle) && "input-error"

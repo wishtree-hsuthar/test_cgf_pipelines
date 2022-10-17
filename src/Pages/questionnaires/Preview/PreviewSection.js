@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PreviewQuestions from "./PreviewQuestions";
 function PreviewSection({
@@ -11,13 +11,15 @@ function PreviewSection({
 }) {
     const navigate = useNavigate();
     const params = useParams();
-
+   useEffect(() => {
+      console.log("section:- ",section)
+   },[])
     return (
         <>
             <div className="preview-card-wrapper">
                 <div className="preview-sect-ttl-wrap">
                     <div class="preview-sect-card-ttl-blk">
-                        <h2 class="subheading">Section Title</h2>
+                        <h2 className="subheading">Section Title</h2>
                     </div>
                     <div className="preview-sect-txt mb-0">
                         {section.sectionTitle}

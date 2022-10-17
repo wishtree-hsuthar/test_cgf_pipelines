@@ -108,17 +108,17 @@ const SectionContent = ({
           countError++;
         }
         if (column?.columnType === "prefilled") {
-          console.log("inside prefiled")
+          console.log("inside prefiled");
           questionnaire?.sections[index]?.rowValues?.forEach((row, rowId) => {
             if (row?.cells[columnIdx]?.value) return;
-            setTableErr("Error hai")
+            setTableErr("Error hai");
             countError++;
           });
         }
       }
     );
     console.log("count Error in table validator: ", countError);
-    return countError
+    return countError;
   };
 
   const validateSection = () => {
@@ -205,6 +205,15 @@ const SectionContent = ({
             },
           ],
         },
+        {
+          uuid: uuidv4(),
+          cells: [
+            {
+              columnId: initialId, // UUID of the column
+              value: "",
+            },
+          ],
+        },
       ];
     }
     //check if layout is form then remove table questions and add form inital question
@@ -257,15 +266,6 @@ const SectionContent = ({
         ADD_QUESTIONNAIRE,
         questionnaireObj ? questionnaireObj : questionnaire
       );
-      setToasterDetails(
-        {
-          titleMessage: "Success!",
-          descriptionMessage: "Section details saved successfully!!",
-          messageType: "success",
-        },
-        () => myRef.current()
-      );
-      // console.log("response from save section", response);
       if (response.status === 201) {
         const fetch = async () => {
           try {
@@ -274,6 +274,16 @@ const SectionContent = ({
             );
             // console.log("response from fetch questionnaire", response);
             setQuestionnaire({ ...response.data });
+            setToasterDetails(
+              {
+                titleMessage: "Success!",
+                descriptionMessage: "Section details saved successfully!!",
+                messageType: "success",
+              },
+              () => myRef.current()
+            );
+            setTimeout(() => navigate("/questionnaires"), 3000);
+            // console.log("response from save section", response);
           } catch (error) {
             setErrorToaster(error);
             // console.log("error from fetch questionnaire", error);
@@ -488,9 +498,16 @@ const SectionContent = ({
         <button
           type="submit"
           onClick={handleSubmitSection}
-          className="primary-button add-button"
+          className="outlined-button add-button mr-10"
         >
           Save
+        </button>
+        <button
+          type="submit"
+          className="primary-button add-button"
+          // onClick={onCancelClickHandler}
+        >
+          Publish
         </button>
       </div>
     </div>

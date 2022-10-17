@@ -12,7 +12,13 @@ import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import TableLayoutCellComponent from "./TableLayoutCellComponent.js";
 
-const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex, tableErr, setTableErr }) => {
+const TableRender = ({
+  questionnaire,
+  setQuestionnaire,
+  sectionIndex,
+  tableErr,
+  setTableErr,
+}) => {
   // on Add Row click handler
   const onAddRowClickHandler = () => {
     let tempQuestionnaire = { ...questionnaire };
@@ -33,7 +39,7 @@ const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex, tableErr, 
 
   // on delete Row click handler
   const onRowDeleteClickHandler = (rowId) => {
-    console.log("Inside row Delete method");
+    // console.log("Inside row Delete method");
     let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire?.sections[sectionIndex]?.rowValues?.splice(rowId, 1);
     setQuestionnaire(tempQuestionnaire);
@@ -55,19 +61,29 @@ const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex, tableErr, 
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell width={80}></TableCell>
+                    <TableCell width={75}></TableCell>
                     {questionnaire &&
                       questionnaire?.sections[sectionIndex]?.columnValues?.map(
                         (column, columnId) => (
                           <TableCell key={column?.uuid}>
                             <div className="que-table-column-info">
-                              <div className="que-column-ttlblk flex-between">
-                                <div
+                              <div className="que-column-ttlblk">
+                                <div className="form-group">
+                                  <TextField
+                                    className="input-field column-input-field"
+                                    id="outlined-basic"
+                                    variant="outlined"
+                                    name="title"
+                                    value={column?.title}
+                                    // placeholder="Give column title"
+                                  />
+                                </div>
+                                {/* <div
                                   className="que-table-col-ttl"
                                   // contentEditable="true"
                                 >
                                   {column?.title}
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                           </TableCell>
@@ -87,12 +103,14 @@ const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex, tableErr, 
                             <span className="que-column-count-txt">
                               {rowId + 1}.
                             </span>
-                            <span
-                              className="minus-iconblk"
-                              onClick={() => onRowDeleteClickHandler(rowId)}
-                            >
-                              <i className="fa fa-minus"></i>
-                            </span>
+                            {questionnaire?.sections[sectionIndex]?.rowValues?.length > 2 && (
+                              <span
+                                className="minus-iconblk"
+                                onClick={() => onRowDeleteClickHandler(rowId)}
+                              >
+                                <i className="fa fa-minus"></i>
+                              </span>
+                            )}
                           </div>
                         </TableCell>
                         {row &&
@@ -130,7 +148,7 @@ const TableRender = ({ questionnaire, setQuestionnaire, sectionIndex, tableErr, 
           </Paper>
         </div>
         <div className="add-row-btnblk">
-          <span className="addmore-icon"  onClick={onAddRowClickHandler}>
+          <span className="addmore-icon" onClick={onAddRowClickHandler}>
             <i className="fa fa-plus"></i>
           </span>{" "}
           <span onClick={onAddRowClickHandler}>Add Row</span>

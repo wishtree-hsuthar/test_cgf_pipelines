@@ -1,8 +1,18 @@
-import { MenuItem, Select, TextField, Tooltip } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import TableRender from "./TableRender.js";
 import React, { useEffect } from "react";
+import DropdownOptionModal from "./DropdownOptionModal.js";
+import { useState } from "react";
+import { set } from "react-hook-form";
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -53,15 +63,37 @@ const TableQuestions = ({
   tableErr,
   setTableErr,
 }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [modalIndex, setModalIndex] = useState(-1)
   const onColumnChangeHandler = (event, columnId) => {
-    console.log("Event: ", event.target.name, "columnId", columnId);
+    // console.log("Event: ", event.target.name, "columnId", columnId);
     const { name, value } = event.target;
     let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire.sections[sectionIndex].columnValues[columnId][name] =
       value;
     setQuestionnaire(tempQuestionnaire);
     // const {name, value} = e.target;
-    console.log("Questionnaire:- ", questionnaire);
+    // console.log("Questionnaire:- ", questionnaire);
+  };
+
+  const onInputTypeChangeHandler = (event, columnId) => {
+    const { name, value } = event.target;
+    let tempQuestionnaire = { ...questionnaire };
+
+    tempQuestionnaire.sections[sectionIndex].columnValues[columnId][name] =
+      value;
+    tempQuestionnaire.sections[sectionIndex].columnValues[columnId].validation =
+      "";
+    tempQuestionnaire.sections[sectionIndex].columnValues[columnId].options =
+      [];
+
+    if (value === "dropdown") {
+      tempQuestionnaire.sections[sectionIndex].columnValues[columnId].options =
+        ["", ""];
+      setModalIndex(columnId)  
+      setOpenModal(true);
+    }
+    setQuestionnaire(tempQuestionnaire);
   };
 
   //method to handle Add column icon click handler
@@ -72,7 +104,7 @@ const TableQuestions = ({
       uuid: initialId,
       title: "",
       columnType: "textbox",
-      options: ["", ""],
+      options: [],
       validation: "",
     });
     tempQuestionnaire.sections[sectionIndex].rowValues?.forEach(
@@ -83,7 +115,7 @@ const TableQuestions = ({
         });
       }
     );
-    console.log("Temp Questionnaire: ", tempQuestionnaire);
+    // console.log("Temp Questionnaire: ", tempQuestionnaire);
     setQuestionnaire(tempQuestionnaire);
   };
 
@@ -101,100 +133,153 @@ const TableQuestions = ({
     );
     setQuestionnaire(tempQuestionnaire);
   };
+
+  const onEditOptionClickHandler = (columnIdx) => {
+    // console.log("columnIdx",columnIdx)
+    setOpenModal(true)
+    setModalIndex(columnIdx) 
+  }
   useEffect(() => {
-    console.log("Questionnaire: ", questionnaire);
+    // console.log("Questionnaire: ", questionnaire);
   }, [questionnaire]);
 
   return (
-    <>
+    <div className="que-column-layout-sect">
       {questionnaire &&
         questionnaire?.sections[sectionIndex]?.columnValues?.map(
           (column, columnId) => (
-            <div key={column?.uuid}>
-              <div>
-                {/* <div className="que-card-icon delete-iconblk"> */}
-                <Tooltip title="Delete column" placement="bottom">
-                  <img
-                    style={{ cursor: "pointer" }}
-                    onClick={(e) => onDeleteIconClickHandler(e, columnId)}
-                    src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
-                    alt=""
-                  />
-                </Tooltip>
-                {/* </div> */}
-                <h2 className="subheading">Column {columnId + 1}</h2>
-                {/* <div className="form-group"> */}
-                <label htmlFor="emailid">Column Title</label>
-                <TextField
-                  className={`input-field ${
-                    !column?.title && tableErr && "input-error"
-                  }`}
-                  id="outlined-basic"
-                  variant="outlined"
-                  name="title"
-                  value={column?.title}
-                  helperText={!column?.title && tableErr ? "Enter column" : " "}
-                  onChange={(e) => onColumnChangeHandler(e, columnId)}
-                  placeholder="Enter column title"
-                />
-                {/* </div> */}
-              </div>
-              <div className="que-card-form-rightfield">
-                <div className="">
-                  <label htmlFor="emailid">Input type</label>
-                  <div className="select-field">
-                    <Select
-                      IconComponent={(props) => (
-                        <KeyboardArrowDownRoundedIcon {...props} />
-                      )}
-                      displayEmpty
-                      placeholder="Select input type"
-                      name="columnType"
-                      value={column?.columnType}
-                      onChange={(e) => onColumnChangeHandler(e, columnId)}
-                      className="select-dropdown"
-                      MenuProps={MenuProps}
-                    >
-                      {inputTypeOptions &&
-                        inputTypeOptions.map((option) => (
-                          <MenuItem key={option?._id} value={option?._id}>
-                            {option?.name}
-                          </MenuItem>
-                        ))}
-                    </Select>
+            <div key={column?.uuid} className="que-column-layout-wrap">
+              <div className="que-column-layout-blk">
+                <div className="que-card-innerblk">
+                  <div className="que-col-form-leftfield flex-between">
+                    <div className="form-group">
+                      <label htmlFor="emailid">
+                        Column {columnId + 1} Title
+                      </label>
+                      <TextField
+                        className={`input-field ${
+                          !column?.title && tableErr && "input-error"
+                        }`}
+                        id="outlined-basic"
+                        variant="outlined"
+                        name="title"
+                        helperText={
+                          !column?.title && tableErr
+                            ? "Enter column title"
+                            : " "
+                        }
+                        value={column?.title}
+                        onChange={(e) => onColumnChangeHandler(e, columnId)}
+                        placeholder="Enter column title"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="emailid">Input type</label>
+                      <div className="select-field">
+                        <FormControl className="fullwidth-field">
+                          <Select
+                            IconComponent={(props) => (
+                              <KeyboardArrowDownRoundedIcon {...props} />
+                            )}
+                            displayEmpty
+                            placeholder="Select input type"
+                            name="columnType"
+                            value={column?.columnType}
+                            // onChange={(e) => onColumnChangeHandler(e, columnId)}
+                            onChange={(e) =>
+                              onInputTypeChangeHandler(e, columnId)
+                            }
+                            className="select-dropdown"
+                            MenuProps={MenuProps}
+                          >
+                            {inputTypeOptions &&
+                              inputTypeOptions.map((option) => (
+                                <MenuItem key={option?._id} value={option?._id}>
+                                  {option?.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                          <FormHelperText> </FormHelperText>
+                        </FormControl>
+                        {openModal && modalIndex === columnId  &&  (
+                          <DropdownOptionModal
+                            openModal={openModal}
+                            setOpenModal={setOpenModal}
+                            questionnaire={questionnaire}
+                            setQuestionnaire={setQuestionnaire}
+                            sectionIndex={sectionIndex}
+                            columnId={columnId}
+                            tableErr={tableErr}
+                            setTableErr={setTableErr}
+                          />
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="emailid">Response Validator</label>
+                      <div className="select-field">
+                        <FormControl className="fullwidth-field">
+                          <Select
+                            disabled={column?.columnType !== "textbox"}
+                            IconComponent={(props) => (
+                              <KeyboardArrowDownRoundedIcon {...props} />
+                            )}
+                            displayEmpty
+                            name="validation"
+                            value={column?.validation}
+                            onChange={(e) => onColumnChangeHandler(e, columnId)}
+                            className="select-dropdown"
+                            MenuProps={MenuProps}
+                          >
+                            <MenuItem disabled value="">
+                              Select Validator
+                            </MenuItem>
+                            {validationOptions &&
+                              validationOptions.map((option) => (
+                                <MenuItem key={option?._id} value={option?._id}>
+                                  {option?.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                          <FormHelperText> </FormHelperText>
+                        </FormControl>
+                      </div>
+                    </div>
+                    {questionnaire?.sections[sectionIndex]?.columnValues
+                      ?.length > 1 && (
+                      <div className="que-col-delete delete-iconblk">
+                        <Tooltip title="Delete column" placement="bottom">
+                          <img
+                            style={{ cursor: "pointer" }}
+                            onClick={(e) =>
+                              onDeleteIconClickHandler(e, columnId)
+                            }
+                            src={
+                              process.env.PUBLIC_URL + "/images/delete-icon.svg"
+                            }
+                            alt=""
+                          />
+                        </Tooltip>
+                      </div>
+                    )}
                   </div>
                 </div>
-                <div className="">
-                  <label htmlFor="emailid">Response Validator</label>
-                  <div className="select-field">
-                    <Select
-                      IconComponent={(props) => (
-                        <KeyboardArrowDownRoundedIcon {...props} />
-                      )}
-                      displayEmpty
-                      name="validation"
-                      value={column?.validation}
-                      onChange={(e) => onColumnChangeHandler(e, columnId)}
-                      className="select-dropdown"
-                      MenuProps={MenuProps}
-                    >
-                      <MenuItem disabled value="">
-                        Select Validator
-                      </MenuItem>
-                      {validationOptions &&
-                        validationOptions.map((option) => (
-                          <MenuItem key={option?._id} value={option?._id}>
-                            {option?.name}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </div>
-                </div>
               </div>
+              {column?.columnType === "dropdown" && (
+                          <div className="add-dropdown-btnblk">
+                            <span className="addmore-icon" onClick={() => onEditOptionClickHandler(columnId)}>
+                              <i className="fa fa-plus"></i>
+                            </span>{" "}
+                            <span onClick={() => onEditOptionClickHandler(columnId)}>Edit Option...</span>
+                          </div>
+                        )}
             </div>
           )
         )}
-      <div className="add-row-btnblk" onClick={onAddColumnClickHandler}>
+      <div
+        className="add-row-btnblk add-col-btn"
+        onClick={onAddColumnClickHandler}
+      >
         <span className="addmore-icon">
           <i className="fa fa-plus"></i>
         </span>{" "}
@@ -207,7 +292,7 @@ const TableQuestions = ({
         tableErr={tableErr}
         setTableErr={setTableErr}
       />
-    </>
+    </div>
   );
 };
 
