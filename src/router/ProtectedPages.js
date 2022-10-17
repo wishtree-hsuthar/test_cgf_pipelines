@@ -24,8 +24,10 @@ import EditOperationMember from "../Pages/operationMember/EditOperationMember";
 import AddQuestionnaires from "../Pages/questionnaires/AddQuestionnaires";
 import QuestionnairesList from "../Pages/questionnaires/QuestionnairesList";
 import AddNewQuestionnaire from "../Pages/questionnaires/AddNewQuestionnaire";
-import PreviewQuestionnaire from "../Pages/PreviewQuestionnaire";
-import PreviewDemo from "../Pages/PreviewDemo";
+// import PreviewQuestionnaire from "../Pages/PreviewQuestionnaire";
+import PreviewQuestionnaire from "../Pages/questionnaires/Preview/PreviewQuestionnaire"
+// import PreviewDemo from "../Pages/PreviewDemo";
+import PreviewDemo from "../Pages/questionnaires/Preview/PreviewDemo";
 import Preview from "../Pages/questionnaires/Preview";
 import AddAssessment from "../AssessmentModule/AddAssessment";
 import AssessmentList from "../AssessmentModule/AssessmentList";

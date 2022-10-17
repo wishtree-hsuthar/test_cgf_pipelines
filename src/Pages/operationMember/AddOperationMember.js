@@ -422,6 +422,11 @@ function AddOperationMember() {
                                                                 error &&
                                                                 "autocomplete-error"
                                                             }`}
+                                                            PaperComponent={({ children }) => (
+                                                                <Paper className="autocomplete-option-txt">
+                                                                  {children}
+                                                                </Paper>
+                                                              )}
                                                             popupIcon={
                                                                 <KeyboardArrowDownRoundedIcon />
                                                             }
@@ -565,7 +570,7 @@ function AddOperationMember() {
                                             Member Company{" "}
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <div className="country-code-auto-search">
+                                        <div className="select-field auto-search-blk">
                                             <Controller
                                                 control={control}
                                                 name="memberId"

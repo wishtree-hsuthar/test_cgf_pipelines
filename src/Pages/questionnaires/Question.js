@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import {
   Checkbox,
@@ -127,8 +128,8 @@ const Question = ({
       name: "Numeric",
     },
     {
-      _id: "character",
-      name: "Character",
+      _id: "alphabets",
+      name: "Alphabets",
     },
   ];
 
@@ -144,7 +145,7 @@ const Question = ({
 
     // deleting error  object
     // let tempErrArray = [...errArray];
-    console.log("questionId: ", questionIdx);
+    // console.log("questionId: ", questionIdx);
     // tempErrArray.splice(questionIdx, 1);
     // setErrArray(tempErrArray);
   };
@@ -154,13 +155,13 @@ const Question = ({
     tempQuestionnaire.sections[sectionIdx].questions[questionIdx].isRequired =
       e.target.checked;
     setQuestionnaire(tempQuestionnaire);
-    console.log("questionnaire:- ", questionnaire);
+    // console.log("questionnaire:- ", questionnaire);
   };
 
   //On + icon click new question will get added
   const addQuestionHandler = () => {
     let tempQuestionnaire = { ...questionnaire };
-    console.log("default Values", defaultValues);
+    // console.log("default Values", defaultValues);
     tempQuestionnaire.sections[sectionIndex].questions.push({
       ...defaultValues,
     });
@@ -168,26 +169,28 @@ const Question = ({
     // let tempErrArray = [...errArray];
     // tempErrArray.push({ questionTitle: "" });
     // setErrArray(tempErrArray);
-    console.log("questionnaire", questionnaire);
+    // console.log("questionnaire", questionnaire);
   };
 
   //method to handle question change handler
   const onQuestionChangeHandler = (event, questionIdx) => {
-    console.log("event", event.target.name);
+    // console.log("event", event.target.name);
     const { name, value } = event.target;
-    const tempQuestionnaire = { ...questionnaire };
-    console.log("name", name, "value", value);
+    let tempQuestionnaire = { ...questionnaire };
+    // console.log("name", name, "value", value);
     tempQuestionnaire.sections[sectionIndex].questions[questionIdx][name] =
       value;
     setQuestionnaire(tempQuestionnaire);
   };
-  //method to handle question focus
-  const onQuestionFocusHandler = (event, questionIdx) => {
-    // let tempErrArray = [...errArray];
-    // tempErrArray[questionIdx].questionTitle = "";
-    // setErrArray(tempErrArray);
-  };
-
+  const onInputTypeChangeHandler = (event, questionIdx) => {
+    const {name, value} = event.target;
+    let tempQuestionnaire = {...questionnaire}
+    tempQuestionnaire.sections[sectionIndex].questions[questionIdx][name] = value
+    tempQuestionnaire.sections[sectionIndex].questions[questionIdx].validation = ""
+    setQuestionnaire(tempQuestionnaire)
+  
+  }
+  
   //method to handle option change
   const onOptionChangeHandler = (e, questionIdx, optionIdx) => {
     let tempQuestionnaire = { ...questionnaire };
@@ -214,23 +217,23 @@ const Question = ({
   };
 // console.log("Error",err)
 useEffect(() => {
-  console.log('Error: ',err)
+  // console.log('Error: ',err)
 
   return () => {
     
   }
 }, [err])
-console.log("Error inside question: ",err)
+// console.log("Error inside question: ",err)
   return (
     <div className={`que-card-blk ${questionIdx + 1 === questionsLength && "active"}`} key={question?.uuid}>
       <div className="que-form-blk">
-        <div className="que-card-ttl-blk">
+        {/* <div className="que-card-ttl-blk">
           <h2 className="subheading">Question {`${questionIdx + 1}`}</h2>
-        </div>
+        </div> */}
         <div className="que-card-innerblk flex-between">
           <div className="que-card-form-leftfield">
             <div className="form-group">
-              <label htmlFor="questionTitle">Question Title <span className="mandatory">*</span></label>
+              <label htmlFor="questionTitle">Question{`${questionIdx + 1}`} Title <span className="mandatory">*</span></label>
               <TextField
                 className={`input-field ${
                   (!question?.questionTitle && err?.questionTitle) && "input-error"
@@ -238,17 +241,8 @@ console.log("Error inside question: ",err)
                 placeholder="Enter question title"
                 name="questionTitle"
                 value={question?.questionTitle}
-                inputProps={{
-                  maxLength: 250,
-                }}
                 helperText={(!question?.questionTitle && err?.questionTitle) ? "Enter question title" : " "}
-                // helperText={
-                //   errArray[questionIdx]?.questionTitle
-                //     ? "Enter question title"
-                //     : " "
-                // }
                 onChange={(e) => onQuestionChangeHandler(e, questionIdx)}
-                onFocus={(e) => onQuestionFocusHandler(e, questionIdx)}
               />
             </div>
           </div>
@@ -264,7 +258,8 @@ console.log("Error inside question: ",err)
                     )}
                     name="inputType"
                     value={question?.inputType}
-                    onChange={(e) => onQuestionChangeHandler(e, questionIdx)}
+                    onChange={(e) => onInputTypeChangeHandler(e, questionIdx)}
+                    // onChange={(e) => onQuestionChangeHandler(e, questionIdx)}
                   >
                     {inputTypeOptions &&
                       inputTypeOptions.map((option) => (
@@ -364,7 +359,7 @@ console.log("Error inside question: ",err)
                       <span className="addmore-icon">
                         <i className="fa fa-plus"></i>
                       </span>
-                      <span className="addmore-txt">Add Other Option</span>
+                      <span className="addmore-txt">Add Option...</span>
                     </div>
                   )}
                 </div>
@@ -416,3 +411,5 @@ console.log("Error inside question: ",err)
 };
 
 export default Question;
+
+

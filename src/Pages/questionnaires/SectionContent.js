@@ -3,7 +3,6 @@ import {
   FormHelperText,
   MenuItem,
   Select,
-  Switch,
   TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -12,8 +11,10 @@ import { privateAxios } from "../../api/axios";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import { useNavigate, useParams } from "react-router-dom";
 import DialogBox from "../../components/DialogBox";
-import Questions from "./Questions";
+import FormQuestions from "./FormQuestions";
 import useCallbackState from "../../utils/useCallBackState";
+import TableQuestions from "./Table/TableQuestions.js";
+import { v4 as uuidv4 } from "uuid";
 import Toaster from "../../components/Toaster";
 
 const SectionContent = ({
@@ -31,6 +32,8 @@ const SectionContent = ({
   const navigate = useNavigate();
   // state to handle question level erros
   const [err, setErr] = useState({ questionTitle: "", option: "" });
+  // state to handle errors in table layout
+  const [tableErr, setTableErr] = useState("");
   const ITEM_HEIGHT = 22;
 
   const MenuProps = {
@@ -50,7 +53,7 @@ const SectionContent = ({
   });
   //method to call all error toaster from this method
   const setErrorToaster = (error) => {
-    console.log("error",error)
+    // console.log("error", error);
     setToasterDetails(
       {
         titleMessage: "Error",
@@ -96,8 +99,34 @@ const SectionContent = ({
     setOpenDialog(false);
   };
 
+  const validateTableQuestions = (countError) => {
+    console.log("inside table question validator");
+    questionnaire?.sections[index]?.columnValues.forEach(
+      (column, columnIdx) => {
+        if (column?.title === "") {
+          setTableErr("Error hai");
+          countError++;
+        }
+        if (column?.columnType === "prefilled") {
+          console.log("inside prefiled");
+          questionnaire?.sections[index]?.rowValues?.forEach((row, rowId) => {
+            if (row?.cells[columnIdx]?.value) return;
+            setTableErr("Error hai");
+            countError++;
+          });
+        }
+      }
+    );
+    console.log("count Error in table validator: ", countError);
+    return countError;
+  };
+
   const validateSection = () => {
     let countError = 0;
+    if (questionnaire?.sections[index]?.layout === "table") {
+      countError = validateTableQuestions(countError);
+    }
+    console.log("count Error", countError);
     //Rajkumar's save section
     let tempError = {
       questionTitle: "",
@@ -105,9 +134,9 @@ const SectionContent = ({
     };
     questionnaire?.sections[index]?.questions?.map((question, questionIdx) => {
       if (question?.questionTitle === "") {
-        console.log("is Error");
+        // console.log("is Error");
         tempError["questionTitle"] = "Enter question title";
-        countError++
+        countError++;
       }
       //   console.log("question in validate section map",question)
       if (
@@ -116,7 +145,7 @@ const SectionContent = ({
         question?.options?.map((option) => {
           if (option === "") {
             tempError["option"] = "Enter option";
-            countError++
+            countError++;
           }
         });
       }
@@ -125,11 +154,11 @@ const SectionContent = ({
     setErr({ ...tempError });
     //Madhav's save section
     // console.log("questionnaire", questionnaire);
-    
-    if(questionnaire?.title === ""){
+
+    if (questionnaire?.title === "") {
       setGlobalSectionTitleError({ errMsg: "Section title required" });
-      countError++
-    } 
+      countError++;
+    }
     for (let i = 0; i < questionnaire.sections.length; i++) {
       if (questionnaire.sections[i].sectionTitle === "") {
         setGlobalSectionTitleError({
@@ -144,18 +173,73 @@ const SectionContent = ({
     if (countError === 0) {
       return true;
     }
-      return false
+    return false;
   };
 
+  const sectionLayoutChangeHandler = (e) => {
+    const { name, value } = e.target;
+    console.log("name:", name, "value:", value);
+    let tempQuestionnaire = { ...questionnaire };
+    console.log("tempQuestionnaire: ", tempQuestionnaire);
+    tempQuestionnaire.sections[index]["layout"] = value;
+    //check if layout is table remove form layout questions and add initial rows and colums
+    if (value === "table") {
+      delete tempQuestionnaire?.sections[index]?.questions;
+      const initialId = uuidv4();
+      tempQuestionnaire.sections[index].columnValues = [
+        {
+          uuid: initialId,
+          title: "",
+          columnType: "textbox",
+          options: ["", ""],
+          validation: "",
+        },
+      ];
+      tempQuestionnaire.sections[index].rowValues = [
+        {
+          uuid: uuidv4(),
+          cells: [
+            {
+              columnId: initialId, // UUID of the column
+              value: "",
+            },
+          ],
+        },
+        {
+          uuid: uuidv4(),
+          cells: [
+            {
+              columnId: initialId, // UUID of the column
+              value: "",
+            },
+          ],
+        },
+      ];
+    }
+    //check if layout is form then remove table questions and add form inital question
+    if (value === "form") {
+      delete tempQuestionnaire?.sections[index]?.columnValues;
+      delete tempQuestionnaire?.sections[index]?.rowValues;
+      tempQuestionnaire.sections[index].questions = [
+        {
+          uuid: uuidv4(),
+          questionTitle: "",
+          inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings, boolean
+          validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
+          defaultValue: "", // Will only be there in case of the inputType which requires the default value
+          isRequired: true,
+          options: ["", ""], // multiple values from which user can select
+        },
+      ];
+    }
+    console.log("tempQuestionnaire after layout update", tempQuestionnaire);
+    setQuestionnaire(tempQuestionnaire);
+  };
   const handleStatusChange = (e) => {
-    console.log("inside Status change handler")
+    // console.log("inside Status change handler");
     const { name, value } = e.target;
     let tempQuestionnare = { ...questionnaire };
     if (value === "active") {
-      // console.log(
-      //   "inside if condition",
-      //   tempQuestionnare.sections[index][name]
-      // );
       tempQuestionnare.sections[index].isActive = true;
     }
     if (value === "inActive") tempQuestionnare.sections[index].isActive = false;
@@ -166,15 +250,11 @@ const SectionContent = ({
     let tempQuestionnare = { ...questionnaire };
 
     tempQuestionnare.sections[index][name] = value;
-    //   value === "active" ? true : value === "inActive" ? false : value;
     setQuestionnaire(tempQuestionnare);
-    // console.log("Name ", name);
-    // console.log("Value ", value);
   };
   const handleSubmitSection = (e) => {
     e.preventDefault();
     validateSection() && saveSection();
-    // console.log("questionnaire after submiting questionnaire", questionnaire);
   };
 
   const params = useParams();
@@ -186,15 +266,6 @@ const SectionContent = ({
         ADD_QUESTIONNAIRE,
         questionnaireObj ? questionnaireObj : questionnaire
       );
-      setToasterDetails(
-        {
-          titleMessage: "Success!",
-          descriptionMessage: "Section details saved successfully!!",
-          messageType: "success",
-        },
-        () => myRef.current()
-      );
-      // console.log("response from save section", response);
       if (response.status === 201) {
         const fetch = async () => {
           try {
@@ -203,16 +274,26 @@ const SectionContent = ({
             );
             // console.log("response from fetch questionnaire", response);
             setQuestionnaire({ ...response.data });
+            setToasterDetails(
+              {
+                titleMessage: "Success!",
+                descriptionMessage: "Section details saved successfully!!",
+                messageType: "success",
+              },
+              () => myRef.current()
+            );
+            setTimeout(() => navigate("/questionnaires"), 3000);
+            // console.log("response from save section", response);
           } catch (error) {
-            setErrorToaster(error)
-            console.log("error from fetch questionnaire", error);
+            setErrorToaster(error);
+            // console.log("error from fetch questionnaire", error);
           }
         };
         fetch();
       }
     } catch (error) {
-      setErrorToaster(error)
-      console.log("error from section component", error);
+      setErrorToaster(error);
+      // console.log("error from section component", error);
     }
   };
   const onCancelClickHandler = () => {
@@ -220,7 +301,7 @@ const SectionContent = ({
   };
   const [sectionObj, setSectionObj] = useState({ ...section });
   // console.log("questionnaire after submiting questionnaire", sectionObj);
-  console.log("Questionnaire: ", questionnaire);
+  // console.log("Questionnaire: ", questionnaire);
   return (
     // <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
     <div className="sect-form-card-wrapper">
@@ -231,7 +312,12 @@ const SectionContent = ({
         messageType={toasterDetails.messageType}
       />
       <DialogBox
-        title={<p>Delete Section  {section?.sectionTitle && '"' + section?.sectionTitle + '"'}</p>}
+        title={
+          <p>
+            Delete Section{" "}
+            {section?.sectionTitle && '"' + section?.sectionTitle + '"'}
+          </p>
+        }
         info1={
           <p>
             On deleting all the details of this section would get deleted and
@@ -253,16 +339,16 @@ const SectionContent = ({
       />
       <div className="sect-form-card-info">
         <div className="sect-form-innercard-blk">
-        {questionnaire.sections.length > 1 && (
-          <div className="sect-ttl-blk flex-between">
-            <div className="sect-leftblk">
-              {/* <h2 className="subheading">
+          {questionnaire.sections.length > 1 && (
+            <div className="sect-ttl-blk flex-between">
+              <div className="sect-leftblk">
+                {/* <h2 className="subheading">
                                 {`Section ${value}`}{" "}
                             </h2> */}
-            </div>
-            <div className="sect-rightblk">
-              <div className="sect-ttl-right-iconblk">
-                {/* <span className="sect-icon-blk add-sect-iconblk mr-40">
+              </div>
+              <div className="sect-rightblk">
+                <div className="sect-ttl-right-iconblk">
+                  {/* <span className="sect-icon-blk add-sect-iconblk mr-40">
                                     <img
                                         src={
                                             process.env.PUBLIC_URL +
@@ -278,9 +364,9 @@ const SectionContent = ({
                       alt=""
                     />
                   </span>
+                </div>
               </div>
             </div>
-          </div>
           )}
           <form>
             <div className="sect-form-card-blk">
@@ -299,11 +385,6 @@ const SectionContent = ({
                       id="outlined-basic"
                       placeholder="Enter section title"
                       variant="outlined"
-                      // error={
-                      //     section.sectionTitle.length !=
-                      //     ""
-                      // }
-                      inputProps={{ maxLength: 250 }}
                       onChange={handleInputSection}
                       value={section.sectionTitle}
                       name={"sectionTitle"}
@@ -327,10 +408,10 @@ const SectionContent = ({
                           IconComponent={(props) => (
                             <KeyboardArrowDownRoundedIcon {...props} />
                           )}
-                          value={section.layout}
-                          onChange={handleInputSection}
-                          MenuProps={MenuProps}
                           name={"layout"}
+                          value={section?.layout}
+                          onChange={sectionLayoutChangeHandler}
+                          MenuProps={MenuProps}
                         >
                           <MenuItem value="form">Form</MenuItem>
                           <MenuItem value="table" selected>
@@ -339,16 +420,6 @@ const SectionContent = ({
                         </Select>
                         <FormHelperText> </FormHelperText>
                       </FormControl>
-                      {/* <Dropdown
-                                            name={"layout"}
-                                            control={control}
-                                            placeholder={"Select layout"}
-                                            options={["Form", "Table"]}
-                                            rules={{
-                                                required: true,
-                                            }}
-                                            myHelper={helperTextForSectionForm}
-                                        /> */}
                     </div>
                   </div>
                   <div className="form-group">
@@ -395,24 +466,27 @@ const SectionContent = ({
                   </div>
                 </div>
               </div>
-              {/* <button onClick={handleSubmit}>Submit</button> */}
-              {/* Question content component over here */}
             </div>
           </form>
         </div>
-        
       </div>
       {section?.layout === "form" ? (
-          <Questions
-            sectionIndex={index}
-            questionnaire={questionnaire}
-            setQuestionnaire={setQuestionnaire}
-            err={err}
-            setErr={setErr}
-          />
-        ) : (
-          " "
-        )}
+        <FormQuestions
+          sectionIndex={index}
+          questionnaire={questionnaire}
+          setQuestionnaire={setQuestionnaire}
+          err={err}
+          setErr={setErr}
+        />
+      ) : (
+        <TableQuestions
+          sectionIndex={index}
+          questionnaire={questionnaire}
+          setQuestionnaire={setQuestionnaire}
+          tableErr={tableErr}
+          setTableErr={setTableErr}
+        />
+      )}
       <div className="form-btn flex-between add-members-btn que-page-btn">
         <button
           type="reset"
@@ -424,9 +498,16 @@ const SectionContent = ({
         <button
           type="submit"
           onClick={handleSubmitSection}
-          className="primary-button add-button"
+          className="outlined-button add-button mr-10"
         >
           Save
+        </button>
+        <button
+          type="submit"
+          className="primary-button add-button"
+          // onClick={onCancelClickHandler}
+        >
+          Publish
         </button>
       </div>
     </div>

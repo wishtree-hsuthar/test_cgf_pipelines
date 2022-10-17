@@ -177,51 +177,7 @@ function AddQuestionnaires() {
 
     const CustomModal = () => {
         return (
-            //     <Modal
-            //     aria-labelledby="transition-modal-title"
-            //     aria-describedby="transition-modal-description"
-            //     open={open}
-            //     onClose={handleClose}
-            //     closeAfterTransition
-            //     BackdropComponent={Backdrop}
-            //     BackdropProps={{
-            //       timeout: 500,
-            //     }}
-            //     className='popup-blk'
-            //   >
-            //     <Fade in={open}>
-            //       <Box sx={style} className='popup-box'>
-            //         <div id="transition-modal-title" className='popup-ttl-blk'>
-            //               <h2 className='popup-ttl heading2'>Create Custom List Dropdown</h2>
-            //               {/* <span class="popup-close-icon" onClick={handleClose}><CloseIcon/></span> */}
-            //         </div>
-            //         <div id="transition-modal-description" className='popup-body'>
-            //           <div className='popup-content-blk'>
-            //               <div className='custom-list-sect'>
-            //                 {/* <div className='subheading mb-20'>Create custom list</div> */}
-            //                 <div className="form-group">
-            //                     <TextField className='input-field' id="outlined-basic" placeholder='Dropdown value1' variant="outlined" />
-            //                 </div>
-            //                 <div className="form-group">
-            //                     <TextField className='input-field' id="outlined-basic" placeholder='Dropdown value2' variant="outlined" />
-            //                 </div>
-            //                 <div className="form-group">
-            //                     <TextField className='input-field' id="outlined-basic" placeholder='Dropdown value3' variant="outlined" />
-            //                 </div>
-            //                 <div className='add-dropdown-btnblk mb-30'>
-            //                     <span class="addmore-icon"><i className='fa fa-plus'></i></span> Add Dropdown
-            //                 </div>
-            //               </div>
-            //               <div className="form-btn flex-center text-center">
-            //                   <button type="submit" className="secondary-button mr-10" onClick={handleClose}>Cancel</button>
-            //                   <button type="submit" className="primary-button">Save</button>
-            //               </div>
-            //           </div>
-            //         </div>
-            //       </Box>
-            //     </Fade>
-            //   </Modal>
-            <Modal
+                <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 open={open}
@@ -229,55 +185,99 @@ function AddQuestionnaires() {
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
-                    timeout: 500,
+                  timeout: 500,
                 }}
                 className='popup-blk'
-            >
+              >
                 <Fade in={open}>
-                    <Box sx={style} className='popup-box'>
-                        <div id="transition-modal-title" className='popup-ttl-blk'>
-                            <h2 className='popup-ttl heading2'>Select Master List Dropdown</h2>
-                            {/* <span class="popup-close-icon" onClick={handleClose}><CloseIcon/></span> */}
-                        </div>
-                        <div id="transition-modal-description" className='popup-body'>
-                            <div className='popup-content-blk'>
-                                <div className='master-list-sect'>
-                                    <div className="form-group">
-                                        <label for="">Select Value (To display)</label>
-                                        <div className="select-field">
-                                            <Select
-                                                IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props} />}
-                                                value="Select value"
-                                                MenuProps={MenuProps}>
-                                                <MenuItem value="Select value">Select value</MenuItem>
-                                                <MenuItem value="Value1" selected>Value1</MenuItem>
-                                                <MenuItem value="Value2" selected>Value2</MenuItem>
-                                            </Select>
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label for="">Select Key (To store)</label>
-                                        <div className="select-field">
-                                            <Select
-                                                IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props} />}
-                                                value="Select key"
-                                                MenuProps={MenuProps}>
-                                                <MenuItem value="Select key">Select key</MenuItem>
-                                                <MenuItem value="Key1" selected>Key1</MenuItem>
-                                                <MenuItem value="Key2" selected>Key2</MenuItem>
-                                            </Select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="form-btn flex-center text-center">
-                                    <button type="submit" className="secondary-button mr-10" onClick={handleClose}>Cancel</button>
-                                    <button type="submit" className="primary-button">Save</button>
-                                </div>
+                  <Box sx={style} className='popup-box'>
+                    <div id="transition-modal-title" className='popup-ttl-blk'>
+                          <h2 className='popup-ttl heading2'>Create Custom List Dropdown</h2>
+                          {/* <span class="popup-close-icon" onClick={handleClose}><CloseIcon/></span> */}
+                    </div>
+                    <div id="transition-modal-description" className='popup-body'>
+                      <div className='popup-content-blk'>
+                          <div className='custom-list-sect'>
+                            {/* <div className='subheading mb-20'>Create custom list</div> */}
+                            <div className="form-group">
+                                <TextField className='input-field' id="outlined-basic" placeholder='Dropdown value1' variant="outlined" />
                             </div>
-                        </div>
-                    </Box>
+                            <div className="form-group">
+                                <TextField className='input-field' id="outlined-basic" placeholder='Dropdown value2' variant="outlined" />
+                            </div>
+                            <div className="form-group">
+                                <TextField className='input-field' id="outlined-basic" placeholder='Dropdown value3' variant="outlined" />
+                            </div>
+                            <div className='add-dropdown-btnblk mb-30'>
+                                <span class="addmore-icon"><i className='fa fa-plus'></i></span> Add Dropdown
+                            </div>
+                          </div>
+                          <div className="form-btn flex-center text-center">
+                              <button type="submit" className="secondary-button mr-10" onClick={handleClose}>Cancel</button>
+                              <button type="submit" className="primary-button">Save</button>
+                          </div>
+                      </div>
+                    </div>
+                  </Box>
                 </Fade>
-            </Modal>
+              </Modal>
+            // <Modal
+            //     aria-labelledby="transition-modal-title"
+            //     aria-describedby="transition-modal-description"
+            //     open={open}
+            //     onClose={handleClose}
+            //     closeAfterTransition
+            //     BackdropComponent={Backdrop}
+            //     BackdropProps={{
+            //         timeout: 500,
+            //     }}
+            //     className='popup-blk'
+            // >
+            //     <Fade in={open}>
+            //         <Box sx={style} className='popup-box'>
+            //             <div id="transition-modal-title" className='popup-ttl-blk'>
+            //                 <h2 className='popup-ttl heading2'>Select Master List Dropdown</h2>
+            //                 {/* <span class="popup-close-icon" onClick={handleClose}><CloseIcon/></span> */}
+            //             </div>
+            //             <div id="transition-modal-description" className='popup-body'>
+            //                 <div className='popup-content-blk'>
+            //                     <div className='master-list-sect'>
+            //                         <div className="form-group">
+            //                             <label for="">Select Value (To display)</label>
+            //                             <div className="select-field">
+            //                                 <Select
+            //                                     IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props} />}
+            //                                     value="Select value"
+            //                                     MenuProps={MenuProps}>
+            //                                     <MenuItem value="Select value">Select value</MenuItem>
+            //                                     <MenuItem value="Value1" selected>Value1</MenuItem>
+            //                                     <MenuItem value="Value2" selected>Value2</MenuItem>
+            //                                 </Select>
+            //                             </div>
+            //                         </div>
+            //                         <div className="form-group">
+            //                             <label for="">Select Key (To store)</label>
+            //                             <div className="select-field">
+            //                                 <Select
+            //                                     IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props} />}
+            //                                     value="Select key"
+            //                                     MenuProps={MenuProps}>
+            //                                     <MenuItem value="Select key">Select key</MenuItem>
+            //                                     <MenuItem value="Key1" selected>Key1</MenuItem>
+            //                                     <MenuItem value="Key2" selected>Key2</MenuItem>
+            //                                 </Select>
+            //                             </div>
+            //                         </div>
+            //                     </div>
+            //                     <div className="form-btn flex-center text-center">
+            //                         <button type="submit" className="secondary-button mr-10" onClick={handleClose}>Cancel</button>
+            //                         <button type="submit" className="primary-button">Save</button>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //         </Box>
+            //     </Fade>
+            // </Modal>
         )
     };
 

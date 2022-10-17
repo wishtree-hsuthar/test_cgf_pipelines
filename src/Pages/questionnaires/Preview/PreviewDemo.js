@@ -39,7 +39,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import dayjs from "dayjs";
-import "./PreviewDemo.css";
+import "../../../Pages/PreviewDemo.css";
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
