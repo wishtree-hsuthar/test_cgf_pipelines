@@ -254,7 +254,12 @@ const SectionContent = ({
   };
   const handleSubmitSection = (e) => {
     e.preventDefault();
-    validateSection() && saveSection();
+    if (validateSection()) {
+      saveSection();
+      return true;
+    }
+    return false;
+    // validateSection() && saveSection()
   };
 
   const params = useParams();
@@ -270,7 +275,7 @@ const SectionContent = ({
         const fetch = async () => {
           try {
             const response = await privateAxios.get(
-              `http://localhost:3000/api/questionnaires/${params.id}`
+              `http://localhost:3000/api/questionnaires/${params?.id}`
             );
             // console.log("response from fetch questionnaire", response);
             setQuestionnaire({ ...response.data });
@@ -282,10 +287,11 @@ const SectionContent = ({
               },
               () => myRef.current()
             );
-            setTimeout(() => navigate("/questionnaires"), 3000);
+            return true;
             // console.log("response from save section", response);
           } catch (error) {
             setErrorToaster(error);
+            return false;
             // console.log("error from fetch questionnaire", error);
           }
         };
@@ -293,11 +299,24 @@ const SectionContent = ({
       }
     } catch (error) {
       setErrorToaster(error);
+      return false;
       // console.log("error from section component", error);
     }
   };
   const onCancelClickHandler = () => {
     return navigate("/questionnaires");
+  };
+  const onPublishButtonClickHandler = async (e) => {
+    console.log("inside publist button click")
+    if (handleSubmitSection(e)) {
+      try {
+        await privateAxios.put(
+          `http://localhost:3000/api/questionnaires/publish/${params?.id}`
+        );
+      } catch (error) {
+        setErrorToaster(error);
+      }
+    }
   };
   const [sectionObj, setSectionObj] = useState({ ...section });
   // console.log("questionnaire after submiting questionnaire", sectionObj);
@@ -391,7 +410,7 @@ const SectionContent = ({
                       helperText={
                         section.sectionTitle === "" &&
                         globalSectionTitleError?.errMsg
-                          ? globalSectionTitleError.errMsg
+                          ? "This is required field"
                           : " "
                       }
                     />
@@ -505,7 +524,7 @@ const SectionContent = ({
         <button
           type="submit"
           className="primary-button add-button"
-          // onClick={onCancelClickHandler}
+          onClick={onPublishButtonClickHandler}
         >
           Publish
         </button>

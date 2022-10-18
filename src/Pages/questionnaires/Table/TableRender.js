@@ -7,6 +7,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -18,6 +19,7 @@ const TableRender = ({
   sectionIndex,
   tableErr,
   setTableErr,
+  isPreview,
 }) => {
   // on Add Row click handler
   const onAddRowClickHandler = () => {
@@ -47,7 +49,7 @@ const TableRender = ({
 
   return (
     <div className="que-table-sect">
-      <div className="que-table-wrap active">
+      <div className={`que-table-wrap ${isPreview || "active" } `}>
         <div className="que-table-innerwrap flex-between no-wrap">
           <Paper
             sx={{ width: "96%", overflow: "hidden" }}
@@ -61,7 +63,7 @@ const TableRender = ({
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell width={75}></TableCell>
+                    {!isPreview && <TableCell width={75}></TableCell>}
                     {questionnaire &&
                       questionnaire?.sections[sectionIndex]?.columnValues?.map(
                         (column, columnId) => (
@@ -69,14 +71,27 @@ const TableRender = ({
                             <div className="que-table-column-info">
                               <div className="que-column-ttlblk">
                                 <div className="form-group">
-                                  <TextField
+                                  {column?.title.length > 50 ? (
+                                    <Tooltip
+                                      title={column?.title}
+                                      placement="bottom-start"
+                                    >
+                                      <p>
+                                        {column?.title.slice(0, 50)}
+                                        ...
+                                      </p>
+                                    </Tooltip>
+                                  ) : (
+                                    <p>{column?.title}</p>
+                                  )}
+                                  {/* <TextField
                                     className="input-field column-input-field"
                                     id="outlined-basic"
                                     variant="outlined"
                                     name="title"
                                     value={column?.title}
                                     // placeholder="Give column title"
-                                  />
+                                  /> */}
                                 </div>
                                 {/* <div
                                   className="que-table-col-ttl"
@@ -95,28 +110,35 @@ const TableRender = ({
                   {questionnaire?.sections[sectionIndex]?.rowValues?.map(
                     (row, rowId) => (
                       <TableRow key={row?.uuid}>
-                        <TableCell>
-                          <div
-                            className="que-column-count flex-between"
-                            style={{ cursor: "pointer" }}
-                          >
-                            <span className="que-column-count-txt">
-                              {rowId + 1}.
-                            </span>
-                            {questionnaire?.sections[sectionIndex]?.rowValues?.length > 2 && (
-                              <span
-                                className="minus-iconblk"
-                                onClick={() => onRowDeleteClickHandler(rowId)}
-                              >
-                                <i className="fa fa-minus"></i>
+                        {isPreview || (
+                          <TableCell sx={{ display: "none" }}>
+                            <div
+                              className="que-column-count flex-between"
+                              style={{ cursor: "pointer", display: "" }}
+                            >
+                              <span className="que-column-count-txt">
+                                {rowId + 1}.
                               </span>
-                            )}
-                          </div>
-                        </TableCell>
+                              {questionnaire?.sections[sectionIndex]?.rowValues
+                                ?.length > 2 &&
+                                (isPreview || (
+                                  <span
+                                    className="minus-iconblk"
+                                    onClick={() =>
+                                      onRowDeleteClickHandler(rowId)
+                                    }
+                                  >
+                                    <i className="fa fa-minus"></i>
+                                  </span>
+                                ))}
+                            </div>
+                          </TableCell>
+                        )}
                         {row &&
                           row?.cells?.map((cell, cellId) => (
                             <TableCell key={cell?.columnId}>
                               <TableLayoutCellComponent
+                                isPreview={isPreview}
                                 questionnaire={questionnaire}
                                 setQuestionnaire={setQuestionnaire}
                                 sectionIndex={sectionIndex}
@@ -147,12 +169,14 @@ const TableRender = ({
             </TableContainer>
           </Paper>
         </div>
-        <div className="add-row-btnblk">
-          <span className="addmore-icon" onClick={onAddRowClickHandler}>
-            <i className="fa fa-plus"></i>
-          </span>{" "}
-          <span onClick={onAddRowClickHandler}>Add Row</span>
-        </div>
+        {isPreview || (
+          <div className="add-row-btnblk">
+            <span className="addmore-icon" onClick={onAddRowClickHandler}>
+              <i className="fa fa-plus"></i>
+            </span>{" "}
+            <span onClick={onAddRowClickHandler}>Add Row</span>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -14,8 +14,10 @@
     margin: 0 0 20px;
 }
 .preview-sect-card-ttl-blk {
-    margin-bottom: 10px;
+    padding: 20px 0 0;
+    margin-bottom: 0;
 }
+.preview-sect-card-ttl-blk .subheading{margin: 0 0 10px;}
 .preview-que-blk {
     margin: 0 0 20px;
 }

@@ -65,7 +65,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>
@@ -241,6 +241,7 @@ function PreviewQuestionnaire() {
                                         {questionnaire?.sections?.map(
                                             (section, index, id) => (
                                                 <Tooltip
+                                                    key={section?.uuid ?? id}
                                                     title={section.sectionTitle}
                                                     placement="bottom-start"
                                                 >
@@ -260,8 +261,8 @@ function PreviewQuestionnaire() {
                         </div>
                         <div className="preview-tab-data">
                             {questionnaire?.sections?.map((section, index) => (
-                                <TabPanel value={value} index={index}>
-                                    <PreviewSection section={section} />
+                                <TabPanel key={section?.uuid ?? index} value={value} index={index}>
+                                    <PreviewSection questionnaire={questionnaire} section={section} sectionIndex={index} />
                                     {/* <div className="preview-card-wrapper">
                                         <div className="preview-que-wrap">
                                             <div className="preview-que-blk">

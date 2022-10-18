@@ -241,7 +241,7 @@ useEffect(() => {
                 placeholder="Enter question title"
                 name="questionTitle"
                 value={question?.questionTitle}
-                helperText={(!question?.questionTitle && err?.questionTitle) ? "Enter question title" : " "}
+                helperText={(!question?.questionTitle && err?.questionTitle) ? "This is required field" : " "}
                 onChange={(e) => onQuestionChangeHandler(e, questionIdx)}
               />
             </div>
@@ -313,7 +313,7 @@ useEffect(() => {
                 <div className="que-card-form-leftfield">
                   <div className="que-checkbox-sect">
                     <div className="que-checkbox-wrap">
-                      <div className="que-checkbox-blk">
+                      <div className={`que-checkbox-blk ${question?.inputType === "dropdown" && "que-dropdown-blk"}`}>
                         <TextField
                           name="options"
                           value={option}
@@ -321,7 +321,7 @@ useEffect(() => {
                             onOptionChangeHandler(e, questionIdx, optionIdx)
                           }
                           className={`input-field que-input-type ${(err?.option && !option) && "input-error"}`}
-                          helperText={(err?.option && !option) ?  err?.option : " "}
+                          helperText={(err?.option && !option) ?  "This is required field" : " "}
                           id="outlined-basic"
                           placeholder="Enter option value"
                           variant="outlined"

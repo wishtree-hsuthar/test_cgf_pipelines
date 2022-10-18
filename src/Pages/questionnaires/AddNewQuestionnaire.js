@@ -235,7 +235,7 @@ function AddNewQuestionnaire() {
                 }}
                 helperText={
                   questionnaire.title === "" && globalSectionTitleError?.errMsg
-                    ? "Enter the questionnaire title"
+                    ? "This is required field"
                     : " "
                 }
               />

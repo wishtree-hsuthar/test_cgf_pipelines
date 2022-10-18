@@ -1,10 +1,16 @@
-import { FormControl, FormHelperText, MenuItem, Select, TextField } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import React from "react";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-
+import { useState } from "react";
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -15,8 +21,8 @@ const MenuProps = {
   },
 };
 
-
 const TableLayoutCellComponent = ({
+  isPreview,
   questionnaire,
   setQuestionnaire,
   sectionIndex,
@@ -26,6 +32,7 @@ const TableLayoutCellComponent = ({
   cellId,
   cell,
 }) => {
+  const [showMore, setShowMore] = useState(false)
   const onCellValueChangeHandler = (e, rowId, cellId) => {
     const { name, value } = e.target;
     const tempQuestionnaire = { ...questionnaire };
@@ -36,16 +43,57 @@ const TableLayoutCellComponent = ({
   };
   const columnFieldType =
     questionnaire?.sections[sectionIndex]?.columnValues[cellId]?.columnType;
-  const column = questionnaire?.sections[sectionIndex]?.columnValues[cellId]
-
+  const column = questionnaire?.sections[sectionIndex]?.columnValues[cellId];
+  console.log("is Preview:- ", isPreview);
   return (
     <div>
-      {columnFieldType && columnFieldType === "prefilled" && (
+      {columnFieldType && columnFieldType === "prefilled" && isPreview && (
+        <p style={{ textAlign: "justify" }}>
+          {showMore ? (
+            <span>
+              <span>{cell?.value}</span>
+              <br />
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowMore(false);
+                }}
+                style={{ color: "#4596D1" }}
+              >
+                Show Less
+              </a>
+            </span>
+          ) : (
+            <span>
+              {cell?.value.length > 100 ? (
+                <span>
+                  <span>{cell?.value.slice(0, 100)}...</span>
+                  <br />
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowMore(true);
+                    }}
+                    style={{ color: "#4596D1" }}
+                  >
+                    Show More
+                  </a>
+                </span>
+              ) : (
+                cell?.value
+              )}
+            </span>
+          )}
+        </p>
+      )}
+      {columnFieldType && columnFieldType === "prefilled" && !isPreview && (
         <TextField
           className={`input-field ${!cell?.value && tableErr && "input-error"}`}
           name="value"
           value={cell?.value}
-          helperText={!cell?.value && tableErr ? "Enter prefiled" : " "}
+          helperText={!cell?.value && tableErr ? "This is required field" : " "}
           onChange={(e) => onCellValueChangeHandler(e, rowId, cellId)}
         />
       )}
@@ -54,26 +102,30 @@ const TableLayoutCellComponent = ({
       )}
       {columnFieldType && columnFieldType === "dropdown" && (
         <FormControl className="fullwidth-field">
-        <Select
-          IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props} />}
-          displayEmpty
-          placeholder="Select input type"
-          name="columnType"
-          value={column?.columnType}
-          // onChange={(e) => onColumnChangeHandler(e, columnId)}
-          // onChange={(e) => onInputTypeChangeHandler(e, columnId)}
-          className="select-dropdown"
-          MenuProps={MenuProps}
-        >
-          <MenuItem value="dropdown" disabled>Select option</MenuItem>
-          {column &&
-            column?.options?.map((option,optionIdx) => (
-              <MenuItem key={optionIdx} value={option} disabled>
-                {option}
-              </MenuItem>
-            ))}
-        </Select>
-        <FormHelperText> </FormHelperText>
+          <Select
+            IconComponent={(props) => (
+              <KeyboardArrowDownRoundedIcon {...props} />
+            )}
+            displayEmpty
+            placeholder="Select input type"
+            name="columnType"
+            value={column?.columnType}
+            // onChange={(e) => onColumnChangeHandler(e, columnId)}
+            // onChange={(e) => onInputTypeChangeHandler(e, columnId)}
+            className="select-dropdown"
+            MenuProps={MenuProps}
+          >
+            <MenuItem value="dropdown" disabled>
+              Select option
+            </MenuItem>
+            {column &&
+              column?.options?.map((option, optionIdx) => (
+                <MenuItem key={optionIdx} value={option} disabled>
+                  {option}
+                </MenuItem>
+              ))}
+          </Select>
+          <FormHelperText> </FormHelperText>
         </FormControl>
       )}
       {columnFieldType && columnFieldType === "date" && (
