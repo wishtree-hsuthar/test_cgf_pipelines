@@ -177,8 +177,8 @@ const ViewOperationMembers = () => {
                     operationType: response?.data?.operationType
                         ? response?.data?.operationType
                         : "N/A",
-                    reportingManager: response?.data?.reportingManager?.name
-                        ? response?.data?.reportingManager?.name
+                    reportingManager: response?.data?.reportingManager[0]?.name
+                        ? response?.data?.reportingManager[0]?.name
                         : "N/A",
                     name: response?.data?.name,
                     isActive: response?.data?.isActive,

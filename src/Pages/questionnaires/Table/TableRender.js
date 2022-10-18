@@ -51,7 +51,7 @@ const TableRender = ({
         <div className="que-table-innerwrap flex-between no-wrap">
           <Paper
             sx={{ width: "96%", overflow: "hidden" }}
-            className="que-table-infoblk"
+            className="que-table-infoblk que-sticky-column"
           >
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table
