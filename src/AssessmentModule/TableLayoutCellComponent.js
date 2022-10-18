@@ -6,7 +6,7 @@ import {
     FormHelperText,
 } from "@mui/material";
 import React, { useState } from "react";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
@@ -26,7 +26,7 @@ const TableLayoutCellComponent = ({
             {transformedColumns[cell.columnId] &&
                 transformedColumns[cell.columnId].columnType ===
                     "prefilled" && (
-                    <p style={{ textAlign: "justify" }}>
+                    <p className="text-justify">
                         {showMore ? (
                             <span>
                                 <span>{cell?.value}</span>
@@ -37,7 +37,7 @@ const TableLayoutCellComponent = ({
                                         e.preventDefault();
                                         setShowMore(false);
                                     }}
-                                    style={{ color: "#4596D1" }}
+                                    className="show-more-less-txt"
                                 >
                                     Show Less
                                 </a>
@@ -56,7 +56,7 @@ const TableLayoutCellComponent = ({
                                                 e.preventDefault();
                                                 setShowMore(true);
                                             }}
-                                            style={{ color: "#4596D1" }}
+                                            className="show-more-less-txt"
                                         >
                                             Show More
                                         </a>
@@ -142,7 +142,7 @@ const TableLayoutCellComponent = ({
                                 value={answer}
                                 className={`datepicker-blk`}
                                 components={{
-                                    OpenPickerIcon: CalendarMonthOutlinedIcon,
+                                    OpenPickerIcon: DateRangeOutlinedIcon,
                                 }}
                                 onChange={(dateValue) => {
                                     handleAnswersChange(

@@ -135,16 +135,15 @@ function FillAssesmentSection({
                 descriptionMessage={toasterDetails.descriptionMessage}
                 messageType={toasterDetails.messageType}
             />
-            <div className="preview-card-wrapper">
+    
                 <div className="preview-sect-ttl-wrap">
                     <div class="preview-sect-card-ttl-blk">
                         <h2 class="subheading">Section Title</h2>
                     </div>
-                    <div className="preview-sect-txt mb-0">
+                    <div className="preview-sect-txt">
                         {section.sectionTitle}
                     </div>
                 </div>
-            </div>
             <div className="preview-card-wrapper">
                 <div className="preview-que-wrap">
                     {section.layout === "form" ? (
@@ -175,7 +174,7 @@ function FillAssesmentSection({
                         />
                     )}
                 </div>
-                <div className="form-btn flex-between add-members-btn mt-30">
+                <div className="form-btn flex-between add-members-btn">
                     <button
                         type="reset"
                         onClick={() => navigate(`/assessment-list/`)}

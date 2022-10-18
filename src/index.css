@@ -1486,7 +1486,7 @@ input:-webkit-autofill:active{
   .mb-20{margin-bottom: 20px;}
   .que-table-wrap{position: relative;}
   .que-table-wrap.active:before{width: 4px;
-    height: 95%;
+    height: 96%;
     background: #F7A823;
     position: absolute;
     left: 0;
@@ -1601,7 +1601,7 @@ input:-webkit-autofill:active{
 .checkbox-with-label .Mui-disabled svg {
     color: rgba(30, 30, 30, 0.5) !important;
 }
-.preview-que-blk:last-child{margin-bottom: 0;}
+/* .preview-que-blk:last-child{margin-bottom: 0;} */
 /* .preview-que-blk .form-group{flex: 0 0 50%;max-width: 50%;} */
 
 .fullwidth-field{width: 100%;}
@@ -1716,14 +1716,37 @@ input:-webkit-autofill:active{
 }
 .popup-content-blk p.MuiFormHelperText-root{margin-bottom: 0;}
 .que-col-form-leftfield{align-items: flex-start;}
-.edit-dropdown-btn{display: flex;
-    align-items: center;
-    justify-content: flex-end;}
+.edit-dropdown-btn{display: flex;align-items: center;justify-content: flex-end;}
 .edit-dropdown-btn svg{font-size: 12px;}
-.popup-innerblk {
-    height: 350px;
-    overflow: auto;
-}
+.popup-innerblk {height: 350px;overflow: auto;}
 
 .required-toggle-btnblk .MuiSwitch-switchBase ~ .MuiSwitch-track{border-color: rgba(204, 204, 204, 1);}
 .required-toggle-btnblk .MuiSwitch-switchBase.Mui-checked ~ .MuiSwitch-track{border-color: #f7a823;}
+
+.assessment-table th:first-child{background: #e9f4fa;border-right: 1px solid rgba(142,142,142,0.15);}
+.assessment-table td:first-child{background: #fff;}
+.assessment-table tr td:first-child{width: 100%;display: table-cell !important;}
+.assessment-table td{padding: 19px 16px;height: 100%;vertical-align: top;}
+.assessment-table-wrap{padding: 0;}
+.assessment-table th{position: sticky;z-index: 2;background: #e9f4fa;}
+.que-half-sect textarea {background: rgba(249,249,249,0.5) !important;box-shadow: inset 0px 1px 2px rgb(0 0 0 / 15%);}
+.que-table th{position: sticky;z-index: 2;background: #e9f4fa;}
+.assessment-table .que-table-column-info {width: 270px;}
+.show-more-less-txt{color: #4596D1 !important;}
+.text-justify{text-align: justify;}
+.que-half-sect .datepicker-blk {flex: 0 0 33%;max-width: 33%;}
+.que-sticky-column tr td:first-child{position: sticky;left: 0;background: #e9f4fa;z-index: 1;}
+
+.preview-sect-ttl-wrap {
+    margin: 20px 0 0;
+}
+.radio-btn-half-blk{flex: 0 0 33%;max-width: 33%;}
+.radio-btn-half-blk .radio-btn{justify-content: space-between;flex-direction: row !important;}
+.checkbox-btn-half-blk{width: 33%;display: flex;justify-content: space-between;}
+.checkbox-btn-half-blk label{margin-right: 30px;}
+.assessment-list-table td .icon:first-child{padding-left: 0;}
+/* .select-field .MuiFormLabel-root{transform: none;transition: none !important;font-family: 'ProximaNova-Regular' , serif, sans-serif;top: -4px;font-size: 14px;color: #8E8E8E;}
+.select-field .MuiFormLabel-root.MuiInputLabel-shrink{top: 8px;left: 17px;}
+.select-field .Mui-focused{transform: none !important;font-size: 14px;color: #1e1e1e !important;line-height: 14px;top: 0 !important;left: 0 !important;}
+.select-field label.Mui-focused{top: 11px !important;left: 17px !important;}
+.select-field fieldset legend {display: none;} */
