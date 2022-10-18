@@ -1724,3 +1724,6 @@ input:-webkit-autofill:active{
     height: 350px;
     overflow: auto;
 }
+
+.required-toggle-btnblk .MuiSwitch-switchBase ~ .MuiSwitch-track{border-color: rgba(204, 204, 204, 1);}
+.required-toggle-btnblk .MuiSwitch-switchBase.Mui-checked ~ .MuiSwitch-track{border-color: #f7a823;}

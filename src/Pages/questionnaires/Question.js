@@ -233,7 +233,7 @@ useEffect(() => {
         <div className="que-card-innerblk flex-between">
           <div className="que-card-form-leftfield">
             <div className="form-group">
-              <label htmlFor="questionTitle">Question{`${questionIdx + 1}`} Title <span className="mandatory">*</span></label>
+              <label htmlFor="questionTitle">Question {`${questionIdx + 1}`} Title <span className="mandatory">*</span></label>
               <TextField
                 className={`input-field ${
                   (!question?.questionTitle && err?.questionTitle) && "input-error"
