@@ -12,6 +12,9 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { EditOutlined } from "@mui/icons-material";
+import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
+import PostAddIcon from "@mui/icons-material/PostAdd";
 // import deleteIcon from "../../public/images/delete-icon.svg";
 import Radio from "@mui/material/Radio";
 
@@ -115,6 +118,9 @@ export default function TableComponent({
     selectedUser,
     onRowClick = false,
     isQuestionnare = false,
+    onClickEditAssesmentFunction,
+    onClickAssignAssesmentFunction,
+    onClickFillAssessmentFunction,
 }) {
     const handleRequestSort = (_event, property) => {
         const isAsc = orderBy === property && order === "asc";
@@ -170,6 +176,15 @@ export default function TableComponent({
     };
     const onClickDeleteIconHandler = (id) => {
         onClickDeleteIconHandler1(id);
+    };
+    const onClickEditAssessmentHandler = (uuid) => {
+        onClickEditAssesmentFunction(uuid);
+    };
+    const onClickAssignAssessmentHandler = (uuid) => {
+        onClickAssignAssesmentFunction(uuid);
+    };
+    const onClickFillAssessmentHandler = (uuid) => {
+        onClickFillAssessmentFunction(uuid);
     };
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
@@ -388,7 +403,7 @@ export default function TableComponent({
                                                             "visibility"
                                                         ) && (
                                                             <span className="icon">
-                                                                <Tooltip title="View">
+                                                                <Tooltip title="View assessment">
                                                                     <VisibilityOutlinedIcon
                                                                         onClick={() =>
                                                                             onClickVisibilityIconHandler(
@@ -421,6 +436,72 @@ export default function TableComponent({
                                                                             )
                                                                         }
                                                                     />
+                                                                </Tooltip>
+                                                            </span>
+                                                        )}
+                                                        {icons.includes(
+                                                            "edit"
+                                                        ) && (
+                                                            <span className="icon">
+                                                                <Tooltip title="edit">
+                                                                    <EditOutlined
+                                                                        onClick={() =>
+                                                                            onClickEditAssessmentHandler(
+                                                                                row.uuid
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                    {/* <img
+                                                                        src={
+                                                                            "/images/delete-icon.svg"
+                                                                        }
+                                                                        
+                                                                        }
+                                                                    /> */}
+                                                                </Tooltip>
+                                                            </span>
+                                                        )}
+                                                        {icons.includes(
+                                                            "send"
+                                                        ) && (
+                                                            <span className="icon">
+                                                                <Tooltip title="Assign to Operation Member">
+                                                                    <SendOutlinedIcon
+                                                                        onClick={() =>
+                                                                            onClickAssignAssesmentFunction(
+                                                                                row.uuid
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                    {/* <img
+                                                                        src={
+                                                                            "/images/delete-icon.svg"
+                                                                        }
+                                                                        
+                                                                        }
+                                                                    /> */}
+                                                                </Tooltip>
+                                                            </span>
+                                                        )}
+                                                        {icons.includes(
+                                                            "fill"
+                                                        ) && (
+                                                            <span className="icon">
+                                                                <Tooltip title="Fill Assessment">
+                                                                    <PostAddIcon
+                                                                        onClick={() =>
+                                                                            onClickFillAssessmentHandler(
+                                                                                row.uuid
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                    {/* <img
+                                                                        src={
+                                                                            "/images/delete-icon.svg"
+                                                                        }
+                                                                        
+                                                                        }
+                                                                    /> */}
                                                                 </Tooltip>
                                                             </span>
                                                         )}

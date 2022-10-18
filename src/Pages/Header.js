@@ -22,6 +22,7 @@ const Header = () => {
     const [isActive, setActive] = React.useState("false");
     const userAuth = useSelector((state) => state?.user?.userObj);
     const privilege = useSelector((state) => state?.user?.privilege);
+    console.log("user auth----", userAuth);
     // const privilege = useSelector((state) => state.user?.privilege);
     let initials = userAuth?.name?.split(" ");
     const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
@@ -245,10 +246,11 @@ const Header = () => {
                                                 </li>
                                             </ul>
                                         </li>
+
                                         <li
                                             className={
                                                 location.pathname.includes(
-                                                    "/questionnaires"
+                                                    "/assessment-list"
                                                 )
                                                     ? "list-item active"
                                                     : "list-item"
@@ -259,27 +261,7 @@ const Header = () => {
                                                     cursor: "pointer",
                                                 }}
                                                 onClick={() =>
-                                                    navigate("/questionnaires")
-                                                }
-                                            >
-                                                Questionnaires
-                                            </a>
-                                        </li>
-                                        <li
-                                            className={
-                                                location.pathname.includes(
-                                                    "/questionnaires"
-                                                )
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() =>
-                                                    navigate("/assessments")
+                                                    navigate("/assessment-list")
                                                 }
                                             >
                                                 Assessments
@@ -331,6 +313,27 @@ const Header = () => {
                                                 }}
                                             >
                                                 Roles and Privileges
+                                            </a>
+                                        </li>
+
+                                        <li
+                                            className={
+                                                location.pathname.includes(
+                                                    "/questionnaires"
+                                                )
+                                                    ? "list-item active"
+                                                    : "list-item"
+                                            }
+                                        >
+                                            <a
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
+                                                onClick={() =>
+                                                    navigate("/questionnaires")
+                                                }
+                                            >
+                                                Questionnaires
                                             </a>
                                         </li>
                                     </ul>

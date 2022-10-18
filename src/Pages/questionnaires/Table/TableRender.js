@@ -49,17 +49,17 @@ const TableRender = ({
 
   return (
     <div className="que-table-sect">
-      <div className={`que-table-wrap ${isPreview || "active" } `}>
-        <div className="que-table-innerwrap flex-between no-wrap">
+      <div className={`que-table-wrap assessment-table-wrap ${isPreview || "que-table-create" }  ${isPreview || "active" } `}>
+        <div className="que-table-innerwrap assessment-table-innerwrap flex-between no-wrap">
           <Paper
             sx={{ width: "96%", overflow: "hidden" }}
-            className="que-table-infoblk"
+            className="que-table-infoblk que-sticky-column pb-0"
           >
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table
                 stickyHeader
                 aria-label="sticky table"
-                className="que-table"
+                className="que-table assessment-table"
               >
                 <TableHead>
                   <TableRow>

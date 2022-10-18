@@ -6,7 +6,7 @@ import {
   TextField,
 } from "@mui/material";
 import React from "react";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -135,7 +135,7 @@ const TableLayoutCellComponent = ({
             value={null}
             className="datepicker-blk"
             components={{
-              OpenPickerIcon: CalendarMonthOutlinedIcon,
+              OpenPickerIcon: DateRangeOutlinedIcon,
             }}
             onChange={() => {}}
             renderInput={(params) => <TextField {...params} helperText=" " />}

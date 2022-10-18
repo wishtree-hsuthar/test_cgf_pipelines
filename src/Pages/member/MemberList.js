@@ -19,7 +19,7 @@ const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 const tableHead = [
   {
     id: "companyName",
-    width: "30%",
+    // width: "30%",
     disablePadding: false,
     label: "Company",
   },

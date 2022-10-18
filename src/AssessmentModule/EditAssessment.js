@@ -1,21 +1,22 @@
-import { Autocomplete, Paper, TextField } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
+import React, { useRef, useState, useEffect } from "react";
+import { useForm, Control, Controller } from "react-hook-form";
 import Input from "../components/Input";
 import Dropdown from "../components/Dropdown";
 import { privateAxios } from "../api/axios";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import {
+    FETCH_ASSESSMENT_BY_ID,
+    FETCH_OPERATION_MEMBER,
+    UPDATE_ASSESSMENT_BY_ID,
+} from "../api/Url";
 import useCallbackState from "../utils/useCallBackState";
+import { TextField } from "@mui/material";
 import Toaster from "../components/Toaster";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
-import { FETCH_OPERATION_MEMBER } from "../api/Url";
-import { date } from "yup";
-
 const helperTextForAssessment = {
     title: {
         required: "Assessment title required",
@@ -36,8 +37,32 @@ const helperTextForAssessment = {
         max: "Reached max limit",
     },
 };
-const AddAssessment = () => {
-    const [datevalue, setDateValue] = useState(new Date());
+function EditAssessment() {
+    const { handleSubmit, control, setValue, reset, watch } = useForm({
+        defaultValues: {
+            title: "",
+            assessmentType: "",
+            assignedMember: {
+                _id: "",
+                name: "",
+            },
+            assignedOperationMember: "",
+            dueDate: "",
+            remarks: "",
+        },
+    });
+
+    // navigate function
+    const navigate = useNavigate();
+    // params to extract id/uuid from url
+    const params = useParams();
+
+    const toasterRef = useRef();
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
     const [
         memberCompaniesForAddAssessments,
         setMemberCompaniesForAddAssessments,
@@ -48,35 +73,67 @@ const AddAssessment = () => {
     ] = useState([]);
     const [questionnares, setQuestionnares] = useState([]);
     const [questionnaresObj, setQuestionnaresObj] = useState([]);
-    const navigate = useNavigate();
-    const toasterRef = useRef();
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
-    const {
-        handleSubmit,
-        formState: { errors },
-        control,
-        watch,
-        reset,
-        setValue,
-    } = useForm({
-        defaultValues: {
-            title: "",
-            assessmentType: "",
-            assignedMember: "",
-            assignedOperationMember: "",
-            dueDate: new Date().toLocaleDateString(),
-            remarks: "",
-            questionnaireId: "",
-        },
-    });
+    const [questionnaireId, setQuestionnaireId] = useState("");
+
+    const fetchOperationMembersAccordingToMemberCompanyForAddAssessment =
+        async (id) => {
+            try {
+                const response = await privateAxios.get(
+                    FETCH_OPERATION_MEMBER + id
+                );
+                console.log(
+                    "Response from fetch operation member according to member company",
+                    response
+                );
+                setOperationMemberForAddAssessments(
+                    response.data.map((data) => ({
+                        _id: data._id,
+                        name: data.name,
+                    }))
+                );
+            } catch (error) {
+                console.log(
+                    "Error from from fetch operation member according to member company",
+                    error
+                );
+            }
+        };
+
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
 
+        const fetchAssessment = async () => {
+            try {
+                const response = await privateAxios.get(
+                    FETCH_ASSESSMENT_BY_ID + params.id,
+                    {
+                        signal: controller.signal,
+                    }
+                );
+                console.log("response from fetch assessment", response.data);
+                isMounted &&
+                    reset({
+                        title: response.data.title,
+                        assessmentType: response.data.assessmentType,
+                        assignedMember: response.data.assignedMember?._id,
+                        // name: response.data.assignedMember?.companyName,
+
+                        assignedOperationMember:
+                            response.data.assignedOperationMember?._id,
+                        dueDate: new Date(response.data.dueDate),
+                        remarks: response.data.remarks,
+                        questionnaireId: response.data.questionnaireId,
+                    });
+                setQuestionnaireId(response.data.questionnaireId);
+                fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+                    response.data?.assignedMember?._id
+                );
+            } catch (error) {
+                console.log("Error from fetch assessment", error);
+            }
+        };
+        fetchAssessment();
         const fetchMemberCompaniesForAddAssesments = async () => {
             try {
                 const response = await privateAxios.get(
@@ -132,71 +189,25 @@ const AddAssessment = () => {
         };
     }, []);
 
-    const fetchOperationMembersAccordingToMemberCompanyForAddAssessment =
-        async (id) => {
-            try {
-                const response = await privateAxios.get(
-                    FETCH_OPERATION_MEMBER + id
-                );
-                console.log(
-                    "Response from fetch operation member according to member company",
-                    response
-                );
-                setOperationMemberForAddAssessments(
-                    response.data.map((data) => ({
-                        _id: data._id,
-                        name: data.name,
-                    }))
-                );
-            } catch (error) {
-                console.log(
-                    "Error from from fetch operation member according to member company",
-                    error
-                );
-            }
-        };
-
-    const handleChangeForMemberCompany = (e) => {
-        setValue("assignedMember", e.target.value);
-        console.log("assignedMember", e.target.value);
-        fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
-            e.target.value
-        );
-    };
-
-    const handleChangeForAssessmentModule = (e) => {
-        console.log("assessment type", e);
-        let filterQuestionnaireById = questionnaresObj.filter(
-            (questionnare) => questionnare.name === e.target.value
-        );
-        console.log("filtered questionnaire", filterQuestionnaireById);
-        setValue("questionnaireId", filterQuestionnaireById[0]._id);
-        setValue("assessmentType", e.target.value);
-    };
-    const submitAssessments = async (data) => {
-        console.log("data from on submit", data);
-
-        let someDate = new Date(data.dueDate);
-        let setUTCHoursForDueDate = new Date(
-            someDate.setDate(someDate.getDate() + 1)
-        );
-        let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
-        console.log(
-            "data after converting to ISOstring",
-            new Date(ISOdate).toISOString()
-        );
-        data = {
-            ...data,
-            dueDate: new Date(setUTCHoursForDueDate) ,
-        };
-
+    const updateAssessment = async (data) => {
+        console.log("data for update assessment", data);
+        data = { ...data, questionnaireId: questionnaireId };
         try {
-            const response = await privateAxios.post(
-                "http://localhost:3000/api/assessments",
+            const response = await privateAxios.put(
+                UPDATE_ASSESSMENT_BY_ID + params.id,
                 data
             );
-            if (response.status === 201) {
-                console.log("response from add assessments", response);
+            console.log("response from update assessment page");
+            if (response.status === 200) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage: response?.data?.message,
+                        messageType: "success",
+                    },
+                    () => toasterRef.current()
+                );
+
                 reset({
                     title: "",
                     assessmentType: "",
@@ -208,20 +219,12 @@ const AddAssessment = () => {
                     remarks: "",
                     questionnaireId: "",
                 });
-                // Add success toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Success!",
-                        descriptionMessage: response?.data?.message,
-                        messageType: "success",
-                    },
-                    () => toasterRef.current()
-                );
                 setTimeout(() => {
                     navigate("/assessment-list");
                 }, 2000);
             }
         } catch (error) {
+            console.log("error from update assessment url", error);
             if (error.response.status === 401) {
                 console.log("Unauthorized user access");
                 // Add error toaster here
@@ -233,6 +236,7 @@ const AddAssessment = () => {
                     },
                     () => toasterRef.current()
                 );
+                navigate("/login");
             }
             if (error.response.status === 400) {
                 console.log("something went wrong");
@@ -260,6 +264,26 @@ const AddAssessment = () => {
             }
         }
     };
+
+    const handleChangeForMemberCompany = (e) => {
+        setValue("assignedMember", e.target.value);
+        console.log("assignedMember", e.target.value);
+        fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+            e.target.value
+        );
+    };
+
+    const handleChangeForAssessmentModule = (e) => {
+        console.log("assessment type", e);
+        let filterQuestionnaireById = questionnaresObj.filter(
+            (questionnare) => questionnare.name === e.target.value
+        );
+        console.log("filtered questionnaire", filterQuestionnaireById);
+        setValue("questionnaireId", filterQuestionnaireById[0]._id);
+        setQuestionnaireId(filterQuestionnaireById[0]._id);
+        setValue("assessmentType", e.target.value);
+    };
+
     return (
         <div className="page-wrapper">
             <Toaster
@@ -272,17 +296,17 @@ const AddAssessment = () => {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/assessments">Assessments</Link>
+                            <Link to="/assessment-list">Assessments</Link>
                         </li>
-                        <li>Add Assessment</li>
+                        <li>Edit Assessment</li>
                     </ul>
                 </div>
             </div>
             <section>
                 <div className="container">
-                    <form onSubmit={handleSubmit(submitAssessments)}>
+                    <form onSubmit={handleSubmit(updateAssessment)}>
                         <div className="form-header flex-between">
-                            <h2 className="heading2">Add Assessment</h2>
+                            <h2 className="heading2">Edit Assessment</h2>
                         </div>
                         <div className="card-wrapper">
                             <div className="card-blk flex-between">
@@ -385,10 +409,10 @@ const AddAssessment = () => {
                                                     dateAdapter={AdapterDayjs}
                                                 >
                                                     <DatePicker
-                                                        // {...field}
+                                                        {...field}
                                                         disablePast
                                                         className="datepicker-blk"
-                                                        value={datevalue}
+                                                        // value={datevalue}
                                                         components={{
                                                             OpenPickerIcon:
                                                                 DateRangeOutlinedIcon,
@@ -397,21 +421,21 @@ const AddAssessment = () => {
                                                         //     "MM/DD/YYYY"
                                                         // }
                                                         // value={datevalue}
-                                                        onChange={(value) => {
-                                                            setDateValue(value);
-                                                            console.log(
-                                                                "date",
-                                                                new Date(
-                                                                    value
-                                                                ).toLocaleDateString()
-                                                            );
-                                                            setValue(
-                                                                "dueDate",
-                                                                new Date(
-                                                                    value
-                                                                ).toISOString()
-                                                            );
-                                                        }}
+                                                        // onChange={(value) => {
+                                                        //     setDateValue(value);
+                                                        //     console.log(
+                                                        //         "date",
+                                                        //         new Date(
+                                                        //             value
+                                                        //         ).toLocaleDateString()
+                                                        //     );
+                                                        //     setValue(
+                                                        //         "dueDate",
+                                                        //         new Date(
+                                                        //             value
+                                                        //         ).toISOString()
+                                                        //     );
+                                                        // }}
                                                         renderInput={(
                                                             params
                                                         ) => (
@@ -469,7 +493,9 @@ const AddAssessment = () => {
                                 <div className="form-btn flex-between add-members-btn">
                                     <button
                                         type={"reset"}
-                                        onClick={() => navigate("/assessments")}
+                                        onClick={() =>
+                                            navigate("/assessment-list")
+                                        }
                                         className="secondary-button mr-10"
                                     >
                                         Cancel
@@ -478,7 +504,7 @@ const AddAssessment = () => {
                                         type="submit"
                                         className="primary-button add-button"
                                     >
-                                        Save
+                                        Update
                                     </button>
                                 </div>
                             </div>
@@ -488,6 +514,6 @@ const AddAssessment = () => {
             </section>
         </div>
     );
-};
+}
 
-export default AddAssessment;
+export default EditAssessment;

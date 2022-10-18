@@ -24,7 +24,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import dayjs from 'dayjs';
 
 const ITEM_HEIGHT = 22;
@@ -659,7 +659,7 @@ function AddQuestionnaires() {
                                                                 <DatePicker
                                                                     className='datepicker-blk'
                                                                     components={{
-                                                                        OpenPickerIcon: CalendarMonthOutlinedIcon
+                                                                        OpenPickerIcon: DateRangeOutlinedIcon
                                                                       }}
                                                                     datevalue={datevalue}
                                                                     onChange={(newValue) => {
