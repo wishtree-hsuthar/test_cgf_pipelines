@@ -67,14 +67,6 @@ const TableLayoutCellComponent = ({
                             </span>
                         )}
                     </p>
-                    // <div name={`${cell.columnId}.${rowId}`}>{cell?.value}</div>
-                    // <TextField
-                    //     className={`input-field`}
-                    //     name={`${cell.columnId}.${rowId}`}
-                    //     value={cell?.value}
-                    //     disabled
-                    //     helperText={" "}
-                    // />
                 )}
             {transformedColumns[cell.columnId] &&
                 transformedColumns[cell.columnId].columnType === "textbox" && (
