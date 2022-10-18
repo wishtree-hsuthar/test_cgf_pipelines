@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
+import React from "react";
+import { useSelector } from "react-redux";
 // Internal Imports
 import TableComponent from "../components/TableComponent";
 // import { MEMBER } from "../api/Url";
@@ -9,6 +8,7 @@ import useCallbackState from "../utils/useCallBackState";
 import Toaster from "../components/Toaster";
 import { useSelector } from "react-redux";
 import { privateAxios } from "../api/axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const tableHead = [
     {
@@ -41,16 +41,10 @@ const tableHead = [
         disablePadding: false,
         label: "Due Date",
     },
-    {
-        // id: "dueDate",
-        width: "30%",
-        disablePadding: false,
-        label: "Action",
-    },
 ];
-const AssessmentList = () => {
+
+function CommonAssessmentList() {
     const keysOrder = [
-        "uuid",
         "_id",
         "title",
         "assessmentType",
@@ -113,19 +107,6 @@ const AssessmentList = () => {
         return navigate(`/assessments/view-assessment/${id}`);
     };
 
-    const onClickEditIconHandler = (uuid) => {
-        console.log("uuid", uuid);
-        return navigate(`/assessments/edit-assessment/${uuid}`);
-    };
-    const onClickAssignAssessmentHandler = (uuid) => {
-        console.log("uuid", uuid);
-        return navigate(`/assessment-list/assign-assessment/${uuid}`);
-    };
-    const onClickFillAssessmentHandler = (uuid) => {
-        console.log("uuid", uuid);
-        return navigate(`/assessment-list/fill-assessment/${uuid}`);
-    };
-
     const generateUrl = () => {
         console.log("Search", search);
         let url = `http://localhost:3000/api/assessments?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
@@ -167,7 +148,7 @@ const AssessmentList = () => {
 
             delete object["__v"];
 
-            // delete object["uuid"];
+            delete object["uuid"];
             // delete object["createdAt"];
             delete object["isDraft"];
             delete object["isPublished"];
@@ -217,18 +198,10 @@ const AssessmentList = () => {
         };
     }, [page, rowsPerPage, orderBy, order, makeApiCall]);
 
-    const addAssessment = () => {
-        navigate("/assessments/add-assessment");
-    };
-
     const privilege = useSelector((state) => state?.user?.privilege);
 
     const userAuth = useSelector((state) => state?.user?.userObj);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    const MEMBER_REPRESENTATIVE =
-        privilege?.name === "Member Representative" ? true : false;
-    const OPERATION_MEMBER =
-        privilege?.name === "Operation Member" ? true : false;
     let privilegeArray =
         userAuth?.roleId?.name === "Super Admin"
             ? []
@@ -245,7 +218,6 @@ const AssessmentList = () => {
                 add: data?.add,
             },
         }));
-
     return (
         <div>
             <div className="page-wrapper">
@@ -257,19 +229,20 @@ const AssessmentList = () => {
                                     Assessment List
                                 </h2>
                             </div>
-                            <div className="form-header-right-txt">
-                                {SUPER_ADMIN == true && (
-                                    <div className="form-btn">
-                                        <button
-                                            type="submit"
-                                            className="primary-button add-button"
-                                            onClick={addAssessment}
-                                        >
-                                            Add Assessment
-                                        </button>
-                                    </div>
-                                )}
+                            {/* <div className="form-header-right-txt">
+                        {(SUPER_ADMIN == true ||
+                            moduleAccesForMember[0]?.member?.add) && (
+                            <div className="form-btn">
+                                <button
+                                    type="submit"
+                                    className="primary-button add-button"
+                                    onClick={addAssessment}
+                                >
+                                    Add Assessment
+                                </button>
                             </div>
+                        )}
+                    </div> */}
                         </div>
                         <div className="member-filter-sect">
                             <div className="member-filter-wrap flex-between">
@@ -314,27 +287,14 @@ const AssessmentList = () => {
                                         // selected={selected}
                                         totalRecords={totalRecords}
                                         orderBy={orderBy}
-                                        icons={
-                                            SUPER_ADMIN
-                                                ? ["visibility", "edit"]
-                                                : ["fill", "send"]
-                                        }
+                                        // icons={["visibility"]}
                                         onClickVisibilityIconHandler1={
                                             onClickVisibilityIconHandler
-                                        }
-                                        onClickEditAssesmentFunction={
-                                            onClickEditIconHandler
                                         }
                                         order={order}
                                         setOrder={setOrder}
                                         setOrderBy={setOrderBy}
                                         setCheckBoxes={false}
-                                        onClickAssignAssesmentFunction={
-                                            onClickAssignAssessmentHandler
-                                        }
-                                        onClickFillAssessmentFunction={
-                                            onClickFillAssessmentHandler
-                                        }
                                         // onRowClick={
                                         //     SUPER_ADMIN
                                         //         ? true
@@ -350,6 +310,6 @@ const AssessmentList = () => {
             </div>
         </div>
     );
-};
+}
 
-export default AssessmentList;
+export default CommonAssessmentList;

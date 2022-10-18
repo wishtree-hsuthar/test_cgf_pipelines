@@ -32,14 +32,47 @@ const MenuProps = {
 const PreviewQuestions = ({ question }) => {
     const [datevalue, setDateValue] = React.useState(null);
 
-    let questionLabel = 
-        question.questionTitle
-    
+    let questionLabel = question.questionTitle;
+
+    let errorObject = {
+        isRequired: question?.isRequired,
+        validation: question?.validation,
+    };
+    // const helperText = () => {
+    //     if (errorObject.isRequired) {
+    //         return assessmentUUID.sectionUUID.questionUUID === ""
+    //             ? setError("required field is empty")
+    //             : setError("  ");
+    //     }
+    //     if (errorObject.validation !== "") {
+
+    //         if ( errorObject.validation === "character") {
+    //             return assessmentUUID.sectionUUID.questionUUID.isalnum()
+    //                 ? setError(" ")
+    //                 : setError("required field should be numeric");
+    //         }
+    //         if (errorObject.validation === "numeric") {
+    //             return assessmentUUID.sectionUUID.questionUUID.isalnum()
+    //                 ? setError(" ")
+    //                 : setError("required field should be numeric");
+    //         }
+    //         if (errorObject.validation === "alphabet") {
+    //             return assessmentUUID.sectionUUID.questionUUID.isalpha()
+    //                 ? setError(" ")
+    //                 : setError("required field should be numeric");
+    //         }
+    //     }
+    // };
+
     console.log("title preview question", questionLabel);
     console.log("title preview question", question.questionTitle);
     let questionComponent =
         question.inputType === "singleTextbox" ? (
-            <TextField placeholder={`Enter ${question.questionTitle}`}  className="input-field" />
+            <TextField
+                placeholder={`Enter ${question.questionTitle}`}
+                // helperText={helperText}
+                className="input-field"
+            />
         ) : question.inputType === "textarea" ? (
             <TextField
                 placeholder={`Enter ${question.questionTitle}`}
@@ -116,15 +149,13 @@ const PreviewQuestions = ({ question }) => {
             <div className="form-group">
                 <label htmlFor="questionTitle">
                     <div class="preview-sect-txt">
-                    {questionLabel} 
-                    {question?.isRequired && (
-                        <span className="mandatory"> *</span>
-                    )}
+                        {questionLabel}
+                        {question?.isRequired && (
+                            <span className="mandatory"> *</span>
+                        )}
                     </div>
                 </label>
-                <div className="que-half-sect">
-                {questionComponent}
-                </div>
+                <div className="que-half-sect">{questionComponent}</div>
             </div>
         </div>
     );
