@@ -166,7 +166,7 @@ const TableQuestions = ({
                         name="title"
                         helperText={
                           !column?.title && tableErr
-                            ? "Enter column title"
+                            ? "This is required field"
                             : " "
                         }
                         value={column?.title}
@@ -289,6 +289,7 @@ const TableQuestions = ({
         Add Column
       </div>
       <TableRender
+        isPreview={false}
         questionnaire={questionnaire}
         setQuestionnaire={setQuestionnaire}
         sectionIndex={sectionIndex}

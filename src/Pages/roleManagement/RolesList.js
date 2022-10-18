@@ -16,7 +16,7 @@ import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 const tableHead = [
   {
     id: "name",
-    width: "30%",
+    // width: "30%",
     disablePadding: false,
     label: "Role",
   },

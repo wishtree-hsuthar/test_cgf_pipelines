@@ -7,37 +7,37 @@ import { WITHDRAW_OPERATION_MEMBER } from "../../api/Url";
 const pendingOperationMemberTableColumnHeader = [
     {
         id: "operationMember",
-        width: "30%",
+        // width: "30%",
         disablePadding: false,
         label: "Operation Member",
     },
     {
         id: "email",
-        width: "30%",
+        // width: "30%",
         disablePadding: false,
         label: "Email",
     },
     {
         id: "memberCompany",
-        width: "30%",
+        // width: "30%",
         disablePadding: false,
         label: "Member Company",
     },
     {
         id: "Company Type",
-        width: "30%",
+        // width: "30%",
         disablePadding: false,
         label: "companyType",
     },
     {
         id: "createdByName",
-        width: "30%",
+        // width: "30%",
         disablePadding: false,
         label: "Created By",
     },
     {
         id: "createdAt",
-        width: "30%",
+        // width: "30%",
         disablePadding: false,
         label: "Created At",
     },
