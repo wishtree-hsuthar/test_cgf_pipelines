@@ -12,7 +12,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { FETCH_OPERATION_MEMBER } from "../api/Url";
 import { date } from "yup";
 
@@ -33,7 +33,7 @@ const helperTextForAssessment = {
         required: "Due date required",
     },
     remarks: {
-        max: "Reached max limit",
+        maxLength: "Reached max limit",
     },
 };
 const AddAssessment = () => {
@@ -187,7 +187,7 @@ const AddAssessment = () => {
         );
         data = {
             ...data,
-            dueDate: new Date(setUTCHoursForDueDate) ,
+            dueDate: new Date(setUTCHoursForDueDate),
         };
 
         try {
@@ -432,7 +432,6 @@ const AddAssessment = () => {
                                             name="remarks"
                                             control={control}
                                             rules={{
-                                                required: true,
                                                 minLength: 3,
                                                 maxLength: 250,
                                             }}
@@ -443,9 +442,9 @@ const AddAssessment = () => {
                                                 <TextField
                                                     multiline
                                                     {...field}
-                                                    inputProps={{
-                                                        maxLength: 250,
-                                                    }}
+                                                    // inputProps={{
+                                                    //     maxLength: 250,
+                                                    // }}
                                                     className={`input-textarea ${
                                                         error &&
                                                         "input-textarea-error"
@@ -456,7 +455,7 @@ const AddAssessment = () => {
                                                         error
                                                             ? helperTextForAssessment
                                                                   .remarks[
-                                                                  error.type
+                                                                  "maxLength"
                                                               ]
                                                             : " "
                                                     }

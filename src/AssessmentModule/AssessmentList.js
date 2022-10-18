@@ -45,7 +45,7 @@ const tableHead = [
         // id: "dueDate",
         width: "30%",
         disablePadding: false,
-        label: "Action",
+        label: "Actions",
     },
 ];
 const AssessmentList = () => {
@@ -338,12 +338,12 @@ const AssessmentList = () => {
                                         onClickFillAssessmentFunction={
                                             onClickFillAssessmentHandler
                                         }
-                                    // onRowClick={
-                                    //     SUPER_ADMIN
-                                    //         ? true
-                                    //         : moduleAccesForMember[0]?.member?.view
-                                    // }
-                                    // isQuestionnare={true}
+                                        // onRowClick={
+                                        //     SUPER_ADMIN
+                                        //         ? true
+                                        //         : moduleAccesForMember[0]?.member?.view
+                                        // }
+                                        // isQuestionnare={true}
                                     />
                                 )}
                             </div>
