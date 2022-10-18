@@ -37,7 +37,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import dayjs from "dayjs";
 import "../../../Pages/PreviewDemo.css";
 
@@ -302,7 +302,7 @@ function PreviewDemo() {
                                                         className="datepicker-blk"
                                                         components={{
                                                             OpenPickerIcon:
-                                                                CalendarMonthOutlinedIcon,
+                                                                DateRangeOutlinedIcon,
                                                         }}
                                                         datevalue={datevalue}
                                                         onChange={(

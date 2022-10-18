@@ -12,7 +12,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import { FETCH_OPERATION_MEMBER } from "../api/Url";
 import { date } from "yup";
 
@@ -187,7 +187,7 @@ const AddAssessment = () => {
         );
         data = {
             ...data,
-            dueDate: setUTCHoursForDueDate,
+            dueDate: new Date(setUTCHoursForDueDate) ,
         };
 
         try {
@@ -391,7 +391,7 @@ const AddAssessment = () => {
                                                         value={datevalue}
                                                         components={{
                                                             OpenPickerIcon:
-                                                                CalendarMonthOutlinedIcon,
+                                                                DateRangeOutlinedIcon,
                                                         }}
                                                         // inputFormat={
                                                         //     "MM/DD/YYYY"

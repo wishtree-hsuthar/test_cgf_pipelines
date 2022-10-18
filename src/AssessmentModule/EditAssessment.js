@@ -16,7 +16,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 const helperTextForAssessment = {
     title: {
         required: "Assessment title required",
@@ -415,7 +415,7 @@ function EditAssessment() {
                                                         // value={datevalue}
                                                         components={{
                                                             OpenPickerIcon:
-                                                                CalendarMonthOutlinedIcon,
+                                                                DateRangeOutlinedIcon,
                                                         }}
                                                         // inputFormat={
                                                         //     "MM/DD/YYYY"

@@ -50,8 +50,8 @@ const TableAssessment = ({
 
     return (
         <div className="que-table-sect">
-            <div className="que-table-wrap">
-                <div className="que-table-innerwrap flex-between no-wrap">
+            <div className="que-table-wrap assessment-table-wrap">
+                <div className="que-table-innerwrap assessment-table-innerwrap flex-between no-wrap">
                     <Paper
                         sx={{ width: "96%", overflow: "hidden" }}
                         className="que-table-infoblk"
@@ -60,15 +60,15 @@ const TableAssessment = ({
                             <Table
                                 stickyHeader
                                 aria-label="sticky table"
-                                className="que-table"
+                                className="que-table assessment-table"
                             >
                                 <TableHead>
                                     <TableRow>
                                         {columnValues?.map(
                                             (column, columnId) => (
-                                                <TableCell key={column?.uuid}>
+                                                <TableCell key={column?.uuid} width="200px">
                                                     <div className="que-table-column-info">
-                                                        <div className="que-column-ttlblk flex-between">
+                                                        <div className="que-column-ttlblk">
                                                             <div
                                                                 className="que-table-col-ttl"
                                                                 // contentEditable="true"

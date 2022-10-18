@@ -18,7 +18,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -101,12 +101,12 @@ const PreviewQuestions = ({ question }) => {
                 </div>
             </div>
         ) : question.inputType === "radioGroup" ? (
-            <div className="radio-btn-field">
+            <div className="radio-btn-field radio-btn-half-blk">
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
                     defaultValue="Active"
                     name="radio-buttons-group"
-                    className="radio-btn radio-btn-vertical"
+                    className="radio-btn"
                 >
                     {question.options.map((option) => (
                         <FormControlLabel
@@ -118,7 +118,7 @@ const PreviewQuestions = ({ question }) => {
                 </RadioGroup>
             </div>
         ) : question.inputType === "checkbox" ? (
-            <div className="checkbox-with-labelblk">
+            <div className="checkbox-with-labelblk checkbox-btn-half-blk">
                 {question.options.map((option) => (
                     <FormControlLabel
                         className="checkbox-with-label"
@@ -132,7 +132,7 @@ const PreviewQuestions = ({ question }) => {
                 <DatePicker
                     className="datepicker-blk"
                     components={{
-                        OpenPickerIcon: CalendarMonthOutlinedIcon,
+                        OpenPickerIcon: DateRangeOutlinedIcon,
                     }}
                     datevalue={datevalue}
                     onChange={(newValue) => {

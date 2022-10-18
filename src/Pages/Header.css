@@ -218,13 +218,13 @@
     }
 }
 @media screen and (max-width: 820px) {
-    .user-img{width: 30px;height: 30px;}
-    .user-name-txt{font-size: 12px;}
-    .user-info{font-size: 12px;}
-    .super-admin-arrow svg{font-size: 18px;}
+    .user-img{width: 27px;height: 27px;margin-right: 5px;}
+    .user-name-txt{font-size: 11px;}
+    .user-info{font-size: 11px;}
+    .super-admin-arrow svg{font-size: 16px;}
     .header-left {
-        flex: 0 0 82%;
-        max-width: 82%;
+        flex: 0 0 81%;
+        max-width: 81%;
     }
     .nav-list li:last-child{padding-right: 0;}
     .nav-list li {padding: 10px 6px;font-size: 11px;}

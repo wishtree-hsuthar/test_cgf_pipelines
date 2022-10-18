@@ -13,7 +13,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 
 export const AlphaRegEx = /^[a-z]+$/i;
 export const NumericRegEx = /^[0-9]+$/i;
@@ -147,7 +147,7 @@ const FillAssessmentQuestion = ({
                 <DatePicker
                     className="datepicker-blk"
                     components={{
-                        OpenPickerIcon: CalendarMonthOutlinedIcon,
+                        OpenPickerIcon: DateRangeOutlinedIcon,
                     }}
                     value={answer ?? ""}
                     onChange={(newValue) =>

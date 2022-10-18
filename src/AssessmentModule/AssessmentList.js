@@ -251,29 +251,14 @@ const AssessmentList = () => {
             <div className="page-wrapper">
                 <section>
                     <div className="container">
-                        <div className="form-header member-form-header flex-between">
+                        <div className="form-header member-form-header flex-between mb-0">
                             <div className="form-header-left-blk flex-start">
                                 <h2 className="heading2 mr-40">
                                     Assessment List
                                 </h2>
                             </div>
-                            <div className="form-header-right-txt">
-                                {SUPER_ADMIN == true && (
-                                    <div className="form-btn">
-                                        <button
-                                            type="submit"
-                                            className="primary-button add-button"
-                                            onClick={addAssessment}
-                                        >
-                                            Add Assessment
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="member-filter-sect">
-                            <div className="member-filter-wrap flex-between">
-                                <div className="member-filter-left">
+                            <div className="form-header-right-txt search-and-btn-field-right">
+                                <div className="search-and-btn-field-blk">
                                     <div className="searchbar">
                                         <input
                                             type="text"
@@ -291,10 +276,28 @@ const AssessmentList = () => {
                                         </button>
                                     </div>
                                 </div>
+                                {SUPER_ADMIN == true && (
+                                    <div className="form-btn">
+                                        <button
+                                            type="submit"
+                                            className="primary-button add-button"
+                                            onClick={addAssessment}
+                                        >
+                                            Add Assessment
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
+                        {/* <div className="member-filter-sect">
+                            <div className="member-filter-wrap flex-between">
+                                <div className="member-filter-left">
+                                    
+                                </div>
+                            </div>
+                        </div> */}
                         <div className="member-info-wrapper table-content-wrap">
-                            <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
+                            <div className="member-info-wrapper table-content-wrap table-footer-btm-space assessment-list-table">
                                 {isLoading ? (
                                     <div className="loader-blk">
                                         <img src={Loader2} alt="Loading" />
@@ -335,12 +338,12 @@ const AssessmentList = () => {
                                         onClickFillAssessmentFunction={
                                             onClickFillAssessmentHandler
                                         }
-                                        // onRowClick={
-                                        //     SUPER_ADMIN
-                                        //         ? true
-                                        //         : moduleAccesForMember[0]?.member?.view
-                                        // }
-                                        // isQuestionnare={true}
+                                    // onRowClick={
+                                    //     SUPER_ADMIN
+                                    //         ? true
+                                    //         : moduleAccesForMember[0]?.member?.view
+                                    // }
+                                    // isQuestionnare={true}
                                     />
                                 )}
                             </div>
