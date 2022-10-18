@@ -1,18 +1,28 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TableAssessment from "./TableAssesment";
 import FillAssessmentQuestion from "./FillAssessmentQuestions";
-import { privateAxios } from "../api/axios";
-import { SUBMIT_ASSESSMENT_AS_DRAFT } from "../api/Url";
 import useCallbackState from "../utils/useCallBackState";
 import Toaster from "../components/Toaster";
 
+const getTransformedColumns = (columns) => {
+    let transformedColumns = {};
+    columns.forEach((column) => {
+        transformedColumns[column.uuid] = column;
+    });
+    return transformedColumns;
+};
+
+const getTransformedRows = (rows) => {
+    let transfromedRows = {};
+    rows.forEach((row) => {
+        transfromedRows[row.uuid] = row;
+    });
+
+    return transfromedRows;
+};
+
 function FillAssesmentSection({
-    // questionnaire,
-    // setQuestionnaire,
-    // uuid,
-    // setValue,
-    // index,
     section,
     setAssessmentQuestionnaire,
     assessmentQuestionnaire,
@@ -20,9 +30,10 @@ function FillAssesmentSection({
     setErrorQuestion,
     errorQuestionUUID,
     setErrorQuestionUUID,
+    errors,
+    handleSetErrors,
+    handleFormSubmit,
 }) {
-    const [selectedValues, setSelectedValues] = React.useState([]);
-
     const navigate = useNavigate();
     const params = useParams();
 
@@ -35,94 +46,12 @@ function FillAssesmentSection({
 
     const myRef = useRef();
 
-    const validateAssessment = async () => {
-        Object.entries(assessmentQuestionnaire).forEach(([key, value]) =>
-            Object.entries(value).forEach(([key, value]) => {
-                if (value.length === 0) {
-                    setErrorQuestion(key);
-                    return false;
-                }
-            })
-        );
-        return true;
-    };
-
-    const saveAssessmentAsDraft = async () => {
-        try {
-            const response =
-                validateAssessment() &&
-                (await privateAxios.post(
-                    SUBMIT_ASSESSMENT_AS_DRAFT + params.id,
-                    {
-                        assessmentQuestionnaire,
-                    }
-                ));
-            console.log("Assessment is saved as draft", response);
-            setToasterDetails(
-                {
-                    titleMessage: "Success",
-                    descriptionMessage: response?.data?.message,
-                    messageType: "success",
-                },
-                () => myRef.current()
-            );
-        } catch (error) {
-            console.log("error from save assessment as draft", error);
-            setToasterDetails(
-                {
-                    titleMessage: "Error",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something Went Wrong!",
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
-        }
-    };
-
-    const [answers, setAnswers] = useState({
-        [section?.uuid]: {},
-    });
-
-    const [errors, setErrors] = useState({
-        [section.uuid]: {},
-    });
-
     const handleAnswersChange = (name, value) => {
-        let tempAns = answers[section?.uuid];
-        tempAns = { ...tempAns, [name]: value };
-        setAnswers({ [section?.uuid]: { ...tempAns } });
-    };
-
-    // useEffect(() => {
-    //     console.log("ANSWERS", answers);
-    // }, [answers]);
-
-    const handleFormSubmit = (e) => {
-        let tempErrors = errors[section?.uuid];
-        let currentSectionAnswers = answers[section?.uuid];
-
-        section?.rowValues.map((row) => {
-            row?.cells.map((cell) => {
-                if (
-                    !currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`] ||
-                    currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`]
-                        .length === 0
-                ) {
-                    tempErrors[`${cell?.columnId}.${row?.uuid}`] =
-                        "This is required";
-                } else {
-                    tempErrors[`${cell?.columnId}.${row?.uuid}`] = "";
-                }
-            });
-        });
-
-        setErrors({
+        setAssessmentQuestionnaire({
+            ...assessmentQuestionnaire,
             [section?.uuid]: {
-                ...tempErrors,
+                ...assessmentQuestionnaire[section?.uuid],
+                [name]: value,
             },
         });
     };
@@ -161,16 +90,31 @@ function FillAssesmentSection({
                                 setErrorQuestion={setErrorQuestion}
                                 errorQuestionUUID={errorQuestionUUID}
                                 setErrorQuestionUUID={setErrorQuestionUUID}
+                                // errors={errors ?? {}}
+                                answer={
+                                    assessmentQuestionnaire[section?.uuid] &&
+                                    assessmentQuestionnaire[section?.uuid][
+                                        question?.uuid
+                                    ]
+                                        ? assessmentQuestionnaire[
+                                              section?.uuid
+                                          ][question?.uuid]
+                                        : question?.inputType === "checkbox"
+                                        ? []
+                                        : ""
+                                }
+                                error={errors[question?.uuid] ?? ""}
+                                handleAnswersChange={handleAnswersChange}
                             />
                         ))
                     ) : (
                         <TableAssessment
+                            assessmentQuestionnaire={assessmentQuestionnaire}
                             sectionUUID={section?.uuid}
                             columnValues={section?.columnValues}
                             rowValues={section?.rowValues}
-                            answers={answers}
                             handleAnswersChange={handleAnswersChange}
-                            errors={errors[section?.uuid]}
+                            errors={errors ?? {}}
                         />
                     )}
                 </div>

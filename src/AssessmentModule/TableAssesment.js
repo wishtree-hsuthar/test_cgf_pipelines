@@ -38,10 +38,10 @@ const getTransformedRows = (rows) => {
 };
 
 const TableAssessment = ({
+    assessmentQuestionnaire,
     columnValues,
     rowValues,
     sectionUUID,
-    answers,
     handleAnswersChange,
     errors,
 }) => {
@@ -64,7 +64,6 @@ const TableAssessment = ({
                             >
                                 <TableHead>
                                     <TableRow>
-                                        {/* <TableCell width={80}></TableCell> */}
                                         {columnValues?.map(
                                             (column, columnId) => (
                                                 <TableCell key={column?.uuid} width="200px">
@@ -74,30 +73,11 @@ const TableAssessment = ({
                                                                 className="que-table-col-ttl"
                                                                 // contentEditable="true"
                                                             >
-                                                                {column?.title
-                                                                    .length >
-                                                                50 ? (
-                                                                    <Tooltip
-                                                                        title={
-                                                                            column?.title
-                                                                        }
-                                                                        placement="bottom-start"
-                                                                    >
-                                                                        <p>
-                                                                            {column?.title.slice(
-                                                                                0,
-                                                                                50
-                                                                            )}
-                                                                            ...
-                                                                        </p>
-                                                                    </Tooltip>
-                                                                ) : (
-                                                                    <p>
-                                                                        {
-                                                                            column?.title
-                                                                        }
-                                                                    </p>
-                                                                )}
+                                                                <p>
+                                                                    {
+                                                                        column?.title
+                                                                    }
+                                                                </p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -109,18 +89,6 @@ const TableAssessment = ({
                                 <TableBody>
                                     {rowValues?.map((row, rowId) => (
                                         <TableRow key={row?.uuid}>
-                                            {/* <TableCell>
-                                                <div
-                                                    className="que-column-count flex-between"
-                                                    style={{
-                                                        cursor: "pointer",
-                                                    }}
-                                                >
-                                                    <span className="que-column-count-txt">
-                                                        {rowId + 1}.
-                                                    </span>
-                                                </div>
-                                            </TableCell> */}
                                             {row &&
                                                 row?.cells?.map(
                                                     (cell, cellId) => (
@@ -139,12 +107,24 @@ const TableAssessment = ({
                                                                     row?.uuid
                                                                 }
                                                                 cell={cell}
+                                                                // answer={
+                                                                //     answers[
+                                                                //         sectionUUID
+                                                                //     ][
+                                                                //         `${cell.columnId}.${row?.uuid}`
+                                                                //     ] ?? ""
+                                                                // }
                                                                 answer={
-                                                                    answers[
+                                                                    assessmentQuestionnaire[
                                                                         sectionUUID
-                                                                    ][
-                                                                        `${cell.columnId}.${row?.uuid}`
-                                                                    ] ?? ""
+                                                                    ]
+                                                                        ? assessmentQuestionnaire[
+                                                                              sectionUUID
+                                                                          ][
+                                                                              `${cell.columnId}.${row?.uuid}`
+                                                                          ] ??
+                                                                          ""
+                                                                        : ""
                                                                 }
                                                                 handleAnswersChange={
                                                                     handleAnswersChange
@@ -152,7 +132,7 @@ const TableAssessment = ({
                                                                 error={
                                                                     errors[
                                                                         `${cell?.columnId}.${row?.uuid}`
-                                                                    ]
+                                                                    ] ?? ""
                                                                 }
                                                             />
                                                         </TableCell>

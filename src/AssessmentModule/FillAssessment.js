@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
-import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
-import { styled } from "@mui/material/styles";
-
 import PropTypes from "prop-types";
 import { Tabs, Tab, Tooltip } from "@mui/material";
-
-import PreviewSection from "../Pages/questionnaires/Preview";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../api/axios";
 import FillAssesmentSection from "./FillAssessmentSection";
+import { SUBMIT_ASSESSMENT_AS_DRAFT } from "../api/Url";
+import useCallbackState from "../utils/useCallBackState";
+import Toaster from "../components/Toaster";
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -20,6 +18,15 @@ const MenuProps = {
         },
     },
 };
+
+const getTransformedColumns = (columns) => {
+    let transformedColumns = {};
+    columns.forEach((column) => {
+        transformedColumns[column.uuid] = column;
+    });
+    return transformedColumns;
+};
+
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -66,6 +73,19 @@ function FillAssessment() {
     const [errorQuestion, setErrorQuestion] = useState("");
     const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
 
+    const [errors, setErrors] = useState({});
+
+    //Toaster Message setter
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
+
+    const handleSetErrors = (errors) => {
+        setErrors({ ...errors });
+    };
+
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -94,10 +114,10 @@ function FillAssessment() {
                 );
                 console.log("response from fetch assessment", response);
                 isMounted && setAssessments({ ...response.data });
-
-                setAssessmentQuestionnaire({
-                    ...response.data.answers.assessmentQuestionnaire,
-                });
+                isMounted &&
+                    setAssessmentQuestionnaire({
+                        ...response.data.answers,
+                    });
                 fetchQuestionnaire(response?.data?.questionnaireId);
             } catch (error) {
                 console.log("error from fetch assessment", error);
@@ -109,9 +129,119 @@ function FillAssessment() {
             controller.abort();
         };
     }, []);
+
+    const myRef = useRef();
+
+    const saveAssessmentAsDraft = async () => {
+        console.log("Save function called");
+        try {
+            const response = await privateAxios.post(
+                SUBMIT_ASSESSMENT_AS_DRAFT + params.id,
+                {
+                    ...assessmentQuestionnaire,
+                }
+            );
+            console.log("Assessment is saved as draft", response);
+            setToasterDetails(
+                {
+                    titleMessage: "Success",
+                    descriptionMessage: response?.data?.message,
+                    messageType: "success",
+                },
+                () => myRef.current()
+            );
+        } catch (error) {
+            console.log("error from save assessment as draft", error);
+            setToasterDetails(
+                {
+                    titleMessage: "Error",
+                    descriptionMessage:
+                        error?.response?.data?.message &&
+                        typeof error.response.data.message === "string"
+                            ? error.response.data.message
+                            : "Something Went Wrong!",
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
+        }
+    };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        const tempErrors = {};
+
+        questionnaire?.sections?.map((section) => {
+            let sectionErrors = errors[section?.uuid] ?? {};
+            let currentSectionAnswers =
+                assessmentQuestionnaire[section?.uuid] ?? {};
+
+            if (section?.layout === "table") {
+                const transformedColValues = getTransformedColumns(
+                    section?.columnValues
+                );
+
+                section?.rowValues.map((row) => {
+                    row?.cells?.map((cell) => {
+                        if (
+                            transformedColValues[cell?.columnId].columnType !==
+                                "prefilled" &&
+                            (!currentSectionAnswers[
+                                `${cell?.columnId}.${row?.uuid}`
+                            ] ||
+                                currentSectionAnswers[
+                                    `${cell?.columnId}.${row?.uuid}`
+                                ].length === 0)
+                        ) {
+                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                                "This is required";
+                        } else {
+                            delete sectionErrors[
+                                `${cell?.columnId}.${row?.uuid}`
+                            ];
+                        }
+                    });
+                });
+            } else {
+                // form validators
+                section?.questions.map((question) => {
+                    if (
+                        question.isRequired &&
+                        (!currentSectionAnswers[question?.uuid] ||
+                            currentSectionAnswers[question?.uuid].length === 0)
+                    ) {
+                        sectionErrors[question?.uuid] = "This is required";
+                    } else {
+                        delete sectionErrors[question?.uuid];
+                    }
+                });
+            }
+
+            tempErrors[section?.uuid] = { ...sectionErrors };
+        });
+
+        handleSetErrors(tempErrors);
+        const isValidated = Object.keys(tempErrors).every(
+            (key) => Object.keys(tempErrors[key]).length === 0
+        );
+        if (isValidated) {
+            saveAssessmentAsDraft();
+        }
+    };
+
+    useEffect(() => {
+        console.log("UseEffect Errors", errors);
+    }, [errors]);
+
     const [datevalue, setDateValue] = React.useState(null);
     return (
         <div className="page-wrapper">
+            <Toaster
+                myRef={myRef}
+                titleMessage={toasterDetails.titleMessage}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                messageType={toasterDetails.messageType}
+            />
             <div className="breadcrumb-wrapper">
                 <div className="container">
                     <ul className="breadcrumb">
@@ -133,21 +263,6 @@ function FillAssessment() {
                     <div className="form-header flex-between">
                         <h2 className="heading2">{questionnaire.title}</h2>
                     </div>
-                    {/* <div className="que-ttl-blk">
-                        <div className="form-group mb-0">
-                            <label for="">
-                                Questionnaire Title{" "}
-                                <span className="mandatory">*</span>
-                            </label>
-                            <TextField
-                                className="input-field"
-                                id="outlined-basic"
-                                value={questionnaire.title}
-                                placeholder="Enter questionnaire title"
-                                variant="outlined"
-                            />
-                        </div>
-                    </div> */}
                     <div className="section-form-sect">
                         <div className="section-tab-blk flex-between preview-tab-blk">
                             <div className="section-tab-leftblk">
@@ -200,6 +315,9 @@ function FillAssessment() {
                                         setErrorQuestionUUID={
                                             setErrorQuestionUUID
                                         }
+                                        errors={errors[section?.uuid] ?? {}}
+                                        // handleSetErrors={handleSetErrors}
+                                        handleFormSubmit={handleFormSubmit}
                                     />
                                 </TabPanel>
                             ))}
