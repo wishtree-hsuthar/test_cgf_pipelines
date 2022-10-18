@@ -6,6 +6,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    Tooltip,
 } from "@mui/material";
 import React from "react";
 import TableLayoutCellComponent from "./TableLayoutCellComponent.js";
@@ -49,7 +50,7 @@ const TableAssessment = ({
 
     return (
         <div className="que-table-sect">
-            <div className="que-table-wrap active">
+            <div className="que-table-wrap">
                 <div className="que-table-innerwrap flex-between no-wrap">
                     <Paper
                         sx={{ width: "96%", overflow: "hidden" }}
@@ -73,7 +74,30 @@ const TableAssessment = ({
                                                                 className="que-table-col-ttl"
                                                                 // contentEditable="true"
                                                             >
-                                                                {column?.title}
+                                                                {column?.title
+                                                                    .length >
+                                                                50 ? (
+                                                                    <Tooltip
+                                                                        title={
+                                                                            column?.title
+                                                                        }
+                                                                        placement="bottom-start"
+                                                                    >
+                                                                        <p>
+                                                                            {column?.title.slice(
+                                                                                0,
+                                                                                50
+                                                                            )}
+                                                                            ...
+                                                                        </p>
+                                                                    </Tooltip>
+                                                                ) : (
+                                                                    <p>
+                                                                        {
+                                                                            column?.title
+                                                                        }
+                                                                    </p>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </div>

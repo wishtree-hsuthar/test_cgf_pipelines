@@ -5,7 +5,7 @@ import {
     MenuItem,
     FormHelperText,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -19,12 +19,55 @@ const TableLayoutCellComponent = ({
     handleAnswersChange,
     error,
 }) => {
+    const [showMore, setShowMore] = useState(false);
+
     return (
         <>
             {transformedColumns[cell.columnId] &&
                 transformedColumns[cell.columnId].columnType ===
                     "prefilled" && (
-                    <div name={`${cell.columnId}.${rowId}`}>{cell?.value}</div>
+                    <p style={{ textAlign: "justify" }}>
+                        {showMore ? (
+                            <span>
+                                <span>{cell?.value}</span>
+                                <br />
+                                <a
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setShowMore(false);
+                                    }}
+                                    style={{ color: "#4596D1" }}
+                                >
+                                    Show Less
+                                </a>
+                            </span>
+                        ) : (
+                            <span>
+                                {cell?.value.length > 100 ? (
+                                    <span>
+                                        <span>
+                                            {cell?.value.slice(0, 100)}...
+                                        </span>
+                                        <br />
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setShowMore(true);
+                                            }}
+                                            style={{ color: "#4596D1" }}
+                                        >
+                                            Show More
+                                        </a>
+                                    </span>
+                                ) : (
+                                    cell?.value
+                                )}
+                            </span>
+                        )}
+                    </p>
+                    // <div name={`${cell.columnId}.${rowId}`}>{cell?.value}</div>
                     // <TextField
                     //     className={`input-field`}
                     //     name={`${cell.columnId}.${rowId}`}
