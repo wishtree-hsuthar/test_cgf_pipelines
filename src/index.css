@@ -1371,7 +1371,7 @@ input:-webkit-autofill:active{
   .que-table-wrap {
     padding: 0 20px 20px;
   }
-  .que-table th{background: rgba(69, 150, 209, 0.1);border-bottom: 1px solid rgba(142,142,142,0.5);padding: 20px 15px;border-right: 1px solid rgba(142,142,142,0.5);font-family: 'ProximaNova-Regular';vertical-align: top;z-index: 1;position: relative;}
+  .que-table th{background: rgba(69, 150, 209, 0.1);border-bottom: 1px solid rgba(142,142,142,0.15);padding: 20px 15px;border-right: 1px solid rgba(142,142,142,0.15);font-family: 'ProximaNova-Regular';vertical-align: top;z-index: 1;position: relative;}
   .que-table th:first-child{background: #fff;border-right: none;}
   .que-table-infoblk{box-shadow: none !important;border-radius: 0 !important;width: 100% !important;padding: 0 0 20px;}
   .que-table-col-ttl{font-size: 14px;color: rgba(30, 30, 30, 1);font-family: 'ProximaNova-Regular';outline: none;width: 195px;}
@@ -1394,8 +1394,8 @@ input:-webkit-autofill:active{
   .que-column-count-txt{font-size: 14px;color: #1E1E1E;font-family: 'ProximaNova-Semibold';}
   .que-column-count .minus-iconblk{width: 12.8px;height: 12.8px;}
   .que-column-count .minus-iconblk i {font-size: 7px;}
-  .que-table td{background: #fff;border-bottom: 1px solid rgba(142,142,142,0.5);border-right: 1px solid rgba(142,142,142,0.5);font-family: 'ProximaNova-Regular';padding: 19px 16px 0;height: 84px;}
-  .que-table td:first-child{background: rgba(69, 150, 209, 0.1);border-left: 1px solid rgba(142,142,142,0.5);}
+  .que-table td{background: #fff;border-bottom: 1px solid rgba(142,142,142,0.15);border-right: 1px solid rgba(142,142,142,0.15);font-family: 'ProximaNova-Regular';padding: 19px 16px 0;height: 84px;}
+  .que-table td:first-child{background: rgba(69, 150, 209, 0.1);border-left: 1px solid rgba(142,142,142,0.15);}
   .que-column-fieldblk{margin-top: 15px;}
   .que-column-fieldblk .select-field::before{top: 10px;}
   .no-wrap{flex-wrap: nowrap;}
@@ -1618,7 +1618,7 @@ input:-webkit-autofill:active{
 .preview-sect-card-ttl-blk .subheading{font-family: 'ProximaNova-semiBold', serif, sans-serif;}
 .preview-que-blk .MuiTypography-root{font-family: 'ProximaNova-Regular' !important;}
 
-.que-half-sect input, .que-half-sect .MuiSelect-select{background: #f9f9f9 !important;box-shadow: inset 0px 1px 2px rgb(0 0 0 / 15%)}
+.que-half-sect input, .que-half-sect .MuiSelect-select{background: rgba(249,249,249,0.5) !important;box-shadow: inset 0px 1px 2px rgba(0,0,0,0.15)}
 .que-half-sect fieldset{border: none;}
 .que-half-sect .Mui-focused fieldset{border: 1px solid #4596d1 !important;}
 
@@ -1695,7 +1695,7 @@ input:-webkit-autofill:active{
 .datepicker-blk .Mui-disabled input:disabled{background: none !important;border-color: none !important;-webkit-text-fill-color: none !important;}
 .que-half-sect .datepicker-blk input{background: none !important;box-shadow: none;z-index: 1;}
 .que-half-sect .datepicker-blk .MuiInputAdornment-root{z-index: 1;}
-.que-half-sect .datepicker-blk fieldset{background: #f9f9f9 !important;box-shadow: inset 0px 1px 2px rgb(0 0 0 / 15%);}
+.que-half-sect .datepicker-blk fieldset{background: rgba(249,249,249,0.5) !important;box-shadow: inset 0px 1px 2px rgba(0,0,0,0.15)}
 .select-field .MuiSelect-select[aria-expanded="false"]{background-color: #ccc;}
 
 .primary-button[disabled], .secondary-button[disabled], .outlined-button[disabled]{
@@ -1719,7 +1719,7 @@ input:-webkit-autofill:active{
 .edit-dropdown-btn{display: flex;
     align-items: center;
     justify-content: flex-end;}
-.edit-dropdown-btn svg{font-size: 15px;}
+.edit-dropdown-btn svg{font-size: 12px;}
 .popup-innerblk {
     height: 350px;
     overflow: auto;
