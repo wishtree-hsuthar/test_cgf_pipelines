@@ -194,7 +194,7 @@ function FillAssessment() {
                                 ].length === 0)
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
-                                "This is required";
+                                "This is required field";
                         } else {
                             delete sectionErrors[
                                 `${cell?.columnId}.${row?.uuid}`
@@ -210,7 +210,8 @@ function FillAssessment() {
                         (!currentSectionAnswers[question?.uuid] ||
                             currentSectionAnswers[question?.uuid].length === 0)
                     ) {
-                        sectionErrors[question?.uuid] = "This is required";
+                        sectionErrors[question?.uuid] =
+                            "This is required field";
                     } else {
                         delete sectionErrors[question?.uuid];
                     }
