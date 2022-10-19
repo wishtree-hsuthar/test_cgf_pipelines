@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
+import { ADD_QUESTIONNAIRE } from "../../api/Url";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -133,7 +134,7 @@ function AddNewQuestionnaire() {
     const fetch = async () => {
       try {
         const response = await privateAxios.get(
-          `http://localhost:3000/api/questionnaires/${id}`,
+          `${ADD_QUESTIONNAIRE}/${id}`,
           {
             signal: controller.signal,
           }

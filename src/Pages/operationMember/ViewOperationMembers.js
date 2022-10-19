@@ -20,6 +20,8 @@ import { privateAxios } from "../../api/axios";
 import {
     GET_OPERATION_MEMBER_BY_ID,
     DELETE_OPERATION_MEMBER,
+    MEMBER,
+    COUNTRIES,
 } from "../../api/Url";
 
 import useCallbackState from "../../utils/useCallBackState";
@@ -93,7 +95,7 @@ const ViewOperationMembers = () => {
         const fetchMemberComapany = async () => {
             try {
                 const response = await privateAxios.get(
-                    "http://localhost:3000/api/members",
+                    MEMBER,
                     {
                         signal: controller.signal,
                     }
@@ -124,7 +126,7 @@ const ViewOperationMembers = () => {
         let fetchCountries = async () => {
             try {
                 const response = await privateAxios.get(
-                    "http://localhost:3000/api/master/country/list",
+                    COUNTRIES,
                     {
                         signal: controller.signal,
                     }

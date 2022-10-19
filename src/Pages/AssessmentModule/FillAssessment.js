@@ -4,11 +4,11 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { Tabs, Tab, Tooltip } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { privateAxios } from "../api/axios";
+import { privateAxios } from "../../api/axios";
 import FillAssesmentSection from "./FillAssessmentSection";
-import { SUBMIT_ASSESSMENT_AS_DRAFT } from "../api/Url";
-import useCallbackState from "../utils/useCallBackState";
-import Toaster from "../components/Toaster";
+import { ADD_QUESTIONNAIRE, ASSESSMENTS, FETCH_ASSESSMENT_BY_ID, SUBMIT_ASSESSMENT_AS_DRAFT } from "../../api/Url";
+import useCallbackState from "../../utils/useCallBackState";
+import Toaster from "../../components/Toaster";
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -92,7 +92,7 @@ function FillAssessment() {
         const fetchQuestionnaire = async (id) => {
             try {
                 const response = await privateAxios.get(
-                    `http://localhost:3000/api/questionnaires/${id}`,
+                    `${ADD_QUESTIONNAIRE}/${id}`,
                     {
                         signal: controller.signal,
                     }
@@ -107,7 +107,7 @@ function FillAssessment() {
         const fetchAssessments = async () => {
             try {
                 const response = await privateAxios.get(
-                    `http://localhost:3000/api/assessments/${params.id}`,
+                    `${ASSESSMENTS}${params.id}`,
                     {
                         signal: controller.signal,
                     }

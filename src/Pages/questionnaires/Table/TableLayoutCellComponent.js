@@ -90,7 +90,8 @@ const TableLayoutCellComponent = ({
       )}
       {columnFieldType && columnFieldType === "prefilled" && !isPreview && (
         <TextField
-          className={`input-field ${!cell?.value && tableErr && "input-error"}`}
+          multiline
+          className={`input-textarea ${!cell?.value && tableErr && "input-textarea-error"}`}
           name="value"
           value={cell?.value}
           helperText={!cell?.value && tableErr ? "This is required field" : " "}

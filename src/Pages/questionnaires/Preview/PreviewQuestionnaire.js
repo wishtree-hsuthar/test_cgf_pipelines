@@ -11,6 +11,7 @@ import PreviewSection from "./PreviewSection";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../../api/axios";
 import "../../../Pages/PreviewDemo.css"
+import { ADD_QUESTIONNAIRE } from "../../../api/Url";
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -79,7 +80,7 @@ function PreviewQuestionnaire() {
         const fetch = async () => {
             try {
                 const response = await privateAxios.get(
-                    `http://localhost:3000/api/questionnaires/${params.id}`,
+                    `${ADD_QUESTIONNAIRE}/${params.id}`,
                     {
                         signal: controller.signal,
                     }

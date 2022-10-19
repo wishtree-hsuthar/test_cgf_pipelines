@@ -7,7 +7,7 @@ import Dropdown from "../../components/Dropdown";
 import { privateAxios } from "../../api/axios";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
-import { ADD_OPERATION_MEMBER, FETCH_OPERATION_MEMBER } from "../../api/Url";
+import { ADD_OPERATION_MEMBER, COUNTRIES, FETCH_OPERATION_MEMBER, MEMBER } from "../../api/Url";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 const helperTextForAddOperationMember = {
     salutation: {
@@ -121,7 +121,7 @@ function AddOperationMember() {
         const fetchMemberComapany = async () => {
             try {
                 const response = await privateAxios.get(
-                    "http://localhost:3000/api/members",
+                    MEMBER,
                     {
                         signal: controller.signal,
                     }
@@ -152,16 +152,20 @@ function AddOperationMember() {
         let fetchCountries = async () => {
             try {
                 const response = await privateAxios.get(
-                    "http://localhost:3000/api/master/country/list",
+                    COUNTRIES,
                     {
                         signal: controller.signal,
                     }
                 );
                 console.log("response", response);
-                isMounted &&
-                    setCountries(
-                        response.data.map((country) => country?.countryCode)
-                    );
+                if(isMounted){
+                    let tempCountryCode = response.data.map((country) => country?.countryCode)
+                    let conutryCodeSet = new Set(tempCountryCode)
+                    setCountries([...conutryCodeSet])
+                }
+                // isMounted && setCountries(
+                //         response.data.map((country) => country?.countryCode)
+                //     );
             } catch (error) {
                 console.log("error from countries api", error);
                 if (error?.response?.status == 401) {
