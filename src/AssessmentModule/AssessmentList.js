@@ -258,7 +258,7 @@ const AssessmentList = () => {
                                 </h2>
                             </div>
                             <div className="form-header-right-txt search-and-btn-field-right">
-                                <div className="search-and-btn-field-blk">
+                                <div className="search-and-btn-field-blk mr-0">
                                     <div className="searchbar">
                                         <input
                                             type="text"
@@ -277,7 +277,7 @@ const AssessmentList = () => {
                                     </div>
                                 </div>
                                 {SUPER_ADMIN == true && (
-                                    <div className="form-btn">
+                                    <div className="form-btn ml-20">
                                         <button
                                             type="submit"
                                             className="primary-button add-button"

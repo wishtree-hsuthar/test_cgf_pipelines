@@ -3,7 +3,7 @@
     background-color: #ABB8C326;
 }
 .table-blk .MuiTableRow-head{height: 54px;background: #4596D11A;white-space: nowrap;padding: 0 10px;}
-.table-header span{font-size: 14px;color: #1E1E1E !important;font-family: 'ProximaNova-Semibold',serif, sans-serif;}
+.table-header span{font-size: 16px;color: #1E1E1E !important;font-family: 'ProximaNova-Semibold',serif, sans-serif;}
 .table-blk .MuiPaper-root{box-shadow: 0px 0 6px rgba(0, 0, 0, 0.1) !important;margin-bottom: 0;}
 .table-blk .css-177gid-MuiTableCell-root{font-family: 'ProximaNova-Regular',serif, sans-serif;font-size: 14px;}
 .table-blk .MuiTableCell-head{padding: 0 !important;text-align: left;}

@@ -49,8 +49,8 @@ const TableRender = ({
 
   return (
     <div className="que-table-sect">
-      <div className={`que-table-wrap assessment-table-wrap ${isPreview || "que-table-create" }  ${isPreview || "active" } `}>
-        <div className="que-table-innerwrap assessment-table-innerwrap flex-between no-wrap">
+      <div className={`que-table-wrap que-table-render-wrap ${isPreview || "que-table-create" }  ${isPreview || "active" } `}>
+        <div className="que-table-innerwrap que-table-render-innerwrap flex-between no-wrap">
           <Paper
             sx={{ width: "96%", overflow: "hidden" }}
             className="que-table-infoblk que-sticky-column pb-0"
@@ -59,7 +59,7 @@ const TableRender = ({
               <Table
                 stickyHeader
                 aria-label="sticky table"
-                className="que-table assessment-table"
+                className="que-table que-table-render"
               >
                 <TableHead>
                   <TableRow>
@@ -170,7 +170,7 @@ const TableRender = ({
           </Paper>
         </div>
         {isPreview || (
-          <div className="add-row-btnblk">
+          <div className="add-row-btnblk mt-20">
             <span className="addmore-icon" onClick={onAddRowClickHandler}>
               <i className="fa fa-plus"></i>
             </span>{" "}
