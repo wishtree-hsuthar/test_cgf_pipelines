@@ -170,7 +170,7 @@ const FillAssessmentQuestion = ({
                         )}
                     </div>
                 </label>
-                {questionComponent}
+                <div className="que-half-blk">{questionComponent}</div>
             </div>
         </div>
     );

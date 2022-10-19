@@ -190,11 +190,11 @@
 /* Responsive css start */
 @media screen and (max-width: 1200px) {
     .nav-list li {
-        padding: 10px;
+        padding: 10px 6px;
     }
     .header-left {
-        flex: 0 0 82%;
-        max-width: 82%;
+        flex: 0 0 79%;
+        max-width: 79%;
         justify-content: flex-start;
     }
     /* .logo-blk {
@@ -203,11 +203,11 @@
 }
 @media screen and (max-width: 1023px) {
     .header-left {
-        flex: 0 0 80%;
-        max-width: 80%;
+        flex: 0 0 76%;
+        max-width: 76%;
     }
     .logo-blk {
-        margin-right: 10px;
+        margin-right: 8px;
     }
     .nav-list li {
         padding: 10px 5px;
@@ -217,15 +217,18 @@
         width: 85px;
     }
 }
-@media screen and (max-width: 820px) {
-    .user-img{width: 27px;height: 27px;margin-right: 5px;}
+@media screen and (max-width: 992px) {
+    .user-img{width: 26px;height: 26px;margin-right: 5px;}
     .user-name-txt{font-size: 11px;}
     .user-info{font-size: 11px;}
     .super-admin-arrow svg{font-size: 16px;}
     .header-left {
-        flex: 0 0 81%;
-        max-width: 81%;
+        flex: 0 0 77%;
+        max-width: 77%;
     }
     .nav-list li:last-child{padding-right: 0;}
-    .nav-list li {padding: 10px 6px;font-size: 11px;}
+    .nav-list li {padding: 10px 5px;font-size: 11px;}
+    .logo-blk {
+        width: 72px;margin-right: 6px;
+    }
 }
