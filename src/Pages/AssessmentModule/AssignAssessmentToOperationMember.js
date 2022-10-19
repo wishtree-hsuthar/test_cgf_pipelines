@@ -17,19 +17,20 @@ import {
     InputLabel,
     Checkbox,
 } from "@mui/material";
-import DialogBox from "../components/DialogBox";
+import DialogBox from "../../components/DialogBox";
 
-import TableTester from "../components/TableTester";
-import TableComponent from "../components/TableComponent";
-import useCallbackState from "../utils/useCallBackState";
-import { privateAxios } from "../api/axios";
+import TableTester from "../../components/TableTester";
+import TableComponent from "../../components/TableComponent";
+import useCallbackState from "../../utils/useCallBackState";
+import { privateAxios } from "../../api/axios";
 import {
     FETCH_ASSESSMENT_BY_ID,
     FETCH_OPERATION_MEMBER,
     FETCH_SUB_ADMIN_BY_ADMIN,
+    MEMBER_OPERATION_MEMBERS,
     REPLACE_SUB_ADMIN,
-} from "../api/Url";
-import Toaster from "../components/Toaster";
+} from "../../api/Url";
+import Toaster from "../../components/Toaster";
 
 const tableHead = [
     {
@@ -106,9 +107,9 @@ const AssignAssessmentToOperationMember = () => {
         console.log("Search", search);
         // console.log("assessment?")
 
-        let url = `http://localhost:3000/api/operation-member/member/${memberId}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${MEMBER_OPERATION_MEMBERS}/${memberId}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
-            url = `http://localhost:3000/api/operation-member/member/${memberId}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+            url = `${MEMBER_OPERATION_MEMBERS}/${memberId}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
         return memberId && url;
     };

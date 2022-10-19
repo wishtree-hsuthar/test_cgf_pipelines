@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
 import { useSelector } from "react-redux";
+import { ADD_OPERATION_MEMBER } from "../../api/Url";
 const OnboardedOperationMemberColumnHeader = [
     {
         id: "name",
@@ -201,7 +202,7 @@ function OnboardedOperationMember({
     const generateUrl = () => {
         console.log("filters in onboarded table----", filters);
         console.log("Search", search);
-        let url = `http://localhost:3000/api/operation-member?page=${pageForOnboardedOperationMemberTab}&size=${rowsPerPageForOnboardedOperationMemberTab}&orderBy=${orderByForOnboardedOperationMember}&order=${orderForOnboardedOperationMemberTab}`;
+        let url = `${ADD_OPERATION_MEMBER}?page=${pageForOnboardedOperationMemberTab}&size=${rowsPerPageForOnboardedOperationMemberTab}&orderBy=${orderByForOnboardedOperationMember}&order=${orderForOnboardedOperationMemberTab}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
         return url;

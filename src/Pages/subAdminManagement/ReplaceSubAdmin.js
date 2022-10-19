@@ -23,7 +23,7 @@ import TableTester from "../../components/TableTester";
 import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";
-import { FETCH_SUB_ADMIN_BY_ADMIN, REPLACE_SUB_ADMIN } from "../../api/Url";
+import { ADD_SUB_ADMIN, FETCH_SUB_ADMIN_BY_ADMIN, REPLACE_SUB_ADMIN } from "../../api/Url";
 import Toaster from "../../components/Toaster";
 const tableHead = [
     {
@@ -103,9 +103,9 @@ const ReplaceSubAdmin = () => {
     const generateUrl = (multiFilterString) => {
         console.log("Search", search);
 
-        let url = `http://localhost:3000/api/users/cgfadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${ADD_SUB_ADMIN}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
-            url = `http://localhost:3000/api/users/cgfadmin?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+            url = `${ADD_SUB_ADMIN}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
         return url;
     };

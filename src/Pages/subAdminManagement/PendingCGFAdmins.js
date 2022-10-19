@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
-import { FETCH_ROLES, WITHDRAW_SUB_ADMIN } from "../../api/Url";
+import { ADD_SUB_ADMIN, FETCH_ROLES, WITHDRAW_SUB_ADMIN } from "../../api/Url";
 import DialogBox from "../../components/DialogBox";
 import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
@@ -182,7 +182,7 @@ function PendingCGFAdmins({
     const generateUrlForPendingTab = () => {
         console.log("filters", filters);
         console.log("Search", search);
-        let url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
+        let url = `${ADD_SUB_ADMIN}/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
 
         if (search?.length >= 3) url += `&search=${search}`;
 

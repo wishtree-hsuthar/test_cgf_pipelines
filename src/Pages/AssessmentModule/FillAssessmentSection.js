@@ -2,8 +2,8 @@ import React, { useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TableAssessment from "./TableAssesment";
 import FillAssessmentQuestion from "./FillAssessmentQuestions";
-import useCallbackState from "../utils/useCallBackState";
-import Toaster from "../components/Toaster";
+import useCallbackState from "../../utils/useCallBackState";
+import Toaster from "../../components/Toaster";
 
 const getTransformedColumns = (columns) => {
     let transformedColumns = {};

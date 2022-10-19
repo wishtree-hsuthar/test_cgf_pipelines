@@ -47,6 +47,7 @@ function Dropdown({
           fullWidth={true}
         >
           <MenuItem
+            disabled
             selected
             value=""
             // sx={{

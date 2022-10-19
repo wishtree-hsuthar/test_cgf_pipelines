@@ -5,6 +5,7 @@ import TableComponent from "../../components/TableComponent";
 import { privateAxios } from "../../api/axios";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { useSelector } from "react-redux";
+import { ADD_QUESTIONNAIRE } from "../../api/Url";
 
 function DraftedQuestionnaires({
     makeApiCall,
@@ -81,7 +82,7 @@ function DraftedQuestionnaires({
     };
     const generateUrl = () => {
         // console.log("Search", search);
-        let url = `http://localhost:3000/api/questionnaires/drafted?page=${pageDraftedQuestionnaire}&size=${rowsPerPageDraftedQuestionnaire}&orderBy=${orderByDraftedQuestionnaire}&order=${orderDraftedQuestionnaire}`;
+        let url = `${ADD_QUESTIONNAIRE}/drafted?page=${pageDraftedQuestionnaire}&size=${rowsPerPageDraftedQuestionnaire}&orderBy=${orderByDraftedQuestionnaire}&order=${orderDraftedQuestionnaire}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
         return url;

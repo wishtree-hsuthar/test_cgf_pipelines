@@ -91,17 +91,21 @@ const AddSubAdmin = () => {
         };
         let fetchCountries = async () => {
             try {
-                const response = await axios.get(
-                    "http://localhost:3000/api/master/country/list",
-                    {
-                        signal: controller.signal,
-                    }
-                );
+                const response = await axios.get(COUNTRIES, {
+                    signal: controller.signal,
+                });
                 console.log("response from countries API-", response);
-                isMounted &&
-                    setCountries(
-                        response?.data.map((country) => country.countryCode)
+                if (isMounted) {
+                    let tempCountryCode = response?.data.map(
+                        (country) => country.countryCode
                     );
+                    let tempCountryCodeSet = new Set(tempCountryCode);
+                    setCountries([...tempCountryCodeSet]);
+                }
+                // isMounted &&
+                //     setCountries(
+                //         response?.data.map((country) => country.countryCode)
+                //     );
             } catch (error) {
                 console.log("error from countries api", error);
                 setToasterDetails(
@@ -225,7 +229,7 @@ const AddSubAdmin = () => {
                                     className="tertiary-btn-blk"
                                     onClick={handleSubmit(handleSaveAndMore)}
                                 >
-                                    <span class="addmore-icon">
+                                    <span className="addmore-icon">
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
@@ -238,7 +242,7 @@ const AddSubAdmin = () => {
                             <div className="card-blk flex-between">
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="name">
+                                        <label htmlFor="name">
                                             CGF Admin Name{" "}
                                             <span className="mandatory">*</span>
                                         </label>
@@ -260,7 +264,7 @@ const AddSubAdmin = () => {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="email">
+                                        <label htmlFor="email">
                                             Email Address{" "}
                                             <span className="mandatory">*</span>
                                         </label>
@@ -282,7 +286,7 @@ const AddSubAdmin = () => {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="phoneNumber">
+                                        <label htmlFor="phoneNumber">
                                             Phone Number{" "}
                                             <span className="mandatory">*</span>
                                         </label>
@@ -405,7 +409,7 @@ const AddSubAdmin = () => {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="role">
+                                        <label htmlFor="role">
                                             Select Role{" "}
                                             <span className="mandatory">*</span>
                                         </label>
@@ -450,12 +454,15 @@ const AddSubAdmin = () => {
                                                             {roles.map(
                                                                 (role) => (
                                                                     <MenuItem
+                                                                        key={
+                                                                            role?._id
+                                                                        }
                                                                         value={
-                                                                            role._id
+                                                                            role?._id
                                                                         }
                                                                     >
                                                                         {
-                                                                            role.name
+                                                                            role?.name
                                                                         }
                                                                     </MenuItem>
                                                                 )

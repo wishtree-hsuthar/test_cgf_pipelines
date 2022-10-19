@@ -9,6 +9,7 @@ import Toaster from "../components/Toaster";
 import { useSelector } from "react-redux";
 import { privateAxios } from "../api/axios";
 import { Link, useNavigate } from "react-router-dom";
+import { FETCH_ASSESSMENT_BY_ID } from "../../api/Url";
 
 const tableHead = [
     {
@@ -109,7 +110,7 @@ function CommonAssessmentList() {
 
     const generateUrl = () => {
         console.log("Search", search);
-        let url = `http://localhost:3000/api/assessments?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${FETCH_ASSESSMENT_BY_ID}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
         return url;

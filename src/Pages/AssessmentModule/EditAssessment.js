@@ -1,17 +1,19 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useForm, Control, Controller } from "react-hook-form";
-import Input from "../components/Input";
-import Dropdown from "../components/Dropdown";
-import { privateAxios } from "../api/axios";
+import Input from "../../components/Input";
+import Dropdown from "../../components/Dropdown";
+import { privateAxios } from "../../api/axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
+    ADD_QUESTIONNAIRE,
     FETCH_ASSESSMENT_BY_ID,
     FETCH_OPERATION_MEMBER,
+    MEMBER,
     UPDATE_ASSESSMENT_BY_ID,
-} from "../api/Url";
-import useCallbackState from "../utils/useCallBackState";
+} from "../../api/Url";
+import useCallbackState from "../../utils/useCallBackState";
 import { TextField } from "@mui/material";
-import Toaster from "../components/Toaster";
+import Toaster from "../../components/Toaster";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -137,7 +139,7 @@ function EditAssessment() {
         const fetchMemberCompaniesForAddAssesments = async () => {
             try {
                 const response = await privateAxios.get(
-                    "http://localhost:3000/api/members",
+                    MEMBER,
                     {
                         signal: controller.signal,
                     }
@@ -163,7 +165,7 @@ function EditAssessment() {
         const fetchQuestionnaires = async () => {
             try {
                 const response = await privateAxios.get(
-                    "http://localhost:3000/api/questionnaires",
+                    ADD_QUESTIONNAIRE,
                     {
                         signal: controller.signal,
                     }

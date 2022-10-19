@@ -9,11 +9,17 @@ export const FORGOT_PASSWORD_VERIFY_TOKEN = `${REACT_APP_API_ENDPOINT}auth/verif
 export const SET_PASSWORD_VERIFY_TOKEN = `${REACT_APP_API_ENDPOINT}auth/verify/set/`;
 export const CONFIRM_PASSWORD = `${REACT_APP_API_ENDPOINT}auth/confirm/`;
 export const RESET_PASSWORD = `${REACT_APP_API_ENDPOINT}auth/reset/`;
+
+//master
 export const REGIONS = `${REACT_APP_API_ENDPOINT}master/region/list`;
 export const REGIONCOUNTRIES = `${REACT_APP_API_ENDPOINT}master/region`;
 export const COUNTRIES = `${REACT_APP_API_ENDPOINT}master/country/list`;
 export const STATES = `${REACT_APP_API_ENDPOINT}master/country`;
+
+//Member
 export const MEMBER = `${REACT_APP_API_ENDPOINT}members`;
+
+//Operation member
 export const MEMBER_OPERATION_MEMBERS = `${REACT_APP_API_ENDPOINT}operation-member/member`;
 
 //sub admin
@@ -41,3 +47,5 @@ export const ADD_QUESTIONNAIRE = `${REACT_APP_API_ENDPOINT}questionnaires`;
 export const FETCH_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const UPDATE_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const SUBMIT_ASSESSMENT_AS_DRAFT = `${REACT_APP_API_ENDPOINT}assessments/`;
+export const ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
+export const ADD_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;

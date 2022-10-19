@@ -275,7 +275,7 @@ const SectionContent = ({
         const fetch = async () => {
           try {
             const response = await privateAxios.get(
-              `http://localhost:3000/api/questionnaires/${params?.id}`
+              `${ADD_QUESTIONNAIRE}/${params?.id}`
             );
             // console.log("response from fetch questionnaire", response);
             setQuestionnaire({ ...response.data });
@@ -311,7 +311,7 @@ const SectionContent = ({
     if (handleSubmitSection(e)) {
       try {
         await privateAxios.put(
-          `http://localhost:3000/api/questionnaires/publish/${params?.id}`
+          `${ADD_QUESTIONNAIRE}/publish/${params?.id}`
         );
       } catch (error) {
         setErrorToaster(error);
