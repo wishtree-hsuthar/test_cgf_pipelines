@@ -41,7 +41,7 @@ const helperTextForAssessment = {
         required: "Due date required",
     },
     remarks: {
-        max: "Reached max limit",
+        maxLength: "Reached max limit",
     },
 };
 const AddAssessment = () => {
@@ -515,7 +515,7 @@ const AddAssessment = () => {
                                             name="remarks"
                                             control={control}
                                             rules={{
-                                                required: true,
+                                                // required: true,
                                                 minLength: 3,
                                                 maxLength: 250,
                                             }}
