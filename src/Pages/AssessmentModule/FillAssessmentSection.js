@@ -64,15 +64,13 @@ function FillAssesmentSection({
                 descriptionMessage={toasterDetails.descriptionMessage}
                 messageType={toasterDetails.messageType}
             />
-    
-                <div className="preview-sect-ttl-wrap">
-                    <div class="preview-sect-card-ttl-blk">
-                        <h2 class="subheading">Section Title</h2>
-                    </div>
-                    <div className="preview-sect-txt">
-                        {section.sectionTitle}
-                    </div>
+
+            <div className="preview-sect-ttl-wrap">
+                <div className="preview-sect-card-ttl-blk">
+                    <h2 className="subheading">{section?.sectionTitle}</h2>
                 </div>
+                <div className="preview-sect-txt">{section?.description}</div>
+            </div>
             <div className="preview-card-wrapper">
                 <div className="preview-que-wrap">
                     {section.layout === "form" ? (

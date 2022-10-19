@@ -1368,9 +1368,9 @@ input:-webkit-autofill:active{
   
   
   /* Add questionnaries table layout */
-  .que-table-wrap {
+  /* .que-table-wrap {
     padding: 0 20px 20px;
-  }
+  } */
   .que-table th{background: rgba(69, 150, 209, 0.1);border-bottom: 1px solid rgba(142,142,142,0.15);padding: 20px 15px;border-right: 1px solid rgba(142,142,142,0.15);font-family: 'ProximaNova-Regular';vertical-align: top;z-index: 1;position: relative;}
   .que-table th:first-child{background: #fff;border-right: none;}
   .que-table-infoblk{box-shadow: none !important;border-radius: 0 !important;width: 100% !important;padding: 0 0 20px;}
@@ -1410,8 +1410,8 @@ input:-webkit-autofill:active{
   }
   .add-row-btnblk{color: #F7A823;font-size: 14px;font-family: 'ProximaNova-Semibold';cursor: pointer;}
   
-  .que-column-ttlblk{align-items: flex-start;}
-  
+  .que-column-ttlblk{align-items: flex-start;font-family: 'Proxima Nova Semibold';font-size: 16px;line-height: 20px;text-transform: capitalize;}
+  .que-column-ttlblk .que-table-col-ttl{font-family: 'Proxima Nova Semibold';font-size: 16px;line-height: 20px;text-transform: capitalize;}
   
   .que-dropdown {
     width: 100%;
@@ -1751,8 +1751,21 @@ input:-webkit-autofill:active{
 .que-table-create {
     padding: 0 20px 20px;
 }
+.mt-20{margin-top: 20px;}
+.mr-0{margin-right: 0;}
+.ml-20{margin-left: 20px;}
 /* .select-field .MuiFormLabel-root{transform: none;transition: none !important;font-family: 'ProximaNova-Regular' , serif, sans-serif;top: -4px;font-size: 14px;color: #8E8E8E;}
 .select-field .MuiFormLabel-root.MuiInputLabel-shrink{top: 8px;left: 17px;}
 .select-field .Mui-focused{transform: none !important;font-size: 14px;color: #1e1e1e !important;line-height: 14px;top: 0 !important;left: 0 !important;}
 .select-field label.Mui-focused{top: 11px !important;left: 17px !important;}
 .select-field fieldset legend {display: none;} */
+
+
+.que-table-render th:first-child{background: #e9f4fa;border-right: 1px solid rgba(142,142,142,0.15);}
+.que-table-render td:first-child{background: #fff;}
+.que-table-render tr td:first-child{width: 100%;display: table-cell !important; background: #fff !important; position: relative !important;}
+.que-table-render td{padding: 19px 16px 0;height: 100%;vertical-align: top;}
+.que-table-render th{position: sticky;z-index: 2;background: #e9f4fa;}
+.que-table-render .que-table-column-info {width: 270px;}
+
+.que-half-blk .datepicker-blk {flex: 0 0 33%;max-width: 33%;}
