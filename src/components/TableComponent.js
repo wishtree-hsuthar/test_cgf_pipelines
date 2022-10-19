@@ -16,6 +16,7 @@ import { EditOutlined } from "@mui/icons-material";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 // import deleteIcon from "../../public/images/delete-icon.svg";
+import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import Radio from "@mui/material/Radio";
 
 import "./TableComponent.css";
@@ -466,7 +467,7 @@ export default function TableComponent({
                                                         ) && (
                                                             <span className="icon">
                                                                 <Tooltip title="Assign to Operation Member">
-                                                                    <SendOutlinedIcon
+                                                                    <GroupAddOutlinedIcon
                                                                         onClick={() =>
                                                                             onClickAssignAssesmentFunction(
                                                                                 row.uuid

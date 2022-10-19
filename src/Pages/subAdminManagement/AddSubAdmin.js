@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { TextField, Select, MenuItem, Box, Autocomplete, Paper } from "@mui/material";
+import {
+    TextField,
+    Select,
+    MenuItem,
+    Box,
+    Autocomplete,
+    Paper,
+} from "@mui/material";
 import "react-phone-number-input/style.css";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,7 +19,7 @@ import { ADD_SUB_ADMIN, COUNTRIES, FETCH_ROLES } from "../../api/Url";
 import { useSelector } from "react-redux";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 const AddSubAdminSchema = yup.object().shape({
     name: yup.string().required("Sub admin name required"),
@@ -174,7 +181,7 @@ const AddSubAdmin = () => {
         data = {
             ...data,
             phoneNumber: Number(data.phoneNumber),
-            roleId: authUser.roleId._id,
+            // roleId: authUser.roleId._id,
         };
 
         addSubAdminData(data);
@@ -222,7 +229,7 @@ const AddSubAdmin = () => {
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
-                                    Save & Add More
+                                        Save & Add More
                                     </span>
                                 </div>
                             </div>
@@ -276,7 +283,8 @@ const AddSubAdmin = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label for="phoneNumber">
-                                            Phone Number <span className="mandatory">*</span>
+                                            Phone Number{" "}
+                                            <span className="mandatory">*</span>
                                         </label>
                                         <div className="phone-number-field">
                                             <div className="select-field country-code">
@@ -289,13 +297,20 @@ const AddSubAdmin = () => {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
-                                                        className={`${error && "autocomplete-error"}`}
-                                                        PaperComponent={({ children }) => (
-                                                            <Paper className="autocomplete-option-txt">
-                                                              {children}
-                                                            </Paper>
-                                                          )}
-                                                        popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                                            className={`${
+                                                                error &&
+                                                                "autocomplete-error"
+                                                            }`}
+                                                            PaperComponent={({
+                                                                children,
+                                                            }) => (
+                                                                <Paper className="autocomplete-option-txt">
+                                                                    {children}
+                                                                </Paper>
+                                                            )}
+                                                            popupIcon={
+                                                                <KeyboardArrowDownRoundedIcon />
+                                                            }
                                                             {...field}
                                                             onChange={(
                                                                 event,
@@ -395,7 +410,7 @@ const AddSubAdmin = () => {
                                             <span className="mandatory">*</span>
                                         </label>
 
-                                        <div >
+                                        <div>
                                             <Controller
                                                 name="subRoleId"
                                                 control={control}
@@ -403,10 +418,20 @@ const AddSubAdmin = () => {
                                                     field,
                                                     fieldState: { error },
                                                 }) => (
-                                                    <div className={`select-field ${error && "select-field-error"}`}>
+                                                    <div
+                                                        className={`select-field ${
+                                                            error &&
+                                                            "select-field-error"
+                                                        }`}
+                                                    >
                                                         <Select
-
-                                                        IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props}/>}
+                                                            IconComponent={(
+                                                                props
+                                                            ) => (
+                                                                <KeyboardArrowDownRoundedIcon
+                                                                    {...props}
+                                                                />
+                                                            )}
                                                             {...field}
                                                             className={`input-field ${
                                                                 error?.subRoleId &&
