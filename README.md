@@ -10,6 +10,15 @@
 
 -   Node.js (>= 16.16.0)
 
+### Install PM2
+
+PM2 setup with node.js and npm - Install Git (if not install while setup PM2)
+$ sudo apt-get install git
+sudo apt-get install build-essential
+sudo apt-get install curl openssl libssl-dev
+-Install PM2
+$ sudo npm install pm2 -g
+
 ## Run Locally
 
 Clone the project
