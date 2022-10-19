@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
-import { WITHDRAW_OPERATION_MEMBER } from "../../api/Url";
+import { ADD_OPERATION_MEMBER, WITHDRAW_OPERATION_MEMBER } from "../../api/Url";
 const pendingOperationMemberTableColumnHeader = [
     {
         id: "operationMember",
@@ -215,8 +215,7 @@ function PendingOperationMembers({
         console.log("filters", filters);
         console.log("Search", search);
 
-        // let url = `http://localhost:3000/api/operation-member/pending?`;
-        let url = `http://localhost:3000/api/operation-member/pending?page=${pageForPendingOperationMemberTab}&size=${rowsPerPageForPendingOperationMemberTab}&orderBy=${orderByForPendingOperationMember}&order=${orderForPendingOperationMemberTab}`;
+        let url = `${ADD_OPERATION_MEMBER}/pending?page=${pageForPendingOperationMemberTab}&size=${rowsPerPageForPendingOperationMemberTab}&orderBy=${orderByForPendingOperationMember}&order=${orderForPendingOperationMemberTab}`;
         if (search.length > 0) url += `&search=${search}`;
 
         return url;

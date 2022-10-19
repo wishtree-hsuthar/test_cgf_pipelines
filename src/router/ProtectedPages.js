@@ -29,11 +29,11 @@ import PreviewQuestionnaire from "../Pages/questionnaires/Preview/PreviewQuestio
 // import PreviewDemo from "../Pages/PreviewDemo";
 import PreviewDemo from "../Pages/questionnaires/Preview/PreviewDemo";
 import Preview from "../Pages/questionnaires/Preview";
-import AddAssessment from "../AssessmentModule/AddAssessment";
-import AssessmentList from "../AssessmentModule/AssessmentList";
-import EditAssessment from "../AssessmentModule/EditAssessment";
-import AssignAssessmentToOperationMember from "../AssessmentModule/AssignAssessmentToOperationMember";
-import FillAssessment from "../AssessmentModule/FillAssessment";
+import AddAssessment from "../Pages/AssessmentModule/AddAssessment";
+import AssessmentList from "../Pages/AssessmentModule/AssessmentList"
+import EditAssessment from "../Pages/AssessmentModule/EditAssessment"
+import AssignAssessmentToOperationMember from "../Pages/AssessmentModule/AssignAssessmentToOperationMember";
+import FillAssessment from "../Pages/AssessmentModule/FillAssessment";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (

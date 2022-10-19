@@ -2,13 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // Internal Imports
-import TableComponent from "../components/TableComponent";
+import TableComponent from "../../components/TableComponent";
 // import { MEMBER } from "../api/Url";
-import Loader2 from "../assets/Loader/Loader2.svg";
-import useCallbackState from "../utils/useCallBackState";
-import Toaster from "../components/Toaster";
+import Loader2 from "../../assets/Loader/Loader2.svg";
+import useCallbackState from "../../utils/useCallBackState";
+import Toaster from "../../components/Toaster"
 import { useSelector } from "react-redux";
-import { privateAxios } from "../api/axios";
+import { privateAxios } from "../../api/axios";
+import { ASSESSMENTS } from "../../api/Url";
 
 const tableHead = [
     {
@@ -128,7 +129,7 @@ const AssessmentList = () => {
 
     const generateUrl = () => {
         console.log("Search", search);
-        let url = `http://localhost:3000/api/assessments?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${ASSESSMENTS}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
         return url;

@@ -19,6 +19,7 @@ import * as yup from "yup";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import {
+    COUNTRIES,
     FETCH_ROLES,
     FETCH_SUB_ADMIN_BY_ADMIN,
     UPDATE_SUB_ADMIN,
@@ -90,7 +91,7 @@ const EditSubAdmin = () => {
         let fetchCountries = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:3000/api/master/country/list",
+                    COUNTRIES,
                     {
                         signal: controller.signal,
                     }
@@ -428,6 +429,7 @@ const EditSubAdmin = () => {
                                                     >
                                                         {roles.map((role) => (
                                                             <MenuItem
+                                                                key={role?._id}
                                                                 value={role._id}
                                                             >
                                                                 {role.name}

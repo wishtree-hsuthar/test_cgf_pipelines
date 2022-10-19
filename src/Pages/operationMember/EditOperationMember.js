@@ -23,9 +23,11 @@ import Toaster from "../../components/Toaster";
 import axios from "axios";
 import {
     ADD_OPERATION_MEMBER,
+    COUNTRIES,
     FETCH_OPERATION_MEMBER,
     FETCH_REPORTING_MANAGER,
     GET_OPERATION_MEMBER_BY_ID,
+    MEMBER,
     UPDATE_OPERATION_MEMBER,
 } from "../../api/Url";
 const defaultValues = {
@@ -181,7 +183,7 @@ function EditOperationMember() {
     const fetchCountries = async (controller) => {
         try {
             const response = await privateAxios.get(
-                "http://localhost:3000/api/master/country/list",
+                COUNTRIES,
                 {
                     signal: controller.signal,
                 }
@@ -208,7 +210,7 @@ function EditOperationMember() {
     const fetchMemberComapany = async (controller) => {
         try {
             const response = await privateAxios.get(
-                "http://localhost:3000/api/members",
+                MEMBER,
                 {
                     signal: controller.signal,
                 }

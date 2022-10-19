@@ -7,7 +7,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";
 import Toaster from "../../components/Toaster";
-import { FETCH_ROLES, WITHDRAW_SUB_ADMIN } from "../../api/Url";
+import { ADD_SUB_ADMIN, FETCH_ROLES, WITHDRAW_SUB_ADMIN } from "../../api/Url";
 import DialogBox from "../../components/DialogBox";
 import OnBoardedSubAdminsTable from "./OnBoardedSubAdminsTable";
 import PendingCGFAdmins from "./PendingCGFAdmins";
@@ -236,7 +236,7 @@ const SubAdminList = () => {
     const generateUrlForPendingTab = () => {
         console.log("filters", filters);
         console.log("Search", search);
-        let url = `http://localhost:3000/api/users/cgfadmin/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
+        let url = `${ADD_SUB_ADMIN}/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
 
         if (search?.length >= 3) url += `&search=${search}`;
        
