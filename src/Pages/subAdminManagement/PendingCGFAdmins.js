@@ -35,7 +35,7 @@ const pendingTableColumnHead = [
         id: "action",
 
         disablePadding: false,
-        label: "Action",
+        label: "Actions",
     },
 ];
 

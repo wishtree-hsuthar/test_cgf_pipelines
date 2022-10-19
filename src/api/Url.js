@@ -48,3 +48,4 @@ export const FETCH_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const UPDATE_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const SUBMIT_ASSESSMENT_AS_DRAFT = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
+export const ADD_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;

@@ -45,7 +45,7 @@ const pendingOperationMemberTableColumnHeader = [
         id: "action",
 
         disablePadding: false,
-        label: "Action",
+        label: "Actions",
     },
 ];
 function PendingOperationMembers({
@@ -298,7 +298,10 @@ function PendingOperationMembers({
             <DialogBox
                 title={<p>Withdraw Operation Member Invitation</p>}
                 info1={
-                    <p>On withdrawal, operation member will not be able to verify their account?</p>
+                    <p>
+                        On withdrawal, operation member will not be able to
+                        verify their account?
+                    </p>
                 }
                 info2={<p>Do you want to withdraw the invitation?</p>}
                 primaryButtonText={"Yes"}

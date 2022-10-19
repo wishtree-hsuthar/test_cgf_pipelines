@@ -7,13 +7,16 @@ import {
     Radio,
     FormControlLabel,
     RadioGroup,
+    FormControl,
+    FormHelperText,
+    FormGroup,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 
 export const AlphaRegEx = /^[a-z]+$/i;
 export const NumericRegEx = /^[0-9]+$/i;
@@ -82,65 +85,94 @@ const FillAssessmentQuestion = ({
                 helperText={!answer && error ? error : ""}
             />
         ) : question.inputType === "dropdown" ? (
-            <div className="form-group">
-                <div className="select-field">
-                    <Select
-                        IconComponent={(props) => (
-                            <KeyboardArrowDownRoundedIcon {...props} />
-                        )}
-                        name={questionUUID}
+            <FormControl className="fullwidth-field">
+                <div className="form-group">
+                    <div
+                        className={`select-field ${
+                            !answer &&
+                            error &&
+                            error?.length !== 0 &&
+                            "select-field-error"
+                        }`}
+                    >
+                        <Select
+                            IconComponent={(props) => (
+                                <KeyboardArrowDownRoundedIcon {...props} />
+                            )}
+                            name={questionUUID}
+                            value={answer ?? ""}
+                            MenuProps={MenuProps}
+                            onChange={(e) =>
+                                handleAnswersChange(
+                                    e.target.name,
+                                    e.target.value
+                                )
+                            }
+                        >
+                            {question.options.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </div>
+                    <FormHelperText>
+                        {!answer && error ? error : ""}
+                    </FormHelperText>
+                </div>
+            </FormControl>
+        ) : question.inputType === "radioGroup" ? (
+            <div className="radio-btn-field">
+                <FormControl>
+                    <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        className="radio-btn radio-btn-vertical"
                         value={answer ?? ""}
-                        MenuProps={MenuProps}
+                        name={questionUUID}
                         onChange={(e) =>
                             handleAnswersChange(e.target.name, e.target.value)
                         }
                     >
                         {question.options.map((option) => (
-                            <MenuItem key={option} value={option}>
-                                {option}
-                            </MenuItem>
+                            <FormControlLabel
+                                value={option}
+                                control={<Radio checked={answer === option} />}
+                                label={option}
+                            />
                         ))}
-                    </Select>
-                </div>
-            </div>
-        ) : question.inputType === "radioGroup" ? (
-            <div className="radio-btn-field">
-                <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    className="radio-btn radio-btn-vertical"
-                    value={answer ?? ""}
-                    name={questionUUID}
-                    onChange={(e) =>
-                        handleAnswersChange(e.target.name, e.target.value)
-                    }
-                >
-                    {question.options.map((option) => (
-                        <FormControlLabel
-                            value={option}
-                            control={<Radio checked={answer === option} />}
-                            label={option}
-                        />
-                    ))}
-                </RadioGroup>
+                    </RadioGroup>
+                    <FormHelperText>
+                        {!answer && error ? error : ""}
+                    </FormHelperText>
+                </FormControl>
             </div>
         ) : question.inputType === "checkbox" ? (
-            <div className="checkbox-with-labelblk">
-                {/* <FormGroup> */}
-                {question.options.map((option) => (
-                    <>
-                        <FormControlLabel
-                            type={"checkbox"}
-                            name={questionUUID}
-                            className="checkbox-with-label"
-                            value={option}
-                            control={<Checkbox />}
-                            checked={answer.includes(option)}
-                            onChange={handleChecked}
-                        />
-                        <labe>{option}</labe>
-                    </>
-                ))}
-                {/* </FormGroup> */}
+            // <div className="form-group mb-0">
+            <div className="checkbox-with-labelblk checkbox-btn-half-blk">
+                <FormControl>
+                    <FormGroup>
+                        {question.options.map((option) => (
+                            <>
+                                <FormControlLabel
+                                    type={"checkbox"}
+                                    name={questionUUID}
+                                    className="checkbox-with-label"
+                                    value={option}
+                                    control={<Checkbox />}
+                                    checked={answer.includes(option)}
+                                    onChange={handleChecked}
+                                    label={option}
+                                />
+                                {/* <label>{option}</label> */}
+                            </>
+                        ))}
+                    </FormGroup>
+                    <FormHelperText>
+                        {!answer && error ? error : ""}
+                    </FormHelperText>
+                </FormControl>
+
+                {/* </div> */}
             </div>
         ) : question.inputType === "date" ? (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
