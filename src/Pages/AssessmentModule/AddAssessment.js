@@ -45,7 +45,7 @@ const helperTextForAssessment = {
     },
 };
 const AddAssessment = () => {
-    const [datevalue, setDateValue] = useState(new Date());
+    const [datevalue, setDateValue] = useState(null);
     const [
         memberCompaniesForAddAssessments,
         setMemberCompaniesForAddAssessments,
@@ -372,7 +372,7 @@ const AddAssessment = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assessment title
+                                            Assessment title{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Input
@@ -391,7 +391,7 @@ const AddAssessment = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assessment Type
+                                            Assessment Type{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
@@ -410,7 +410,7 @@ const AddAssessment = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Member
+                                            Assign Member{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
@@ -431,7 +431,7 @@ const AddAssessment = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Operation Member
+                                            Assign Operation Member{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
@@ -454,12 +454,13 @@ const AddAssessment = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Due date
+                                            Due date{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Controller
                                             name="dueDate"
                                             control={control}
+                                            rules={{ required: true }}
                                             render={({
                                                 field,
                                                 fieldState: { error },
@@ -468,10 +469,9 @@ const AddAssessment = () => {
                                                     dateAdapter={AdapterDayjs}
                                                 >
                                                     <DatePicker
-                                                        // {...field}
                                                         disablePast
                                                         className="datepicker-blk"
-                                                        value={datevalue}
+                                                        // value={datevalue}
                                                         components={{
                                                             OpenPickerIcon:
                                                                 DateRangeOutlinedIcon,
@@ -480,28 +480,39 @@ const AddAssessment = () => {
                                                         //     "MM/DD/YYYY"
                                                         // }
                                                         // value={datevalue}
-                                                        onChange={(value) => {
-                                                            setDateValue(value);
-                                                            console.log(
-                                                                "date",
-                                                                new Date(
-                                                                    value
-                                                                ).toLocaleDateString()
-                                                            );
-                                                            setValue(
-                                                                "dueDate",
-                                                                new Date(
-                                                                    value
-                                                                ).toISOString()
-                                                            );
-                                                        }}
+                                                        // onChange={(value) => {
+                                                        //     setDateValue(value);
+                                                        //     console.log(
+                                                        //         "date",
+                                                        //         value &&
+                                                        //             new Date(
+                                                        //                 value
+                                                        //             ).toLocaleDateString()
+                                                        //     );
+                                                        //     setValue(
+                                                        //         "dueDate",
+                                                        //         value &&
+                                                        //             new Date(
+                                                        //                 value
+                                                        //             ).toISOString()
+                                                        //     );
+                                                        // }}
                                                         renderInput={(
                                                             params
                                                         ) => (
                                                             <TextField
                                                                 {...params}
+                                                                helperText={
+                                                                    error
+                                                                        ? helperTextForAssessment
+                                                                              .dueDate[
+                                                                              "required"
+                                                                          ]
+                                                                        : " "
+                                                                }
                                                             />
                                                         )}
+                                                        {...field}
                                                     />
                                                 </LocalizationProvider>
                                             )}

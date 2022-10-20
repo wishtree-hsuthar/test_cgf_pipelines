@@ -23,11 +23,7 @@ function TabPanel(props) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    {children}
-                </Box>
-            )}
+            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
         </div>
     );
 }
@@ -149,7 +145,11 @@ const SubAdminList = () => {
             // delete object["isActive"];
             object["createdAt"] = new Date(
                 object["createdAt"]
-            ).toLocaleDateString("en-US");
+            ).toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
 
             // object["role"] = object["data"]["subRoleId"].name;
             // object["role"] = object["data"]["subRole"][0].name;
@@ -239,7 +239,7 @@ const SubAdminList = () => {
         let url = `${ADD_SUB_ADMIN}/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
 
         if (search?.length >= 3) url += `&search=${search}`;
-       
+
         return url;
     };
 
@@ -365,7 +365,6 @@ const SubAdminList = () => {
                     <div className="form-header member-form-header flex-between">
                         <div className="form-header-left-blk flex-start">
                             <h2 className="heading2">CGF Admins</h2>
-                            
                         </div>
                         <div className="form-header-right-txt">
                             <div className="tertiary-btn-blk mr-20">
@@ -388,7 +387,7 @@ const SubAdminList = () => {
                     </div>
                     <div className="member-filter-wrap flex-between">
                         <div className="member-tab-left">
-                        <div className="member-tab-wrapper">
+                            <div className="member-tab-wrapper">
                                 <Box
                                     sx={{
                                         borderBottom: 1,
