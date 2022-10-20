@@ -6,7 +6,7 @@ import TableComponent from "../../components/TableComponent";
 // import { MEMBER } from "../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import useCallbackState from "../../utils/useCallBackState";
-import Toaster from "../../components/Toaster"
+import Toaster from "../../components/Toaster";
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { ASSESSMENTS } from "../../api/Url";
@@ -196,7 +196,8 @@ const AssessmentList = () => {
             delete object["memberCompany"];
             delete object["questionnaireId"];
             object["dueDate"] = new Date(object["dueDate"]).toLocaleDateString(
-                "en-US"
+                "en-US",
+                { month: "2-digit", day: "2-digit", year: "numeric" }
             );
             keysOrder.forEach((k) => {
                 const v = object[k];
@@ -277,17 +278,16 @@ const AssessmentList = () => {
                                         </button>
                                     </div>
                                 </div>
-                                {SUPER_ADMIN == true && (
-                                    <div className="form-btn ml-20">
-                                        <button
-                                            type="submit"
-                                            className="primary-button add-button"
-                                            onClick={addAssessment}
-                                        >
-                                            Add Assessment
-                                        </button>
-                                    </div>
-                                )}
+
+                                <div className="form-btn ml-20">
+                                    <button
+                                        type="submit"
+                                        className="primary-button add-button"
+                                        onClick={addAssessment}
+                                    >
+                                        Add Assessment
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         {/* <div className="member-filter-sect">

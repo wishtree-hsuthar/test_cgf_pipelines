@@ -94,12 +94,9 @@ const ViewOperationMembers = () => {
         let controller = new AbortController();
         const fetchMemberComapany = async () => {
             try {
-                const response = await privateAxios.get(
-                    MEMBER,
-                    {
-                        signal: controller.signal,
-                    }
-                );
+                const response = await privateAxios.get(MEMBER, {
+                    signal: controller.signal,
+                });
                 console.log(
                     "member company---",
                     response.data.map((data) => {
@@ -125,12 +122,9 @@ const ViewOperationMembers = () => {
         };
         let fetchCountries = async () => {
             try {
-                const response = await privateAxios.get(
-                    COUNTRIES,
-                    {
-                        signal: controller.signal,
-                    }
-                );
+                const response = await privateAxios.get(COUNTRIES, {
+                    signal: controller.signal,
+                });
                 console.log("response", response);
                 isMounted &&
                     setCountries(
@@ -220,7 +214,7 @@ const ViewOperationMembers = () => {
                 );
                 setOpenDeleteDialog(false);
                 setTimeout(() => {
-                    navigate("/users/operation-member");
+                    navigate("/users/operation-members");
                 }, 2000);
             }
         } catch (error) {

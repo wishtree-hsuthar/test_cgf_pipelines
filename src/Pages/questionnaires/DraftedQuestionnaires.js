@@ -71,7 +71,11 @@ function DraftedQuestionnaires({
             // object["creted"]
             object["createdAt"] = new Date(
                 object["createdAt"]
-            ).toLocaleDateString("en-US");
+            ).toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
             keysOrder.forEach((k) => {
                 const v = object[k];
                 delete object[k];
