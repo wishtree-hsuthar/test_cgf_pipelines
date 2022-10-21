@@ -651,14 +651,14 @@ select:focus {
 .tabs-sect {
     border-bottom: none !important;
 }
-.tabs-sect .css-1ujnqem-MuiTabs-root {
+.tabs-sect .MuiTabs-root {
     border: none;
     background: transparent;
     font-family: "ProximaNova-Bold", serif, sans-serif;
     min-height: 21px !important;
 }
 
-.tabs-sect .css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
+.tabs-sect .MuiTab-root {
     margin-right: 30px;
     padding: 13px 0 !important;
     font-size: 14px !important;
@@ -669,10 +669,10 @@ select:focus {
     color: rgba(30, 30, 30, 0.5);
     min-width: auto;
 }
-.tabs-sect .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+.tabs-sect .MuiTab-root.Mui-selected {
     color: #f7a823 !important;
 }
-.tabs-sect .css-1aquho2-MuiTabs-indicator {
+.tabs-sect .MuiTabs-indicator {
     background-color: #f7a823;
     height: 3px;
 }
@@ -907,7 +907,7 @@ input[type=checkbox]:checked:before {
     right: 30px;
     cursor: pointer;
 }
-.popup-blk .css-sox5kk-MuiBackdrop-root {
+.popup-blk .MuiBackdrop-root {
     background-color: rgba(0, 0, 0, 0.6);
 }
 
@@ -925,10 +925,10 @@ input[type=checkbox]:checked:before {
     font-size: 14px;
     color: rgba(30, 30, 30, 1);
 }
-.radio-btn .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
+.radio-btn .MuiButtonBase-root.MuiRadio-root.Mui-checked {
     color: #4596d1;
 }
-.radio-btn .css-vqmohf-MuiButtonBase-root-MuiRadio-root {
+.radio-btn .MuiButtonBase-root.MuiRadio-root {
     color: #707070;
 }
 .radio-btn svg {
@@ -1139,7 +1139,7 @@ input[type=checkbox]:checked:before {
     height: 40px;
 }
 .country-code
-    .css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator:hover {
+    .MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator:hover {
     background: none !important;
 }
 .country-code .MuiButtonBase-root[aria-label="Clear"] {
@@ -1463,7 +1463,7 @@ input:-webkit-autofill:active {
     color: #1e1e1e;
 }
 .required-toggle-btnblk
-    .css-1g66d9k-MuiSwitch-root
+    .MuiSwitch-root
     .MuiSwitch-switchBase.Mui-checked
     + .MuiSwitch-track {
     background: #fff;
@@ -1476,10 +1476,10 @@ input:-webkit-autofill:active {
 .required-toggle-btnblk .MuiSwitch-switchBase.Mui-checked .MuiSwitch-thumb {
     color: #f7a823;
 }
-.required-toggle-btnblk .css-1g66d9k-MuiSwitch-root .MuiSwitch-switchBase {
+.required-toggle-btnblk .MuiSwitch-root .MuiSwitch-switchBase {
     padding: 5px;
 }
-.required-toggle-btnblk .css-1g66d9k-MuiSwitch-root .MuiSwitch-track {
+.required-toggle-btnblk .MuiSwitch-root .MuiSwitch-track {
     background: #fff;
     border: 0.8px solid #f7a823;
     border-radius: 10px;
