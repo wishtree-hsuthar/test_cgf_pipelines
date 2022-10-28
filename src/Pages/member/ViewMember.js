@@ -1388,7 +1388,7 @@ const ViewMember = () => {
                                             className="primary-button add-button"
                                             onClick={() =>
                                                 navigate(
-                                                    "/users/members/add-member"
+                                                    "/users/operation-members/add-operation-member"
                                                 )
                                             }
                                         >
