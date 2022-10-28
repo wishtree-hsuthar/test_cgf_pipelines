@@ -1405,7 +1405,7 @@ const ViewMember = () => {
                                                 type="text"
                                                 value={search}
                                                 name="search"
-                                                placeholder="Search member name, email and member company"
+                                                placeholder="Search"
                                                 onKeyDown={(e) =>
                                                     e.key === "Enter" &&
                                                     setMakeApiCall(true)

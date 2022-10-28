@@ -23,7 +23,11 @@ import TableTester from "../../components/TableTester";
 import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";
-import { ADD_SUB_ADMIN, FETCH_SUB_ADMIN_BY_ADMIN, REPLACE_SUB_ADMIN } from "../../api/Url";
+import {
+    ADD_SUB_ADMIN,
+    FETCH_SUB_ADMIN_BY_ADMIN,
+    REPLACE_SUB_ADMIN,
+} from "../../api/Url";
 import Toaster from "../../components/Toaster";
 const tableHead = [
     {
@@ -383,7 +387,7 @@ const ReplaceSubAdmin = () => {
                             <div className="searchbar">
                                 <input
                                     type="text"
-                                    placeholder="Search sub-admin name, email "
+                                    placeholder="Search"
                                     onChange={(e) => onSearchChangeHandler(e)}
                                     name="search"
                                 />

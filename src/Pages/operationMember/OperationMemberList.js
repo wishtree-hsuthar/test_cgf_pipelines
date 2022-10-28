@@ -25,11 +25,7 @@ function TabPanel(props) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    {children}
-                </Box>
-            )}
+            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
         </div>
     );
 }
@@ -190,7 +186,7 @@ function OperationMemberList() {
                                 <div className="searchbar">
                                     <input
                                         type="text"
-                                        placeholder="Search sub-admin name, email "
+                                        placeholder="Search"
                                         value={search}
                                         onChange={
                                             (e) => onSearchChangeHandler(e)
