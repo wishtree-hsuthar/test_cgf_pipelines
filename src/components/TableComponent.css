@@ -5,11 +5,11 @@
     height: 54px;
 }
 .table-blk tbody tr:hover {
-    background-color: #abb8c326 !important;
+    background-color: rgba(171, 184, 195, 0.15) !important;
 }
 .table-blk .MuiTableRow-head {
     height: 54px;
-    background: #4596d11a;
+    background: rgba(69, 150, 209, 0.1);
     white-space: nowrap;
     padding: 0 10px;
 }
@@ -22,10 +22,7 @@
     box-shadow: 0px 0 6px rgba(0, 0, 0, 0.1) !important;
     margin-bottom: 0;
 }
-.table-blk .css-177gid-MuiTableCell-root {
-    font-family: "ProximaNova-Regular", serif, sans-serif;
-    font-size: 14px;
-}
+
 .table-blk .MuiTableCell-head {
     padding: 0 !important;
     text-align: left;
@@ -33,6 +30,7 @@
 /* .table-blk .MuiTableCell-head:nth-child(2){padding: 0 !important;} */
 /* .table-blk .MuiCheckbox-root svg{width: 13px;height: 12px;} */
 .table-blk .MuiTableCell-root {
+    font-family: "ProximaNova-Regular", serif, sans-serif;
     padding: 0 10px 0 0;
     border-bottom: none;
     font-size: 14px;
@@ -45,7 +43,7 @@
 }
 .table-blk .MuiTableRow-root .button-style span {
     color: #e53850;
-    background: #e5385026;
+    background: rgba(229, 56, 80, 0.15);
     padding: 5px;
     font-size: 14px;
     width: 67px;
@@ -54,18 +52,17 @@
 }
 .button-style-success span {
     color: #6db02d !important;
-    background: #6db02d26 !important;
+    background: rgba(109, 176, 45, 0.15) !important;
 }
 .table-blk
-    .css-1azl6jz-MuiTableCell-root
-    .css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root {
+    .MuiTableCell-root
+    .MuiTableSortLabel-root {
     flex-direction: initial;
 }
-.table-blk
-    .css-194a1fa-MuiSelect-select-MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input {
+/* .per-page-select-field .MuiSelect-select.MuiInputBase-input {
     min-width: 5px !important;
     background: transparent !important;
-}
+} */
 
 /* CSS added by Rajkumar */
 .table-blk th {
@@ -108,7 +105,7 @@
     padding: 0 15px;
     cursor: pointer;
 }
-.table-blk .css-1q1u3t4-MuiTableRow-root.Mui-selected {
+.table-blk .MuiTableRow-root.Mui-selected {
     background-color: rgba(171, 184, 195, 0.26);
 }
 .show-entries-txt {
@@ -137,7 +134,7 @@
 .per-page-select-field .MuiSelect-select {
     background: transparent !important;
     padding: 0 30px 0 0 !important;
-    font-family: "ProximaNova-Semibold", serif, sans-serif;
+    font-family: "ProximaNova-Semibold", serif, sans-serif !important;
 }
 .per-page-select-field svg {
     color: #1d1d23 !important;
@@ -181,12 +178,7 @@
     color: #0082c9;
 }
 .table-checkbox
-    .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate {
-    color: #0082c9;
-}
-.table-checkbox
-    .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate
-    svg {
+    .MuiCheckbox-root.MuiCheckbox-indeterminate {
     color: #0082c9;
 }
 

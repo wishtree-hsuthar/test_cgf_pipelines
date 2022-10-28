@@ -8,7 +8,7 @@ import useCallbackState from "../../utils/useCallBackState";
 const pendingTableColumnHead = [
     {
         id: "subAdminName",
-        width: "30%",
+        // width: "30%",
         disablePadding: false,
         label: "CGF Admin Name",
     },

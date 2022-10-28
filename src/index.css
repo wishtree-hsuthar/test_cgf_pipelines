@@ -260,6 +260,7 @@ h3 {
     font-family: "ProximaNova-Semibold", serif, sans-serif;
     font-size: 14px;
     cursor: pointer;
+    line-height: 14px;
 }
 .tertiary-btn-blk:hover {
     color: #d98c08;
@@ -477,7 +478,7 @@ ul.breadcrumb li a:hover {
     font-family: "ProximaNova-Regular", serif, sans-serif !important;
 }
 
-.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+.MuiInputLabel-root {
     transform: translate(18px, 13px) scale(1) !important;
     font-size: 14px !important;
 }
@@ -601,7 +602,7 @@ ul.breadcrumb li a:hover {
     width: 100%;
 }
 
-.css-yf8vq0-MuiSelect-nativeInput {
+.select-field input{
     height: 45px;
 }
 .select-field fieldset {
@@ -616,17 +617,17 @@ ul.breadcrumb li a:hover {
     border-color: rgba(30, 30, 30, 0.15) !important;
 }
 
-.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root {
+.MuiMenuItem-gutters.MuiMenuItem-root {
     font-size: 14px !important;
     padding: 5px 15px !important;
     font-family: "ProximaNova-Regular", serif, sans-serif !important;
 }
 
-.css-6hp17o-MuiList-root-MuiMenu-list {
+.MuiList-root.MuiMenu-list {
     padding: 15px 0 0 !important;
 }
 
-.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root.Mui-selected {
+.MuiMenuItem-gutters.Mui-selected {
     background: rgba(247, 168, 35, 0.07) !important;
 }
 
@@ -677,12 +678,8 @@ select:focus {
     height: 3px;
 }
 
-.tabs-sect .css-1gsv261 {
-    border-bottom: none !important;
-}
-
-.filter-select-field .css-hfutr2-MuiSvgIcon-root-MuiSelect-icon {
-    color: #1e1e1e99;
+.filter-select-field .MuiSelect-icon {
+    color: #1d1d23;
 }
 .member-filter-wrap {
     justify-content: flex-end;
@@ -715,7 +712,7 @@ select:focus {
     color: #1e1e1e80 !important;
 }
 
-.member-info-wrapper .css-19kzrtu {
+.member-info-wrapper .MuiBox-root {
     padding: 0;
 }
 .search-and-btn-field-right {
@@ -853,7 +850,7 @@ input[type=checkbox]:checked:before {
 .crud-toggle-list li:hover {
     background: rgba(247, 168, 35, 0.07);
     font-family: "ProximaNova-Semibold";
-    color: #f7a823;
+    color: #d98c08;
 }
 .form-header-link {
     display: flex;
@@ -1437,7 +1434,7 @@ input:-webkit-autofill:active {
 .que-ttl-blk .MuiInputBase-input {
     font-family: "ProximaNova-Semibold" !important;
 }
-.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
+.MuiMenuItem-gutters.MuiMenuItem-root:hover {
     background: rgba(247, 168, 35, 0.07) !important;
     color: #f7a823 !important;
     font-family: "ProximaNova-Semibold" !important;
@@ -2398,3 +2395,8 @@ input:-webkit-autofill:active {
     flex: 0 0 33%;
     max-width: 33%;
 }
+.card-inner-wrap:last-child{margin-bottom: 20px;}
+.required-toggle-btnblk .MuiSwitch-switchBase:hover, .required-toggle-btnblk .MuiSwitch-switchBase.Mui-checked:hover{background: none;}
+.required-toggle-btnblk .MuiSwitch-thumb{box-shadow: none !important;}
+.que-table-render td textarea{overflow: visible !important;}
+.MuiTooltip-tooltip{font-family: "ProximaNova-Regular", serif, sans-serif !important;}
