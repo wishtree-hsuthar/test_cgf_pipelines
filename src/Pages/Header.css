@@ -66,7 +66,7 @@
     color: #1e1e1e;
     font-family: "ProximaNova-Regular", serif, sans-serif;
 }
-.profile-menu-item .css-6hp17o-MuiList-root-MuiMenu-list {
+.profile-menu-item .MuiMenu-list {
     padding: 0 !important;
 }
 .nav-list-right {
@@ -141,11 +141,11 @@
 }
 .header-submenu li:hover {
     background-color: rgba(247, 168, 35, 0.07);
-    color: #f7a823;
+    color: #d98c08;
     font-family: "ProximaNova-Semibold";
 }
 .header-submenu li:hover a {
-    color: #f7a823 !important;
+    color: #d98c08 !important;
 }
 .header-submenu li a {
     color: #1e1e1e;
@@ -182,9 +182,11 @@
 }
 .profile-menu-item .MuiMenuItem-gutters:hover {
     background: rgba(247, 168, 35, 0.07) !important;
+    color: #d98c08 !important;
+    font-family: "ProximaNova-Semibold" !important;
 }
 .profile-menu-item .MuiMenuItem-gutters:hover p {
-    color: #f7a823;
+    color: #d98c08;
     font-family: "ProximaNova-Semibold";
 }
 /* Responsive css start */

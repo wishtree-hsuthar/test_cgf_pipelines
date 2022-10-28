@@ -7,7 +7,7 @@ import useCallbackState from "../../utils/useCallBackState";
 const onBoardedTableColumnHead = [
     {
         id: "name",
-        width: "30%",
+        // width: "30%",
         disablePadding: false,
         label: "CGF Admin Name",
     },
