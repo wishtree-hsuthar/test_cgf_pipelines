@@ -22,9 +22,10 @@ const schema = yup.object().shape({
         .required("Enter new password")
 
         .matches(
-            /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-            "Password must contain at least 8 characters, one uppercase, one number and one special case character"
-        ),
+            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,15}$/,
+            "Password must contain at least 6 characters, one uppercase, one number and one special case character"
+        )
+        .required("Password required"),
     confirmPassword: yup
         .string()
         .required("Enter confirm password")
@@ -196,7 +197,7 @@ const ResetPassword = () => {
                                                     }
                                                     // value={values.newPassword}
                                                     // onChange={handleChange('newPassword')}
-                                                    placeholder="Enter password"
+                                                    placeholder="Enter new password"
                                                     className={`input-field ${
                                                         errors.newPassword &&
                                                         "input-error"
@@ -271,7 +272,7 @@ const ResetPassword = () => {
                                                     }
                                                     // value={values.confirmPassword}
                                                     // onChange={handleChange('confirmPassword')}
-                                                    placeholder="Enter password"
+                                                    placeholder="Enter new password"
                                                     className={`input-field ${
                                                         errors.confirmPassword &&
                                                         "input-error"

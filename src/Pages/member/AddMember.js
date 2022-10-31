@@ -520,7 +520,7 @@ const AddMember = () => {
                                                                         ""
                                                                     )
                                                                 }
-                                                                placeholder="Please select parent Company"
+                                                                placeholder="Enter parent Company"
                                                             />
                                                         )}
                                                     />
@@ -616,7 +616,7 @@ const AddMember = () => {
                                             <Input
                                                 control={control}
                                                 name="corporateEmail"
-                                                placeholder="Enter email"
+                                                placeholder="Enter the corporate email address"
                                                 myHelper={memberHelper}
                                                 rules={{
                                                     required: "true",
@@ -929,6 +929,7 @@ const AddMember = () => {
                                                         //   }
                                                         //   return option;
                                                         // }}
+                                                        disableClearable
                                                         renderOption={(
                                                             props,
                                                             option
