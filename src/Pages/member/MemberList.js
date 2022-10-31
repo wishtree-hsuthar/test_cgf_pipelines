@@ -160,16 +160,16 @@ const MemberList = () => {
       if (typeof object["createdBy"] === "object") {
         object.createdBy = object["createdBy"]["name"];
       } else {
-        object.createdBy = "NA";
+        object.createdBy = "N/A";
       }
       if (object["representative"].length > 0) {
         object["isActive"] = object["representative"][0]["isActive"];
-        object.email = object["representative"][0]?.email ?? "NA";
-        object.name = object["representative"][0]?.name ?? "NA";
+        object.email = object["representative"][0]?.email ?? "N/A";
+        object.name = object["representative"][0]?.name ?? "N/A";
       } else {
         object["isActive"] = false;
-        object.email = "NA";
-        object.name = "NA";
+        object.email = "N/A";
+        object.name = "N/A";
       }
 
       object.totalOperationMembers = object["totalOperationMembers"]?.toString();

@@ -11,7 +11,7 @@ export const memberHelper = {
       required: "Select Activity",
     },
     corporateEmail: {
-      required: "Enter Email",
+      required: "Enter the Email",
       maxLength: "Max char limit exceed",
       minLength: "Input must contain atleast 3 characters",
       pattern: "Invalid Input",
@@ -65,6 +65,12 @@ export const memberHelper = {
     department: {
       minLength: "Input must contain atleast 3 charcters",
       maxLength: "Max char limit exceed",
+      pattern: "Invalid Input",
+    },
+    memberContactEmail:{
+      required: "Enter the email",
+      maxLength: "Max char limit exceed",
+      minLength: "Input must contain atleast 3 characters",
       pattern: "Invalid Input",
     },
     memberContactCountryCode: {

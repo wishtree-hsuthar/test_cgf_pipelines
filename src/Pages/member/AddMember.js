@@ -39,6 +39,8 @@ const cgfActivitiesManufacturer = [
     "None",
     "Apparel",
     "Food Manufacturer",
+    "Non-food manufacturer",
+    "Household care",
     "Personal care & beauty",
 ];
 const cgfActivitiesRetailer = [
@@ -48,7 +50,7 @@ const cgfActivitiesRetailer = [
     "food retailer",
     "food service",
     "Grocery",
-    "Health/beaty drugstore",
+    "Health/beauty drugstore",
     "Non food retailer",
     "Wholesaler",
 ];
@@ -1080,9 +1082,12 @@ const AddMember = () => {
                                                 myHelper={memberHelper}
                                                 rules={{ required: true }}
                                                 options={[
-                                                    "Mumbai",
-                                                    "Delhi",
-                                                    "Vadodara",
+                                                    
+                                                    "Bogota",
+                                                    "Paris",
+                                                    "Shanghai",
+                                                    "Washington",
+                                                    "Tokyo"
                                                 ]}
                                             />
                                         </div>
