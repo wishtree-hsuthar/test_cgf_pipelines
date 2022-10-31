@@ -46,10 +46,7 @@ const defaultValues = {
         companyType: "",
     },
     address: "",
-    reportingManager: {
-        _id: "",
-        name: "",
-    },
+    reportingManager: "",
     isActive: "",
 };
 const helperTextForAddOperationMember = {
@@ -182,12 +179,9 @@ function EditOperationMember() {
     // fetch all countries and its objects
     const fetchCountries = async (controller) => {
         try {
-            const response = await privateAxios.get(
-                COUNTRIES,
-                {
-                    signal: controller.signal,
-                }
-            );
+            const response = await privateAxios.get(COUNTRIES, {
+                signal: controller.signal,
+            });
             console.log("response from countries", response);
             // isMounted &&
             setCountries(response.data.map((country) => country?.countryCode));
@@ -209,12 +203,9 @@ function EditOperationMember() {
     // Fetch all member comapanies
     const fetchMemberComapany = async (controller) => {
         try {
-            const response = await privateAxios.get(
-                MEMBER,
-                {
-                    signal: controller.signal,
-                }
-            );
+            const response = await privateAxios.get(MEMBER, {
+                signal: controller.signal,
+            });
             console.log(
                 "member company---",
                 response.data.map((data) => {
@@ -262,6 +253,7 @@ function EditOperationMember() {
     };
 
     // fetch operation member by id
+    console.log("reporting managers", reportingManagers);
 
     const fetchOperationMember = async (controller, isMounted) => {
         try {
@@ -271,36 +263,73 @@ function EditOperationMember() {
                     signal: controller.signal,
                 }
             );
-            isMounted &&
-                reset({
-                    memberId: {
-                        _id: response?.data?.memberId?._id,
-                        companyName: response?.data?.memberId?.companyName,
+            // fetchRm(response?.data?.memberId?._id);
+            (async () => {
+                isMounted && (await fetchRm(response?.data?.memberId?._id));
+                isMounted &&
+                    reset({
+                        memberId: {
+                            _id: response?.data?.memberId?._id,
+                            companyName: response?.data?.memberId?.companyName,
+                            companyType: response?.data?.memberId?.companyType,
+                        },
                         companyType: response?.data?.memberId?.companyType,
-                    },
-                    companyType: response?.data?.memberId?.companyType,
-                    countryCode: response?.data?.countryCode,
-                    phoneNumber: response?.data?.phoneNumber,
-                    address: response?.data?.address,
-                    title: response?.data?.title ? response.data.title : "N/A",
-                    department: response?.data?.department
-                        ? response?.data?.department
-                        : "N/A",
-                    email: response?.data?.email,
-                    operationType: response?.data?.operationType
-                        ? response?.data?.operationType
-                        : "N/A",
-                    reportingManager: response?.data?.reportingManager?._id,
-                    salutation: response?.data?.salutation,
-                    name: response?.data?.name,
-                    isActive: response?.data?.isActive,
-                    // reportingManagerId:
-                    //     response?.data?.reportingManager?._id,
-                });
+                        countryCode: response?.data?.countryCode,
+                        phoneNumber: response?.data?.phoneNumber,
+                        address: response?.data?.address,
+                        title: response?.data?.title
+                            ? response.data.title
+                            : "N/A",
+                        department: response?.data?.department
+                            ? response?.data?.department
+                            : "N/A",
+                        email: response?.data?.email,
+                        operationType: response?.data?.operationType
+                            ? response?.data?.operationType
+                            : "N/A",
+                        reportingManager: [
+                            response?.data?.reportingManager[0]?._id,
+                        ],
+                        salutation: response?.data?.salutation,
+                        name: response?.data?.name,
+                        isActive: response?.data?.isActive,
+                        // reportingManagerId:
+                        //     response?.data?.reportingManager?._id,
+                    });
+            })();
+
+            // isMounted &&
+            //     reset({
+            //         memberId: {
+            //             _id: response?.data?.memberId?._id,
+            //             companyName: response?.data?.memberId?.companyName,
+            //             companyType: response?.data?.memberId?.companyType,
+            //         },
+            //         companyType: response?.data?.memberId?.companyType,
+            //         countryCode: response?.data?.countryCode,
+            //         phoneNumber: response?.data?.phoneNumber,
+            //         address: response?.data?.address,
+            //         title: response?.data?.title ? response.data.title : "N/A",
+            //         department: response?.data?.department
+            //             ? response?.data?.department
+            //             : "N/A",
+            //         email: response?.data?.email,
+            //         operationType: response?.data?.operationType
+            //             ? response?.data?.operationType
+            //             : "N/A",
+            //         reportingManager: {
+            //             _id: response?.data?.reportingManager[0]?._id,
+            //             name: response?.data?.reportingManager[0]?.name,
+            //         },
+            //         salutation: response?.data?.salutation,
+            //         name: response?.data?.name,
+            //         isActive: response?.data?.isActive,
+            //         // reportingManagerId:
+            //         //     response?.data?.reportingManager?._id,
+            //     });
             setOperationMember(response.data);
             console.log("response data ----", operationMember);
-            fetchRm(response?.data?.memberId?._id);
-            // fetchReportingManagers(operationMember?.memberId?._id);
+            // fetchReportingManagers(response?.data?.memberId?._id);
         } catch (error) {
             console.log("error from edit operation members", error);
         }
@@ -717,18 +746,18 @@ function EditOperationMember() {
                                                                 "new Value ",
                                                                 newValue
                                                             );
-                                                            setValue(
-                                                                "reportingManager",
-                                                                ""
-                                                            );
+                                                            // setValue(
+                                                            //     "reportingManager",
+                                                            //     ""
+                                                            // );
                                                             trigger("memberId");
                                                             setDisableReportingManager(
                                                                 false
                                                             );
                                                             // call fetch Reporting managers here
-                                                            fetchReportingManagers(
-                                                                newValue._id
-                                                            );
+                                                            // fetchReportingManagers(
+                                                            //     newValue._id
+                                                            // );
                                                             setValue(
                                                                 "companyType",
                                                                 newValue.companyType

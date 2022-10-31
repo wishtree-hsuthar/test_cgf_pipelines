@@ -7,7 +7,12 @@ import Dropdown from "../../components/Dropdown";
 import { privateAxios } from "../../api/axios";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
-import { ADD_OPERATION_MEMBER, COUNTRIES, FETCH_OPERATION_MEMBER, MEMBER } from "../../api/Url";
+import {
+    ADD_OPERATION_MEMBER,
+    COUNTRIES,
+    FETCH_OPERATION_MEMBER,
+    MEMBER,
+} from "../../api/Url";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 const helperTextForAddOperationMember = {
     salutation: {
@@ -32,7 +37,7 @@ const helperTextForAddOperationMember = {
         pattern: "Invalid format",
     },
     email: {
-        required: "Enter email addrees",
+        required: "Enter email address",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         pattern: "Invalid format",
@@ -120,12 +125,9 @@ function AddOperationMember() {
         const controller = new AbortController();
         const fetchMemberComapany = async () => {
             try {
-                const response = await privateAxios.get(
-                    MEMBER,
-                    {
-                        signal: controller.signal,
-                    }
-                );
+                const response = await privateAxios.get(MEMBER, {
+                    signal: controller.signal,
+                });
                 console.log(
                     "member company---",
                     response.data.map((data) => {
@@ -151,17 +153,16 @@ function AddOperationMember() {
         };
         let fetchCountries = async () => {
             try {
-                const response = await privateAxios.get(
-                    COUNTRIES,
-                    {
-                        signal: controller.signal,
-                    }
-                );
+                const response = await privateAxios.get(COUNTRIES, {
+                    signal: controller.signal,
+                });
                 console.log("response", response);
-                if(isMounted){
-                    let tempCountryCode = response.data.map((country) => country?.countryCode)
-                    let conutryCodeSet = new Set(tempCountryCode)
-                    setCountries([...conutryCodeSet])
+                if (isMounted) {
+                    let tempCountryCode = response.data.map(
+                        (country) => country?.countryCode
+                    );
+                    let conutryCodeSet = new Set(tempCountryCode);
+                    setCountries([...conutryCodeSet]);
                 }
                 // isMounted && setCountries(
                 //         response.data.map((country) => country?.countryCode)
@@ -308,7 +309,7 @@ function AddOperationMember() {
                                                 <Dropdown
                                                     control={control}
                                                     name="salutation"
-                                                    placeholder="Mr."
+                                                    // placeholder="Mr."
                                                     myHelper={
                                                         helperTextForAddOperationMember
                                                     }
@@ -426,11 +427,13 @@ function AddOperationMember() {
                                                                 error &&
                                                                 "autocomplete-error"
                                                             }`}
-                                                            PaperComponent={({ children }) => (
+                                                            PaperComponent={({
+                                                                children,
+                                                            }) => (
                                                                 <Paper className="autocomplete-option-txt">
-                                                                  {children}
+                                                                    {children}
                                                                 </Paper>
-                                                              )}
+                                                            )}
                                                             popupIcon={
                                                                 <KeyboardArrowDownRoundedIcon />
                                                             }
@@ -516,7 +519,7 @@ function AddOperationMember() {
                                                     helperTextForAddOperationMember
                                                 }
                                                 placeholder={
-                                                    "Enter phone nummber"
+                                                    "Enter phone number"
                                                 }
                                                 rules={{
                                                     required: true,

@@ -118,7 +118,7 @@ const ForgetPassword = () => {
                                     <form onSubmit={handleSubmit(submitEmail)}>
                                         <div class="form-group">
                                             <label for="emailid">
-                                                Email Id{" "}
+                                                Email Address{" "}
                                                 <span class="mandatory">*</span>
                                             </label>
                                             <TextField
@@ -127,7 +127,7 @@ const ForgetPassword = () => {
                                                     "input-error"
                                                 }`}
                                                 id="outlined-basic"
-                                                placeholder="Enter email id"
+                                                placeholder="Enter email address"
                                                 variant="outlined"
                                                 {...register("email")}
                                                 error={

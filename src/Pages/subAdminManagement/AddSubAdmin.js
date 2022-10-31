@@ -22,15 +22,14 @@ import useCallbackState from "../../utils/useCallBackState";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 const AddSubAdminSchema = yup.object().shape({
-    name: yup.string().required("Sub admin name required"),
+    name: yup.string().required("Sub admin name required").trim(),
     email: yup
         .string()
         .email("Enter valid email address")
         .required("Email address requried"),
     subRoleId: yup.string().required("Role required"),
-    phoneNumber: yup
-        .number("please add valid number")
-        .min(3, "Minimum 3 digits required"),
+    phoneNumber: yup.number().typeError("Enter valid number"),
+
     countryCode: yup.string().required("Code required"),
 });
 const AddSubAdmin = () => {
@@ -253,6 +252,9 @@ const AddSubAdmin = () => {
                                             className={`input-field ${
                                                 errors.name && "input-error"
                                             }`}
+                                            inputProps={{
+                                                maxLength: 50,
+                                            }}
                                             {...register("name")}
                                             helperText={
                                                 errors.name
@@ -397,6 +399,9 @@ const AddSubAdmin = () => {
                                                 placeholder="Enter phone number"
                                                 variant="outlined"
                                                 {...register("phoneNumber")}
+                                                inputProps={{
+                                                    maxLength: 10,
+                                                }}
                                                 helperText={
                                                     errors.phoneNumber
                                                         ? errors.phoneNumber
