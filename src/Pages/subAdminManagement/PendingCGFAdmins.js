@@ -7,13 +7,13 @@ import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 const pendingTableColumnHead = [
     {
-        id: "subAdminName",
+        id: "name",
         // width: "30%",
         disablePadding: false,
         label: "CGF Admin Name",
     },
     {
-        id: "Email Address",
+        id: "email",
 
         disablePadding: false,
         label: "Email Address",

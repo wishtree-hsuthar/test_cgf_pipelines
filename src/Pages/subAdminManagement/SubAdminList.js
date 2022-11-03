@@ -373,16 +373,20 @@ const SubAdminList = () => {
                                 </span>
                                 Download
                             </div>
-                            <div className="form-btn">
-                                <button
-                                    onClick={() =>
-                                        navigate("/sub-admins/add-sub-admin")
-                                    }
-                                    className="primary-button add-button"
-                                >
-                                    Add CGF Admin
-                                </button>
-                            </div>
+                            {value === 0 && (
+                                <div className="form-btn">
+                                    <button
+                                        onClick={() =>
+                                            navigate(
+                                                "/sub-admins/add-sub-admin"
+                                            )
+                                        }
+                                        className="primary-button add-button"
+                                    >
+                                        Add CGF Admin
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="member-filter-wrap flex-between">

@@ -12,7 +12,7 @@ const onBoardedTableColumnHead = [
         label: "CGF Admin Name",
     },
     {
-        id: "Email Address",
+        id: "email",
 
         disablePadding: false,
         label: "Email Address",

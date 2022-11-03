@@ -101,10 +101,10 @@ function AddOperationMember() {
     } = useForm({
         defaultValues: {
             salutation: "Mr.",
-            memberId: {
-                _id: "",
-                companyName: "",
-            },
+            // memberId: {
+            //     _id: "",
+            //     companyName: "",
+            // },
         },
     });
 
@@ -215,6 +215,8 @@ function AddOperationMember() {
                 data
             );
             if (response.status == 201) {
+                reset();
+
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
@@ -605,6 +607,7 @@ function AddOperationMember() {
                                                         value={
                                                             memberCompanies?._id
                                                         }
+                                                        // freeSolo
                                                         // clearIcon={false}
                                                         disableClearable
                                                         onChange={(
@@ -645,6 +648,7 @@ function AddOperationMember() {
                                                                 "companyType",
                                                                 newValue.companyType
                                                             );
+                                                            trigger("memberId");
                                                         }}
                                                         // sx={{ width: 200 }}
                                                         options={

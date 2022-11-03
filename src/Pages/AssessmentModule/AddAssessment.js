@@ -542,7 +542,6 @@ const AddAssessment = () => {
                                                     inputProps={{
                                                         maxLength: 250,
                                                     }}
-                                                    error
                                                     className={`input-textarea ${
                                                         error &&
                                                         "input-textarea-error"

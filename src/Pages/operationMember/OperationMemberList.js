@@ -139,20 +139,21 @@ function OperationMemberList() {
                                 </div>
                                 {(SUPER_ADMIN === true ||
                                     moduleAccessForOperationMember[0]
-                                        .operationMember.add === true) && (
-                                    <div className="form-btn">
-                                        <button
-                                            onClick={() =>
-                                                navigate(
-                                                    "/users/operation-members/add-operation-member"
-                                                )
-                                            }
-                                            className="primary-button add-button"
-                                        >
-                                            Add Operation Member
-                                        </button>
-                                    </div>
-                                )}
+                                        .operationMember.add === true) &&
+                                    value === 0 && (
+                                        <div className="form-btn">
+                                            <button
+                                                onClick={() =>
+                                                    navigate(
+                                                        "/users/operation-members/add-operation-member"
+                                                    )
+                                                }
+                                                className="primary-button add-button"
+                                            >
+                                                Add Operation Member
+                                            </button>
+                                        </div>
+                                    )}
                             </div>
                         </div>
                         <div className="member-filter-wrap flex-between">

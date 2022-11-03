@@ -39,6 +39,15 @@ const Header = () => {
     // console.log("suoer admin in header", SUPER_ADMIN);
     // console.log("privilege in header", privilege);
 
+    const userNameInitials = () => {
+        let letter = "";
+        if (initials.length > 1) {
+            letter = initials[0].slice(0, 1) + initials[1]?.slice(0, 1);
+            return letter;
+        }
+        letter = initials[0].slice(0, 1);
+        return letter;
+    };
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
         setActive(!isActive);
@@ -83,6 +92,16 @@ const Header = () => {
         .filter((data) => data?.moduleId?.name === "Questionnaire")
         .map((data) => ({
             operationMember: {
+                list: data.list,
+                view: data.view,
+                edit: data.edit,
+                delete: data.delete,
+            },
+        }));
+    let moduleAccessForAssessment = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Assessment")
+        .map((data) => ({
+            assessment: {
                 list: data.list,
                 view: data.view,
                 edit: data.edit,
@@ -247,74 +266,86 @@ const Header = () => {
                                             </ul>
                                         </li>
 
-                                        <li
-                                            className={
-                                                location.pathname.includes(
-                                                    "/assessment-list"
-                                                )
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() =>
-                                                    navigate("/assessment-list")
+                                        {(SUPER_ADMIN ||
+                                            moduleAccessForAssessment[0]
+                                                ?.assessment?.list) && (
+                                            <li
+                                                className={
+                                                    location.pathname.includes(
+                                                        "/assessment-list"
+                                                    )
+                                                        ? "list-item active"
+                                                        : "list-item"
                                                 }
                                             >
-                                                Assessments
-                                            </a>
-                                        </li>
-
-                                        <li
-                                            className={
-                                                location.pathname.includes(
-                                                    "/sub-admins"
-                                                )
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                hidden={!SUPER_ADMIN}
-                                                onClick={() => {
-                                                    // setActiveState(false);
-                                                    setActiveStateForMembers(
-                                                        false
-                                                    );
-                                                    setActiveStateForOperationMembers(
-                                                        false
-                                                    );
-                                                    navigate("/sub-admins");
-                                                }}
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                CGF Admins
-                                            </a>
-                                        </li>
-                                        <li
-                                            className={
-                                                location.pathname == "/roles"
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                hidden={!SUPER_ADMIN}
-                                                onClick={() =>
-                                                    navigate("/roles")
+                                                <a
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                    onClick={() =>
+                                                        navigate(
+                                                            "/assessment-list"
+                                                        )
+                                                    }
+                                                >
+                                                    Assessments
+                                                </a>
+                                            </li>
+                                        )}
+                                        {SUPER_ADMIN && (
+                                            <li
+                                                className={
+                                                    location.pathname.includes(
+                                                        "/sub-admins"
+                                                    )
+                                                        ? "list-item active"
+                                                        : "list-item"
                                                 }
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
                                             >
-                                                Roles and Privileges
-                                            </a>
-                                        </li>
+                                                <a
+                                                    onClick={() => {
+                                                        // setActiveState(false);
+                                                        setActiveStateForMembers(
+                                                            false
+                                                        );
+                                                        setActiveStateForOperationMembers(
+                                                            false
+                                                        );
+                                                        navigate("/sub-admins");
+                                                    }}
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                >
+                                                    CGF Admins
+                                                </a>
+                                            </li>
+                                        )}
+                                        {SUPER_ADMIN && (
+                                            <li
+                                                className={
+                                                    location.pathname ==
+                                                    "/roles"
+                                                        ? "list-item active"
+                                                        : "list-item"
+                                                }
+                                            >
+                                                <a
+                                                    // hidden={!SUPER_ADMIN}
+                                                    onClick={() =>
+                                                        navigate("/roles")
+                                                    }
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        display:
+                                                            !SUPER_ADMIN &&
+                                                            "none",
+                                                    }}
+                                                >
+                                                    Roles and Privileges
+                                                </a>
+                                            </li>
+                                        )}
 
                                         <li
                                             className={
@@ -342,10 +373,10 @@ const Header = () => {
                             <div className="header-right">
                                 <Box>
                                     {/* <Tooltip title="Open settings"> */}
-                                        <div className="user-blk flex-between">
-                                            <div className="user-img">
-                                                <span className="user-name-txt">
-                                                    {initials?.length >= 1 &&
+                                    <div className="user-blk flex-between">
+                                        <div className="user-img">
+                                            <span className="user-name-txt">
+                                                {/* {initials?.length >= 1 &&
                                                         initials[0].slice(
                                                             0,
                                                             1
@@ -353,30 +384,31 @@ const Header = () => {
                                                             initials[1]?.slice(
                                                                 0,
                                                                 1
-                                                            )}
-                                                </span>
-                                            </div>
-                                            <div className="user-info">
-                                                <span className="user-name">
-                                                    {userAuth?.name}
-                                                </span>
-                                                <span
-                                                    className="user-type"
-                                                    onClick={handleOpenUserMenu}
-                                                >
-                                                    {userAuth?.role?.name}
-                                                    <span
-                                                        className={
-                                                            isActive
-                                                                ? "super-admin-arrow"
-                                                                : "super-admin-arrow active"
-                                                        }
-                                                    >
-                                                        <KeyboardArrowDownIcon />
-                                                    </span>
-                                                </span>
-                                            </div>
+                                                            )} */}
+                                                {userNameInitials()}
+                                            </span>
                                         </div>
+                                        <div className="user-info">
+                                            <span className="user-name">
+                                                {userAuth?.name}
+                                            </span>
+                                            <span
+                                                className="user-type"
+                                                onClick={handleOpenUserMenu}
+                                            >
+                                                {userAuth?.role?.name}
+                                                <span
+                                                    className={
+                                                        isActive
+                                                            ? "super-admin-arrow"
+                                                            : "super-admin-arrow active"
+                                                    }
+                                                >
+                                                    <KeyboardArrowDownIcon />
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
                                     {/* </Tooltip> */}
                                     <Menu
                                         sx={{ mt: "35px", mr: "35px" }}

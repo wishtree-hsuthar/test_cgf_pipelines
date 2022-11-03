@@ -428,10 +428,7 @@ const EditSubAdmin = () => {
                                                             />
                                                         )}
                                                         {...field}
-                                                        // value={
-                                                        //     fetchSubAdminDetailsForEdit
-                                                        //         .subRoleId.name
-                                                        // }
+                                                        disabled
                                                         className={`input-field ${
                                                             errors.role &&
                                                             "input-error"

@@ -107,7 +107,7 @@ const ForgetPassword = () => {
                                     />
                                 </div>
                                 <h2 class="heading1 text-uppercase mb-40">
-                                    Forget password
+                                    Forgot password
                                 </h2>
                                 <p className="forget-password-message">
                                     Enter you registered email address and we'll{" "}
