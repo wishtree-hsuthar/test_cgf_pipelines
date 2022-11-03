@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     AppBar,
     Box,
@@ -7,6 +7,7 @@ import {
     Menu,
     Tooltip,
     MenuItem,
+    Modal,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,6 +16,11 @@ import { resetUser, setUser } from "../redux/UserSlice";
 import { GET_USER, LOGOUT_URL } from "../api/Url";
 import axios from "axios";
 import { privateAxios } from "../api/axios";
+import { Backdrop, Fade } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import "./Header.css";
 const Header = () => {
     // const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -48,6 +54,7 @@ const Header = () => {
         setAnchorElUser(null);
         setActive(!isActive);
     };
+    
     // console.log("privilege", );
     // console.log("privilege entries", );
     console.log("privilege from ", privilege);
@@ -120,7 +127,138 @@ const Header = () => {
             }
         }
     };
+//    const truncate = (str) =>{
+//         return str.length > 20 ? str.substring(0, 18) + "..." : str;
+        
+//     }
+const textElementRef = useRef();
+const textnameElementRef = useRef();
+const compareSize = () => {
+  const compare = textElementRef.current.scrollWidth > textElementRef.current.clientWidth;
+  const comparename = textnameElementRef.current.scrollWidth > textnameElementRef.current.clientWidth;
+  console.log('compare: ', compare);
+  setHover(compare);
+  setNameHover(comparename)
+};
+
+// compare once and add resize listener on "componentDidMount"
+useEffect(() => {
+  compareSize();
+  window.addEventListener('resize', compareSize);
+}, []);
+
+// remove resize listener again on "componentWillUnmount"
+useEffect(() => () => {
+  window.removeEventListener('resize', compareSize);
+}, []);
+
+// Define state and function to update the value
+const [hoverStatus, setHover] = useState(false);
+const [hoverNameStatus, setNameHover] = useState(false);
+
+const [openModal, setOpenModal] = useState(false);
+// css for modal
+const style = {
+    position: "absolute",
+    top: "9.7%",
+    right: "6.5%",
+    //transform: "translate(-50%, -50%)",
+    width: 325,
+    bgcolor: "background.paper",
+    p: 4,
+  };
+
+  //modal button close
+  const handleClose = () => {
+    setOpenModal(false);
+    setAnchorElUser(null);
+    setActive(!isActive);
+  };
+  const openProfileDialog = ()=> {
+    setAnchorElUser(null);
+    setActive(!isActive);
+    setOpenModal(true);
+}
+
     return (
+        <div>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={openModal}
+                onClose={handleClose}
+                closeAfterTransition
+                BackdropComponent={false}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+                className="popup-blk"
+                >
+                <Fade in={openModal}>
+                    <Box sx={style} className="profile-popup-box">
+                    <div id="transition-modal-title" className="profile-popup-ttl-blk">
+                        <span className="popup-close-icon" onClick={handleClose}>
+                            <CloseIcon />
+                        </span>
+                    </div>
+                    <div id="transition-modal-title1" className="profile-popup-wrap">
+                        <div className="signin-user-blk flex-start">
+                            <div className="signin-user-left">
+                                <div class="signin-user-img">
+                                    <span class="signin-user-name-txt">
+                                        {initials?.length >= 1 &&
+                                                        initials[0].slice(
+                                                            0,
+                                                            1
+                                                        ) +
+                                                            initials[1]?.slice(
+                                                                0,
+                                                                1
+                                                            )}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="signin-user-right">
+                                <div className="profile-info-blk">
+                                    <div className="profile-name">{userAuth?.name}</div>
+                                    <div className="profile-info">
+                                        {userAuth?.role?.name}
+                                    </div>
+                                    <div className="profile-info">
+                                        <span className="profile-info-icon"><LocalPhoneOutlinedIcon /></span>
+                                        <span className="profile-info-txt">+91 9123456789</span>
+                                    </div>
+                                    <div className="profile-info">
+                                        <span className="profile-info-icon"><EmailOutlinedIcon /></span>
+                                        <span className="profile-info-txt">admin@cgfhrdd.com</span>
+                                    </div>
+                                    <div className="profile-info mb-0">
+                                        <span className="profile-info-icon"><PlaceOutlinedIcon /></span>
+                                        <span className="profile-info-txt">Pune</span>
+                                    </div>
+                                    <div className="tertiary-btn-blk mt-20">
+                                        <span className="addmore-txt">
+                                            Change Password
+                                        </span>
+                                    </div>
+                                    <div className="form-btn flex-center mt-20">
+                                        <button type="submit" className="primary-button" onClick={handleLogOut}>
+                                            Logout
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* <div id="transition-modal-description" className="popup-body">
+                        <div className="popup-content-blk text-center">
+                        
+                        </div>
+                    </div> */}
+                    </Box>
+                </Fade>
+                </Modal>
+        
         <AppBar position="sticky" className="header-sect">
             <div className="nav">
                 <div className="container">
@@ -356,16 +494,35 @@ const Header = () => {
                                                             )}
                                                 </span>
                                             </div>
-                                            <div className="user-info">
-                                                <span className="user-name">
-                                                    {userAuth?.name}
-                                                </span>
-                                                <span
-                                                    className="user-type"
-                                                    onClick={handleOpenUserMenu}
+                                            <div className="user-info" onClick={openProfileDialog}>
+                                            <div>
+                                                <Tooltip
+                                                    title={userAuth?.name}
+                                                    interactive
+                                                    disableHoverListener={!hoverNameStatus}
+                                                    style={{ fontSize: '14px' }}
                                                 >
-                                                    {userAuth?.role?.name}
                                                     <span
+                                                        ref={textnameElementRef}
+                                                        className="user-name">
+                                                        {userAuth?.name}
+                                                    </span>
+                                                </Tooltip>
+                                                <Tooltip
+                                                    title={userAuth?.role?.name}
+                                                    interactive
+                                                    disableHoverListener={!hoverStatus}
+                                                    style={{ fontSize: '14px' }}
+                                                >
+                                                    <span
+                                                        ref={textElementRef}
+                                                        className="user-type"
+                                                    >
+                                                        {userAuth?.role?.name}
+                                                    </span>
+                                                </Tooltip>
+                                            </div>
+                                                <span
                                                         className={
                                                             isActive
                                                                 ? "super-admin-arrow"
@@ -374,11 +531,11 @@ const Header = () => {
                                                     >
                                                         <KeyboardArrowDownIcon />
                                                     </span>
-                                                </span>
+
                                             </div>
                                         </div>
                                     {/* </Tooltip> */}
-                                    <Menu
+                                    {/* <Menu
                                         sx={{ mt: "35px", mr: "35px" }}
                                         id="menu-appbar"
                                         anchorEl={anchorElUser}
@@ -396,7 +553,8 @@ const Header = () => {
                                         className="profile-menu-item"
                                     >
                                         <MenuItem
-                                            onClick={handleCloseUserMenu}
+                                            // onClick={handleCloseUserMenu}
+                                            
                                             sx={{ width: "135px" }}
                                         >
                                             <Typography textAlign="center">
@@ -408,7 +566,7 @@ const Header = () => {
                                                 Logout
                                             </Typography>
                                         </MenuItem>
-                                    </Menu>
+                                    </Menu> */}
                                 </Box>
                             </div>
                         </div>
@@ -469,6 +627,7 @@ const Header = () => {
                 </Box>
               </div> */}
         </AppBar>
+        </div>
     );
 };
 

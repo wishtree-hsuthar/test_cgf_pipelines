@@ -37,19 +37,19 @@ const tableHead = [
         id: "",
         disablePadding: true,
         label: "Select User",
-        width: "10%",
+        // width: "10%",
     },
     {
         id: "operationMember",
         disablePadding: true,
         label: "Operation Member",
-        width: "30%",
+        // width: "30%",
     },
     {
         id: "emailId",
         disablePadding: false,
         label: "Email Id",
-        width: "40%",
+        // width: "40%",
     },
 ];
 

@@ -372,7 +372,7 @@ const ReplaceSubAdmin = () => {
                 <div className="container">
                     <div className="form-header flex-between ">
                         <h2 className="heading2">Replace</h2>
-                        <h4>Replace sub-admin with following:</h4>
+                        {/* <h4>Replace sub-admin with following:</h4> */}
                         <div
                             className="form-header-right-txt 
         member-filter-right
@@ -396,7 +396,7 @@ const ReplaceSubAdmin = () => {
                     </div>
 
                     <div className="member-info-wrapper table-content-wrap">
-                        <div className="member-data-sect">
+                        <div className="member-data-sect replace-admin-table">
                             <TableComponent
                                 tableHead={tableHead}
                                 records={records}

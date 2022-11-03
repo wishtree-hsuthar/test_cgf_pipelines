@@ -264,11 +264,11 @@ function PendingCGFAdmins({
     return (
         <>
             <DialogBox
-                title={`Withdraw CGF Admin Invitation`}
+                title={<p>Withdraw CGF Admin Invitation</p>}
                 info1={
-                    "On withdrawal, cgf admin will not be able to verify their account?"
+                    <p>On withdrawal, cgf admin will not be able to verify their account?</p>
                 }
-                info2={"Do you want to withdraw the invitation?"}
+                info2={<p>Do you want to withdraw the invitation?</p>}
                 primaryButtonText={"Yes"}
                 secondaryButtonText={"No"}
                 onPrimaryModalButtonClickHandler={() => {

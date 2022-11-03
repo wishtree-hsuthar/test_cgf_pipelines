@@ -67,7 +67,7 @@ const FillAssessmentQuestion = ({
                 onChange={(e) =>
                     handleAnswersChange(e.target.name, e.target.value)
                 }
-                className={`${
+                className={`input-field ${
                     !answer && error && error?.length !== 0 ? "input-error" : ""
                 }`}
                 helperText={!answer && error ? error : ""}
