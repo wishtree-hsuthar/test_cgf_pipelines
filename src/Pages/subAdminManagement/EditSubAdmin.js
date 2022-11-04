@@ -206,7 +206,7 @@ const EditSubAdmin = () => {
                     () => toasterRef.current()
                 );
                 setTimeout(() => {
-                    navigate(`/sub-admins/view-sub-admin/${params.id}`);
+                    navigate(`/sub-admins`);
                 }, 2000);
             }
         } catch (error) {
@@ -228,7 +228,8 @@ const EditSubAdmin = () => {
     };
 
     const handleCancel = () => {
-        navigate("/sub-admins/view-sub-admin/" + params.id);
+        // navigate("/sub-admins/view-sub-admin/" + params.id);
+        navigate("/sub-admins");
     };
     return (
         <div className="page-wrapper">

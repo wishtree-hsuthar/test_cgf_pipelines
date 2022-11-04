@@ -266,7 +266,7 @@ function PendingCGFAdmins({
             <DialogBox
                 title={`Withdraw CGF Admin Invitation`}
                 info1={
-                    "On withdrawal, cgf admin will not be able to verify their account?"
+                    "On withdrawal, cgf admin will not be able to verify their account."
                 }
                 info2={"Do you want to withdraw the invitation?"}
                 primaryButtonText={"Yes"}
