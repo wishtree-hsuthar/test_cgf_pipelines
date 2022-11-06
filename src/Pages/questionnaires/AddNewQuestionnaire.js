@@ -234,9 +234,10 @@ function AddNewQuestionnaire() {
                     title: e.target.value,
                   });
                 }}
+                onBlur={(e) => setQuestionnaire({...questionnaire, title : e.target.value?.trim()}) }
                 helperText={
                   questionnaire.title === "" && globalSectionTitleError?.errMsg
-                    ? "This is required field"
+                    ? "Enter questionnaire title"
                     : " "
                 }
               />

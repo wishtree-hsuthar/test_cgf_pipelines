@@ -354,6 +354,19 @@ const EditMember = () => {
   const checkKeyDown = (e) => {
     if (e.code === "Enter") e.preventDefault();
   };
+  const phoneNumberChangeHandler = (e, name, code) => {
+    console.log(
+      "on number change",
+      e.target.value,
+      "name: ",
+      name,
+      "code",
+      code
+    );
+    setValue(name, e.target.value);
+    trigger(name);
+    trigger(code);
+  };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -419,6 +432,9 @@ const EditMember = () => {
                         <Input
                           control={control}
                           name="memberCompany"
+                          onBlur={(e) =>
+                            setValue("memberCompany", e.target.value?.trim())
+                          }
                           placeholder="Enter member company"
                           myHelper={memberHelper}
                           rules={{
@@ -484,6 +500,12 @@ const EditMember = () => {
                                     : setValue("parentCompany", newValue);
                                 }
                               }}
+                              onBlur={(e) =>
+                                setValue(
+                                  "parentCompany",
+                                  e.target.value?.trim()
+                                )
+                              }
                               selectOnFocus
                               handleHomeEndKeys
                               id="free-solo-with-text-demo"
@@ -594,6 +616,9 @@ const EditMember = () => {
                         <Input
                           control={control}
                           name="corporateEmail"
+                          onBlur={(e) =>
+                            setValue("corporateEmail", e.target.value?.trim())
+                          }
                           placeholder="Enter email"
                           myHelper={memberHelper}
                           rules={{
@@ -608,16 +633,20 @@ const EditMember = () => {
                     </div>
                     <div className="card-form-field">
                       <div className="form-group">
-                        <label htmlFor="phoneNumber">
-                          Phone Number <span className="mandatory">*</span>
-                        </label>
+                        <label htmlFor="phoneNumber">Phone Number</label>
                         <div className="phone-number-field">
                           <div className="select-field country-code">
                             <Controller
                               control={control}
                               name="countryCode"
                               rules={{
-                                required: true,
+                                validate: () => {
+                                  if (
+                                    !watch("countryCode") &&
+                                    watch("phoneNumber")
+                                  )
+                                    return "Invalid input";
+                                },
                               }}
                               // rules={{
                               //   validate: () => {
@@ -642,6 +671,7 @@ const EditMember = () => {
                                       ? setValue("countryCode", newValue.name)
                                       : setValue("countryCode", newValue);
                                     trigger("countryCode");
+                                    trigger("phoneNumber");
                                   }}
                                   // sx={{ width: 200 }}
                                   options={arrOfCountryCode}
@@ -679,17 +709,29 @@ const EditMember = () => {
                           <Input
                             control={control}
                             name="phoneNumber"
+                            myOnChange={(e) =>
+                              phoneNumberChangeHandler(
+                                e,
+                                "phoneNumber",
+                                "countryCode"
+                              )
+                            }
+                            onBlur={(e) =>
+                              setValue("phoneNumber", e.target.value?.trim())
+                            }
                             placeholder="Enter phone number"
                             myHelper={memberHelper}
                             rules={{
-                              required: true,
                               maxLength: 15,
                               minLength: 3,
                               validate: (value) => {
-                                // if (watch("phoneNumber") && !watch("countryCode"))
-                                //   return "Invalid input";
+                                if (
+                                  !watch("phoneNumber") &&
+                                  watch("countryCode")
+                                )
+                                  return "invalid input";
                                 if (value && !Number(value))
-                                  return "Invalid Input";
+                                  return "Invalid input";
                               },
                             }}
                           />
@@ -702,6 +744,9 @@ const EditMember = () => {
                         <Input
                           control={control}
                           name="websiteUrl"
+                          onBlur={(e) =>
+                            setValue("websiteUrl", e.target.value?.trim())
+                          }
                           placeholder="N/A"
                           myHelper={memberHelper}
                           rules={{
@@ -784,6 +829,9 @@ const EditMember = () => {
                                     : setValue("city", newValue);
                                 }
                               }}
+                              onBlur={(e) =>
+                                setValue("city", e.target.value?.trim())
+                              }
                               selectOnFocus
                               handleHomeEndKeys
                               id="free-solo-with-text-demo"
@@ -833,13 +881,12 @@ const EditMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="address">
-                          Address <span className="mandatory">*</span>
+                          Address 
                         </label>
                         <Controller
                           name="address"
                           control={control}
                           rules={{
-                            required: true,
                             minLength: 3,
                             maxLength: 250,
                           }}
@@ -847,6 +894,9 @@ const EditMember = () => {
                             <TextField
                               multiline
                               {...field}
+                              onBlur={(e) =>
+                                setValue("address", e.target.value?.trim())
+                              }
                               inputProps={{
                                 maxLength: 250,
                               }}
@@ -967,6 +1017,12 @@ const EditMember = () => {
                                 pattern: /^[A-Za-z]+[A-Za-z ]*$/,
                               }}
                               name="memberContactFullName"
+                              onBlur={(e) =>
+                                setValue(
+                                  "memberContactFullName",
+                                  e.target.value?.trim()
+                                )
+                              }
                               placeholder="N/A"
                             />
                           </div>
@@ -984,6 +1040,9 @@ const EditMember = () => {
                             minLength: 3,
                           }}
                           name="title"
+                          onBlur={(e) =>
+                            setValue("title", e.target.value?.trim())
+                          }
                           placeholder="N/A"
                         />
                       </div>
@@ -999,6 +1058,9 @@ const EditMember = () => {
                             minLength: 3,
                           }}
                           name="department"
+                          onBlur={(e) =>
+                            setValue("department", e.target.value?.trim())
+                          }
                           placeholder="N/A"
                         />
                       </div>
@@ -1020,6 +1082,12 @@ const EditMember = () => {
                               /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                           }}
                           name="memberContactEmail"
+                          onBlur={(e) =>
+                            setValue(
+                              "memberContactEmail",
+                              e.target.value?.trim()
+                            )
+                          }
                           placeholder="N/A"
                         />
                       </div>
@@ -1027,7 +1095,7 @@ const EditMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="memberContactPhoneNumber">
-                          Phone Number <span className="mandatory">*</span>
+                          Phone Number 
                         </label>
                         <div className="phone-number-field">
                           <div className="select-field country-code">
@@ -1035,7 +1103,13 @@ const EditMember = () => {
                               control={control}
                               name="memberContactCountryCode"
                               rules={{
-                                required: true,
+                                validate: () => {
+                                  if (
+                                    !watch("memberContactCountryCode") &&
+                                    watch("memberContactPhoneNuber")
+                                  )
+                                    return "Invalid input";
+                                },
                               }}
                               render={({ field, fieldState: { error } }) => (
                                 <Autocomplete
@@ -1058,6 +1132,7 @@ const EditMember = () => {
                                           newValue
                                         );
                                     trigger("memberContactCountryCode");
+                                    trigger("memberContactPhoneNuber");
                                   }}
                                   // sx={{ width: 200 }}
                                   options={arrOfCountryCode}
@@ -1096,17 +1171,23 @@ const EditMember = () => {
                           <Input
                             control={control}
                             name="memberContactPhoneNuber"
+                            myOnChange={(e) => phoneNumberChangeHandler(e,"memberContactPhoneNuber","memberContactCountryCode")}
+                            onBlur={(e) =>
+                              setValue(
+                                "memberContactPhoneNuber",
+                                e.target.value?.trim()
+                              )
+                            }
                             myHelper={memberHelper}
                             rules={{
-                              required: true,
                               maxLength: 15,
                               minLength: 3,
                               validate: (value) => {
-                                // if (
-                                //   watch("memberContactPhoneNuber") &&
-                                //   !watch("memberContactCountryCode")
-                                // )
-                                //   return "Invalid Input";
+                                if (
+                                  !watch("memberContactPhoneNuber") &&
+                                  watch("memberContactCountryCode")
+                                )
+                                  return "invalid input";
                                 if (value && !Number(value))
                                   return "Invalid input";
                               },

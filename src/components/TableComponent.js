@@ -79,7 +79,7 @@ function EnhancedTableHead(props) {
                                 {headCell.label}
                             </TableSortLabel>
                         )}
-                        {headCell.id === "action" && headCell.label}
+                        {headCell.id === "action" && <span className="sorted-blk">{headCell.label}</span> }
                     </TableCell>
                 ))}
             </TableRow>

@@ -40,7 +40,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>
@@ -282,6 +282,7 @@ function FillAssessment() {
                                         {questionnaire?.sections?.map(
                                             (section, index, id) => (
                                                 <Tooltip
+                                                    key={section?.uuid}
                                                     title={section.sectionTitle}
                                                     placement="bottom-start"
                                                 >
@@ -301,7 +302,7 @@ function FillAssessment() {
                         </div>
                         <div className="preview-tab-data">
                             {questionnaire?.sections?.map((section, index) => (
-                                <TabPanel value={value} index={index}>
+                                <TabPanel value={value} index={index} key={section?.uuid}>
                                     <FillAssesmentSection
                                         assessmentQuestionnaire={
                                             assessmentQuestionnaire

@@ -320,33 +320,34 @@ const EditRole = () => {
                           <TableRow>
                             <TableCell
                               align="left"
-                              className="tableHeader"
+                              className="table-header"
                               width="16%"
                             >
-                              Modules
+                              <span className="sorted-blk">Modules</span>
+                              
                             </TableCell>
-                            <TableCell className="tableHeader">List</TableCell>
-                            <TableCell align="center" className="tableHeader">
-                              Add
+                            <TableCell className="table-header"><span className="sorted-blk">List</span></TableCell>
+                            <TableCell align="center" className="table-header">
+                            <span className="sorted-blk">Add</span>
                             </TableCell>
-                            <TableCell align="center" className="tableHeader">
-                              Edit
+                            <TableCell align="center" className="table-header">
+                            <span className="sorted-blk">Edit</span>
                             </TableCell>
-                            <TableCell align="center" className="tableHeader">
-                              View
+                            <TableCell align="center" className="table-header">
+                            <span className="sorted-blk">View</span>
                             </TableCell>
-                            <TableCell align="center" className="tableHeader">
-                              Delete
+                            <TableCell align="center" className="table-header">
+                            <span className="sorted-blk">Delete</span>
                             </TableCell>
                             {/* <TableCell
                               align="center"
-                              className="tableHeader"
+                              className="table-header"
                               width="16%"
                             >
                               Assign to Member
                             </TableCell> */}
-                            <TableCell align="center" className="tableHeader">
-                              All
+                            <TableCell align="center" className="table-header">
+                            <span className="sorted-blk">All</span>
                             </TableCell>
                           </TableRow>
                         </TableHead>

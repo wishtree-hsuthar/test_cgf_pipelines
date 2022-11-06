@@ -169,7 +169,7 @@ const Login = (prop) => {
                                     >
                                         <div class="form-group">
                                             <label for="emailid">
-                                                Username or Email Address{" "}
+                                                Username or Email{" "}
                                                 <span class="mandatory">*</span>
                                             </label>
                                             <TextField

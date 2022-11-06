@@ -416,7 +416,7 @@ const SubAdminList = () => {
                             <div className="searchbar">
                                 <input
                                     type="text"
-                                    placeholder="Search sub-admin name, email "
+                                    placeholder="Search CGF admin name, email "
                                     onChange={(e) => onSearchChangeHandler(e)}
                                     name="search"
                                 />

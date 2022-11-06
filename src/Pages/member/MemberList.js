@@ -119,8 +119,8 @@ const MemberList = () => {
   //code of tablecomponent
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [order, setOrder] = useState("desc");
-  const [orderBy, setOrderBy] = useState("");
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("initialRender");
   const [records, setRecords] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [selected, setSelected] = useState([]);
@@ -236,6 +236,7 @@ const MemberList = () => {
     console.log("filters", filters);
 
     const namesMappings = {
+      initialRender : "",
       companyName: "name",
       name: "representativeName",
       email: "representativeEmail",
@@ -246,6 +247,7 @@ const MemberList = () => {
       isActive: "status",
     };
 
+    // let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=&order=${order}`;
     let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${namesMappings[orderBy]}&order=${order}`;
     if (search?.length >= 3) url = url + `&search=${search}`;
     if (filters?.status !== "all" && filters?.status !== "none")

@@ -1,8 +1,8 @@
 export const memberHelper = {
     memberCompany: {
+      required: "Enter member company",
       maxLength: "Max char limit exceed",
       minLength: "Input must contain atleast 3 characters",
-      required: "Enter member company",
     },
     cgfCategory:{
       required: "Select Category"
@@ -18,19 +18,19 @@ export const memberHelper = {
     },
     countryCode: {
       required: "select country code",
-      validate: "Invalid input",
+      validate: "select country code"
     },
     phoneNumber: {
       required: "Enter phone number",
       maxLength: "Max char limit exceed",
       minLength: "Input must contain atleast 3 characters",
       pattern: "Invalid Input",
-      validate: "Invalid Input",
+      validate: "Enter phone number"
     },
     websiteUrl: {
       maxLength: "Max char limit exceed",
       minLength: "Input must contain atleast 3 characters",
-      pattern: "Invalid Input",
+      pattern: "Enter valid URL",
     },
     region: {
       required: "Select region",
@@ -74,13 +74,12 @@ export const memberHelper = {
       pattern: "Invalid Input",
     },
     memberContactCountryCode: {
-      required: "sekect country code",
+      validate: "select country code"
     },
     memberContactPhoneNuber: {
       required: "Enter country code",
       maxLength: "Max char limit exceed",
       minLength: "Input must contain atleast 3 characters",
-      pattern: "Invalid Input",
-      validate: "Invalid Input",
+      validate: "Enter phone number",
     },
   };

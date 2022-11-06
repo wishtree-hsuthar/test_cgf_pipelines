@@ -17,6 +17,7 @@ const TableLayoutCellComponent = ({
     cell,
     answer,
     handleAnswersChange,
+    handleAnswersBlur,
     error,
 }) => {
     const [showMore, setShowMore] = useState(false);
@@ -81,6 +82,7 @@ const TableLayoutCellComponent = ({
                         onChange={(e) =>
                             handleAnswersChange(e.target.name, e.target.value)
                         }
+                        onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
                         helperText={
                             !answer && error && error?.length !== 0
                                 ? error
