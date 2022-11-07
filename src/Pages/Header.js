@@ -54,7 +54,7 @@ const Header = () => {
         setAnchorElUser(null);
         setActive(!isActive);
     };
-    
+
     // console.log("privilege", );
     // console.log("privilege entries", );
     console.log("privilege from ", privilege);
@@ -127,159 +127,58 @@ const Header = () => {
             }
         }
     };
-//    const truncate = (str) =>{
-//         return str.length > 20 ? str.substring(0, 18) + "..." : str;
-        
-//     }
-const textElementRef = useRef();
-const textnameElementRef = useRef();
-const compareSize = () => {
-  const compare = textElementRef.current.scrollWidth > textElementRef.current.clientWidth;
-  const comparename = textnameElementRef.current.scrollWidth > textnameElementRef.current.clientWidth;
-  console.log('compare: ', compare);
-  setHover(compare);
-  setNameHover(comparename)
-};
+    //    const truncate = (str) =>{
+    //         return str.length > 20 ? str.substring(0, 18) + "..." : str;
 
-// compare once and add resize listener on "componentDidMount"
-useEffect(() => {
-  compareSize();
-  window.addEventListener('resize', compareSize);
-}, []);
+    //     }
+    const textElementRef = useRef();
+    const textnameElementRef = useRef();
+    const compareSize = () => {
+        const compare = textElementRef.current.scrollWidth > textElementRef.current.clientWidth;
+        const comparename = textnameElementRef.current.scrollWidth > textnameElementRef.current.clientWidth;
+        console.log('compare: ', compare);
+        setHover(compare);
+        setNameHover(comparename)
+    };
 
-// remove resize listener again on "componentWillUnmount"
-useEffect(() => () => {
-  window.removeEventListener('resize', compareSize);
-}, []);
+    // compare once and add resize listener on "componentDidMount"
+    useEffect(() => {
+        compareSize();
+        window.addEventListener('resize', compareSize);
+    }, []);
 
-// Define state and function to update the value
-const [hoverStatus, setHover] = useState(false);
-const [hoverNameStatus, setNameHover] = useState(false);
+    // remove resize listener again on "componentWillUnmount"
+    useEffect(() => () => {
+        window.removeEventListener('resize', compareSize);
+    }, []);
 
-const [openModal, setOpenModal] = useState(false);
-// css for modal
-const style = {
-    position: "absolute",
-    top: "9.7%",
-    right: "6.5%",
-    //transform: "translate(-50%, -50%)",
-    width: 325,
-    bgcolor: "background.paper",
-    p: 4,
-  };
+    // Define state and function to update the value
+    const [hoverStatus, setHover] = useState(false);
+    const [hoverNameStatus, setNameHover] = useState(false);
 
-  //modal button close
-  const handleClose = () => {
-    setOpenModal(false);
-    setAnchorElUser(null);
-    setActive(!isActive);
-  };
-  const openProfileDialog = ()=> {
-    setAnchorElUser(null);
-    setActive(!isActive);
-    setOpenModal(true);
-}
-
+    
     return (
-        <div>
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={openModal}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={false}
-                BackdropProps={{
-                    timeout: 500,
-                }}
-                className="popup-blk"
-                >
-                <Fade in={openModal}>
-                    <Box sx={style} className="profile-popup-box">
-                    <div id="transition-modal-title" className="profile-popup-ttl-blk">
-                        <span className="popup-close-icon" onClick={handleClose}>
-                            <CloseIcon />
-                        </span>
-                    </div>
-                    <div id="transition-modal-title1" className="profile-popup-wrap">
-                        <div className="signin-user-blk flex-start">
-                            <div className="signin-user-left">
-                                <div class="signin-user-img">
-                                    <span class="signin-user-name-txt">
-                                        {initials?.length >= 1 &&
-                                                        initials[0].slice(
-                                                            0,
-                                                            1
-                                                        ) +
-                                                            initials[1]?.slice(
-                                                                0,
-                                                                1
-                                                            )}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="signin-user-right">
-                                <div className="profile-info-blk">
-                                    <div className="profile-name">{userAuth?.name}</div>
-                                    <div className="profile-info">
-                                        {userAuth?.role?.name}
+            <AppBar position="sticky" className="header-sect">
+                <div className="nav">
+                    <div className="container">
+                        <Toolbar disableGutters>
+                            <div className="header-wrapper">
+                                <div className="header-left">
+                                    <div className="logo-blk">
+                                        <a href="/home">
+                                            <img
+                                                src={
+                                                    process.env.PUBLIC_URL +
+                                                    "/images/logo.png"
+                                                }
+                                                className="img-fluid"
+                                                alt=""
+                                            />
+                                        </a>
                                     </div>
-                                    <div className="profile-info">
-                                        <span className="profile-info-icon"><LocalPhoneOutlinedIcon /></span>
-                                        <span className="profile-info-txt">+91 9123456789</span>
-                                    </div>
-                                    <div className="profile-info">
-                                        <span className="profile-info-icon"><EmailOutlinedIcon /></span>
-                                        <span className="profile-info-txt">admin@cgfhrdd.com</span>
-                                    </div>
-                                    <div className="profile-info mb-0">
-                                        <span className="profile-info-icon"><PlaceOutlinedIcon /></span>
-                                        <span className="profile-info-txt">Pune</span>
-                                    </div>
-                                    <div className="tertiary-btn-blk mt-20">
-                                        <span className="addmore-txt">
-                                            Change Password
-                                        </span>
-                                    </div>
-                                    <div className="form-btn flex-center mt-20">
-                                        <button type="submit" className="primary-button" onClick={handleLogOut}>
-                                            Logout
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {/* <div id="transition-modal-description" className="popup-body">
-                        <div className="popup-content-blk text-center">
-                        
-                        </div>
-                    </div> */}
-                    </Box>
-                </Fade>
-                </Modal>
-        
-        <AppBar position="sticky" className="header-sect">
-            <div className="nav">
-                <div className="container">
-                    <Toolbar disableGutters>
-                        <div className="header-wrapper">
-                            <div className="header-left">
-                                <div className="logo-blk">
-                                    <a href="/home">
-                                        <img
-                                            src={
-                                                process.env.PUBLIC_URL +
-                                                "/images/logo.png"
-                                            }
-                                            className="img-fluid"
-                                            alt=""
-                                        />
-                                    </a>
-                                </div>
-                                <div className="nav-listblk">
-                                    <ul className="nav-list flex-between">
-                                        {/* <li
+                                    <div className="nav-listblk">
+                                        <ul className="nav-list flex-between">
+                                            {/* <li
                                             className={
                                                 location.pathname ==
                                                 "/dashboard"
@@ -290,196 +189,196 @@ const style = {
                                                 Members
                                             </a>
                                         </li> */}
-                                        <li
-                                            className={
-                                                location.pathname == "/home"
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                hidden={
-                                                    CGF_ADMIN_ACCESS
-                                                        ? "active"
-                                                        : ""
+                                            <li
+                                                className={
+                                                    location.pathname == "/home"
+                                                        ? "list-item active"
+                                                        : "list-item"
                                                 }
-                                            ></a>
-                                            <a
-                                                onClick={() =>
-                                                    navigate("/home")
-                                                }
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
                                             >
-                                                Home
-                                            </a>
-                                        </li>
-                                        <li
-                                            className={
-                                                location.pathname.includes(
-                                                    "/users"
-                                                )
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                hidden={OPERATION_MEMBER}
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                User Management
-                                            </a>
-                                            <ul className="header-submenu">
-                                                <li
+                                                <a
                                                     hidden={
-                                                        SUPER_ADMIN === true
-                                                            ? false
-                                                            : !moduleAccesForMember[0]
-                                                                  ?.member?.list
-                                                    }
-                                                    className={
-                                                        location.pathname ===
-                                                        "/users/members"
-                                                            ? "subactive"
+                                                        CGF_ADMIN_ACCESS
+                                                            ? "active"
                                                             : ""
                                                     }
+                                                ></a>
+                                                <a
+                                                    onClick={() =>
+                                                        navigate("/home")
+                                                    }
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
                                                 >
-                                                    <a
-                                                        onClick={() => {
-                                                            navigate(
+                                                    Home
+                                                </a>
+                                            </li>
+                                            <li
+                                                className={
+                                                    location.pathname.includes(
+                                                        "/users"
+                                                    )
+                                                        ? "list-item active"
+                                                        : "list-item"
+                                                }
+                                            >
+                                                <a
+                                                    hidden={OPERATION_MEMBER}
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                >
+                                                    User Management
+                                                </a>
+                                                <ul className="header-submenu">
+                                                    <li
+                                                        hidden={
+                                                            SUPER_ADMIN === true
+                                                                ? false
+                                                                : !moduleAccesForMember[0]
+                                                                    ?.member?.list
+                                                        }
+                                                        className={
+                                                            location.pathname ===
                                                                 "/users/members"
-                                                            );
-                                                        }}
+                                                                ? "subactive"
+                                                                : ""
+                                                        }
                                                     >
-                                                        Members
-                                                    </a>
-                                                </li>
-                                                <li
-                                                    className={
-                                                        location.pathname ===
-                                                        "/users/operation-members"
-                                                            ? "subactive"
-                                                            : ""
-                                                    }
-                                                    hidden={
-                                                        SUPER_ADMIN === true
-                                                            ? false
-                                                            : !moduleAccessForOperationMember[0]
-                                                                  ?.operationMember
-                                                                  ?.list
+                                                        <a
+                                                            onClick={() => {
+                                                                navigate(
+                                                                    "/users/members"
+                                                                );
+                                                            }}
+                                                        >
+                                                            Members
+                                                        </a>
+                                                    </li>
+                                                    <li
+                                                        className={
+                                                            location.pathname ===
+                                                                "/users/operation-members"
+                                                                ? "subactive"
+                                                                : ""
+                                                        }
+                                                        hidden={
+                                                            SUPER_ADMIN === true
+                                                                ? false
+                                                                : !moduleAccessForOperationMember[0]
+                                                                    ?.operationMember
+                                                                    ?.list
+                                                        }
+                                                    >
+                                                        <a
+                                                            onClick={() => {
+                                                                navigate(
+                                                                    "/users/operation-members"
+                                                                );
+                                                            }}
+                                                        >
+                                                            Operation Members
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+
+                                            <li
+                                                className={
+                                                    location.pathname.includes(
+                                                        "/assessment-list"
+                                                    )
+                                                        ? "list-item active"
+                                                        : "list-item"
+                                                }
+                                            >
+                                                <a
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                    onClick={() =>
+                                                        navigate("/assessment-list")
                                                     }
                                                 >
-                                                    <a
-                                                        onClick={() => {
-                                                            navigate(
-                                                                "/users/operation-members"
-                                                            );
-                                                        }}
-                                                    >
-                                                        Operation Members
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
+                                                    Assessments
+                                                </a>
+                                            </li>
 
-                                        <li
-                                            className={
-                                                location.pathname.includes(
-                                                    "/assessment-list"
-                                                )
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() =>
-                                                    navigate("/assessment-list")
+                                            <li
+                                                className={
+                                                    location.pathname.includes(
+                                                        "/sub-admins"
+                                                    )
+                                                        ? "list-item active"
+                                                        : "list-item"
                                                 }
                                             >
-                                                Assessments
-                                            </a>
-                                        </li>
-
-                                        <li
-                                            className={
-                                                location.pathname.includes(
-                                                    "/sub-admins"
-                                                )
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                hidden={!SUPER_ADMIN}
-                                                onClick={() => {
-                                                    // setActiveState(false);
-                                                    setActiveStateForMembers(
-                                                        false
-                                                    );
-                                                    setActiveStateForOperationMembers(
-                                                        false
-                                                    );
-                                                    navigate("/sub-admins");
-                                                }}
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                CGF Admins
-                                            </a>
-                                        </li>
-                                        <li
-                                            className={
-                                                location.pathname == "/roles"
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                hidden={!SUPER_ADMIN}
-                                                onClick={() =>
-                                                    navigate("/roles")
-                                                }
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                Roles and Privileges
-                                            </a>
-                                        </li>
-
-                                        <li
-                                            className={
-                                                location.pathname.includes(
-                                                    "/questionnaires"
-                                                )
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() =>
-                                                    navigate("/questionnaires")
+                                                <a
+                                                    hidden={!SUPER_ADMIN}
+                                                    onClick={() => {
+                                                        // setActiveState(false);
+                                                        setActiveStateForMembers(
+                                                            false
+                                                        );
+                                                        setActiveStateForOperationMembers(
+                                                            false
+                                                        );
+                                                        navigate("/sub-admins");
+                                                    }}
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                >
+                                                    CGF Admins
+                                                </a>
+                                            </li>
+                                            <li
+                                                className={
+                                                    location.pathname == "/roles"
+                                                        ? "list-item active"
+                                                        : "list-item"
                                                 }
                                             >
-                                                Questionnaires
-                                            </a>
-                                        </li>
-                                    </ul>
+                                                <a
+                                                    hidden={!SUPER_ADMIN}
+                                                    onClick={() =>
+                                                        navigate("/roles")
+                                                    }
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                >
+                                                    Roles and Privileges
+                                                </a>
+                                            </li>
+
+                                            <li
+                                                className={
+                                                    location.pathname.includes(
+                                                        "/questionnaires"
+                                                    )
+                                                        ? "list-item active"
+                                                        : "list-item"
+                                                }
+                                            >
+                                                <a
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                    onClick={() =>
+                                                        navigate("/questionnaires")
+                                                    }
+                                                >
+                                                    Questionnaires
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="header-right">
-                                <Box>
-                                    {/* <Tooltip title="Open settings"> */}
+                                <div className="header-right">
+                                    <Box>
+                                        {/* <Tooltip title="Open settings"> */}
                                         <div className="user-blk flex-between">
                                             <div className="user-img">
                                                 <span className="user-name-txt">
@@ -488,92 +387,139 @@ const style = {
                                                             0,
                                                             1
                                                         ) +
-                                                            initials[1]?.slice(
-                                                                0,
-                                                                1
-                                                            )}
+                                                        initials[1]?.slice(
+                                                            0,
+                                                            1
+                                                        )}
                                                 </span>
                                             </div>
-                                            <div className="user-info" onClick={openProfileDialog}>
-                                            <div>
-                                                <Tooltip
-                                                    title={userAuth?.name}
-                                                    interactive
-                                                    disableHoverListener={!hoverNameStatus}
-                                                    style={{ fontSize: '14px' }}
-                                                >
-                                                    <span
-                                                        ref={textnameElementRef}
-                                                        className="user-name">
-                                                        {userAuth?.name}
-                                                    </span>
-                                                </Tooltip>
-                                                <Tooltip
-                                                    title={userAuth?.role?.name}
-                                                    interactive
-                                                    disableHoverListener={!hoverStatus}
-                                                    style={{ fontSize: '14px' }}
-                                                >
-                                                    <span
-                                                        ref={textElementRef}
-                                                        className="user-type"
+                                            <div className="user-info" onClick={handleOpenUserMenu}>
+                                                <div>
+                                                    <Tooltip
+                                                        title={userAuth?.name}
+                                                        interactive
+                                                        disableHoverListener={!hoverNameStatus}
+                                                        style={{ fontSize: '14px' }}
                                                     >
-                                                        {userAuth?.role?.name}
-                                                    </span>
-                                                </Tooltip>
-                                            </div>
+                                                        <span
+                                                            ref={textnameElementRef}
+                                                            className="user-name">
+                                                            {userAuth?.name}
+                                                        </span>
+                                                    </Tooltip>
+                                                    <Tooltip
+                                                        title={userAuth?.role?.name}
+                                                        interactive
+                                                        disableHoverListener={!hoverStatus}
+                                                        style={{ fontSize: '14px' }}
+                                                    >
+                                                        <span
+                                                            ref={textElementRef}
+                                                            className="user-type"
+                                                        >
+                                                            {userAuth?.role?.name}
+                                                        </span>
+                                                    </Tooltip>
+                                                </div>
                                                 <span
-                                                        className={
-                                                            isActive
-                                                                ? "super-admin-arrow"
-                                                                : "super-admin-arrow active"
-                                                        }
-                                                    >
-                                                        <KeyboardArrowDownIcon />
-                                                    </span>
+                                                    className={
+                                                        isActive
+                                                            ? "super-admin-arrow"
+                                                            : "super-admin-arrow active"
+                                                    }
+                                                >
+                                                    <KeyboardArrowDownIcon />
+                                                </span>
 
                                             </div>
                                         </div>
-                                    {/* </Tooltip> */}
-                                    {/* <Menu
-                                        sx={{ mt: "35px", mr: "35px" }}
-                                        id="menu-appbar"
-                                        anchorEl={anchorElUser}
-                                        anchorOrigin={{
-                                            vertical: "top",
-                                            horizontal: "right",
-                                        }}
-                                        keepMounted
-                                        transformOrigin={{
-                                            vertical: "top",
-                                            horizontal: "right",
-                                        }}
-                                        open={Boolean(anchorElUser)}
-                                        onClose={handleCloseUserMenu}
-                                        className="profile-menu-item"
-                                    >
-                                        <MenuItem
-                                            // onClick={handleCloseUserMenu}
-                                            
-                                            sx={{ width: "135px" }}
+                                        {/* </Tooltip> */}
+                                        <Menu
+                                            sx={{ mt: "35px", mr: "35px" }}
+                                            id="menu-appbar"
+                                            anchorEl={anchorElUser}
+                                            anchorOrigin={{
+                                                vertical: "top",
+                                                horizontal: "right",
+                                            }}
+                                            keepMounted
+                                            transformOrigin={{
+                                                vertical: "top",
+                                                horizontal: "right",
+                                            }}
+                                            open={Boolean(anchorElUser)}
+                                            onClose={handleCloseUserMenu}
+                                            className="profile-popup-blk"
                                         >
-                                            <Typography textAlign="center">
-                                                Profile
-                                            </Typography>
-                                        </MenuItem>
-                                        <MenuItem onClick={handleLogOut}>
-                                            <Typography textAlign="center">
-                                                Logout
-                                            </Typography>
-                                        </MenuItem>
-                                    </Menu> */}
-                                </Box>
+                                            <MenuItem
+                                            // onClick={handleCloseUserMenu}
+
+                                            >
+                                                <div className="profile-popup-box">
+                                                    <div id="transition-modal-title" className="profile-popup-ttl-blk">
+                                                        <span className="popup-close-icon" onClick={handleCloseUserMenu}>
+                                                            <CloseIcon />
+                                                        </span>
+                                                    </div>
+                                                    <div id="transition-modal-title1" className="profile-popup-wrap">
+                                                        <div className="signin-user-blk flex-start">
+                                                            <div className="signin-user-left">
+                                                                <div class="signin-user-img">
+                                                                    <span class="signin-user-name-txt">
+                                                                        {initials?.length >= 1 &&
+                                                                            initials[0].slice(
+                                                                                0,
+                                                                                1
+                                                                            ) +
+                                                                            initials[1]?.slice(
+                                                                                0,
+                                                                                1
+                                                                            )}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="signin-user-right">
+                                                                <div className="profile-info-blk">
+                                                                    <div className="profile-name">{userAuth?.name}</div>
+                                                                    <div className="profile-info">
+                                                                        {userAuth?.role?.name}
+                                                                    </div>
+                                                                    <div className="profile-info">
+                                                                        <span className="profile-info-icon"><LocalPhoneOutlinedIcon /></span>
+                                                                        <span className="profile-info-txt">+91 9123456789</span>
+                                                                    </div>
+                                                                    <div className="profile-info">
+                                                                        <span className="profile-info-icon"><EmailOutlinedIcon /></span>
+                                                                        <span className="profile-info-txt">admin@cgfhrdd.com</span>
+                                                                    </div>
+                                                                    <div className="profile-info mb-0">
+                                                                        <span className="profile-info-icon"><PlaceOutlinedIcon /></span>
+                                                                        <span className="profile-info-txt">Pune</span>
+                                                                    </div>
+                                                                    <div className="tertiary-btn-blk mt-20">
+                                                                        <span className="addmore-txt">
+                                                                            Change Password
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="form-btn flex-center mt-20">
+                                                                        <button type="submit" className="primary-button" onClick={handleLogOut}>
+                                                                            Logout
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </MenuItem>
+                                        </Menu>
+                                    </Box>
+                                </div>
                             </div>
-                        </div>
-                    </Toolbar>
+                        </Toolbar>
+                    </div>
                 </div>
-            </div>
-            {/* <div className="header-right">
+                {/* <div className="header-right">
                 <Box>
                   <Tooltip title="Open settings">
                     <div className="user-blk flex-between">
@@ -626,8 +572,7 @@ const style = {
                   </Menu>
                 </Box>
               </div> */}
-        </AppBar>
-        </div>
+            </AppBar>
     );
 };
 
