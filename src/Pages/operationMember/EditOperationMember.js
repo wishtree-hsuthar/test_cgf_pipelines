@@ -1,6 +1,7 @@
 import {
     Autocomplete,
     FormControlLabel,
+    Paper,
     Radio,
     RadioGroup,
     // FormControlLabel,
@@ -20,6 +21,7 @@ import { privateAxios } from "../../api/axios";
 // import { useNavigate } from "react-router-dom";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import axios from "axios";
 import {
     ADD_OPERATION_MEMBER,
@@ -548,6 +550,14 @@ function EditOperationMember() {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
+                                                            PaperComponent={({ children }) => (
+                                                                <Paper className="autocomplete-option-txt">
+                                                                {children}
+                                                                </Paper>
+                                                            )}
+                                                            popupIcon={
+                                                                <KeyboardArrowDownRoundedIcon />
+                                                            }
                                                             {...field}
                                                             onChange={(
                                                                 event,

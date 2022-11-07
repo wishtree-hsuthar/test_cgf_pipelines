@@ -71,7 +71,7 @@ const TableLayoutCellComponent = ({
             {transformedColumns[cell.columnId] &&
                 transformedColumns[cell.columnId].columnType === "textbox" && (
                     <TextField
-                        className={`${
+                        className={`input-field ${
                             !answer && error && error?.length !== 0
                                 ? "input-error"
                                 : ""

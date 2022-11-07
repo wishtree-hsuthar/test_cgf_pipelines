@@ -12,6 +12,7 @@ import {
     RadioGroup,
     FormControlLabel,
     Autocomplete,
+    Paper,
 } from "@mui/material";
 
 import "react-phone-number-input/style.css";
@@ -31,6 +32,8 @@ import { Controller, useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { useSelector } from "react-redux";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+
 const defaultValues = {
     memberCompany: "",
     companyType: "Internal",
@@ -460,6 +463,17 @@ const ViewOperationMembers = () => {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
+                                                        disabled
+                                                        PaperComponent={({ children }) => (
+                                                            <Paper className="autocomplete-option-txt">
+                                                              {children}
+                                                            </Paper>
+                                                          )}
+                                                          popupIcon={
+                                                            <KeyboardArrowDownRoundedIcon />
+                                                        }
+                                                        className="phone-number-disable"
+                                                        readOnly
                                                             {...field}
                                                             options={countries}
                                                             autoHighlight
