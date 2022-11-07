@@ -18,7 +18,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 const helperTextForAssessment = {
     title: {
         required: "Assessment title required",
@@ -138,12 +138,9 @@ function EditAssessment() {
         fetchAssessment();
         const fetchMemberCompaniesForAddAssesments = async () => {
             try {
-                const response = await privateAxios.get(
-                    MEMBER,
-                    {
-                        signal: controller.signal,
-                    }
-                );
+                const response = await privateAxios.get(MEMBER, {
+                    signal: controller.signal,
+                });
 
                 console.log(
                     "response from fetch member companies for add assessments",
@@ -164,12 +161,9 @@ function EditAssessment() {
 
         const fetchQuestionnaires = async () => {
             try {
-                const response = await privateAxios.get(
-                    ADD_QUESTIONNAIRE,
-                    {
-                        signal: controller.signal,
-                    }
-                );
+                const response = await privateAxios.get(ADD_QUESTIONNAIRE, {
+                    signal: controller.signal,
+                });
                 console.log("response from questionnaires api", response.data);
                 isMounted &&
                     setQuestionnares(response.data.map((data) => data.title));
@@ -315,11 +309,13 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assessment title
-                                            <span className="mandatory">*</span>
+                                            Assessment title <span className="mandatory">*</span>
                                         </label>
                                         <Input
                                             name={"title"}
+                                            onBlur={(e) =>
+                                                setValue("title", e.target.value?.trim())
+                                              }
                                             control={control}
                                             myHelper={helperTextForAssessment}
                                             placeholder={
@@ -334,8 +330,7 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assessment Type
-                                            <span className="mandatory">*</span>
+                                            Assessment Type <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
                                             control={control}
@@ -353,8 +348,7 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Member
-                                            <span className="mandatory">*</span>
+                                            Assign Member <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
                                             control={control}
@@ -374,8 +368,7 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Operation Member
-                                            <span className="mandatory">*</span>
+                                            Assign Operation Member <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
                                             control={control}
@@ -397,8 +390,7 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Due date
-                                            <span className="mandatory">*</span>
+                                            Due date <span className="mandatory">*</span>
                                         </label>
                                         <Controller
                                             name="dueDate"
@@ -458,7 +450,6 @@ function EditAssessment() {
                                             name="remarks"
                                             control={control}
                                             rules={{
-                                                required: true,
                                                 minLength: 3,
                                                 maxLength: 250,
                                             }}
@@ -469,6 +460,9 @@ function EditAssessment() {
                                                 <TextField
                                                     multiline
                                                     {...field}
+                                                    onBlur={(e) =>
+                                                        setValue("remarks", e.target.value?.trim())
+                                                      }
                                                     inputProps={{
                                                         maxLength: 250,
                                                     }}

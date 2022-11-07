@@ -61,7 +61,7 @@ function AddNewQuestionnaire() {
           error?.response?.data?.message &&
           typeof error.response.data.message === "string"
             ? error.response.data.message
-            : "Something Went Wrong!",
+            : "Something went wrong!",
         messageType: "error",
       },
       () => myRef.current()
@@ -234,9 +234,10 @@ function AddNewQuestionnaire() {
                     title: e.target.value,
                   });
                 }}
+                onBlur={(e) => setQuestionnaire({...questionnaire, title : e.target.value?.trim()}) }
                 helperText={
                   questionnaire.title === "" && globalSectionTitleError?.errMsg
-                    ? "This is required field"
+                    ? "Enter questionnaire title"
                     : " "
                 }
               />

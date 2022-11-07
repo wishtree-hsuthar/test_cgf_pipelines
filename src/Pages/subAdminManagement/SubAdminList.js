@@ -279,7 +279,7 @@ const SubAdminList = () => {
                             error?.response?.data?.error &&
                             typeof error.response.data.error === "string"
                                 ? error.response.data.error
-                                : "Something Went Wrong!",
+                                : "Something went wrong!",
 
                         messageType: "error",
                     },
@@ -336,11 +336,14 @@ const SubAdminList = () => {
     return (
         <div className="page-wrapper">
             <DialogBox
-                title={`Withdraw CGF Admin Invitation`}
+                title={<p>Withdraw CGF Admin Invitation</p>}
                 info1={
-                    "On withdrawal, cgf admin will not be able to verify their account?"
+                    <p>
+                        On withdrawal, cgf admin will not be able to verify
+                        their account?
+                    </p>
                 }
-                info2={"Do you want to withdraw the invitation?"}
+                info2={<p>Do you want to withdraw the invitation?</p>}
                 primaryButtonText={"Yes"}
                 secondaryButtonText={"No"}
                 onPrimaryModalButtonClickHandler={() => {
@@ -373,16 +376,20 @@ const SubAdminList = () => {
                                 </span>
                                 Download
                             </div>
-                            <div className="form-btn">
-                                <button
-                                    onClick={() =>
-                                        navigate("/sub-admins/add-sub-admin")
-                                    }
-                                    className="primary-button add-button"
-                                >
-                                    Add CGF Admin
-                                </button>
-                            </div>
+                            {value === 0 && (
+                                <div className="form-btn">
+                                    <button
+                                        onClick={() =>
+                                            navigate(
+                                                "/sub-admins/add-sub-admin"
+                                            )
+                                        }
+                                        className="primary-button add-button"
+                                    >
+                                        Add CGF Admin
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="member-filter-wrap flex-between">

@@ -43,6 +43,7 @@ const TableAssessment = ({
     rowValues,
     sectionUUID,
     handleAnswersChange,
+    handleAnswersBlur,
     errors,
 }) => {
     const tranformedColumnValues = getTransformedColumns(columnValues);
@@ -129,6 +130,7 @@ const TableAssessment = ({
                                                                 handleAnswersChange={
                                                                     handleAnswersChange
                                                                 }
+                                                                handleAnswersBlur={handleAnswersBlur}
                                                                 error={
                                                                     errors[
                                                                         `${cell?.columnId}.${row?.uuid}`

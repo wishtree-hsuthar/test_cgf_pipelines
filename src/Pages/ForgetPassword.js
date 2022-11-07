@@ -12,8 +12,8 @@ import { FORGET_PASSWORD } from "../api/Url";
 const forgetPasswordSchema = yup.object().shape({
     email: yup
         .string()
-        .email("Please enter valid email address")
-        .required("Email address required"),
+        .email("Invalid Input")
+        .required("Enter the email address."),
 });
 const ForgetPassword = () => {
     const {
@@ -54,7 +54,9 @@ const ForgetPassword = () => {
             if (response.status === 200) {
                 setMessageType("success");
                 setMessageTitle("Success");
-                setMessageDescription(response?.data?.message);
+                setMessageDescription(
+                    "Email sent successfully with the reset password link!"
+                );
                 setTimeout(() => {
                     toasterRef.current();
                 }, 3000);
@@ -107,7 +109,7 @@ const ForgetPassword = () => {
                                     />
                                 </div>
                                 <h2 class="heading1 text-uppercase mb-40">
-                                    Forget password
+                                    Forgot password
                                 </h2>
                                 <p className="forget-password-message">
                                     Enter you registered email address and we'll{" "}
@@ -118,7 +120,7 @@ const ForgetPassword = () => {
                                     <form onSubmit={handleSubmit(submitEmail)}>
                                         <div class="form-group">
                                             <label for="emailid">
-                                                Email Id{" "}
+                                                Email Address{" "}
                                                 <span class="mandatory">*</span>
                                             </label>
                                             <TextField
@@ -127,7 +129,7 @@ const ForgetPassword = () => {
                                                     "input-error"
                                                 }`}
                                                 id="outlined-basic"
-                                                placeholder="Enter email id"
+                                                placeholder="Enter email address"
                                                 variant="outlined"
                                                 {...register("email")}
                                                 error={

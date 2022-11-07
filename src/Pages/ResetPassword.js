@@ -19,15 +19,17 @@ import { useParams, useNavigate } from "react-router-dom";
 const schema = yup.object().shape({
     newPassword: yup
         .string()
+        .required("Enter new password")
+
         .matches(
-            /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-            "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,15}$/,
+            "Password must contain at least 6 characters, one uppercase, one number and one special case character"
         )
         .required("Password required"),
     confirmPassword: yup
         .string()
-        .required("Please enter confirm password")
-        .oneOf([yup.ref("newPassword"), null], "Passwords don't match."),
+        .required("Enter confirm password")
+        .oneOf([yup.ref("newPassword"), null], "Password does not match."),
 });
 const ResetPassword = () => {
     const {
@@ -124,7 +126,9 @@ const ResetPassword = () => {
             if (response?.status == 201) {
                 setMessageType("success");
                 setMessageTitle("Success");
-                setMessageDescription("Password reset successfull");
+                setMessageDescription(
+                    "Your password has been successfully updated!"
+                );
                 setTimeout(() => {
                     toasterRef.current();
                 }, 1000);
@@ -193,11 +197,14 @@ const ResetPassword = () => {
                                                     }
                                                     // value={values.newPassword}
                                                     // onChange={handleChange('newPassword')}
-                                                    placeholder="Enter password"
+                                                    placeholder="Enter new password"
                                                     className={`input-field ${
                                                         errors.newPassword &&
                                                         "input-error"
                                                     }`}
+                                                    inputProps={{
+                                                        maxLength: 15,
+                                                    }}
                                                     endAdornment={
                                                         <InputAdornment position="end">
                                                             <IconButton
@@ -217,7 +224,7 @@ const ResetPassword = () => {
                                                                             process
                                                                                 .env
                                                                                 .PUBLIC_URL +
-                                                                            "/images/non-visibleicon.png"
+                                                                            "/images/non-visibleicon.svg"
                                                                         }
                                                                         alt=""
                                                                         class="img-fluid"
@@ -228,7 +235,7 @@ const ResetPassword = () => {
                                                                             process
                                                                                 .env
                                                                                 .PUBLIC_URL +
-                                                                            "/images/visibleicon.png"
+                                                                            "/images/visibleicon.svg"
                                                                         }
                                                                         alt=""
                                                                         class="img-fluid"
@@ -240,10 +247,12 @@ const ResetPassword = () => {
                                                     {...register("newPassword")}
                                                 />
                                                 <p className={`password-error`}>
-                                                    {
-                                                       errors?.newPassword ? errors.newPassword
-                                                            ?.message : <span>&nbsp;</span>
-                                                    }
+                                                    {errors?.newPassword ? (
+                                                        errors.newPassword
+                                                            ?.message
+                                                    ) : (
+                                                        <span>&nbsp;</span>
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>
@@ -263,11 +272,14 @@ const ResetPassword = () => {
                                                     }
                                                     // value={values.confirmPassword}
                                                     // onChange={handleChange('confirmPassword')}
-                                                    placeholder="Enter password"
+                                                    placeholder="Enter new password"
                                                     className={`input-field ${
                                                         errors.confirmPassword &&
                                                         "input-error"
                                                     }`}
+                                                    inputProps={{
+                                                        maxLength: 15,
+                                                    }}
                                                     endAdornment={
                                                         <InputAdornment position="end">
                                                             <IconButton
@@ -312,9 +324,12 @@ const ResetPassword = () => {
                                                     )}
                                                 />
                                                 <p className={`password-error`}>
-                                                    {
-                                                        errors?.confirmPassword ? errors.confirmPassword.message : <span>&nbsp;</span>
-                                                    }
+                                                    {errors?.confirmPassword ? (
+                                                        errors.confirmPassword
+                                                            .message
+                                                    ) : (
+                                                        <span>&nbsp;</span>
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>

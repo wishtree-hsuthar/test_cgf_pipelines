@@ -20,17 +20,28 @@ import { useSelector } from "react-redux";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import Input from "../../components/Input";
 
+const helperTextForCGFAdmin = {
+    countryCode: {
+        validate: "Select country code",
+    },
+    phoneNumber: {
+        maxLength: "Max digits limit exceed",
+        minLength: "Number must contain atleast 3 digits",
+        validate: "Enter phone number",
+        // pattern: "Invalid format",
+    },
+};
 const AddSubAdminSchema = yup.object().shape({
-    name: yup.string().required("Sub admin name required"),
+    name: yup.string().required("Sub admin name required").trim(),
     email: yup
         .string()
         .email("Enter valid email address")
         .required("Email address requried"),
     subRoleId: yup.string().required("Role required"),
-    phoneNumber: yup
-        .number("please add valid number")
-        .min(3, "Minimum 3 digits required"),
+    phoneNumber: yup.number().typeError("Enter valid number"),
+
     countryCode: yup.string().required("Code required"),
 });
 const AddSubAdmin = () => {
@@ -39,6 +50,7 @@ const AddSubAdmin = () => {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
         reset,
         control,
@@ -66,6 +78,13 @@ const AddSubAdmin = () => {
         descriptionMessage: "",
         messageType: "error",
     });
+
+    const phoneNumberChangeHandler = (e, name, code) => {
+        console.log("inside on Change");
+        setValue(name, e.target.value);
+        trigger(name);
+        trigger(code);
+    };
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -253,6 +272,9 @@ const AddSubAdmin = () => {
                                             className={`input-field ${
                                                 errors.name && "input-error"
                                             }`}
+                                            inputProps={{
+                                                maxLength: 50,
+                                            }}
                                             {...register("name")}
                                             helperText={
                                                 errors.name
@@ -397,6 +419,9 @@ const AddSubAdmin = () => {
                                                 placeholder="Enter phone number"
                                                 variant="outlined"
                                                 {...register("phoneNumber")}
+                                                inputProps={{
+                                                    maxLength: 10,
+                                                }}
                                                 helperText={
                                                     errors.phoneNumber
                                                         ? errors.phoneNumber

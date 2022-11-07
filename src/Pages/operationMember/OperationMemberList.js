@@ -25,11 +25,7 @@ function TabPanel(props) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    {children}
-                </Box>
-            )}
+            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
         </div>
     );
 }
@@ -143,20 +139,21 @@ function OperationMemberList() {
                                 </div>
                                 {(SUPER_ADMIN === true ||
                                     moduleAccessForOperationMember[0]
-                                        .operationMember.add === true) && (
-                                    <div className="form-btn">
-                                        <button
-                                            onClick={() =>
-                                                navigate(
-                                                    "/users/operation-members/add-operation-member"
-                                                )
-                                            }
-                                            className="primary-button add-button"
-                                        >
-                                            Add Operation Member
-                                        </button>
-                                    </div>
-                                )}
+                                        .operationMember.add === true) &&
+                                    value === 0 && (
+                                        <div className="form-btn">
+                                            <button
+                                                onClick={() =>
+                                                    navigate(
+                                                        "/users/operation-members/add-operation-member"
+                                                    )
+                                                }
+                                                className="primary-button add-button"
+                                            >
+                                                Add Operation Member
+                                            </button>
+                                        </div>
+                                    )}
                             </div>
                         </div>
                         <div className="member-filter-wrap flex-between">
@@ -190,7 +187,7 @@ function OperationMemberList() {
                                 <div className="searchbar">
                                     <input
                                         type="text"
-                                        placeholder="Search sub-admin name, email "
+                                        placeholder="Search"
                                         value={search}
                                         onChange={
                                             (e) => onSearchChangeHandler(e)

@@ -1,80 +1,95 @@
 export const memberHelper = {
     memberCompany: {
+      required: "Enter the member company",
       maxLength: "Max char limit exceed",
-      minLength: "Input must contain atleast 3 characters",
-      required: "Enter member company",
+      minLength: "minimum 3 characters required",
     },
     cgfCategory:{
       required: "Select Category"
     },
     cgfActivity: {
-      required: "Select Activity",
+      required: "Select the CGF activity",
+      validate: "Select the CGF activity",
     },
     corporateEmail: {
-      required: "Enter Email",
+      required: "Enter the corporate email",
       maxLength: "Max char limit exceed",
-      minLength: "Input must contain atleast 3 characters",
+      minLength: "minimum 3 characters required",
       pattern: "Invalid Input",
     },
     countryCode: {
-      required: "select country code",
-      validate: "Invalid input",
+      required: "Select country code",
+      validate: "Select country code"
     },
     phoneNumber: {
-      required: "Enter phone number",
+      required: "Enter the phone number",
       maxLength: "Max char limit exceed",
-      minLength: "Input must contain atleast 3 characters",
+      minLength: "minimum 3 characters required",
       pattern: "Invalid Input",
-      validate: "Invalid Input",
+      validate: "Enter the phone number"
     },
     websiteUrl: {
       maxLength: "Max char limit exceed",
-      minLength: "Input must contain atleast 3 characters",
-      pattern: "Invalid Input",
+      minLength: "minimum 3 characters required",
+      pattern: "Enter valid URL",
     },
     region: {
-      required: "Select region",
+      required: "Select the region",
+    },
+    cgfOfficeRegion: {
+      required: "Select the region",
     },
     country: {
-      required: "Select country",
+      required: "Select the country",
+    },
+    cgfOfficeCountry: {
+      required: "Select the country",
+    },
+    cgfOffice:{
+        required: "Select the office"
     },
     state: {},
     city: {
       maxLength: "Max char limit exceed",
-      minLength: "Input must contain atleast 3 charcters",
+      minLength: "minimum 3 characters required",
     },
     address: {
       required: "Enter the address",
       maxLength: "Max char limit exceed",
-      minLength: "Input must contain atleast 3 characters",
+      minLength: "minimum 3 characters required",
     },
     memberContactSalutation: {
       required: "Select the Salutation",
     },
     memberContactFullName: {
-      required: "Enter the name",
-      minLength: "Input must contain atleast 3 charcters",
+      required: "Enter the full name",
+      minLength: "minimum 3 characters required",
       maxLength: "Max char limit exceed",
       pattern: "Invalid Input",
     },
     title: {
-      minLength: "Input must contain atleast 3 charcters",
+      minLength: "minimum 3 characters required",
       maxLength: "Max char limit exceed",
       pattern: "Invalid Input",
     },
     department: {
-      minLength: "Input must contain atleast 3 charcters",
+      minLength: "minimum 3 characters required",
       maxLength: "Max char limit exceed",
       pattern: "Invalid Input",
     },
+    memberContactEmail:{
+      required: "Enter the email",
+      maxLength: "Max char limit exceed",
+      minLength: "minimum 3 characters required",
+      pattern: "Invalid Input",
+    },
     memberContactCountryCode: {
-      required: "sekect country code",
+      validate: "select country code"
     },
     memberContactPhoneNuber: {
       required: "Enter country code",
       maxLength: "Max char limit exceed",
-      minLength: "Input must contain atleast 3 characters",
-      pattern: "Invalid Input",
-      validate: "Invalid Input",
+      minLength: "minimum 3 characters required",
+      validate: "Enter phone number",
     },
   };

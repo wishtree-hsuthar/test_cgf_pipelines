@@ -37,7 +37,7 @@ const OnboardedOperationMemberColumnHeader = [
         label: "Created By",
     },
     {
-        id: "onBoardedOn",
+        id: "createdAt",
         // width: "30%",
         disablePadding: false,
         label: "Onboarded On",
@@ -106,7 +106,7 @@ function OnboardedOperationMember({
     const [
         orderByForOnboardedOperationMember,
         setOrderByForOnboardedOperationMemberTab,
-    ] = React.useState("createdAt");
+    ] = React.useState("");
     const [
         recordsForOnboardedOperationMemberTab,
         setRecordsForOnboardedOperationMemberTab,
@@ -127,7 +127,7 @@ function OnboardedOperationMember({
             "companyType",
             "createdByName",
 
-            "onBoardedOn",
+            "createdAt",
             "isActive",
         ];
 
@@ -162,7 +162,7 @@ function OnboardedOperationMember({
             object["memberCompany"] = object["memberData"]["companyName"];
             object["companyType"] = object["memberData"]["companyType"];
             object["createdByName"] = object["createdBy"]["name"];
-            object["onBoardedOn"] = new Date(
+            object["createdAt"] = new Date(
                 object["createdAt"]
             ).toLocaleDateString("en-US", {
                 month: "2-digit",
@@ -181,7 +181,7 @@ function OnboardedOperationMember({
             delete object["salutation"];
             delete object["createdBy"];
             delete object["updatedBy"];
-            delete object["createdAt"];
+            // delete object["createdAt"];
             delete object["subRole"];
             delete object["data"];
             delete object["memberData"];

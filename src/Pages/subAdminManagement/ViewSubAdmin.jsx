@@ -243,7 +243,7 @@ const ViewSubAdmin = () => {
                 title={<p> Delete CGF Admin {fetchedSubAdminDetails?.name} </p>}
                 info1={
                     <p>
-                        We recommend you to replace this sub admin with the new
+                        We recommend you to replace this CGF admin with the new
                         one because deleting all the details which sub admin has
                         added will get deleted and this will be an irreversible
                         action

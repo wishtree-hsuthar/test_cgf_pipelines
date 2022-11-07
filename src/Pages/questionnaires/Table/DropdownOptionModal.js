@@ -46,6 +46,14 @@ const DropdownOptionModal = ({
     ] = value;
     setQuestionnaire(tempQuestionnaire);
   };
+  const onTableLayoutOptionBlurHandler = (e, optionIdx) => {
+    const { name, value } = e.target;
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire.sections[sectionIndex].columnValues[columnId].options[
+      optionIdx
+    ] = value?.trim();
+    setQuestionnaire(tempQuestionnaire);
+  }
   const onTableLayoutOptionDeleteHandler = (optionIdx) => {
     let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire?.sections[sectionIndex]?.columnValues[
@@ -103,13 +111,14 @@ const DropdownOptionModal = ({
                 ]?.options?.map((option, optionIdx) => (
                   <div className="form-group" key={optionIdx}>
                     <div className="que-checkbox-wrap">
-                      <div className="que-checkbox-blk">
+                      <div className="que-checkbox-blk que-dropdown-blk">
                         <TextField
                           className={`input-field que-input-type ${tableOptionErr && !option && "input-error"}`}
                           value={option}
                           onChange={(e) =>
                             onTableLayoutOptionChangeHandler(e, optionIdx)
                           }
+                          onBlur={(e) => onTableLayoutOptionBlurHandler(e, optionIdx)}
                           id="outlined-basic"
                           helperText={(tableOptionErr && !option) ? "Enter option" : " "}
                           placeholder={`Option ${optionIdx + 1}`}

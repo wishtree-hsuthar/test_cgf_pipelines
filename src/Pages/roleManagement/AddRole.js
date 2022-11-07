@@ -54,13 +54,13 @@ const AddRole = () => {
     roleName: {
       required: "Enter the role name",
       maxLength: "Max char limit exceed",
-      minLength: "Role must contain atleast 3 characters",
+      minLength: "minimum 3 characters required",
       pattern: "Invalid format",
     },
     description: {
       required: "Enter the description",
       maxLength: "Max char limit exceed",
-      minLength: "Description must contain atlest 3 characters",
+      minLength: "minimum 3 characters required",
     },
   };
 
@@ -134,7 +134,7 @@ const AddRole = () => {
             error?.response?.data?.message &&
             typeof error.response.data.message === "string"
               ? error.response.data.message
-              : "Something Went Wrong!",
+              : "Something went wrong!",
           messageType: "error",
         },
         () => myRef.current()
@@ -178,7 +178,7 @@ const AddRole = () => {
             error?.response?.data?.message &&
             typeof error.response.data.message === "string"
               ? error.response.data.message
-              : "Something Went Wrong!",
+              : "Something went wrong!",
           messageType: "error",
         },
         () => myRef.current()
@@ -203,7 +203,7 @@ const AddRole = () => {
             error?.response?.data?.message &&
             typeof error.response.data.message === "string"
               ? error.response.data.message
-              : "Something Went Wrong!",
+              : "Something went wrong!",
           messageType: "error",
         },
         () => myRef.current()
@@ -368,45 +368,41 @@ const AddRole = () => {
                 <Paper sx={{ width: "100%" }}>
                   <TableContainer>
                     <Table sx={{ minWidth: 750 }}>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell
-                            align="left"
-                            className="tableHeader"
-                            width="16%"
-                            style={{
-                              padding: "15px !important",
-                            }}
-                          >
-                            Modules
-                          </TableCell>
-                          <TableCell align="center" className="tableHeader">
-                            List
-                          </TableCell>
-                          <TableCell align="center" className="tableHeader">
-                            Add
-                          </TableCell>
-                          <TableCell align="center" className="tableHeader">
-                            Edit
-                          </TableCell>
-                          <TableCell align="center" className="tableHeader">
-                            View
-                          </TableCell>
-                          <TableCell align="center" className="tableHeader">
-                            Delete
-                          </TableCell>
-                          {/* <TableCell
-                            align="center"
-                            className="tableHeader"
-                            width="16%"
-                          >
-                            Assign to Member
-                          </TableCell> */}
-                          <TableCell align="center" className="tableHeader">
-                            All
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
+                    <TableHead>
+                          <TableRow>
+                            <TableCell
+                              align="left"
+                              className="table-header"
+                              width="16%"
+                            >
+                              <span className="sorted-blk">Modules</span>
+                              
+                            </TableCell>
+                            <TableCell className="table-header"><span className="sorted-blk">List</span></TableCell>
+                            <TableCell align="center" className="table-header">
+                            <span className="sorted-blk">Add</span>
+                            </TableCell>
+                            <TableCell align="center" className="table-header">
+                            <span className="sorted-blk">Edit</span>
+                            </TableCell>
+                            <TableCell align="center" className="table-header">
+                            <span className="sorted-blk">View</span>
+                            </TableCell>
+                            <TableCell align="center" className="table-header">
+                            <span className="sorted-blk">Delete</span>
+                            </TableCell>
+                            {/* <TableCell
+                              align="center"
+                              className="table-header"
+                              width="16%"
+                            >
+                              Assign to Member
+                            </TableCell> */}
+                            <TableCell align="center" className="table-header">
+                            <span className="sorted-blk">All</span>
+                            </TableCell>
+                          </TableRow>
+                        </TableHead>
                       <TableBody>
                         {Object.keys(previleges).map((previleg, _id) => {
                           return (

@@ -137,11 +137,11 @@ function QuestionnairesList() {
                                             aria-label="basic tabs example"
                                         >
                                             <Tab
-                                                label="Drafted"
+                                                label="Published"
                                                 {...a11yProps(0)}
                                             />
                                             <Tab
-                                                label="Published"
+                                                label="Drafted"
                                                 {...a11yProps(1)}
                                             />
                                         </Tabs>
@@ -206,7 +206,7 @@ function QuestionnairesList() {
                         </div>
                     </div>
                     <div className="member-info-wrapper table-content-wrap">
-                        <TabPanel value={value} index={0}>
+                        <TabPanel value={value} index={1}>
                             <DraftedQuestionnaires
                                 makeApiCall={makeApiCall}
                                 setMakeApiCall={setMakeApiCall}
@@ -215,7 +215,7 @@ function QuestionnairesList() {
                                 searchTimeout={searchTimeout}
                             />
                         </TabPanel>
-                        <TabPanel value={value} index={1}>
+                        <TabPanel value={value} index={0}>
                             <PublishedQuestionnaires
                                 makeApiCall={makeApiCall}
                                 setMakeApiCall={setMakeApiCall}

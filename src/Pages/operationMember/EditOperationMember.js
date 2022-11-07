@@ -1,6 +1,7 @@
 import {
     Autocomplete,
     FormControlLabel,
+    Paper,
     Radio,
     RadioGroup,
     // FormControlLabel,
@@ -20,6 +21,7 @@ import { privateAxios } from "../../api/axios";
 // import { useNavigate } from "react-router-dom";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import axios from "axios";
 import {
     ADD_OPERATION_MEMBER,
@@ -46,10 +48,7 @@ const defaultValues = {
         companyType: "",
     },
     address: "",
-    reportingManager: {
-        _id: "",
-        name: "",
-    },
+    reportingManager: "",
     isActive: "",
 };
 const helperTextForAddOperationMember = {
@@ -57,7 +56,7 @@ const helperTextForAddOperationMember = {
         required: "Select salutation",
     },
     name: {
-        required: "Enter the full name",
+        required: "Enter the operation member name",
         maxLength: "Max char limit exceed",
         minLength: "Role must contain atleast 3 characters",
         pattern: "Invalid format",
@@ -81,14 +80,12 @@ const helperTextForAddOperationMember = {
         pattern: "Invalid format",
     },
     countryCode: {
-        required: "Enter country code",
-        // validate: "Enter country code",
+        validate: "Select country code",
     },
     phoneNumber: {
-        required: "Enter the phone number",
         maxLength: "Max digits limit exceed",
         minLength: "Number must contain atleast 3 digits",
-        // validate: "Enter country code first",
+        validate: "Enter phone number",
         // pattern: "Invalid format",
     },
     memberCompany: {
@@ -182,12 +179,9 @@ function EditOperationMember() {
     // fetch all countries and its objects
     const fetchCountries = async (controller) => {
         try {
-            const response = await privateAxios.get(
-                COUNTRIES,
-                {
-                    signal: controller.signal,
-                }
-            );
+            const response = await privateAxios.get(COUNTRIES, {
+                signal: controller.signal,
+            });
             console.log("response from countries", response);
             // isMounted &&
             setCountries(response.data.map((country) => country?.countryCode));
@@ -209,12 +203,9 @@ function EditOperationMember() {
     // Fetch all member comapanies
     const fetchMemberComapany = async (controller) => {
         try {
-            const response = await privateAxios.get(
-                MEMBER,
-                {
-                    signal: controller.signal,
-                }
-            );
+            const response = await privateAxios.get(MEMBER, {
+                signal: controller.signal,
+            });
             console.log(
                 "member company---",
                 response.data.map((data) => {
@@ -262,6 +253,7 @@ function EditOperationMember() {
     };
 
     // fetch operation member by id
+    console.log("reporting managers", reportingManagers);
 
     const fetchOperationMember = async (controller, isMounted) => {
         try {
@@ -290,7 +282,7 @@ function EditOperationMember() {
                     operationType: response?.data?.operationType
                         ? response?.data?.operationType
                         : "N/A",
-                    reportingManager: response?.data?.reportingManager?._id,
+                    reportingManager: response?.data?.reportingManager[0]?._id,
                     salutation: response?.data?.salutation,
                     name: response?.data?.name,
                     isActive: response?.data?.isActive,
@@ -305,7 +297,19 @@ function EditOperationMember() {
             console.log("error from edit operation members", error);
         }
     };
-
+    const phoneNumberChangeHandler = (e, name, code) => {
+        console.log(
+            "on number change",
+            e.target.value,
+            "name: ",
+            name,
+            "code",
+            code
+        );
+        setValue(name, e.target.value);
+        trigger(name);
+        trigger(code);
+    };
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
@@ -341,7 +345,8 @@ function EditOperationMember() {
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage: response.data.message,
+                        descriptionMessage:
+                            "Operation member details updated successfully!",
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -353,7 +358,7 @@ function EditOperationMember() {
             }
         } catch (error) {
             console.log(
-                "error in submit data for add operation member method",
+                "error in submit data  add operation member method",
                 error
             );
             setToasterDetails(
@@ -436,7 +441,7 @@ function EditOperationMember() {
                                         <div className="salutation-wrap">
                                             <div className="salutation-blk">
                                                 <label htmlFor="salutation">
-                                                    Salutation
+                                                    Salutation{" "}
                                                     <span className="mandatory">
                                                         *
                                                     </span>
@@ -460,7 +465,7 @@ function EditOperationMember() {
                                                 />
                                             </div>
                                             <div className="salutation-inputblk">
-                                                <label for="name">
+                                                <label htmlFor="name">
                                                     Full Name{" "}
                                                     <span className="mandatory">
                                                         *
@@ -469,6 +474,12 @@ function EditOperationMember() {
                                                 <Input
                                                     name={"name"}
                                                     control={control}
+                                                    onBlur={(e) =>
+                                                        setValue(
+                                                            "name",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
                                                     placeholder="NA"
                                                     myHelper={
                                                         helperTextForAddOperationMember
@@ -486,11 +497,17 @@ function EditOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="email">Title </label>
+                                        <label htmlFor="email">Title </label>
                                         <Input
                                             name={"title"}
                                             placeholder="NA"
                                             control={control}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "title",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             rules={{
                                                 maxLength: 50,
                                             }}
@@ -499,11 +516,19 @@ function EditOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="email">Department </label>
+                                        <label htmlFor="email">
+                                            Department{" "}
+                                        </label>
                                         <Input
                                             name={"department"}
                                             placeholder="NA"
                                             control={control}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "department",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
@@ -515,13 +540,19 @@ function EditOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="email">
-                                            Email Id{" "}
+                                        <label htmlFor="email">
+                                            Email{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Input
                                             name={"email"}
                                             control={control}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "email",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             placeholder="NA"
                                             isDisabled
                                             myHelper={
@@ -533,16 +564,27 @@ function EditOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label htmlfor="phoneNumber">
+                                        <label htmlFor="phoneNumber">
                                             Phone Number
-                                            <span className="mandatory">*</span>
                                         </label>
                                         <div className="phone-number-field">
                                             <div className="select-field country-code">
                                                 <Controller
                                                     control={control}
                                                     name="countryCode"
-                                                    rules={{ required: true }}
+                                                    rules={{
+                                                        validate: () => {
+                                                            if (
+                                                                !watch(
+                                                                    "countryCode"
+                                                                ) &&
+                                                                watch(
+                                                                    "phoneNumber"
+                                                                )
+                                                            )
+                                                                return "Invalid input";
+                                                        },
+                                                    }}
                                                     render={({
                                                         field,
                                                         fieldState: { error },
@@ -574,12 +616,15 @@ function EditOperationMember() {
                                                                 trigger(
                                                                     "countryCode"
                                                                 );
+                                                                trigger(
+                                                                    "phoneNumber"
+                                                                );
                                                             }}
                                                             options={
                                                                 countries.length >
                                                                 0
                                                                     ? countries
-                                                                    : ["+916"]
+                                                                    : ["+91"]
                                                             }
                                                             autoHighlight
                                                             // placeholder="Select country code"
@@ -613,7 +658,7 @@ function EditOperationMember() {
                                                                     }
                                                                     // onSubmit={() => setValue("countryCode", "")}
                                                                     placeholder={
-                                                                        "+91111"
+                                                                        "+91"
                                                                     }
                                                                     helperText={
                                                                         error
@@ -633,14 +678,40 @@ function EditOperationMember() {
                                             <Input
                                                 name={"phoneNumber"}
                                                 control={control}
+                                                myOnChange={(e) =>
+                                                    phoneNumberChangeHandler(
+                                                        e,
+                                                        "phoneNumber",
+                                                        "countryCode"
+                                                    )
+                                                }
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "phoneNumber",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
                                                 placeholder="NA"
                                                 myHelper={
                                                     helperTextForAddOperationMember
                                                 }
                                                 rules={{
-                                                    required: true,
                                                     maxLength: 15,
                                                     minLength: 3,
+                                                    validate: (value) => {
+                                                        if (
+                                                            !watch(
+                                                                "phoneNumber"
+                                                            ) &&
+                                                            watch("countryCode")
+                                                        )
+                                                            return "invalid input";
+                                                        if (
+                                                            value &&
+                                                            !Number(value)
+                                                        )
+                                                            return "Invalid input";
+                                                    },
                                                 }}
                                             />
                                         </div>
@@ -648,8 +719,8 @@ function EditOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="">
-                                            Operation Type
+                                        <label htmlFor="">
+                                            Operation Type{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
@@ -671,8 +742,8 @@ function EditOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="">
-                                            Member Company
+                                        <label htmlFor="">
+                                            Member Company{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <div className="country-code-auto-search">
@@ -805,15 +876,18 @@ function EditOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="">
-                                            Address
-                                            <span className="mandatory">*</span>
-                                        </label>
+                                        <label htmlFor="">Address</label>
                                         <Input
                                             control={control}
                                             name={"address"}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "address",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             placeholder="NA"
-                                            rules={{ required: true }}
+                                            rules={{}}
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
@@ -822,8 +896,8 @@ function EditOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="">
-                                            Reporting Manager
+                                        <label htmlFor="">
+                                            Reporting Manager{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown

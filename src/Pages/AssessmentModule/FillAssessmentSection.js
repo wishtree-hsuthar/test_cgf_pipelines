@@ -55,7 +55,16 @@ function FillAssesmentSection({
             },
         });
     };
-
+   const handleAnswersBlur = (name, value) => {
+    console.log("inside on Blur")
+    setAssessmentQuestionnaire({
+        ...assessmentQuestionnaire,
+        [section?.uuid]: {
+            ...assessmentQuestionnaire[section?.uuid],
+            [name]: value?.trim(),
+        },
+    });
+};
     return (
         <>
             <Toaster
@@ -76,6 +85,7 @@ function FillAssesmentSection({
                     {section.layout === "form" ? (
                         section.questions.map((question) => (
                             <FillAssessmentQuestion
+                               key={question?.uuid}
                                 assessmentQuestionnaire={
                                     assessmentQuestionnaire
                                 }
@@ -103,6 +113,7 @@ function FillAssesmentSection({
                                 }
                                 error={errors[question?.uuid] ?? ""}
                                 handleAnswersChange={handleAnswersChange}
+                                handleAnswersBlur={handleAnswersBlur}
                             />
                         ))
                     ) : (
@@ -112,6 +123,7 @@ function FillAssesmentSection({
                             columnValues={section?.columnValues}
                             rowValues={section?.rowValues}
                             handleAnswersChange={handleAnswersChange}
+                            handleAnswersBlur={handleAnswersBlur}
                             errors={errors ?? {}}
                         />
                     )}

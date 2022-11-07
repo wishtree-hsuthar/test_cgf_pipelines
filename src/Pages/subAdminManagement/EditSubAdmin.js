@@ -25,7 +25,7 @@ import {
     UPDATE_SUB_ADMIN,
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 const editSubAdminSchema = yup.object().shape({
     subAdminName: yup.string().required("Sub admin name required"),
@@ -35,9 +35,9 @@ const editSubAdminSchema = yup.object().shape({
         .required("Email address requried"),
     role: yup.string().required("Role required"),
     phoneNumber: yup
-        .string()
-        .min(3, "Minimum 3 digits required")
-        .max(15, "Maximum 15 digits required"),
+        .number()
+        .typeError("Enter valid phone number")
+        .required("Enter phone number"),
     countryCode: yup.string(),
 });
 
@@ -90,12 +90,9 @@ const EditSubAdmin = () => {
         let controller = new AbortController();
         let fetchCountries = async () => {
             try {
-                const response = await axios.get(
-                    COUNTRIES,
-                    {
-                        signal: controller.signal,
-                    }
-                );
+                const response = await axios.get(COUNTRIES, {
+                    signal: controller.signal,
+                });
                 console.log("response", response);
                 isMounted && setCountries(response.data);
             } catch (error) {
@@ -209,7 +206,7 @@ const EditSubAdmin = () => {
                     () => toasterRef.current()
                 );
                 setTimeout(() => {
-                    navigate(`/sub-admins/view-sub-admin/${params.id}`);
+                    navigate(`/sub-admins`);
                 }, 2000);
             }
         } catch (error) {
@@ -231,7 +228,8 @@ const EditSubAdmin = () => {
     };
 
     const handleCancel = () => {
-        navigate("/sub-admins/view-sub-admin/" + params.id);
+        // navigate("/sub-admins/view-sub-admin/" + params.id);
+        navigate("/sub-admins");
     };
     return (
         <div className="page-wrapper">
@@ -286,6 +284,9 @@ const EditSubAdmin = () => {
                                                 errors.subAdminName &&
                                                 "input-error"
                                             }`}
+                                            inputProps={{
+                                                maxLength: 50,
+                                            }}
                                             {...register("subAdminName")}
                                             helperText={
                                                 errors.subAdminName
@@ -300,7 +301,7 @@ const EditSubAdmin = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label for="email">
-                                            Email Id{" "}
+                                            Email{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <TextField
@@ -329,7 +330,9 @@ const EditSubAdmin = () => {
                                         <div className="phone-number-field">
                                             <div className="select-field country-code">
                                                 <Autocomplete
-                                                popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                                    popupIcon={
+                                                        <KeyboardArrowDownRoundedIcon />
+                                                    }
                                                     options={countries}
                                                     // autoHighlight
                                                     autoComplete={false}
@@ -395,11 +398,13 @@ const EditSubAdmin = () => {
                                                 placeholder="Enter phone number"
                                                 variant="outlined"
                                                 {...register("phoneNumber")}
+                                                helperText={
+                                                    errors.phoneNumber?.message
+                                                }
+                                                inputProps={{
+                                                    maxLength: 15,
+                                                }}
                                             />
-
-                                            <p className={`input-error-msg`}>
-                                                {errors.phoneNumber?.message}
-                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -416,12 +421,15 @@ const EditSubAdmin = () => {
                                                 control={control}
                                                 render={({ field }) => (
                                                     <Select
-                                                    IconComponent={(props) => <KeyboardArrowDownRoundedIcon {...props}/>}
+                                                        IconComponent={(
+                                                            props
+                                                        ) => (
+                                                            <KeyboardArrowDownRoundedIcon
+                                                                {...props}
+                                                            />
+                                                        )}
                                                         {...field}
-                                                        // value={
-                                                        //     fetchSubAdminDetailsForEdit
-                                                        //         .subRoleId.name
-                                                        // }
+                                                        disabled
                                                         className={`input-field ${
                                                             errors.role &&
                                                             "input-error"

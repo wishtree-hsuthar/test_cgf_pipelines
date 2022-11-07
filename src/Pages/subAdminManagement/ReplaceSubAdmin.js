@@ -176,7 +176,7 @@ const ReplaceSubAdmin = () => {
                             error?.response?.data?.error &&
                             typeof error.response.data.error === "string"
                                 ? error.response.data.error
-                                : "Something Went Wrong!",
+                                : "Something went wrong!",
 
                         messageType: "error",
                     },
@@ -382,7 +382,7 @@ const ReplaceSubAdmin = () => {
                             <div className="searchbar">
                                 <input
                                     type="text"
-                                    placeholder="Search sub-admin name, email "
+                                    placeholder="Search"
                                     onChange={(e) => onSearchChangeHandler(e)}
                                     name="search"
                                 />
@@ -395,7 +395,7 @@ const ReplaceSubAdmin = () => {
                     </div>
 
                     <div className="member-info-wrapper table-content-wrap">
-                        <div className="member-data-sect">
+                        <div className="member-data-sect replace-admin-table">
                             <TableComponent
                                 tableHead={tableHead}
                                 records={records}
