@@ -7,16 +7,7 @@ import {
     useParams,
 } from "react-router-dom";
 import PropTypes from "prop-types";
-import {
-    Box,
-    Tabs,
-    Tab,
-    Typography,
-    MenuItem,
-    Select,
-    InputLabel,
-    Checkbox,
-} from "@mui/material";
+
 import DialogBox from "../../components/DialogBox";
 
 import TableTester from "../../components/TableTester";
@@ -26,7 +17,9 @@ import { privateAxios } from "../../api/axios";
 import {
     ADD_SUB_ADMIN,
     FETCH_SUB_ADMIN_BY_ADMIN,
+    GET_OPERATION_MEMBER_BY_ID,
     REPLACE_SUB_ADMIN,
+    ADD_OPERATION_MEMBER,
 } from "../../api/Url";
 import Toaster from "../../components/Toaster";
 const tableHead = [
@@ -37,15 +30,15 @@ const tableHead = [
         width: "10%",
     },
     {
-        id: "subAdminName",
+        id: "name",
         disablePadding: true,
-        label: "CGF Admin Name",
+        label: "Operation Member",
         width: "30%",
     },
     {
-        id: "emailId",
+        id: "email",
         disablePadding: false,
-        label: "Email Id",
+        label: "Email",
         width: "40%",
     },
     {
@@ -54,26 +47,17 @@ const tableHead = [
         label: "Role",
         width: "20%",
     },
-    // {
-    //     id: "",
-    //     disablePadding: true,
-    //     label: "",
-    //     width: "0%",
-    // },
 ];
-//Array of Object (idealy we will get this data from backend)
-
-const ReplaceSubAdmin = () => {
+const ReplaceOperationMember = () => {
     const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [isLoading, setIsLoading] = useState(false);
-    const [cgfAdmin, setCgfAdmin] = useState({});
+    const [operationMember, setOperationMember] = useState({});
+
     const { id } = useParams();
     //state to hold search timeout delay
     const [searchTimeout, setSearchTimeout] = useState(null);
-
-    //array to get array of selected rows ids
     const [selected, setSelected] = React.useState([]);
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("operationalMember");
@@ -107,9 +91,9 @@ const ReplaceSubAdmin = () => {
     const generateUrl = (multiFilterString) => {
         console.log("Search", search);
 
-        let url = `${ADD_SUB_ADMIN}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${ADD_OPERATION_MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
-            url = `${ADD_SUB_ADMIN}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+            url = `${ADD_OPERATION_MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
         return url;
     };
@@ -130,13 +114,22 @@ const ReplaceSubAdmin = () => {
             delete object["uuid"];
             delete object["phoneNumber"];
             delete object["createdAt"];
-            object["role"] = object["subRole"][0].name;
+            object["role"] = "Operation Member";
+            // object["role"] = object["subRole"][0].name;
             delete object["subRole"];
             delete object["subRoleId"];
             delete object["isActive"];
             delete object["createdBy"];
             delete object["updatedBy"];
             delete object["isReplaced"];
+            delete object["memberData"];
+            delete object["salutation"];
+            delete object["memberId"];
+            delete object["title"];
+            delete object["department"];
+            delete object["address"];
+            delete object["reportingManager"];
+            delete object["operationType"];
 
             replaceHeaderKeyOrder.forEach((k) => {
                 const v = object[k];
@@ -147,58 +140,41 @@ const ReplaceSubAdmin = () => {
         console.log("data in updaterecords method", staleData);
         setRecords([...staleData]);
     };
-    // fetch sub-admins
-    const getSubAdmin = async (
+
+    const getOperationMember = async (
         isMounted = true,
         controller = new AbortController()
     ) => {
         try {
             let url = generateUrl();
-            setIsLoading(true);
+            // setIsLoading(true);
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
             // console.log(response.headers["x-total-count"]);
             setTotalRecords(parseInt(response.headers["x-total-count"]));
-            console.log("Response from sub admin api get", response);
+            console.log("Response from operation member api get", response);
 
             updateRecords(response.data.filter((data) => data._id !== id));
-            setIsLoading(false);
+            // setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
-            console.log("Error from getSubAdmin-------", error);
-            isMounted &&
-                setToasterDetails(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.error &&
-                            typeof error.response.data.error === "string"
-                                ? error.response.data.error
-                                : "Something Went Wrong!",
+            console.log("Error from operation member-------", error);
 
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-            setIsLoading(false);
-            if (error?.response?.status == 500) {
-                console.log(
-                    "Error status 500 while fetchiing subadmin from replace sub-admin"
-                );
-                navigate("/sub-admins");
+            if (error?.response?.status == 401) {
+                navigate("/login");
             }
+            // setIsLoading(false);
         }
     };
 
-    const fetchSubAdmin = async () => {
+    const fetchOperationMember = async () => {
         try {
             const response = await privateAxios.get(
-                FETCH_SUB_ADMIN_BY_ADMIN + id
+                GET_OPERATION_MEMBER_BY_ID + id
             );
             console.log("response from fetch sub admin by id", response);
-            setCgfAdmin(response.data);
+            setOperationMember(response.data);
         } catch (error) {
             if (error?.response?.status == 500) {
                 console.log(
@@ -208,14 +184,13 @@ const ReplaceSubAdmin = () => {
             }
         }
     };
-
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
-        makeApiCall && getSubAdmin(isMounted, controller);
+        makeApiCall && getOperationMember(isMounted, controller);
         console.log("makeApiCall", makeApiCall);
         console.log("inside use Effect");
-        fetchSubAdmin();
+        fetchOperationMember();
 
         return () => {
             isMounted = false;
@@ -223,7 +198,7 @@ const ReplaceSubAdmin = () => {
             controller.abort();
         };
     }, [page, rowsPerPage, orderBy, order, makeApiCall]);
-    //page change handler
+
     const handleTableTesterPageChange = (newPage) => {
         console.log("new Page", newPage);
         setPage(newPage);
@@ -234,19 +209,6 @@ const ReplaceSubAdmin = () => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(1);
     };
-
-    //on Click of visibility icon
-
-    console.log(
-        "page: ",
-        page,
-        "rows Per Page: ",
-        rowsPerPage,
-        "order: ",
-        order,
-        "order By: ",
-        orderBy
-    );
 
     const replaceUser = async () => {
         try {
@@ -270,7 +232,7 @@ const ReplaceSubAdmin = () => {
                 );
                 setOpen(false);
                 setTimeout(() => {
-                    navigate("/sub-admins");
+                    navigate("/users/operation-members");
                 }, 3000);
             }
         } catch (error) {
@@ -335,19 +297,19 @@ const ReplaceSubAdmin = () => {
                 titleMessage={toasterDetails.titleMessage}
             />
             <DialogBox
-                title={<p> Replace CGF admin {cgfAdmin.name} </p>}
+                title={<p> Replace Operation Member {operationMember.name} </p>}
                 info1={
                     <p>
                         {" "}
-                        On replacing a cgf admin, all the statistics and record
-                        would get transfer to the new member.
+                        On replacing a Operation Member, all the statistics and
+                        record would get transfer to the new member.
                     </p>
                 }
                 info2={
                     <p>
                         {" "}
                         Are you sure you want to replace{" "}
-                        <b> {cgfAdmin.name} </b>?{" "}
+                        <b> {operationMember.name} </b>?{" "}
                     </p>
                 }
                 primaryButtonText="Yes"
@@ -361,14 +323,18 @@ const ReplaceSubAdmin = () => {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/sub-admins">CGF Admin</Link>
-                        </li>
-                        <li>
-                            <Link to={`/sub-admins/view-sub-admin/${id}`}>
-                                View CGF Admin
+                            <Link to="/users/operation-members">
+                                Operation Member
                             </Link>
                         </li>
-                        <li>Replace CGF Admin</li>
+                        <li>
+                            <Link
+                                to={`/users/operation-member/view-operation-member/${id}`}
+                            >
+                                View Operation Member
+                            </Link>
+                        </li>
+                        <li>Replace Operation Member</li>
                     </ul>
                 </div>
             </div>
@@ -382,7 +348,7 @@ const ReplaceSubAdmin = () => {
                             <div className="searchbar">
                                 <input
                                     type="text"
-                                    placeholder="Search sub-admin name, email "
+                                    placeholder="Search"
                                     onChange={(e) => onSearchChangeHandler(e)}
                                     name="search"
                                 />
@@ -421,7 +387,7 @@ const ReplaceSubAdmin = () => {
                     </div>
                     <div className="form-btn flex-between add-members-btn mb-20">
                         <button
-                            onClick={() => navigate("/sub-admins")}
+                            onClick={() => navigate("/users/operation-members")}
                             className="secondary-button mr-10"
                         >
                             Cancel
@@ -440,4 +406,4 @@ const ReplaceSubAdmin = () => {
     );
 };
 
-export default ReplaceSubAdmin;
+export default ReplaceOperationMember;

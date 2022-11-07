@@ -25,15 +25,16 @@ import AddQuestionnaires from "../Pages/questionnaires/AddQuestionnaires";
 import QuestionnairesList from "../Pages/questionnaires/QuestionnairesList";
 import AddNewQuestionnaire from "../Pages/questionnaires/AddNewQuestionnaire";
 // import PreviewQuestionnaire from "../Pages/PreviewQuestionnaire";
-import PreviewQuestionnaire from "../Pages/questionnaires/Preview/PreviewQuestionnaire"
+import PreviewQuestionnaire from "../Pages/questionnaires/Preview/PreviewQuestionnaire";
 // import PreviewDemo from "../Pages/PreviewDemo";
 import PreviewDemo from "../Pages/questionnaires/Preview/PreviewDemo";
 import Preview from "../Pages/questionnaires/Preview";
 import AddAssessment from "../Pages/AssessmentModule/AddAssessment";
-import AssessmentList from "../Pages/AssessmentModule/AssessmentList"
-import EditAssessment from "../Pages/AssessmentModule/EditAssessment"
+import AssessmentList from "../Pages/AssessmentModule/AssessmentList";
+import EditAssessment from "../Pages/AssessmentModule/EditAssessment";
 import AssignAssessmentToOperationMember from "../Pages/AssessmentModule/AssignAssessmentToOperationMember";
 import FillAssessment from "../Pages/AssessmentModule/FillAssessment";
+import ReplaceOperationMember from "../Pages/operationMember/ReplaceOperationMember";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -162,6 +163,10 @@ const ProtectedPages = () => {
                             <EditOperationMember />
                         </RequireAuth>
                     }
+                />
+                <Route
+                    path="/users/operation-member/replace-operation-member/:id"
+                    element={<ReplaceOperationMember />}
                 />
                 <Route
                     path="/questionnaires"
