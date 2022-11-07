@@ -97,22 +97,26 @@
 .user-info span {
     display: flex;
     align-items: center;
-    line-height: 10px;
+    line-height: 16px;
     cursor: pointer;
 }
 .user-name {
     color: #1d354d;
     font-family: "ProximaNova-Bold", serif, sans-serif;
+    white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: block !important;max-width: 140px;
 }
 .user-info {
     margin: 8px 0 0;
     font-size: 13px;
+    display: flex;
+    align-items: flex-end;
 }
 .super-admin-arrow svg {
-    transition: 0.5s ease;
+    transition: 0.5s ease;position: relative;
 }
 .super-admin-arrow.active svg {
     transform: rotate(180deg);
+    
 }
 
 /* Header submenu css */
@@ -142,7 +146,7 @@
 .header-submenu li:hover {
     background-color: rgba(247, 168, 35, 0.07);
     color: #d98c08;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
 }
 .header-submenu li:hover a {
     color: #d98c08 !important;
@@ -163,6 +167,7 @@
     position: relative;
     font-family: "ProximaNova-Semibold", serif, sans-serif;
 }
+.header-submenu li.subactive:hover a {color: #d98c08 !important}
 /* .header-submenu li.subactive a::before {
     width: 100%;
     height: 5px;
@@ -183,12 +188,46 @@
 .profile-menu-item .MuiMenuItem-gutters:hover {
     background: rgba(247, 168, 35, 0.07) !important;
     color: #d98c08 !important;
-    font-family: "ProximaNova-Semibold" !important;
+    font-family: "ProximaNova-Semibold", serif, sans-serif !important;
 }
 .profile-menu-item .MuiMenuItem-gutters:hover p {
     color: #d98c08;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
 }
+.user-type{font-size: 13px !important;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inline-block !important;max-width: 140px;}
+
+.profile-menu-item .MuiPaper-root{top: 30px !important;}
+
+/* Profile popup css start */
+/* .profile-popup-box{width: 325px !important;border-radius: 5px;outline: none;padding: 10px 20px !important;box-shadow: 0px 0px 6px rgba(0,0,0,0.1);} */
+.signin-user-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    background: #4d6073;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+.signin-user-left{margin-right: 20px;}
+.signin-user-name-txt {color: #ffffff;font-size: 18px;font-family: "ProximaNova-Semibold", serif, sans-serif;text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);}
+.profile-popup-ttl-blk{position: absolute;top: 0;right: 0;cursor: pointer;}
+.profile-popup-ttl-blk .popup-close-icon{top: 15px;right: 15px;}
+.profile-popup-ttl-blk .popup-close-icon svg{width: 20px;}
+.profile-name{font-family: "ProximaNova-Semibold", serif, sans-serif;font-size: 18px;color: #1d354d;margin-bottom: 10px;}
+.signin-user-blk{align-items: flex-start;}
+.profile-popup-wrap{padding: 20px 0 10px;}
+.profile-info{font-size: 14px;line-height: 16px;font-family: "ProximaNova-Regular", serif, sans-serif !important;margin-bottom: 10px;color: rgba(30, 30, 30, 0.5);display: flex;align-items: center;justify-content: flex-start;}
+.profile-info-icon{margin-right: 10px;line-height: 0;}
+.profile-info-icon svg{width: 18px;color: #f7a823;height: 18px;}
+.signin-user-right {width: calc(100% - 92px);}
+
+.profile-popup-blk .MuiList-root.MuiMenu-list{padding: 0 !important;width: 310px;}
+.profile-popup-blk .MuiMenuItem-gutters.MuiMenuItem-root{padding: 20px 30px !important;background: #fff;cursor: auto;}
+.profile-popup-blk .MuiMenuItem-gutters.MuiMenuItem-root:hover{background: #fff !important;color: #1e1e1e !important;}
+.profile-popup-blk .MuiPaper-root{top: 30px !important;}
+.profile-popup-blk .MuiTouchRipple-root{display: none;}
 /* Responsive css start */
 @media screen and (max-width: 1200px) {
     .nav-list li {
@@ -199,9 +238,7 @@
         max-width: 79%;
         justify-content: flex-start;
     }
-    /* .logo-blk {
-        margin-right: 30px;
-    } */
+    .profile-popup-box{right: 2% !important;}
 }
 @media screen and (max-width: 1023px) {
     .header-left {
@@ -223,7 +260,8 @@
     .user-img{width: 26px;height: 26px;margin-right: 5px;}
     .user-name-txt{font-size: 11px;}
     .user-info{font-size: 11px;}
-    .super-admin-arrow svg{font-size: 16px;}
+    .user-type{font-size: 11px !important;}
+    .super-admin-arrow svg{font-size: 16px;top: -3px;}
     .header-left {
         flex: 0 0 77%;
         max-width: 77%;

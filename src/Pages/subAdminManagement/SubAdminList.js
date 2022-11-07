@@ -336,11 +336,16 @@ const SubAdminList = () => {
     return (
         <div className="page-wrapper">
             <DialogBox
-                title={`Withdraw CGF Admin Invitation`}
-                info1={
-                    "On withdrawal, cgf admin will not be able to verify their account?"
+                title={
+                    <p>Withdraw CGF Admin Invitation</p>
+                        
                 }
-                info2={"Do you want to withdraw the invitation?"}
+                info1={
+                    <p>On withdrawal, cgf admin will not be able to verify their account?</p>
+                }
+                info2={
+                    <p>Do you want to withdraw the invitation?</p>
+                }
                 primaryButtonText={"Yes"}
                 secondaryButtonText={"No"}
                 onPrimaryModalButtonClickHandler={() => {

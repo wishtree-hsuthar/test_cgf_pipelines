@@ -261,7 +261,7 @@ const Login = (prop) => {
                                                 Log In
                                             </button>
                                             <div
-                                                class="tertiary-btn-blk mr-10"
+                                                class="tertiary-btn-blk"
                                                 onClick={
                                                     navigateToforgetPasswordPage
                                                 }
