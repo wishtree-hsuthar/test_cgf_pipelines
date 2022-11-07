@@ -14,15 +14,15 @@ import { useNavigate, useParams } from "react-router-dom";
 const schema = yup.object().shape({
     password: yup
         .string()
+        .required("Enter the New Password")
         .matches(
             /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
             "Password must contain at least 8 characters, one uppercase, one number and one special case character"
-        )
-        .required("Password required"),
+            ),
     confirmPassword: yup
         .string()
-        .required("Please enter confirm password")
-        .oneOf([yup.ref("password"), null], "Passwords don't match."),
+        .required("Enter the confirm password")
+        .oneOf([yup.ref("password"), null], "Password does not match"),
 });
 const SetPassword = () => {
     const {
@@ -189,7 +189,7 @@ const SetPassword = () => {
                                                     }
                                                     // value={values.password}
                                                     // onChange={handleChange('password')}
-                                                    placeholder="Enter password"
+                                                    placeholder="Enter new password"
                                                     className={`input-field ${
                                                         errors.password &&
                                                         "input-error"
@@ -264,7 +264,7 @@ const SetPassword = () => {
                                                     }
                                                     // value={values.confirmPassword}
                                                     // onChange={handleChange('confirmPassword')}
-                                                    placeholder="Enter password"
+                                                    placeholder="Enter confirm password"
                                                     className={`input-field ${
                                                         errors.confirmPassword &&
                                                         "input-error"

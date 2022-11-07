@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import {
   Checkbox,
@@ -73,7 +72,7 @@ const Question = ({
   // setErrArray,
   questionsLength,
   err,
-  setErr
+  setErr,
 }) => {
   let defaultValues = {
     uuid: uuidv4(),
@@ -82,7 +81,7 @@ const Question = ({
     inputType: "singleTextbox",
     validation: "",
     isRequired: true,
-    options: ["",""],
+    options: ["", ""],
   };
   const myHelper = {
     questionTitle: {
@@ -99,7 +98,7 @@ const Question = ({
     },
     {
       _id: "textarea",
-      name: "Textarea"
+      name: "Textarea",
     },
     {
       _id: "dropdown",
@@ -182,15 +181,25 @@ const Question = ({
       value;
     setQuestionnaire(tempQuestionnaire);
   };
+  //method to handle question blur event
+  const onQuestionBlurHandler = (event, questionIdx) => {
+    const { name, value } = event.target;
+    let tempQuestionnaire = { ...questionnaire };
+    // console.log("name", name, "value", value);
+    tempQuestionnaire.sections[sectionIndex].questions[questionIdx][name] =
+      value?.trim();
+    setQuestionnaire(tempQuestionnaire);
+  };
   const onInputTypeChangeHandler = (event, questionIdx) => {
-    const {name, value} = event.target;
-    let tempQuestionnaire = {...questionnaire}
-    tempQuestionnaire.sections[sectionIndex].questions[questionIdx][name] = value
-    tempQuestionnaire.sections[sectionIndex].questions[questionIdx].validation = ""
-    setQuestionnaire(tempQuestionnaire)
-  
-  }
-  
+    const { name, value } = event.target;
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire.sections[sectionIndex].questions[questionIdx][name] =
+      value;
+    tempQuestionnaire.sections[sectionIndex].questions[questionIdx].validation =
+      "";
+    setQuestionnaire(tempQuestionnaire);
+  };
+
   //method to handle option change
   const onOptionChangeHandler = (e, questionIdx, optionIdx) => {
     let tempQuestionnaire = { ...questionnaire };
@@ -199,6 +208,14 @@ const Question = ({
     ] = e.target.value;
     setQuestionnaire(tempQuestionnaire);
   };
+  //method to handler option blur handler
+  const onOptionBlurHandler = (e, questionIdx, optionIdx) => {
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire.sections[sectionIndex].questions[questionIdx].options[
+      optionIdx
+    ] = e.target.value?.trim();
+    setQuestionnaire(tempQuestionnaire);
+  }
   //method to handle option deletion
   const onOptionDeleteHandler = (e, questionIdx, optionIdx) => {
     let tempQuestionnaire = { ...questionnaire };
@@ -215,17 +232,20 @@ const Question = ({
     ].options.push("");
     setQuestionnaire(tempQuestionnaire);
   };
-// console.log("Error",err)
-useEffect(() => {
-  // console.log('Error: ',err)
+  // console.log("Error",err)
+  useEffect(() => {
+    // console.log('Error: ',err)
 
-  return () => {
-    
-  }
-}, [err])
-// console.log("Error inside question: ",err)
+    return () => {};
+  }, [err]);
+  // console.log("Error inside question: ",err)
   return (
-    <div className={`que-card-blk ${questionIdx + 1 === questionsLength && "active"}`} key={question?.uuid}>
+    <div
+      className={`que-card-blk ${
+        questionIdx + 1 === questionsLength && "active"
+      }`}
+      key={question?.uuid}
+    >
       <div className="que-form-blk">
         {/* <div className="que-card-ttl-blk">
           <h2 className="subheading">Question {`${questionIdx + 1}`}</h2>
@@ -233,22 +253,34 @@ useEffect(() => {
         <div className="que-card-innerblk flex-between">
           <div className="que-card-form-leftfield">
             <div className="form-group">
-              <label htmlFor="questionTitle">Question {`${questionIdx + 1}`} Title <span className="mandatory">*</span></label>
+              <label htmlFor="questionTitle">
+                Question {`${questionIdx + 1}`} Title{" "}
+                <span className="mandatory">*</span>
+              </label>
               <TextField
                 className={`input-field ${
-                  (!question?.questionTitle && err?.questionTitle) && "input-error"
+                  !question?.questionTitle &&
+                  err?.questionTitle &&
+                  "input-error"
                 } `}
                 placeholder="Enter question title"
                 name="questionTitle"
                 value={question?.questionTitle}
-                helperText={(!question?.questionTitle && err?.questionTitle) ? "This is required field" : " "}
+                helperText={
+                  !question?.questionTitle && err?.questionTitle
+                    ? "Enter question title"
+                    : " "
+                }
                 onChange={(e) => onQuestionChangeHandler(e, questionIdx)}
+                onBlur={(e) => onQuestionBlurHandler(e, questionIdx)}
               />
             </div>
           </div>
           <div className="que-card-form-rightfield flex-between">
             <div className="form-group">
-              <label htmlFor="inputField">Input Field <span className="mandatory">*</span></label>
+              <label htmlFor="inputField">
+                Input Field <span className="mandatory">*</span>
+              </label>
               <FormControl className="fullwidth-field">
                 <div className="select-field">
                   <Select
@@ -305,7 +337,7 @@ useEffect(() => {
             </div>
           </div>
         </div>
-        
+
         {["dropdown", "checkbox", "radioGroup"].includes(question?.inputType) &&
           question.options.map((option, optionIdx) => (
             <div className="que-card-innerblk" key={optionIdx}>
@@ -313,15 +345,27 @@ useEffect(() => {
                 <div className="que-card-form-leftfield">
                   <div className="que-checkbox-sect">
                     <div className="que-checkbox-wrap">
-                      <div className={`que-checkbox-blk ${question?.inputType === "dropdown" && "que-dropdown-blk"}`}>
+                      <div
+                        className={`que-checkbox-blk ${
+                          question?.inputType === "dropdown" &&
+                          "que-dropdown-blk"
+                        }`}
+                      >
                         <TextField
                           name="options"
                           value={option}
                           onChange={(e) =>
                             onOptionChangeHandler(e, questionIdx, optionIdx)
                           }
-                          className={`input-field que-input-type ${(err?.option && !option) && "input-error"}`}
-                          helperText={(err?.option && !option) ?  "This is required field" : " "}
+                          onBlur={(e) => onOptionBlurHandler(e, questionIdx, optionIdx)}
+                          className={`input-field que-input-type ${
+                            err?.option && !option && "input-error"
+                          }`}
+                          helperText={
+                            err?.option && !option
+                              ? "This is required field"
+                              : " "
+                          }
                           id="outlined-basic"
                           placeholder="Enter option value"
                           variant="outlined"
@@ -366,7 +410,7 @@ useEffect(() => {
               </div>
             </div>
           ))}
-          <div className="que-card-icon-sect">
+        <div className="que-card-icon-sect">
           <div className="que-card-icon-blk">
             <div className="que-card-icon add-que-iconblk mr-40">
               <img
@@ -411,5 +455,3 @@ useEffect(() => {
 };
 
 export default Question;
-
-

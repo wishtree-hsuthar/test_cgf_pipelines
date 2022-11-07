@@ -41,6 +41,8 @@ const cgfActivitiesManufacturer = [
     "None",
     "Apparel",
     "Food Manufacturer",
+    "Household care",
+    "Non-food manufacturer",
     "Personal care & beauty",
 ];
 const cgfActivitiesRetailer = [
@@ -50,10 +52,10 @@ const cgfActivitiesRetailer = [
     "food retailer",
     "food service",
     "Grocery",
-    "Health/beaty drugstore",
+    "Health/beauty drugstore",
     "Non food retailer",
     "Wholesaler",
-    "NA",
+    "N/A",
 ];
 
 const ViewMember = () => {
@@ -178,9 +180,7 @@ const ViewMember = () => {
                 "createdBy",
                 object["createdBy"]
             );
-            object["createdAt"] = new Date(
-                object["createdAt"]
-            ).toLocaleDateString("en-GB");
+            object["createdAt"] = new Date(object["createdAt"])?.toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"} );
             typeof object["createdBy"] === "object"
                 ? (object.createdBy = object["createdBy"]["name"])
                 : (object.createdBy = object["createdBy"]);
@@ -281,7 +281,7 @@ const ViewMember = () => {
                     error?.response?.data?.message &&
                     typeof error.response.data.message === "string"
                         ? error.response.data.message
-                        : "Something Went Wrong!",
+                        : "Something went wrong!",
                 messageType: "error",
             },
             () => myRef.current()
@@ -351,7 +351,7 @@ const ViewMember = () => {
             //       error?.response?.data?.error &&
             //       typeof error.response.data.error === "string"
             //         ? error.response.data.error
-            //         : "Something Went Wrong!",
+            //         : "Something went wrong!",
             //     messageType: "error",
             //   },
             //   () => myRef.current()
@@ -487,41 +487,41 @@ const ViewMember = () => {
                 signal: controller.signal,
             });
             const data = response.data;
-            console.log("Code: ", data);
+            console.log("data: ", data);
             setMember({ ...data });
             reset({
-                memberCompany: data?.companyName,
-                companyType: data?.companyType,
-                parentCompany: data?.parentCompany,
-                cgfCategory: data?.cgfCategory,
-                cgfActivity: data?.cgfActivity,
-                replacedMember: "Kit Kat",
-                corporateEmail: data?.corporateEmail,
-                countryCode: data?.countryCode,
-                phoneNumber: data?.phoneNumber?.toString(),
-                websiteUrl: data?.website,
-                region: data?.region,
-                country: data?.country,
-                state: data?.state,
-                city: data?.city,
-                address: data?.address,
-                cgfOfficeRegion: data?.cgfOfficeRegion,
-                cgfOfficeCountry: data?.cgfOfficeCountry,
-                cgfOffice: data?.cgfOffice,
-                memberContactSalutation: "Mr.",
-                memberContactFullName: data?.memberRepresentativeId[0]?.name,
-                title: data?.memberRepresentativeId[0]?.title,
-                department: data?.memberRepresentativeId[0]?.department,
+                memberCompany: data?.companyName ?? "N/A",
+                companyType: data?.companyType ?? "N/A",
+                parentCompany: data?.parentCompany ?? "N/A",
+                cgfCategory: data?.cgfCategory ?? "N/A",
+                cgfActivity: data?.cgfActivity ?? "N/A",
+                replacedMember: data?.replacedMember ?? "N/A",
+                corporateEmail: data?.corporateEmail ?? "N/A",
+                countryCode: data?.countryCode ?? "N/A",
+                phoneNumber: data?.phoneNumber?.toString() ?? "N/A",
+                websiteUrl: data?.website ?? "N/A",
+                region: data?.region ?? "N/A",
+                country: data?.country ?? "N/A",
+                state: data?.state ?? "N/A",
+                city: data?.city ?? "N/A",
+                address: data?.address ?? "N/A",
+                cgfOfficeRegion: data?.cgfOfficeRegion ?? "N/A",
+                cgfOfficeCountry: data?.cgfOfficeCountry ?? "N/A",
+                cgfOffice: data?.cgfOffice ?? "N/A",
+                memberContactSalutation: data?.memberRepresentativeId[0]?.salutation ?? "N/A",
+                memberContactFullName: data?.memberRepresentativeId[0]?.name ?? "N/A",
+                title: data?.memberRepresentativeId[0]?.title ?? "N/A",
+                department: data?.memberRepresentativeId[0]?.department ?? "N/A",
                 memberContactCountryCode:
-                    data?.memberRepresentativeId[0]?.countryCode,
-                memberContactEmail: data?.memberRepresentativeId[0]?.email,
+                    data?.memberRepresentativeId[0]?.countryCode ?? "N/A",
+                memberContactEmail: data?.memberRepresentativeId[0]?.email ?? "N/A",
                 memberContactPhoneNuber:
-                    data?.memberRepresentativeId[0]?.phoneNumber?.toString(),
+                    data?.memberRepresentativeId[0]?.phoneNumber?.toString() ?? "N/A",
                 status: data?.memberRepresentativeId[0]?.isActive
                     ? "active"
                     : "inactive",
-                totalOperationMembers: totalRecords?.toString(),
-                createdBy: data?.createdBy["name"],
+                totalOperationMembers: totalRecords?.toString() ?? "N/A",
+                createdBy: data?.createdBy["name"] ?? "N/A",
             });
             setIsLoading(false);
         } catch (error) {
@@ -750,7 +750,7 @@ const ViewMember = () => {
                                                 className="searchable-input"
                                                 value={
                                                     member?.parentCompany ??
-                                                    "NA"
+                                                    "N/A"
                                                 }
                                                 selectOnFocus
                                                 handleHomeEndKeys
@@ -788,7 +788,7 @@ const ViewMember = () => {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder="NA"
+                                                        placeholder="N/A"
                                                     />
                                                 )}
                                             />
@@ -919,7 +919,7 @@ const ViewMember = () => {
                                                                     ...params.inputProps,
                                                                 }}
                                                                 placeholder={
-                                                                    "NA"
+                                                                    "N/A"
                                                                 }
                                                             />
                                                         )}
@@ -943,7 +943,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="websiteUrl"
-                                                placeholder="NA"
+                                                placeholder="N/A"
                                                 myHelper={myHelper}
                                             />
                                         </div>
@@ -1047,7 +1047,7 @@ const ViewMember = () => {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder="NA"
+                                                        placeholder="N/A"
                                                     />
                                                 )}
                                             />
@@ -1142,9 +1142,11 @@ const ViewMember = () => {
                                                 name="cgfOffice"
                                                 placeholder="Select office"
                                                 options={[
-                                                    "Mumbai",
-                                                    "Delhi",
-                                                    "Vadodara",
+                                                    "Bogota",
+                                                    "Paris",
+                                                    "Shanghai",
+                                                    "Washington",
+                                                    "Tokyo"
                                                 ]}
                                             />
                                         </div>
@@ -1189,7 +1191,7 @@ const ViewMember = () => {
                                                         isDisabled
                                                         control={control}
                                                         name="memberContactFullName"
-                                                        placeholder="NA"
+                                                        placeholder="N/A"
                                                     />
                                                 </div>
                                             </div>
@@ -1202,7 +1204,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="title"
-                                                placeholder="NA"
+                                                placeholder="N/A"
                                             />
                                         </div>
                                     </div>
@@ -1215,7 +1217,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="department"
-                                                placeholder="NA"
+                                                placeholder="N/A"
                                             />
                                         </div>
                                     </div>
@@ -1231,7 +1233,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="memberContactEmail"
-                                                placeholder="NA"
+                                                placeholder="N/A"
                                             />
                                         </div>
                                     </div>
@@ -1283,7 +1285,7 @@ const ViewMember = () => {
                                                                     )
                                                                 }
                                                                 placeholder={
-                                                                    "NA"
+                                                                    "N/A"
                                                                 }
                                                             />
                                                         )}
@@ -1293,7 +1295,7 @@ const ViewMember = () => {
                                                     isDisabled
                                                     control={control}
                                                     name="memberContactPhoneNuber"
-                                                    placeholder="NA"
+                                                    placeholder="N/A"
                                                 />
                                             </div>
                                         </div>
@@ -1349,7 +1351,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="totalOperationMembers"
-                                                placeholder="NA"
+                                                placeholder="N/A"
                                             />
                                         </div>
                                     </div>
@@ -1365,7 +1367,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="createdBy"
-                                                placeholder="NA"
+                                                placeholder="N/A"
                                             />
                                         </div>
                                     </div>

@@ -45,321 +45,12 @@ const tableHead = [
   {
     id: "createdAt",
     disablePadding: false,
-    label: "Created At",
+    label: "Created On",
   },
   {
     id: "isActive",
     disablePadding: false,
     label: "Status",
-  }
-];
-
-const rows = [
-  {
-    _id: "1",
-    subAdmin: "jeff Hall",
-    email: "jeffbezoz@gmail.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "2",
-    subAdmin: "Edward Meaning",
-    email: "EdwardMeaning53@gmail.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "inactive",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "3",
-    subAdmin: "William Johnsan bhai",
-    email: "WillianJohnbhai4509@gmail.com",
-    assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "4",
-    subAdmin: "harry robot son",
-    email: "harrykakaji3209@zero.com",
-    assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "5",
-    subAdmin: "joe biden",
-    email: "joeBidenladen@gmail.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "Inactive",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "6",
-    subAdmin: "Vladimir Putin",
-    email: "vladputin007@gmail.com",
-    assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "7",
-    subAdmin: "Anderson James",
-    email: "Andersonvir@gmail.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "8",
-    subAdmin: "Virat Kohli",
-    email: "ViratRunMachicne@icc.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "9",
-    subAdmin: "Sachin Tendulkar",
-    email: "SachinMumbaikar123@gmail.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "Inactive",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "10",
-    subAdmin: "Mahendra Singh Dhoni",
-    email: "Mahikmatvalie@csk.com",
-    assessments: "external",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "11",
-    subAdmin: "SRK",
-    email: "srkverse@gmail.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "Inactive",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "12",
-    subAdmin: "salman khan",
-    email: "blackbug123@gmail.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "13",
-    subAdmin: "Rishabh Pant",
-    email: "rishabhPant234@gmail.com",
-    assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "14",
-    subAdmin: "Jasprit Bumrah",
-    email: "yorkerking007@gmail.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "15",
-    subAdmin: "Mohammad Shami",
-    email: "mohammadshami002@gmail.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "16",
-    subAdmin: "Rohit Sharma",
-    email: "rosuperhitsharma234@gmail.com",
-    assessments: "External",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "Inactive",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  },
-  {
-    _id: "17",
-    subAdmin: "Ravindra Jadeja",
-    email: "sirjadeja123@gmail.com",
-    assessments: "internal",
-    onboardedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
-    status: "active",
-    createdBy: "rajkumar",
-    assignedOn: new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }),
   },
 ];
 
@@ -367,7 +58,7 @@ const ViewRole = () => {
   //Refr for Toaster
   const myRef = React.useRef();
   //order in which records needs to show
-  const keysOrder = ["_id", "name","email", "createdAt", "isActive"];
+  const keysOrder = ["_id", "name", "email", "createdAt", "isActive"];
   //Toaster Message setter
   const [toasterDetails, setToasterDetails] = useCallbackState({
     titleMessage: "",
@@ -414,7 +105,7 @@ const ViewRole = () => {
             error?.response?.data?.message &&
             typeof error.response.data.message === "string"
               ? error.response.data.message
-              : "Something Went Wrong!",
+              : "Something went wrong!",
           messageType: "error",
         },
         () => myRef.current()
@@ -487,7 +178,7 @@ const ViewRole = () => {
   };
   const onClickVisibilityIconHandler = (id) => {
     console.log("id", id);
-    return navigate(`/sub-admins/view-sub-admin/${id}`)
+    return navigate(`/sub-admins/view-sub-admin/${id}`);
   };
   const createPrevileges = (tempPrivileges) => {
     console.log("temp data", tempPrivileges);
@@ -513,43 +204,46 @@ const ViewRole = () => {
     setTemp(privileges);
   };
   const updateUsers = (data) => {
-    const users = data?.cgfAdmins
-    console.log("Users: ",users)
-    users.forEach(object => {
-      delete object["countryCode"]
-      delete object["createdBy"]
-      delete object["isDeleted"]
-      delete object["isReplaced"]
-      delete object["password"]
-      delete object["phoneNumber"]
-      delete object["roleId"]
-      delete object["salt"]
-      delete object["subRoleId"]
-      delete object["updatedAt"]
-      delete object["updatedBy"]
-      delete object["uuid"]
-      delete object["memberId"]
-      delete object["title"]
-      delete object["department"]
-      delete object["salutation"]
-      delete object['reportingManager']
-      delete object['operationType']
-      delete object['address']
+    const users = data?.cgfAdmins;
+    console.log("Users: ", users);
+    users.forEach((object) => {
+      delete object["countryCode"];
+      delete object["createdBy"];
+      delete object["isDeleted"];
+      delete object["isReplaced"];
+      delete object["password"];
+      delete object["phoneNumber"];
+      delete object["roleId"];
+      delete object["salt"];
+      delete object["subRoleId"];
+      delete object["updatedAt"];
+      delete object["updatedBy"];
+      delete object["uuid"];
+      delete object["memberId"];
+      delete object["title"];
+      delete object["department"];
+      delete object["salutation"];
+      delete object["reportingManager"];
+      delete object["operationType"];
+      delete object["address"];
 
-      delete object["__v"]
-      object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"});
+      delete object["__v"];
+      object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
+        "en-US",
+        { month: "2-digit", day: "2-digit", year: "numeric" }
+      );
       keysOrder.forEach((k) => {
         const v = object[k];
         delete object[k];
         object[k] = v;
       });
-    })
-    setRecords([...users])
-  }
+    });
+    setRecords([...users]);
+  };
   const updateFileds = (data) => {
     console.log("data", data);
-    updateUsers(data)
-    setTotalRecords(data?.totalCgfAdmins ?? 0)
+    updateUsers(data);
+    setTotalRecords(data?.totalCgfAdmins ?? 0);
     setFieldValues({
       roleName: data?.name,
       description: data?.description,
@@ -579,7 +273,7 @@ const ViewRole = () => {
                 error?.response?.data?.message &&
                 typeof error.response.data.message === "string"
                   ? error.response.data.message
-                  : "Something Went Wrong!",
+                  : "Something went wrong!",
               messageType: "error",
             },
             () => myRef.current()
@@ -591,7 +285,7 @@ const ViewRole = () => {
       isMounted = false;
       controller.abort();
     };
-  }, []);
+  }, [page, rowsPerPage, orderBy, order,]);
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
       <Toaster
@@ -606,8 +300,9 @@ const ViewRole = () => {
         }
         info1={
           <p>
-            On deleting all the sub admins to whoom this role the access for the
-            system would get deleted and this will be irreversible action.
+            On deleting all the CGF admins to whom assign this role the access
+            for the system would get deleted and this will be an irreversible
+            action
           </p>
         }
         info2={
@@ -756,7 +451,7 @@ const ViewRole = () => {
                       aria-label="basic tabs example"
                     >
                       <Tab
-                        label="Modules Access"
+                        label="Module Access"
                         // {...a11yProps(0)}
                         id="simple-tab-0"
                         aria-controls="simple-tabpanel-0"
@@ -784,35 +479,50 @@ const ViewRole = () => {
                             <TableRow>
                               <TableCell
                                 align="left"
-                                className="tableHeader"
+                                className="table-header"
                                 width="16%"
                               >
-                                Modules
+                                <span className="sorted-blk">Modules</span>
                               </TableCell>
-                              <TableCell className="tableHeader">
-                                List
+                              <TableCell className="table-header">
+                                <span className="sorted-blk">List</span>
                               </TableCell>
-                              <TableCell align="center" className="tableHeader">
-                                Add
+                              <TableCell
+                                align="center"
+                                className="table-header"
+                              >
+                                <span className="sorted-blk">Add</span>
                               </TableCell>
-                              <TableCell align="center" className="tableHeader">
-                                Edit
+                              <TableCell
+                                align="center"
+                                className="table-header"
+                              >
+                                <span className="sorted-blk">Edit</span>
                               </TableCell>
-                              <TableCell align="center" className="tableHeader">
-                                View
+                              <TableCell
+                                align="center"
+                                className="table-header"
+                              >
+                                <span className="sorted-blk">View</span>
                               </TableCell>
-                              <TableCell align="center" className="tableHeader">
-                                Delete
+                              <TableCell
+                                align="center"
+                                className="table-header"
+                              >
+                                <span className="sorted-blk">Delete</span>
                               </TableCell>
                               {/* <TableCell
+                              align="center"
+                              className="table-header"
+                              width="16%"
+                            >
+                              Assign to Member
+                            </TableCell> */}
+                              <TableCell
                                 align="center"
-                                className="tableHeader"
-                                width="16%"
+                                className="table-header"
                               >
-                                Assign to Member
-                              </TableCell> */}
-                              <TableCell align="center" className="tableHeader">
-                                All
+                                <span className="sorted-blk">All</span>
                               </TableCell>
                             </TableRow>
                           </TableHead>

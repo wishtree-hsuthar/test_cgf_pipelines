@@ -279,7 +279,7 @@ const SubAdminList = () => {
                             error?.response?.data?.error &&
                             typeof error.response.data.error === "string"
                                 ? error.response.data.error
-                                : "Something Went Wrong!",
+                                : "Something went wrong!",
 
                         messageType: "error",
                     },
@@ -421,7 +421,7 @@ const SubAdminList = () => {
                             <div className="searchbar">
                                 <input
                                     type="text"
-                                    placeholder="Search sub-admin name, email "
+                                    placeholder="Search CGF admin name, email "
                                     onChange={(e) => onSearchChangeHandler(e)}
                                     name="search"
                                 />

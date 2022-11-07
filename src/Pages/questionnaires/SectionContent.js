@@ -61,7 +61,7 @@ const SectionContent = ({
           error?.response?.data?.message &&
           typeof error.response.data.message === "string"
             ? error.response.data.message
-            : "Something Went Wrong!",
+            : "Something went wrong!",
         messageType: "error",
       },
       () => myRef.current()
@@ -121,10 +121,10 @@ const SectionContent = ({
     return countError;
   };
 
-  const validateSection = () => {
+  const validateSection = async () => {
     let countError = 0;
     if (questionnaire?.sections[index]?.layout === "table") {
-      countError = validateTableQuestions(countError);
+      countError = await validateTableQuestions(countError);
     }
     console.log("count Error", countError);
     //Rajkumar's save section
@@ -132,7 +132,7 @@ const SectionContent = ({
       questionTitle: "",
       option: "",
     };
-    questionnaire?.sections[index]?.questions?.map((question, questionIdx) => {
+    await questionnaire?.sections[index]?.questions?.map((question, questionIdx) => {
       if (question?.questionTitle === "") {
         // console.log("is Error");
         tempError["questionTitle"] = "Enter question title";
@@ -252,10 +252,17 @@ const SectionContent = ({
     tempQuestionnare.sections[index][name] = value;
     setQuestionnaire(tempQuestionnare);
   };
-  const handleSubmitSection = (e) => {
+  const handleInputBlur = (e) => {
+    const {name, value} = e.target;
+    let tempQuestionnaire = {...questionnaire}
+    tempQuestionnaire.sections[index][name] = value?.trim()
+    setQuestionnaire(tempQuestionnaire)
+  }
+  const handleSubmitSection = async (e) => {
     e.preventDefault();
-    if (validateSection()) {
-      saveSection();
+    const response = await validateSection()
+    if (response) {
+      await saveSection();
       return true;
     }
     return false;
@@ -308,7 +315,8 @@ const SectionContent = ({
   };
   const onPublishButtonClickHandler = async (e) => {
     console.log("inside publist button click")
-    if (handleSubmitSection(e)) {
+    const response = await handleSubmitSection(e)
+    if (response) {
       try {
         await privateAxios.put(
           `${ADD_QUESTIONNAIRE}/publish/${params?.id}`
@@ -393,7 +401,7 @@ const SectionContent = ({
                 <div className="sect-card-form-leftfield">
                   <div className="form-group">
                     <label htmlFor="title">
-                      Section Title <span className="mandatory">*</span>
+                      Section name <span className="mandatory">*</span>
                     </label>
                     <TextField
                       className={`input-field ${
@@ -402,15 +410,16 @@ const SectionContent = ({
                         "input-error"
                       }`}
                       id="outlined-basic"
-                      placeholder="Enter section title"
+                      placeholder="Enter section name"
                       variant="outlined"
                       onChange={handleInputSection}
+                      onBlur={handleInputBlur}
                       value={section.sectionTitle}
                       name={"sectionTitle"}
                       helperText={
                         section.sectionTitle === "" &&
                         globalSectionTitleError?.errMsg
-                          ? "This is required field"
+                          ? "Enter section name"
                           : " "
                       }
                     />
@@ -478,6 +487,7 @@ const SectionContent = ({
                       placeholder="Enter description"
                       variant="outlined"
                       onChange={handleInputSection}
+                      onBlur={handleInputBlur}
                       name={"description"}
                       value={section.description}
                       // multiline

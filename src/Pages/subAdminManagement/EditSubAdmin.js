@@ -300,7 +300,7 @@ const EditSubAdmin = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label for="email">
-                                            Email Id{" "}
+                                            Email{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <TextField

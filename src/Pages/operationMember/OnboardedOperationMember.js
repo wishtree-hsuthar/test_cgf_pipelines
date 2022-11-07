@@ -106,7 +106,7 @@ function OnboardedOperationMember({
     const [
         orderByForOnboardedOperationMember,
         setOrderByForOnboardedOperationMemberTab,
-    ] = React.useState("createdAt");
+    ] = React.useState("");
     const [
         recordsForOnboardedOperationMemberTab,
         setRecordsForOnboardedOperationMemberTab,

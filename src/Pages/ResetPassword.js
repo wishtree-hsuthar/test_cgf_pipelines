@@ -193,7 +193,7 @@ const ResetPassword = () => {
                                                     }
                                                     // value={values.newPassword}
                                                     // onChange={handleChange('newPassword')}
-                                                    placeholder="Enter password"
+                                                    placeholder="Enter new password"
                                                     className={`input-field ${
                                                         errors.newPassword &&
                                                         "input-error"
@@ -263,7 +263,7 @@ const ResetPassword = () => {
                                                     }
                                                     // value={values.confirmPassword}
                                                     // onChange={handleChange('confirmPassword')}
-                                                    placeholder="Enter password"
+                                                    placeholder="Enter confirm password"
                                                     className={`input-field ${
                                                         errors.confirmPassword &&
                                                         "input-error"
