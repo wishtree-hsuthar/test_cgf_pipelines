@@ -19,7 +19,7 @@ const helperTextForAddOperationMember = {
         required: "Select salutation",
     },
     name: {
-        required: "Enter the full name",
+        required: "Enter the operation member name",
         maxLength: "Max char limit exceed",
         minLength: "Role must contain atleast 3 characters",
         pattern: "Invalid format",
@@ -37,27 +37,27 @@ const helperTextForAddOperationMember = {
         pattern: "Invalid format",
     },
     email: {
-        required: "Enter email address",
+        required: "Enter email addrees",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         pattern: "Invalid format",
     },
     countryCode: {
         required: "Enter country code",
-        // validate: "Enter country code",
+        validate: "Select country code",
     },
     phoneNumber: {
         required: "Enter the phone number",
         maxLength: "Max digits limit exceed",
         minLength: "Number must contain atleast 3 digits",
-        // validate: "Enter country code first",
+        validate: "Enter phone number",
         // pattern: "Invalid format",
     },
     memberCompany: {
         required: "Select member company",
     },
     operationType: {
-        required: "Enter operation type ",
+        required: "Select operation type",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
@@ -120,6 +120,19 @@ function AddOperationMember() {
         descriptionMessage: "",
         messageType: "error",
     });
+    const phoneNumberChangeHandler = (e, name, code) => {
+        console.log(
+            "on number change",
+            e.target.value,
+            "name: ",
+            name,
+            "code",
+            code
+        );
+        setValue(name, e.target.value);
+        trigger(name);
+        trigger(code);
+    };
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
@@ -286,7 +299,7 @@ function AddOperationMember() {
                                     className="tertiary-btn-blk"
                                     onClick={handleSubmit(handleSaveAndMore)}
                                 >
-                                    <span class="addmore-icon">
+                                    <span className="addmore-icon">
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
@@ -311,7 +324,7 @@ function AddOperationMember() {
                                                 <Dropdown
                                                     control={control}
                                                     name="salutation"
-                                                    // placeholder="Mr."
+                                                    placeholder="Mr."
                                                     myHelper={
                                                         helperTextForAddOperationMember
                                                     }
@@ -326,7 +339,7 @@ function AddOperationMember() {
                                                 />
                                             </div>
                                             <div className="salutation-inputblk">
-                                                <label for="name">
+                                                <label htmlFor="name">
                                                     Full Name{" "}
                                                     <span className="mandatory">
                                                         *
@@ -334,6 +347,12 @@ function AddOperationMember() {
                                                 </label>
                                                 <Input
                                                     name={"name"}
+                                                    onBlur={(e) =>
+                                                        setValue(
+                                                            "name",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
                                                     control={control}
                                                     placeholder={
                                                         "Enter full name"
@@ -354,9 +373,15 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="title">Title </label>
+                                        <label htmlFor="title">Title </label>
                                         <Input
                                             name={"title"}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "title",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             control={control}
                                             placeholder={"Enter title"}
                                             rules={{
@@ -367,17 +392,23 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="department">
+                                        <label htmlFor="department">
                                             Department{" "}
                                         </label>
                                         <Input
                                             name={"department"}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "department",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             control={control}
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
                                             placeholder={
-                                                "Enter departnment name"
+                                                "Enter department name"
                                             }
                                             rules={{
                                                 maxLength: 50,
@@ -387,17 +418,23 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="email">
-                                            Email Address{" "}
+                                        <label htmlFor="email">
+                                            Email{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Input
                                             name={"email"}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "email",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             control={control}
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
-                                            placeholder={"Enter email address"}
+                                            placeholder={"Enter email"}
                                             rules={{
                                                 required: "true",
                                                 maxLength: 50,
@@ -410,16 +447,27 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label htmlfor="phoneNumber">
-                                            Phone Number{" "}
-                                            <span className="mandatory">*</span>
+                                        <label htmlFor="phoneNumber">
+                                            Phone Number
                                         </label>
                                         <div className="phone-number-field">
                                             <div className="select-field country-code">
                                                 <Controller
                                                     control={control}
                                                     name="countryCode"
-                                                    rules={{ required: true }}
+                                                    rules={{
+                                                        validate: () => {
+                                                            if (
+                                                                !watch(
+                                                                    "countryCode"
+                                                                ) &&
+                                                                watch(
+                                                                    "phoneNumber"
+                                                                )
+                                                            )
+                                                                return "Invalid input";
+                                                        },
+                                                    }}
                                                     render={({
                                                         field,
                                                         fieldState: { error },
@@ -465,8 +513,15 @@ function AddOperationMember() {
                                                                 trigger(
                                                                     "countryCode"
                                                                 );
+                                                                trigger(
+                                                                    "phoneNumber"
+                                                                );
                                                             }}
-                                                            options={countries}
+                                                            options={
+                                                                countries
+                                                                    ? countries
+                                                                    : []
+                                                            }
                                                             autoHighlight
                                                             // placeholder="Select country code"
                                                             getOptionLabel={(
@@ -504,7 +559,8 @@ function AddOperationMember() {
                                                                         error
                                                                             ? helperTextForAddOperationMember
                                                                                   .countryCode[
-                                                                                  "required"
+                                                                                  error
+                                                                                      ?.type
                                                                               ]
                                                                             : " "
                                                                     }
@@ -516,6 +572,19 @@ function AddOperationMember() {
                                             </div>
                                             <Input
                                                 name={"phoneNumber"}
+                                                myOnChange={(e) =>
+                                                    phoneNumberChangeHandler(
+                                                        e,
+                                                        "phoneNumber",
+                                                        "countryCode"
+                                                    )
+                                                }
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "phoneNumber",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
                                                 control={control}
                                                 myHelper={
                                                     helperTextForAddOperationMember
@@ -524,9 +593,22 @@ function AddOperationMember() {
                                                     "Enter phone number"
                                                 }
                                                 rules={{
-                                                    required: true,
                                                     maxLength: 15,
                                                     minLength: 3,
+                                                    validate: (value) => {
+                                                        if (
+                                                            !watch(
+                                                                "phoneNumber"
+                                                            ) &&
+                                                            watch("countryCode")
+                                                        )
+                                                            return "invalid input";
+                                                        if (
+                                                            value &&
+                                                            !Number(value)
+                                                        )
+                                                            return "Invalid input";
+                                                    },
                                                     // validate: (value) => {
                                                     //     if (
                                                     //         watch(
@@ -550,7 +632,7 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="">
+                                        <label htmlFor="">
                                             Operation Type{" "}
                                             <span className="mandatory">*</span>
                                         </label>
@@ -575,7 +657,7 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="">
+                                        <label htmlFor="">
                                             Member Company{" "}
                                             <span className="mandatory">*</span>
                                         </label>
@@ -607,7 +689,6 @@ function AddOperationMember() {
                                                         value={
                                                             memberCompanies?._id
                                                         }
-                                                        // freeSolo
                                                         // clearIcon={false}
                                                         disableClearable
                                                         onChange={(
@@ -648,11 +729,12 @@ function AddOperationMember() {
                                                                 "companyType",
                                                                 newValue.companyType
                                                             );
-                                                            trigger("memberId");
                                                         }}
                                                         // sx={{ width: 200 }}
                                                         options={
                                                             memberCompanies
+                                                                ? memberCompanies
+                                                                : []
                                                         }
                                                         placeholder="Select country code"
                                                         getOptionLabel={(
@@ -710,8 +792,14 @@ function AddOperationMember() {
                                         </label>
                                         <Input
                                             isDisabled={true}
-                                            name={"companyType"}
                                             control={control}
+                                            name={"companyType"}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "companyType",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
@@ -721,14 +809,17 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="">
-                                            Address{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
+                                        <label htmlFor="">Address</label>
                                         <Input
                                             control={control}
                                             name={"address"}
-                                            rules={{ required: true }}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "address",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
+                                            rules={{}}
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
@@ -738,7 +829,7 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label for="">
+                                        <label htmlFor="">
                                             Reporting Manager{" "}
                                             <span className="mandatory">*</span>
                                         </label>
@@ -754,7 +845,11 @@ function AddOperationMember() {
                                                 helperTextForAddOperationMember
                                             }
                                             rules={{ required: true }}
-                                            options={reportingManagers}
+                                            options={
+                                                reportingManagers
+                                                    ? reportingManagers
+                                                    : []
+                                            }
                                         />
                                     </div>
                                 </div>

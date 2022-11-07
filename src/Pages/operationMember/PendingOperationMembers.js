@@ -83,7 +83,7 @@ function PendingOperationMembers({
     const [
         orderByForPendingOperationMember,
         setOrderByForPendingOperationMemberTab,
-    ] = React.useState("createdAt");
+    ] = React.useState("");
     const [
         recordsForPendingOperationMemberTab,
         setRecordsForPendingOperationMemberTab,
@@ -261,7 +261,7 @@ function PendingOperationMembers({
                             error?.response?.data?.message &&
                             typeof error.response.data.message === "string"
                                 ? error.response.data.message
-                                : "Something Went Wrong!",
+                                : "Something went wrong!",
 
                         messageType: "error",
                     },

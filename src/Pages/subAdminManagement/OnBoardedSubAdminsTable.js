@@ -15,7 +15,7 @@ const onBoardedTableColumnHead = [
         id: "email",
 
         disablePadding: false,
-        label: "Email Address",
+        label: "Email",
     },
     {
         id: "role",
@@ -27,7 +27,7 @@ const onBoardedTableColumnHead = [
         id: "createdAt",
 
         disablePadding: false,
-        label: "Created At",
+        label: "Onboarded on",
     },
     {
         id: "status",
@@ -53,7 +53,7 @@ function OnBoardedSubAdminsTable({
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [order, setOrder] = React.useState("desc");
-    const [orderBy, setOrderBy] = React.useState("createdAt");
+    const [orderBy, setOrderBy] = React.useState("");
     const [records, setRecords] = React.useState([]);
     const [totalRecords, setTotalRecords] = React.useState(0);
     const [selected, setSelected] = useState([]);

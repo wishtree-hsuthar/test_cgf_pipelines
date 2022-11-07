@@ -309,11 +309,13 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assessment title
-                                            <span className="mandatory">*</span>
+                                            Assessment title <span className="mandatory">*</span>
                                         </label>
                                         <Input
                                             name={"title"}
+                                            onBlur={(e) =>
+                                                setValue("title", e.target.value?.trim())
+                                              }
                                             control={control}
                                             myHelper={helperTextForAssessment}
                                             placeholder={
@@ -328,8 +330,7 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assessment Type
-                                            <span className="mandatory">*</span>
+                                            Assessment Type <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
                                             control={control}
@@ -347,8 +348,7 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Member
-                                            <span className="mandatory">*</span>
+                                            Assign Member <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
                                             control={control}
@@ -368,8 +368,7 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Operation Member
-                                            <span className="mandatory">*</span>
+                                            Assign Operation Member <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
                                             control={control}
@@ -391,8 +390,7 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Due date
-                                            <span className="mandatory">*</span>
+                                            Due date <span className="mandatory">*</span>
                                         </label>
                                         <Controller
                                             name="dueDate"
@@ -462,6 +460,9 @@ function EditAssessment() {
                                                 <TextField
                                                     multiline
                                                     {...field}
+                                                    onBlur={(e) =>
+                                                        setValue("remarks", e.target.value?.trim())
+                                                      }
                                                     inputProps={{
                                                         maxLength: 250,
                                                     }}

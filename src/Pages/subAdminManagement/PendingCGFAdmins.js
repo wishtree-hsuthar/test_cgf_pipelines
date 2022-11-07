@@ -16,7 +16,7 @@ const pendingTableColumnHead = [
         id: "email",
 
         disablePadding: false,
-        label: "Email Address",
+        label: "Email",
     },
     {
         id: "role",
@@ -28,7 +28,7 @@ const pendingTableColumnHead = [
         id: "createdAt",
 
         disablePadding: false,
-        label: "Created At",
+        label: "Onboarded on",
     },
 
     {
@@ -51,6 +51,7 @@ function PendingCGFAdmins({
 }) {
     const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
     const [withdrawInviteid, setWithdrawInviteid] = useState("");
+    const [withdrawInviteUser, setWithdrawInviteUser] = useState([]);
 
     // state to manage loader
     const [isLoading, setIsLoading] = useState(false);
@@ -149,10 +150,16 @@ function PendingCGFAdmins({
     };
 
     //  on click delete icon open delete modal
-    const onClickDeleteIconHandler = (id) => {
+    const onClickDeleteIconHandler = async (id) => {
         console.log("id for delete", id);
         setOpenDeleteDialogBox(true);
         setWithdrawInviteid(id);
+        console.log("records: ", recordsForPendingTab);
+        const withdrawCgfAdmin = recordsForPendingTab.filter(
+            (user) => user?._id === id
+        );
+        console.log("Withdraw user", withdrawCgfAdmin);
+        setWithdrawInviteUser([...withdrawCgfAdmin]);
     };
 
     const withdrawInviteById = async () => {
@@ -225,7 +232,7 @@ function PendingCGFAdmins({
                             error?.response?.data?.message &&
                             typeof error.response.data.message === "string"
                                 ? error.response.data.message
-                                : "Something Went Wrong!",
+                                : "Something went wrong!",
 
                         messageType: "error",
                     },
@@ -264,11 +271,22 @@ function PendingCGFAdmins({
     return (
         <>
             <DialogBox
-                title={`Withdraw CGF Admin Invitation`}
-                info1={
-                    "On withdrawal, cgf admin will not be able to verify their account."
+                title={
+                    <p>
+                        Withdraw{" "}
+                        {withdrawInviteUser
+                            ? withdrawInviteUser[0]?.name
+                            : "CGF admin"}
+                        's Invitation
+                    </p>
                 }
-                info2={"Do you want to withdraw the invitation?"}
+                info1={
+                    <p>
+                        On withdrawal, CGF admin will not be able to verify
+                        their account?
+                    </p>
+                }
+                info2={<p>Do you want to withdraw the invitation?</p>}
                 primaryButtonText={"Yes"}
                 secondaryButtonText={"No"}
                 onPrimaryModalButtonClickHandler={() => {

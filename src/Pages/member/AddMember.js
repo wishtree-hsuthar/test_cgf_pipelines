@@ -39,6 +39,8 @@ const cgfActivitiesManufacturer = [
     "None",
     "Apparel",
     "Food Manufacturer",
+    "Non-food manufacturer",
+    "Household care",
     "Personal care & beauty",
 ];
 const cgfActivitiesRetailer = [
@@ -48,7 +50,7 @@ const cgfActivitiesRetailer = [
     "food retailer",
     "food service",
     "Grocery",
-    "Health/beaty drugstore",
+    "Health/beauty drugstore",
     "Non food retailer",
     "Wholesaler",
 ];
@@ -73,7 +75,7 @@ const AddMember = () => {
                     error?.response?.data?.message &&
                     typeof error.response.data.message === "string"
                         ? error.response.data.message
-                        : "Something Went Wrong!",
+                        : "Something went wrong!",
                 messageType: "error",
             },
             () => myRef.current()
@@ -288,7 +290,19 @@ const AddMember = () => {
         trigger("cgfCategory");
         setValue("cgfActivity", "");
     };
-
+    const phoneNumberChangeHandler = (e, name, code) => {
+        console.log(
+            "on number change",
+            e.target.value,
+            "name: ",
+            name,
+            "code",
+            code
+        );
+        setValue(name, e.target.value);
+        trigger(name);
+        trigger(code);
+    };
     useEffect(() => {
         // let isMounted = true;
         const controller = new AbortController();
@@ -345,9 +359,7 @@ const AddMember = () => {
                     >
                         <div className="card-wrapper">
                             <div className="card-inner-wrap">
-                                <h2 className="sub-heading1">
-                                    Company Details
-                                </h2>
+                                <h2 className="sub-heading1">Company Detail</h2>
                                 <div className="card-blk flex-between">
                                     <div className="card-form-field">
                                         <div className="form-group">
@@ -361,6 +373,12 @@ const AddMember = () => {
                                                 control={control}
                                                 name="memberCompany"
                                                 placeholder="Enter member company"
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "memberCompany",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
                                                 myHelper={memberHelper}
                                                 rules={{
                                                     required: true,
@@ -436,6 +454,12 @@ const AddMember = () => {
                                                             </Paper>
                                                         )}
                                                         className="searchable-input"
+                                                        onBlur={(e) =>
+                                                            setValue(
+                                                                "parentCompany",
+                                                                e.target.value?.trim()
+                                                            )
+                                                        }
                                                         onSubmit={() =>
                                                             setValue(
                                                                 "parentCompany",
@@ -601,9 +625,7 @@ const AddMember = () => {
                                 </div>
                             </div>
                             <div className="card-inner-wrap">
-                                <h2 className="sub-heading1">
-                                    Contact Details
-                                </h2>
+                                <h2 className="sub-heading1">Contact Detail</h2>
                                 <div className="flex-between card-blk">
                                     <div className="card-form-field">
                                         <div className="form-group">
@@ -616,7 +638,13 @@ const AddMember = () => {
                                             <Input
                                                 control={control}
                                                 name="corporateEmail"
-                                                placeholder="Enter the corporate email address"
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "corporateEmail",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
+                                                placeholder="example@domain.com"
                                                 myHelper={memberHelper}
                                                 rules={{
                                                     required: "true",
@@ -631,10 +659,7 @@ const AddMember = () => {
                                     <div className="card-form-field">
                                         <div className="form-group">
                                             <label htmlFor="phoneNumber">
-                                                Phone Number{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
+                                                Phone Number
                                             </label>
                                             <div className="phone-number-field">
                                                 <div className="select-field country-code">
@@ -642,7 +667,17 @@ const AddMember = () => {
                                                         control={control}
                                                         name="countryCode"
                                                         rules={{
-                                                            required: true,
+                                                            validate: () => {
+                                                                if (
+                                                                    !watch(
+                                                                        "countryCode"
+                                                                    ) &&
+                                                                    watch(
+                                                                        "phoneNumber"
+                                                                    )
+                                                                )
+                                                                    return "Invalid input";
+                                                            },
                                                             // validate: () => {
                                                             //   if (watch("phoneNumber") && !watch("countryCode"))
                                                             //     return "Invalid Input";
@@ -687,6 +722,9 @@ const AddMember = () => {
                                                                           );
                                                                     trigger(
                                                                         "countryCode"
+                                                                    );
+                                                                    trigger(
+                                                                        "phoneNumber"
                                                                     );
                                                                 }}
                                                                 PaperComponent={({
@@ -748,27 +786,39 @@ const AddMember = () => {
                                                 <Input
                                                     control={control}
                                                     name="phoneNumber"
-                                                    placeholder="Enter phone number"
+                                                    placeholder="1234567890"
                                                     myHelper={memberHelper}
+                                                    myOnChange={(e) =>
+                                                        phoneNumberChangeHandler(
+                                                            e,
+                                                            "phoneNumber",
+                                                            "countryCode"
+                                                        )
+                                                    }
+                                                    onBlur={(e) =>
+                                                        setValue(
+                                                            "phoneNumber",
+                                                            e.target.value.trim()
+                                                        )
+                                                    }
                                                     rules={{
                                                         maxLength: 15,
                                                         minLength: 3,
-                                                        required: true,
                                                         validate: (value) => {
                                                             if (
-                                                                watch(
+                                                                !watch(
                                                                     "phoneNumber"
                                                                 ) &&
-                                                                !watch(
+                                                                watch(
                                                                     "countryCode"
                                                                 )
                                                             )
-                                                                return "Invalid input";
-                                                            else if (
+                                                                return "invalid input";
+                                                            if (
                                                                 value &&
                                                                 !Number(value)
                                                             )
-                                                                return "Invalid Input";
+                                                                return "Invalid input";
                                                         },
                                                     }}
                                                 />
@@ -783,7 +833,13 @@ const AddMember = () => {
                                             <Input
                                                 control={control}
                                                 name="websiteUrl"
-                                                placeholder="Enter website URL"
+                                                placeholder="www.google.com"
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "websiteUrl",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
                                                 myHelper={memberHelper}
                                                 rules={{
                                                     maxLength: 50,
@@ -798,7 +854,7 @@ const AddMember = () => {
                             </div>
                             <div className="card-inner-wrap">
                                 <h2 className="sub-heading1">
-                                    Company Address Details
+                                    Company Address Detail
                                 </h2>
                                 <div className="flex-between card-blk">
                                     <div className="card-form-field">
@@ -851,7 +907,7 @@ const AddMember = () => {
                                                 isDisabled={!watch("country")}
                                                 control={control}
                                                 name="state"
-                                                placeholder="Enter state"
+                                                placeholder="Select state"
                                                 myHelper={memberHelper}
                                                 options={arrOfStateCountry}
                                             />
@@ -904,6 +960,12 @@ const AddMember = () => {
                                                                       );
                                                             }
                                                         }}
+                                                        onBlur={(e) =>
+                                                            setValue(
+                                                                "city",
+                                                                e.target.value?.trim()
+                                                            )
+                                                        }
                                                         selectOnFocus
                                                         handleHomeEndKeys
                                                         id="free-solo-with-text-demo"
@@ -929,7 +991,6 @@ const AddMember = () => {
                                                         //   }
                                                         //   return option;
                                                         // }}
-                                                        disableClearable
                                                         renderOption={(
                                                             props,
                                                             option
@@ -958,7 +1019,7 @@ const AddMember = () => {
                                                                         ""
                                                                     )
                                                                 }
-                                                                placeholder="Please select city"
+                                                                placeholder="Enter city"
                                                             />
                                                         )}
                                                     />
@@ -970,16 +1031,12 @@ const AddMember = () => {
                                     <div className="card-form-field">
                                         <div className="form-group">
                                             <label htmlFor="address">
-                                                Address{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
+                                                Address
                                             </label>
                                             <Controller
                                                 name="address"
                                                 control={control}
                                                 rules={{
-                                                    required: true,
                                                     minLength: 3,
                                                     maxLength: 250,
                                                 }}
@@ -990,6 +1047,12 @@ const AddMember = () => {
                                                     <TextField
                                                         multiline
                                                         {...field}
+                                                        onBlur={(e) =>
+                                                            setValue(
+                                                                "address",
+                                                                e.target.value?.trim()
+                                                            )
+                                                        }
                                                         inputProps={{
                                                             maxLength: 250,
                                                         }}
@@ -1019,7 +1082,7 @@ const AddMember = () => {
                             </div>
                             <div className="card-inner-wrap">
                                 <h2 className="sub-heading1">
-                                    CGF Office Details
+                                    CGF Office Detail
                                 </h2>
                                 <div className="flex-between card-blk">
                                     <div className="card-form-field">
@@ -1036,7 +1099,7 @@ const AddMember = () => {
                                                 myOnChange={
                                                     cgfOfficeRegionChangeHandler
                                                 }
-                                                placeholder="Select Region"
+                                                placeholder="Select region"
                                                 myHelper={memberHelper}
                                                 rules={{ required: true }}
                                                 options={arrOfRegions}
@@ -1081,9 +1144,11 @@ const AddMember = () => {
                                                 myHelper={memberHelper}
                                                 rules={{ required: true }}
                                                 options={[
-                                                    "Mumbai",
-                                                    "Delhi",
-                                                    "Vadodara",
+                                                    "Bogota",
+                                                    "Paris",
+                                                    "Shanghai",
+                                                    "Washington",
+                                                    "Tokyo",
                                                 ]}
                                             />
                                         </div>
@@ -1092,7 +1157,7 @@ const AddMember = () => {
                             </div>
                             <div className="card-inner-wrap">
                                 <h2 className="sub-heading1">
-                                    Member Contact Details
+                                    Member Contact Detail
                                 </h2>
                                 <div className="flex-between card-blk">
                                     <div className="card-form-field">
@@ -1138,6 +1203,12 @@ const AddMember = () => {
                                                                 /^[A-Za-z]+[A-Za-z ]*$/,
                                                         }}
                                                         name="memberContactFullName"
+                                                        onBlur={(e) =>
+                                                            setValue(
+                                                                "memberContactFullName",
+                                                                e.target.value?.trim()
+                                                            )
+                                                        }
                                                         placeholder="Enter full name"
                                                     />
                                                 </div>
@@ -1155,6 +1226,12 @@ const AddMember = () => {
                                                     minLength: 3,
                                                 }}
                                                 name="title"
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "title",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
                                                 placeholder="Enter title"
                                             />
                                         </div>
@@ -1172,6 +1249,12 @@ const AddMember = () => {
                                                     minLength: 3,
                                                 }}
                                                 name="department"
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "department",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
                                                 placeholder="Enter department"
                                             />
                                         </div>
@@ -1195,17 +1278,20 @@ const AddMember = () => {
                                                         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                                                 }}
                                                 name="memberContactEmail"
-                                                placeholder="Enter email"
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "memberContactEmail",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
+                                                placeholder="example@domain.com"
                                             />
                                         </div>
                                     </div>
                                     <div className="card-form-field">
                                         <div className="form-group">
                                             <label htmlFor="memberContactPhoneNumber">
-                                                Phone Number{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
+                                                Phone Number
                                             </label>
                                             <div className="phone-number-field">
                                                 <div className="select-field country-code">
@@ -1213,7 +1299,17 @@ const AddMember = () => {
                                                         control={control}
                                                         name="memberContactCountryCode"
                                                         rules={{
-                                                            required: true,
+                                                            validate: () => {
+                                                                if (
+                                                                    !watch(
+                                                                        "memberContactCountryCode"
+                                                                    ) &&
+                                                                    watch(
+                                                                        "memberContactPhoneNuber"
+                                                                    )
+                                                                )
+                                                                    return "Invalid input";
+                                                            },
                                                         }}
                                                         render={({
                                                             field,
@@ -1257,6 +1353,9 @@ const AddMember = () => {
                                                                     trigger(
                                                                         "memberContactCountryCode"
                                                                     );
+                                                                    trigger(
+                                                                        "memberContactPhoneNuber"
+                                                                    );
                                                                 }}
                                                                 // sx={{ width: 200 }}
                                                                 options={
@@ -1283,9 +1382,7 @@ const AddMember = () => {
                                                                         inputProps={{
                                                                             ...params.inputProps,
                                                                         }}
-                                                                        // onChange={() =>
-                                                                        // trigger("memberContactCountryCode")
-                                                                        // }
+                                                                        // onChange={() =>{trigger("memberContactCountryCode")}}
                                                                         // onSubmit={() =>
                                                                         //   setValue("memberContactCountryCode", "")
                                                                         // }
@@ -1295,7 +1392,7 @@ const AddMember = () => {
                                                                         helperText={
                                                                             error
                                                                                 ? memberHelper
-                                                                                      .countryCode[
+                                                                                      .memberContactCountryCode[
                                                                                       error
                                                                                           ?.type
                                                                                   ]
@@ -1310,17 +1407,33 @@ const AddMember = () => {
                                                 <Input
                                                     control={control}
                                                     name="memberContactPhoneNuber"
+                                                    myOnChange={(e) =>
+                                                        phoneNumberChangeHandler(
+                                                            e,
+                                                            "memberContactPhoneNuber",
+                                                            "memberContactCountryCode"
+                                                        )
+                                                    }
+                                                    onBlur={(e) =>
+                                                        setValue(
+                                                            "memberContactPhoneNuber",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
                                                     myHelper={memberHelper}
                                                     rules={{
                                                         maxLength: 15,
                                                         minLength: 3,
-                                                        required: true,
                                                         validate: (value) => {
-                                                            // if (
-                                                            //   watch("memberContactPhoneNuber") &&
-                                                            //   !watch("memberContactCountryCode")
-                                                            // )
-                                                            //   return "Invalid Input";
+                                                            if (
+                                                                !watch(
+                                                                    "memberContactPhoneNuber"
+                                                                ) &&
+                                                                watch(
+                                                                    "memberContactCountryCode"
+                                                                )
+                                                            )
+                                                                return "invalid input";
                                                             if (
                                                                 value &&
                                                                 !Number(value)
@@ -1328,7 +1441,7 @@ const AddMember = () => {
                                                                 return "Invalid input";
                                                         },
                                                     }}
-                                                    placeholder="Enter phone number"
+                                                    placeholder="1234567890"
                                                 />
                                             </div>
                                         </div>

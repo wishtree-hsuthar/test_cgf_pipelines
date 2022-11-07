@@ -14,16 +14,15 @@ import { useNavigate, useParams } from "react-router-dom";
 const schema = yup.object().shape({
     password: yup
         .string()
-        .required("Enter password")
-
+        .required("Enter the New Password")
         .matches(
             /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,15}$/,
             "Password must contain at least 6 characters, one uppercase, one number and one special case character"
-        )
-        .required("Password required"),
+        ),
+
     confirmPassword: yup
         .string()
-        .required("Enter confirm password")
+        .required("Enter the confirm password")
         .oneOf([yup.ref("password"), null], "Password does not match."),
 });
 const SetPassword = () => {
@@ -270,7 +269,7 @@ const SetPassword = () => {
                                                     }
                                                     // value={values.confirmPassword}
                                                     // onChange={handleChange('confirmPassword')}
-                                                    placeholder="Enter new password"
+                                                    placeholder="Enter confirm password"
                                                     className={`input-field ${
                                                         errors.confirmPassword &&
                                                         "input-error"

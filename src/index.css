@@ -356,6 +356,8 @@ textarea:disabled {
 .select-field fieldset {
     border-color: rgba(30, 30, 30, 0.5);
 }
+.select-field:hover fieldset{border-color: rgba(30, 30, 30, 0.8) !important;}
+.select-field:hover .Mui-disabled fieldset{border-color: rgba(30, 30, 30, 0.15) !important;}
 /* .select-field::before {
     font-size: 14px;
     content: "\f078";
@@ -849,7 +851,7 @@ input[type=checkbox]:checked:before {
 }
 .crud-toggle-list li:hover {
     background: rgba(247, 168, 35, 0.07);
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
     color: #d98c08;
 }
 .form-header-link {
@@ -1268,12 +1270,12 @@ input:-webkit-autofill:active {
 
 .autocomplete-option-txt {
     font-size: 14px;
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
 }
 .autocomplete-option-txt li:hover {
     color: #f7a823 !important;
     background: rgba(247, 168, 35, 0.07) !important;
-    font-family: "ProximaNova-Semibold" !important;
+    font-family: "ProximaNova-Semibold", serif, sans-serif !important;
 }
 
 .member-tab-left {
@@ -1282,7 +1284,7 @@ input:-webkit-autofill:active {
 }
 .no-records-blk .heading2 {
     color: #1e1e1e;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
 }
 
 /* Questionaries css */
@@ -1340,7 +1342,7 @@ input:-webkit-autofill:active {
 }
 .heading3 {
     color: #1e1e1e;
-    font-family: "ProximaNova-Bold";
+    font-family: "ProximaNova-Bold", serif, sans-serif;
     font-size: 18px;
     line-height: 18px;
 }
@@ -1406,7 +1408,7 @@ input:-webkit-autofill:active {
 .response-validator-list li {
     font-size: 14px;
     color: #1e1e1e;
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
     list-style-type: none;
     padding: 4px 15px;
     cursor: pointer;
@@ -1417,7 +1419,7 @@ input:-webkit-autofill:active {
 }
 .response-validator-list li.active {
     background: #ecf4fb;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
 }
 .response-validator-txt {
     margin-bottom: 6px;
@@ -1432,12 +1434,12 @@ input:-webkit-autofill:active {
     border-color: rgba(30, 30, 30, 0.8);
 }
 .que-ttl-blk .MuiInputBase-input {
-    font-family: "ProximaNova-Semibold" !important;
+    font-family: "ProximaNova-Semibold", serif, sans-serif !important;
 }
 .MuiMenuItem-gutters.MuiMenuItem-root:hover {
     background: rgba(247, 168, 35, 0.07) !important;
     color: #f7a823 !important;
-    font-family: "ProximaNova-Semibold" !important;
+    font-family: "ProximaNova-Semibold", serif, sans-serif !important;
 }
 .que-card-icon-sect {
     display: flex;
@@ -1456,7 +1458,7 @@ input:-webkit-autofill:active {
 }
 .required-toggle-btnblk p {
     font-size: 14px;
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
     color: #1e1e1e;
 }
 .required-toggle-btnblk
@@ -1517,7 +1519,7 @@ input:-webkit-autofill:active {
 }
 .subheading {
     color: #1e1e1e;
-    font-family: "ProximaNova-Bold";
+    font-family: "ProximaNova-Bold", serif, sans-serif;
     font-size: 14px;
     line-height: 14px;
     position: relative;
@@ -1551,7 +1553,7 @@ input:-webkit-autofill:active {
     border-bottom: 1px solid rgba(142, 142, 142, 0.15);
     padding: 20px 15px;
     border-right: 1px solid rgba(142, 142, 142, 0.15);
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
     vertical-align: top;
     z-index: 1;
     position: relative;
@@ -1569,7 +1571,7 @@ input:-webkit-autofill:active {
 .que-table-col-ttl {
     font-size: 14px;
     color: rgba(30, 30, 30, 1);
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
     outline: none;
     width: 195px;
 }
@@ -1596,7 +1598,7 @@ input:-webkit-autofill:active {
 .que-column-count-txt {
     font-size: 14px;
     color: #1e1e1e;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
 }
 .que-column-count .minus-iconblk {
     width: 12.8px;
@@ -1609,7 +1611,7 @@ input:-webkit-autofill:active {
     background: #fff;
     border-bottom: 1px solid rgba(142, 142, 142, 0.15);
     border-right: 1px solid rgba(142, 142, 142, 0.15);
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
     padding: 19px 16px 0;
     height: 84px;
 }
@@ -1636,7 +1638,7 @@ input:-webkit-autofill:active {
 .add-column-btnblk {
     color: #f7a823;
     font-size: 14px;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
     cursor: pointer;
 }
 .add-column-btnblk .addmore-icon {
@@ -1645,19 +1647,19 @@ input:-webkit-autofill:active {
 .add-row-btnblk {
     color: #f7a823;
     font-size: 14px;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
     cursor: pointer;
 }
 
 .que-column-ttlblk {
     align-items: flex-start;
-    font-family: "Proxima Nova Semibold";
+    font-family: "Proxima Nova Semibold", serif, sans-serif;
     font-size: 16px;
     line-height: 20px;
     text-transform: capitalize;
 }
 .que-column-ttlblk .que-table-col-ttl {
-    font-family: "Proxima Nova Semibold";
+    font-family: "Proxima Nova Semibold", serif, sans-serif;
     font-size: 16px;
     line-height: 20px;
     text-transform: capitalize;
@@ -1709,7 +1711,7 @@ input:-webkit-autofill:active {
     cursor: pointer;
     background: rgba(247, 168, 35, 0.07);
     color: #f7a823;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
 }
 .dropdown-header .icon {
     font-size: 13px;
@@ -1725,7 +1727,7 @@ input:-webkit-autofill:active {
 .create-custom-list-txt {
     font-size: 14px;
     color: #f7a823;
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
     text-decoration: underline;
     margin-bottom: 10px;
     cursor: pointer;
@@ -1739,7 +1741,7 @@ input:-webkit-autofill:active {
     font-size: 14px;
     line-height: 14px;
     color: rgba(30, 30, 30, 0.5);
-    font-family: "ProximaNova-Regular";
+    font-family: "ProximaNova-Regular", serif, sans-serif;
     margin: 0 0 5px;
 }
 /* .que-table{padding: 0 0 20px;} */
@@ -1750,7 +1752,7 @@ input:-webkit-autofill:active {
 .add-dropdown-btnblk {
     color: #f7a823;
     font-size: 14px;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
     cursor: pointer;
     text-align: right;
 }
@@ -1841,7 +1843,7 @@ input:-webkit-autofill:active {
     font-size: 24px;
     line-height: 24px;
     color: rgba(69, 150, 209, 1);
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
     text-align: left;
 }
 .assessment-type-txt {
@@ -1849,7 +1851,7 @@ input:-webkit-autofill:active {
     line-height: 14px;
     color: rgba(30, 30, 30, 1);
     margin-bottom: 5px;
-    font-family: "ProximaNova-Semibold";
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
     text-align: left;
     text-transform: capitalize;
 }
@@ -2086,7 +2088,7 @@ input:-webkit-autofill:active {
 .que-select-field-body {
     line-height: 14px !important;
     font-size: 14px !important;
-    font-family: "ProximaNova-Regular" !important;
+    font-family: "ProximaNova-Regular", serif, sans-serif !important;
     color: rgba(30, 30, 30, 0.5) !important;
     padding: 0 10px !important;
 }
@@ -2359,7 +2361,7 @@ input:-webkit-autofill:active {
     margin-left: 20px;
 }
 /* .select-field .MuiFormLabel-root{transform: none;transition: none !important;font-family: 'ProximaNova-Regular' , serif, sans-serif;top: -4px;font-size: 14px;color: #8E8E8E;}
-.select-field .MuiFormLabel-root.MuiInputLabel-shrink{top: 8px;left: 17px;}
+.select-field .MuiFormLabel-root.MuiInputLabel-shrink{top: 8px;left: 17px;} 
 .select-field .Mui-focused{transform: none !important;font-size: 14px;color: #1e1e1e !important;line-height: 14px;top: 0 !important;left: 0 !important;}
 .select-field label.Mui-focused{top: 11px !important;left: 17px !important;}
 .select-field fieldset legend {display: none;} */
@@ -2382,6 +2384,7 @@ input:-webkit-autofill:active {
     height: 100%;
     vertical-align: top;
 }
+.preview-que-wrap .que-table-render td{padding: 19px 16px;}
 .que-table-render th {
     position: sticky;
     z-index: 2;
@@ -2400,3 +2403,10 @@ input:-webkit-autofill:active {
 .required-toggle-btnblk .MuiSwitch-thumb{box-shadow: none !important;}
 .que-table-render td textarea{overflow: visible !important;}
 .MuiTooltip-tooltip{font-family: "ProximaNova-Regular", serif, sans-serif !important;}
+.country-code-auto-search .Mui-disabled.MuiInputBase-root {padding-right: 0 !important;}
+.country-code-auto-search .Mui-disabled input{height: 40px !important;}
+.country-code .Mui-disabled input{height: 40px !important;}
+.country-code .Mui-disabled{padding-right: 0 !important;}
+.replace-admin-table .radio-btn-field .MuiRadio-root{width: 35px;margin: 0 auto;}
+
+

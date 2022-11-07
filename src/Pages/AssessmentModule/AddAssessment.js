@@ -378,6 +378,9 @@ const AddAssessment = () => {
                                         <Input
                                             name={"title"}
                                             control={control}
+                                            onBlur={(e) =>
+                                                setValue("title", e.target.value?.trim())
+                                              }
                                             myHelper={helperTextForAssessment}
                                             placeholder={
                                                 "Enter assessment title"
@@ -539,6 +542,9 @@ const AddAssessment = () => {
                                                 <TextField
                                                     multiline
                                                     {...field}
+                                                    onBlur={(e) =>
+                                                        setValue("remarks", e.target.value?.trim())
+                                                      }
                                                     inputProps={{
                                                         maxLength: 250,
                                                     }}
@@ -565,7 +571,7 @@ const AddAssessment = () => {
                                 <div className="form-btn flex-between add-members-btn">
                                     <button
                                         type={"reset"}
-                                        onClick={() => navigate("/assessments")}
+                                        onClick={() => navigate("/assessment-list")}
                                         className="secondary-button mr-10"
                                     >
                                         Cancel

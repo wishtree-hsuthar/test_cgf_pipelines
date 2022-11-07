@@ -17,6 +17,7 @@ const TableLayoutCellComponent = ({
     cell,
     answer,
     handleAnswersChange,
+    handleAnswersBlur,
     error,
 }) => {
     const [showMore, setShowMore] = useState(false);
@@ -71,7 +72,7 @@ const TableLayoutCellComponent = ({
             {transformedColumns[cell.columnId] &&
                 transformedColumns[cell.columnId].columnType === "textbox" && (
                     <TextField
-                        className={`${
+                        className={`input-field ${
                             !answer && error && error?.length !== 0
                                 ? "input-error"
                                 : ""
@@ -81,6 +82,7 @@ const TableLayoutCellComponent = ({
                         onChange={(e) =>
                             handleAnswersChange(e.target.name, e.target.value)
                         }
+                        onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
                         helperText={
                             !answer && error && error?.length !== 0
                                 ? error

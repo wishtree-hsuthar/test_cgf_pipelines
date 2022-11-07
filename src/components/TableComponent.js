@@ -79,7 +79,7 @@ function EnhancedTableHead(props) {
                                 {headCell.label}
                             </TableSortLabel>
                         )}
-                        {headCell.id === "action" && headCell.label}
+                        {headCell.id === "action" && <span className="sorted-blk">{headCell.label}</span> }
                     </TableCell>
                 ))}
             </TableRow>
@@ -551,9 +551,9 @@ export default function TableComponent({
                             </div>
                         </div>
                         <div className="show-entries-txt">
-                            Showing {(page - 1) * rowsPerPage + 1} to{" "}
-                            {(page - 1) * rowsPerPage + records?.length} of{" "}
-                            {totalRecords} Entries
+                        showing {(page - 1) * rowsPerPage + 1}-
+                            {(page - 1) * rowsPerPage + records?.length} out of{" "}
+                            {totalRecords}
                         </div>
                     </div>
                     <div className="table-footer-right">

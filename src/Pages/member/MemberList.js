@@ -41,7 +41,7 @@ const tableHead = [
   {
     id: "totalOperationMembers",
     disablePadding: false,
-    label: "Operation Members",
+    label: "Operation Team Members",
   },
   {
     id: "createdBy",
@@ -119,8 +119,8 @@ const MemberList = () => {
   //code of tablecomponent
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [order, setOrder] = useState("desc");
-  const [orderBy, setOrderBy] = useState("");
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("initialRender");
   const [records, setRecords] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [selected, setSelected] = useState([]);
@@ -160,16 +160,16 @@ const MemberList = () => {
       if (typeof object["createdBy"] === "object") {
         object.createdBy = object["createdBy"]["name"];
       } else {
-        object.createdBy = "NA";
+        object.createdBy = "N/A";
       }
       if (object["representative"].length > 0) {
         object["isActive"] = object["representative"][0]["isActive"];
-        object.email = object["representative"][0]?.email ?? "NA";
-        object.name = object["representative"][0]?.name ?? "NA";
+        object.email = object["representative"][0]?.email ?? "N/A";
+        object.name = object["representative"][0]?.name ?? "N/A";
       } else {
         object["isActive"] = false;
-        object.email = "NA";
-        object.name = "NA";
+        object.email = "N/A";
+        object.name = "N/A";
       }
 
       object.totalOperationMembers = object["totalOperationMembers"]?.toString();
@@ -236,6 +236,7 @@ const MemberList = () => {
     console.log("filters", filters);
 
     const namesMappings = {
+      initialRender : "",
       companyName: "name",
       name: "representativeName",
       email: "representativeEmail",
@@ -246,6 +247,7 @@ const MemberList = () => {
       isActive: "status",
     };
 
+    // let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=&order=${order}`;
     let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${namesMappings[orderBy]}&order=${order}`;
     if (search?.length >= 3) url = url + `&search=${search}`;
     if (filters?.status !== "all" && filters?.status !== "none")
@@ -274,7 +276,7 @@ const MemberList = () => {
               error?.response?.data?.message &&
               typeof error.response.data.message === "string"
                 ? error.response.data.message
-                : "Something Went Wrong!",
+                : "Something went wrong!",
 
             messageType: "error",
           },

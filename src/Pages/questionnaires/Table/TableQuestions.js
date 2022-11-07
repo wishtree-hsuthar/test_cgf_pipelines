@@ -76,7 +76,14 @@ const TableQuestions = ({
     // const {name, value} = e.target;
     // console.log("Questionnaire:- ", questionnaire);
   };
-
+ const onColumnBlurHandler = (event, columnId) => {
+  const { name, value } = event.target;
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire.sections[sectionIndex].columnValues[columnId][name] =
+      value?.trim();
+    setQuestionnaire(tempQuestionnaire);
+    
+ }
   const onInputTypeChangeHandler = (event, columnId) => {
     const { name, value } = event.target;
     let tempQuestionnaire = { ...questionnaire };
@@ -166,11 +173,12 @@ const TableQuestions = ({
                         name="title"
                         helperText={
                           !column?.title && tableErr
-                            ? "This is required field"
+                            ? "Enter column title"
                             : " "
                         }
                         value={column?.title}
                         onChange={(e) => onColumnChangeHandler(e, columnId)}
+                        onBlur={(e) => onColumnBlurHandler(e, columnId)}
                         placeholder="Enter column title"
                       />
                     </div>

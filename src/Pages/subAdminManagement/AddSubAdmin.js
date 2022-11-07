@@ -20,7 +20,19 @@ import { useSelector } from "react-redux";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import Input from "../../components/Input";
 
+const helperTextForCGFAdmin = {
+    countryCode: {
+        validate: "Select country code",
+    },
+    phoneNumber: {
+        maxLength: "Max digits limit exceed",
+        minLength: "Number must contain atleast 3 digits",
+        validate: "Enter phone number",
+        // pattern: "Invalid format",
+    },
+};
 const AddSubAdminSchema = yup.object().shape({
     name: yup.string().required("Sub admin name required").trim(),
     email: yup
@@ -38,6 +50,7 @@ const AddSubAdmin = () => {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
         reset,
         control,
@@ -65,6 +78,13 @@ const AddSubAdmin = () => {
         descriptionMessage: "",
         messageType: "error",
     });
+
+    const phoneNumberChangeHandler = (e, name, code) => {
+        console.log("inside on Change");
+        setValue(name, e.target.value);
+        trigger(name);
+        trigger(code);
+    };
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
