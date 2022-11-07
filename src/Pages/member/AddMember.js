@@ -75,7 +75,7 @@ const AddMember = () => {
           error?.response?.data?.message &&
           typeof error.response.data.message === "string"
             ? error.response.data.message
-            : "Something Went Wrong!",
+            : "Something went wrong!",
         messageType: "error",
       },
       () => myRef.current()
@@ -350,7 +350,7 @@ const AddMember = () => {
           >
             <div className="card-wrapper">
               <div className="card-inner-wrap">
-                <h2 className="sub-heading1">Company Details</h2>
+                <h2 className="sub-heading1">Company Detail</h2>
                 <div className="card-blk flex-between">
                   <div className="card-form-field">
                     <div className="form-group">
@@ -475,7 +475,7 @@ const AddMember = () => {
                                   setValue("parentCompany", e.target.value)
                                 }
                                 onSubmit={() => setValue("parentCompany", "")}
-                                placeholder="Please select parent Company"
+                                placeholder="Enter parent Company"
                               />
                             )}
                           />
@@ -538,7 +538,7 @@ const AddMember = () => {
                 </div>
               </div>
               <div className="card-inner-wrap">
-                <h2 className="sub-heading1">Contact Details</h2>
+                <h2 className="sub-heading1">Contact Detail</h2>
                 <div className="flex-between card-blk">
                   <div className="card-form-field">
                     <div className="form-group">
@@ -551,7 +551,7 @@ const AddMember = () => {
                         onBlur={(e) =>
                             setValue("corporateEmail", e.target.value?.trim())
                           }
-                        placeholder="Enter email"
+                        placeholder="example@domain.com"
                         myHelper={memberHelper}
                         rules={{
                           required: "true",
@@ -634,7 +634,7 @@ const AddMember = () => {
                         <Input
                           control={control}
                           name="phoneNumber"
-                          placeholder="Enter phone number"
+                          placeholder="1234567890"
                           myHelper={memberHelper}
                           myOnChange={(e) => phoneNumberChangeHandler(e,"phoneNumber","countryCode")}
                           onBlur={(e) =>
@@ -663,7 +663,7 @@ const AddMember = () => {
                       <Input
                         control={control}
                         name="websiteUrl"
-                        placeholder="Enter website URL"
+                        placeholder="www.google.com"
                         onBlur={(e) =>
                             setValue("websiteUrl", e.target.value?.trim())
                           }
@@ -681,7 +681,7 @@ const AddMember = () => {
                 </div>
               </div>
               <div className="card-inner-wrap">
-                <h2 className="sub-heading1">Company Address Details</h2>
+                <h2 className="sub-heading1">Company Address Detail</h2>
                 <div className="flex-between card-blk">
                   <div className="card-form-field">
                     <div className="form-group">
@@ -723,7 +723,7 @@ const AddMember = () => {
                         isDisabled={!watch("country")}
                         control={control}
                         name="state"
-                        placeholder="Enter state"
+                        placeholder="Select state"
                         myHelper={memberHelper}
                         options={arrOfStateCountry}
                       />
@@ -794,7 +794,7 @@ const AddMember = () => {
                                   setValue("city", e.target.value)
                                 }
                                 onSubmit={() => setValue("city", "")}
-                                placeholder="Please select city"
+                                placeholder="Enter city"
                               />
                             )}
                           />
@@ -844,7 +844,7 @@ const AddMember = () => {
                 </div>
               </div>
               <div className="card-inner-wrap">
-                <h2 className="sub-heading1">CGF Office Details</h2>
+                <h2 className="sub-heading1">CGF Office Detail</h2>
                 <div className="flex-between card-blk">
                   <div className="card-form-field">
                     <div className="form-group">
@@ -855,7 +855,7 @@ const AddMember = () => {
                         control={control}
                         name="cgfOfficeRegion"
                         myOnChange={cgfOfficeRegionChangeHandler}
-                        placeholder="Select Region"
+                        placeholder="Select region"
                         myHelper={memberHelper}
                         rules={{ required: true }}
                         options={arrOfRegions}
@@ -902,7 +902,7 @@ const AddMember = () => {
                 </div>
               </div>
               <div className="card-inner-wrap">
-                <h2 className="sub-heading1">Member Contact Details</h2>
+                <h2 className="sub-heading1">Member Contact Detail</h2>
                 <div className="flex-between card-blk">
                   <div className="card-form-field">
                     <div className="form-group">
@@ -1000,7 +1000,7 @@ const AddMember = () => {
                         onBlur={(e) =>
                             setValue("memberContactEmail", e.target.value?.trim())
                           }
-                        placeholder="Enter email"
+                        placeholder="example@domain.com"
                       />
                     </div>
                   </div>
@@ -1094,7 +1094,7 @@ const AddMember = () => {
                                 return "Invalid input";
                             },
                           }}
-                          placeholder="Enter phone number"
+                          placeholder="1234567890"
                         />
                       </div>
                     </div>

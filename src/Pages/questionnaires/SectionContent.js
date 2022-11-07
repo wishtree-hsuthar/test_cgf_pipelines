@@ -61,7 +61,7 @@ const SectionContent = ({
           error?.response?.data?.message &&
           typeof error.response.data.message === "string"
             ? error.response.data.message
-            : "Something Went Wrong!",
+            : "Something went wrong!",
         messageType: "error",
       },
       () => myRef.current()

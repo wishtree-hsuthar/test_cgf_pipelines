@@ -63,7 +63,7 @@ const EditRole = () => {
     description: {
       required: "Enter the description",
       maxLength: "Max char limit exceed",
-      minLength: "Description must contain atlest 3 characters",
+      minLength: "minimum 3 characters required",
     },
   };
 
@@ -106,7 +106,7 @@ const EditRole = () => {
             error?.response?.data?.message &&
             typeof error.response.data.message === "string"
               ? error.response.data.message
-              : "Something Went Wrong!",
+              : "Something went wrong!",
           messageType: "error",
         },
         () => myRef.current()
@@ -165,7 +165,7 @@ const EditRole = () => {
             error?.response?.data?.message &&
             typeof error.response.data.message === "string"
               ? error.response.data.message
-              : "Something Went Wrong!",
+              : "Something went wrong!",
           messageType: "error",
         },
         () => myRef.current()

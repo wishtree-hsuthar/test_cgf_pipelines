@@ -18,7 +18,7 @@ const tableHead = [
     id: "name",
     // width: "30%",
     disablePadding: false,
-    label: "Role",
+    label: "Roles",
   },
   {
     id: "totalCgfAdmins",
@@ -28,7 +28,7 @@ const tableHead = [
   {
     id: "createdAt",
     disablePadding: false,
-    label: "Created At",
+    label: "Created On",
   },
   {
     id: "isActive",
@@ -168,7 +168,7 @@ const RolesList = () => {
               error?.response?.data?.message &&
               typeof error.response.data.message === "string"
                 ? error.response.data.message
-                : "Something Went Wrong!",
+                : "Something went wrong!",
 
             messageType: "error",
           },

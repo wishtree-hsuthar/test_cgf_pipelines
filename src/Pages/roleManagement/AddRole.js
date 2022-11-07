@@ -54,13 +54,13 @@ const AddRole = () => {
     roleName: {
       required: "Enter the role name",
       maxLength: "Max char limit exceed",
-      minLength: "Role must contain atleast 3 characters",
+      minLength: "minimum 3 characters required",
       pattern: "Invalid format",
     },
     description: {
       required: "Enter the description",
       maxLength: "Max char limit exceed",
-      minLength: "Description must contain atlest 3 characters",
+      minLength: "minimum 3 characters required",
     },
   };
 
@@ -134,7 +134,7 @@ const AddRole = () => {
             error?.response?.data?.message &&
             typeof error.response.data.message === "string"
               ? error.response.data.message
-              : "Something Went Wrong!",
+              : "Something went wrong!",
           messageType: "error",
         },
         () => myRef.current()
@@ -178,7 +178,7 @@ const AddRole = () => {
             error?.response?.data?.message &&
             typeof error.response.data.message === "string"
               ? error.response.data.message
-              : "Something Went Wrong!",
+              : "Something went wrong!",
           messageType: "error",
         },
         () => myRef.current()
@@ -203,7 +203,7 @@ const AddRole = () => {
             error?.response?.data?.message &&
             typeof error.response.data.message === "string"
               ? error.response.data.message
-              : "Something Went Wrong!",
+              : "Something went wrong!",
           messageType: "error",
         },
         () => myRef.current()
