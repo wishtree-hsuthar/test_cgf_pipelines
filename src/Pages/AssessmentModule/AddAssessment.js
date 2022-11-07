@@ -45,7 +45,7 @@ const helperTextForAssessment = {
     },
 };
 const AddAssessment = () => {
-    const [datevalue, setDateValue] = useState(null);
+    const [datevalue, setDateValue] = useState();
     const [
         memberCompaniesForAddAssessments,
         setMemberCompaniesForAddAssessments,
@@ -482,40 +482,42 @@ const AddAssessment = () => {
                                                         // inputFormat={
                                                         //     "MM/DD/YYYY"
                                                         // }
-                                                        // value={datevalue}
-                                                        // onChange={(value) => {
-                                                        //     setDateValue(value);
-                                                        //     console.log(
-                                                        //         "date",
-                                                        //         value &&
-                                                        //             new Date(
-                                                        //                 value
-                                                        //             ).toLocaleDateString()
-                                                        //     );
-                                                        //     setValue(
-                                                        //         "dueDate",
-                                                        //         value &&
-                                                        //             new Date(
-                                                        //                 value
-                                                        //             ).toISOString()
-                                                        //     );
-                                                        // }}
+                                                        value={datevalue}
+                                                        onChange={(event) => {
+                                                            setDateValue(event);
+                                                            console.log(
+                                                                "date" +
+                                                                    "  " +
+                                                                    event.toISOString()
+                                                            );
+                                                            setValue(
+                                                                "dueDate",
+
+                                                                event.toISOString()
+                                                            );
+                                                        }}
                                                         renderInput={(
                                                             params
                                                         ) => (
                                                             <TextField
                                                                 {...params}
+                                                                className={` input-field ${
+                                                                    error &&
+                                                                    "input-error"
+                                                                }`}
+                                                                error
                                                                 helperText={
                                                                     error
                                                                         ? helperTextForAssessment
                                                                               .dueDate[
-                                                                              "required"
+                                                                              error
+                                                                                  .type
                                                                           ]
                                                                         : " "
                                                                 }
                                                             />
                                                         )}
-                                                        {...field}
+                                                        // {...field}
                                                     />
                                                 </LocalizationProvider>
                                             )}

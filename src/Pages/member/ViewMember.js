@@ -1390,7 +1390,7 @@ const ViewMember = () => {
                                             className="primary-button add-button"
                                             onClick={() =>
                                                 navigate(
-                                                    "/users/members/add-member"
+                                                    "/users/operation-members/add-operation-member"
                                                 )
                                             }
                                         >
@@ -1407,7 +1407,7 @@ const ViewMember = () => {
                                                 type="text"
                                                 value={search}
                                                 name="search"
-                                                placeholder="Search member name, email and member company"
+                                                placeholder="Search"
                                                 onKeyDown={(e) =>
                                                     e.key === "Enter" &&
                                                     setMakeApiCall(true)

@@ -414,6 +414,9 @@ const AddAssessment = () => {
                                                         ) => (
                                                             <TextField
                                                                 {...params}
+                                                                helperText={
+                                                                    "help"
+                                                                }
                                                             />
                                                         )}
                                                     />

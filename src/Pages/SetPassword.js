@@ -16,13 +16,14 @@ const schema = yup.object().shape({
         .string()
         .required("Enter the New Password")
         .matches(
-            /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-            "Password must contain at least 8 characters, one uppercase, one number and one special case character"
-            ),
+            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,15}$/,
+            "Password must contain at least 6 characters, one uppercase, one number and one special case character"
+        ),
+
     confirmPassword: yup
         .string()
         .required("Enter the confirm password")
-        .oneOf([yup.ref("password"), null], "Password does not match"),
+        .oneOf([yup.ref("password"), null], "Password does not match."),
 });
 const SetPassword = () => {
     const {
@@ -194,6 +195,9 @@ const SetPassword = () => {
                                                         errors.password &&
                                                         "input-error"
                                                     }`}
+                                                    inputProps={{
+                                                        maxLength: 15,
+                                                    }}
                                                     endAdornment={
                                                         <InputAdornment position="end">
                                                             <IconButton
@@ -241,10 +245,11 @@ const SetPassword = () => {
                                                     }
                                                 />
                                                 <p className={`password-error`}>
-                                                    {errors?.password
-                                                        ? errors.password
-                                                              .message
-                                                        : <span>&nbsp;</span>}
+                                                    {errors?.password ? (
+                                                        errors.password.message
+                                                    ) : (
+                                                        <span>&nbsp;</span>
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>
@@ -269,6 +274,9 @@ const SetPassword = () => {
                                                         errors.confirmPassword &&
                                                         "input-error"
                                                     }`}
+                                                    inputProps={{
+                                                        maxLength: 15,
+                                                    }}
                                                     endAdornment={
                                                         <InputAdornment position="end">
                                                             <IconButton
@@ -318,10 +326,12 @@ const SetPassword = () => {
                                                     }
                                                 />
                                                 <p className={`password-error`}>
-                                                    {errors?.confirmPassword
-                                                        ? errors.confirmPassword
-                                                              .message
-                                                        : <span>&nbsp;</span>}
+                                                    {errors?.confirmPassword ? (
+                                                        errors.confirmPassword
+                                                            .message
+                                                    ) : (
+                                                        <span>&nbsp;</span>
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>

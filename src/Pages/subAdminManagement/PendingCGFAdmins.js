@@ -7,13 +7,13 @@ import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 const pendingTableColumnHead = [
     {
-        id: "subAdminName",
+        id: "name",
         // width: "30%",
         disablePadding: false,
         label: "CGF Admin Name",
     },
     {
-        id: "Email Address",
+        id: "email",
 
         disablePadding: false,
         label: "Email",
@@ -51,7 +51,7 @@ function PendingCGFAdmins({
 }) {
     const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
     const [withdrawInviteid, setWithdrawInviteid] = useState("");
-    const [withdrawInviteUser, setWithdrawInviteUser] = useState([])
+    const [withdrawInviteUser, setWithdrawInviteUser] = useState([]);
 
     // state to manage loader
     const [isLoading, setIsLoading] = useState(false);
@@ -154,10 +154,12 @@ function PendingCGFAdmins({
         console.log("id for delete", id);
         setOpenDeleteDialogBox(true);
         setWithdrawInviteid(id);
-        console.log("records: ",recordsForPendingTab)
-        const withdrawCgfAdmin = recordsForPendingTab.filter((user) => user?._id === id )
-        console.log("Withdraw user",withdrawCgfAdmin)
-        setWithdrawInviteUser([...withdrawCgfAdmin])
+        console.log("records: ", recordsForPendingTab);
+        const withdrawCgfAdmin = recordsForPendingTab.filter(
+            (user) => user?._id === id
+        );
+        console.log("Withdraw user", withdrawCgfAdmin);
+        setWithdrawInviteUser([...withdrawCgfAdmin]);
     };
 
     const withdrawInviteById = async () => {
@@ -269,8 +271,21 @@ function PendingCGFAdmins({
     return (
         <>
             <DialogBox
-                title={<p>Withdraw {withdrawInviteUser ? withdrawInviteUser[0]?.name : "CGF admin"}'s Invitation</p>}
-                info1={<p>On withdrawal, CGF admin will not be able to verify their account?</p>}
+                title={
+                    <p>
+                        Withdraw{" "}
+                        {withdrawInviteUser
+                            ? withdrawInviteUser[0]?.name
+                            : "CGF admin"}
+                        's Invitation
+                    </p>
+                }
+                info1={
+                    <p>
+                        On withdrawal, CGF admin will not be able to verify
+                        their account?
+                    </p>
+                }
                 info2={<p>Do you want to withdraw the invitation?</p>}
                 primaryButtonText={"Yes"}
                 secondaryButtonText={"No"}

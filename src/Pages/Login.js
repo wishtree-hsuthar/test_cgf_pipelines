@@ -169,7 +169,7 @@ const Login = (prop) => {
                                     >
                                         <div class="form-group">
                                             <label for="emailid">
-                                                Username or Email{" "}
+                                                Email Address{" "}
                                                 <span class="mandatory">*</span>
                                             </label>
                                             <TextField
@@ -178,7 +178,7 @@ const Login = (prop) => {
                                                     "input-error"
                                                 }`}
                                                 id="outlined-basic"
-                                                placeholder="Enter email id"
+                                                placeholder="Enter email address"
                                                 variant="outlined"
                                                 {...register("email")}
                                                 helperText={
@@ -249,7 +249,11 @@ const Login = (prop) => {
                                                     {...register("password")}
                                                 />
                                                 <p className={`password-error`}>
-                                                    {errors?.password ? errors.password?.message : <span>&nbsp;</span>}
+                                                    {errors?.password ? (
+                                                        errors.password?.message
+                                                    ) : (
+                                                        <span>&nbsp;</span>
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>

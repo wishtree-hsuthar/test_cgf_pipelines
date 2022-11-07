@@ -6,7 +6,7 @@ import DialogBox from "../../components/DialogBox";
 import { ADD_OPERATION_MEMBER, WITHDRAW_OPERATION_MEMBER } from "../../api/Url";
 const pendingOperationMemberTableColumnHeader = [
     {
-        id: "operationMember",
+        id: "name",
         // width: "30%",
         disablePadding: false,
         label: "Operation Member",
@@ -24,7 +24,7 @@ const pendingOperationMemberTableColumnHeader = [
         label: "Member Company",
     },
     {
-        id: "Company Type",
+        id: "companyType",
         // width: "30%",
         disablePadding: false,
         label: "Company Type",
@@ -95,7 +95,7 @@ function PendingOperationMembers({
 
     const pendingKeysOrder = [
         "_id",
-        "operationMember",
+        "name",
         "email",
         "memberCompany",
         "companyType",
@@ -130,7 +130,7 @@ function PendingOperationMembers({
             // object["role"] = object["data"]["subRole"][0].name;
             object["_id"] = object["_id"];
 
-            object["operationMember"] = object["data"].name;
+            object["name"] = object["data"].name;
             object["email"] = object["data"].email;
             // object["createdAt"] = object["createdAt"];
             object["memberCompany"] = object["memberData"]["companyName"];
