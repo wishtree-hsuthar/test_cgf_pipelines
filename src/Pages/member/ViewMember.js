@@ -88,7 +88,7 @@ const ViewMember = () => {
             id: "createdAt",
             disablePadding: false,
             // width: "5%",
-            label: "Created At",
+            label: "Onboarded on",
         },
         {
             id: "is Active",
@@ -841,7 +841,7 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             {/* <div className="select-field"> */}
                                             <label htmlFor="replacedMember">
-                                                Replaced Member{" "}
+                                                Replaced Member Company{" "}
                                                 <span className="mandatory">
                                                     *
                                                 </span>
@@ -1407,7 +1407,7 @@ const ViewMember = () => {
                                                 type="text"
                                                 value={search}
                                                 name="search"
-                                                placeholder="Search member name, email and member company"
+                                                placeholder="Search"
                                                 onKeyDown={(e) =>
                                                     e.key === "Enter" &&
                                                     setMakeApiCall(true)

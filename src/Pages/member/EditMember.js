@@ -162,7 +162,7 @@ const EditMember = () => {
       setToasterDetails(
         {
           titleMessage: "Success!",
-          descriptionMessage: "Member updated successfully!",
+          descriptionMessage: "Member details updated successfully!",
           messageType: "success",
         },
         () => myRef.current()
@@ -422,7 +422,7 @@ const EditMember = () => {
             ) : (
               <div className="card-wrapper">
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Company Details</h2>
+                  <h2 className="sub-heading1">Company Detail</h2>
                   <div className="card-blk flex-between">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -606,7 +606,7 @@ const EditMember = () => {
                   </div>
                 </div>
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Contact Details</h2>
+                  <h2 className="sub-heading1">Contact Detail</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -619,7 +619,7 @@ const EditMember = () => {
                           onBlur={(e) =>
                             setValue("corporateEmail", e.target.value?.trim())
                           }
-                          placeholder="Enter email"
+                          placeholder="example@domain.com"
                           myHelper={memberHelper}
                           rules={{
                             required: "true",
@@ -719,7 +719,7 @@ const EditMember = () => {
                             onBlur={(e) =>
                               setValue("phoneNumber", e.target.value?.trim())
                             }
-                            placeholder="Enter phone number"
+                            placeholder="1234567890"
                             myHelper={memberHelper}
                             rules={{
                               maxLength: 15,
@@ -747,7 +747,7 @@ const EditMember = () => {
                           onBlur={(e) =>
                             setValue("websiteUrl", e.target.value?.trim())
                           }
-                          placeholder="N/A"
+                          placeholder="www.google.com"
                           myHelper={memberHelper}
                           rules={{
                             maxLength: 50,
@@ -761,7 +761,7 @@ const EditMember = () => {
                   </div>
                 </div>
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Company Address Details</h2>
+                  <h2 className="sub-heading1">Company Address Detail</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -919,7 +919,7 @@ const EditMember = () => {
                   </div>
                 </div>
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">CGF Office Details</h2>
+                  <h2 className="sub-heading1">CGF Office Detail</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -983,7 +983,7 @@ const EditMember = () => {
                   </div>
                 </div>
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Member Contact Details</h2>
+                  <h2 className="sub-heading1">Member Contact Detail</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -1023,7 +1023,7 @@ const EditMember = () => {
                                   e.target.value?.trim()
                                 )
                               }
-                              placeholder="N/A"
+                              placeholder="Enter full name"
                             />
                           </div>
                         </div>
@@ -1192,7 +1192,7 @@ const EditMember = () => {
                                   return "Invalid input";
                               },
                             }}
-                            placeholder="N/A"
+                            placeholder="1234567890"
                           />
                         </div>
                       </div>
