@@ -336,16 +336,14 @@ const SubAdminList = () => {
     return (
         <div className="page-wrapper">
             <DialogBox
-                title={
-                    <p>Withdraw CGF Admin Invitation</p>
-                        
-                }
+                title={<p>Withdraw CGF Admin Invitation</p>}
                 info1={
-                    <p>On withdrawal, cgf admin will not be able to verify their account?</p>
+                    <p>
+                        On withdrawal, cgf admin will not be able to verify
+                        their account?
+                    </p>
                 }
-                info2={
-                    <p>Do you want to withdraw the invitation?</p>
-                }
+                info2={<p>Do you want to withdraw the invitation?</p>}
                 primaryButtonText={"Yes"}
                 secondaryButtonText={"No"}
                 onPrimaryModalButtonClickHandler={() => {
@@ -378,16 +376,20 @@ const SubAdminList = () => {
                                 </span>
                                 Download
                             </div>
-                            <div className="form-btn">
-                                <button
-                                    onClick={() =>
-                                        navigate("/sub-admins/add-sub-admin")
-                                    }
-                                    className="primary-button add-button"
-                                >
-                                    Add CGF Admin
-                                </button>
-                            </div>
+                            {value === 0 && (
+                                <div className="form-btn">
+                                    <button
+                                        onClick={() =>
+                                            navigate(
+                                                "/sub-admins/add-sub-admin"
+                                            )
+                                        }
+                                        className="primary-button add-button"
+                                    >
+                                        Add CGF Admin
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="member-filter-wrap flex-between">
@@ -421,7 +423,7 @@ const SubAdminList = () => {
                             <div className="searchbar">
                                 <input
                                     type="text"
-                                    placeholder="Search CGF admin name, email "
+                                    placeholder="Search"
                                     onChange={(e) => onSearchChangeHandler(e)}
                                     name="search"
                                 />

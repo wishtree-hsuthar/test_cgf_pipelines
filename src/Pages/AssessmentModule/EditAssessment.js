@@ -18,7 +18,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 const helperTextForAssessment = {
     title: {
         required: "Assessment title required",
@@ -138,12 +138,9 @@ function EditAssessment() {
         fetchAssessment();
         const fetchMemberCompaniesForAddAssesments = async () => {
             try {
-                const response = await privateAxios.get(
-                    MEMBER,
-                    {
-                        signal: controller.signal,
-                    }
-                );
+                const response = await privateAxios.get(MEMBER, {
+                    signal: controller.signal,
+                });
 
                 console.log(
                     "response from fetch member companies for add assessments",
@@ -164,12 +161,9 @@ function EditAssessment() {
 
         const fetchQuestionnaires = async () => {
             try {
-                const response = await privateAxios.get(
-                    ADD_QUESTIONNAIRE,
-                    {
-                        signal: controller.signal,
-                    }
-                );
+                const response = await privateAxios.get(ADD_QUESTIONNAIRE, {
+                    signal: controller.signal,
+                });
                 console.log("response from questionnaires api", response.data);
                 isMounted &&
                     setQuestionnares(response.data.map((data) => data.title));
@@ -456,7 +450,6 @@ function EditAssessment() {
                                             name="remarks"
                                             control={control}
                                             rules={{
-                                                required: true,
                                                 minLength: 3,
                                                 maxLength: 250,
                                             }}

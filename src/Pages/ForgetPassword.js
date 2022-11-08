@@ -54,7 +54,9 @@ const ForgetPassword = () => {
             if (response.status === 200) {
                 setMessageType("success");
                 setMessageTitle("Success");
-                setMessageDescription("Email sent successfully with the reset password link!");
+                setMessageDescription(
+                    "Email sent successfully with the reset password link!"
+                );
                 setTimeout(() => {
                     toasterRef.current();
                 }, 3000);
@@ -107,7 +109,7 @@ const ForgetPassword = () => {
                                     />
                                 </div>
                                 <h2 class="heading1 text-uppercase mb-40">
-                                    Forget password
+                                    Forgot password
                                 </h2>
                                 <p className="forget-password-message">
                                     Enter you registered email address and we'll{" "}
@@ -118,7 +120,7 @@ const ForgetPassword = () => {
                                     <form onSubmit={handleSubmit(submitEmail)}>
                                         <div class="form-group">
                                             <label for="emailid">
-                                            Email Address{" "}
+                                                Email Address{" "}
                                                 <span class="mandatory">*</span>
                                             </label>
                                             <TextField
