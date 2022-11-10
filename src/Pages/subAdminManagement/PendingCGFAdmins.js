@@ -28,7 +28,7 @@ const pendingTableColumnHead = [
         id: "createdAt",
 
         disablePadding: false,
-        label: "Onboarded on",
+        label: "Onboarded On",
     },
 
     {
@@ -61,7 +61,7 @@ function PendingCGFAdmins({
     //state to hold wheather to make api call or not
 
     const navigate = useNavigate();
-    //(onboarded sub-admins table) order in which records needs to show
+    //(onboarded users/cgf-admin/ table) order in which records needs to show
     const [pageForPendingTab, setPageForPendingTab] = React.useState(1);
     const [rowsPerPageForPendingTab, setRowsPerPageForPendingTab] =
         React.useState(10);

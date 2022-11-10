@@ -49,3 +49,6 @@ export const UPDATE_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const SUBMIT_ASSESSMENT_AS_DRAFT = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const ADD_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
+export const REASSIGN_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
+export const ACCEPT_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
+export const DECLINE_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;

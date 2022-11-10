@@ -9,6 +9,7 @@ import {
     RadioGroup,
     FormControlLabel,
     Radio,
+    Paper,
 } from "@mui/material";
 
 import "react-phone-number-input/style.css";
@@ -26,35 +27,43 @@ import {
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import Input from "../../components/Input";
+import Dropdown from "../../components/Dropdown";
 
-const editSubAdminSchema = yup.object().shape({
-    subAdminName: yup.string().required("Sub admin name required"),
-    email: yup
-        .string()
-        .email("Enter valid email address")
-        .required("Email address requried"),
-    role: yup.string().required("Role required"),
-    phoneNumber: yup
-        .number()
-        .typeError("Enter valid phone number")
-        .required("Enter phone number"),
-    countryCode: yup.string(),
-});
+const helperTextForCGFAdmin = {
+    countryCode: {
+        validate: "Select the country code",
+    },
+    phoneNumber: {
+        maxLength: "Max digits limit exceed",
+        minLength: "Number must contain atleast 3 digits",
+        validate: "Enter the phone number",
+        pattern: "Invalid format",
+    },
+    name: {
+        required: "Enter the CGF admin name",
+        maxLength: "Max char limit exceed",
+        minLength: "Name must contain atleast 3 characters",
+        pattern: "Invalid format",
+    },
+    email: {
+        required: "Enter the email",
+        pattern: "Invalid format",
+    },
+    subRoleId: {
+        required: "Select the role",
+    },
+};
 
 const EditSubAdmin = () => {
     const navigate = useNavigate();
     const params = useParams();
     const toasterRef = useRef();
-    const [values, setValues] = useState({
-        subAdminName: "madhav",
-        email: "madhav@yopmail.com",
-        role: "manager",
-        phoneNumber: "+917350378900",
-    });
-    const [value, setValue] = useState({
-        name: "India",
-        countryCode: "+91",
-    });
+
+    // const [value, setValue] = useState({
+    //     name: "India",
+    //     countryCode: "+91",
+    // });
     const [countries, setCountries] = useState([]);
     const [roles, setRoles] = useState([]);
     const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -70,9 +79,12 @@ const EditSubAdmin = () => {
         control,
         formState: { errors },
         reset,
+        watch,
+        setValue,
+        trigger,
     } = useForm({
         defaultValues: {
-            subAdminName: "",
+            name: "",
             email: "",
             subRoleId: "",
             phoneNumber: "",
@@ -83,8 +95,15 @@ const EditSubAdmin = () => {
             status: "",
             role: "",
         },
-        resolver: yupResolver(editSubAdminSchema),
+        // resolver: yupResolver(editSubAdminSchema),
     });
+
+    const phoneNumberChangeHandler = (e, name, code) => {
+        console.log("inside on Change");
+        setValue(name, e.target.value);
+        trigger(name);
+        trigger(code);
+    };
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -94,7 +113,14 @@ const EditSubAdmin = () => {
                     signal: controller.signal,
                 });
                 console.log("response", response);
-                isMounted && setCountries(response.data);
+                if (isMounted) {
+                    let tempCountryCode = response?.data.map(
+                        (country) => country.countryCode
+                    );
+                    let tempCountryCodeSet = new Set(tempCountryCode);
+                    setCountries([...tempCountryCodeSet]);
+                }
+                // isMounted && setCountries(response.data);
             } catch (error) {
                 console.log(
                     "error from countries api of edit sub-admin",
@@ -127,12 +153,12 @@ const EditSubAdmin = () => {
                 isMounted && setFetchSubAdminDetailsForEdit(response.data);
                 console.log("role from edit", response.data.subRoleId.name);
                 reset({
-                    subAdminName: response.data.name,
+                    name: response.data.name,
                     email: response.data.email,
                     countryCode: response.data.countryCode,
                     phoneNumber: response.data.phoneNumber,
                     status: response.data.isActive ? "active" : "inactive",
-                    role: response?.data?.subRoleId._id,
+                    subRoleId: response?.data?.subRoleId._id,
                 });
             } catch (error) {
                 console.log("error from sub admin view page fetch api", error);
@@ -144,7 +170,7 @@ const EditSubAdmin = () => {
                     },
                     () => toasterRef.current()
                 );
-                navigate("/sub-admins");
+                navigate("/users/cgf-admin/");
             }
         };
         fetchSubAdmin();
@@ -188,7 +214,7 @@ const EditSubAdmin = () => {
             const response = await privateAxios.put(
                 UPDATE_SUB_ADMIN + params.id,
                 {
-                    name: data.subAdminName,
+                    name: data.name,
                     subRoleId: data.role,
                     phoneNumber: parseInt(data.phoneNumber),
                     countryCode: data.countryCode,
@@ -200,13 +226,14 @@ const EditSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage: response?.data?.message,
+                        descriptionMessage:
+                            "CGF admin details updated successfully!",
                         messageType: "success",
                     },
                     () => toasterRef.current()
                 );
                 setTimeout(() => {
-                    navigate(`/sub-admins`);
+                    navigate(`/users/cgf-admin/`);
                 }, 2000);
             }
         } catch (error) {
@@ -228,8 +255,8 @@ const EditSubAdmin = () => {
     };
 
     const handleCancel = () => {
-        // navigate("/sub-admins/view-sub-admin/" + params.id);
-        navigate("/sub-admins");
+        // navigate("/users/cgf-admin/view-sub-admin/" + params.id);
+        navigate("/users/cgf-admin/");
     };
     return (
         <div className="page-wrapper">
@@ -243,11 +270,11 @@ const EditSubAdmin = () => {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/sub-admins">CGF Admin</Link>
+                            <Link to="/users/cgf-admin">CGF Admins</Link>
                         </li>
                         <li>
                             <Link
-                                to={`/sub-admins/view-sub-admin/${params.id}`}
+                                to={`/users/cgf-admin/view-sub-admin/${params.id}`}
                             >
                                 View CGF Admin
                             </Link>
@@ -276,7 +303,7 @@ const EditSubAdmin = () => {
                                             CGF Admin Name{" "}
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <TextField
+                                        {/* <TextField
                                             id="outlined-basic"
                                             placeholder="Enter sub admin name"
                                             variant="outlined"
@@ -294,6 +321,24 @@ const EditSubAdmin = () => {
                                                           ?.message
                                                     : " "
                                             }
+                                        /> */}
+                                        <Input
+                                            name={"name"}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "name",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
+                                            control={control}
+                                            placeholder={"Enter full name"}
+                                            myHelper={helperTextForCGFAdmin}
+                                            rules={{
+                                                required: true,
+                                                maxLength: 50,
+                                                pattern:
+                                                    /^[A-Za-z]+[A-Za-z ]*$/,
+                                            }}
                                         />
                                         {/* <p className={`input-error-msg`}>{errors.subAdminName?.message}</p> */}
                                     </div>
@@ -304,7 +349,7 @@ const EditSubAdmin = () => {
                                             Email{" "}
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <TextField
+                                        {/* <TextField
                                             className={`input-field ${
                                                 errors.email && "input-error"
                                             }`}
@@ -318,6 +363,25 @@ const EditSubAdmin = () => {
                                                     ? errors.email?.message
                                                     : " "
                                             }
+                                        /> */}
+                                        <Input
+                                            name={"email"}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "email",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
+                                            isDisabled
+                                            control={control}
+                                            placeholder={"Enter email address"}
+                                            myHelper={helperTextForCGFAdmin}
+                                            rules={{
+                                                required: true,
+                                                maxLength: 50,
+                                                pattern:
+                                                    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                                            }}
                                         />
                                         {/* <p className={`input-error-msg`}>{errors.email?.message}</p> */}
                                     </div>
@@ -329,80 +393,177 @@ const EditSubAdmin = () => {
                                         </label>
                                         <div className="phone-number-field">
                                             <div className="select-field country-code">
-                                                <Autocomplete
-                                                    popupIcon={
-                                                        <KeyboardArrowDownRoundedIcon />
-                                                    }
-                                                    options={countries}
-                                                    // autoHighlight
-                                                    autoComplete={false}
-                                                    value={value}
-                                                    getOptionLabel={(country) =>
-                                                        country["countryCode"]
-                                                            ? country[
-                                                                  "countryCode"
-                                                              ]
-                                                            : country
-                                                    }
-                                                    renderOption={(
-                                                        props,
-                                                        option
-                                                    ) => (
-                                                        <Box
-                                                            component="li"
-                                                            sx={{
-                                                                "& > img": {
-                                                                    mr: 2,
-                                                                    flexShrink: 0,
-                                                                },
+                                                <Controller
+                                                    control={control}
+                                                    name="countryCode"
+                                                    rules={{
+                                                        validate: () => {
+                                                            if (
+                                                                !watch(
+                                                                    "countryCode"
+                                                                ) &&
+                                                                watch(
+                                                                    "phoneNumber"
+                                                                )
+                                                            )
+                                                                return "Invalid input";
+                                                        },
+                                                    }}
+                                                    render={({
+                                                        field,
+                                                        fieldState: { error },
+                                                    }) => (
+                                                        <Autocomplete
+                                                            className={`${
+                                                                error &&
+                                                                "autocomplete-error"
+                                                            }`}
+                                                            PaperComponent={({
+                                                                children,
+                                                            }) => (
+                                                                <Paper className="autocomplete-option-txt">
+                                                                    {children}
+                                                                </Paper>
+                                                            )}
+                                                            popupIcon={
+                                                                <KeyboardArrowDownRoundedIcon />
+                                                            }
+                                                            {...field}
+                                                            onChange={(
+                                                                event,
+                                                                newValue
+                                                            ) => {
+                                                                console.log(
+                                                                    "inside autocomplete onchange"
+                                                                );
+                                                                console.log(
+                                                                    "new Value ",
+                                                                    newValue
+                                                                );
+                                                                newValue &&
+                                                                typeof newValue ===
+                                                                    "object"
+                                                                    ? setValue(
+                                                                          "countryCode",
+                                                                          newValue.name
+                                                                      )
+                                                                    : setValue(
+                                                                          "countryCode",
+                                                                          newValue
+                                                                      );
+                                                                trigger(
+                                                                    "countryCode"
+                                                                );
+                                                                trigger(
+                                                                    "phoneNumber"
+                                                                );
                                                             }}
-                                                            {...props}
-                                                        >
-                                                            {option.name + " "}
-                                                            {option.countryCode}
-                                                        </Box>
-                                                    )}
-                                                    onChange={(e, v) =>
-                                                        setValue(v)
-                                                    }
-                                                    // onSelect={(e, v) => setValue(v)}
-                                                    renderInput={(params) => (
-                                                        <TextField
-                                                            {...params}
-                                                            inputProps={{
-                                                                ...params.inputProps,
-                                                                autoComplete:
-                                                                    "", // disable autocomplete and autofill
-                                                            }}
-                                                            // value={value.name}
-                                                            // onChange={(e, v) =>
-                                                            //     setValue(v)
-                                                            // }
-                                                            // onSelect={(e) =>
-                                                            //     setValue(e.target.value)
-                                                            // }
-                                                            {...register(
-                                                                "countryCode"
+                                                            options={
+                                                                countries
+                                                                    ? countries
+                                                                    : []
+                                                            }
+                                                            autoHighlight
+                                                            // placeholder="Select country code"
+                                                            getOptionLabel={(
+                                                                country
+                                                            ) => country}
+                                                            renderOption={(
+                                                                props,
+                                                                option
+                                                            ) => (
+                                                                <li {...props}>
+                                                                    {option}
+                                                                </li>
+                                                            )}
+                                                            renderInput={(
+                                                                params
+                                                            ) => (
+                                                                <TextField
+                                                                    // className={`input-field ${
+                                                                    //   error && "input-error"
+                                                                    // }`}
+                                                                    {...params}
+                                                                    inputProps={{
+                                                                        ...params.inputProps,
+                                                                    }}
+                                                                    onChange={() =>
+                                                                        trigger(
+                                                                            "countryCode"
+                                                                        )
+                                                                    }
+                                                                    // onSubmit={() => setValue("countryCode", "")}
+                                                                    placeholder={
+                                                                        "+91"
+                                                                    }
+                                                                    helperText={
+                                                                        error
+                                                                            ? helperTextForCGFAdmin
+                                                                                  .countryCode[
+                                                                                  error
+                                                                                      ?.type
+                                                                              ]
+                                                                            : " "
+                                                                    }
+                                                                />
                                                             )}
                                                         />
                                                     )}
                                                 />
                                             </div>
-
-                                            <TextField
-                                                className={`input-field ${
-                                                    errors.email &&
-                                                    "input-error"
-                                                }`}
-                                                id="outlined-basic"
-                                                placeholder="Enter phone number"
-                                                variant="outlined"
-                                                {...register("phoneNumber")}
-                                                helperText={
-                                                    errors.phoneNumber?.message
+                                            <Input
+                                                name={"phoneNumber"}
+                                                myOnChange={(e) =>
+                                                    phoneNumberChangeHandler(
+                                                        e,
+                                                        "phoneNumber",
+                                                        "countryCode"
+                                                    )
                                                 }
-                                                inputProps={{
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "phoneNumber",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
+                                                control={control}
+                                                myHelper={helperTextForCGFAdmin}
+                                                placeholder={
+                                                    "Enter phone number"
+                                                }
+                                                rules={{
                                                     maxLength: 15,
+                                                    minLength: 3,
+                                                    validate: (value) => {
+                                                        if (
+                                                            !watch(
+                                                                "phoneNumber"
+                                                            ) &&
+                                                            watch("countryCode")
+                                                        )
+                                                            return "invalid input";
+                                                        if (
+                                                            value &&
+                                                            !Number(value)
+                                                        )
+                                                            return "Invalid input";
+                                                    },
+                                                    // validate: (value) => {
+                                                    //     if (
+                                                    //         watch(
+                                                    //             "phoneNumber"
+                                                    //         ) &&
+                                                    //         !watch(
+                                                    //             "countryCode"
+                                                    //         )
+                                                    //     )
+                                                    //         return "Enter Country code";
+                                                    // else if (
+                                                    //     value &&
+                                                    //     !Number(value)
+                                                    // )
+                                                    //     return "Please enter valid phone number";
+                                                    // },
                                                 }}
                                             />
                                         </div>
@@ -411,40 +572,21 @@ const EditSubAdmin = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label for="role">
-                                            Select role{" "}
+                                            Role{" "}
                                             <span className="mandatory">*</span>
                                         </label>
 
                                         <div className="select-field">
-                                            <Controller
-                                                name="role"
+                                            <Dropdown
+                                                name="subRoleId"
                                                 control={control}
-                                                render={({ field }) => (
-                                                    <Select
-                                                        IconComponent={(
-                                                            props
-                                                        ) => (
-                                                            <KeyboardArrowDownRoundedIcon
-                                                                {...props}
-                                                            />
-                                                        )}
-                                                        {...field}
-                                                        disabled
-                                                        className={`input-field ${
-                                                            errors.role &&
-                                                            "input-error"
-                                                        }`}
-                                                    >
-                                                        {roles.map((role) => (
-                                                            <MenuItem
-                                                                key={role?._id}
-                                                                value={role._id}
-                                                            >
-                                                                {role.name}
-                                                            </MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                )}
+                                                options={roles}
+                                                rules={{
+                                                    required: true,
+                                                }}
+                                                isDisabled
+                                                myHelper={helperTextForCGFAdmin}
+                                                placeholder={"Select role"}
                                             />
 
                                             <p className={`input-error-msg`}>

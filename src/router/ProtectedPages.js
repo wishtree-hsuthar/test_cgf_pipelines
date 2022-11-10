@@ -25,13 +25,13 @@ import AddQuestionnaires from "../Pages/questionnaires/AddQuestionnaires";
 import QuestionnairesList from "../Pages/questionnaires/QuestionnairesList";
 import AddNewQuestionnaire from "../Pages/questionnaires/AddNewQuestionnaire";
 // import PreviewQuestionnaire from "../Pages/PreviewQuestionnaire";
-import PreviewQuestionnaire from "../Pages/questionnaires/Preview/PreviewQuestionnaire"
+import PreviewQuestionnaire from "../Pages/questionnaires/Preview/PreviewQuestionnaire";
 // import PreviewDemo from "../Pages/PreviewDemo";
 import PreviewDemo from "../Pages/questionnaires/Preview/PreviewDemo";
 import Preview from "../Pages/questionnaires/Preview";
 import AddAssessment from "../Pages/AssessmentModule/AddAssessment";
-import AssessmentList from "../Pages/AssessmentModule/AssessmentList"
-import EditAssessment from "../Pages/AssessmentModule/EditAssessment"
+import AssessmentList from "../Pages/AssessmentModule/AssessmentList";
+import EditAssessment from "../Pages/AssessmentModule/EditAssessment";
 import AssignAssessmentToOperationMember from "../Pages/AssessmentModule/AssignAssessmentToOperationMember";
 import FillAssessment from "../Pages/AssessmentModule/FillAssessment";
 // import Layout from "../Pages/Layout";
@@ -42,7 +42,7 @@ const ProtectedPages = () => {
             <Route path="/" element={<Layout />}>
                 <Route path="/home" element={<Dashboard />} />
                 <Route
-                    path="/sub-admins"
+                    path="/users/cgf-admin"
                     element={
                         // <RequireAuth allowedRoles={["Super Admin", "Sub Admin"]}>
                         <SubAdminList />
@@ -50,7 +50,7 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
-                    path="/sub-admins/add-sub-admin"
+                    path="/users/cgf-admin/add-sub-admin"
                     element={
                         // <RequireAuth allowedRoles={["Super Admin", "Sub Admin"]}>
                         <AddSubAdmin />
@@ -58,15 +58,15 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
-                    path="/sub-admins/view-sub-admin/:id"
+                    path="/users/cgf-admin/view-sub-admin/:id"
                     element={<ViewSubAdmin />}
                 />
                 <Route
-                    path="/sub-admins/edit-sub-admin/:id"
+                    path="/users/cgf-admin/edit-sub-admin/:id"
                     element={<EditSubAdmin />}
                 />
                 <Route
-                    path="/sub-admins/replace-sub-admin/:id"
+                    path="/users/cgf-admin/replace-sub-admin/:id"
                     element={<ReplaceSubAdmin />}
                 />
 

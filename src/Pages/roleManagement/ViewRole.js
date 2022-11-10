@@ -178,7 +178,7 @@ const ViewRole = () => {
     };
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
-        return navigate(`/sub-admins/view-sub-admin/${id}`);
+        return navigate(`/users/cgf-admin/view-sub-admin/${id}`);
     };
     const createPrevileges = (tempPrivileges) => {
         console.log("temp data", tempPrivileges);

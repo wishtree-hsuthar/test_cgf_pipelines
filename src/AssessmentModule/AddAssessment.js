@@ -62,6 +62,8 @@ const AddAssessment = () => {
         watch,
         reset,
         setValue,
+        trigger,
+        clearErrors,
     } = useForm({
         defaultValues: {
             title: "",
@@ -158,7 +160,11 @@ const AddAssessment = () => {
 
     const handleChangeForMemberCompany = (e) => {
         setValue("assignedMember", e.target.value);
+        trigger("assignedMember");
+        trigger("assignedOperationMember");
+
         console.log("assignedMember", e.target.value);
+
         fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
             e.target.value
         );
@@ -172,6 +178,9 @@ const AddAssessment = () => {
         console.log("filtered questionnaire", filterQuestionnaireById);
         setValue("questionnaireId", filterQuestionnaireById[0]._id);
         setValue("assessmentType", e.target.value);
+        trigger("assessmentType");
+
+        // watch("assessmentType");
     };
     const submitAssessments = async (data) => {
         console.log("data from on submit", data);
@@ -310,29 +319,29 @@ const AddAssessment = () => {
                                         </label>
                                         <Dropdown
                                             control={control}
+                                            myOnChange={
+                                                handleChangeForAssessmentModule
+                                            }
                                             name="assessmentType"
                                             placeholder={"Select assessment "}
                                             myHelper={helperTextForAssessment}
                                             rules={{ required: true }}
                                             options={questionnares}
-                                            myOnChange={
-                                                handleChangeForAssessmentModule
-                                            }
                                         />
                                     </div>
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Member
+                                            Member Company
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
                                             control={control}
-                                            name={"assignedMember"}
                                             myOnChange={
                                                 handleChangeForMemberCompany
                                             }
+                                            name={"assignedMember"}
                                             placeholder={"Assign member"}
                                             myHelper={helperTextForAssessment}
                                             rules={{ required: true }}

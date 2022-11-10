@@ -27,7 +27,7 @@ const onBoardedTableColumnHead = [
         id: "createdAt",
 
         disablePadding: false,
-        label: "Onboarded on",
+        label: "Onboarded On",
     },
     {
         id: "status",
