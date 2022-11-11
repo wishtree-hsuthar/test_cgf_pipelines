@@ -39,6 +39,7 @@ export const DELETE_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-membe
 export const GET_OPERATION_MEMBER_BY_ID = `${REACT_APP_API_ENDPOINT}operation-member/`;
 export const UPDATE_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/`;
 export const FETCH_REPORTING_MANAGER = `${REACT_APP_API_ENDPOINT}operation-member/member/`;
+export const REPLACE_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}positions/mappings/`;
 
 // add questionnaire
 export const ADD_QUESTIONNAIRE = `${REACT_APP_API_ENDPOINT}questionnaires`;

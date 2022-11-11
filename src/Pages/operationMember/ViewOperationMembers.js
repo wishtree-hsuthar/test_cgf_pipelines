@@ -314,7 +314,9 @@ const ViewOperationMembers = () => {
                 onPrimaryModalButtonClickHandler={handleDeleteOperationMember}
                 onSecondaryModalButtonClickHandler={() => {
                     setOpenDeleteDialog(false);
-                    navigate("/users/cgf-admin/replace-sub-admin");
+                    navigate(
+                        `/users/operation-member/replace-operation-member/${params.id}`
+                    );
                 }}
                 primaryButtonText={"Delete anyway"}
                 secondaryButtonText={"Replace"}

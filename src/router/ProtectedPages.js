@@ -34,6 +34,7 @@ import AssessmentList from "../Pages/AssessmentModule/AssessmentList";
 import EditAssessment from "../Pages/AssessmentModule/EditAssessment";
 import AssignAssessmentToOperationMember from "../Pages/AssessmentModule/AssignAssessmentToOperationMember";
 import FillAssessment from "../Pages/AssessmentModule/FillAssessment";
+import ReplaceOperationMember from "../Pages/operationMember/ReplaceOperationMember";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -164,6 +165,10 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
+                    path="/users/operation-member/replace-operation-member/:id"
+                    element={<ReplaceOperationMember />}
+                />
+                <Route
                     path="/questionnaires"
                     element={<QuestionnairesList />}
                 />
@@ -178,12 +183,27 @@ const ProtectedPages = () => {
                 />
                 <Route
                     path="/assessments/add-assessment"
-                    element={<AddAssessment />}
+                    element={
+                        <RequireAuth page={"add"} moduleName={"Assessment"}>
+                            <AddAssessment />
+                        </RequireAuth>
+                    }
                 />
-                <Route path="/assessment-list" element={<AssessmentList />} />
+                <Route
+                    path="/assessment-list"
+                    element={
+                        <RequireAuth page={"list"} moduleName={"Assessment"}>
+                            <AssessmentList />
+                        </RequireAuth>
+                    }
+                />
                 <Route
                     path="/assessments/edit-assessment/:id"
-                    element={<EditAssessment />}
+                    element={
+                        <RequireAuth page={"edit"} moduleName={"Assessment"}>
+                            <EditAssessment />
+                        </RequireAuth>
+                    }
                 />
                 <Route
                     path="/assessment-list/assign-assessment/:id"

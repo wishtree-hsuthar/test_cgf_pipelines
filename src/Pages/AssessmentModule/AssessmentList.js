@@ -28,7 +28,7 @@ const tableHead = [
         id: "assignedMember.name",
         width: "30%",
         disablePadding: false,
-        label: "Assigned member",
+        label: "Assigned Member",
     },
     {
         id: "assignedOperationMember.name",
@@ -236,10 +236,10 @@ const AssessmentList = () => {
             ? []
             : Object.values(privilege?.privileges);
     // let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
-    let moduleAccesForMember = privilegeArray
-        .filter((data) => data?.moduleId?.name === "Members")
+    let moduleAccesForAssessment = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Assessment")
         .map((data) => ({
-            member: {
+            assessment: {
                 list: data?.list,
                 view: data?.view,
                 edit: data?.edit,
@@ -278,16 +278,19 @@ const AssessmentList = () => {
                                         </button>
                                     </div>
                                 </div>
-
-                                <div className="form-btn ml-20">
-                                    <button
-                                        type="submit"
-                                        className="primary-button add-button"
-                                        onClick={addAssessment}
-                                    >
-                                        Add Assessment
-                                    </button>
-                                </div>
+                                {(SUPER_ADMIN ||
+                                    moduleAccesForAssessment[0]?.assessment
+                                        ?.add) && (
+                                    <div className="form-btn ml-20">
+                                        <button
+                                            type="submit"
+                                            className="primary-button add-button"
+                                            onClick={addAssessment}
+                                        >
+                                            Add Assessment
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         {/* <div className="member-filter-sect">
@@ -321,6 +324,9 @@ const AssessmentList = () => {
                                         icons={
                                             SUPER_ADMIN
                                                 ? ["visibility", "edit"]
+                                                : moduleAccesForAssessment[0]
+                                                      ?.assessment?.edit
+                                                ? ["visibility", "edit"]
                                                 : ["fill", "send"]
                                         }
                                         onClickVisibilityIconHandler1={
@@ -342,7 +348,8 @@ const AssessmentList = () => {
                                         // onRowClick={
                                         //     SUPER_ADMIN
                                         //         ? true
-                                        //         : moduleAccesForMember[0]?.member?.view
+                                        //         : moduleAccesForAssessment[0]
+                                        //               ?.assessment?.view
                                         // }
                                         // isQuestionnare={true}
                                     />
