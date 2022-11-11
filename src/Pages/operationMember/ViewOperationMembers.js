@@ -294,17 +294,14 @@ const ViewOperationMembers = () => {
             />
             <DialogBox
                 title={
-                    <p>
-                        Delete Operation Member{" "}
-                        {fetchOperationMemberDetaills.name}
-                    </p>
+                    <p>Delete CGF Admin {fetchOperationMemberDetaills.name}</p>
                 }
                 info1={
                     <p>
-                        We recommend you to replace this operation member with
-                        the new one because deleting all the details which
-                        operation member has added will get deleted and this
-                        will be an irreversible action
+                        We recommend you to replace this sub admin with the new
+                        one because deleting all the details which sub admin has
+                        added will get deleted and this will be an irreversible
+                        action
                     </p>
                 }
                 info2={
@@ -317,7 +314,9 @@ const ViewOperationMembers = () => {
                 onPrimaryModalButtonClickHandler={handleDeleteOperationMember}
                 onSecondaryModalButtonClickHandler={() => {
                     setOpenDeleteDialog(false);
-                    navigate("/sub-admins/replace-sub-admin");
+                    navigate(
+                        `/users/operation-member/replace-operation-member/${params.id}`
+                    );
                 }}
                 primaryButtonText={"Delete anyway"}
                 secondaryButtonText={"Replace"}

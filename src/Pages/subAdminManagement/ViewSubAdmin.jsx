@@ -258,7 +258,7 @@ const ViewSubAdmin = () => {
                 onPrimaryModalButtonClickHandler={handleDeleteSubAdmin}
                 onSecondaryModalButtonClickHandler={() => {
                     setOpenDeleteDialog(false);
-                    navigate("/sub-admins/replace-sub-admin");
+                    navigate(`/sub-admins/replace-sub-admin/${params.id}`);
                 }}
                 primaryButtonText={"Delete anyway"}
                 secondaryButtonText={"Replace"}

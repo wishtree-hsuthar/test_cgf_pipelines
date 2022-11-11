@@ -34,6 +34,7 @@ import AssessmentList from "../Pages/AssessmentModule/AssessmentList";
 import EditAssessment from "../Pages/AssessmentModule/EditAssessment";
 import AssignAssessmentToOperationMember from "../Pages/AssessmentModule/AssignAssessmentToOperationMember";
 import FillAssessment from "../Pages/AssessmentModule/FillAssessment";
+import ReplaceOperationMember from "../Pages/operationMember/ReplaceOperationMember";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -162,6 +163,10 @@ const ProtectedPages = () => {
                             <EditOperationMember />
                         </RequireAuth>
                     }
+                />
+                <Route
+                    path="/users/operation-member/replace-operation-member/:id"
+                    element={<ReplaceOperationMember />}
                 />
                 <Route
                     path="/questionnaires"
