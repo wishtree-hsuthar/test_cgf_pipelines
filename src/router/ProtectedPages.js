@@ -183,12 +183,27 @@ const ProtectedPages = () => {
                 />
                 <Route
                     path="/assessments/add-assessment"
-                    element={<AddAssessment />}
+                    element={
+                        <RequireAuth page={"add"} moduleName={"Assessment"}>
+                            <AddAssessment />
+                        </RequireAuth>
+                    }
                 />
-                <Route path="/assessment-list" element={<AssessmentList />} />
+                <Route
+                    path="/assessment-list"
+                    element={
+                        <RequireAuth page={"list"} moduleName={"Assessment"}>
+                            <AssessmentList />
+                        </RequireAuth>
+                    }
+                />
                 <Route
                     path="/assessments/edit-assessment/:id"
-                    element={<EditAssessment />}
+                    element={
+                        <RequireAuth page={"edit"} moduleName={"Assessment"}>
+                            <EditAssessment />
+                        </RequireAuth>
+                    }
                 />
                 <Route
                     path="/assessment-list/assign-assessment/:id"
