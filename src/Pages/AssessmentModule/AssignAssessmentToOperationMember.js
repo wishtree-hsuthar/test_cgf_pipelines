@@ -289,9 +289,9 @@ const AssignAssessmentToOperationMember = () => {
                     },
                     () => myRef.current()
                 );
-                // setTimeout(() => {
-                //     navigate("/assessment-list");
-                // }, 2000);
+                setTimeout(() => {
+                    navigate("/assessment-list");
+                }, 2000);
             }
         } catch (error) {
             console.log("Error from re-assign assessment", error);
@@ -429,7 +429,7 @@ const AssignAssessmentToOperationMember = () => {
                     </div>
                     <div className="form-btn flex-between add-members-btn mb-20">
                         <button
-                            onClick={() => navigate("/users/cgf-admin/")}
+                            onClick={() => navigate("/assessment-list")}
                             className="secondary-button mr-10"
                         >
                             Cancel

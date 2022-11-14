@@ -324,10 +324,10 @@ const AssessmentList = () => {
                                         icons={
                                             SUPER_ADMIN
                                                 ? ["visibility", "edit"]
-                                                : moduleAccesForAssessment[0]
-                                                      ?.assessment?.edit
-                                                ? ["visibility", "edit"]
-                                                : ["fill", "send"]
+                                                : // : moduleAccesForAssessment[0]
+                                                  //       ?.assessment?.edit
+                                                  // ? ["visibility", "edit"]
+                                                  ["fill", "send"]
                                         }
                                         onClickVisibilityIconHandler1={
                                             onClickVisibilityIconHandler

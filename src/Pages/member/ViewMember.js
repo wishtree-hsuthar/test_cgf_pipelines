@@ -23,6 +23,7 @@ import Input from "../../components/Input";
 import axios from "axios";
 import {
     COUNTRIES,
+    FETCH_ROLES,
     MEMBER,
     MEMBER_OPERATION_MEMBERS,
     REGIONCOUNTRIES,
@@ -32,6 +33,7 @@ import {
 import TableComponent from "../../components/TableComponent";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { useSelector } from "react-redux";
+import { privateAxios } from "../../api/axios";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -137,6 +139,9 @@ const ViewMember = () => {
     const [filters, setFilters] = useState({
         status: "none",
     });
+    // state to hold roles
+    const [roles, setRoles] = useState([]);
+
     const privilege = useSelector((state) => state?.user?.privilege);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
     let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
@@ -172,6 +177,7 @@ const ViewMember = () => {
             delete object["isReplaced"];
             delete object["uuid"];
             delete object["__v"];
+            delete object["isMemberRepresentative"];
             // delete object["createdBy"]
             object.assessment = object["assessment"]?.toString() ?? "0";
             console.log(
@@ -180,7 +186,13 @@ const ViewMember = () => {
                 "createdBy",
                 object["createdBy"]
             );
-            object["createdAt"] = new Date(object["createdAt"])?.toLocaleDateString("en-US",{month: "2-digit",day:"2-digit",year:"numeric"} );
+            object["createdAt"] = new Date(
+                object["createdAt"]
+            )?.toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
             typeof object["createdBy"] === "object"
                 ? (object.createdBy = object["createdBy"]["name"])
                 : (object.createdBy = object["createdBy"]);
@@ -508,20 +520,26 @@ const ViewMember = () => {
                 cgfOfficeRegion: data?.cgfOfficeRegion ?? "N/A",
                 cgfOfficeCountry: data?.cgfOfficeCountry ?? "N/A",
                 cgfOffice: data?.cgfOffice ?? "N/A",
-                memberContactSalutation: data?.memberRepresentativeId[0]?.salutation ?? "N/A",
-                memberContactFullName: data?.memberRepresentativeId[0]?.name ?? "N/A",
+                memberContactSalutation:
+                    data?.memberRepresentativeId[0]?.salutation ?? "N/A",
+                memberContactFullName:
+                    data?.memberRepresentativeId[0]?.name ?? "N/A",
                 title: data?.memberRepresentativeId[0]?.title ?? "N/A",
-                department: data?.memberRepresentativeId[0]?.department ?? "N/A",
+                department:
+                    data?.memberRepresentativeId[0]?.department ?? "N/A",
                 memberContactCountryCode:
                     data?.memberRepresentativeId[0]?.countryCode ?? "N/A",
-                memberContactEmail: data?.memberRepresentativeId[0]?.email ?? "N/A",
+                memberContactEmail:
+                    data?.memberRepresentativeId[0]?.email ?? "N/A",
                 memberContactPhoneNuber:
-                    data?.memberRepresentativeId[0]?.phoneNumber?.toString() ?? "N/A",
+                    data?.memberRepresentativeId[0]?.phoneNumber?.toString() ??
+                    "N/A",
                 status: data?.memberRepresentativeId[0]?.isActive
                     ? "active"
                     : "inactive",
                 totalOperationMembers: totalRecords?.toString() ?? "N/A",
                 createdBy: data?.createdBy["name"] ?? "N/A",
+                roleId: data?.memberRepresentativeId[0].roleId ?? "N/A",
             });
             setIsLoading(false);
         } catch (error) {
@@ -530,6 +548,28 @@ const ViewMember = () => {
             isMounted && setErrorToaster(error);
         }
         // console.log("response for member: ", response);
+    };
+
+    // Fetch roles
+    let fetchRoles = async () => {
+        try {
+            const response = await privateAxios.get(FETCH_ROLES);
+            console.log("Response from fetch roles - ", response);
+            setRoles(response.data);
+        } catch (error) {
+            console.log("Error from fetch roles", error);
+            setToasterDetails(
+                {
+                    titleMessage: "Oops!",
+                    descriptionMessage: error?.response?.data?.message,
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
+            setTimeout(() => {
+                navigate("/login");
+            }, 3000);
+        }
     };
     const getOperationMemberByMemberId = async (controller) => {
         try {
@@ -559,6 +599,7 @@ const ViewMember = () => {
             isMounted &&
                 makeApiCall &&
                 (await getOperationMemberByMemberId(controller));
+            isMounted && fetchRoles();
         })();
         // makeApiCall && getMembers(isMounted, controller);
         return () => {
@@ -1146,7 +1187,7 @@ const ViewMember = () => {
                                                     "Paris",
                                                     "Shanghai",
                                                     "Washington",
-                                                    "Tokyo"
+                                                    "Tokyo",
                                                 ]}
                                             />
                                         </div>
@@ -1371,8 +1412,33 @@ const ViewMember = () => {
                                             />
                                         </div>
                                     </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="role">
+                                                Role{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+
+                                            <div>
+                                                <Dropdown
+                                                    name="roleId"
+                                                    control={control}
+                                                    options={roles}
+                                                    rules={{
+                                                        required: true,
+                                                    }}
+                                                    isDisabled
+                                                    // myHelper={memberHelper}
+                                                    placeholder={"Select role"}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                             <div className="form-header member-form-header flex-between">
                                 <div className="form-header-left-blk flex-start">
                                     {/* <h2 className="heading2 mr-40">Members</h2> */}

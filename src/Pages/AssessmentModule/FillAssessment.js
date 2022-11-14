@@ -19,6 +19,7 @@ import Toaster from "../../components/Toaster";
 import DialogBox from "../../components/DialogBox";
 import Input from "../../components/Input";
 import { useForm, Controller } from "react-hook-form";
+import { useSelector } from "react-redux";
 export const AlphaRegEx = /^[a-z]+$/i;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
@@ -85,12 +86,15 @@ function FillAssessment() {
         setTabValue(newValue);
     };
     const params = useParams();
+    const userAuth = useSelector((state) => state?.user?.userObj);
+
     const navigate = useNavigate();
     const [assessment, setAssessments] = useState({});
     const [questionnaire, setQuestionnaire] = useState({});
     const [assessmentQuestionnaire, setAssessmentQuestionnaire] = useState({});
     const [errorQuestion, setErrorQuestion] = useState("");
     const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
+    const [viewMode, setViewMode] = useState(false);
 
     const [errors, setErrors] = useState({});
 
@@ -133,6 +137,10 @@ function FillAssessment() {
                     }
                 );
                 console.log("response from fetch assessment", response);
+                setViewMode(
+                    userAuth?._id ===
+                        response?.data?.assignedOperationMember?._id
+                );
                 isMounted && setAssessments({ ...response.data });
                 isMounted &&
                     setAssessmentQuestionnaire({
@@ -162,14 +170,20 @@ function FillAssessment() {
                 }
             );
             console.log("Assessment is saved as draft", response);
-            setToasterDetails(
-                {
-                    titleMessage: "Success",
-                    descriptionMessage: response?.data?.message,
-                    messageType: "success",
-                },
-                () => myRef.current()
-            );
+            if (response.status == 201) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success",
+                        descriptionMessage: response?.data?.message,
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+
+                setTimeout(() => {
+                    navigate("/assessment-list");
+                }, 3000);
+            }
         } catch (error) {
             console.log("error from save assessment as draft", error);
             setToasterDetails(
@@ -529,6 +543,7 @@ function FillAssessment() {
                                         errors={errors[section?.uuid] ?? {}}
                                         // handleSetErrors={handleSetErrors}
                                         handleFormSubmit={handleFormSubmit}
+                                        disableInput={viewMode}
                                     />
                                 </TabPanel>
                             ))}

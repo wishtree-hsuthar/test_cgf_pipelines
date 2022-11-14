@@ -104,6 +104,7 @@ function OnBoardedSubAdminsTable({
             delete object["salt"];
             delete object["uuid"];
             delete object["phoneNumber"];
+            delete object["isCGFAdmin"];
             // delete object["_id"];
             object["createdAt"] = new Date(
                 object["createdAt"]

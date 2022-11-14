@@ -14,6 +14,7 @@ import Dropdown from "../../components/Dropdown";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import {
     COUNTRIES,
+    FETCH_ROLES,
     MEMBER,
     REGIONCOUNTRIES,
     REGIONS,
@@ -23,6 +24,7 @@ import axios from "axios";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import { memberHelper } from "../../utils/helpertext";
+import { privateAxios } from "../../api/axios";
 
 //CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
@@ -106,6 +108,7 @@ const AddMember = () => {
         memberContactCountryCode: "",
         memberContactEmail: "",
         memberContactPhoneNuber: "",
+        roleId: "",
     };
     //to hold all regions
     const [arrOfRegions, setArrOfRegions] = useState([]);
@@ -118,6 +121,10 @@ const AddMember = () => {
     //to hold array of countries for perticular region for CGF Office details
     const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
         useState([]);
+
+    // To fetch and set roles
+    const [roles, setRoles] = useState([]);
+
     const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
         reValidateMode: "onChange",
         defaultValues: defaultValues,
@@ -153,6 +160,7 @@ const AddMember = () => {
                     phoneNumber: data.memberContactPhoneNuber
                         ? parseInt(data.memberContactPhoneNuber)
                         : "",
+                    roleId: data.roleId,
                 },
             };
             const response = await axios.post(MEMBER, { ...backendObject });
@@ -280,6 +288,28 @@ const AddMember = () => {
         }
     };
 
+    // Fetch roles
+    let fetchRoles = async () => {
+        try {
+            const response = await privateAxios.get(FETCH_ROLES);
+            console.log("Response from fetch roles - ", response);
+            setRoles(response.data);
+        } catch (error) {
+            console.log("Error from fetch roles", error);
+            setToasterDetails(
+                {
+                    titleMessage: "Oops!",
+                    descriptionMessage: error?.response?.data?.message,
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
+            setTimeout(() => {
+                navigate("/login");
+            }, 3000);
+        }
+    };
+
     //prevent form submission on press of enter key
     const checkKeyDown = (e) => {
         if (e.code === "Enter") e.preventDefault();
@@ -308,6 +338,7 @@ const AddMember = () => {
         const controller = new AbortController();
         arrOfRegions.length === 0 && getRegions(controller);
         arrOfCountryCode.length === 0 && getCountryCode(controller);
+        roles.length === 0 && fetchRoles();
 
         return () => {
             // isMounted = false;
@@ -1442,6 +1473,29 @@ const AddMember = () => {
                                                         },
                                                     }}
                                                     placeholder="1234567890"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="role">
+                                                Role{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+
+                                            <div>
+                                                <Dropdown
+                                                    name="roleId"
+                                                    control={control}
+                                                    options={roles}
+                                                    rules={{
+                                                        required: true,
+                                                    }}
+                                                    myHelper={memberHelper}
+                                                    placeholder={"Select role"}
                                                 />
                                             </div>
                                         </div>

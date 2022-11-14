@@ -35,6 +35,7 @@ import EditAssessment from "../Pages/AssessmentModule/EditAssessment";
 import AssignAssessmentToOperationMember from "../Pages/AssessmentModule/AssignAssessmentToOperationMember";
 import FillAssessment from "../Pages/AssessmentModule/FillAssessment";
 import ReplaceOperationMember from "../Pages/operationMember/ReplaceOperationMember";
+import ChangePassword from "../Pages/ChangePassword";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -170,11 +171,19 @@ const ProtectedPages = () => {
                 />
                 <Route
                     path="/questionnaires"
-                    element={<QuestionnairesList />}
+                    element={
+                        <RequireAuth page={"list"} moduleName={"Questionnaire"}>
+                            <QuestionnairesList />
+                        </RequireAuth>
+                    }
                 />
                 <Route
                     path="/questionnaires/add-questionnaire/:id"
-                    element={<AddNewQuestionnaire />}
+                    element={
+                        <RequireAuth page={"add"} moduleName={"Questionnaire"}>
+                            <AddNewQuestionnaire />
+                        </RequireAuth>
+                    }
                     // element={<AddQuestionnaires />}
                 />
                 <Route
@@ -215,6 +224,7 @@ const ProtectedPages = () => {
                 />
                 <Route path="/preview" element={<PreviewDemo />} />
                 <Route path="*" element={<FallBackUI />} />
+                <Route path="/change-password" element={<ChangePassword />} />
             </Route>
         </Routes>
     );

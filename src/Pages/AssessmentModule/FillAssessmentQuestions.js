@@ -37,6 +37,7 @@ const FillAssessmentQuestion = ({
     answer,
     handleAnswersChange,
     handleAnswersBlur,
+    disableInput,
 }) => {
     let questionLabel = question.questionTitle;
     let errorObject = {
@@ -62,6 +63,7 @@ const FillAssessmentQuestion = ({
     let questionComponent =
         question.inputType === "singleTextbox" ? (
             <TextField
+                disabled={disableInput}
                 placeholder={`Enter text here`}
                 value={answer ?? ""}
                 name={questionUUID}
@@ -106,6 +108,7 @@ const FillAssessmentQuestion = ({
             />
         ) : question.inputType === "textarea" ? (
             <TextField
+                disabled={disableInput}
                 placeholder={`Enter text here`}
                 multiline
                 value={answer ?? ""}
@@ -165,6 +168,8 @@ const FillAssessmentQuestion = ({
             <div className="radio-btn-field">
                 <FormControl>
                     <RadioGroup
+                        //  disabled={disableInput}
+
                         aria-labelledby="demo-radio-buttons-group-label"
                         className="radio-btn radio-btn-vertical"
                         value={answer ?? ""}
@@ -176,7 +181,12 @@ const FillAssessmentQuestion = ({
                         {question.options.map((option) => (
                             <FormControlLabel
                                 value={option}
-                                control={<Radio checked={answer === option} />}
+                                control={
+                                    <Radio
+                                        disabled={disableInput}
+                                        checked={answer === option}
+                                    />
+                                }
                                 label={option}
                             />
                         ))}
@@ -198,7 +208,9 @@ const FillAssessmentQuestion = ({
                                     name={questionUUID}
                                     className="checkbox-with-label"
                                     value={option}
-                                    control={<Checkbox />}
+                                    control={
+                                        <Checkbox disabled={disableInput} />
+                                    }
                                     checked={answer.includes(option)}
                                     onChange={handleChecked}
                                     label={option}
@@ -221,6 +233,7 @@ const FillAssessmentQuestion = ({
                     components={{
                         OpenPickerIcon: DateRangeOutlinedIcon,
                     }}
+                    disabled={disableInput}
                     value={answer ?? ""}
                     onChange={(newValue) =>
                         handleAnswersChange(questionUUID, newValue)

@@ -271,8 +271,8 @@ function EditAssessment() {
         );
 
         console.log(
-            "member representative----"
-            // memberRepresentative[0]?.representative[0]?.name
+            "member representative----",
+            memberRepresentative[0]?.representative[0]?.name
         );
 
         setValue(

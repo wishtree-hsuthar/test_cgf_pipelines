@@ -89,7 +89,7 @@ const Header = () => {
     let moduleAccessForQuestionnaire = privilegeArray
         .filter((data) => data?.moduleId?.name === "Questionnaire")
         .map((data) => ({
-            operationMember: {
+            questionnaire: {
                 list: data.list,
                 view: data.view,
                 edit: data.edit,
@@ -400,27 +400,32 @@ const Header = () => {
                                                 </a>
                                             </li>
                                         )}
-
-                                        <li
-                                            className={
-                                                location.pathname.includes(
-                                                    "/questionnaires"
-                                                )
-                                                    ? "list-item active"
-                                                    : "list-item"
-                                            }
-                                        >
-                                            <a
-                                                style={{
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() =>
-                                                    navigate("/questionnaires")
+                                        {(SUPER_ADMIN ||
+                                            moduleAccessForQuestionnaire[0]
+                                                ?.questionnaire?.list) && (
+                                            <li
+                                                className={
+                                                    location.pathname.includes(
+                                                        "/questionnaires"
+                                                    )
+                                                        ? "list-item active"
+                                                        : "list-item"
                                                 }
                                             >
-                                                Questionnaires
-                                            </a>
-                                        </li>
+                                                <a
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                    onClick={() =>
+                                                        navigate(
+                                                            "/questionnaires"
+                                                        )
+                                                    }
+                                                >
+                                                    Questionnaires
+                                                </a>
+                                            </li>
+                                        )}
                                     </ul>
                                 </div>
                             </div>
@@ -582,7 +587,14 @@ const Header = () => {
                                                                         Pune
                                                                     </span>
                                                                 </div>
-                                                                <div className="tertiary-btn-blk mt-20">
+                                                                <div
+                                                                    className="tertiary-btn-blk mt-20"
+                                                                    onClick={() =>
+                                                                        navigate(
+                                                                            "/change-password"
+                                                                        )
+                                                                    }
+                                                                >
                                                                     <span className="addmore-txt">
                                                                         Change
                                                                         Password
