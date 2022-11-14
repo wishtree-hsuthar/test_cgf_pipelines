@@ -21,29 +21,33 @@ import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import Input from "../../components/Input";
+import Dropdown from "../../components/Dropdown";
 
 const helperTextForCGFAdmin = {
     countryCode: {
-        validate: "Select country code",
+        validate: "Select the country code",
     },
     phoneNumber: {
         maxLength: "Max digits limit exceed",
         minLength: "Number must contain atleast 3 digits",
-        validate: "Enter phone number",
-        // pattern: "Invalid format",
+        validate: "Enter the phone number",
+        pattern: "Invalid format",
+    },
+    name: {
+        required: "Enter the CGF admin name",
+        maxLength: "Max char limit exceed",
+        minLength: "Name must contain atleast 3 characters",
+        pattern: "Invalid format",
+    },
+    email: {
+        required: "Enter the email",
+        pattern: "Invalid format",
+    },
+    subRoleId: {
+        required: "Select the role",
     },
 };
-const AddSubAdminSchema = yup.object().shape({
-    name: yup.string().required("Sub admin name required").trim(),
-    email: yup
-        .string()
-        .email("Enter valid email address")
-        .required("Email address requried"),
-    subRoleId: yup.string().required("Role required"),
-    phoneNumber: yup.number().typeError("Enter valid number"),
 
-    countryCode: yup.string().required("Code required"),
-});
 const AddSubAdmin = () => {
     const authUser = useSelector((state) => state.user.userObj);
     const navigate = useNavigate();
@@ -57,7 +61,6 @@ const AddSubAdmin = () => {
         trigger,
         setValue,
     } = useForm({
-        resolver: yupResolver(AddSubAdminSchema),
         defaultValues: {
             name: "",
             email: "",
@@ -159,7 +162,7 @@ const AddSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage: response.data.message,
+                        descriptionMessage: "New CGF admin added successfully!",
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -191,9 +194,9 @@ const AddSubAdmin = () => {
 
         console.log("new phone number", data);
         addSubAdminData(data);
-        // navigate("/sub-admins");
+        // navigate("/users/cgf-admin/");
         setTimeout(() => {
-            navigate("/sub-admins");
+            navigate("/users/cgf-admin/");
         }, 3000);
     };
 
@@ -214,7 +217,7 @@ const AddSubAdmin = () => {
         setRoleSelected("");
     };
     const handleCancel = () => {
-        navigate("/sub-admins");
+        navigate("/users/cgf-admin/");
     };
 
     return (
@@ -229,7 +232,7 @@ const AddSubAdmin = () => {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/sub-admins">CGF Admin</Link>
+                            <Link to="/users/cgf-admin/">CGF Admins</Link>
                         </li>
                         <li>Add CGF Admin</li>
                     </ul>
@@ -265,7 +268,26 @@ const AddSubAdmin = () => {
                                             CGF Admin Name{" "}
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <TextField
+                                        <Input
+                                            name={"name"}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "name",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
+                                            control={control}
+                                            placeholder={"Enter CGF admin name"}
+                                            myHelper={helperTextForCGFAdmin}
+                                            rules={{
+                                                required: true,
+                                                maxLength: 50,
+                                                pattern:
+                                                    /^[A-Za-z]+[A-Za-z ]*$/,
+                                            }}
+                                        />
+
+                                        {/* <TextField
                                             id="outlined-basic"
                                             placeholder="Enter sub admin name"
                                             variant="outlined"
@@ -281,16 +303,34 @@ const AddSubAdmin = () => {
                                                     ? errors.name?.message
                                                     : " "
                                             }
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label htmlFor="email">
-                                            Email Address{" "}
+                                            Email{" "}
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <TextField
+                                        <Input
+                                            name={"email"}
+                                            onBlur={(e) =>
+                                                setValue(
+                                                    "email",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
+                                            control={control}
+                                            placeholder={"Enter email"}
+                                            myHelper={helperTextForCGFAdmin}
+                                            rules={{
+                                                required: true,
+                                                maxLength: 50,
+                                                pattern:
+                                                    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                                            }}
+                                        />
+                                        {/* <TextField
                                             className={`input-field ${
                                                 errors.email && "input-error"
                                             }`}
@@ -303,10 +343,10 @@ const AddSubAdmin = () => {
                                                     ? errors?.email?.message
                                                     : ""
                                             }
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
-                                <div className="card-form-field">
+                                {/* <div className="card-form-field">
                                     <div className="form-group">
                                         <label htmlFor="phoneNumber">
                                             Phone Number{" "}
@@ -431,16 +471,199 @@ const AddSubAdmin = () => {
                                             />
                                         </div>
                                     </div>
+                                </div> */}
+                                <div className="card-form-field">
+                                    <div className="form-group">
+                                        <label htmlFor="phoneNumber">
+                                            Phone Number
+                                        </label>
+                                        <div className="phone-number-field">
+                                            <div className="select-field country-code">
+                                                <Controller
+                                                    control={control}
+                                                    name="countryCode"
+                                                    rules={{
+                                                        validate: () => {
+                                                            if (
+                                                                !watch(
+                                                                    "countryCode"
+                                                                ) &&
+                                                                watch(
+                                                                    "phoneNumber"
+                                                                )
+                                                            )
+                                                                return "Invalid input";
+                                                        },
+                                                    }}
+                                                    render={({
+                                                        field,
+                                                        fieldState: { error },
+                                                    }) => (
+                                                        <Autocomplete
+                                                            className={`${
+                                                                error &&
+                                                                "autocomplete-error"
+                                                            }`}
+                                                            PaperComponent={({
+                                                                children,
+                                                            }) => (
+                                                                <Paper className="autocomplete-option-txt">
+                                                                    {children}
+                                                                </Paper>
+                                                            )}
+                                                            popupIcon={
+                                                                <KeyboardArrowDownRoundedIcon />
+                                                            }
+                                                            {...field}
+                                                            onChange={(
+                                                                event,
+                                                                newValue
+                                                            ) => {
+                                                                console.log(
+                                                                    "inside autocomplete onchange"
+                                                                );
+                                                                console.log(
+                                                                    "new Value ",
+                                                                    newValue
+                                                                );
+                                                                newValue &&
+                                                                typeof newValue ===
+                                                                    "object"
+                                                                    ? setValue(
+                                                                          "countryCode",
+                                                                          newValue.name
+                                                                      )
+                                                                    : setValue(
+                                                                          "countryCode",
+                                                                          newValue
+                                                                      );
+                                                                trigger(
+                                                                    "countryCode"
+                                                                );
+                                                                trigger(
+                                                                    "phoneNumber"
+                                                                );
+                                                            }}
+                                                            options={
+                                                                countries
+                                                                    ? countries
+                                                                    : []
+                                                            }
+                                                            autoHighlight
+                                                            // placeholder="Select country code"
+                                                            getOptionLabel={(
+                                                                country
+                                                            ) => country}
+                                                            renderOption={(
+                                                                props,
+                                                                option
+                                                            ) => (
+                                                                <li {...props}>
+                                                                    {option}
+                                                                </li>
+                                                            )}
+                                                            renderInput={(
+                                                                params
+                                                            ) => (
+                                                                <TextField
+                                                                    // className={`input-field ${
+                                                                    //   error && "input-error"
+                                                                    // }`}
+                                                                    {...params}
+                                                                    inputProps={{
+                                                                        ...params.inputProps,
+                                                                    }}
+                                                                    onChange={() =>
+                                                                        trigger(
+                                                                            "countryCode"
+                                                                        )
+                                                                    }
+                                                                    // onSubmit={() => setValue("countryCode", "")}
+                                                                    placeholder={
+                                                                        "+91"
+                                                                    }
+                                                                    helperText={
+                                                                        error
+                                                                            ? helperTextForCGFAdmin
+                                                                                  .countryCode[
+                                                                                  error
+                                                                                      ?.type
+                                                                              ]
+                                                                            : " "
+                                                                    }
+                                                                />
+                                                            )}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                            <Input
+                                                name={"phoneNumber"}
+                                                myOnChange={(e) =>
+                                                    phoneNumberChangeHandler(
+                                                        e,
+                                                        "phoneNumber",
+                                                        "countryCode"
+                                                    )
+                                                }
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "phoneNumber",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
+                                                control={control}
+                                                myHelper={helperTextForCGFAdmin}
+                                                placeholder={
+                                                    "Enter phone number"
+                                                }
+                                                rules={{
+                                                    maxLength: 15,
+                                                    minLength: 3,
+                                                    validate: (value) => {
+                                                        if (
+                                                            !watch(
+                                                                "phoneNumber"
+                                                            ) &&
+                                                            watch("countryCode")
+                                                        )
+                                                            return "invalid input";
+                                                        if (
+                                                            value &&
+                                                            !Number(value)
+                                                        )
+                                                            return "Invalid input";
+                                                    },
+                                                    // validate: (value) => {
+                                                    //     if (
+                                                    //         watch(
+                                                    //             "phoneNumber"
+                                                    //         ) &&
+                                                    //         !watch(
+                                                    //             "countryCode"
+                                                    //         )
+                                                    //     )
+                                                    //         return "Enter Country code";
+                                                    // else if (
+                                                    //     value &&
+                                                    //     !Number(value)
+                                                    // )
+                                                    //     return "Please enter valid phone number";
+                                                    // },
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label htmlFor="role">
-                                            Select Role{" "}
+                                            Role{" "}
                                             <span className="mandatory">*</span>
                                         </label>
 
                                         <div>
-                                            <Controller
+                                            {/* <Controller
                                                 name="subRoleId"
                                                 control={control}
                                                 render={({
@@ -495,6 +718,16 @@ const AddSubAdmin = () => {
                                                         </Select>
                                                     </div>
                                                 )}
+                                            /> */}
+                                            <Dropdown
+                                                name="subRoleId"
+                                                control={control}
+                                                options={roles}
+                                                rules={{
+                                                    required: true,
+                                                }}
+                                                myHelper={helperTextForCGFAdmin}
+                                                placeholder={"Select role"}
                                             />
 
                                             <p className={`password-error`}>

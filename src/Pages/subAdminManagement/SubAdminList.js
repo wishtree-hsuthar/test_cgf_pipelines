@@ -64,7 +64,7 @@ const SubAdminList = () => {
     const [makeApiCall, setMakeApiCall] = useState(true);
 
     const navigate = useNavigate();
-    //(onboarded sub-admins table) order in which records needs to show
+    //(onboarded users/cgf-admin/ table) order in which records needs to show
 
     const [page, setPage] = React.useState(1);
 
@@ -381,7 +381,7 @@ const SubAdminList = () => {
                                     <button
                                         onClick={() =>
                                             navigate(
-                                                "/sub-admins/add-sub-admin"
+                                                "/users/cgf-admin/add-sub-admin"
                                             )
                                         }
                                         className="primary-button add-button"

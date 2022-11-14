@@ -73,6 +73,7 @@ function EditAssessment() {
         operationMemberForAddAssessments,
         setOperationMemberForAddAssessments,
     ] = useState([]);
+    const [memberRepresentatives, setMemberRepresentatives] = useState([]);
     const [questionnares, setQuestionnares] = useState([]);
     const [questionnaresObj, setQuestionnaresObj] = useState([]);
     const [questionnaireId, setQuestionnaireId] = useState("");
@@ -153,6 +154,7 @@ function EditAssessment() {
                             name: data.companyName,
                         }))
                     );
+                setMemberRepresentatives(response.data);
             } catch (error) {
                 console.log("Error from fetch member company api", error);
             }
@@ -264,6 +266,20 @@ function EditAssessment() {
     const handleChangeForMemberCompany = (e) => {
         setValue("assignedMember", e.target.value);
         console.log("assignedMember", e.target.value);
+        let memberRepresentative = memberRepresentatives.filter(
+            (data) => data._id === e.target.value
+        );
+
+        console.log(
+            "member representative----",
+            memberRepresentative[0]?.representative[0]?.name
+        );
+
+        setValue(
+            "assignedOperationMember",
+
+            memberRepresentative[0]?.representative[0]?._id
+        );
         fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
             e.target.value
         );
@@ -309,13 +325,17 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assessment title <span className="mandatory">*</span>
+                                            Assessment title{" "}
+                                            <span className="mandatory">*</span>
                                         </label>
                                         <Input
                                             name={"title"}
                                             onBlur={(e) =>
-                                                setValue("title", e.target.value?.trim())
-                                              }
+                                                setValue(
+                                                    "title",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             control={control}
                                             myHelper={helperTextForAssessment}
                                             placeholder={
@@ -330,7 +350,8 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assessment Type <span className="mandatory">*</span>
+                                            Assessment Type{" "}
+                                            <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
                                             control={control}
@@ -348,7 +369,8 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Member <span className="mandatory">*</span>
+                                            Assign Member{" "}
+                                            <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
                                             control={control}
@@ -368,13 +390,15 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Operation Member <span className="mandatory">*</span>
+                                            Assign Operation Member{" "}
+                                            <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
                                             control={control}
-                                            isDisabled={
-                                                !watch("assignedMember")
-                                            }
+                                            // isDisabled={
+                                            //     !watch("assignedMember")
+                                            // }
+                                            isDisabled
                                             name={"assignedOperationMember"}
                                             placeholder={
                                                 "Select operation member "
@@ -390,7 +414,8 @@ function EditAssessment() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Due date <span className="mandatory">*</span>
+                                            Due date{" "}
+                                            <span className="mandatory">*</span>
                                         </label>
                                         <Controller
                                             name="dueDate"
@@ -461,8 +486,11 @@ function EditAssessment() {
                                                     multiline
                                                     {...field}
                                                     onBlur={(e) =>
-                                                        setValue("remarks", e.target.value?.trim())
-                                                      }
+                                                        setValue(
+                                                            "remarks",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
                                                     inputProps={{
                                                         maxLength: 250,
                                                     }}

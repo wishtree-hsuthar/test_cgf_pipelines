@@ -54,6 +54,7 @@ const AddAssessment = () => {
         operationMemberForAddAssessments,
         setOperationMemberForAddAssessments,
     ] = useState([]);
+    const [memberRepresentatives, setMemberRepresentatives] = useState([]);
     const [questionnares, setQuestionnares] = useState([]);
     const [questionnaresObj, setQuestionnaresObj] = useState([]);
     const navigate = useNavigate();
@@ -70,6 +71,7 @@ const AddAssessment = () => {
         watch,
         reset,
         setValue,
+        trigger,
     } = useForm({
         defaultValues: {
             title: "",
@@ -102,6 +104,7 @@ const AddAssessment = () => {
                             name: data.companyName,
                         }))
                     );
+                setMemberRepresentatives(response.data);
             } catch (error) {
                 console.log("Error from fetch member company api", error);
             }
@@ -161,6 +164,22 @@ const AddAssessment = () => {
     const handleChangeForMemberCompany = (e) => {
         setValue("assignedMember", e.target.value);
         console.log("assignedMember", e.target.value);
+        let memberRepresentative = memberRepresentatives.filter(
+            (data) => data._id === e.target.value
+        );
+
+        console.log(
+            "member representative----",
+            memberRepresentative[0]?.representative[0]?.name
+        );
+
+        setValue(
+            "assignedOperationMember",
+
+            memberRepresentative[0]?.representative[0]?._id
+        );
+        trigger("assignedOperationMember");
+        trigger("assignedMember");
         fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
             e.target.value
         );
@@ -174,91 +193,9 @@ const AddAssessment = () => {
         console.log("filtered questionnaire", filterQuestionnaireById);
         setValue("questionnaireId", filterQuestionnaireById[0]._id);
         setValue("assessmentType", e.target.value);
+        trigger("assessmentType");
     };
-    // const submitAssessments = async (data) => {
-    //   console.log("data from on submit", data);
 
-    //   let someDate = new Date(data.dueDate);
-    //   let setUTCHoursForDueDate = new Date(
-    //     someDate.setDate(someDate.getDate() + 1)
-    //   );
-    //   let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
-    //   console.log(
-    //     "data after converting to ISOstring",
-    //     new Date(ISOdate).toISOString()
-    //   );
-    //   data = {
-    //     ...data,
-    //     dueDate: new Date(setUTCHoursForDueDate),
-    //   };
-
-    //   try {
-    //     const response = await privateAxios.post(ASSESSMENTS, data);
-    //     if (response.status === 201) {
-    //       console.log("response from add assessments", response);
-    //       reset({
-    //         title: "",
-    //         assessmentType: "",
-    //         assignedMember: "",
-    //         // name: .assignedMember?.companyName,
-
-    //         assignedOperationMember: "",
-    //         dueDate: "",
-    //         remarks: "",
-    //         questionnaireId: "",
-    //       });
-    //       // Add success toaster here
-    //       setToasterDetails(
-    //         {
-    //           titleMessage: "Success!",
-    //           descriptionMessage: response?.data?.message,
-    //           messageType: "success",
-    //         },
-    //         () => toasterRef.current()
-    //       );
-    //       setTimeout(() => {
-    //         navigate("/assessment-list");
-    //       }, 2000);
-    //     }
-    //   } catch (error) {
-    //     if (error.response.status === 401) {
-    //       console.log("Unauthorized user access");
-    //       // Add error toaster here
-    //       setToasterDetails(
-    //         {
-    //           titleMessage: "Oops!",
-    //           descriptionMessage: error?.response?.data?.message,
-    //           messageType: "error",
-    //         },
-    //         () => toasterRef.current()
-    //       );
-    //     }
-    //     if (error.response.status === 400) {
-    //       console.log("something went wrong");
-    //       // Add error toaster here
-    //       setToasterDetails(
-    //         {
-    //           titleMessage: "Oops!",
-    //           descriptionMessage: error?.response?.data?.message,
-    //           messageType: "error",
-    //         },
-    //         () => toasterRef.current()
-    //       );
-    //     }
-    //     if (error.response.status === 403) {
-    //       console.log("something went wrong");
-    //       // Add error toaster here
-    //       setToasterDetails(
-    //         {
-    //           titleMessage: "Oops!",
-    //           descriptionMessage: "Something went wrong",
-    //           messageType: "error",
-    //         },
-    //         () => toasterRef.current()
-    //       );
-    //     }
-    //   }
-    // };
     const submitAssessments = async (data) => {
         console.log("data from on submit", data);
 
@@ -379,8 +316,11 @@ const AddAssessment = () => {
                                             name={"title"}
                                             control={control}
                                             onBlur={(e) =>
-                                                setValue("title", e.target.value?.trim())
-                                              }
+                                                setValue(
+                                                    "title",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             myHelper={helperTextForAssessment}
                                             placeholder={
                                                 "Enter assessment title"
@@ -439,9 +379,10 @@ const AddAssessment = () => {
                                         </label>
                                         <Dropdown
                                             control={control}
-                                            isDisabled={
-                                                !watch("assignedMember")
-                                            }
+                                            // isDisabled={
+                                            //     !watch("assignedMember")
+                                            // }
+                                            isDisabled={true}
                                             name={"assignedOperationMember"}
                                             placeholder={
                                                 "Select operation member "
@@ -543,8 +484,11 @@ const AddAssessment = () => {
                                                     multiline
                                                     {...field}
                                                     onBlur={(e) =>
-                                                        setValue("remarks", e.target.value?.trim())
-                                                      }
+                                                        setValue(
+                                                            "remarks",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
                                                     inputProps={{
                                                         maxLength: 250,
                                                     }}
@@ -571,7 +515,9 @@ const AddAssessment = () => {
                                 <div className="form-btn flex-between add-members-btn">
                                     <button
                                         type={"reset"}
-                                        onClick={() => navigate("/assessment-list")}
+                                        onClick={() =>
+                                            navigate("/assessment-list")
+                                        }
                                         className="secondary-button mr-10"
                                     >
                                         Cancel

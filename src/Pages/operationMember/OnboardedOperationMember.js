@@ -150,6 +150,7 @@ function OnboardedOperationMember({
             delete object["tokenExpiry"];
             delete object["tokenType"];
             delete object["address"];
+            delete object["isMemberRepresentative"];
             // delete object["isActive"];
 
             // object["role"] = object["data"]["subRoleId"].name;

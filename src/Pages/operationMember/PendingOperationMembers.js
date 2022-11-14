@@ -314,6 +314,7 @@ function PendingOperationMembers({
                 }}
                 openModal={openDeleteDialogBoxPendingOperationMember}
                 setOpenModal={setOpenDeleteDialogBoxPendingOperationMember}
+                isModalForm={false}
             />
             <TableComponent
                 tableHead={pendingOperationMemberTableColumnHeader}

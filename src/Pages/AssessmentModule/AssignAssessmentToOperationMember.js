@@ -28,6 +28,7 @@ import {
     FETCH_OPERATION_MEMBER,
     FETCH_SUB_ADMIN_BY_ADMIN,
     MEMBER_OPERATION_MEMBERS,
+    REASSIGN_ASSESSMENTS,
     REPLACE_SUB_ADMIN,
 } from "../../api/Url";
 import Toaster from "../../components/Toaster";
@@ -36,25 +37,25 @@ const tableHead = [
     {
         id: "",
         disablePadding: true,
-        label: "Select User",
-        // width: "10%",
+        label: "",
+        // width: "30%",
     },
     {
-        id: "operationMember",
+        id: "name",
         disablePadding: true,
         label: "Operation Member",
         // width: "30%",
     },
     {
-        id: "emailId",
+        id: "email",
         disablePadding: false,
-        label: "Email Id",
+        label: "Email",
         // width: "40%",
     },
 ];
 
 const AssignAssessmentToOperationMember = () => {
-    const keysOrder = ["_id", "operationMember", "email"];
+    const keysOrder = ["_id", "name", "email"];
 
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -143,8 +144,8 @@ const AssignAssessmentToOperationMember = () => {
             delete object["address"];
             delete object["operationType"];
             delete object["reportingManager"];
-            object["operationMember"] = object["name"];
-            delete object["name"];
+            object["name"] = object["name"];
+            // delete object["name"];
 
             keysOrder.forEach((k) => {
                 const v = object[k];
@@ -212,7 +213,7 @@ const AssignAssessmentToOperationMember = () => {
                 console.log(
                     "Error status 500 while fetchiing operation member"
                 );
-                // navigate("/sub-admins");
+                // navigate("/users/cgf-admin/");
             }
         }
     };
@@ -271,7 +272,12 @@ const AssignAssessmentToOperationMember = () => {
             `data from re-assign assessment-${id} and operation-member-${newOperationMember}`
         );
         try {
-            const response = await privateAxios("");
+            const response = await privateAxios.post(
+                REASSIGN_ASSESSMENTS + id + "/reassign",
+                {
+                    reassignTo: newOperationMember,
+                }
+            );
             console.log("response from handle re-assign assessment", response);
             if (response.status == 201) {
                 setToasterDetails(
@@ -331,7 +337,7 @@ const AssignAssessmentToOperationMember = () => {
             isMounted = false;
             controller.abort();
         };
-    }, []);
+    }, [makeApiCall, orderBy, order, page]);
 
     return (
         <div class="page-wrapper">
@@ -378,25 +384,21 @@ const AssignAssessmentToOperationMember = () => {
             <section>
                 <div className="container">
                     <div className="form-header flex-between ">
-                        <h2 className="heading2">
-                            Assign Assessment to operation member
-                        </h2>
-                        <div className="form-header-right-txt member-filter-right">
-                            <div className="tertiary-btn-blk">
-                                <div className="searchbar">
-                                    <input
-                                        type="text"
-                                        placeholder="Search"
-                                        onChange={(e) =>
-                                            onSearchChangeHandler(e)
-                                        }
-                                        name="search"
-                                    />
-                                    <button type="submit">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
+                        <h2 className="heading2">Assign Assessment</h2>
+                        <div className="member-filter-left">
+                            {/* <div className="tertiary-btn-blk"> */}
+                            <div className="searchbar">
+                                <input
+                                    type="text"
+                                    placeholder="Search"
+                                    onChange={(e) => onSearchChangeHandler(e)}
+                                    name="search"
+                                />
+                                <button type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
                             </div>
+                            {/* </div> */}
                         </div>
                     </div>
 
@@ -427,22 +429,21 @@ const AssignAssessmentToOperationMember = () => {
                     </div>
                     <div className="form-btn flex-between add-members-btn mb-20">
                         <button
-                            onClick={() => navigate("/sub-admins")}
+                            onClick={() => navigate("/assessment-list")}
                             className="secondary-button mr-10"
                         >
                             Cancel
                         </button>
-                        {disableAssignButton && (
-                            <button
-                                // onClick={openReplaceDailogBox}
-                                onClick={handleReassignAssessment}
-                                // disabled={disableAssignButton}
-                                // disabled
-                                className="primary-button add-button replace-assign-btn"
-                            >
-                                Assign
-                            </button>
-                        )}
+
+                        <button
+                            // onClick={openReplaceDailogBox}
+                            onClick={handleReassignAssessment}
+                            disabled={selectedUser == ""}
+                            // disabled
+                            className="primary-button add-button replace-assign-btn"
+                        >
+                            Assign
+                        </button>
                     </div>
                 </div>
             </section>
