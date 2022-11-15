@@ -34,7 +34,8 @@ function FillAssesmentSection({
     errors,
     handleSetErrors,
     handleFormSubmit,
-    disableInput,
+    viewMode,
+    setViewMode,
 }) {
     const navigate = useNavigate();
     const params = useParams();
@@ -140,7 +141,8 @@ function FillAssesmentSection({
                                 error={errors[question?.uuid] ?? ""}
                                 handleAnswersChange={handleAnswersChange}
                                 handleAnswersBlur={handleAnswersBlur}
-                                disableInput={disableInput}
+                                viewMode={viewMode}
+                                setViewMode={setViewMode}
                             />
                         ))
                     ) : (
@@ -155,28 +157,41 @@ function FillAssesmentSection({
                         />
                     )}
                 </div>
-                <div className="form-btn flex-between add-members-btn">
-                    <button
-                        type="reset"
-                        onClick={() => setOpenCancelDailog(true)}
-                        className="secondary-button mr-10"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        onClick={
-                            // () =>
-                            // navigate(
-                            //     `/questionnaires/add-questionnaire/${params.id}`
-                            // )
-                            handleFormSubmit
-                        }
-                        className="primary-button add-button"
-                    >
-                        Submit assessment
-                    </button>
-                </div>
+                {viewMode ? (
+                    <div className="form-btn flex-between add-members-btn">
+                        <button
+                            type="reset"
+                            onClick={() => setOpenCancelDailog(true)}
+                            className="secondary-button mr-10"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            onClick={
+                                // () =>
+                                // navigate(
+                                //     `/questionnaires/add-questionnaire/${params.id}`
+                                // )
+                                handleFormSubmit
+                            }
+                            className="primary-button add-button"
+                        >
+                            Submit assessment
+                        </button>
+                    </div>
+                ) : (
+                    <div className="form-btn flex-between add-members-btn">
+                        <button
+                            type="reset"
+                            onClick={() => navigate("/assessment-list")}
+                            className="secondary-button mr-10"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                )}
             </div>
         </>
     );

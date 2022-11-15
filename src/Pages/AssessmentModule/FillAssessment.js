@@ -109,10 +109,30 @@ function FillAssessment() {
         setErrors({ ...errors });
     };
 
+    console.log(
+        "both user are same",
+        userAuth._id === assessment?.assignedOperationMember?._id
+    );
+
+    console.log(
+        "first user ",
+        userAuth._id +
+            "  second user  " +
+            assessment?.assignedOperationMember?._id
+    );
+    const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
+
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
-        setOpenDeleteDialogBox(true);
+        // setOpenDeleteDialogBox(
+        //     userAuth._id === assessment?.assignedOperationMember?._id
+        // );
+        setViewMode(
+            userAuth._id === assessment?.assignedOperationMember?._id
+                ? true
+                : false
+        );
         const fetchQuestionnaire = async (id) => {
             try {
                 const response = await privateAxios.get(
@@ -147,6 +167,10 @@ function FillAssessment() {
                         ...response.data.answers,
                     });
                 fetchQuestionnaire(response?.data?.questionnaireId);
+                setOpenDeleteDialogBox(
+                    userAuth._id ===
+                        response?.data?.assignedOperationMember?._id
+                );
             } catch (error) {
                 console.log("error from fetch assessment", error);
             }
@@ -389,7 +413,6 @@ function FillAssessment() {
     }, [errors]);
 
     const [datevalue, setDateValue] = React.useState(null);
-    const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
 
     return (
         <div className="page-wrapper">
@@ -403,13 +426,6 @@ function FillAssessment() {
                     </p>
                 }
                 info2={
-                    // <Input
-                    //     control={control}
-                    //     name={"comment"}
-                    //     myHelper={helperTextForReason}
-                    //     placeholder={"Enter comment"}
-                    //     rules={{ required: true }}
-                    // />
                     <Controller
                         name="comment"
                         control={control}
@@ -543,7 +559,8 @@ function FillAssessment() {
                                         errors={errors[section?.uuid] ?? {}}
                                         // handleSetErrors={handleSetErrors}
                                         handleFormSubmit={handleFormSubmit}
-                                        disableInput={viewMode}
+                                        viewMode={viewMode}
+                                        setViewMode={setViewMode}
                                     />
                                 </TabPanel>
                             ))}

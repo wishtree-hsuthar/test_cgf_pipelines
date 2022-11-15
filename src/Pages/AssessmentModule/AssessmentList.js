@@ -111,7 +111,7 @@ const AssessmentList = () => {
     };
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
-        return navigate(`/assessments/view-assessment/${id}`);
+        return navigate(`/assessment-list/fill-assessment/${id}`);
     };
 
     const onClickEditIconHandler = (uuid) => {
@@ -345,6 +345,7 @@ const AssessmentList = () => {
                                         onClickFillAssessmentFunction={
                                             onClickFillAssessmentHandler
                                         }
+                                        viewAssessment={true}
                                         // onRowClick={
                                         //     SUPER_ADMIN
                                         //         ? true

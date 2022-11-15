@@ -19,6 +19,7 @@ export const STATES = `${REACT_APP_API_ENDPOINT}master/country`;
 
 //Member
 export const MEMBER = `${REACT_APP_API_ENDPOINT}members`;
+export const MEMBER_DROPDOWN = `${REACT_APP_API_ENDPOINT}members/master`;
 
 //Operation member
 export const MEMBER_OPERATION_MEMBERS = `${REACT_APP_API_ENDPOINT}operation-member/member`;

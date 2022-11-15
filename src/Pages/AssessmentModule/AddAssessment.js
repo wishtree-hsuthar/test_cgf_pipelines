@@ -20,6 +20,7 @@ import {
     ASSESSMENTS,
     FETCH_OPERATION_MEMBER,
     MEMBER,
+    MEMBER_DROPDOWN,
     MEMBER_OPERATION_MEMBERS,
 } from "../../api/Url";
 import { date } from "yup";
@@ -89,7 +90,7 @@ const AddAssessment = () => {
 
         const fetchMemberCompaniesForAddAssesments = async () => {
             try {
-                const response = await privateAxios.get(MEMBER, {
+                const response = await privateAxios.get(MEMBER_DROPDOWN, {
                     signal: controller.signal,
                 });
 

@@ -9,6 +9,7 @@ import {
     FETCH_ASSESSMENT_BY_ID,
     FETCH_OPERATION_MEMBER,
     MEMBER,
+    MEMBER_DROPDOWN,
     UPDATE_ASSESSMENT_BY_ID,
 } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
@@ -139,7 +140,7 @@ function EditAssessment() {
         fetchAssessment();
         const fetchMemberCompaniesForAddAssesments = async () => {
             try {
-                const response = await privateAxios.get(MEMBER, {
+                const response = await privateAxios.get(MEMBER_DROPDOWN, {
                     signal: controller.signal,
                 });
 

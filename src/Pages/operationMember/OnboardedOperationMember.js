@@ -151,6 +151,8 @@ function OnboardedOperationMember({
             delete object["tokenType"];
             delete object["address"];
             delete object["isMemberRepresentative"];
+            delete object["isCGFStaff"];
+            delete object["isOperationMember"];
             // delete object["isActive"];
 
             // object["role"] = object["data"]["subRoleId"].name;
