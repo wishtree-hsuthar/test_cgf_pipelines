@@ -277,6 +277,8 @@ function AddOperationMember() {
             ...data,
             phoneNumber: Number(data?.phoneNumber),
             isCGFStaff: data.isCGFStaff === "true" ? true : false,
+            memberId:
+                data.isCGFStaff === "true" ? cgfMember[0]._id : data.memberId,
         };
         try {
             const response = await privateAxios.post(
@@ -333,7 +335,7 @@ function AddOperationMember() {
         console.log(cgfCompany[0]._id);
         if (e.target.value === "true") {
             setValue("companyType", "Internal");
-            setValue("memberId", "CGF");
+            setValue("memberId", cgfCompany[0].companyName);
             setShowTextField(true);
             setDisableReportingManager(false);
             fetchReportingManagers("", true);

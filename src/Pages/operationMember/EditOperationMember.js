@@ -240,21 +240,27 @@ function EditOperationMember() {
     };
 
     // Fetch reporting managers of all member companies
-    const fetchRm = async (id) => {
+    const fetchRm = async (id, isCGFStaff) => {
         console.log("operation member----", operationMember);
         try {
             const response = await privateAxios.get(
-                FETCH_REPORTING_MANAGER +
-                    id +
-                    // operationMember?.memberId?._id +
-                    "/rm"
+                // FETCH_REPORTING_MANAGER + id
+                // + isCGFStaff
+                //     ? "/master/external"
+                //     : "/master/internal"
+                // // operationMember?.memberId?._id +
+                isCGFStaff
+                    ? FETCH_OPERATION_MEMBER + id + "/master/external"
+                    : FETCH_OPERATION_MEMBER + id + "/master/internal"
             );
             console.log("response from rm", response);
             setReportingManagers(
-                response.data.map((data) => ({
-                    _id: data?._id,
-                    name: data?.name,
-                }))
+                response.data
+                    .filter((data) => data._id !== params.id)
+                    .map((data) => ({
+                        _id: data?._id,
+                        name: data?.name,
+                    }))
             );
         } catch (error) {
             console.log("Error from fetching rm reporting manager", error);
@@ -296,13 +302,15 @@ function EditOperationMember() {
                     name: response?.data?.name,
                     isActive: response?.data?.isActive,
                     roleId: response?.data?.roleId,
-                    isCGFStaff: response?.data?.isCGFStaff,
+                    isCGFStaff:
+                        response?.data?.isCGFStaff === true ? "true" : "false",
                     // reportingManagerId:
                     //     response?.data?.reportingManager?._id,
                 });
             setOperationMember(response.data);
             console.log("response data ----", operationMember);
-            fetchRm(response?.data?.memberId?._id);
+            let isCGFStaff = response?.data?.isCGFStaff ? true : false;
+            fetchRm(response?.data?.memberId?._id, isCGFStaff);
             // fetchReportingManagers(operationMember?.memberId?._id);
         } catch (error) {
             console.log("error from edit operation members", error);
