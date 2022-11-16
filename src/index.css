@@ -2409,4 +2409,7 @@ input:-webkit-autofill:active {
 .country-code .Mui-disabled{padding-right: 0 !important;}
 .replace-admin-table .radio-btn-field .MuiRadio-root{width: 35px;margin: 0 auto;}
 
+input::-ms-reveal {
+    display: none;
+}
 
