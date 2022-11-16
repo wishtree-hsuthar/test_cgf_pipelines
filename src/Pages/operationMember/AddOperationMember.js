@@ -21,23 +21,23 @@ const helperTextForAddOperationMember = {
     name: {
         required: "Enter the operation member name",
         maxLength: "Max char limit exceed",
-        minLength: "Role must contain atleast 3 characters",
+        minLength: "minimum 3 characters required",
         pattern: "Invalid format",
     },
     department: {
         // required: "Enter the role name",
         maxLength: "Max char limit exceed",
-        minLength: "Role must contain atleast 3 characters",
+        minLength: "minimum 3 characters required",
         pattern: "Invalid format",
     },
     title: {
         // required: "Enter the role name",
         maxLength: "Max char limit exceed",
-        minLength: "Role must contain atleast 3 characters",
+        minLength: "minimum 3 characters required",
         pattern: "Invalid format",
     },
     email: {
-        required: "Enter email addrees",
+        required: "Enter the email",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         pattern: "Invalid format",
@@ -49,7 +49,7 @@ const helperTextForAddOperationMember = {
     phoneNumber: {
         required: "Enter the phone number",
         maxLength: "Max digits limit exceed",
-        minLength: "Number must contain atleast 3 digits",
+        minLength: "minimum 3 characters required",
         validate: "Enter phone number",
         // pattern: "Invalid format",
     },
@@ -57,14 +57,14 @@ const helperTextForAddOperationMember = {
         required: "Select member company",
     },
     operationType: {
-        required: "Select operation type",
+        required: "Select the operation type",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
     },
     memberId: {
-        required: "Enter member company",
-        validate: "Enter member company",
+        required: "Select the member company",
+        validate: "Select the member company",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
@@ -78,11 +78,11 @@ const helperTextForAddOperationMember = {
     address: {
         required: "Enter address",
         maxLength: "Max char limit exceed",
-        minLength: "Role must contain atleast 3 characters",
+        minLength: "minimum 3 characters required",
         pattern: "Invalid format",
     },
     reportingManager: {
-        required: "Select reporting manager ",
+        required: "Select the reporting manager ",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
@@ -363,6 +363,7 @@ function AddOperationMember() {
                                                     rules={{
                                                         required: true,
                                                         maxLength: 50,
+                                                        minLength: 3,
                                                         pattern:
                                                             /^[A-Za-z]+[A-Za-z ]*$/,
                                                     }}
@@ -382,10 +383,12 @@ function AddOperationMember() {
                                                     e.target.value?.trim()
                                                 )
                                             }
+                                            myHelper={helperTextForAddOperationMember}
                                             control={control}
                                             placeholder={"Enter title"}
                                             rules={{
                                                 maxLength: 50,
+                                                minLength:3
                                             }}
                                         />
                                     </div>
@@ -408,10 +411,11 @@ function AddOperationMember() {
                                                 helperTextForAddOperationMember
                                             }
                                             placeholder={
-                                                "Enter department name"
+                                                "Enter department"
                                             }
                                             rules={{
                                                 maxLength: 50,
+                                                minLength:3
                                             }}
                                         />
                                     </div>
@@ -434,7 +438,7 @@ function AddOperationMember() {
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
-                                            placeholder={"Enter email"}
+                                            placeholder={"example@domain.com"}
                                             rules={{
                                                 required: "true",
                                                 maxLength: 50,
@@ -590,7 +594,7 @@ function AddOperationMember() {
                                                     helperTextForAddOperationMember
                                                 }
                                                 placeholder={
-                                                    "Enter phone number"
+                                                    "1234567890"
                                                 }
                                                 rules={{
                                                     maxLength: 15,
@@ -803,7 +807,7 @@ function AddOperationMember() {
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
-                                            placeholder={"Company type"}
+                                            placeholder={"Enter company type"}
                                         />
                                     </div>
                                 </div>

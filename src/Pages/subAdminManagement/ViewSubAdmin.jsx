@@ -197,7 +197,7 @@ const ViewSubAdmin = () => {
     //                             {modalData.title}
     //                         </h2>
     //                         <span
-    //                             class="popup-close-icon"
+    //                             className="popup-close-icon"
     //                             onClick={handleClose}
     //                         >
     //                             <CloseIcon />

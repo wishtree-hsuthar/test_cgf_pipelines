@@ -48,7 +48,7 @@ const tableHead = [
     {
         id: "emailId",
         disablePadding: false,
-        label: "Email Id",
+        label: "Email",
         // width: "40%",
     },
 ];
@@ -277,7 +277,7 @@ const AssignAssessmentToOperationMember = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Success",
-                        descriptionMessage: response?.data?.message,
+                        descriptionMessage: "Assessment assigned successfully!",
 
                         messageType: "success",
                     },
@@ -334,7 +334,7 @@ const AssignAssessmentToOperationMember = () => {
     }, []);
 
     return (
-        <div class="page-wrapper">
+        <div className="page-wrapper">
             <Toaster
                 myRef={myRef}
                 messageType={toasterDetails.messageType}
@@ -379,7 +379,7 @@ const AssignAssessmentToOperationMember = () => {
                 <div className="container">
                     <div className="form-header flex-between ">
                         <h2 className="heading2">
-                            Assign Assessment to operation member
+                            Assign Assessment
                         </h2>
                         <div className="form-header-right-txt member-filter-right">
                             <div className="tertiary-btn-blk">
@@ -393,7 +393,7 @@ const AssignAssessmentToOperationMember = () => {
                                         name="search"
                                     />
                                     <button type="submit">
-                                        <i class="fa fa-search"></i>
+                                        <i className="fa fa-search"></i>
                                     </button>
                                 </div>
                             </div>

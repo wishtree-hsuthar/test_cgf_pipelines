@@ -208,7 +208,7 @@ const ViewOperationMembers = () => {
         setToasterDetails(
           {
             titleMessage: "Success",
-            descriptionMessage: response.data.message,
+            descriptionMessage: `${fetchOperationMemberDetaills?.name} deleted!`,
             messageType: "success",
           },
           () => toasterRef.current()
@@ -276,7 +276,7 @@ const ViewOperationMembers = () => {
           : !moduleAccessForOperationMember[0]?.operationMember.delete,
     },
   ];
-
+//  console.log("operation member:- ",fetchOperationMemberDetaills)
   return (
     <div className="page-wrapper">
       <Toaster
@@ -286,12 +286,10 @@ const ViewOperationMembers = () => {
         titleMessage={toasterDetails.titleMessage}
       />
       <DialogBox
-        title={<p>Delete CGF Admin {fetchOperationMemberDetaills.name}</p>}
+        title={<p>Delete opration member "{fetchOperationMemberDetaills.name}"</p>}
         info1={
           <p>
-            We recommend you to replace this sub admin with the new one because
-            deleting all the details which sub admin has added will get deleted
-            and this will be an irreversible action
+            We recommend you to replace this operation member with the new one because deleting all the statistics & records would get deleted and this will be an irreversible action
           </p>
         }
         info2={
@@ -540,9 +538,9 @@ const ViewOperationMembers = () => {
                 <div className="card-form-field">
                   <div className="form-group">
                     <label htmlFor="">
-                      Address <span className="mandatory">*</span>
+                      Address 
                     </label>
-                    <Input control={control} name={"address"} isDisabled />
+                    <Input control={control} name={"address"} placeholder="N/A" isDisabled />
                   </div>
                 </div>
                 <div className="card-form-field">

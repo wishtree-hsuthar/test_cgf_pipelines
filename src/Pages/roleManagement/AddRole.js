@@ -117,7 +117,7 @@ const AddRole = () => {
       setToasterDetails(
         {
           titleMessage: "Hurray!",
-          descriptionMessage: "New role added successfully",
+          descriptionMessage: "New role added successfully!",
           messageType: "success",
         },
         () => myRef.current()

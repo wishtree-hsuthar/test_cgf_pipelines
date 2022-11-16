@@ -103,7 +103,7 @@ const TableLayoutCellComponent = ({
           className={`input-textarea ${!cell?.value && tableErr && "input-textarea-error"}`}
           name="value"
           value={cell?.value}
-          helperText={!cell?.value && tableErr ? "Enter row value" : " "}
+          helperText={!cell?.value && tableErr ? "Enter the row value" : " "}
           onChange={(e) => onCellValueChangeHandler(e, rowId, cellId)}
           onBlur={(e) => onCellValueBlurHandler(e, rowId, cellId)}
         />

@@ -4,6 +4,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
@@ -71,9 +72,16 @@ const SectionContent = ({
   const onDialogPrimaryButtonClickHandler = () => {
     deleteSection(uuid);
   };
+  const onDialogPrimaryButtonClickHandler1 = () => {
+    handleSubmitSection()
+    setOpenDialog1(false)
+  }
   const onDialogSecondaryButtonClickHandler = () => {
     setOpenDialog(false);
   };
+  const onDialogSecondaryButtonClickHandler1 = () => {
+    setOpenDialog1(false)
+  }
   const deleteSection = (uuid) => {
     let tempQuestionnare = { ...questionnaire };
 
@@ -132,24 +140,26 @@ const SectionContent = ({
       questionTitle: "",
       option: "",
     };
-    await questionnaire?.sections[index]?.questions?.map((question, questionIdx) => {
-      if (question?.questionTitle === "") {
-        // console.log("is Error");
-        tempError["questionTitle"] = "Enter question title";
-        countError++;
+    await questionnaire?.sections[index]?.questions?.map(
+      (question, questionIdx) => {
+        if (question?.questionTitle === "") {
+          // console.log("is Error");
+          tempError["questionTitle"] = "Enter question title";
+          countError++;
+        }
+        //   console.log("question in validate section map",question)
+        if (
+          ["dropdown", "checkbox", "radioGroup"].includes(question?.inputType)
+        ) {
+          question?.options?.map((option) => {
+            if (option === "") {
+              tempError["option"] = "Enter option";
+              countError++;
+            }
+          });
+        }
       }
-      //   console.log("question in validate section map",question)
-      if (
-        ["dropdown", "checkbox", "radioGroup"].includes(question?.inputType)
-      ) {
-        question?.options?.map((option) => {
-          if (option === "") {
-            tempError["option"] = "Enter option";
-            countError++;
-          }
-        });
-      }
-    });
+    );
 
     setErr({ ...tempError });
     //Madhav's save section
@@ -253,16 +263,16 @@ const SectionContent = ({
     setQuestionnaire(tempQuestionnare);
   };
   const handleInputBlur = (e) => {
-    const {name, value} = e.target;
-    let tempQuestionnaire = {...questionnaire}
-    tempQuestionnaire.sections[index][name] = value?.trim()
-    setQuestionnaire(tempQuestionnaire)
-  }
-  const handleSubmitSection = async (e) => {
-    e.preventDefault();
-    const response = await validateSection()
+    const { name, value } = e.target;
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire.sections[index][name] = value?.trim();
+    setQuestionnaire(tempQuestionnaire);
+  };
+  const handleSubmitSection = async (e, isPublished) => {
+    e?.preventDefault();
+    const response = await validateSection();
     if (response) {
-      await saveSection();
+      await saveSection(undefined, isPublished);
       return true;
     }
     return false;
@@ -271,8 +281,9 @@ const SectionContent = ({
 
   const params = useParams();
   const [openDialog, setOpenDialog] = useState(false);
+  const [openDialog1, setOpenDialog1] = useState(false);
 
-  const saveSection = async (questionnaireObj) => {
+  const saveSection = async (questionnaireObj, isPublished) => {
     try {
       const response = await privateAxios.post(
         ADD_QUESTIONNAIRE,
@@ -289,7 +300,11 @@ const SectionContent = ({
             setToasterDetails(
               {
                 titleMessage: "Success!",
-                descriptionMessage: "Section details saved successfully!!",
+                descriptionMessage: `${
+                  isPublished
+                    ? "Questionnaire published successfully!"
+                    : "Section details saved successfully!"
+                }`,
                 messageType: "success",
               },
               () => myRef.current()
@@ -311,16 +326,16 @@ const SectionContent = ({
     }
   };
   const onCancelClickHandler = () => {
-    return navigate("/questionnaires");
+    setOpenDialog1(true)
+    // return navigate("/questionnaires");
   };
   const onPublishButtonClickHandler = async (e) => {
-    console.log("inside publist button click")
-    const response = await handleSubmitSection(e)
+    console.log("inside publist button click");
+    const response = await handleSubmitSection(e, true);
     if (response) {
       try {
-        await privateAxios.put(
-          `${ADD_QUESTIONNAIRE}/publish/${params?.id}`
-        );
+        await privateAxios.put(`${ADD_QUESTIONNAIRE}/publish/${params?.id}`);
+        setTimeout(() => navigate("/questionnaires"), 3000);
       } catch (error) {
         setErrorToaster(error);
       }
@@ -348,13 +363,12 @@ const SectionContent = ({
         info1={
           <p>
             On deleting all the details of this section would get deleted and
-            this will be an irreversible action, Are you want to remove the
-            section name?
+            this will be an irreversible action
           </p>
         }
         info2={
           <p>
-            Are you sure you want to delete <b>{section?.sectionTitle}</b>?
+            Are you want to remove <b>{section?.sectionTitle}</b>?
           </p>
         }
         primaryButtonText="Delete"
@@ -363,6 +377,23 @@ const SectionContent = ({
         onSecondaryModalButtonClickHandler={onDialogSecondaryButtonClickHandler}
         openModal={openDialog}
         setOpenModal={setOpenDialog}
+      />
+      {/* Dialog box for cancel */}
+      <DialogBox
+        title={
+          <p>
+            Cancel Questionnaire{" "}
+            {questionnaire?.title && '"' + questionnaire?.title + '"'}
+          </p>
+        }
+        info1={<p>All the saved sections will save a draft</p>}
+        info2={<p>Are you sure want to cancel the form?</p>}
+        primaryButtonText="Yes"
+        secondaryButtonText="No"
+        onPrimaryModalButtonClickHandler={onDialogPrimaryButtonClickHandler1}
+        onSecondaryModalButtonClickHandler={onDialogSecondaryButtonClickHandler1}
+        openModal={openDialog1}
+        setOpenModal={setOpenDialog1}
       />
       <div className="sect-form-card-info">
         <div className="sect-form-innercard-blk">
@@ -385,11 +416,13 @@ const SectionContent = ({
                                     />
                                 </span> */}
                   <span className="sect-icon-blk delete-iconblk">
-                    <img
-                      onClick={() => setOpenDialog(true)}
-                      src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
-                      alt=""
-                    />
+                    <Tooltip title="Delete section">
+                      <img
+                        onClick={() => setOpenDialog(true)}
+                        src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
+                        alt=""
+                      />
+                    </Tooltip>
                   </span>
                 </div>
               </div>
@@ -401,7 +434,7 @@ const SectionContent = ({
                 <div className="sect-card-form-leftfield">
                   <div className="form-group">
                     <label htmlFor="title">
-                      Section name <span className="mandatory">*</span>
+                      Section Name <span className="mandatory">*</span>
                     </label>
                     <TextField
                       className={`input-field ${
@@ -419,7 +452,7 @@ const SectionContent = ({
                       helperText={
                         section.sectionTitle === "" &&
                         globalSectionTitleError?.errMsg
-                          ? "Enter section name"
+                          ? "Enter the section name"
                           : " "
                       }
                     />

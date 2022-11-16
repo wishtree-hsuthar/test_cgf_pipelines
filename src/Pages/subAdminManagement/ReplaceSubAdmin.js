@@ -327,7 +327,7 @@ const ReplaceSubAdmin = () => {
         setSelectedUser(id);
     };
     return (
-        <div class="page-wrapper">
+        <div className="page-wrapper">
             <Toaster
                 myRef={myRef}
                 messageType={toasterDetails.messageType}
@@ -392,7 +392,7 @@ const ReplaceSubAdmin = () => {
                                     name="search"
                                 />
                                 <button type="submit">
-                                    <i class="fa fa-search"></i>
+                                    <i className="fa fa-search"></i>
                                 </button>
                             </div>
                             {/* </div> */}

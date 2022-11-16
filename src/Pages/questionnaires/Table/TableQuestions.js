@@ -162,7 +162,7 @@ const TableQuestions = ({
                   <div className="que-col-form-leftfield flex-between">
                     <div className="form-group">
                       <label htmlFor="emailid">
-                        Column {columnId + 1} Title
+                        Column {columnId + 1} Title <span className="mandatory">*</span>
                       </label>
                       <TextField
                         className={`input-field ${
@@ -173,7 +173,7 @@ const TableQuestions = ({
                         name="title"
                         helperText={
                           !column?.title && tableErr
-                            ? "Enter column title"
+                            ? "Enter the column title"
                             : " "
                         }
                         value={column?.title}
@@ -183,7 +183,7 @@ const TableQuestions = ({
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="emailid">Input type</label>
+                      <label htmlFor="emailid">Input Type <span className="mandatory">*</span></label>
                       <div className="select-field">
                         <FormControl className="fullwidth-field">
                           <Select

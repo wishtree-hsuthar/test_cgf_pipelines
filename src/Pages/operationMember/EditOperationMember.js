@@ -58,33 +58,35 @@ const helperTextForAddOperationMember = {
     name: {
         required: "Enter the operation member name",
         maxLength: "Max char limit exceed",
-        minLength: "Role must contain atleast 3 characters",
+        minLength: "minimum 3 characters required",
         pattern: "Invalid format",
     },
     department: {
         // required: "Enter the role name",
         maxLength: "Max char limit exceed",
-        minLength: "Role must contain atleast 3 characters",
+        minLength: "minimum 3 characters required",
         pattern: "Invalid format",
     },
     title: {
         // required: "Enter the role name",
         maxLength: "Max char limit exceed",
-        minLength: "Role must contain atleast 3 characters",
+        minLength: "minimum 3 characters required",
         pattern: "Invalid format",
     },
     email: {
-        required: "Enter email id",
+        required: "Enter the email",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         pattern: "Invalid format",
     },
     countryCode: {
+        required: "Enter country code",
         validate: "Select country code",
     },
     phoneNumber: {
+        required: "Enter the phone number",
         maxLength: "Max digits limit exceed",
-        minLength: "Number must contain atleast 3 digits",
+        minLength: "minimum 3 characters required",
         validate: "Enter phone number",
         // pattern: "Invalid format",
     },
@@ -92,13 +94,14 @@ const helperTextForAddOperationMember = {
         required: "Select member company",
     },
     operationType: {
-        required: "Enter operation type ",
+        required: "Select the operation type",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
     },
     memberId: {
-        required: "Enter member company",
+        required: "Select the member company",
+        validate: "Select the member company",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
@@ -112,11 +115,11 @@ const helperTextForAddOperationMember = {
     address: {
         required: "Enter address",
         maxLength: "Max char limit exceed",
-        minLength: "Role must contain atleast 3 characters",
+        minLength: "minimum 3 characters required",
         pattern: "Invalid format",
     },
     reportingManager: {
-        required: "Select reporting manager ",
+        required: "Select the reporting manager ",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
@@ -274,14 +277,14 @@ function EditOperationMember() {
                     countryCode: response?.data?.countryCode,
                     phoneNumber: response?.data?.phoneNumber,
                     address: response?.data?.address,
-                    title: response?.data?.title ? response.data.title : "N/A",
+                    title: response?.data?.title ? response.data.title : "",
                     department: response?.data?.department
                         ? response?.data?.department
-                        : "N/A",
+                        : "",
                     email: response?.data?.email,
                     operationType: response?.data?.operationType
                         ? response?.data?.operationType
-                        : "N/A",
+                        : "",
                     reportingManager: response?.data?.reportingManager[0]?._id,
                     salutation: response?.data?.salutation,
                     name: response?.data?.name,
@@ -425,7 +428,7 @@ function EditOperationMember() {
                                     className="tertiary-btn-blk"
                                     onClick={handleSubmit(handleSaveAndMore)}
                                 >
-                                    <span class="addmore-icon">
+                                    <span className="addmore-icon">
                                         <i className="fa fa-plus"></i>
                                     </span>
                                     <span className="addmore-txt">
@@ -480,7 +483,7 @@ function EditOperationMember() {
                                                             e.target.value?.trim()
                                                         )
                                                     }
-                                                    placeholder="NA"
+                                                    placeholder="Enter full name"
                                                     myHelper={
                                                         helperTextForAddOperationMember
                                                     }
@@ -489,6 +492,7 @@ function EditOperationMember() {
                                                         pattern:
                                                             /^[A-Za-z]+[A-Za-z ]*$/,
                                                         maxLength: 50,
+                                                        minLength:3
                                                     }}
                                                 />
                                             </div>
@@ -500,7 +504,7 @@ function EditOperationMember() {
                                         <label htmlFor="email">Title </label>
                                         <Input
                                             name={"title"}
-                                            placeholder="NA"
+                                            placeholder="Enter title"
                                             control={control}
                                             onBlur={(e) =>
                                                 setValue(
@@ -508,8 +512,10 @@ function EditOperationMember() {
                                                     e.target.value?.trim()
                                                 )
                                             }
+                                            myHelper={helperTextForAddOperationMember}
                                             rules={{
                                                 maxLength: 50,
+                                                minLength:3
                                             }}
                                         />
                                     </div>
@@ -521,7 +527,7 @@ function EditOperationMember() {
                                         </label>
                                         <Input
                                             name={"department"}
-                                            placeholder="NA"
+                                            placeholder="Enter department"
                                             control={control}
                                             onBlur={(e) =>
                                                 setValue(
@@ -534,6 +540,7 @@ function EditOperationMember() {
                                             }
                                             rules={{
                                                 maxLength: 50,
+                                                minLength:3
                                             }}
                                         />
                                     </div>
@@ -691,7 +698,7 @@ function EditOperationMember() {
                                                         e.target.value?.trim()
                                                     )
                                                 }
-                                                placeholder="NA"
+                                                placeholder="1234567890"
                                                 myHelper={
                                                     helperTextForAddOperationMember
                                                 }
@@ -726,7 +733,7 @@ function EditOperationMember() {
                                         <Dropdown
                                             control={control}
                                             name="operationType"
-                                            placeholder="NA"
+                                            placeholder="Select operation type"
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
@@ -886,8 +893,8 @@ function EditOperationMember() {
                                                     e.target.value?.trim()
                                                 )
                                             }
-                                            placeholder="NA"
-                                            rules={{}}
+                                            placeholder="Enter address"
+                                            rules={{maxLength:250,minLength:3}}
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }

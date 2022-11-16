@@ -102,7 +102,7 @@ function QuestionnairesList() {
                     <div className="form-header member-form-header flex-between">
                         <div className="form-header-left-blk flex-start">
                             <h2 className="heading2 mr-40">
-                                Questionnaire List
+                                Questionnaires
                             </h2>
                         </div>
                         <div className="form-header-right-txt">

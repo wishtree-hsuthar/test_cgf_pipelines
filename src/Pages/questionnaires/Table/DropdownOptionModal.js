@@ -76,6 +76,8 @@ const DropdownOptionModal = ({
   const onCancelButtonClickHandler = () => {
     let tempQuestionnaire = {...questionnaire}
     tempQuestionnaire.sections[sectionIndex].columnValues[columnId].options = ["", ""]
+    tempQuestionnaire.sections[sectionIndex].columnValues[columnId].columnType = "textbox"
+
     setQuestionnaire(tempQuestionnaire)
     setOpenModal(false)
   }
@@ -100,7 +102,7 @@ const DropdownOptionModal = ({
           <div className="popup-innerblk">
           <div id="transition-modal-title" className="popup-ttl-blk">
             <h2 className="popup-ttl heading2">Create Custom List Dropdown</h2>
-            {/* <span class="popup-close-icon" onClick={handleClose}><CloseIcon/></span> */}
+            <span className="popup-close-icon" onClick={onCancelButtonClickHandler}><CloseIcon/></span>
           </div>
           <div id="transition-modal-description" className="popup-body">
             <div className="popup-content-blk">
@@ -120,8 +122,8 @@ const DropdownOptionModal = ({
                           }
                           onBlur={(e) => onTableLayoutOptionBlurHandler(e, optionIdx)}
                           id="outlined-basic"
-                          helperText={(tableOptionErr && !option) ? "Enter option" : " "}
-                          placeholder={`Option ${optionIdx + 1}`}
+                          helperText={(tableOptionErr && !option) ? "Enter the option" : " "}
+                          placeholder={`Enter option value`}
                           variant="outlined"
                         />
                       </div>
@@ -152,9 +154,9 @@ const DropdownOptionModal = ({
                 </div>
               </div>
               <div className="form-btn flex-center text-center">
-                {/* <button className="secondary-button mr-10" onClick={onCancelButtonClickHandler}>
+                <button className="secondary-button mr-10" onClick={onCancelButtonClickHandler}>
                   Cancel
-                </button> */}
+                </button>
                 <button
                   type="submit"
                   className="primary-button"

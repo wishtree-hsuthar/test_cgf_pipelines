@@ -96,7 +96,7 @@ function OperationMemberList() {
     const navigate = useNavigate();
     return (
         <>
-            <div class="page-wrapper">
+            <div className="page-wrapper">
                 {/* <DialogBox
                     title={`Withdraw CGF Admin Invitation`}
                     info1={
@@ -132,7 +132,7 @@ function OperationMemberList() {
                             </div>
                             <div className="form-header-right-txt">
                                 <div className="tertiary-btn-blk mr-20">
-                                    <span class="download-icon">
+                                    <span className="download-icon">
                                         <DownloadIcon />
                                     </span>
                                     Download
@@ -197,7 +197,7 @@ function OperationMemberList() {
                                         name="search"
                                     />
                                     <button type="submit">
-                                        <i class="fa fa-search"></i>
+                                        <i className="fa fa-search"></i>
                                     </button>
                                 </div>
                             </div>

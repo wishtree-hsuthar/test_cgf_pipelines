@@ -14,7 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const schema = yup.object().shape({
     password: yup
         .string()
-        .required("Enter the New Password")
+        .required("Enter the new password")
         .matches(
             /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,15}$/,
             "Password must contain at least 6 characters, one uppercase, one number and one special case character"
@@ -107,7 +107,7 @@ const SetPassword = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage: response.data.message,
+                        descriptionMessage: "Your password has been set successfully!",
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -142,42 +142,42 @@ const SetPassword = () => {
     };
 
     return (
-        <div class="page-wrapper login-page-wrap">
+        <div className="page-wrapper login-page-wrap">
             <Toaster
                 myRef={toasterRef}
                 titleMessage={toasterDetails.titleMessage}
                 descriptionMessage={toasterDetails.descriptionMessage}
                 messageType={toasterDetails.messageType}
             />
-            <div class="login-section">
-                <div class="container">
-                    <div class="login-wrapper">
-                        <div class="login-leftblk">
-                            <div class="login-slider">
+            <div className="login-section">
+                <div className="container">
+                    <div className="login-wrapper">
+                        <div className="login-leftblk">
+                            <div className="login-slider">
                                 <Slider />
                             </div>
                         </div>
-                        <div class="login-rightblk">
-                            <div class="login-blk">
-                                <div class="logo">
+                        <div className="login-rightblk">
+                            <div className="login-blk">
+                                <div className="logo">
                                     <img
                                         src={
                                             process.env.PUBLIC_URL +
                                             "/images/logo.png"
                                         }
                                         alt=""
-                                        class="img-fluid"
+                                        className="img-fluid"
                                     />
                                 </div>
-                                <h2 class="heading1 text-uppercase">
+                                <h2 className="heading1 text-uppercase">
                                     Set Password
                                 </h2>
-                                <div class="login-form">
+                                <div className="login-form">
                                     <form onSubmit={handleSubmit(submitForm)}>
-                                        <div class="form-group">
+                                        <div className="form-group">
                                             <label for="password">
                                                 New Password{" "}
-                                                <span class="mandatory">*</span>
+                                                <span className="mandatory">*</span>
                                             </label>
                                             <div className="password-field">
                                                 <OutlinedInput
@@ -220,7 +220,7 @@ const SetPassword = () => {
                                                                             "/images/non-visibleicon.svg"
                                                                         }
                                                                         alt=""
-                                                                        class="img-fluid"
+                                                                        className="img-fluid"
                                                                     />
                                                                 ) : (
                                                                     <img
@@ -231,7 +231,7 @@ const SetPassword = () => {
                                                                             "/images/visibleicon.svg"
                                                                         }
                                                                         alt=""
-                                                                        class="img-fluid"
+                                                                        className="img-fluid"
                                                                     />
                                                                 )}
                                                             </IconButton>
@@ -253,10 +253,10 @@ const SetPassword = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div className="form-group">
                                             <label for="password">
                                                 Confirm Password{" "}
-                                                <span class="mandatory">*</span>
+                                                <span className="mandatory">*</span>
                                             </label>
                                             <div className="password-field">
                                                 <OutlinedInput
@@ -299,7 +299,7 @@ const SetPassword = () => {
                                                                             "/images/non-visibleicon.svg"
                                                                         }
                                                                         alt=""
-                                                                        class="img-fluid"
+                                                                        className="img-fluid"
                                                                     />
                                                                 ) : (
                                                                     <img
@@ -310,7 +310,7 @@ const SetPassword = () => {
                                                                             "/images/visibleicon.svg"
                                                                         }
                                                                         alt=""
-                                                                        class="img-fluid"
+                                                                        className="img-fluid"
                                                                     />
                                                                 )}
                                                             </IconButton>
@@ -335,11 +335,11 @@ const SetPassword = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="form-btn flex-between">
-                                            <button class="primary-button">
+                                        <div className="form-btn flex-between">
+                                            <button className="primary-button">
                                                 Submit
                                             </button>
-                                            {/* <div class="tertiary-btn-blk mr-10">Back to login</div> */}
+                                            {/* <div className="tertiary-btn-blk mr-10">Back to login</div> */}
                                         </div>
                                     </form>
                                 </div>

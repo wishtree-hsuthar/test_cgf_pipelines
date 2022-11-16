@@ -19,16 +19,14 @@ import { useParams, useNavigate } from "react-router-dom";
 const schema = yup.object().shape({
     newPassword: yup
         .string()
-        .required("Enter new password")
-
+        .required("Enter the new password")
         .matches(
             /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,15}$/,
             "Password must contain at least 6 characters, one uppercase, one number and one special case character"
-        )
-        .required("Password required"),
+        ),
     confirmPassword: yup
         .string()
-        .required("Enter confirm password")
+        .required("Enter the confirm password")
         .oneOf([yup.ref("newPassword"), null], "Password does not match."),
 });
 const ResetPassword = () => {
@@ -139,7 +137,7 @@ const ResetPassword = () => {
             if (error?.response?.status == 400) {
                 setMessageType("error");
                 setMessageTitle("Password Reset Failure");
-                setMessageDescription("Password reset unsuccessfull");
+                setMessageDescription(error?.response?.data?.message);
                 reset();
                 setTimeout(() => {
                     toasterRef.current();
@@ -149,42 +147,42 @@ const ResetPassword = () => {
     };
 
     return (
-        <div class="page-wrapper login-page-wrap">
+        <div className="page-wrapper login-page-wrap">
             <Toaster
                 messageType={messageType}
                 titleMessage={messageTitle}
                 myRef={toasterRef}
                 descriptionMessage={messageDescription}
             />
-            <div class="login-section">
-                <div class="container">
-                    <div class="login-wrapper">
-                        <div class="login-leftblk">
-                            <div class="login-slider">
+            <div className="login-section">
+                <div className="container">
+                    <div className="login-wrapper">
+                        <div className="login-leftblk">
+                            <div className="login-slider">
                                 <Slider />
                             </div>
                         </div>
-                        <div class="login-rightblk">
-                            <div class="login-blk">
-                                <div class="logo">
+                        <div className="login-rightblk">
+                            <div className="login-blk">
+                                <div className="logo">
                                     <img
                                         src={
                                             process.env.PUBLIC_URL +
                                             "/images/logo.png"
                                         }
                                         alt=""
-                                        class="img-fluid"
+                                        className="img-fluid"
                                     />
                                 </div>
-                                <h2 class="heading1 text-uppercase">
+                                <h2 className="heading1 text-uppercase">
                                     Reset Password
                                 </h2>
-                                <div class="login-form">
+                                <div className="login-form">
                                     <form onSubmit={handleSubmit(submitForm)}>
-                                        <div class="form-group">
+                                        <div className="form-group">
                                             <label for="password">
                                                 New Password{" "}
-                                                <span class="mandatory">*</span>
+                                                <span className="mandatory">*</span>
                                             </label>
                                             <div className="password-field">
                                                 <OutlinedInput
@@ -227,7 +225,7 @@ const ResetPassword = () => {
                                                                             "/images/non-visibleicon.svg"
                                                                         }
                                                                         alt=""
-                                                                        class="img-fluid"
+                                                                        className="img-fluid"
                                                                     />
                                                                 ) : (
                                                                     <img
@@ -238,7 +236,7 @@ const ResetPassword = () => {
                                                                             "/images/visibleicon.svg"
                                                                         }
                                                                         alt=""
-                                                                        class="img-fluid"
+                                                                        className="img-fluid"
                                                                     />
                                                                 )}
                                                             </IconButton>
@@ -256,10 +254,10 @@ const ResetPassword = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div className="form-group">
                                             <label for="password">
                                                 Confirm Password{" "}
-                                                <span class="mandatory">*</span>
+                                                <span className="mandatory">*</span>
                                             </label>
                                             <div className="password-field">
                                                 <OutlinedInput
@@ -272,7 +270,7 @@ const ResetPassword = () => {
                                                     }
                                                     // value={values.confirmPassword}
                                                     // onChange={handleChange('confirmPassword')}
-                                                    placeholder="Enter new password"
+                                                    placeholder="Enter confirm password"
                                                     className={`input-field ${
                                                         errors.confirmPassword &&
                                                         "input-error"
@@ -302,7 +300,7 @@ const ResetPassword = () => {
                                                                             "/images/non-visibleicon.svg"
                                                                         }
                                                                         alt=""
-                                                                        class="img-fluid"
+                                                                        className="img-fluid"
                                                                     />
                                                                 ) : (
                                                                     <img
@@ -313,7 +311,7 @@ const ResetPassword = () => {
                                                                             "/images/visibleicon.svg"
                                                                         }
                                                                         alt=""
-                                                                        class="img-fluid"
+                                                                        className="img-fluid"
                                                                     />
                                                                 )}
                                                             </IconButton>
@@ -333,10 +331,10 @@ const ResetPassword = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="form-btn flex-between">
+                                        <div className="form-btn flex-between">
                                             <button
                                                 type="submit"
-                                                class="primary-button"
+                                                className="primary-button"
                                             >
                                                 Reset
                                             </button>
@@ -344,7 +342,7 @@ const ResetPassword = () => {
                                                 onClick={() =>
                                                     navigate("/login")
                                                 }
-                                                class="tertiary-btn-blk mr-10"
+                                                className="tertiary-btn-blk mr-10"
                                             >
                                                 Back to login
                                             </div>

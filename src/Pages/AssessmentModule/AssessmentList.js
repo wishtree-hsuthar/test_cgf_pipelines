@@ -28,7 +28,7 @@ const tableHead = [
         id: "assignedMember.name",
         width: "30%",
         disablePadding: false,
-        label: "Assigned member",
+        label: "Assigned Member",
     },
     {
         id: "assignedOperationMember.name",
@@ -256,7 +256,7 @@ const AssessmentList = () => {
                         <div className="form-header member-form-header flex-between mb-0">
                             <div className="form-header-left-blk flex-start">
                                 <h2 className="heading2 mr-40">
-                                    Assessment List
+                                    Assessments
                                 </h2>
                             </div>
                             <div className="form-header-right-txt search-and-btn-field-right">
