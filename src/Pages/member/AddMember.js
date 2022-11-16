@@ -160,7 +160,7 @@ const AddMember = () => {
                     phoneNumber: data.memberContactPhoneNuber
                         ? parseInt(data.memberContactPhoneNuber)
                         : "",
-                    roleId: data.role,
+                    roleId: data.roleId,
                 },
             };
             const response = await axios.post(MEMBER, { ...backendObject });
