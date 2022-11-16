@@ -178,6 +178,8 @@ const ViewMember = () => {
             delete object["uuid"];
             delete object["__v"];
             delete object["isMemberRepresentative"];
+            delete object["isCGFStaff"];
+            delete object["isOperationMember"];
             // delete object["createdBy"]
             object.assessment = object["assessment"]?.toString() ?? "0";
             console.log(

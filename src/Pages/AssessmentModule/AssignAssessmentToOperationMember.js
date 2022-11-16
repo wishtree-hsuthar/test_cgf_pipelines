@@ -144,6 +144,9 @@ const AssignAssessmentToOperationMember = () => {
             delete object["address"];
             delete object["operationType"];
             delete object["reportingManager"];
+            delete object["isCGFStaff"];
+            delete object["isOperationMember"];
+            delete object["isMemberRepresentative"];
             object["name"] = object["name"];
             // delete object["name"];
 

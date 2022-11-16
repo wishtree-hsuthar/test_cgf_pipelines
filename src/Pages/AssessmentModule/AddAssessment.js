@@ -20,6 +20,7 @@ import {
     ASSESSMENTS,
     FETCH_OPERATION_MEMBER,
     MEMBER,
+    MEMBER_DROPDOWN,
     MEMBER_OPERATION_MEMBERS,
 } from "../../api/Url";
 import { date } from "yup";
@@ -78,18 +79,20 @@ const AddAssessment = () => {
             assessmentType: "",
             assignedMember: "",
             assignedOperationMember: "",
-            dueDate: new Date().toLocaleDateString(),
+            dueDate: new Date(),
             remarks: "",
             questionnaireId: "",
         },
     });
+    const [isCGFStaff, setIsCGFStaff] = useState(false);
+
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
 
         const fetchMemberCompaniesForAddAssesments = async () => {
             try {
-                const response = await privateAxios.get(MEMBER, {
+                const response = await privateAxios.get(MEMBER_DROPDOWN, {
                     signal: controller.signal,
                 });
 
@@ -138,10 +141,13 @@ const AddAssessment = () => {
     }, []);
 
     const fetchOperationMembersAccordingToMemberCompanyForAddAssessment =
-        async (id) => {
+        async (id, isCGFStaff) => {
             try {
                 const response = await privateAxios.get(
-                    FETCH_OPERATION_MEMBER + id
+                    // FETCH_OPERATION_MEMBER + id
+                    isCGFStaff
+                        ? FETCH_OPERATION_MEMBER + id + "/master/internal"
+                        : FETCH_OPERATION_MEMBER + id
                 );
                 console.log(
                     "Response from fetch operation member according to member company",
@@ -153,6 +159,17 @@ const AddAssessment = () => {
                         name: data.name,
                     }))
                 );
+                let representative = response.data.filter(
+                    (data) => data?.isMemberRepresentative
+                );
+                console.log("Representative---", representative);
+                console.log("is Cgf staff---", isCGFStaff);
+                isCGFStaff
+                    ? setValue("assignedOperationMember", "")
+                    : setValue(
+                          "assignedOperationMember",
+                          representative[0]?._id ? representative[0]?._id : ""
+                      );
             } catch (error) {
                 console.log(
                     "Error from from fetch operation member according to member company",
@@ -164,25 +181,35 @@ const AddAssessment = () => {
     const handleChangeForMemberCompany = (e) => {
         setValue("assignedMember", e.target.value);
         console.log("assignedMember", e.target.value);
+        console.log("member representatives-----", memberRepresentatives);
+
+        let cgfCompany = memberCompaniesForAddAssessments.filter(
+            (data) => data._id === e.target.value
+        );
+        console.log("cgf company-----", cgfCompany);
+
         let memberRepresentative = memberRepresentatives.filter(
             (data) => data._id === e.target.value
         );
 
-        console.log(
-            "member representative----",
-            memberRepresentative[0]?.representative[0]?.name
-        );
+        if (cgfCompany[0].name === "CGF") {
+            setIsCGFStaff(true);
+            fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+                e.target.value,
+                true
+            );
+        } else {
+            setIsCGFStaff(false);
+            fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+                e.target.value,
+                false
+            );
+        }
 
-        setValue(
-            "assignedOperationMember",
+        console.log("member representative----", memberRepresentative);
 
-            memberRepresentative[0]?.representative[0]?._id
-        );
-        trigger("assignedOperationMember");
+        // trigger("assignedOperationMember");
         trigger("assignedMember");
-        fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
-            e.target.value
-        );
     };
 
     const handleChangeForAssessmentModule = (e) => {
@@ -382,7 +409,7 @@ const AddAssessment = () => {
                                             // isDisabled={
                                             //     !watch("assignedMember")
                                             // }
-                                            isDisabled={true}
+                                            isDisabled={!isCGFStaff}
                                             name={"assignedOperationMember"}
                                             placeholder={
                                                 "Select operation member "

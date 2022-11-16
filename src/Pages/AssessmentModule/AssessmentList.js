@@ -37,6 +37,12 @@ const tableHead = [
         label: "Assigned To",
     },
     {
+        id: "assessmentStatus",
+        width: "30%",
+        disablePadding: false,
+        label: "Assessment Status",
+    },
+    {
         id: "dueDate",
         width: "30%",
         disablePadding: false,
@@ -57,6 +63,7 @@ const AssessmentList = () => {
         "assessmentType",
         "assignedMember.name",
         "assignedOperationMember.name",
+        "assessmentStatus",
         "dueDate",
     ];
     const navigate = useNavigate();
@@ -111,7 +118,7 @@ const AssessmentList = () => {
     };
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
-        return navigate(`/assessments/view-assessment/${id}`);
+        return navigate(`/assessment-list/fill-assessment/${id}`);
     };
 
     const onClickEditIconHandler = (uuid) => {
@@ -195,6 +202,7 @@ const AssessmentList = () => {
             delete object["assignedMember"];
             delete object["memberCompany"];
             delete object["questionnaireId"];
+            delete object["isMemberRepresentative"];
             object["dueDate"] = new Date(object["dueDate"]).toLocaleDateString(
                 "en-US",
                 { month: "2-digit", day: "2-digit", year: "numeric" }
@@ -345,6 +353,7 @@ const AssessmentList = () => {
                                         onClickFillAssessmentFunction={
                                             onClickFillAssessmentHandler
                                         }
+                                        viewAssessment={true}
                                         // onRowClick={
                                         //     SUPER_ADMIN
                                         //         ? true

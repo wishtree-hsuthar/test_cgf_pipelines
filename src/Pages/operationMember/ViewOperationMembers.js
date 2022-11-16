@@ -48,6 +48,7 @@ const defaultValues = {
     address: "",
     isActive: "",
     reportingManager: "",
+    isCGFStaff: "",
 };
 const ViewOperationMembers = () => {
     const { control, reset, watch, trigger } = useForm({
@@ -181,6 +182,8 @@ const ViewOperationMembers = () => {
                         : "N/A",
                     name: response?.data?.name,
                     isActive: response?.data?.isActive,
+                    isCGFStaff:
+                        response?.data?.isCGFStaff === true ? "true" : "false",
                 });
             } catch (error) {
                 console.log(
@@ -529,6 +532,62 @@ const ViewOperationMembers = () => {
                                                 "Retail/Franchise/Merchandisers",
                                             ]}
                                         />
+                                    </div>
+                                </div>
+                                <div className="card-form-field">
+                                    <div className="form-group">
+                                        <label htmlFor="">
+                                            CGF Staff{" "}
+                                            <span className="mandatory">*</span>
+                                        </label>
+                                        <div className="radio-btn-field">
+                                            <Controller
+                                                name="isCGFStaff"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <RadioGroup
+                                                        {...field}
+                                                        onChange={(e) => {
+                                                            field.onChange(e);
+                                                            e.target.value ===
+                                                            "true"
+                                                                ? setValue(
+                                                                      "companyType",
+                                                                      "Internal"
+                                                                  )
+                                                                : setValue(
+                                                                      "companyType",
+                                                                      "External"
+                                                                  );
+                                                        }}
+                                                        // value={field.name}
+                                                        // value={field.isCGFStaff}
+                                                        aria-labelledby="demo-radio-buttons-group-label"
+                                                        name="radio-buttons-group"
+                                                        className="radio-btn"
+                                                    >
+                                                        <FormControlLabel
+                                                            value="true"
+                                                            control={
+                                                                <Radio
+                                                                    disabled
+                                                                />
+                                                            }
+                                                            label="Yes"
+                                                        />
+                                                        <FormControlLabel
+                                                            value="false"
+                                                            control={
+                                                                <Radio
+                                                                    disabled
+                                                                />
+                                                            }
+                                                            label="No"
+                                                        />
+                                                    </RadioGroup>
+                                                )}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="card-form-field">

@@ -567,8 +567,10 @@ const Header = () => {
                                                                         <LocalPhoneOutlinedIcon />
                                                                     </span>
                                                                     <span className="profile-info-txt">
-                                                                        {userAuth?.countryCode +
-                                                                            userAuth?.phoneNumber}
+                                                                        {userAuth?.countryCode
+                                                                            ? userAuth?.countryCode +
+                                                                              userAuth?.phoneNumber
+                                                                            : "N/A"}
                                                                     </span>
                                                                 </div>
                                                                 <div className="profile-info">
@@ -576,7 +578,9 @@ const Header = () => {
                                                                         <EmailOutlinedIcon />
                                                                     </span>
                                                                     <span className="profile-info-txt">
-                                                                        admin@cgfhrdd.com
+                                                                        {
+                                                                            userAuth?.email
+                                                                        }
                                                                     </span>
                                                                 </div>
                                                                 <div className="profile-info mb-0">

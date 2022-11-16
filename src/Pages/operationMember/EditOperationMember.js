@@ -28,6 +28,7 @@ import {
     COUNTRIES,
     FETCH_OPERATION_MEMBER,
     FETCH_REPORTING_MANAGER,
+    FETCH_ROLES,
     GET_OPERATION_MEMBER_BY_ID,
     MEMBER,
     UPDATE_OPERATION_MEMBER,
@@ -50,6 +51,7 @@ const defaultValues = {
     address: "",
     reportingManager: "",
     isActive: "",
+    isCGFStaff: "",
 };
 const helperTextForAddOperationMember = {
     salutation: {
@@ -121,6 +123,12 @@ const helperTextForAddOperationMember = {
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
     },
+    roleId: {
+        required: "Select the role",
+    },
+    isCGFStaff: {
+        required: "Select the CGFSTaff",
+    },
 };
 function EditOperationMember() {
     const {
@@ -150,6 +158,7 @@ function EditOperationMember() {
         descriptionMessage: "",
         messageType: "error",
     });
+    const [roles, setRoles] = useState([]);
 
     console.log("watch country code", watch("countryCode"));
     const fetchReportingManagers = async (id) => {
@@ -231,21 +240,27 @@ function EditOperationMember() {
     };
 
     // Fetch reporting managers of all member companies
-    const fetchRm = async (id) => {
+    const fetchRm = async (id, isCGFStaff) => {
         console.log("operation member----", operationMember);
         try {
             const response = await privateAxios.get(
-                FETCH_REPORTING_MANAGER +
-                    id +
-                    // operationMember?.memberId?._id +
-                    "/rm"
+                // FETCH_REPORTING_MANAGER + id
+                // + isCGFStaff
+                //     ? "/master/external"
+                //     : "/master/internal"
+                // // operationMember?.memberId?._id +
+                isCGFStaff
+                    ? FETCH_OPERATION_MEMBER + id + "/master/external"
+                    : FETCH_OPERATION_MEMBER + id + "/master/internal"
             );
             console.log("response from rm", response);
             setReportingManagers(
-                response.data.map((data) => ({
-                    _id: data?._id,
-                    name: data?.name,
-                }))
+                response.data
+                    .filter((data) => data._id !== params.id)
+                    .map((data) => ({
+                        _id: data?._id,
+                        name: data?.name,
+                    }))
             );
         } catch (error) {
             console.log("Error from fetching rm reporting manager", error);
@@ -286,15 +301,41 @@ function EditOperationMember() {
                     salutation: response?.data?.salutation,
                     name: response?.data?.name,
                     isActive: response?.data?.isActive,
+                    roleId: response?.data?.roleId,
+                    isCGFStaff:
+                        response?.data?.isCGFStaff === true ? "true" : "false",
                     // reportingManagerId:
                     //     response?.data?.reportingManager?._id,
                 });
             setOperationMember(response.data);
             console.log("response data ----", operationMember);
-            fetchRm(response?.data?.memberId?._id);
+            let isCGFStaff = response?.data?.isCGFStaff ? true : false;
+            fetchRm(response?.data?.memberId?._id, isCGFStaff);
             // fetchReportingManagers(operationMember?.memberId?._id);
         } catch (error) {
             console.log("error from edit operation members", error);
+        }
+    };
+
+    // fetch & set Roles
+    let fetchRoles = async () => {
+        try {
+            const response = await privateAxios.get(FETCH_ROLES);
+            console.log("Response from fetch roles - ", response);
+            setRoles(response.data);
+        } catch (error) {
+            console.log("Error from fetch roles", error);
+            setToasterDetails(
+                {
+                    titleMessage: "Oops!",
+                    descriptionMessage: error?.response?.data?.message,
+                    messageType: "error",
+                },
+                () => toasterRef.current()
+            );
+            setTimeout(() => {
+                navigate("/login");
+            }, 3000);
         }
     };
     const phoneNumberChangeHandler = (e, name, code) => {
@@ -316,6 +357,7 @@ function EditOperationMember() {
 
         countries.length === 0 && fetchCountries(controller);
         memberCompanies.length === 0 && fetchMemberComapany(controller);
+        roles.length === 0 && fetchRoles();
 
         fetchOperationMember(controller, isMounted);
 
@@ -743,6 +785,62 @@ function EditOperationMember() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label htmlFor="">
+                                            CGF Staff{" "}
+                                            <span className="mandatory">*</span>
+                                        </label>
+                                        <div className="radio-btn-field">
+                                            <Controller
+                                                name="isCGFStaff"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <RadioGroup
+                                                        {...field}
+                                                        onChange={(e) => {
+                                                            field.onChange(e);
+                                                            e.target.value ===
+                                                            "true"
+                                                                ? setValue(
+                                                                      "companyType",
+                                                                      "Internal"
+                                                                  )
+                                                                : setValue(
+                                                                      "companyType",
+                                                                      "External"
+                                                                  );
+                                                        }}
+                                                        // value={field.name}
+                                                        // value={field.isCGFStaff}
+                                                        aria-labelledby="demo-radio-buttons-group-label"
+                                                        name="radio-buttons-group"
+                                                        className="radio-btn"
+                                                    >
+                                                        <FormControlLabel
+                                                            value="true"
+                                                            control={
+                                                                <Radio
+                                                                    disabled
+                                                                />
+                                                            }
+                                                            label="Yes"
+                                                        />
+                                                        <FormControlLabel
+                                                            value="false"
+                                                            control={
+                                                                <Radio
+                                                                    disabled
+                                                                />
+                                                            }
+                                                            label="No"
+                                                        />
+                                                    </RadioGroup>
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card-form-field">
+                                    <div className="form-group">
+                                        <label htmlFor="">
                                             Member Company{" "}
                                             <span className="mandatory">*</span>
                                         </label>
@@ -916,6 +1014,34 @@ function EditOperationMember() {
                                         />
                                     </div>
                                 </div>
+                                <div className="card-form-field">
+                                    <div className="form-group">
+                                        <label htmlFor="role">
+                                            Role{" "}
+                                            <span className="mandatory">*</span>
+                                        </label>
+
+                                        <div>
+                                            <Dropdown
+                                                name="roleId"
+                                                control={control}
+                                                options={roles}
+                                                rules={{
+                                                    required: true,
+                                                }}
+                                                myHelper={
+                                                    helperTextForAddOperationMember
+                                                }
+                                                placeholder={"Select role"}
+                                            />
+
+                                            <p className={`password-error`}>
+                                                {errors.subRoleId?.message}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label htmlFor="status">Status</label>
