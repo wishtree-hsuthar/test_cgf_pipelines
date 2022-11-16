@@ -158,7 +158,7 @@ function FillAssesmentSection({
                     )}
                 </div>
                 {viewMode ? (
-                    <div className="form-btn flex-between add-members-btn">
+                    <div className="form-btn flex-between add-members-btn que-page-btn">
                         <button
                             type="reset"
                             onClick={() => setOpenCancelDailog(true)}
@@ -174,7 +174,20 @@ function FillAssesmentSection({
                                 // navigate(
                                 //     `/questionnaires/add-questionnaire/${params.id}`
                                 // )
-                                handleFormSubmit
+                                (e) => handleFormSubmit(e, true)
+                            }
+                            className="outlined-button add-button mr-10"
+                        >
+                            Save as draft
+                        </button>
+                        <button
+                            type="submit"
+                            onClick={
+                                // () =>
+                                // navigate(
+                                //     `/questionnaires/add-questionnaire/${params.id}`
+                                // )
+                                (e) => handleFormSubmit(e, false)
                             }
                             className="primary-button add-button"
                         >

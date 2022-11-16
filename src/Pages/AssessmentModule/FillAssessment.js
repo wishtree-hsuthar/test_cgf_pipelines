@@ -184,11 +184,13 @@ function FillAssessment() {
 
     const myRef = useRef();
 
-    const saveAssessmentAsDraft = async () => {
+    const saveAssessmentAsDraft = async (saveAsDraft) => {
         console.log("Save function called");
         try {
             const response = await privateAxios.post(
-                SUBMIT_ASSESSMENT_AS_DRAFT + params.id,
+                saveAsDraft
+                    ? SUBMIT_ASSESSMENT_AS_DRAFT + params.id
+                    : SUBMIT_ASSESSMENT_AS_DRAFT + params.id + "/submit",
                 {
                     ...assessmentQuestionnaire,
                 }
@@ -225,7 +227,7 @@ function FillAssessment() {
         }
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = (e, saveAsDraft) => {
         e.preventDefault();
         const tempErrors = {};
 
@@ -266,7 +268,9 @@ function FillAssessment() {
                     if (
                         question.isRequired &&
                         (!currentSectionAnswers[question?.uuid] ||
-                            currentSectionAnswers[question?.uuid].length === 0)
+                            currentSectionAnswers[question?.uuid].length ===
+                                0) &&
+                        saveAsDraft === false
                     ) {
                         console.log("error from required");
 
@@ -325,7 +329,7 @@ function FillAssessment() {
             (key) => Object.keys(tempErrors[key]).length === 0
         );
         if (isValidated) {
-            saveAssessmentAsDraft();
+            saveAssessmentAsDraft(saveAsDraft);
         }
     };
 
