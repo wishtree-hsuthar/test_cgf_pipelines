@@ -27,21 +27,23 @@ import { date } from "yup";
 
 const helperTextForAssessment = {
     title: {
-        required: "Assessment title required",
+        required: "Enter the assessment title",
+        minLength: "minimum 3 characters required"
     },
     assessmentType: {
-        required: "Assessment type required",
+        required: "Select the assessment type",
     },
     assignedMember: {
-        required: "Member required",
+        required: "Select the member company",
     },
     assignedOperationMember: {
-        required: "Operation member required",
+        required: "Select the operation member",
     },
     dueDate: {
-        required: "Due date required",
+        required: "Select the due date",
     },
     remarks: {
+        minLength: "minimum 3 characters required",
         maxLength: "Reached max limit",
     },
 };
@@ -259,7 +261,7 @@ const AddAssessment = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage: response?.data?.message,
+                        descriptionMessage: "Assessment added sucessfully!",
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -336,7 +338,7 @@ const AddAssessment = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assessment title{" "}
+                                            Assessment Title{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Input
@@ -354,6 +356,8 @@ const AddAssessment = () => {
                                             }
                                             rules={{
                                                 required: "true",
+                                                minLength: 3,
+                                                maxLength: 50
                                             }}
                                         />
                                     </div>
@@ -367,7 +371,7 @@ const AddAssessment = () => {
                                         <Dropdown
                                             control={control}
                                             name="assessmentType"
-                                            placeholder={"Select assessment "}
+                                            placeholder={"Select assessment type"}
                                             myHelper={helperTextForAssessment}
                                             rules={{ required: true }}
                                             options={questionnares}
@@ -380,7 +384,7 @@ const AddAssessment = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Member{" "}
+                                            Member Company{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
@@ -389,7 +393,7 @@ const AddAssessment = () => {
                                             myOnChange={
                                                 handleChangeForMemberCompany
                                             }
-                                            placeholder={"Assign member"}
+                                            placeholder={"Select member company"}
                                             myHelper={helperTextForAssessment}
                                             rules={{ required: true }}
                                             options={
@@ -401,7 +405,7 @@ const AddAssessment = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Assign Operation Member{" "}
+                                            Operation Member{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
@@ -425,7 +429,7 @@ const AddAssessment = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label>
-                                            Due date{" "}
+                                            Due Date{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Controller

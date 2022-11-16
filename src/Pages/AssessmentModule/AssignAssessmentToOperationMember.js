@@ -286,7 +286,7 @@ const AssignAssessmentToOperationMember = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Success",
-                        descriptionMessage: response?.data?.message,
+                        descriptionMessage: "Assessment assigned successfully!",
 
                         messageType: "success",
                     },
@@ -343,7 +343,7 @@ const AssignAssessmentToOperationMember = () => {
     }, [makeApiCall, orderBy, order, page]);
 
     return (
-        <div class="page-wrapper">
+        <div className="page-wrapper">
             <Toaster
                 myRef={myRef}
                 messageType={toasterDetails.messageType}

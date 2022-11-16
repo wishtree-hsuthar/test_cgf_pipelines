@@ -9,13 +9,15 @@ import * as yup from "yup";
 import { privateAxios } from "../api/axios";
 import Toaster from "../components/Toaster";
 import { FORGET_PASSWORD } from "../api/Url";
+import { useNavigate } from "react-router-dom";
 const forgetPasswordSchema = yup.object().shape({
     email: yup
         .string()
-        .email("Invalid Input")
-        .required("Enter the email address."),
+        .email("Invalid input")
+        .required("Enter the email address"),
 });
 const ForgetPassword = () => {
+    const navigate = useNavigate()
     const {
         register,
         handleSubmit,
@@ -55,7 +57,7 @@ const ForgetPassword = () => {
                 setMessageType("success");
                 setMessageTitle("Success");
                 setMessageDescription(
-                    "Email sent successfully with the reset password link!"
+                    "Reset password link has been successfully sent on the entered email address! Kindly check your email to reset your password"
                 );
                 setTimeout(() => {
                     toasterRef.current();
@@ -81,34 +83,34 @@ const ForgetPassword = () => {
     };
 
     return (
-        <div class="page-wrapper login-page-wrap">
+        <div className="page-wrapper login-page-wrap">
             <Toaster
                 messageType={messageType}
                 titleMessage={messageTitle}
                 myRef={toasterRef}
                 descriptionMessage={messageDescription}
             />
-            <div class="login-section">
-                <div class="container">
-                    <div class="login-wrapper">
-                        <div class="login-leftblk">
-                            <div class="login-slider">
+            <div className="login-section">
+                <div className="container">
+                    <div className="login-wrapper">
+                        <div className="login-leftblk">
+                            <div className="login-slider">
                                 <Slider />
                             </div>
                         </div>
-                        <div class="login-rightblk">
-                            <div class="login-blk">
-                                <div class="logo">
+                        <div className="login-rightblk">
+                            <div className="login-blk">
+                                <div className="logo">
                                     <img
                                         src={
                                             process.env.PUBLIC_URL +
                                             "/images/logo.png"
                                         }
                                         alt=""
-                                        class="img-fluid"
+                                        className="img-fluid"
                                     />
                                 </div>
-                                <h2 class="heading1 text-uppercase mb-40">
+                                <h2 className="heading1 text-uppercase mb-40">
                                     Forgot password
                                 </h2>
                                 <p className="forget-password-message">
@@ -116,12 +118,12 @@ const ForgetPassword = () => {
                                     <br /> send you a link to reset your
                                     password
                                 </p>
-                                <div class="login-form">
+                                <div className="login-form">
                                     <form onSubmit={handleSubmit(submitEmail)}>
-                                        <div class="form-group">
+                                        <div className="form-group">
                                             <label for="emailid">
-                                                Email Address{" "}
-                                                <span class="mandatory">*</span>
+                                                Email{" "}
+                                                <span className="mandatory">*</span>
                                             </label>
                                             <TextField
                                                 className={`input-field ${
@@ -129,7 +131,7 @@ const ForgetPassword = () => {
                                                     "input-error"
                                                 }`}
                                                 id="outlined-basic"
-                                                placeholder="Enter email address"
+                                                placeholder="Enter email"
                                                 variant="outlined"
                                                 {...register("email")}
                                                 error={
@@ -143,13 +145,21 @@ const ForgetPassword = () => {
                                             />
                                         </div>
 
-                                        <div class="form-btn flex-between">
+                                        <div className="form-btn flex-between">
                                             <button
                                                 type="submit"
-                                                class="primary-button"
+                                                className="primary-button"
                                             >
                                                 Submit
                                             </button>
+                                            <div
+                                                onClick={() =>
+                                                    navigate("/login")
+                                                }
+                                                className="tertiary-btn-blk mr-10"
+                                            >
+                                                Back to login
+                                            </div>
                                         </div>
                                     </form>
                                 </div>

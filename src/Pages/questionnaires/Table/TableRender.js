@@ -49,7 +49,11 @@ const TableRender = ({
 
   return (
     <div className="que-table-sect">
-      <div className={`que-table-wrap que-table-render-wrap ${isPreview || "que-table-create" }  ${isPreview || "active" } `}>
+      <div
+        className={`que-table-wrap que-table-render-wrap ${
+          isPreview || "que-table-create"
+        }  ${isPreview || "active"} `}
+      >
         <div className="que-table-innerwrap que-table-render-innerwrap flex-between no-wrap">
           <Paper
             sx={{ width: "96%", overflow: "hidden" }}
@@ -122,14 +126,16 @@ const TableRender = ({
                               {questionnaire?.sections[sectionIndex]?.rowValues
                                 ?.length > 2 &&
                                 (isPreview || (
-                                  <span
-                                    className="minus-iconblk"
-                                    onClick={() =>
-                                      onRowDeleteClickHandler(rowId)
-                                    }
-                                  >
-                                    <i className="fa fa-minus"></i>
-                                  </span>
+                                  <Tooltip title="Delete row">
+                                    <span
+                                      className="minus-iconblk"
+                                      onClick={() =>
+                                        onRowDeleteClickHandler(rowId)
+                                      }
+                                    >
+                                      <i className="fa fa-minus"></i>
+                                    </span>
+                                  </Tooltip>
                                 ))}
                             </div>
                           </TableCell>
@@ -157,7 +163,7 @@ const TableRender = ({
                     <TableCell>
                       <div className="que-column-count flex-between">
                         <span className="que-column-count-txt">1.</span>
-                        <span class="minus-iconblk">
+                        <span className="minus-iconblk">
                           <i className="fa fa-minus"></i>
                         </span>
                       </div>

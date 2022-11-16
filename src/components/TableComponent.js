@@ -325,7 +325,7 @@ export default function TableComponent({
                                                                           ][0].toUpperCase() +
                                                                           row[
                                                                               cell
-                                                                          ].slice(
+                                                                          ]?.slice(
                                                                               1
                                                                           )
                                                                         : row[
@@ -361,13 +361,13 @@ export default function TableComponent({
                                                                               ][0].toUpperCase() +
                                                                               `${row[
                                                                                   cell
-                                                                              ].slice(
+                                                                              ]?.slice(
                                                                                   1,
                                                                                   30
                                                                               )}...`
                                                                             : `${row[
                                                                                   cell
-                                                                              ].slice(
+                                                                              ]?.slice(
                                                                                   0,
                                                                                   30
                                                                               )}...`}

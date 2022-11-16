@@ -228,6 +228,8 @@ const ViewRole = () => {
             delete object["address"];
             delete object["isCGFStaff"];
             delete object["isOperationMember"];
+            delete object["isMemberRepresentative"]
+            delete object["isCGFAdmin"]
 
             delete object["__v"];
             object["createdAt"] = new Date(

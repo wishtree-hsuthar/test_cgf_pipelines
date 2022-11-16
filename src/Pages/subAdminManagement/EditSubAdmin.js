@@ -226,8 +226,7 @@ const EditSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage:
-                            "CGF admin details updated successfully!",
+                        descriptionMessage: "CGF admin details updated successfully!",
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -289,7 +288,7 @@ const EditSubAdmin = () => {
                         <h2 className="heading2">Edit CGF Admin</h2>
                         {/* <div className="form-header-right-txt">
                     <div className="tertiary-btn-blk">
-                        <span class="addmore-icon"><i className='fa fa-plus'></i></span>
+                        <span className="addmore-icon"><i className='fa fa-plus'></i></span>
                         <span className="addmore-txt">Save & Add More</span>
                     </div>
                 </div> */}

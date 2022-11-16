@@ -176,7 +176,7 @@ const ViewOperationMembers = () => {
                     email: response?.data?.email,
                     operationType: response?.data?.operationType
                         ? response?.data?.operationType
-                        : "N/A",
+                        : "",
                     reportingManager: response?.data?.reportingManager[0]?.name
                         ? response?.data?.reportingManager[0]?.name
                         : "N/A",
@@ -213,7 +213,7 @@ const ViewOperationMembers = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Success",
-                        descriptionMessage: response.data.message,
+                        descriptionMessage: `${fetchOperationMemberDetaills?.name} deleted!`,
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -262,86 +262,76 @@ const ViewOperationMembers = () => {
         }
     };
 
-    const data = [
-        {
-            id: 1,
-            action: "Edit",
-            hide:
-                SUPER_ADMIN === true
-                    ? false
-                    : !moduleAccessForOperationMember[0]?.operationMember.edit,
-        },
-        {
-            id: 2,
-            action: "Replace",
-            hide: !SUPER_ADMIN,
-        },
-        {
-            id: 3,
-            action: "Delete",
-            hide:
-                SUPER_ADMIN === true
-                    ? false
-                    : !moduleAccessForOperationMember[0]?.operationMember
-                          .delete,
-        },
-    ];
-
-    return (
-        <div className="page-wrapper">
-            <Toaster
-                messageType={toasterDetails.messageType}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                myRef={toasterRef}
-                titleMessage={toasterDetails.titleMessage}
-            />
-            <DialogBox
-                title={
-                    <p>Delete CGF Admin {fetchOperationMemberDetaills.name}</p>
-                }
-                info1={
-                    <p>
-                        We recommend you to replace this sub admin with the new
-                        one because deleting all the details which sub admin has
-                        added will get deleted and this will be an irreversible
-                        action
-                    </p>
-                }
-                info2={
-                    <p>
-                        {" "}
-                        Are you you want to delete{" "}
-                        <b>{fetchOperationMemberDetaills.name}</b>?
-                    </p>
-                }
-                onPrimaryModalButtonClickHandler={handleDeleteOperationMember}
-                onSecondaryModalButtonClickHandler={() => {
-                    setOpenDeleteDialog(false);
-                    navigate(
-                        `/users/operation-member/replace-operation-member/${params.id}`
-                    );
-                }}
-                primaryButtonText={"Delete anyway"}
-                secondaryButtonText={"Replace"}
-                openModal={openDeleteDialog}
-                setOpenModal={setOpenDeleteDialog}
-            />
-            <div className="breadcrumb-wrapper">
-                <div className="container">
-                    <ul className="breadcrumb">
-                        <li>
-                            <Link to="/users/operation-members">
-                                Operation Member
-                            </Link>
-                        </li>
-                        <li>View Operation Member</li>
-                    </ul>
-                </div>
-            </div>
-            <section>
-                <div className="container">
-                    <div className="form-header flex-between">
-                        <h2 className="heading2">View Operation Member</h2>
+  const data = [
+    {
+      id: 1,
+      action: "Edit",
+      hide:
+        SUPER_ADMIN === true
+          ? false
+          : !moduleAccessForOperationMember[0]?.operationMember.edit,
+    },
+    {
+      id: 2,
+      action: "Replace",
+      hide: !SUPER_ADMIN,
+    },
+    {
+      id: 3,
+      action: "Delete",
+      hide:
+        SUPER_ADMIN === true
+          ? false
+          : !moduleAccessForOperationMember[0]?.operationMember.delete,
+    },
+  ];
+//  console.log("operation member:- ",fetchOperationMemberDetaills)
+  return (
+    <div className="page-wrapper">
+      <Toaster
+        messageType={toasterDetails.messageType}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        myRef={toasterRef}
+        titleMessage={toasterDetails.titleMessage}
+      />
+      <DialogBox
+        title={<p>Delete opration member "{fetchOperationMemberDetaills.name}"</p>}
+        info1={
+          <p>
+            We recommend you to replace this operation member with the new one because deleting all the statistics & records would get deleted and this will be an irreversible action
+          </p>
+        }
+        info2={
+          <p>
+            {" "}
+            Are you you want to delete{" "}
+            <b>{fetchOperationMemberDetaills.name}</b>?
+          </p>
+        }
+        onPrimaryModalButtonClickHandler={handleDeleteOperationMember}
+        onSecondaryModalButtonClickHandler={() => {
+          setOpenDeleteDialog(false);
+          navigate(`/users/operation-member/replace-operation-member/${params?.id}`);
+        }}
+        primaryButtonText={"Delete anyway"}
+        secondaryButtonText={"Replace"}
+        openModal={openDeleteDialog}
+        setOpenModal={setOpenDeleteDialog}
+      />
+      <div className="breadcrumb-wrapper">
+        <div className="container">
+          <ul className="breadcrumb">
+            <li>
+              <Link to="/users/operation-members">Operation Member</Link>
+            </li>
+            <li>View Operation Member</li>
+          </ul>
+        </div>
+      </div>
+      <section>
+        <div className="container">
+          <div className="form-header flex-between">
+            <h2 className="heading2">View Operation Member</h2>
 
                         <span
                             className="form-header-right-txt"
@@ -522,9 +512,10 @@ const ViewOperationMembers = () => {
                                             <span className="mandatory">*</span>
                                         </label>
                                         <Dropdown
+                                            isDisabled
                                             control={control}
                                             name="operationType"
-                                            isDisabled
+                                            placeholder="N/A"
                                             options={[
                                                 "Warehousing and Distribution",
                                                 "Manufacturing/Bottling/Roasting",
@@ -672,12 +663,12 @@ const ViewOperationMembers = () => {
                                     <div className="form-group">
                                         <label htmlFor="">
                                             Address{" "}
-                                            <span className="mandatory">*</span>
+                                            
                                         </label>
                                         <Input
                                             control={control}
                                             name={"address"}
-                                            isDisabled
+                                            placeholder="N/A" isDisabled
                                         />
                                     </div>
                                 </div>

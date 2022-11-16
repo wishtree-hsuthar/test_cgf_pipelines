@@ -532,8 +532,8 @@ const Header = () => {
                                                 >
                                                     <div className="signin-user-blk flex-start">
                                                         <div className="signin-user-left">
-                                                            <div class="signin-user-img">
-                                                                <span class="signin-user-name-txt">
+                                                            <div className="signin-user-img">
+                                                                <span className="signin-user-name-txt">
                                                                     {/* {initials?.length >=
                                                                         1 &&
                                                                         initials[0].slice(

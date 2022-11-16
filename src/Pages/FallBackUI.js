@@ -27,7 +27,7 @@ function FallBackUI() {
                             <p className="oops">OOPS...</p>
                             <p className="error-status">404</p>
                             <p className="page-not-found">PAGE NOT FOUND</p>
-                            <div class="form-btn text-center">
+                            <div className="form-btn text-center">
                             <button
                                 // type="submit"
                                 onClick={() => navigate("/home")}

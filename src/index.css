@@ -1656,7 +1656,7 @@ input:-webkit-autofill:active {
     font-family: "Proxima Nova Semibold", serif, sans-serif;
     font-size: 16px;
     line-height: 20px;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
 }
 .que-column-ttlblk .que-table-col-ttl {
     font-family: "Proxima Nova Semibold", serif, sans-serif;
