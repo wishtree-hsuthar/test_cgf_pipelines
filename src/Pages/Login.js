@@ -20,9 +20,9 @@ import { privateAxios, publicAxios } from "../api/axios";
 const loginFormSchema = yup.object().shape({
     email: yup
         .string()
-        .email("Please enter valid email")
-        .required("Email address required"),
-    password: yup.string().required("Password required"),
+        .email("Invalid input")
+        .required("Enter the email address"),
+    password: yup.string().required("Enter the password"),
 });
 const Login = (prop) => {
     const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -115,7 +115,7 @@ const Login = (prop) => {
                 setToasterDetails(
                     {
                         titleMessage: "Invalid Credentials",
-                        descriptionMessage: "Incorrect email or password",
+                        descriptionMessage: "Email or password is incorrect!",
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -135,42 +135,42 @@ const Login = (prop) => {
     };
 
     return (
-        <div class="page-wrapper login-page-wrap">
+        <div className="page-wrapper login-page-wrap">
             <Toaster
                 myRef={toasterRef}
                 titleMessage={toasterDetails.titleMessage}
                 descriptionMessage={toasterDetails.descriptionMessage}
                 messageType={toasterDetails.messageType}
             />
-            <div class="login-section">
-                <div class="container">
-                    <div class="login-wrapper">
-                        <div class="login-leftblk">
-                            <div class="login-slider">
+            <div className="login-section">
+                <div className="container">
+                    <div className="login-wrapper">
+                        <div className="login-leftblk">
+                            <div className="login-slider">
                                 <Slider />
                             </div>
                         </div>
-                        <div class="login-rightblk">
-                            <div class="login-blk">
-                                <div class="logo">
+                        <div className="login-rightblk">
+                            <div className="login-blk">
+                                <div className="logo">
                                     <img
                                         src={
                                             process.env.PUBLIC_URL +
                                             "/images/logo.png"
                                         }
                                         alt=""
-                                        class="img-fluid"
+                                        className="img-fluid"
                                     />
                                 </div>
-                                <h2 class="heading1 text-uppercase">Log in</h2>
-                                <div class="login-form">
+                                <h2 className="heading1 text-uppercase">Log in</h2>
+                                <div className="login-form">
                                     <form
                                         onSubmit={handleSubmit(submitLoginData)}
                                     >
-                                        <div class="form-group">
+                                        <div className="form-group">
                                             <label for="emailid">
-                                                Email Address{" "}
-                                                <span class="mandatory">*</span>
+                                                Email{" "}
+                                                <span className="mandatory">*</span>
                                             </label>
                                             <TextField
                                                 className={`input-field ${
@@ -178,7 +178,7 @@ const Login = (prop) => {
                                                     "input-error"
                                                 }`}
                                                 id="outlined-basic"
-                                                placeholder="Enter email address"
+                                                placeholder="Enter email"
                                                 variant="outlined"
                                                 {...register("email")}
                                                 helperText={
@@ -188,10 +188,10 @@ const Login = (prop) => {
                                                 }
                                             />
                                         </div>
-                                        <div class="form-group">
+                                        <div className="form-group">
                                             <label for="password">
                                                 Password{" "}
-                                                <span class="mandatory">*</span>
+                                                <span className="mandatory">*</span>
                                             </label>
                                             <div className="password-field">
                                                 <OutlinedInput
@@ -229,7 +229,7 @@ const Login = (prop) => {
                                                                             "/images/non-visibleicon.svg"
                                                                         }
                                                                         alt=""
-                                                                        class="img-fluid"
+                                                                        className="img-fluid"
                                                                     />
                                                                 ) : (
                                                                     <img
@@ -240,7 +240,7 @@ const Login = (prop) => {
                                                                             "/images/visibleicon.svg"
                                                                         }
                                                                         alt=""
-                                                                        class="img-fluid"
+                                                                        className="img-fluid"
                                                                     />
                                                                 )}
                                                             </IconButton>
@@ -257,15 +257,15 @@ const Login = (prop) => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="form-btn flex-between">
+                                        <div className="form-btn flex-between">
                                             <button
                                                 type="submit"
-                                                class="primary-button"
+                                                className="primary-button"
                                             >
                                                 Log In
                                             </button>
                                             <div
-                                                class="tertiary-btn-blk"
+                                                className="tertiary-btn-blk"
                                                 onClick={
                                                     navigateToforgetPasswordPage
                                                 }

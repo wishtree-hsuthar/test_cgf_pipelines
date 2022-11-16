@@ -89,7 +89,7 @@ const PreviewQuestions = ({ question }) => {
           aria-labelledby="demo-radio-buttons-group-label"
           defaultValue="Active"
           name="radio-buttons-group"
-          className="radio-btn"
+          className="radio-btn radio-btn-vertical"
         >
           {question.options.map((option) => (
             <FormControlLabel
@@ -130,7 +130,7 @@ const PreviewQuestions = ({ question }) => {
     <div className="preview-que-blk">
       <div className="form-group">
         <label htmlFor="questionTitle">
-          <div class="preview-sect-txt">
+          <div className="preview-sect-txt">
             {questionLabel}
             {question?.isRequired && <span className="mandatory"> *</span>}
           </div>

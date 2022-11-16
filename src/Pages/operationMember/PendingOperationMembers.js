@@ -45,7 +45,7 @@ const pendingOperationMemberTableColumnHeader = [
         id: "action",
 
         disablePadding: false,
-        label: "Actions",
+        label: "Action",
     },
 ];
 function PendingOperationMembers({

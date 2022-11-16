@@ -197,7 +197,7 @@ const ViewSubAdmin = () => {
     //                             {modalData.title}
     //                         </h2>
     //                         <span
-    //                             class="popup-close-icon"
+    //                             className="popup-close-icon"
     //                             onClick={handleClose}
     //                         >
     //                             <CloseIcon />
@@ -493,11 +493,13 @@ const ViewSubAdmin = () => {
                                             }
                                         >
                                             <FormControlLabel
+                                                disabled
                                                 value={"active"}
                                                 control={<Radio />}
                                                 label="Active"
                                             />
                                             <FormControlLabel
+                                                disabled
                                                 value={"inactive"}
                                                 control={<Radio />}
                                                 label="Inactive"

@@ -1656,7 +1656,7 @@ input:-webkit-autofill:active {
     font-family: "Proxima Nova Semibold", serif, sans-serif;
     font-size: 16px;
     line-height: 20px;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
 }
 .que-column-ttlblk .que-table-col-ttl {
     font-family: "Proxima Nova Semibold", serif, sans-serif;
@@ -2409,4 +2409,7 @@ input:-webkit-autofill:active {
 .country-code .Mui-disabled{padding-right: 0 !important;}
 .replace-admin-table .radio-btn-field .MuiRadio-root{width: 35px;margin: 0 auto;}
 
+input::-ms-reveal {
+    display: none;
+}
 

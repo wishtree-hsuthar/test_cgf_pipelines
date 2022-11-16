@@ -172,7 +172,7 @@ function OnboardedOperationMember({
                 day: "2-digit",
                 year: "numeric",
             });
-            object["isActive"] = object["isActive"];
+            // object["isActive"] = object["isActive"];
 
             // delete object["data"]["subRoleId"];
             // delete object["data"]["subRole"][0].name;

@@ -9,6 +9,7 @@ import {
   Select,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
@@ -94,15 +95,15 @@ const Question = ({
   const inputTypeOptions = [
     {
       _id: "singleTextbox",
-      name: "Single textbox",
+      name: "Single text box",
     },
     {
       _id: "textarea",
-      name: "Textarea",
+      name: "Text area",
     },
     {
       _id: "dropdown",
-      name: "Dropdown",
+      name: "Drop down",
     },
     {
       _id: "date",
@@ -215,7 +216,7 @@ const Question = ({
       optionIdx
     ] = e.target.value?.trim();
     setQuestionnaire(tempQuestionnaire);
-  }
+  };
   //method to handle option deletion
   const onOptionDeleteHandler = (e, questionIdx, optionIdx) => {
     let tempQuestionnaire = { ...questionnaire };
@@ -268,7 +269,7 @@ const Question = ({
                 value={question?.questionTitle}
                 helperText={
                   !question?.questionTitle && err?.questionTitle
-                    ? "Enter question title"
+                    ? "Enter the question title"
                     : " "
                 }
                 onChange={(e) => onQuestionChangeHandler(e, questionIdx)}
@@ -279,7 +280,7 @@ const Question = ({
           <div className="que-card-form-rightfield flex-between">
             <div className="form-group">
               <label htmlFor="inputField">
-                Input Field <span className="mandatory">*</span>
+                Input Type <span className="mandatory">*</span>
               </label>
               <FormControl className="fullwidth-field">
                 <div className="select-field">
@@ -357,13 +358,15 @@ const Question = ({
                           onChange={(e) =>
                             onOptionChangeHandler(e, questionIdx, optionIdx)
                           }
-                          onBlur={(e) => onOptionBlurHandler(e, questionIdx, optionIdx)}
+                          onBlur={(e) =>
+                            onOptionBlurHandler(e, questionIdx, optionIdx)
+                          }
                           className={`input-field que-input-type ${
                             err?.option && !option && "input-error"
                           }`}
                           helperText={
                             err?.option && !option
-                              ? "This is required field"
+                              ? "Enter the option value"
                               : " "
                           }
                           id="outlined-basic"
@@ -413,14 +416,17 @@ const Question = ({
         <div className="que-card-icon-sect">
           <div className="que-card-icon-blk">
             <div className="que-card-icon add-que-iconblk mr-40">
-              <img
-                onClick={addQuestionHandler}
-                src={process.env.PUBLIC_URL + "/images/add-question-icon.svg"}
-                alt=""
-              />
+              <Tooltip title="Add Question">
+                <img
+                  onClick={addQuestionHandler}
+                  src={process.env.PUBLIC_URL + "/images/add-question-icon.svg"}
+                  alt=""
+                />
+              </Tooltip>
             </div>
             {questionsLength !== 1 && (
               <div className="que-card-icon delete-iconblk mr-40">
+                <Tooltip title="Delete Question">
                 <img
                   onClick={() =>
                     deleteQuestionHandler(question?.uuid, questionIdx)
@@ -428,6 +434,7 @@ const Question = ({
                   src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
                   alt=""
                 />
+                </Tooltip>
               </div>
             )}
             <div className="required-toggle-btnblk">

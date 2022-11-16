@@ -7,17 +7,17 @@ const Slider = () => {
         <OwlCarousel className='owl-theme' items="1" dots loop autoplay>
             <div className='item'>
                 <div className="login-slide-img">
-                    <img src={process.env.PUBLIC_URL + '/images/login-slide1.png'} alt="" class="img-fluid" />
+                    <img src={process.env.PUBLIC_URL + '/images/login-slide1.png'} alt="" className="img-fluid" />
                 </div>
             </div>
             <div className='item'>
                 <div className="login-slide-img">
-                    <img src={process.env.PUBLIC_URL + '/images/login-slide2.png'} alt="" class="img-fluid" />
+                    <img src={process.env.PUBLIC_URL + '/images/login-slide2.png'} alt="" className="img-fluid" />
                 </div>
             </div>
             <div className='item'>
                 <div className="login-slide-img">
-                    <img src={process.env.PUBLIC_URL + '/images/login-slide3.png'} alt="" class="img-fluid" />
+                    <img src={process.env.PUBLIC_URL + '/images/login-slide3.png'} alt="" className="img-fluid" />
                 </div>
             </div>
         </OwlCarousel>

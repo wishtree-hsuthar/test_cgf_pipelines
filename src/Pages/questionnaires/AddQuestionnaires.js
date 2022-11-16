@@ -193,7 +193,7 @@ function AddQuestionnaires() {
                   <Box sx={style} className='popup-box'>
                     <div id="transition-modal-title" className='popup-ttl-blk'>
                           <h2 className='popup-ttl heading2'>Create Custom List Dropdown</h2>
-                          {/* <span class="popup-close-icon" onClick={handleClose}><CloseIcon/></span> */}
+                          {/* <span className="popup-close-icon" onClick={handleClose}><CloseIcon/></span> */}
                     </div>
                     <div id="transition-modal-description" className='popup-body'>
                       <div className='popup-content-blk'>
@@ -209,7 +209,7 @@ function AddQuestionnaires() {
                                 <TextField className='input-field' id="outlined-basic" placeholder='Dropdown value3' variant="outlined" />
                             </div>
                             <div className='add-dropdown-btnblk mb-30'>
-                                <span class="addmore-icon"><i className='fa fa-plus'></i></span> Add Dropdown
+                                <span className="addmore-icon"><i className='fa fa-plus'></i></span> Add Dropdown
                             </div>
                           </div>
                           <div className="form-btn flex-center text-center">
@@ -237,7 +237,7 @@ function AddQuestionnaires() {
             //         <Box sx={style} className='popup-box'>
             //             <div id="transition-modal-title" className='popup-ttl-blk'>
             //                 <h2 className='popup-ttl heading2'>Select Master List Dropdown</h2>
-            //                 {/* <span class="popup-close-icon" onClick={handleClose}><CloseIcon/></span> */}
+            //                 {/* <span className="popup-close-icon" onClick={handleClose}><CloseIcon/></span> */}
             //             </div>
             //             <div id="transition-modal-description" className='popup-body'>
             //                 <div className='popup-content-blk'>
@@ -328,7 +328,7 @@ function AddQuestionnaires() {
                             <div className='section-tab-rightblk'>
                                 <div className="form-header-right-txt">
                                     <div className="tertiary-btn-blk mr-20">
-                                        <span class="preview-icon">
+                                        <span className="preview-icon">
                                             <VisibilityOutlinedIcon />
                                         </span>
                                         <span className="addmore-txt">
@@ -336,7 +336,7 @@ function AddQuestionnaires() {
                                         </span>
                                     </div>
                                     <div className="tertiary-btn-blk">
-                                        <span class="addmore-icon">
+                                        <span className="addmore-icon">
                                             <i className="fa fa-plus"></i>
                                         </span>
                                         <span className="addmore-txt">
@@ -498,7 +498,7 @@ function AddQuestionnaires() {
                                                         </div>
                                                     </div>
                                                     <div className="que-card-form-leftfield">
-                                                        <div class="form-group">
+                                                        <div className="form-group">
                                                         <TextField
                                                             multiline
                                                             className="input-textarea"
@@ -534,7 +534,7 @@ function AddQuestionnaires() {
                                                         </div>
                                                         <div className="que-card-form-rightfield">
                                                             {/* <div className="tertiary-btn-blk">
-                                                                <span class="addmore-icon">
+                                                                <span className="addmore-icon">
                                                                     <i className="fa fa-plus"></i>
                                                                 </span>
                                                                 <span className="addmore-txt">
@@ -568,7 +568,7 @@ function AddQuestionnaires() {
                                                         </div>
                                                         <div className="que-card-form-rightfield">
                                                             <div className="tertiary-btn-blk">
-                                                                <span class="addmore-icon">
+                                                                <span className="addmore-icon">
                                                                     <i className="fa fa-plus"></i>
                                                                 </span>
                                                                 <span className="addmore-txt">
@@ -606,7 +606,7 @@ function AddQuestionnaires() {
                                                         </div>
                                                         <div className="que-card-form-rightfield">
                                                             {/* <div className="tertiary-btn-blk">
-                                                                <span class="addmore-icon">
+                                                                <span className="addmore-icon">
                                                                     <i className="fa fa-plus"></i>
                                                                 </span>
                                                                 <span className="addmore-txt">
@@ -641,7 +641,7 @@ function AddQuestionnaires() {
                                                         </div>
                                                         <div className="que-card-form-rightfield">
                                                             <div className="tertiary-btn-blk">
-                                                                <span class="addmore-icon">
+                                                                <span className="addmore-icon">
                                                                     <i className="fa fa-plus"></i>
                                                                 </span>
                                                                 <span className="addmore-txt">
@@ -719,7 +719,7 @@ function AddQuestionnaires() {
                                                                             <div className='que-column-ttlblk flex-between'>
                                                                                 <div className='que-table-col-ttl' contenteditable="true">Give column title</div>
                                                                                 <div className='que-table-col-right flex-between'>
-                                                                                    <span class="minus-iconblk"><i className='fa fa-minus'></i></span>
+                                                                                    <span className="minus-iconblk"><i className='fa fa-minus'></i></span>
                                                                                     <div className='que-table-validator-iconblk'>
                                                                                         <div className='validator-iconblk' onClick={handleToggleField}>
                                                                                             <span className='validator-icon'><MoreVertIcon /></span>
@@ -764,7 +764,7 @@ function AddQuestionnaires() {
                                                                             <div className='que-column-ttlblk flex-between'>
                                                                                 <div className='que-table-col-ttl' contenteditable="true">Give column title</div>
                                                                                 <div className='que-table-col-right flex-between'>
-                                                                                    <span class="minus-iconblk"><i className='fa fa-minus'></i></span>
+                                                                                    <span className="minus-iconblk"><i className='fa fa-minus'></i></span>
                                                                                     <div className='que-table-validator-iconblk'>
                                                                                         <div className='validator-iconblk' onClick={handleToggleField}>
                                                                                             <span className='validator-icon'><MoreVertIcon /></span>
@@ -809,7 +809,7 @@ function AddQuestionnaires() {
                                                                             <div className='que-column-ttlblk flex-between'>
                                                                                 <div className='que-table-col-ttl' contenteditable="true">Give column title</div>
                                                                                 <div className='que-table-col-right flex-between'>
-                                                                                    <span class="minus-iconblk"><i className='fa fa-minus'></i></span>
+                                                                                    <span className="minus-iconblk"><i className='fa fa-minus'></i></span>
                                                                                     <div className='que-table-validator-iconblk'>
                                                                                         <div className='validator-iconblk' onClick={handleToggleField}>
                                                                                             <span className='validator-icon'><MoreVertIcon /></span>
@@ -847,7 +847,7 @@ function AddQuestionnaires() {
                                                                     <TableCell>
                                                                         <div className='que-column-count flex-between'>
                                                                             <span className='que-column-count-txt'>1.</span>
-                                                                            <span class="minus-iconblk"><i className='fa fa-minus'></i></span>
+                                                                            <span className="minus-iconblk"><i className='fa fa-minus'></i></span>
                                                                         </div>
                                                                     </TableCell>
                                                                     <TableCell>
@@ -909,11 +909,11 @@ function AddQuestionnaires() {
                                                     </TableContainer>
                                                 </Paper>
                                                 <div className='add-column-btnblk'>
-                                                    <span class="addmore-icon"><i className='fa fa-plus'></i></span>  Add Column
+                                                    <span className="addmore-icon"><i className='fa fa-plus'></i></span>  Add Column
                                                 </div>
                                             </div>
                                             <div className='add-row-btnblk'>
-                                                <span class="addmore-icon"><i className='fa fa-plus'></i></span>  Add Row
+                                                <span className="addmore-icon"><i className='fa fa-plus'></i></span>  Add Row
                                             </div>
                                         </div>
 

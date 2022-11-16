@@ -130,6 +130,9 @@ const ReplaceOperationMember = () => {
             delete object["address"];
             delete object["reportingManager"];
             delete object["operationType"];
+            delete object["isMemberRepresentative"]
+            delete object["isCGFAdmin"]
+
 
             replaceHeaderKeyOrder.forEach((k) => {
                 const v = object[k];

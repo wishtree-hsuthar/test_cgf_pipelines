@@ -90,7 +90,7 @@ const ViewMember = () => {
             id: "createdAt",
             disablePadding: false,
             // width: "5%",
-            label: "Created At",
+            label: "Onboarded on",
         },
         {
             id: "is Active",
@@ -541,7 +541,7 @@ const ViewMember = () => {
                     : "inactive",
                 totalOperationMembers: totalRecords?.toString() ?? "N/A",
                 createdBy: data?.createdBy["name"] ?? "N/A",
-                roleId: data?.memberRepresentativeId[0].roleId ?? "N/A",
+                roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
             });
             setIsLoading(false);
         } catch (error) {
@@ -884,7 +884,7 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             {/* <div className="select-field"> */}
                                             <label htmlFor="replacedMember">
-                                                Replaced Member{" "}
+                                                Replaced Member Company{" "}
                                                 <span className="mandatory">
                                                     *
                                                 </span>
@@ -1424,6 +1424,7 @@ const ViewMember = () => {
                                             </label>
 
                                             <div>
+                                                {/* <Input/> */}
                                                 <Dropdown
                                                     name="roleId"
                                                     control={control}

@@ -169,8 +169,8 @@ function Preview() {
                             <TabPanel value={value} index={0}>
                                 <div className="preview-card-wrapper">
                                     <div className='preview-sect-ttl-wrap'>
-                                        <div class="preview-sect-card-ttl-blk">
-                                            <h2 class="subheading">Section Title</h2>
+                                        <div className="preview-sect-card-ttl-blk">
+                                            <h2 className="subheading">Section Title</h2>
                                         </div>
                                         <div className='preview-sect-txt mb-0'>
                                             Section Title will come here
@@ -180,7 +180,7 @@ function Preview() {
                                 <div className="preview-card-wrapper">
                                     <div className='preview-que-wrap'>
                                         <div className='preview-que-blk'>
-                                            <div class="preview-sect-txt">
+                                            <div className="preview-sect-txt">
                                                 Question 1 title will come here
                                             </div>
                                             <div className="form-group">
@@ -188,7 +188,7 @@ function Preview() {
                                             </div>
                                         </div>
                                         <div className='preview-que-blk'>
-                                            <div class="preview-sect-txt">
+                                            <div className="preview-sect-txt">
                                                 Question 2 title will come here
                                             </div>
                                             <div className="form-group">
@@ -205,7 +205,7 @@ function Preview() {
                                             </div>
                                         </div>
                                         <div className='preview-que-blk'>
-                                            <div class="preview-sect-txt">
+                                            <div className="preview-sect-txt">
                                                 Question 3 title will come here
                                             </div>
                                             <div className="form-group">
@@ -225,7 +225,7 @@ function Preview() {
                                             </div>
                                         </div>
                                         <div className='preview-que-blk'>
-                                            <div class="preview-sect-txt">
+                                            <div className="preview-sect-txt">
                                                 Question 4 title will come here
                                             </div>
                                             <div className="form-group">
@@ -239,7 +239,7 @@ function Preview() {
                                             </div>
                                         </div>
                                         <div className='preview-que-blk'>
-                                            <div class="preview-sect-txt preview-incl-padding-space">
+                                            <div className="preview-sect-txt preview-incl-padding-space">
                                                 Question 5 title will come here
                                             </div>
                                             <div className="form-group">
@@ -257,7 +257,7 @@ function Preview() {
                                             </div>
                                         </div>
                                         <div className='preview-que-blk'>
-                                            <div class="preview-sect-txt preview-incl-padding-space">
+                                            <div className="preview-sect-txt preview-incl-padding-space">
                                                 Question 6 title will come here
                                             </div>
                                             <div className="form-group mb-0">
