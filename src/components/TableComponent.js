@@ -469,26 +469,28 @@ export default function TableComponent({
                                                         )}
                                                         {icons.includes(
                                                             "send"
-                                                        ) && (
-                                                            <span className="icon">
-                                                                <Tooltip title="Assign to Operation Member">
-                                                                    <GroupAddOutlinedIcon
-                                                                        onClick={() =>
-                                                                            onClickAssignAssesmentFunction(
-                                                                                row.uuid
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                    {/* <img
+                                                        ) &&
+                                                            row?.assessmentStatus ==
+                                                                "Accepted" && (
+                                                                <span className="icon">
+                                                                    <Tooltip title="Assign to Operation Member">
+                                                                        <GroupAddOutlinedIcon
+                                                                            onClick={() =>
+                                                                                onClickAssignAssesmentFunction(
+                                                                                    row.uuid
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                        {/* <img
                                                                         src={
                                                                             "/images/delete-icon.svg"
                                                                         }
                                                                         
                                                                         }
                                                                     /> */}
-                                                                </Tooltip>
-                                                            </span>
-                                                        )}
+                                                                    </Tooltip>
+                                                                </span>
+                                                            )}
                                                         {icons.includes(
                                                             "fill"
                                                         ) && (

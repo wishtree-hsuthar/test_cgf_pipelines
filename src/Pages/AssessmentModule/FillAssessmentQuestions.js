@@ -109,7 +109,7 @@ const FillAssessmentQuestion = ({
             />
         ) : question.inputType === "textarea" ? (
             <TextField
-                disabled={viewMode}
+                disabled={!viewMode}
                 placeholder={`Enter text here`}
                 multiline
                 value={answer ?? ""}
@@ -184,7 +184,7 @@ const FillAssessmentQuestion = ({
                                 value={option}
                                 control={
                                     <Radio
-                                        disabled={viewMode}
+                                        disabled={!viewMode}
                                         checked={answer === option}
                                     />
                                 }
@@ -209,7 +209,7 @@ const FillAssessmentQuestion = ({
                                     name={questionUUID}
                                     className="checkbox-with-label"
                                     value={option}
-                                    control={<Checkbox disabled={viewMode} />}
+                                    control={<Checkbox disabled={!viewMode} />}
                                     checked={answer.includes(option)}
                                     onChange={handleChecked}
                                     label={option}
@@ -232,12 +232,17 @@ const FillAssessmentQuestion = ({
                     components={{
                         OpenPickerIcon: DateRangeOutlinedIcon,
                     }}
-                    disabled={viewMode}
+                    disabled={!viewMode}
                     value={answer ?? ""}
                     onChange={(newValue) =>
                         handleAnswersChange(questionUUID, newValue)
                     }
-                    renderInput={(params) => <TextField {...params} />}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            helperText={!answer && error ? error : ""}
+                        />
+                    )}
                 />
             </LocalizationProvider>
         ) : (
