@@ -1,9 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TableAssessment from "./TableAssesment";
 import FillAssessmentQuestion from "./FillAssessmentQuestions";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
+import DialogBox from "../../components/DialogBox";
 
 const getTransformedColumns = (columns) => {
     let transformedColumns = {};
@@ -33,6 +34,8 @@ function FillAssesmentSection({
     errors,
     handleSetErrors,
     handleFormSubmit,
+    viewMode,
+    setViewMode,
 }) {
     const navigate = useNavigate();
     const params = useParams();
@@ -43,6 +46,10 @@ function FillAssesmentSection({
         descriptionMessage: "",
         messageType: "success",
     });
+
+    // cancel dailog box open/close state
+
+    const [openCancelDailog, setOpenCancelDailog] = useState(false);
 
     const myRef = useRef();
 
@@ -55,18 +62,38 @@ function FillAssesmentSection({
             },
         });
     };
-   const handleAnswersBlur = (name, value) => {
-    console.log("inside on Blur")
-    setAssessmentQuestionnaire({
-        ...assessmentQuestionnaire,
-        [section?.uuid]: {
-            ...assessmentQuestionnaire[section?.uuid],
-            [name]: value?.trim(),
-        },
-    });
-};
+    const handleAnswersBlur = (name, value) => {
+        console.log("inside on Blur");
+        setAssessmentQuestionnaire({
+            ...assessmentQuestionnaire,
+            [section?.uuid]: {
+                ...assessmentQuestionnaire[section?.uuid],
+                [name]: value?.trim(),
+            },
+        });
+    };
     return (
         <>
+            <DialogBox
+                title={<p>Cancel</p>}
+                info1={
+                    <p>
+                        On canceling all the entered details of the section will
+                        not save.
+                    </p>
+                }
+                info2={<p>Do you want to cancel filling assessment?</p>}
+                primaryButtonText={"Yes"}
+                secondaryButtonText={"No"}
+                onPrimaryModalButtonClickHandler={() => {
+                    navigate("/assessment-list");
+                }}
+                onSecondaryModalButtonClickHandler={() => {
+                    setOpenCancelDailog(false);
+                }}
+                openModal={openCancelDailog}
+                setOpenModal={setOpenCancelDailog}
+            />
             <Toaster
                 myRef={myRef}
                 titleMessage={toasterDetails.titleMessage}
@@ -85,7 +112,7 @@ function FillAssesmentSection({
                     {section.layout === "form" ? (
                         section.questions.map((question) => (
                             <FillAssessmentQuestion
-                               key={question?.uuid}
+                                key={question?.uuid}
                                 assessmentQuestionnaire={
                                     assessmentQuestionnaire
                                 }
@@ -114,6 +141,8 @@ function FillAssesmentSection({
                                 error={errors[question?.uuid] ?? ""}
                                 handleAnswersChange={handleAnswersChange}
                                 handleAnswersBlur={handleAnswersBlur}
+                                viewMode={viewMode}
+                                setViewMode={setViewMode}
                             />
                         ))
                     ) : (
@@ -128,28 +157,41 @@ function FillAssesmentSection({
                         />
                     )}
                 </div>
-                <div className="form-btn flex-between add-members-btn">
-                    <button
-                        type="reset"
-                        onClick={() => navigate(`/assessment-list/`)}
-                        className="secondary-button mr-10"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        onClick={
-                            // () =>
-                            // navigate(
-                            //     `/questionnaires/add-questionnaire/${params.id}`
-                            // )
-                            handleFormSubmit
-                        }
-                        className="primary-button add-button"
-                    >
-                        Submit assessment
-                    </button>
-                </div>
+                {viewMode ? (
+                    <div className="form-btn flex-between add-members-btn">
+                        <button
+                            type="reset"
+                            onClick={() => setOpenCancelDailog(true)}
+                            className="secondary-button mr-10"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            onClick={
+                                // () =>
+                                // navigate(
+                                //     `/questionnaires/add-questionnaire/${params.id}`
+                                // )
+                                handleFormSubmit
+                            }
+                            className="primary-button add-button"
+                        >
+                            Submit assessment
+                        </button>
+                    </div>
+                ) : (
+                    <div className="form-btn flex-between add-members-btn">
+                        <button
+                            type="reset"
+                            onClick={() => navigate("/assessment-list")}
+                            className="secondary-button mr-10"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                )}
             </div>
         </>
     );

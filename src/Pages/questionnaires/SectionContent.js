@@ -1,9 +1,9 @@
 import {
-  FormControl,
-  FormHelperText,
-  MenuItem,
-  Select,
-  TextField,
+    FormControl,
+    FormHelperText,
+    MenuItem,
+    Select,
+    TextField,
   Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -19,23 +19,23 @@ import { v4 as uuidv4 } from "uuid";
 import Toaster from "../../components/Toaster";
 
 const SectionContent = ({
-  value,
-  questionnaire,
-  setQuestionnaire,
-  uuid,
-  setValue,
-  index,
-  section,
-  id,
-  globalSectionTitleError,
-  setGlobalSectionTitleError,
+    value,
+    questionnaire,
+    setQuestionnaire,
+    uuid,
+    setValue,
+    index,
+    section,
+    id,
+    globalSectionTitleError,
+    setGlobalSectionTitleError,
 }) => {
-  const navigate = useNavigate();
-  // state to handle question level erros
-  const [err, setErr] = useState({ questionTitle: "", option: "" });
-  // state to handle errors in table layout
-  const [tableErr, setTableErr] = useState("");
-  const ITEM_HEIGHT = 22;
+    const navigate = useNavigate();
+    // state to handle question level erros
+    const [err, setErr] = useState({ questionTitle: "", option: "" });
+    // state to handle errors in table layout
+    const [tableErr, setTableErr] = useState("");
+    const ITEM_HEIGHT = 22;
 
   const MenuProps = {
     PaperProps: {
@@ -85,202 +85,209 @@ const SectionContent = ({
   const deleteSection = (uuid) => {
     let tempQuestionnare = { ...questionnaire };
 
-    let tempSections = tempQuestionnare.sections.filter(
-      (section) => section.uuid !== uuid
-    );
+        let tempSections = tempQuestionnare.sections.filter(
+            (section) => section.uuid !== uuid
+        );
 
-    // console.log("filter sections", tempQuestionnare);
-    // console.log("filter sections", tempSections);
-    // console.log("filter sections id", uuid);
-    setQuestionnaire({
-      ...tempQuestionnare,
-      sections: tempSections,
-    });
-    let newObj = {
-      ...tempQuestionnare,
-      sections: tempSections,
-    };
-
-    saveSection(newObj);
-
-    setValue(0);
-    setOpenDialog(false);
-  };
-
-  const validateTableQuestions = (countError) => {
-    console.log("inside table question validator");
-    questionnaire?.sections[index]?.columnValues.forEach(
-      (column, columnIdx) => {
-        if (column?.title === "") {
-          setTableErr("Error hai");
-          countError++;
-        }
-        if (column?.columnType === "prefilled") {
-          console.log("inside prefiled");
-          questionnaire?.sections[index]?.rowValues?.forEach((row, rowId) => {
-            if (row?.cells[columnIdx]?.value) return;
-            setTableErr("Error hai");
-            countError++;
-          });
-        }
-      }
-    );
-    console.log("count Error in table validator: ", countError);
-    return countError;
-  };
-
-  const validateSection = async () => {
-    let countError = 0;
-    if (questionnaire?.sections[index]?.layout === "table") {
-      countError = await validateTableQuestions(countError);
-    }
-    console.log("count Error", countError);
-    //Rajkumar's save section
-    let tempError = {
-      questionTitle: "",
-      option: "",
-    };
-    await questionnaire?.sections[index]?.questions?.map(
-      (question, questionIdx) => {
-        if (question?.questionTitle === "") {
-          // console.log("is Error");
-          tempError["questionTitle"] = "Enter question title";
-          countError++;
-        }
-        //   console.log("question in validate section map",question)
-        if (
-          ["dropdown", "checkbox", "radioGroup"].includes(question?.inputType)
-        ) {
-          question?.options?.map((option) => {
-            if (option === "") {
-              tempError["option"] = "Enter option";
-              countError++;
-            }
-          });
-        }
-      }
-    );
-
-    setErr({ ...tempError });
-    //Madhav's save section
-    // console.log("questionnaire", questionnaire);
-
-    if (questionnaire?.title === "") {
-      setGlobalSectionTitleError({ errMsg: "Section title required" });
-      countError++;
-    }
-    for (let i = 0; i < questionnaire.sections.length; i++) {
-      if (questionnaire.sections[i].sectionTitle === "") {
-        setGlobalSectionTitleError({
-          errMsg: "Section title required",
+        // console.log("filter sections", tempQuestionnare);
+        // console.log("filter sections", tempSections);
+        // console.log("filter sections id", uuid);
+        setQuestionnaire({
+            ...tempQuestionnare,
+            sections: tempSections,
         });
-        // console.log("in validate section for block");
-        setValue(i);
-        countError++;
-        return false;
+        let newObj = {
+            ...tempQuestionnare,
+            sections: tempSections,
+        };
+
+        saveSection(newObj);
+
+        setValue(0);
+        setOpenDialog(false);
+    };
+
+    const validateTableQuestions = (countError) => {
+        console.log("inside table question validator");
+        questionnaire?.sections[index]?.columnValues.forEach(
+            (column, columnIdx) => {
+                if (column?.title === "") {
+                    setTableErr("Error hai");
+                    countError++;
+                }
+                if (column?.columnType === "prefilled") {
+                    console.log("inside prefiled");
+                    questionnaire?.sections[index]?.rowValues?.forEach(
+                        (row, rowId) => {
+                            if (row?.cells[columnIdx]?.value) return;
+                            setTableErr("Error hai");
+                            countError++;
+                        }
+                    );
+                }
+            }
+        );
+        console.log("count Error in table validator: ", countError);
+        return countError;
+    };
+
+    const validateSection = async () => {
+        let countError = 0;
+        if (questionnaire?.sections[index]?.layout === "table") {
+            countError = await validateTableQuestions(countError);
+        }
+        console.log("count Error", countError);
+        //Rajkumar's save section
+        let tempError = {
+            questionTitle: "",
+            option: "",
+        };
+        await questionnaire?.sections[index]?.questions?.map(
+            
+      (question, questionIdx) => {
+                  if (question?.questionTitle === "") {
+                      // console.log("is Error");
+                      tempError["questionTitle"] = "Enter question title";
+                      countError++;
+                  }
+                  //   console.log("question in validate section map",question)
+                  if (
+                      ["dropdown", "checkbox", "radioGroup"].includes(
+                        question?.inputType
+                    )
+                  ) {
+                      question?.options?.map((option) => {
+                          if (option === "") {
+                              tempError["option"] = "Enter option";
+                              countError++;
+                          }
+                      });
+                  }
       }
-    }
-    if (countError === 0) {
-      return true;
-    }
-    return false;
-  };
+            
+        );
 
-  const sectionLayoutChangeHandler = (e) => {
-    const { name, value } = e.target;
-    console.log("name:", name, "value:", value);
-    let tempQuestionnaire = { ...questionnaire };
-    console.log("tempQuestionnaire: ", tempQuestionnaire);
-    tempQuestionnaire.sections[index]["layout"] = value;
-    //check if layout is table remove form layout questions and add initial rows and colums
-    if (value === "table") {
-      delete tempQuestionnaire?.sections[index]?.questions;
-      const initialId = uuidv4();
-      tempQuestionnaire.sections[index].columnValues = [
-        {
-          uuid: initialId,
-          title: "",
-          columnType: "textbox",
-          options: ["", ""],
-          validation: "",
-        },
-      ];
-      tempQuestionnaire.sections[index].rowValues = [
-        {
-          uuid: uuidv4(),
-          cells: [
-            {
-              columnId: initialId, // UUID of the column
-              value: "",
-            },
-          ],
-        },
-        {
-          uuid: uuidv4(),
-          cells: [
-            {
-              columnId: initialId, // UUID of the column
-              value: "",
-            },
-          ],
-        },
-      ];
-    }
-    //check if layout is form then remove table questions and add form inital question
-    if (value === "form") {
-      delete tempQuestionnaire?.sections[index]?.columnValues;
-      delete tempQuestionnaire?.sections[index]?.rowValues;
-      tempQuestionnaire.sections[index].questions = [
-        {
-          uuid: uuidv4(),
-          questionTitle: "",
-          inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings, boolean
-          validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
-          defaultValue: "", // Will only be there in case of the inputType which requires the default value
-          isRequired: true,
-          options: ["", ""], // multiple values from which user can select
-        },
-      ];
-    }
-    console.log("tempQuestionnaire after layout update", tempQuestionnaire);
-    setQuestionnaire(tempQuestionnaire);
-  };
-  const handleStatusChange = (e) => {
-    // console.log("inside Status change handler");
-    const { name, value } = e.target;
-    let tempQuestionnare = { ...questionnaire };
-    if (value === "active") {
-      tempQuestionnare.sections[index].isActive = true;
-    }
-    if (value === "inActive") tempQuestionnare.sections[index].isActive = false;
-    setQuestionnaire(tempQuestionnare);
-  };
-  const handleInputSection = (e) => {
-    const { name, value } = e.target;
-    let tempQuestionnare = { ...questionnaire };
+        setErr({ ...tempError });
+        //Madhav's save section
+        // console.log("questionnaire", questionnaire);
 
-    tempQuestionnare.sections[index][name] = value;
-    setQuestionnaire(tempQuestionnare);
-  };
-  const handleInputBlur = (e) => {
-    const { name, value } = e.target;
-    let tempQuestionnaire = { ...questionnaire };
-    tempQuestionnaire.sections[index][name] = value?.trim();
-    setQuestionnaire(tempQuestionnaire);
-  };
-  const handleSubmitSection = async (e, isPublished) => {
-    e?.preventDefault();
-    const response = await validateSection();
-    if (response) {
-      await saveSection(undefined, isPublished);
-      return true;
-    }
-    return false;
-    // validateSection() && saveSection()
-  };
+        if (questionnaire?.title === "") {
+            setGlobalSectionTitleError({ errMsg: "Section title required" });
+            countError++;
+        }
+        for (let i = 0; i < questionnaire.sections.length; i++) {
+            if (questionnaire.sections[i].sectionTitle === "") {
+                setGlobalSectionTitleError({
+                    errMsg: "Section title required",
+                });
+                // console.log("in validate section for block");
+                setValue(i);
+                countError++;
+                return false;
+            }
+        }
+        if (countError === 0) {
+            return true;
+        }
+        return false;
+    };
 
-  const params = useParams();
-  const [openDialog, setOpenDialog] = useState(false);
+    const sectionLayoutChangeHandler = (e) => {
+        const { name, value } = e.target;
+        console.log("name:", name, "value:", value);
+        let tempQuestionnaire = { ...questionnaire };
+        console.log("tempQuestionnaire: ", tempQuestionnaire);
+        tempQuestionnaire.sections[index]["layout"] = value;
+        //check if layout is table remove form layout questions and add initial rows and colums
+        if (value === "table") {
+            delete tempQuestionnaire?.sections[index]?.questions;
+            const initialId = uuidv4();
+            tempQuestionnaire.sections[index].columnValues = [
+                {
+                    uuid: initialId,
+                    title: "",
+                    columnType: "textbox",
+                    options: ["", ""],
+                    validation: "",
+                },
+            ];
+            tempQuestionnaire.sections[index].rowValues = [
+                {
+                    uuid: uuidv4(),
+                    cells: [
+                        {
+                            columnId: initialId, // UUID of the column
+                            value: "",
+                        },
+                    ],
+                },
+                {
+                    uuid: uuidv4(),
+                    cells: [
+                        {
+                            columnId: initialId, // UUID of the column
+                            value: "",
+                        },
+                    ],
+                },
+            ];
+        }
+        //check if layout is form then remove table questions and add form inital question
+        if (value === "form") {
+            delete tempQuestionnaire?.sections[index]?.columnValues;
+            delete tempQuestionnaire?.sections[index]?.rowValues;
+            tempQuestionnaire.sections[index].questions = [
+                {
+                    uuid: uuidv4(),
+                    questionTitle: "",
+                    inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings, boolean
+                    validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
+                    defaultValue: "", // Will only be there in case of the inputType which requires the default value
+                    isRequired: true,
+                    options: ["", ""], // multiple values from which user can select
+                },
+            ];
+        }
+        console.log("tempQuestionnaire after layout update", tempQuestionnaire);
+        setQuestionnaire(tempQuestionnaire);
+    };
+    const handleStatusChange = (e) => {
+        // console.log("inside Status change handler");
+        const { name, value } = e.target;
+        let tempQuestionnare = { ...questionnaire };
+        if (value === "active") {
+            tempQuestionnare.sections[index].isActive = true;
+        }
+        if (value === "inActive")
+            tempQuestionnare.sections[index].isActive = false;
+        setQuestionnaire(tempQuestionnare);
+    };
+    const handleInputSection = (e) => {
+        const { name, value } = e.target;
+        let tempQuestionnare = { ...questionnaire };
+
+        tempQuestionnare.sections[index][name] = value;
+        setQuestionnaire(tempQuestionnare);
+    };
+    const handleInputBlur = (e) => {
+        const {  name, value  } = e.target;
+        let tempQuestionnaire = {  ...questionnaire  };;
+        tempQuestionnaire.sections[index][name] = value?.trim();;
+        setQuestionnaire(tempQuestionnaire);;
+    };;
+    const handleSubmitSection = async (e, isPublished) => {
+        e?.preventDefault();
+        const response = await validateSection();;
+        if (response) {
+            await saveSection(undefined, isPublished);
+            return true;
+        }
+        return false;
+        // validateSection() && saveSection()
+    };
+
+    const params = useParams();
+    const [openDialog, setOpenDialog] = useState(false);
   const [openDialog1, setOpenDialog1] = useState(false);
 
   const saveSection = async (questionnaireObj, isPublished) => {
@@ -403,10 +410,10 @@ const SectionContent = ({
                 {/* <h2 className="subheading">
                                 {`Section ${value}`}{" "}
                             </h2> */}
-              </div>
-              <div className="sect-rightblk">
-                <div className="sect-ttl-right-iconblk">
-                  {/* <span className="sect-icon-blk add-sect-iconblk mr-40">
+                            </div>
+                            <div className="sect-rightblk">
+                                <div className="sect-ttl-right-iconblk">
+                                    {/* <span className="sect-icon-blk add-sect-iconblk mr-40">
                                     <img
                                         src={
                                             process.env.PUBLIC_URL +
@@ -415,166 +422,202 @@ const SectionContent = ({
                                         alt=""
                                     />
                                 </span> */}
-                  <span className="sect-icon-blk delete-iconblk">
-                    <Tooltip title="Delete section">
+                                    <span className="sect-icon-blk delete-iconblk">
+                                        <Tooltip title="Delete section">
                       <img
-                        onClick={() => setOpenDialog(true)}
-                        src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
-                        alt=""
-                      />
-                    </Tooltip>
+                                              onClick={() => setOpenDialog(true)}
+                                              src={
+                                                process.env.PUBLIC_URL +
+                                                "/images/delete-icon.svg"
+                                            }
+                                              alt=""
+                                          />
+                                      </Tooltip>
                   </span>
-                </div>
-              </div>
-            </div>
-          )}
-          <form>
-            <div className="sect-form-card-blk">
-              <div className="sect-form-card-innerblk flex-between">
-                <div className="sect-card-form-leftfield">
-                  <div className="form-group">
-                    <label htmlFor="title">
-                      Section Name <span className="mandatory">*</span>
-                    </label>
-                    <TextField
-                      className={`input-field ${
-                        section.sectionTitle === "" &&
-                        globalSectionTitleError?.errMsg &&
-                        "input-error"
-                      }`}
-                      id="outlined-basic"
-                      placeholder="Enter section name"
-                      variant="outlined"
-                      onChange={handleInputSection}
-                      onBlur={handleInputBlur}
-                      value={section.sectionTitle}
-                      name={"sectionTitle"}
-                      helperText={
-                        section.sectionTitle === "" &&
-                        globalSectionTitleError?.errMsg
-                          ? "Enter the section name"
-                          : " "
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="sect-card-form-rightfield flex-between">
-                  <div className="form-group">
-                    <label htmlFor="layout">
-                      Layout <span className="mandatory">*</span>
-                    </label>
-                    <div className="select-field">
-                      <FormControl className="fullwidth-field">
-                        <Select
-                          IconComponent={(props) => (
-                            <KeyboardArrowDownRoundedIcon {...props} />
-                          )}
-                          name={"layout"}
-                          value={section?.layout}
-                          onChange={sectionLayoutChangeHandler}
-                          MenuProps={MenuProps}
-                        >
-                          <MenuItem value="form">Form</MenuItem>
-                          <MenuItem value="table" selected>
-                            Table
-                          </MenuItem>
-                        </Select>
-                        <FormHelperText> </FormHelperText>
-                      </FormControl>
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="status">
-                      Status <span className="mandatory">*</span>
-                    </label>
-                    <div className="select-field">
-                      <FormControl className="fullwidth-field">
-                        <Select
-                          IconComponent={(props) => (
-                            <KeyboardArrowDownRoundedIcon {...props} />
-                          )}
-                          value={section?.isActive ? "active" : "inActive"}
-                          onChange={handleStatusChange}
-                          MenuProps={MenuProps}
-                          name={"isActive"}
-                        >
-                          <MenuItem value={"active"} selected>
-                            Active
-                          </MenuItem>
-                          <MenuItem value={"inActive"}>Inactive</MenuItem>
-                        </Select>
-                        <FormHelperText> </FormHelperText>
-                      </FormControl>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <form>
+                        <div className="sect-form-card-blk">
+                            <div className="sect-form-card-innerblk flex-between">
+                                <div className="sect-card-form-leftfield">
+                                    <div className="form-group">
+                                        <label htmlFor="title">
+                                            Section Name{" "}
+                                            <span className="mandatory">*</span>
+                                        </label>
+                                        <TextField
+                                            className={`input-field ${
+                                                section.sectionTitle === "" &&
+                                                globalSectionTitleError?.errMsg &&
+                                                "input-error"
+                                            }`}
+                                            id="outlined-basic"
+                                            placeholder="Enter section name"
+                                            variant="outlined"
+                                            onChange={handleInputSection}
+                                            onBlur={handleInputBlur}
+                                            value={section.sectionTitle}
+                                            name={"sectionTitle"}
+                                            helperText={
+                                                section.sectionTitle === "" &&
+                                                globalSectionTitleError?.errMsg
+                                                    ? "Enter the section name"
+                                                    : " "
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                                <div className="sect-card-form-rightfield flex-between">
+                                    <div className="form-group">
+                                        <label htmlFor="layout">
+                                            Layout{" "}
+                                            <span className="mandatory">*</span>
+                                        </label>
+                                        <div className="select-field">
+                                            <FormControl className="fullwidth-field">
+                                                <Select
+                                                    IconComponent={(props) => (
+                                                        <KeyboardArrowDownRoundedIcon
+                                                            {...props}
+                                                        />
+                                                    )}
+                                                    name={"layout"}
+                                                    value={section?.layout}
+                                                    onChange={
+                                                        sectionLayoutChangeHandler
+                                                    }
+                                                    MenuProps={MenuProps}
+                                                >
+                                                    <MenuItem value="form">
+                                                        Form
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        value="table"
+                                                        selected
+                                                    >
+                                                        Table
+                                                    </MenuItem>
+                                                </Select>
+                                                <FormHelperText>
+                                                    {" "}
+                                                </FormHelperText>
+                                            </FormControl>
+                                        </div>
+                                    </div>
+                                    {/* <div className="form-group">
+                                        <label htmlFor="status">
+                                            Status{" "}
+                                            <span className="mandatory">*</span>
+                                        </label>
+                                        <div className="select-field">
+                                            <FormControl className="fullwidth-field">
+                                                <Select
+                                                    IconComponent={(props) => (
+                                                        <KeyboardArrowDownRoundedIcon
+                                                            {...props}
+                                                        />
+                                                    )}
+                                                    value={
+                                                        section?.isActive
+                                                            ? "active"
+                                                            : "inActive"
+                                                    }
+                                                    onChange={
+                                                        handleStatusChange
+                                                    }
+                                                    MenuProps={MenuProps}
+                                                    name={"isActive"}
+                                                >
+                                                    <MenuItem
+                                                        value={"active"}
+                                                        selected
+                                                    >
+                                                        Active
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        value={"inActive"}
+                                                    >
+                                                        Inactive
+                                                    </MenuItem>
+                                                </Select>
+                                                <FormHelperText>
+                                                    {" "}
+                                                </FormHelperText>
+                                            </FormControl>
+                                        </div>
+                                    </div> */}
+                                </div>
+                            </div>
 
-              <div className="sect-form-card-innerblk">
-                <div className="sect-card-form-leftfield full-width">
-                  <div className="form-group mb-0">
-                    <label htmlFor="emailid">Description</label>
-                    <TextField
-                      className="input-field"
-                      id="outlined-basic"
-                      placeholder="Enter description"
-                      variant="outlined"
-                      onChange={handleInputSection}
-                      onBlur={handleInputBlur}
-                      name={"description"}
-                      value={section.description}
-                      // multiline
-                    />
-                  </div>
+                            <div className="sect-form-card-innerblk">
+                                <div className="sect-card-form-leftfield full-width">
+                                    <div className="form-group mb-0">
+                                        <label htmlFor="emailid">
+                                            Description
+                                        </label>
+                                        <TextField
+                                            className="input-field"
+                                            id="outlined-basic"
+                                            placeholder="Enter description"
+                                            variant="outlined"
+                                            onChange={handleInputSection}
+                                            onBlur={handleInputBlur}
+                                            name={"description"}
+                                            value={section.description}
+                                            // multiline
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-              </div>
             </div>
-          </form>
+            {section?.layout === "form" ? (
+                <FormQuestions
+                    sectionIndex={index}
+                    questionnaire={questionnaire}
+                    setQuestionnaire={setQuestionnaire}
+                    err={err}
+                    setErr={setErr}
+                />
+            ) : (
+                <TableQuestions
+                    sectionIndex={index}
+                    questionnaire={questionnaire}
+                    setQuestionnaire={setQuestionnaire}
+                    tableErr={tableErr}
+                    setTableErr={setTableErr}
+                />
+            )}
+            <div className="form-btn flex-between add-members-btn que-page-btn">
+                <button
+                    type="reset"
+                    className="secondary-button mr-10"
+                    onClick={onCancelClickHandler}
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    onClick={handleSubmitSection}
+                    className="outlined-button add-button mr-10"
+                >
+                    Save
+                </button>
+                <button
+                    type="submit"
+                    className="primary-button add-button"
+                    onClick={onPublishButtonClickHandler}
+                >
+                    Publish
+                </button>
+            </div>
         </div>
-      </div>
-      {section?.layout === "form" ? (
-        <FormQuestions
-          sectionIndex={index}
-          questionnaire={questionnaire}
-          setQuestionnaire={setQuestionnaire}
-          err={err}
-          setErr={setErr}
-        />
-      ) : (
-        <TableQuestions
-          sectionIndex={index}
-          questionnaire={questionnaire}
-          setQuestionnaire={setQuestionnaire}
-          tableErr={tableErr}
-          setTableErr={setTableErr}
-        />
-      )}
-      <div className="form-btn flex-between add-members-btn que-page-btn">
-        <button
-          type="reset"
-          className="secondary-button mr-10"
-          onClick={onCancelClickHandler}
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          onClick={handleSubmitSection}
-          className="outlined-button add-button mr-10"
-        >
-          Save
-        </button>
-        <button
-          type="submit"
-          className="primary-button add-button"
-          onClick={onPublishButtonClickHandler}
-        >
-          Publish
-        </button>
-      </div>
-    </div>
-    // </div>
-  );
+        // </div>
+    );
 };
 
 export default SectionContent;

@@ -1,4 +1,11 @@
-import { Autocomplete, Paper, TextField } from "@mui/material";
+import {
+    Autocomplete,
+    FormControlLabel,
+    Paper,
+    Radio,
+    RadioGroup,
+    TextField,
+} from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
@@ -11,7 +18,9 @@ import {
     ADD_OPERATION_MEMBER,
     COUNTRIES,
     FETCH_OPERATION_MEMBER,
+    FETCH_ROLES,
     MEMBER,
+    MEMBER_DROPDOWN,
 } from "../../api/Url";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 const helperTextForAddOperationMember = {
@@ -64,7 +73,7 @@ const helperTextForAddOperationMember = {
     },
     memberId: {
         required: "Select the member company",
-        validate: "Select the member company",
+        // validate: "Select the member company",
         // maxLength: "Max char limit exceed",
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
@@ -80,6 +89,9 @@ const helperTextForAddOperationMember = {
         maxLength: "Max char limit exceed",
         minLength: "minimum 3 characters required",
         pattern: "Invalid format",
+    },
+    roleId: {
+        required: "Select the role",
     },
     reportingManager: {
         required: "Select the reporting manager ",
@@ -105,6 +117,9 @@ function AddOperationMember() {
             //     _id: "",
             //     companyName: "",
             // },
+            // memberId: "",
+            // companyType: "",
+            isCGFStaff: false,
         },
     });
 
@@ -120,6 +135,34 @@ function AddOperationMember() {
         descriptionMessage: "",
         messageType: "error",
     });
+
+    // conditionally render textfield or searchable textfield
+    const [showTextField, setShowTextField] = useState(false);
+    // cgf as member company
+    const [cgfMember, setCgfMember] = useState();
+    const [roles, setRoles] = useState([]);
+    // Fetch and set roles
+    let fetchRoles = async () => {
+        try {
+            const response = await privateAxios.get(FETCH_ROLES);
+            console.log("Response from fetch roles - ", response);
+            setRoles(response.data);
+        } catch (error) {
+            console.log("Error from fetch roles", error);
+            setToasterDetails(
+                {
+                    titleMessage: "Oops!",
+                    descriptionMessage: error?.response?.data?.message,
+                    messageType: "error",
+                },
+                () => toasterRef.current()
+            );
+            setTimeout(() => {
+                navigate("/login");
+            }, 3000);
+        }
+    };
+
     const phoneNumberChangeHandler = (e, name, code) => {
         console.log(
             "on number change",
@@ -138,7 +181,7 @@ function AddOperationMember() {
         const controller = new AbortController();
         const fetchMemberComapany = async () => {
             try {
-                const response = await privateAxios.get(MEMBER, {
+                const response = await privateAxios.get(MEMBER_DROPDOWN, {
                     signal: controller.signal,
                 });
                 console.log(
@@ -146,6 +189,10 @@ function AddOperationMember() {
                     response.data.map((data) => {
                         console.log("member company=", data?.companyName);
                     })
+                );
+
+                setCgfMember(
+                    response.data.filter((data) => data.companyName === "CGF")
                 );
 
                 if ((response.status = 200)) {
@@ -197,16 +244,21 @@ function AddOperationMember() {
         };
         fetchCountries();
         fetchMemberComapany();
+        fetchRoles();
 
         return () => {
             isMounted = false;
             controller.abort();
         };
     }, []);
-    const fetchReportingManagers = async (id) => {
+    const fetchReportingManagers = async (id, isCGF) => {
         try {
             const response = await privateAxios.get(
-                FETCH_OPERATION_MEMBER + id
+                isCGF
+                    ? FETCH_OPERATION_MEMBER +
+                          cgfMember[0]._id +
+                          "/master/external"
+                    : FETCH_OPERATION_MEMBER + id + "/master/internal"
             );
             if (response.status == 200) {
                 setReportingManagers(
@@ -221,7 +273,13 @@ function AddOperationMember() {
         }
     };
     const addOperationMember = async (data, navigateToListPage) => {
-        data = { ...data, phoneNumber: Number(data?.phoneNumber) };
+        data = {
+            ...data,
+            phoneNumber: Number(data?.phoneNumber),
+            isCGFStaff: data.isCGFStaff === "true" ? true : false,
+            memberId:
+                data.isCGFStaff === "true" ? cgfMember[0]._id : data.memberId,
+        };
         try {
             const response = await privateAxios.post(
                 ADD_OPERATION_MEMBER,
@@ -267,6 +325,31 @@ function AddOperationMember() {
         console.log("data from handleSaveAndMore", data);
         addOperationMember(data, true);
         reset();
+    };
+
+    const handleCGFStaffChange = (e) => {
+        let cgfCompany = memberCompanies.filter(
+            (company) => company.companyName === "CGF"
+        );
+        console.log(e);
+        console.log(cgfCompany[0]._id);
+        if (e.target.value === "true") {
+            setValue("companyType", "Internal");
+            setValue("memberId", cgfCompany[0].companyName);
+            setShowTextField(true);
+            setDisableReportingManager(false);
+            fetchReportingManagers("", true);
+            setValue("reportingManager", "");
+        } else {
+            setValue("companyType", "External");
+            setValue("memberId", "");
+            // trigger("memberId");
+            setShowTextField(false);
+            setReportingManagers();
+            setValue("reportingManager", "");
+
+            setDisableReportingManager(true);
+        }
     };
 
     return (
@@ -659,134 +742,188 @@ function AddOperationMember() {
                                         />
                                     </div>
                                 </div>
+
+                                <div className="card-form-field">
+                                    <div className="form-group">
+                                        <label htmlFor="">
+                                            CGF Staff{" "}
+                                            <span className="mandatory">*</span>
+                                        </label>
+                                        <div className="radio-btn-field">
+                                            <Controller
+                                                name="isCGFStaff"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <RadioGroup
+                                                        {...field}
+                                                        // value={editDefault && editDefault.status}
+                                                        aria-labelledby="demo-radio-buttons-group-label"
+                                                        name="radio-buttons-group"
+                                                        className="radio-btn"
+                                                        onChange={(e) => {
+                                                            field.onChange(e);
+                                                            handleCGFStaffChange(
+                                                                e
+                                                            );
+                                                        }}
+                                                    >
+                                                        <FormControlLabel
+                                                            value="true"
+                                                            control={<Radio />}
+                                                            label="Yes"
+                                                        />
+                                                        <FormControlLabel
+                                                            value="false"
+                                                            control={<Radio />}
+                                                            label="No"
+                                                        />
+                                                    </RadioGroup>
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label htmlFor="">
                                             Member Company{" "}
                                             <span className="mandatory">*</span>
                                         </label>
-                                        <div className="select-field auto-search-blk">
-                                            <Controller
+                                        {showTextField ? (
+                                            <Input
                                                 control={control}
                                                 name="memberId"
+                                                isDisabled
                                                 rules={{ required: true }}
-                                                render={({
-                                                    field,
-                                                    fieldState: { error },
-                                                }) => (
-                                                    <Autocomplete
-                                                        PaperComponent={({
-                                                            children,
-                                                        }) => (
-                                                            <Paper className="autocomplete-option-txt">
-                                                                {children}
-                                                            </Paper>
-                                                        )}
-                                                        className={`${
-                                                            error &&
-                                                            "autocomplete-error"
-                                                        }`}
-                                                        popupIcon={
-                                                            <KeyboardArrowDownRoundedIcon />
-                                                        }
-                                                        {...field}
-                                                        value={
-                                                            memberCompanies?._id
-                                                        }
-                                                        // clearIcon={false}
-                                                        disableClearable
-                                                        onChange={(
-                                                            event,
-                                                            newValue
-                                                        ) => {
-                                                            newValue &&
-                                                            typeof newValue ===
-                                                                "object"
-                                                                ? setValue(
-                                                                      "memberId",
-                                                                      newValue?._id
-                                                                  )
-                                                                : setValue(
-                                                                      "memberId",
-                                                                      newValue
-                                                                  );
-                                                            console.log(
-                                                                "inside autocomplete onchange"
-                                                            );
-                                                            console.log(
-                                                                "new Value ",
-                                                                newValue
-                                                            );
-                                                            setValue(
-                                                                "reportingManager",
-                                                                ""
-                                                            );
-                                                            trigger("memberId");
-                                                            setDisableReportingManager(
-                                                                false
-                                                            );
-                                                            // call fetch Reporting managers here
-                                                            fetchReportingManagers(
-                                                                newValue._id
-                                                            );
-                                                            setValue(
-                                                                "companyType",
-                                                                newValue.companyType
-                                                            );
-                                                        }}
-                                                        // sx={{ width: 200 }}
-                                                        options={
-                                                            memberCompanies
-                                                                ? memberCompanies
-                                                                : []
-                                                        }
-                                                        placeholder="Select country code"
-                                                        getOptionLabel={(
-                                                            company
-                                                        ) =>
-                                                            company.companyName
-                                                        }
-                                                        renderOption={(
-                                                            props,
-                                                            option
-                                                        ) => (
-                                                            <li {...props}>
-                                                                {
-                                                                    option.companyName
-                                                                }
-                                                            </li>
-                                                        )}
-                                                        renderInput={(
-                                                            params
-                                                        ) => (
-                                                            <TextField
-                                                                {...params}
-                                                                inputProps={{
-                                                                    ...params.inputProps,
-                                                                }}
-                                                                placeholder={
-                                                                    "Select member company"
-                                                                }
-                                                                onChange={() =>
-                                                                    trigger(
-                                                                        "memberId"
-                                                                    )
-                                                                }
-                                                                helperText={
-                                                                    error
-                                                                        ? helperTextForAddOperationMember
-                                                                              .memberId[
-                                                                              error
-                                                                                  ?.type
-                                                                          ]
-                                                                        : " "
-                                                                }
-                                                            />
-                                                        )}
-                                                    />
-                                                )}
                                             />
-                                        </div>
+                                        ) : (
+                                            <div className="select-field auto-search-blk">
+                                                <Controller
+                                                    control={control}
+                                                    name="memberId"
+                                                    rules={{ required: true }}
+                                                    render={({
+                                                        field,
+                                                        fieldState: { error },
+                                                    }) => (
+                                                        <Autocomplete
+                                                            PaperComponent={({
+                                                                children,
+                                                            }) => (
+                                                                <Paper className="autocomplete-option-txt">
+                                                                    {children}
+                                                                </Paper>
+                                                            )}
+                                                            className={`${
+                                                                error &&
+                                                                "autocomplete-error"
+                                                            }`}
+                                                            popupIcon={
+                                                                <KeyboardArrowDownRoundedIcon />
+                                                            }
+                                                            {...field}
+                                                            value={
+                                                                memberCompanies?._id
+                                                            }
+                                                            // clearIcon={false}
+                                                            disableClearable
+                                                            onChange={(
+                                                                event,
+                                                                newValue
+                                                            ) => {
+                                                                newValue &&
+                                                                typeof newValue ===
+                                                                    "object"
+                                                                    ? setValue(
+                                                                          "memberId",
+                                                                          newValue?._id
+                                                                      )
+                                                                    : setValue(
+                                                                          "memberId",
+                                                                          newValue
+                                                                      );
+                                                                console.log(
+                                                                    "inside autocomplete onchange"
+                                                                );
+                                                                console.log(
+                                                                    "new Value ",
+                                                                    newValue
+                                                                );
+                                                                setValue(
+                                                                    "reportingManager",
+                                                                    ""
+                                                                );
+                                                                trigger(
+                                                                    "memberId"
+                                                                );
+                                                                setDisableReportingManager(
+                                                                    false
+                                                                );
+                                                                // call fetch Reporting managers here
+                                                                fetchReportingManagers(
+                                                                    newValue._id,
+                                                                    false
+                                                                );
+                                                                setValue(
+                                                                    "companyType",
+                                                                    newValue.companyType
+                                                                );
+                                                            }}
+                                                            // sx={{ width: 200 }}
+                                                            options={
+                                                                memberCompanies
+                                                                    ? memberCompanies
+                                                                    : []
+                                                            }
+                                                            placeholder="Select country code"
+                                                            getOptionLabel={(
+                                                                company
+                                                            ) =>
+                                                                company.companyName
+                                                            }
+                                                            renderOption={(
+                                                                props,
+                                                                option
+                                                            ) => (
+                                                                <li {...props}>
+                                                                    {
+                                                                        option.companyName
+                                                                    }
+                                                                </li>
+                                                            )}
+                                                            renderInput={(
+                                                                params
+                                                            ) => (
+                                                                <TextField
+                                                                    {...params}
+                                                                    inputProps={{
+                                                                        ...params.inputProps,
+                                                                    }}
+                                                                    placeholder={
+                                                                        "Select member company"
+                                                                    }
+                                                                    onChange={() =>
+                                                                        trigger(
+                                                                            "memberId"
+                                                                        )
+                                                                    }
+                                                                    helperText={
+                                                                        error
+                                                                            ? helperTextForAddOperationMember
+                                                                                  .memberId[
+                                                                                  error
+                                                                                      ?.type
+                                                                              ]
+                                                                            : " "
+                                                                    }
+                                                                />
+                                                            )}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="card-form-field">
@@ -855,6 +992,33 @@ function AddOperationMember() {
                                                     : []
                                             }
                                         />
+                                    </div>
+                                </div>
+                                <div className="card-form-field">
+                                    <div className="form-group">
+                                        <label htmlFor="role">
+                                            Role{" "}
+                                            <span className="mandatory">*</span>
+                                        </label>
+
+                                        <div>
+                                            <Dropdown
+                                                name="roleId"
+                                                control={control}
+                                                options={roles}
+                                                rules={{
+                                                    required: true,
+                                                }}
+                                                myHelper={
+                                                    helperTextForAddOperationMember
+                                                }
+                                                placeholder={"Select role"}
+                                            />
+
+                                            <p className={`password-error`}>
+                                                {errors.subRoleId?.message}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 

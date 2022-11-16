@@ -20,6 +20,7 @@ import {
     ASSESSMENTS,
     FETCH_OPERATION_MEMBER,
     MEMBER,
+    MEMBER_DROPDOWN,
     MEMBER_OPERATION_MEMBERS,
 } from "../../api/Url";
 import { date } from "yup";
@@ -56,6 +57,7 @@ const AddAssessment = () => {
         operationMemberForAddAssessments,
         setOperationMemberForAddAssessments,
     ] = useState([]);
+    const [memberRepresentatives, setMemberRepresentatives] = useState([]);
     const [questionnares, setQuestionnares] = useState([]);
     const [questionnaresObj, setQuestionnaresObj] = useState([]);
     const navigate = useNavigate();
@@ -72,24 +74,27 @@ const AddAssessment = () => {
         watch,
         reset,
         setValue,
+        trigger,
     } = useForm({
         defaultValues: {
             title: "",
             assessmentType: "",
             assignedMember: "",
             assignedOperationMember: "",
-            dueDate: new Date().toLocaleDateString(),
+            dueDate: new Date(),
             remarks: "",
             questionnaireId: "",
         },
     });
+    const [isCGFStaff, setIsCGFStaff] = useState(false);
+
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
 
         const fetchMemberCompaniesForAddAssesments = async () => {
             try {
-                const response = await privateAxios.get(MEMBER, {
+                const response = await privateAxios.get(MEMBER_DROPDOWN, {
                     signal: controller.signal,
                 });
 
@@ -104,6 +109,7 @@ const AddAssessment = () => {
                             name: data.companyName,
                         }))
                     );
+                setMemberRepresentatives(response.data);
             } catch (error) {
                 console.log("Error from fetch member company api", error);
             }
@@ -137,10 +143,13 @@ const AddAssessment = () => {
     }, []);
 
     const fetchOperationMembersAccordingToMemberCompanyForAddAssessment =
-        async (id) => {
+        async (id, isCGFStaff) => {
             try {
                 const response = await privateAxios.get(
-                    FETCH_OPERATION_MEMBER + id
+                    // FETCH_OPERATION_MEMBER + id
+                    isCGFStaff
+                        ? FETCH_OPERATION_MEMBER + id + "/master/internal"
+                        : FETCH_OPERATION_MEMBER + id
                 );
                 console.log(
                     "Response from fetch operation member according to member company",
@@ -152,6 +161,17 @@ const AddAssessment = () => {
                         name: data.name,
                     }))
                 );
+                let representative = response.data.filter(
+                    (data) => data?.isMemberRepresentative
+                );
+                console.log("Representative---", representative);
+                console.log("is Cgf staff---", isCGFStaff);
+                isCGFStaff
+                    ? setValue("assignedOperationMember", "")
+                    : setValue(
+                          "assignedOperationMember",
+                          representative[0]?._id ? representative[0]?._id : ""
+                      );
             } catch (error) {
                 console.log(
                     "Error from from fetch operation member according to member company",
@@ -163,9 +183,35 @@ const AddAssessment = () => {
     const handleChangeForMemberCompany = (e) => {
         setValue("assignedMember", e.target.value);
         console.log("assignedMember", e.target.value);
-        fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
-            e.target.value
+        console.log("member representatives-----", memberRepresentatives);
+
+        let cgfCompany = memberCompaniesForAddAssessments.filter(
+            (data) => data._id === e.target.value
         );
+        console.log("cgf company-----", cgfCompany);
+
+        let memberRepresentative = memberRepresentatives.filter(
+            (data) => data._id === e.target.value
+        );
+
+        if (cgfCompany[0].name === "CGF") {
+            setIsCGFStaff(true);
+            fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+                e.target.value,
+                true
+            );
+        } else {
+            setIsCGFStaff(false);
+            fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+                e.target.value,
+                false
+            );
+        }
+
+        console.log("member representative----", memberRepresentative);
+
+        // trigger("assignedOperationMember");
+        trigger("assignedMember");
     };
 
     const handleChangeForAssessmentModule = (e) => {
@@ -176,91 +222,9 @@ const AddAssessment = () => {
         console.log("filtered questionnaire", filterQuestionnaireById);
         setValue("questionnaireId", filterQuestionnaireById[0]._id);
         setValue("assessmentType", e.target.value);
+        trigger("assessmentType");
     };
-    // const submitAssessments = async (data) => {
-    //   console.log("data from on submit", data);
 
-    //   let someDate = new Date(data.dueDate);
-    //   let setUTCHoursForDueDate = new Date(
-    //     someDate.setDate(someDate.getDate() + 1)
-    //   );
-    //   let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
-    //   console.log(
-    //     "data after converting to ISOstring",
-    //     new Date(ISOdate).toISOString()
-    //   );
-    //   data = {
-    //     ...data,
-    //     dueDate: new Date(setUTCHoursForDueDate),
-    //   };
-
-    //   try {
-    //     const response = await privateAxios.post(ASSESSMENTS, data);
-    //     if (response.status === 201) {
-    //       console.log("response from add assessments", response);
-    //       reset({
-    //         title: "",
-    //         assessmentType: "",
-    //         assignedMember: "",
-    //         // name: .assignedMember?.companyName,
-
-    //         assignedOperationMember: "",
-    //         dueDate: "",
-    //         remarks: "",
-    //         questionnaireId: "",
-    //       });
-    //       // Add success toaster here
-    //       setToasterDetails(
-    //         {
-    //           titleMessage: "Success!",
-    //           descriptionMessage: response?.data?.message,
-    //           messageType: "success",
-    //         },
-    //         () => toasterRef.current()
-    //       );
-    //       setTimeout(() => {
-    //         navigate("/assessment-list");
-    //       }, 2000);
-    //     }
-    //   } catch (error) {
-    //     if (error.response.status === 401) {
-    //       console.log("Unauthorized user access");
-    //       // Add error toaster here
-    //       setToasterDetails(
-    //         {
-    //           titleMessage: "Oops!",
-    //           descriptionMessage: error?.response?.data?.message,
-    //           messageType: "error",
-    //         },
-    //         () => toasterRef.current()
-    //       );
-    //     }
-    //     if (error.response.status === 400) {
-    //       console.log("something went wrong");
-    //       // Add error toaster here
-    //       setToasterDetails(
-    //         {
-    //           titleMessage: "Oops!",
-    //           descriptionMessage: error?.response?.data?.message,
-    //           messageType: "error",
-    //         },
-    //         () => toasterRef.current()
-    //       );
-    //     }
-    //     if (error.response.status === 403) {
-    //       console.log("something went wrong");
-    //       // Add error toaster here
-    //       setToasterDetails(
-    //         {
-    //           titleMessage: "Oops!",
-    //           descriptionMessage: "Something went wrong",
-    //           messageType: "error",
-    //         },
-    //         () => toasterRef.current()
-    //       );
-    //     }
-    //   }
-    // };
     const submitAssessments = async (data) => {
         console.log("data from on submit", data);
 
@@ -381,8 +345,11 @@ const AddAssessment = () => {
                                             name={"title"}
                                             control={control}
                                             onBlur={(e) =>
-                                                setValue("title", e.target.value?.trim())
-                                              }
+                                                setValue(
+                                                    "title",
+                                                    e.target.value?.trim()
+                                                )
+                                            }
                                             myHelper={helperTextForAssessment}
                                             placeholder={
                                                 "Enter assessment title"
@@ -443,9 +410,10 @@ const AddAssessment = () => {
                                         </label>
                                         <Dropdown
                                             control={control}
-                                            isDisabled={
-                                                !watch("assignedMember")
-                                            }
+                                            // isDisabled={
+                                            //     !watch("assignedMember")
+                                            // }
+                                            isDisabled={!isCGFStaff}
                                             name={"assignedOperationMember"}
                                             placeholder={
                                                 "Select operation member "
@@ -547,8 +515,11 @@ const AddAssessment = () => {
                                                     multiline
                                                     {...field}
                                                     onBlur={(e) =>
-                                                        setValue("remarks", e.target.value?.trim())
-                                                      }
+                                                        setValue(
+                                                            "remarks",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
                                                     inputProps={{
                                                         maxLength: 250,
                                                     }}
@@ -575,7 +546,9 @@ const AddAssessment = () => {
                                 <div className="form-btn flex-between add-members-btn">
                                     <button
                                         type={"reset"}
-                                        onClick={() => navigate("/assessment-list")}
+                                        onClick={() =>
+                                            navigate("/assessment-list")
+                                        }
                                         className="secondary-button mr-10"
                                     >
                                         Cancel

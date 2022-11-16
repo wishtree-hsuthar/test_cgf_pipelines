@@ -79,7 +79,9 @@ function EnhancedTableHead(props) {
                                 {headCell.label}
                             </TableSortLabel>
                         )}
-                        {headCell.id === "action" && <span className="sorted-blk">{headCell.label}</span> }
+                        {headCell.id === "action" && (
+                            <span className="sorted-blk">{headCell.label}</span>
+                        )}
                     </TableCell>
                 ))}
             </TableRow>
@@ -122,6 +124,7 @@ export default function TableComponent({
     onClickEditAssesmentFunction,
     onClickAssignAssesmentFunction,
     onClickFillAssessmentFunction,
+    viewAssessment = false,
 }) {
     const handleRequestSort = (_event, property) => {
         const isAsc = orderBy === property && order === "asc";
@@ -322,7 +325,7 @@ export default function TableComponent({
                                                                           ][0].toUpperCase() +
                                                                           row[
                                                                               cell
-                                                                          ].slice(
+                                                                          ]?.slice(
                                                                               1
                                                                           )
                                                                         : row[
@@ -358,13 +361,13 @@ export default function TableComponent({
                                                                               ][0].toUpperCase() +
                                                                               `${row[
                                                                                   cell
-                                                                              ].slice(
+                                                                              ]?.slice(
                                                                                   1,
                                                                                   30
                                                                               )}...`
                                                                             : `${row[
                                                                                   cell
-                                                                              ].slice(
+                                                                              ]?.slice(
                                                                                   0,
                                                                                   30
                                                                               )}...`}
@@ -408,7 +411,9 @@ export default function TableComponent({
                                                                     <VisibilityOutlinedIcon
                                                                         onClick={() =>
                                                                             onClickVisibilityIconHandler(
-                                                                                row._id
+                                                                                viewAssessment
+                                                                                    ? row.uuid
+                                                                                    : row._id
                                                                             )
                                                                         }
                                                                     />
@@ -551,7 +556,7 @@ export default function TableComponent({
                             </div>
                         </div>
                         <div className="show-entries-txt">
-                        showing {(page - 1) * rowsPerPage + 1}-
+                            showing {(page - 1) * rowsPerPage + 1}-
                             {(page - 1) * rowsPerPage + records?.length} out of{" "}
                             {totalRecords}
                         </div>
@@ -595,4 +600,5 @@ TableComponent.propTypes = {
     setCheckBoxes: PropTypes.bool,
     onRowClick: PropTypes.bool,
     isQuestionnare: PropTypes.bool,
+    viewAssessment: PropTypes.bool,
 };

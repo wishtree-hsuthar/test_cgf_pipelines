@@ -150,6 +150,9 @@ function OnboardedOperationMember({
             delete object["tokenExpiry"];
             delete object["tokenType"];
             delete object["address"];
+            delete object["isMemberRepresentative"];
+            delete object["isCGFStaff"];
+            delete object["isOperationMember"];
             // delete object["isActive"];
 
             // object["role"] = object["data"]["subRoleId"].name;
@@ -169,7 +172,7 @@ function OnboardedOperationMember({
                 day: "2-digit",
                 year: "numeric",
             });
-            object["isActive"] = object["isActive"];
+            // object["isActive"] = object["isActive"];
 
             // delete object["data"]["subRoleId"];
             // delete object["data"]["subRole"][0].name;

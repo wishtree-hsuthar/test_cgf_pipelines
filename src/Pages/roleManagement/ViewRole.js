@@ -178,7 +178,7 @@ const ViewRole = () => {
     };
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
-        return navigate(`/sub-admins/view-sub-admin/${id}`);
+        return navigate(`/users/cgf-admin/view-sub-admin/${id}`);
     };
     const createPrevileges = (tempPrivileges) => {
         console.log("temp data", tempPrivileges);
@@ -226,6 +226,10 @@ const ViewRole = () => {
             delete object["reportingManager"];
             delete object["operationType"];
             delete object["address"];
+            delete object["isCGFStaff"];
+            delete object["isOperationMember"];
+            delete object["isMemberRepresentative"]
+            delete object["isCGFAdmin"]
 
             delete object["__v"];
             object["createdAt"] = new Date(

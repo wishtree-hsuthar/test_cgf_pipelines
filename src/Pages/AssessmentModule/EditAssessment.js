@@ -5,10 +5,12 @@ import Dropdown from "../../components/Dropdown";
 import { privateAxios } from "../../api/axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
+    ADD_OPERATION_MEMBER,
   ADD_QUESTIONNAIRE,
   FETCH_ASSESSMENT_BY_ID,
   FETCH_OPERATION_MEMBER,
   MEMBER,
+    MEMBER_DROPDOWN,
   UPDATE_ASSESSMENT_BY_ID,
 } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
@@ -42,19 +44,20 @@ const helperTextForAssessment = {
   },
 };
 function EditAssessment() {
-  const { handleSubmit, control, setValue, reset, watch } = useForm({
-    defaultValues: {
-      title: "",
-      assessmentType: "",
-      assignedMember: {
-        _id: "",
-        name: "",
-      },
-      assignedOperationMember: "",
-      dueDate: "",
-      remarks: "",
-    },
-  });
+  const { handleSubmit, control, setValue, reset, watch, getValues } =
+        useForm({
+        defaultValues: {
+          title: "",
+          assessmentType: "",
+          assignedMember: {
+            _id: "",
+            name: "",
+          },
+          assignedOperationMember: "",
+          dueDate: "",
+          remarks: "",
+        },
+      });
 
   // navigate function
   const navigate = useNavigate();
@@ -75,32 +78,50 @@ function EditAssessment() {
     operationMemberForAddAssessments,
     setOperationMemberForAddAssessments,
   ] = useState([]);
+    const [memberRepresentatives, setMemberRepresentatives] = useState([]);
   const [questionnares, setQuestionnares] = useState([]);
   const [questionnaresObj, setQuestionnaresObj] = useState([]);
   const [questionnaireId, setQuestionnaireId] = useState("");
+    const [isCGFStaff, setIsCGFStaff] = useState();
 
-  const fetchOperationMembersAccordingToMemberCompanyForAddAssessment = async (
-    id
-  ) => {
-    try {
-      const response = await privateAxios.get(FETCH_OPERATION_MEMBER + id);
-      console.log(
-        "Response from fetch operation member according to member company",
-        response
-      );
-      setOperationMemberForAddAssessments(
-        response.data.map((data) => ({
-          _id: data._id,
-          name: data.name,
-        }))
-      );
-    } catch (error) {
-      console.log(
-        "Error from from fetch operation member according to member company",
-        error
-      );
-    }
-  };
+    const fetchOperationMembersAccordingToMemberCompanyForAddAssessment =
+        async (id, isCGFStaff) => {
+            try {
+                const response = await privateAxios.get(
+                    FETCH_OPERATION_MEMBER + id
+                    // isCGFStaff
+                    //     ? FETCH_OPERATION_MEMBER + id + "/master/internal"
+                    //     : FETCH_OPERATION_MEMBER + id
+                );
+                console.log(
+                    "Response from fetch operation member according to member company",
+                    response
+                );
+                setOperationMemberForAddAssessments(
+                    response.data.map((data) => ({
+                        _id: data._id,
+                        name: data.name,
+                    }))
+                );
+                let representative = response.data.filter(
+                    (data) => data?.isMemberRepresentative
+                );
+
+                console.log("Representative---", representative);
+                console.log("is Cgf staff---", isCGFStaff);
+                isCGFStaff
+                    ? setValue("assignedOperationMember")
+                    : setValue(
+                          "assignedOperationMember",
+                          representative[0]._id
+                      );
+            } catch (error) {
+                console.log(
+                    "Error from from fetch operation member according to member company",
+                    error
+                );
+            }
+        };
 
   useEffect(() => {
     let isMounted = true;
@@ -122,25 +143,27 @@ function EditAssessment() {
             assignedMember: response.data.assignedMember?._id,
             // name: response.data.assignedMember?.companyName,
 
-            assignedOperationMember: response.data.assignedOperationMember?._id,
-            dueDate: new Date(response.data.dueDate),
-            remarks: response.data.remarks,
-            questionnaireId: response.data.questionnaireId,
-          });
-        setQuestionnaireId(response.data.questionnaireId);
-        fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
-          response.data?.assignedMember?._id
-        );
-      } catch (error) {
-        console.log("Error from fetch assessment", error);
-      }
-    };
-    fetchAssessment();
-    const fetchMemberCompaniesForAddAssesments = async () => {
-      try {
-        const response = await privateAxios.get(MEMBER, {
-          signal: controller.signal,
-        });
+                        assignedOperationMember:
+                            response.data.assignedOperationMember?._id,
+                        dueDate: new Date(response.data.dueDate),
+                        remarks: response.data.remarks,
+                        questionnaireId: response.data.questionnaireId,
+                    });
+                setQuestionnaireId(response.data.questionnaireId);
+                // fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+                //     response.data?.assignedMember?._id
+                // );
+                fetchMember();
+            } catch (error) {
+                console.log("Error from fetch assessment", error);
+            }
+        };
+        fetchAssessment();
+        const fetchMemberCompaniesForAddAssesments = async () => {
+            try {
+                const response = await privateAxios.get(MEMBER_DROPDOWN, {
+                    signal: controller.signal,
+                });
 
         console.log(
           "response from fetch member companies for add assessments",
@@ -153,6 +176,7 @@ function EditAssessment() {
               name: data.companyName,
             }))
           );
+                setMemberRepresentatives(response.data);
       } catch (error) {
         console.log("Error from fetch member company api", error);
       }
@@ -184,24 +208,39 @@ function EditAssessment() {
     };
   }, []);
 
-  const updateAssessment = async (data) => {
-    console.log("data for update assessment", data);
-    data = { ...data, questionnaireId: questionnaireId };
-    try {
-      const response = await privateAxios.put(
-        UPDATE_ASSESSMENT_BY_ID + params.id,
-        data
-      );
-      console.log("response from update assessment page");
-      if (response.status === 200) {
-        setToasterDetails(
-          {
-            titleMessage: "Success!",
-            descriptionMessage: "Assessment updated successfully!",
-            messageType: "success",
-          },
-          () => toasterRef.current()
-        );
+    const fetchMember = async () => {
+        try {
+            const response = await privateAxios.get(ADD_OPERATION_MEMBER);
+            console.log("Member fetched", response.data);
+            setOperationMemberForAddAssessments(
+                response.data.map((data) => ({
+                    _id: data._id,
+                    name: data.name,
+                }))
+            );
+        } catch (error) {
+            console.log("error from fetch member api", error);
+        }
+    };
+
+    const updateAssessment = async (data) => {
+        console.log("data for update assessment", data);
+        data = { ...data, questionnaireId: questionnaireId };
+        try {
+            const response = await privateAxios.put(
+                UPDATE_ASSESSMENT_BY_ID + params.id,
+                data
+            );
+            console.log("response from update assessment page");
+            if (response.status === 200) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage: response?.data?.message,
+                        messageType: "success",
+                    },
+                    () => toasterRef.current()
+                );
 
         reset({
           title: "",
@@ -260,13 +299,46 @@ function EditAssessment() {
     }
   };
 
-  const handleChangeForMemberCompany = (e) => {
-    setValue("assignedMember", e.target.value);
-    console.log("assignedMember", e.target.value);
-    fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
-      e.target.value
-    );
-  };
+    const handleChangeForMemberCompany = (e) => {
+        setValue("assignedMember", e.target.value);
+        console.log("assignedMember", e.target.value);
+        // let memberRepresentative = memberRepresentatives.filter(
+        //     (data) => data._id === e.target.value
+        // );
+
+        // console.log("member representative----", memberRepresentative[0]?.name);
+
+        // setValue(
+        //     "assignedOperationMember",
+
+        //     memberRepresentative[0]?._id
+        // );
+        // fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+        //     e.target.value
+        // );
+        let cgfCompany = memberCompaniesForAddAssessments.filter(
+            (data) => data._id === e.target.value
+        );
+        console.log("cgf company-----", cgfCompany);
+
+        let memberRepresentative = memberRepresentatives.filter(
+            (data) => data._id === e.target.value
+        );
+
+        if (cgfCompany[0].name === "CGF") {
+            setIsCGFStaff(true);
+            fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+                e.target.value,
+                true
+            );
+        } else {
+            setIsCGFStaff(false);
+            fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+                e.target.value,
+                false
+            );
+        }
+    };
 
   const handleChangeForAssessmentModule = (e) => {
     console.log("assessment type", e);
@@ -362,7 +434,7 @@ function EditAssessment() {
                     </label>
                     <Dropdown
                       control={control}
-                      isDisabled={!watch("assignedMember")}
+                      isDisabled={!isCGFStaff}
                       name={"assignedOperationMember"}
                       placeholder={"Select operation member "}
                       myHelper={helperTextForAssessment}
@@ -379,6 +451,7 @@ function EditAssessment() {
                     <Controller
                       name="dueDate"
                       control={control}
+
                       render={({ field, fieldState: { error } }) => (
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DatePicker

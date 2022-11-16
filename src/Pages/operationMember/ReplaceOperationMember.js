@@ -7,16 +7,7 @@ import {
     useParams,
 } from "react-router-dom";
 import PropTypes from "prop-types";
-import {
-    Box,
-    Tabs,
-    Tab,
-    Typography,
-    MenuItem,
-    Select,
-    InputLabel,
-    Checkbox,
-} from "@mui/material";
+
 import DialogBox from "../../components/DialogBox";
 
 import TableTester from "../../components/TableTester";
@@ -24,48 +15,49 @@ import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";
 import {
-    FETCH_ASSESSMENT_BY_ID,
-    FETCH_OPERATION_MEMBER,
+    ADD_SUB_ADMIN,
     FETCH_SUB_ADMIN_BY_ADMIN,
-    MEMBER_OPERATION_MEMBERS,
-    REASSIGN_ASSESSMENTS,
+    GET_OPERATION_MEMBER_BY_ID,
     REPLACE_SUB_ADMIN,
+    ADD_OPERATION_MEMBER,
 } from "../../api/Url";
 import Toaster from "../../components/Toaster";
-
 const tableHead = [
     {
         id: "",
         disablePadding: true,
-        label: "",
-        // width: "30%",
+        label: "Select User",
+        width: "10%",
     },
     {
         id: "name",
         disablePadding: true,
         label: "Operation Member",
-        // width: "30%",
+        width: "30%",
     },
     {
         id: "email",
         disablePadding: false,
         label: "Email",
-        // width: "40%",
+        width: "40%",
+    },
+    {
+        id: "role",
+        disablePadding: false,
+        label: "Role",
+        width: "20%",
     },
 ];
-
-const AssignAssessmentToOperationMember = () => {
-    const keysOrder = ["_id", "name", "email"];
-
+const ReplaceOperationMember = () => {
+    const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [isLoading, setIsLoading] = useState(false);
-    const [cgfAdmin, setCgfAdmin] = useState({});
+    const [operationMember, setOperationMember] = useState({});
+
     const { id } = useParams();
     //state to hold search timeout delay
     const [searchTimeout, setSearchTimeout] = useState(null);
-
-    //array to get array of selected rows ids
     const [selected, setSelected] = React.useState([]);
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("operationalMember");
@@ -73,23 +65,15 @@ const AssignAssessmentToOperationMember = () => {
     const [makeApiCall, setMakeApiCall] = useState(true);
     const [records, setRecords] = React.useState([]);
     const [totalRecords, setTotalRecords] = React.useState(0);
-    const [assessment, setAssessment] = useState({});
     const [search, setSearch] = useState("");
-    const [newOperationMember, setNewOperationMember] = useState("");
-    const [disableAssignButton, setDisableAssignButton] = useState(false);
     const navigate = useNavigate();
     const myRef = React.useRef();
-
-    const [open, setOpen] = useState();
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
         descriptionMessage: "",
         messageType: "success",
     });
-
-    let memberId;
-    let operationMemberId;
     // search function
     const onSearchChangeHandler = (e) => {
         console.log("event", e.key);
@@ -104,15 +88,14 @@ const AssignAssessmentToOperationMember = () => {
             }, 1000)
         );
     };
-    const generateUrl = () => {
+    const generateUrl = (multiFilterString) => {
         console.log("Search", search);
-        // console.log("assessment?")
 
-        let url = `${MEMBER_OPERATION_MEMBERS}/${memberId}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${ADD_OPERATION_MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
-            url = `${MEMBER_OPERATION_MEMBERS}/${memberId}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+            url = `${ADD_OPERATION_MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
-        return memberId && url;
+        return url;
     };
 
     const updateRecords = (data) => {
@@ -131,26 +114,27 @@ const AssignAssessmentToOperationMember = () => {
             delete object["uuid"];
             delete object["phoneNumber"];
             delete object["createdAt"];
+            object["role"] = "Operation Member";
             // object["role"] = object["subRole"][0].name;
-            delete object["department"];
-            delete object["isDeleted"];
+            delete object["subRole"];
+            delete object["subRoleId"];
             delete object["isActive"];
             delete object["createdBy"];
             delete object["updatedBy"];
             delete object["isReplaced"];
-            delete object["memberId"];
+            delete object["memberData"];
             delete object["salutation"];
+            delete object["memberId"];
             delete object["title"];
+            delete object["department"];
             delete object["address"];
-            delete object["operationType"];
             delete object["reportingManager"];
-            delete object["isCGFStaff"];
-            delete object["isOperationMember"];
-            delete object["isMemberRepresentative"];
-            object["name"] = object["name"];
-            // delete object["name"];
+            delete object["operationType"];
+            delete object["isMemberRepresentative"]
+            delete object["isCGFAdmin"]
 
-            keysOrder.forEach((k) => {
+
+            replaceHeaderKeyOrder.forEach((k) => {
                 const v = object[k];
                 delete object[k];
                 object[k] = v;
@@ -160,66 +144,63 @@ const AssignAssessmentToOperationMember = () => {
         setRecords([...staleData]);
     };
 
-    const fetchReportingManagers = async (id) => {
-        try {
-            const response = await privateAxios.get(
-                FETCH_OPERATION_MEMBER + id
-            );
-            if (response.status == 200) {
-            }
-        } catch (error) {
-            console.log("error from fetching reporting managers", error);
-        }
-    };
-
-    const getOperationMembers = async (
+    const getOperationMember = async (
         isMounted = true,
         controller = new AbortController()
     ) => {
         try {
             let url = generateUrl();
-            setIsLoading(true);
-            const response = await privateAxios.get(memberId && url, {
+            // setIsLoading(true);
+            const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
             // console.log(response.headers["x-total-count"]);
             setTotalRecords(parseInt(response.headers["x-total-count"]));
-            console.log(
-                "Response from  api get operation member api",
-                response
-            );
-            let filteredMembers = response?.data.filter(
-                (member) => member?._id !== operationMemberId
-            );
-            updateRecords(filteredMembers);
-            setIsLoading(false);
+            console.log("Response from operation member api get", response);
+
+            updateRecords(response.data.filter((data) => data._id !== id));
+            // setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
             console.log("Error from operation member-------", error);
-            isMounted &&
-                setToasterDetails(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.error &&
-                            typeof error.response.data.error === "string"
-                                ? error.response.data.error
-                                : "Something went wrong!",
 
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-            setIsLoading(false);
+            if (error?.response?.status == 401) {
+                navigate("/login");
+            }
+            // setIsLoading(false);
+        }
+    };
+
+    const fetchOperationMember = async () => {
+        try {
+            const response = await privateAxios.get(
+                GET_OPERATION_MEMBER_BY_ID + id
+            );
+            console.log("response from fetch sub admin by id", response);
+            setOperationMember(response.data);
+        } catch (error) {
             if (error?.response?.status == 500) {
                 console.log(
-                    "Error status 500 while fetchiing operation member"
+                    "Error status 500 while fetchiing subadmin from replace sub-admin"
                 );
-                // navigate("/users/cgf-admin/");
+                navigate("/sub-admins");
             }
         }
     };
+    useEffect(() => {
+        let isMounted = true;
+        const controller = new AbortController();
+        makeApiCall && getOperationMember(isMounted, controller);
+        console.log("makeApiCall", makeApiCall);
+        console.log("inside use Effect");
+        fetchOperationMember();
+
+        return () => {
+            isMounted = false;
+            clearTimeout(searchTimeout);
+            controller.abort();
+        };
+    }, [page, rowsPerPage, orderBy, order, makeApiCall]);
 
     const handleTableTesterPageChange = (newPage) => {
         console.log("new Page", newPage);
@@ -231,139 +212,107 @@ const AssignAssessmentToOperationMember = () => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(1);
     };
-    // selects single operation member
-    const selectSingleUser = (id) => {
-        console.log("select single user---", id);
-        setDisableAssignButton(true);
 
-        setSelectedUser(id);
-        setNewOperationMember(id);
-    };
-
-    // fetch assessment method
-    const fetchAssessment = async (
-        isMounted = true,
-        controller = new AbortController()
-    ) => {
-        try {
-            const response = await privateAxios.get(
-                FETCH_ASSESSMENT_BY_ID + id,
-                {
-                    signal: controller.signal,
-                }
-            );
-            isMounted && setAssessment(response.data);
-            memberId = response?.data?.assignedMember?._id;
-            operationMemberId = response?.data?.assignedOperationMember?._id;
-
-            console.log(
-                "response from fetch assessment in assign assessment page",
-                response
-            );
-        } catch (error) {
-            console.log(
-                "Error from fetch assessment in assign assessment page",
-                error
-            );
-        }
-    };
-
-    // assign assessment to operation member
-    const handleReassignAssessment = async () => {
-        setDisableAssignButton(false);
-        console.log(
-            `data from re-assign assessment-${id} and operation-member-${newOperationMember}`
-        );
+    const replaceUser = async () => {
         try {
             const response = await privateAxios.post(
-                REASSIGN_ASSESSMENTS + id + "/reassign",
+                REPLACE_SUB_ADMIN + "replace",
+
                 {
-                    reassignTo: newOperationMember,
+                    replacingTo: id,
+
+                    replacingWith: selectedUser,
                 }
             );
-            console.log("response from handle re-assign assessment", response);
             if (response.status == 201) {
                 setToasterDetails(
                     {
                         titleMessage: "Success",
-                        descriptionMessage: "Assessment assigned successfully!",
-
+                        descriptionMessage: response?.data?.message,
                         messageType: "success",
                     },
                     () => myRef.current()
                 );
+                setOpen(false);
                 setTimeout(() => {
-                    navigate("/assessment-list");
-                }, 2000);
+                    navigate("/users/operation-members");
+                }, 3000);
             }
         } catch (error) {
-            console.log("Error from re-assign assessment", error);
-            if (
-                error?.response?.status == 400 ||
-                error?.response?.status == 400
-            ) {
+            console.log("error from replace user");
+            if (error.response.status == 400) {
                 setToasterDetails(
                     {
                         titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.error &&
-                            typeof error.response.data.error === "string"
-                                ? error.response.data.error
-                                : "Something went wrong!",
-
+                        descriptionMessage: error?.response?.data?.message,
                         messageType: "error",
                     },
                     () => myRef.current()
                 );
+                setOpen(false);
+            }
+            if (error.response.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setOpen(false);
+            }
+            if (error?.response?.status == 500) {
+                console.log(
+                    "Error status 500 while fetchiing subadmin from replace sub-admin"
+                );
+                navigate("/sub-admins");
             }
         }
     };
+    const [searchText, setSearchText] = useState("");
+    const [open, setOpen] = useState(false);
+    const handleSearchText = (e) => {
+        setSearchText(e.target.value);
+    };
+    console.log("Search text---", searchText);
 
-    useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
-        makeApiCall &&
-            // const fetchAssessment=()=>{
-            //     try {
-
-            //     } catch (error) {
-
-            //     }
-            // }
-            (async () => {
-                await fetchAssessment(isMounted, controller);
-                await getOperationMembers(isMounted, controller);
-            })();
-        console.log("assessment - ", assessment);
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        };
-    }, [makeApiCall, orderBy, order, page]);
-
+    const handleYes = () => {
+        console.log("Yes replcae" + id + " replace id with", selectedUser);
+        replaceUser();
+    };
+    const handleNo = () => {
+        console.log("No replcae");
+    };
+    const openReplaceDailogBox = () => {
+        setOpen(true);
+    };
+    const selectSingleUser = (id) => {
+        console.log("select single user---", id);
+        setSelectedUser(id);
+    };
     return (
-        <div className="page-wrapper">
+        <div class="page-wrapper">
             <Toaster
                 myRef={myRef}
                 messageType={toasterDetails.messageType}
                 descriptionMessage={toasterDetails.descriptionMessage}
                 titleMessage={toasterDetails.titleMessage}
             />
-            {/* <DialogBox
-                title={<p> Assign Assessment {cgfAdmin.name} </p>}
+            <DialogBox
+                title={<p> Replace Operation Member {operationMember.name} </p>}
                 info1={
                     <p>
                         {" "}
-                        On assigning this assessment, it will
-                         get transfer to the new operation member.
+                        On replacing a Operation Member, all the statistics and
+                        record would get transfer to the new member.
                     </p>
                 }
                 info2={
                     <p>
                         {" "}
-                        Are you sure you want to Assign it to {" "}
-                        <b> {cgfAdmin.name} </b>?{" "}
+                        Are you sure you want to replace{" "}
+                        <b> {operationMember.name} </b>?{" "}
                     </p>
                 }
                 primaryButtonText="Yes"
@@ -372,22 +321,31 @@ const AssignAssessmentToOperationMember = () => {
                 onSecondaryModalButtonClickHandler={handleNo}
                 openModal={open}
                 setOpenModal={setOpen}
-            /> */}
+            />
             <div className="breadcrumb-wrapper">
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/assessment-list">Assessment</Link>
+                            <Link to="/users/operation-members">
+                                Operation Member
+                            </Link>
                         </li>
-
-                        <li>Assign Assessment</li>
+                        <li>
+                            <Link
+                                to={`/users/operation-member/view-operation-member/${id}`}
+                            >
+                                View Operation Member
+                            </Link>
+                        </li>
+                        <li>Replace Operation Member</li>
                     </ul>
                 </div>
             </div>
             <section>
                 <div className="container">
                     <div className="form-header flex-between ">
-                        <h2 className="heading2">Assign Assessment</h2>
+                        <h2 className="heading2">Replace</h2>
+
                         <div className="member-filter-left">
                             {/* <div className="tertiary-btn-blk"> */}
                             <div className="searchbar">
@@ -432,17 +390,14 @@ const AssignAssessmentToOperationMember = () => {
                     </div>
                     <div className="form-btn flex-between add-members-btn mb-20">
                         <button
-                            onClick={() => navigate("/assessment-list")}
+                            onClick={() => navigate("/users/operation-members")}
                             className="secondary-button mr-10"
                         >
                             Cancel
                         </button>
-
                         <button
-                            // onClick={openReplaceDailogBox}
-                            onClick={handleReassignAssessment}
-                            disabled={selectedUser == ""}
-                            // disabled
+                            disabled={selectedUser === ""}
+                            onClick={openReplaceDailogBox}
                             className="primary-button add-button replace-assign-btn"
                         >
                             Assign
@@ -454,4 +409,4 @@ const AssignAssessmentToOperationMember = () => {
     );
 };
 
-export default AssignAssessmentToOperationMember;
+export default ReplaceOperationMember;

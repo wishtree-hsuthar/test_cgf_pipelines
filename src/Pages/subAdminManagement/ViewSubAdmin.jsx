@@ -67,7 +67,7 @@ const ViewSubAdmin = () => {
             } catch (error) {
                 console.log("error from sub admin view page fetch api", error);
                 if (error?.response?.status === 500) {
-                    navigate("/sub-admins");
+                    navigate("/users/cgf-admin/");
                 }
             }
         };
@@ -94,7 +94,7 @@ const ViewSubAdmin = () => {
                 );
                 setOpenDeleteDialog(false);
                 setTimeout(() => {
-                    navigate("/sub-admins");
+                    navigate("/users/cgf-admin/");
                 }, 2000);
             }
         } catch (error) {
@@ -120,11 +120,11 @@ const ViewSubAdmin = () => {
         console.log(index);
         if (index === 0) {
             setOpen(false);
-            history(`/sub-admins/edit-sub-admin/${params.id}`);
+            history(`/users/cgf-admin/edit-sub-admin/${params.id}`);
         }
         if (index === 1) {
             setOpen(false);
-            history(`/sub-admins/replace-sub-admin/${params.id}`);
+            history(`/users/cgf-admin/replace-sub-admin/${params.id}`);
         }
         if (index === 2) {
             setOpen(false);
@@ -258,7 +258,7 @@ const ViewSubAdmin = () => {
                 onPrimaryModalButtonClickHandler={handleDeleteSubAdmin}
                 onSecondaryModalButtonClickHandler={() => {
                     setOpenDeleteDialog(false);
-                    navigate("/sub-admins/replace-sub-admin");
+                    navigate(`/users/cgf-admin/replace-sub-admin/${params.id}`);
                 }}
                 primaryButtonText={"Delete anyway"}
                 secondaryButtonText={"Replace"}
@@ -269,7 +269,7 @@ const ViewSubAdmin = () => {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/sub-admins">CGF Admin</Link>
+                            <Link to="/users/cgf-admin/">CGF Admins</Link>
                         </li>
                         <li>View CGF Admin</li>
                     </ul>
@@ -328,7 +328,7 @@ const ViewSubAdmin = () => {
                             <div className="card-form-field">
                                 <div className="form-group">
                                     <label for="email">
-                                        Email Id{" "}
+                                        Email{" "}
                                         <span className="mandatory">*</span>
                                     </label>
                                     <TextField
@@ -421,7 +421,7 @@ const ViewSubAdmin = () => {
                             <div className="card-form-field">
                                 <div className="form-group">
                                     <label for="role">
-                                        Select Role{" "}
+                                        Role{" "}
                                         <span className="mandatory">*</span>
                                     </label>
 
@@ -493,11 +493,13 @@ const ViewSubAdmin = () => {
                                             }
                                         >
                                             <FormControlLabel
+                                                disabled
                                                 value={"active"}
                                                 control={<Radio />}
                                                 label="Active"
                                             />
                                             <FormControlLabel
+                                                disabled
                                                 value={"inactive"}
                                                 control={<Radio />}
                                                 label="Inactive"

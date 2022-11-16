@@ -137,6 +137,7 @@ const ReplaceSubAdmin = () => {
             delete object["createdBy"];
             delete object["updatedBy"];
             delete object["isReplaced"];
+            delete object["isCGFAdmin"]
 
             replaceHeaderKeyOrder.forEach((k) => {
                 const v = object[k];
@@ -147,7 +148,7 @@ const ReplaceSubAdmin = () => {
         console.log("data in updaterecords method", staleData);
         setRecords([...staleData]);
     };
-    // fetch sub-admins
+    // fetch users/cgf-admin/
     const getSubAdmin = async (
         isMounted = true,
         controller = new AbortController()
@@ -187,7 +188,7 @@ const ReplaceSubAdmin = () => {
                 console.log(
                     "Error status 500 while fetchiing subadmin from replace sub-admin"
                 );
-                navigate("/sub-admins");
+                navigate("/users/cgf-admin/");
             }
         }
     };
@@ -204,7 +205,7 @@ const ReplaceSubAdmin = () => {
                 console.log(
                     "Error status 500 while fetchiing subadmin from replace sub-admin"
                 );
-                navigate("/sub-admins");
+                navigate("/users/cgf-admin/");
             }
         }
     };
@@ -270,7 +271,7 @@ const ReplaceSubAdmin = () => {
                 );
                 setOpen(false);
                 setTimeout(() => {
-                    navigate("/sub-admins");
+                    navigate("/users/cgf-admin/");
                 }, 3000);
             }
         } catch (error) {
@@ -301,7 +302,7 @@ const ReplaceSubAdmin = () => {
                 console.log(
                     "Error status 500 while fetchiing subadmin from replace sub-admin"
                 );
-                navigate("/sub-admins");
+                navigate("/users/cgf-admin/");
             }
         }
     };
@@ -361,10 +362,10 @@ const ReplaceSubAdmin = () => {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/sub-admins">CGF Admin</Link>
+                            <Link to="/users/cgf-admin/">CGF Admin</Link>
                         </li>
                         <li>
-                            <Link to={`/sub-admins/view-sub-admin/${id}`}>
+                            <Link to={`/users/cgf-admin/view-sub-admin/${id}`}>
                                 View CGF Admin
                             </Link>
                         </li>
@@ -376,13 +377,8 @@ const ReplaceSubAdmin = () => {
                 <div className="container">
                     <div className="form-header flex-between ">
                         <h2 className="heading2">Replace</h2>
-                        {/* <h4>Replace sub-admin with following:</h4> */}
-                        <div
-                            className="form-header-right-txt 
-        member-filter-right
-               
-               "
-                        >
+
+                        <div className="member-filter-left">
                             {/* <div className="tertiary-btn-blk"> */}
                             <div className="searchbar">
                                 <input
@@ -426,16 +422,17 @@ const ReplaceSubAdmin = () => {
                     </div>
                     <div className="form-btn flex-between add-members-btn mb-20">
                         <button
-                            onClick={() => navigate("/sub-admins")}
+                            onClick={() => navigate("/users/cgf-admin/")}
                             className="secondary-button mr-10"
                         >
                             Cancel
                         </button>
                         <button
+                            disabled={selectedUser === ""}
                             onClick={openReplaceDailogBox}
                             className="primary-button add-button replace-assign-btn"
                         >
-                            Assign
+                            Replace
                         </button>
                     </div>
                 </div>

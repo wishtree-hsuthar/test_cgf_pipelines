@@ -2,14 +2,27 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { Tabs, Tab, Tooltip } from "@mui/material";
+import { Tabs, Tab, Tooltip, TextField } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import FillAssesmentSection from "./FillAssessmentSection";
-import { ADD_QUESTIONNAIRE, ASSESSMENTS, FETCH_ASSESSMENT_BY_ID, SUBMIT_ASSESSMENT_AS_DRAFT } from "../../api/Url";
+import {
+    ACCEPT_ASSESSMENT,
+    ADD_QUESTIONNAIRE,
+    ASSESSMENTS,
+    DECLINE_ASSESSMENT,
+    FETCH_ASSESSMENT_BY_ID,
+    SUBMIT_ASSESSMENT_AS_DRAFT,
+} from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
-
+import DialogBox from "../../components/DialogBox";
+import Input from "../../components/Input";
+import { useForm, Controller } from "react-hook-form";
+import { useSelector } from "react-redux";
+export const AlphaRegEx = /^[a-z]+$/i;
+export const NumericRegEx = /^[0-9]+$/i;
+export const AlphaNumRegEx = /^[a-z0-9]+$/i;
 const ITEM_HEIGHT = 22;
 const MenuProps = {
     PaperProps: {
@@ -38,11 +51,7 @@ function TabPanel(props) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && (
-                <Box>
-                    {children}
-                </Box>
-            )}
+            {value === index && <Box>{children}</Box>}
         </div>
     );
 }
@@ -60,18 +69,32 @@ function a11yProps(index) {
     };
 }
 
+const helperTextForReason = {
+    comment: {
+        required: "Enter the reason for rejecting assessment.",
+    },
+};
+
 function FillAssessment() {
-    const [value, setValue] = useState(0);
+    const { handleSubmit, reset, control, setValue } = useForm({
+        // defaultValues: {
+        //     comment: "",
+        // },
+    });
+    const [value, setTabValue] = useState(0);
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setTabValue(newValue);
     };
     const params = useParams();
+    const userAuth = useSelector((state) => state?.user?.userObj);
+
     const navigate = useNavigate();
     const [assessment, setAssessments] = useState({});
     const [questionnaire, setQuestionnaire] = useState({});
     const [assessmentQuestionnaire, setAssessmentQuestionnaire] = useState({});
     const [errorQuestion, setErrorQuestion] = useState("");
     const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
+    const [viewMode, setViewMode] = useState(false);
 
     const [errors, setErrors] = useState({});
 
@@ -86,9 +109,30 @@ function FillAssessment() {
         setErrors({ ...errors });
     };
 
+    console.log(
+        "both user are same",
+        userAuth._id === assessment?.assignedOperationMember?._id
+    );
+
+    console.log(
+        "first user ",
+        userAuth._id +
+            "  second user  " +
+            assessment?.assignedOperationMember?._id
+    );
+    const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
+
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
+        // setOpenDeleteDialogBox(
+        //     userAuth._id === assessment?.assignedOperationMember?._id
+        // );
+        setViewMode(
+            userAuth._id === assessment?.assignedOperationMember?._id
+                ? true
+                : false
+        );
         const fetchQuestionnaire = async (id) => {
             try {
                 const response = await privateAxios.get(
@@ -113,12 +157,20 @@ function FillAssessment() {
                     }
                 );
                 console.log("response from fetch assessment", response);
+                setViewMode(
+                    userAuth?._id ===
+                        response?.data?.assignedOperationMember?._id
+                );
                 isMounted && setAssessments({ ...response.data });
                 isMounted &&
                     setAssessmentQuestionnaire({
                         ...response.data.answers,
                     });
                 fetchQuestionnaire(response?.data?.questionnaireId);
+                setOpenDeleteDialogBox(
+                    userAuth._id ===
+                        response?.data?.assignedOperationMember?._id
+                );
             } catch (error) {
                 console.log("error from fetch assessment", error);
             }
@@ -142,14 +194,20 @@ function FillAssessment() {
                 }
             );
             console.log("Assessment is saved as draft", response);
-            setToasterDetails(
-                {
-                    titleMessage: "Success",
-                    descriptionMessage: response?.data?.message,
-                    messageType: "success",
-                },
-                () => myRef.current()
-            );
+            if (response.status == 201) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success",
+                        descriptionMessage: response?.data?.message,
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+
+                setTimeout(() => {
+                    navigate("/assessment-list");
+                }, 3000);
+            }
         } catch (error) {
             console.log("error from save assessment as draft", error);
             setToasterDetails(
@@ -171,7 +229,7 @@ function FillAssessment() {
         e.preventDefault();
         const tempErrors = {};
 
-        questionnaire?.sections?.map((section) => {
+        questionnaire?.sections?.map((section, index) => {
             let sectionErrors = errors[section?.uuid] ?? {};
             let currentSectionAnswers =
                 assessmentQuestionnaire[section?.uuid] ?? {};
@@ -210,8 +268,49 @@ function FillAssessment() {
                         (!currentSectionAnswers[question?.uuid] ||
                             currentSectionAnswers[question?.uuid].length === 0)
                     ) {
+                        console.log("error from required");
+
                         sectionErrors[question?.uuid] =
                             "This is required field";
+                        setTabValue(index);
+                    } else if (
+                        question.validation === "alphabets" &&
+                        currentSectionAnswers[question?.uuid] &&
+                        AlphaRegEx.test(
+                            currentSectionAnswers[question?.uuid]
+                        ) === false
+                    ) {
+                        console.log("error from numric if elese");
+
+                        sectionErrors[question?.uuid] =
+                            "Please enter alphabets field";
+                        setTabValue(index);
+                    } else if (
+                        question.validation === "numeric" &&
+                        currentSectionAnswers[question?.uuid] &&
+                        NumericRegEx.test(
+                            currentSectionAnswers[question?.uuid]
+                        ) === false
+                    ) {
+                        console.log("error from numric if elese");
+                        console.log(
+                            NumericRegEx.test(
+                                currentSectionAnswers[question?.uuid]
+                            )
+                        );
+                        sectionErrors[question?.uuid] =
+                            "This is nummeric field";
+                        setTabValue(index);
+                    } else if (
+                        question.validation === "alphanumeric" &&
+                        currentSectionAnswers[question?.uuid] &&
+                        AlphaNumRegEx.test(
+                            currentSectionAnswers[question?.uuid]
+                        ) === false
+                    ) {
+                        sectionErrors[question?.uuid] =
+                            "This is alphanumeric field";
+                        setTabValue(index);
                     } else {
                         delete sectionErrors[question?.uuid];
                     }
@@ -230,13 +329,149 @@ function FillAssessment() {
         }
     };
 
+    // API for declining assessments
+    const onSubmitReason = async (data) => {
+        console.log("comment", data);
+        try {
+            const response = await privateAxios.post(
+                DECLINE_ASSESSMENT + params.id + "/decline",
+                {
+                    comment: data.comment,
+                }
+            );
+            console.log(
+                "Response from backend for decline assessment",
+                response
+            );
+            if (response.status == 201) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success",
+                        descriptionMessage: response?.data?.message,
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+            }
+        } catch (error) {
+            console.log("error response from backen decline assessment");
+            setToasterDetails(
+                {
+                    titleMessage: "Success",
+                    descriptionMessage:
+                        error?.response?.data?.message &&
+                        typeof error.response.data.message === "string"
+                            ? error.response.data.message
+                            : "Something went wrong!",
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
+        }
+        setOpenDeleteDialogBox(false);
+        // reset({});
+    };
+
+    //API for accepting assessments
+    const onAcceptAssessments = async () => {
+        try {
+            const response = await privateAxios.post(
+                ACCEPT_ASSESSMENT + params.id + "/accept"
+            );
+            console.log(" response from backen accept assessment");
+            if (response.status == 201) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success",
+                        descriptionMessage: response?.data?.message,
+
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+            }
+        } catch (error) {
+            console.log("error response from backend accept assessment");
+            setToasterDetails(
+                {
+                    titleMessage: "Success",
+                    descriptionMessage:
+                        error?.response?.data?.message &&
+                        typeof error.response.data.message === "string"
+                            ? error.response.data.message
+                            : "Something went wrong!",
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
+        }
+        setOpenDeleteDialogBox(false);
+    };
+
     useEffect(() => {
         console.log("UseEffect Errors", errors);
     }, [errors]);
 
     const [datevalue, setDateValue] = React.useState(null);
+
     return (
         <div className="page-wrapper">
+            <DialogBox
+                title={<p>Accept/Reject Assessment </p>}
+                info1={
+                    <p>
+                        On Accepting this assessment you need to fill this
+                        assessmentin given time, and on rejecting this
+                        assessment you need to mention reason for it
+                    </p>
+                }
+                info2={
+                    <Controller
+                        name="comment"
+                        control={control}
+                        rules={{
+                            required: true,
+                        }}
+                        render={({ field, fieldState: { error } }) => (
+                            <TextField
+                                multiline
+                                {...field}
+                                onBlur={(e) =>
+                                    setValue("comment", e.target.value?.trim())
+                                }
+                                inputProps={{
+                                    maxLength: 250,
+                                }}
+                                className={`input-textarea ${
+                                    error && "input-textarea-error"
+                                }`}
+                                id="outlined-basic"
+                                placeholder="Enter reason"
+                                helperText={
+                                    error
+                                        ? helperTextForReason.comment[
+                                              error.type
+                                          ]
+                                        : " "
+                                }
+                                variant="outlined"
+                            />
+                        )}
+                    />
+                }
+                primaryButtonText={"Accept"}
+                secondaryButtonText={"Reject"}
+                onPrimaryModalButtonClickHandler={() => {
+                    // withdrawInviteById();
+                    onAcceptAssessments();
+                }}
+                onSecondaryModalButtonClickHandler={handleSubmit(
+                    onSubmitReason
+                )}
+                openModal={openDeleteDialogBox}
+                setOpenModal={setOpenDeleteDialogBox}
+                isModalForm={true}
+            />
             <Toaster
                 myRef={myRef}
                 titleMessage={toasterDetails.titleMessage}
@@ -302,7 +537,11 @@ function FillAssessment() {
                         </div>
                         <div className="preview-tab-data">
                             {questionnaire?.sections?.map((section, index) => (
-                                <TabPanel value={value} index={index} key={section?.uuid}>
+                                <TabPanel
+                                    value={value}
+                                    index={index}
+                                    key={section?.uuid}
+                                >
                                     <FillAssesmentSection
                                         assessmentQuestionnaire={
                                             assessmentQuestionnaire
@@ -320,6 +559,8 @@ function FillAssessment() {
                                         errors={errors[section?.uuid] ?? {}}
                                         // handleSetErrors={handleSetErrors}
                                         handleFormSubmit={handleFormSubmit}
+                                        viewMode={viewMode}
+                                        setViewMode={setViewMode}
                                     />
                                 </TabPanel>
                             ))}
