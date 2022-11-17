@@ -77,15 +77,18 @@ const FillAssessmentQuestion = ({
                         ? "input-error"
                         : question.validation === "numeric" &&
                           !NumericRegEx.test(answer) &&
-                          answer
+                          answer &&
+                          error
                         ? "input-error"
                         : question.validation === "alphabets" &&
                           !AlphaRegEx.test(answer) &&
-                          answer
+                          answer &&
+                          error
                         ? "input-error"
                         : question.validation === "alphanumeric" &&
                           !AlphaNumRegEx.test(answer) &&
-                          answer
+                          answer &&
+                          error
                         ? "input-error"
                         : "input-field"
                 }`}
