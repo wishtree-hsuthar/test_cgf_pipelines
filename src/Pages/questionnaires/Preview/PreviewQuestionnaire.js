@@ -10,9 +10,10 @@ import { Tabs, Tab, Tooltip } from "@mui/material";
 import PreviewSection from "./PreviewSection";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../../api/axios";
-import "../../../Pages/PreviewDemo.css"
+import "../../../Pages/PreviewDemo.css";
 import { ADD_QUESTIONNAIRE } from "../../../api/Url";
 import { useDocumentTitle } from "../../../utils/useDocumentTitle";
+import { useSelector } from "react-redux";
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -33,11 +34,7 @@ function TabPanel(props) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && (
-                <Box>
-                    {children}
-                </Box>
-            )}
+            {value === index && <Box>{children}</Box>}
         </div>
     );
 }
@@ -70,13 +67,32 @@ const dropdownData = [
 function PreviewQuestionnaire() {
     const [value, setValue] = useState(0);
     //custom hook to set title of page
-useDocumentTitle("Preview Questionnaire")
+    useDocumentTitle("Preview Questionnaire");
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
     const params = useParams();
     const navigate = useNavigate();
     const [questionnaire, setQuestionnaire] = useState({});
+
+    const privilege = useSelector((state) => state?.user?.privilege);
+    const userAuth = useSelector((state) => state?.user?.userObj);
+    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
+    let privilegeArray =
+        userAuth?.roleId?.name === "Super Admin"
+            ? []
+            : Object.values(privilege?.privileges);
+    let moduleAccesForMember = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Questionnaire")
+        .map((data) => ({
+            questionnaire: {
+                list: data?.list,
+                view: data?.view,
+                edit: data?.edit,
+                delete: data?.delete,
+                add: data?.add,
+            },
+        }));
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -116,14 +132,21 @@ useDocumentTitle("Preview Questionnaire")
                                 Questionnaire
                             </Link>
                         </li>
-                        <li>
-                            <Link
-                                to={`/questionnaires/add-questionnaire/${params.id}`}
-                                style={{ cursor: "pointer" }}
-                            >
-                                Add Questionnaire
-                            </Link>
-                        </li>
+                        {(SUPER_ADMIN == true ||
+                            moduleAccesForMember[0]?.questionnaire?.add) && (
+                            <li>
+                                <a
+                                    onClick={() =>
+                                        navigate(
+                                            `/questionnaires/add-questionnaire/${params.id}`
+                                        )
+                                    }
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    Add Questionnaire
+                                </a>
+                            </li>
+                        )}
                         <li>Preview Questionnaire</li>
                     </ul>
                 </div>
@@ -186,8 +209,16 @@ useDocumentTitle("Preview Questionnaire")
                         </div>
                         <div className="preview-tab-data">
                             {questionnaire?.sections?.map((section, index) => (
-                                <TabPanel key={section?.uuid ?? index} value={value} index={index}>
-                                    <PreviewSection questionnaire={questionnaire} section={section} sectionIndex={index} />
+                                <TabPanel
+                                    key={section?.uuid ?? index}
+                                    value={value}
+                                    index={index}
+                                >
+                                    <PreviewSection
+                                        questionnaire={questionnaire}
+                                        section={section}
+                                        sectionIndex={index}
+                                    />
                                     {/* <div className="preview-card-wrapper">
                                         <div className="preview-que-wrap">
                                             <div className="preview-que-blk">
