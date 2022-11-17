@@ -22,6 +22,7 @@ import {
     ADD_OPERATION_MEMBER,
 } from "../../api/Url";
 import Toaster from "../../components/Toaster";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 const tableHead = [
     {
         id: "",
@@ -49,6 +50,8 @@ const tableHead = [
     },
 ];
 const ReplaceOperationMember = () => {
+    //custom hook to set title of page
+    useDocumentTitle("Replace Operation Member");
     const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);

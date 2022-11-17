@@ -23,8 +23,11 @@ import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import DialogBox from "../../components/DialogBox";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const ViewSubAdmin = () => {
+    //custom hook to set title of page
+    useDocumentTitle("View CGF Admin")
     const history = useNavigate();
     const params = useParams();
     const toasterRef = useRef();

@@ -11,6 +11,7 @@ import { ADD_SUB_ADMIN, FETCH_ROLES, WITHDRAW_SUB_ADMIN } from "../../api/Url";
 import DialogBox from "../../components/DialogBox";
 import OnBoardedSubAdminsTable from "./OnBoardedSubAdminsTable";
 import PendingCGFAdmins from "./PendingCGFAdmins";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -41,6 +42,8 @@ function a11yProps(index) {
 }
 
 const SubAdminList = () => {
+    //custom hook to set title of page
+    useDocumentTitle("CGF Admins")
     // const dispatch = useDispatch();
     const [value, setValue] = React.useState(0);
 

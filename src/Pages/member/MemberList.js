@@ -12,6 +12,7 @@ import Loader2 from "../../assets/Loader/Loader2.svg";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import { useSelector } from "react-redux";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
@@ -63,6 +64,8 @@ const tableHead = [
 ];
 
 const MemberList = () => {
+    //custom hook to set title of page
+useDocumentTitle("Members")
     const navigate = useNavigate();
     //Refr for Toaster
     const myRef = React.useRef();

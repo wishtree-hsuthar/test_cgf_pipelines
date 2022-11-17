@@ -33,6 +33,7 @@ import {
     MEMBER,
     UPDATE_OPERATION_MEMBER,
 } from "../../api/Url";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 const defaultValues = {
     memberCompany: "",
     companyType: "Internal",
@@ -134,6 +135,8 @@ const helperTextForAddOperationMember = {
     },
 };
 function EditOperationMember() {
+    //custom hook to set title of page
+    useDocumentTitle("Edit Operation Member")
     const {
         register,
         handleSubmit,

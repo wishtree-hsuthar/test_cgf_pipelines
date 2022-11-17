@@ -1,6 +1,9 @@
 import React from "react";
-
+import {useDocumentTitle} from "../utils/useDocumentTitle"
 export const Dashboard = (props) => {
+    
+    //custom hook to set title of page
+    useDocumentTitle("Home")
     console.log(props);
     return (
         <div className="page-wrapper">

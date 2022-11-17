@@ -29,6 +29,7 @@ import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const tableHead = [
     {
@@ -55,6 +56,8 @@ const tableHead = [
 ];
 
 const ViewRole = () => {
+    //custom hook to set title of page
+    useDocumentTitle("View Role")
     //Refr for Toaster
     const myRef = React.useRef();
     //order in which records needs to show

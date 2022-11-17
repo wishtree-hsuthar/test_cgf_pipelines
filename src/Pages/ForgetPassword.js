@@ -10,6 +10,7 @@ import { privateAxios } from "../api/axios";
 import Toaster from "../components/Toaster";
 import { FORGET_PASSWORD } from "../api/Url";
 import { useNavigate } from "react-router-dom";
+import { useDocumentTitle } from "../utils/useDocumentTitle";
 const forgetPasswordSchema = yup.object().shape({
     email: yup
         .string()
@@ -17,6 +18,8 @@ const forgetPasswordSchema = yup.object().shape({
         .required("Enter the email address"),
 });
 const ForgetPassword = () => {
+    //custom hook to set title of page
+useDocumentTitle("Forgot Password")
     const navigate = useNavigate()
     const {
         register,

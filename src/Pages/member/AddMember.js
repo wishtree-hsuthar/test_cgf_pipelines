@@ -25,6 +25,7 @@ import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import { memberHelper } from "../../utils/helpertext";
 import { privateAxios } from "../../api/axios";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 //CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
@@ -58,6 +59,8 @@ const cgfActivitiesRetailer = [
 ];
 
 const AddMember = () => {
+    //custom hook to set title of page
+useDocumentTitle("Add Member")
     const navigate = useNavigate();
     // Refr for Toaster
     const myRef = React.useRef();
