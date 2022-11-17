@@ -356,6 +356,9 @@ function FillAssessment() {
                     },
                     () => myRef.current()
                 );
+                setTimeout(() => {
+                    navigate("/assessment-list");
+                }, 3000);
             }
         } catch (error) {
             console.log("error response from backen decline assessment");

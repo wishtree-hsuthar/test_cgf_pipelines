@@ -70,9 +70,9 @@ function QuestionnairesList() {
             ? []
             : Object.values(privilege?.privileges);
     let moduleAccesForMember = privilegeArray
-        .filter((data) => data?.moduleId?.name === "Members")
+        .filter((data) => data?.moduleId?.name === "Questionnaire")
         .map((data) => ({
-            member: {
+            questionnaire: {
                 list: data?.list,
                 view: data?.view,
                 edit: data?.edit,
@@ -101,13 +101,12 @@ function QuestionnairesList() {
                 <div className="container">
                     <div className="form-header member-form-header flex-between">
                         <div className="form-header-left-blk flex-start">
-                            <h2 className="heading2 mr-40">
-                                Questionnaires
-                            </h2>
+                            <h2 className="heading2 mr-40">Questionnaires</h2>
                         </div>
                         <div className="form-header-right-txt">
                             {(SUPER_ADMIN == true ||
-                                moduleAccesForMember[0]?.member?.add) && (
+                                moduleAccesForMember[0]?.questionnaire
+                                    ?.add) && (
                                 <div className="form-btn">
                                     <button
                                         type="submit"
