@@ -33,6 +33,7 @@ import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { useSelector } from "react-redux";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const defaultValues = {
     memberCompany: "",
@@ -51,6 +52,8 @@ const defaultValues = {
     isCGFStaff: "",
 };
 const ViewOperationMembers = () => {
+    //custom hook to set title of page
+    useDocumentTitle("View Operation Member")
     const { control, reset, watch, trigger } = useForm({
         defaultValues: defaultValues,
     });

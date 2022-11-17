@@ -24,8 +24,10 @@ import Toaster from "../../components/Toaster";
 import "../../components/TableComponent.css";
 import useCallbackState from "../../utils/useCallBackState";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
+import {useDocumentTitle} from "../../utils/useDocumentTitle"
 
 const AddRole = () => {
+  useDocumentTitle("Add Role")   
   const navigate = useNavigate();
 
   //Refr for Toaster

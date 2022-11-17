@@ -32,6 +32,7 @@ import {
     REPLACE_SUB_ADMIN,
 } from "../../api/Url";
 import Toaster from "../../components/Toaster";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const tableHead = [
     {
@@ -55,6 +56,9 @@ const tableHead = [
 ];
 
 const AssignAssessmentToOperationMember = () => {
+     //custom hook to set title of page
+useDocumentTitle("Assign Assessment")
+   
     const keysOrder = ["_id", "name", "email"];
 
     const [page, setPage] = React.useState(1);

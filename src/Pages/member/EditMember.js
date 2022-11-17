@@ -26,6 +26,7 @@ import useCallbackState from "../../utils/useCallBackState";
 import { memberHelper } from "../../utils/helpertext";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { privateAxios } from "../../api/axios";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 //CGF Categories (Ideally get from backend)
 const cgfCategories1 = ["Manufacturer", "Retailer", "Other"];
@@ -50,6 +51,8 @@ const cgfActivitiesRetailer1 = [
 ];
 
 const EditMember = () => {
+  //custom hook to set title of page
+useDocumentTitle("Edit Member")
     const defaultValues1 = {
         memberCompany: "",
         companyType: "Internal",

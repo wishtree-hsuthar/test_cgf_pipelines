@@ -23,6 +23,7 @@ import {
     MEMBER_DROPDOWN,
 } from "../../api/Url";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 const helperTextForAddOperationMember = {
     salutation: {
         required: "Select salutation",
@@ -101,6 +102,8 @@ const helperTextForAddOperationMember = {
     },
 };
 function AddOperationMember() {
+    //custom hook to set title of page
+    useDocumentTitle("Add Operation Member")
     const {
         register,
         handleSubmit,

@@ -29,6 +29,7 @@ import { privateAxios } from "../../api/axios";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const helperTextForCGFAdmin = {
     countryCode: {
@@ -56,6 +57,9 @@ const helperTextForCGFAdmin = {
 };
 
 const EditSubAdmin = () => {
+    //custom hook to set title of page
+    useDocumentTitle("Edit CGF Admin")
+    
     const navigate = useNavigate();
     const params = useParams();
     const toasterRef = useRef();

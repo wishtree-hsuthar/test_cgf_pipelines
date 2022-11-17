@@ -14,6 +14,7 @@ import PendingOperationMembers from "./PendingOperationMembers";
 import OnBoardedSubAdminsTable from "../subAdminManagement/OnBoardedSubAdminsTable";
 import OnboardedOperationMember from "./OnboardedOperationMember";
 import { useSelector } from "react-redux";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -42,6 +43,8 @@ function a11yProps(index) {
     };
 }
 function OperationMemberList() {
+    //custom hook to set title of page
+    useDocumentTitle("Operation Members")
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
         descriptionMessage: "",

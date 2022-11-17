@@ -7,6 +7,7 @@ import DraftedQuestionnaires from "./DraftedQuestionnaires";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import PublishedQuestionnaires from "./PublishedQuestionnaires";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -36,6 +37,8 @@ function a11yProps(index) {
     };
 }
 function QuestionnairesList() {
+    //custom hook to set title of page
+useDocumentTitle("Questionnaires")
     const navigate = useNavigate();
     const addQuestionnaire = () => {
         navigate(`/questionnaires/add-questionnaire/${uuidv4()}`);

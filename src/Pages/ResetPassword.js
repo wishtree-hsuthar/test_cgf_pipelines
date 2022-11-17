@@ -16,6 +16,7 @@ import {
 } from "../api/Url";
 import Toaster from "../components/Toaster";
 import { useParams, useNavigate } from "react-router-dom";
+import { useDocumentTitle } from "../utils/useDocumentTitle";
 const schema = yup.object().shape({
     newPassword: yup
         .string()
@@ -30,6 +31,8 @@ const schema = yup.object().shape({
         .oneOf([yup.ref("newPassword"), null], "Password does not match."),
 });
 const ResetPassword = () => {
+    //custom hook to set title of page
+useDocumentTitle("Reset Password")
     const {
         register,
         handleSubmit,

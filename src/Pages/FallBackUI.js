@@ -1,10 +1,13 @@
 import "../Pages/fallbackUI.css";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDocumentTitle } from "../utils/useDocumentTitle";
 
 
 
 function FallBackUI() {
+    //custom hook to set title of page
+useDocumentTitle("")
     
     useEffect(() => {
         document.body.classList.add("login-page");

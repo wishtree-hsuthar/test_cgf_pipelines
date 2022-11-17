@@ -8,10 +8,11 @@ import PropTypes from "prop-types";
 import { Tabs, Tab, Tooltip } from "@mui/material";
 
 import PreviewSection from "./PreviewSection";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../../api/axios";
 import "../../../Pages/PreviewDemo.css"
 import { ADD_QUESTIONNAIRE } from "../../../api/Url";
+import { useDocumentTitle } from "../../../utils/useDocumentTitle";
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -68,6 +69,8 @@ const dropdownData = [
 
 function PreviewQuestionnaire() {
     const [value, setValue] = useState(0);
+    //custom hook to set title of page
+useDocumentTitle("Preview Questionnaire")
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -105,24 +108,21 @@ function PreviewQuestionnaire() {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <a
-                                onClick={() => navigate(`/questionnaires`)}
+                            <Link
+                                // onClick={() => navigate(`/questionnaires`)}
+                                to="/questionnaires"
                                 style={{ cursor: "pointer" }}
                             >
                                 Questionnaire
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a
-                                onClick={() =>
-                                    navigate(
-                                        `/questionnaires/add-questionnaire/${params.id}`
-                                    )
-                                }
+                            <Link
+                                to={`/questionnaires/add-questionnaire/${params.id}`}
                                 style={{ cursor: "pointer" }}
                             >
                                 Add Questionnaire
-                            </a>
+                            </Link>
                         </li>
                         <li>Preview Questionnaire</li>
                     </ul>
