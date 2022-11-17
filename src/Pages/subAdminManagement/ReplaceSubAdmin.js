@@ -29,6 +29,7 @@ import {
     REPLACE_SUB_ADMIN,
 } from "../../api/Url";
 import Toaster from "../../components/Toaster";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 const tableHead = [
     {
         id: "",
@@ -64,6 +65,8 @@ const tableHead = [
 //Array of Object (idealy we will get this data from backend)
 
 const ReplaceSubAdmin = () => {
+    //custom hook to set title of page
+    useDocumentTitle("Replace CGF Admin")
     const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);

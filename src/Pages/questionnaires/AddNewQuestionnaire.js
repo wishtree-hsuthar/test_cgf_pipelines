@@ -7,11 +7,12 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import SectionContent from "./SectionContent";
 import { v4 as uuidv4 } from "uuid";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -43,6 +44,8 @@ function a11yProps(index) {
 
 
 function AddNewQuestionnaire() {
+  //custom hook to set title of page
+useDocumentTitle("Add Questionnaire")
   //Refr for Toaster
   const myRef = React.useRef();
   //Toaster Message setter
@@ -199,7 +202,7 @@ function AddNewQuestionnaire() {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <a href="/questionnaires">Questionnaire</a>
+              <Link to="/questionnaires">Questionnaire</Link>
             </li>
             <li>Add Questionnaire</li>
           </ul>

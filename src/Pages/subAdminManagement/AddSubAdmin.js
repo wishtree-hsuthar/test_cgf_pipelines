@@ -22,6 +22,7 @@ import useCallbackState from "../../utils/useCallBackState";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const helperTextForCGFAdmin = {
     countryCode: {
@@ -49,6 +50,9 @@ const helperTextForCGFAdmin = {
 };
 
 const AddSubAdmin = () => {
+    //custom hook to set title of page
+    useDocumentTitle("Add CGF Admin")
+    
     const authUser = useSelector((state) => state.user.userObj);
     const navigate = useNavigate();
     const {

@@ -25,12 +25,14 @@ import "../../components/TableComponent.css";
 import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const titleMessage = "";
 const descriptionMessage = "";
 const messageType = "";
 
 const EditRole = () => {
+  useDocumentTitle("Edit Role")
   const params = useParams();
 
   // state to manage loader

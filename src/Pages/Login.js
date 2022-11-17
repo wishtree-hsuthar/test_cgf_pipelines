@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { setUser, setPrivileges } from "../redux/UserSlice";
 import useCallbackState from "../utils/useCallBackState";
 import { privateAxios, publicAxios } from "../api/axios";
+import { useDocumentTitle } from "../utils/useDocumentTitle";
 const loginFormSchema = yup.object().shape({
     email: yup
         .string()
@@ -25,6 +26,8 @@ const loginFormSchema = yup.object().shape({
     password: yup.string().required("Enter the password"),
 });
 const Login = (prop) => {
+    //custom hook to set title of page
+useDocumentTitle("Login")
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
         descriptionMessage: "",

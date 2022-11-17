@@ -10,6 +10,7 @@ import Toaster from "../../components/Toaster";
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { ASSESSMENTS } from "../../api/Url";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const tableHead = [
     {
@@ -56,6 +57,9 @@ const tableHead = [
     },
 ];
 const AssessmentList = () => {
+     //custom hook to set title of page
+useDocumentTitle("Assessments")
+   
     const keysOrder = [
         "uuid",
         "_id",

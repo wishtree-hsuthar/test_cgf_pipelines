@@ -20,6 +20,7 @@ import DialogBox from "../../components/DialogBox";
 import Input from "../../components/Input";
 import { useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 export const AlphaRegEx = /^[a-z]+$/i;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
@@ -76,6 +77,9 @@ const helperTextForReason = {
 };
 
 function FillAssessment() {
+     //custom hook to set title of page
+useDocumentTitle("Fill Assessment")
+   
     const { handleSubmit, reset, control, setValue } = useForm({
         // defaultValues: {
         //     comment: "",

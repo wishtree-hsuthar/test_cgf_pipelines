@@ -21,6 +21,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 const helperTextForAssessment = {
   title: {
     required: "Enter the assessment title",
@@ -44,6 +45,9 @@ const helperTextForAssessment = {
   },
 };
 function EditAssessment() {
+   //custom hook to set title of page
+useDocumentTitle("Edit Assessment")
+   
   const { handleSubmit, control, setValue, reset, watch, getValues } =
         useForm({
         defaultValues: {
