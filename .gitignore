@@ -28,3 +28,4 @@ yarn-error.log*
 .scannerwork
 
 /node_modules
+/build
