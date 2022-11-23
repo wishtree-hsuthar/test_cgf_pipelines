@@ -169,7 +169,7 @@ function CommonAssessmentList() {
             object["assignedOperationMember.name"] =
                 object["assignedOperationMember"]["name"];
             // object["title"] = object["title"];
-            object["assessmentType"] = object["assessmentType"];
+            // object["assessmentType"] = object["assessmentType"];
 
             // object["assessmentType"] = object["assessmentType"];
             delete object["assignedOperationMember"];

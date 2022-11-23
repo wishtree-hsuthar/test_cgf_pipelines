@@ -3,7 +3,7 @@ import { TextField, Box } from "@mui/material";
 import { Tab, Tabs, Tooltip } from "@mui/material";
 import PropTypes from "prop-types";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-
+import Loader2 from "../../assets/Loader/Loader2.svg";
 import CloseIcon from "@mui/icons-material/Close";
 import SectionContent from "./SectionContent";
 import { v4 as uuidv4 } from "uuid";
@@ -46,6 +46,8 @@ function a11yProps(index) {
 function AddNewQuestionnaire() {
   //custom hook to set title of page
 useDocumentTitle("Add Questionnaire")
+// state to manage to loader
+const [isLoading, setIsLoading] = useState(false)
   //Refr for Toaster
   const myRef = React.useRef();
   //Toaster Message setter
@@ -136,15 +138,19 @@ useDocumentTitle("Add Questionnaire")
     let controller = new AbortController();
     const fetch = async () => {
       try {
+        setIsLoading(true)
         const response = await privateAxios.get(
           `${ADD_QUESTIONNAIRE}/${id}`,
           {
             signal: controller.signal,
           }
         );
+        setIsLoading(false)
         // console.log("response from fetch questionnaire", response);
         isMounted && setQuestionnaire({ ...response.data });
       } catch (error) {
+        if (error?.code === "ERR_CANCELED") return;
+        setIsLoading(false)
         // setErrorToaster(error)
         // console.log("error from fetch questionnaire", error);
       }
@@ -209,7 +215,10 @@ useDocumentTitle("Add Questionnaire")
         </div>
       </div>
       <section>
-        <div className="container">
+        {
+          isLoading ? <div className="loader-blk">
+          <img src={Loader2} alt="Loading" />
+      </div> : <div className="container">
           <div className="form-header flex-between">
             <h2 className="heading2">Add Questionnaire</h2>
           </div>
@@ -341,6 +350,8 @@ useDocumentTitle("Add Questionnaire")
                         </div>
                     </div>
                 </div>
+        
+        }
             </section>
         </div>
     );

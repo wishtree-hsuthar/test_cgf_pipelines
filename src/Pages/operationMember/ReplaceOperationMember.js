@@ -310,14 +310,13 @@ const ReplaceOperationMember = () => {
                 info1={
                     <p>
                         {" "}
-                        On replacing a Operation Member, all the statistics and
-                        record would get transfer to the new member.
+                        On replacing an operation member, all the statistics & records ownership would get transferred to the new operation member
                     </p>
                 }
                 info2={
                     <p>
                         {" "}
-                        Are you sure you want to replace{" "}
+                        Are you want to replace{" "}
                         <b> {operationMember.name} </b>?{" "}
                     </p>
                 }

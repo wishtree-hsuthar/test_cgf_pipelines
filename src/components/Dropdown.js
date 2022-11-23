@@ -34,6 +34,7 @@ function Dropdown({
     console.log("options", options);
     return (
         <FormControl className="select-reusable" disabled={isDisabled}>
+            
             <div className={`select-field ${error && "select-field-error"}`}>
                 <Select
                     IconComponent={(props) => (
@@ -44,11 +45,12 @@ function Dropdown({
                     value={value}
                     placeholder={placeholder}
                     onChange={myOnChange ? myOnChange : onChange} // send value to hook form
+                    renderValue={value !== "" ? undefined : ()  => placeholder}
                     // onFocus={(e) => setShowPlaceholder(false)}
                     inputRef={ref}
                     fullWidth={true}
                 >
-                    <MenuItem
+                    {/* <MenuItem
                         disabled
                         selected
                         value=""
@@ -57,7 +59,7 @@ function Dropdown({
                         // }}
                     >
                         {placeholder}
-                    </MenuItem>
+                    </MenuItem> */}
                     {options &&
                         options?.map((option) => (
                             <MenuItem

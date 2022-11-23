@@ -40,26 +40,28 @@ const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
 // CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
+
 const cgfActivitiesManufacturer = [
-  "None",
   "Apparel",
-  "Food Manufacturer",
+  "Food manufacturer",
   "Household care",
+  "None",
   "Non-food manufacturer",
   "Personal care & beauty",
 ];
 const cgfActivitiesRetailer = [
-  "Department Store",
+  "Department store",
   "Ecommerce",
   "Food/Non food retailer",
-  "food retailer",
-  "food service",
+  "Food retailer",
+  "Food service",
   "Grocery",
   "Health/beauty drugstore",
   "Non food retailer",
   "Wholesaler",
-  "N/A",
+  "N/A"
 ];
+
 
 const ViewMember = () => {
   //Code for Operatiom Member List
@@ -200,8 +202,8 @@ const ViewMember = () => {
         }
       );
       typeof object["createdBy"] === "object"
-        ? (object.createdBy = object["createdBy"]["name"])
-        : (object.createdBy = object["createdBy"]);
+        && (object.createdBy = object["createdBy"]["name"])
+        
       keysOrder.forEach((k) => {
         const v = object[k];
         delete object[k];
@@ -276,7 +278,7 @@ const ViewMember = () => {
   };
   const onClickVisibilityIconHandler = (id) => {
     // console.log("id", id);
-    return navigate(`/users/operation-members/view-operation-member/${id}`);
+    return navigate(`/users/operation-member/view-operation-member/${id}`);
   };
 
   //code to View Member Fields
@@ -538,8 +540,8 @@ const ViewMember = () => {
       });
       setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       if (error?.code === "ERR_CANCELED") return;
+      setIsLoading(false);
       isMounted && setErrorToaster(error);
     }
     // console.log("response for member: ", response);

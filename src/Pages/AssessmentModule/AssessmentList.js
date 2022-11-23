@@ -17,7 +17,7 @@ const tableHead = [
         id: "title",
         width: "30%",
         disablePadding: false,
-        label: "Assessment Title",
+        label: "Title",
     },
     {
         id: "assessmentType",
@@ -41,7 +41,7 @@ const tableHead = [
         id: "assessmentStatus",
         width: "30%",
         disablePadding: false,
-        label: "Assessment Status",
+        label: "Status",
     },
     {
         id: "dueDate",
@@ -145,6 +145,7 @@ useDocumentTitle("Assessments")
 
         return url;
     };
+    
 
     const getAssessments = async (
         isMounted = true,
@@ -199,7 +200,7 @@ useDocumentTitle("Assessments")
             object["assignedOperationMember.name"] =
                 object["assignedOperationMember"]["name"];
             // object["title"] = object["title"];
-            object["assessmentType"] = object["assessmentType"];
+            // object["assessmentType"] = object["assessmentType"];
 
             // object["assessmentType"] = object["assessmentType"];
             delete object["assignedOperationMember"];

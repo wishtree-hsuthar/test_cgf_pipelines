@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useForm, Control, Controller } from "react-hook-form";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
+import Loader2 from "../../assets/Loader/Loader2.svg"
 import { privateAxios } from "../../api/axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
@@ -47,6 +48,8 @@ const helperTextForAssessment = {
 function EditAssessment() {
    //custom hook to set title of page
 useDocumentTitle("Edit Assessment")
+// state to manage loaders
+const [isLoading, setIsLoading] = useState(false)
    
   const { handleSubmit, control, setValue, reset, watch, getValues } =
         useForm({
@@ -133,12 +136,14 @@ useDocumentTitle("Edit Assessment")
 
     const fetchAssessment = async () => {
       try {
+        setIsLoading(true)
         const response = await privateAxios.get(
           FETCH_ASSESSMENT_BY_ID + params.id,
           {
             signal: controller.signal,
           }
         );
+        setIsLoading(false)
         console.log("response from fetch assessment", response.data);
         isMounted &&
           reset({
@@ -159,6 +164,8 @@ useDocumentTitle("Edit Assessment")
                 // );
                 fetchMember();
             } catch (error) {
+              if (error?.code === "ERR_CANCELED") return;
+                setIsLoading(false)
                 console.log("Error from fetch assessment", error);
             }
         };
@@ -379,6 +386,10 @@ useDocumentTitle("Edit Assessment")
             <div className="form-header flex-between">
               <h2 className="heading2">Edit Assessment</h2>
             </div>
+            {
+              isLoading ?  <div className="loader-blk">
+              <img src={Loader2} alt="Loading" />
+          </div> :
             <div className="card-wrapper">
               <div className="card-blk flex-between">
                 <div className="card-form-field">
@@ -542,6 +553,7 @@ useDocumentTitle("Edit Assessment")
                 </div>
               </div>
             </div>
+            }
           </form>
         </div>
       </section>

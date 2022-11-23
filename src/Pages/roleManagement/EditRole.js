@@ -160,6 +160,7 @@ const EditRole = () => {
     } catch (error) {
       console.log("Error", error);
       if (error?.code === "ERR_CANCELED") return;
+      setIsLoading(false);
       setToasterDetails(
         {
           titleMessage: "Error",
@@ -172,7 +173,6 @@ const EditRole = () => {
         },
         () => myRef.current()
       );
-      setIsLoading(false);
     }
   }
   useEffect(() => {

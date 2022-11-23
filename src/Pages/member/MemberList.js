@@ -282,8 +282,8 @@ useDocumentTitle("Members")
             setIsLoading(false);
             updateRecords(response?.data);
         } catch (error) {
-            setIsLoading(false);
             if (error?.code === "ERR_CANCELED") return;
+            setIsLoading(false);
             isMounted &&
                 setToasterDetails(
                     {
