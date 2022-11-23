@@ -102,9 +102,9 @@ function DraftedQuestionnaires({
             : Object.values(privilege?.privileges);
     // let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
     let moduleAccesForMember = privilegeArray
-        .filter((data) => data?.moduleId?.name === "Members")
+        .filter((data) => data?.moduleId?.name === "Questionnaire")
         .map((data) => ({
-            member: {
+            questionnaire: {
                 list: data?.list,
                 view: data?.view,
                 edit: data?.edit,
@@ -158,7 +158,7 @@ function DraftedQuestionnaires({
 
     const onClickVisibilityIconHandler = (uuid) => {
         // console.log("id", uuid);
-        return navigate(`/questionnaires/add-questionnaire/${uuid}`);
+        return navigate(`/questionnaires/preview-questionnaire/${uuid}`);
     };
     useEffect(() => {
         let isMounted = true;
@@ -210,7 +210,7 @@ function DraftedQuestionnaires({
                         onRowClick={
                             SUPER_ADMIN
                                 ? true
-                                : moduleAccesForMember[0]?.member?.view
+                                : moduleAccesForMember[0]?.questionnaire?.view
                         }
                         isQuestionnare={true}
                     />

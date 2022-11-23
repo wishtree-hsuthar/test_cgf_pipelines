@@ -15,26 +15,28 @@ import OnBoardedSubAdminsTable from "../subAdminManagement/OnBoardedSubAdminsTab
 import OnboardedOperationMember from "./OnboardedOperationMember";
 import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+import { DOWNLOAD_OPERATION_MEMBER } from "../../api/Url";
+import { TabPanel } from "../../utils/tabUtils/TabPanel";
+// function TabPanel(props) {
+//     const { children, value, index, ...other } = props;
 
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-        </div>
-    );
-}
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
+//     return (
+//         <div
+//             role="tabpanel"
+//             hidden={value !== index}
+//             id={`simple-tabpanel-${index}`}
+//             aria-labelledby={`simple-tab-${index}`}
+//             {...other}
+//         >
+//             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+//         </div>
+//     );
+// }
+// TabPanel.propTypes = {
+//     children: PropTypes.node,
+//     index: PropTypes.number.isRequired,
+//     value: PropTypes.number.isRequired,
+// };
 
 function a11yProps(index) {
     return {
@@ -44,7 +46,7 @@ function a11yProps(index) {
 }
 function OperationMemberList() {
     //custom hook to set title of page
-    useDocumentTitle("Operation Members")
+    useDocumentTitle("Operation Members");
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
         descriptionMessage: "",
@@ -73,6 +75,40 @@ function OperationMemberList() {
         "member operation privilege",
         moduleAccessForOperationMember[0]?.operationMember
     );
+
+    const downloadOperationMembers = async () => {
+        try {
+            const response = await privateAxios.get(DOWNLOAD_OPERATION_MEMBER, {
+                responseType: "blob",
+            });
+            console.log(
+                "resposne from download operation members admins",
+                response
+            );
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute(
+                "download",
+                `Operation Members - ${new Date().toISOString()}.xls`
+            );
+            document.body.appendChild(link);
+            link.click();
+            if (response.status == 200) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage: "Download successfull!",
+
+                        messageType: "success",
+                    },
+                    () => toasterRef.current()
+                );
+            }
+        } catch (error) {
+            console.log("Error from download operation members", error);
+        }
+    };
     const onSearchChangeHandler = (e) => {
         console.log("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
@@ -134,7 +170,10 @@ function OperationMemberList() {
                                 </h2>
                             </div>
                             <div className="form-header-right-txt">
-                                <div className="tertiary-btn-blk mr-20">
+                                <div
+                                    className="tertiary-btn-blk mr-20"
+                                    onClick={downloadOperationMembers}
+                                >
                                     <span className="download-icon">
                                         <DownloadIcon />
                                     </span>

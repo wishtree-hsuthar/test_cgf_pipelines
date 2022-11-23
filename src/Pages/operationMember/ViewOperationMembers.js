@@ -38,24 +38,23 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const defaultValues = {
-  memberCompany: "",
-  companyType: "Internal",
-  countryCode: "",
-  phoneNumber: "",
-  address: "",
-  title: "",
-  department: "",
-  email: "",
-  operationType: "",
-  memberId: "",
-  // address: "",
-  isActive: "",
-  reportingManager: "",
-  isCGFStaff: "",
+    memberCompany: "",
+    companyType: "Internal",
+    countryCode: "",
+    phoneNumber: "",
+    address: "",
+    title: "",
+    department: "",
+    email: "",
+    operationType: "",
+    memberId: "",
+    isActive: "",
+    reportingManager: "",
+    isCGFStaff: "",
 };
 const ViewOperationMembers = () => {
   //custom hook to set title of page
-  useDocumentTitle("View Operation Member");
+  useDocumentTitle("View Operation Member");;
   // state to manage to loaders
   const [isLoading, setIsLoading] = useState(true);
   const { control, reset, watch, trigger } = useForm({
@@ -266,82 +265,95 @@ const ViewOperationMembers = () => {
     }
   };
 
-  const data = [
-    {
-      id: 1,
-      action: "Edit",
-      hide:
-        SUPER_ADMIN === true
-          ? false
-          : !moduleAccessForOperationMember[0]?.operationMember.edit,
-    },
-    {
-      id: 2,
-      action: "Replace",
-      hide: !SUPER_ADMIN,
-    },
-    {
-      id: 3,
-      action: "Delete",
-      hide:
-        SUPER_ADMIN === true
-          ? false
-          : !moduleAccessForOperationMember[0]?.operationMember.delete,
-    },
-  ];
-  //  console.log("operation member:- ",fetchOperationMemberDetaills)
-  return (
-    <div className="page-wrapper">
-      <Toaster
-        messageType={toasterDetails.messageType}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        myRef={toasterRef}
-        titleMessage={toasterDetails.titleMessage}
-      />
-      <DialogBox
-        title={
-          <p>Delete opration member "{fetchOperationMemberDetaills.name}"</p>
-        }
-        info1={
+    const data = [
+        {
+            id: 1,
+            action: "Edit",
+            hide:
+                SUPER_ADMIN === true
+                    ? false
+                    : !moduleAccessForOperationMember[0]?.operationMember.edit,
+        },
+        {
+            id: 2,
+            action: "Replace",
+            hide: !SUPER_ADMIN,
+        },
+        {
+            id: 3,
+            action: "Delete",
+            hide:
+                SUPER_ADMIN === true
+                    ? false
+                    : !moduleAccessForOperationMember[0]?.operationMember
+                          .delete,
+        },
+    ];
+      //  console.log("operation member:- ",fetchOperationMemberDetaills)
+    return (
+        <div className="page-wrapper">
+            <Toaster
+                messageType={toasterDetails.messageType}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                myRef={toasterRef}
+                titleMessage={toasterDetails.titleMessage}
+            />
+            <DialogBox
+                title={
+                    
           <p>
-            We recommend you to replace this operation member with the new one
-            because deleting all the statistics & records would get deleted and
-            this will be an irreversible action
-          </p>
+                        Delete operation member "
+                        {fetchOperationMemberDetaills.name}"
+                    </p>
+                
         }
-        info2={
-          <p>
-            {" "}
-            Are you you want to delete{" "}
-            <b>{fetchOperationMemberDetaills.name}</b>?
-          </p>
-        }
-        onPrimaryModalButtonClickHandler={handleDeleteOperationMember}
-        onSecondaryModalButtonClickHandler={() => {
-          setOpenDeleteDialog(false);
-          navigate(
+                info1={
+                    <p>
+                        We recommend you to replace this operation member with
+                        the new one
+            because deleting all the statistics &
+                        records would get deleted and
+            this will be an
+                        irreversible action
+                    </p>
+                }
+                info2={
+                    <p>
+                        {" "}
+                        Are you want to delete{" "}
+                        <b>{fetchOperationMemberDetaills.name}</b>?
+                    </p>
+                }
+                onPrimaryModalButtonClickHandler={handleDeleteOperationMember}
+                onSecondaryModalButtonClickHandler={() => {
+                    setOpenDeleteDialog(false);
+                    navigate(
+                        
             `/users/operation-member/replace-operation-member/${params?.id}`
+                    
           );
-        }}
-        primaryButtonText={"Delete anyway"}
-        secondaryButtonText={"Replace"}
-        openModal={openDeleteDialog}
-        setOpenModal={setOpenDeleteDialog}
-      />
-      <div className="breadcrumb-wrapper">
-        <div className="container">
-          <ul className="breadcrumb">
-            <li>
-              <Link to="/users/operation-members">Operation Member</Link>
-            </li>
-            <li>View Operation Member</li>
-          </ul>
-        </div>
-      </div>
-      <section>
-        <div className="container">
-          <div className="form-header flex-between">
-            <h2 className="heading2">View Operation Member</h2>
+                }}
+                primaryButtonText={"Delete anyway"}
+                secondaryButtonText={"Replace"}
+                openModal={openDeleteDialog}
+                setOpenModal={setOpenDeleteDialog}
+            />
+            <div className="breadcrumb-wrapper">
+                <div className="container">
+                    <ul className="breadcrumb">
+                        <li>
+                            <Link to="/users/operation-members">
+                                Operation Member
+                            </Link>
+                        </li>
+                        <li>View Operation Member</li>
+                    </ul>
+                </div>
+            </div>
+            <section>
+                <div className="container">
+                    <div className="form-header flex-between">
+                        <h2 className="heading2">View Operation Member</h2>
 
             <span className="form-header-right-txt" onClick={handleToggle}>
               {(SUPER_ADMIN === true ||

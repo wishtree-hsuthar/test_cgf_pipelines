@@ -55,3 +55,10 @@ export const ADD_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const REASSIGN_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const ACCEPT_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const DECLINE_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
+
+// download
+export const DOWNLOAD_CGF_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/download`;
+export const DOWNLOAD_MEMBERS = `${REACT_APP_API_ENDPOINT}members/download`;
+export const DOWNLOAD_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/download`;
+export const DOWNLOAD_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
+export const DOWNLOAD_QUESTIONNAIRES = `${REACT_APP_API_ENDPOINT}questionnaires/`;

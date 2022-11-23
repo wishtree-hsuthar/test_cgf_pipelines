@@ -13,248 +13,255 @@ import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { TabPanel } from "../../utils/tabUtils/TabPanel";
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+// function TabPanel(props) {
+//   const { children, value, index, ...other } = props;
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box>{children}</Box>}
-    </div>
-  );
-}
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
+//   return (
+//     <div
+//       role="tabpanel"
+//       hidden={value !== index}
+//       id={`simple-tabpanel-${index}`}
+//       aria-labelledby={`simple-tab-${index}`}
+//       {...other}
+//     >
+//       {value === index && <Box>{children}</Box>}
+//     </div>
+//   );
+// }
+// TabPanel.propTypes = {
+//   children: PropTypes.node,
+//   index: PropTypes.number.isRequired,
+//   value: PropTypes.number.isRequired,
+// };
 
 function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
+    return {
+        id: `simple-tab-${index}`,
+        "aria-controls": `simple-tabpanel-${index}`,
+    };
 }
 
-
 function AddNewQuestionnaire() {
-  //custom hook to set title of page
-useDocumentTitle("Add Questionnaire")
+    //custom hook to set title of page
+    useDocumentTitle("Add Questionnaire");
 // state to manage to loader
 const [isLoading, setIsLoading] = useState(false)
-  //Refr for Toaster
-  const myRef = React.useRef();
-  //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
-  //method to call all error toaster from this method
-  const setErrorToaster = (error) => {
-    // console.log("error",error)
-    setToasterDetails(
-      {
-        titleMessage: "Error",
-        descriptionMessage:
-          error?.response?.data?.message &&
-          typeof error.response.data.message === "string"
-            ? error.response.data.message
-            : "Something went wrong!",
-        messageType: "error",
-      },
-      () => myRef.current()
-    );
-  };
-  const [value, setValue] = React.useState(0);
-  // questionnaire id
-  const { id } = useParams();
-
-  /* Popup */
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
-
-  const [globalSectionTitleError, setGlobalSectionTitleError] = useState({
-    errMsg: "",
-  });
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const navigate = useNavigate() 
-
-  const [questionnaire, setQuestionnaire] = useState({
-    uuid: id,
-    version: "", // TBD
-    title: "",
-    sections: [
-      {
-        id: "",
-        isRequired: true,
-        uuid: uuidv4(),
-        sectionTitle: "",
-        description: "",
-        layout: "form", // form | table
-        isActive: true,
-        questions: [
-          {
-            uuid: uuidv4(),
-            questionTitle: "",
-            inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings, boolean
-            validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
-            defaultValue: "", // Will only be there in case of the inputType which requires the default value
-            isRequired: true,
-            options: ["",""], // multiple values from which user can select
-          },
-        ],
-        value: 1,
-      },
-    ],
-    isDraft: true,
-    isPublished: false,
-    createdAt: Date,
-    updatedAt: Date,
-    createdBy: "",
-    updatedBy: "",
-  });
-  useEffect(() => {
-    let isMounted = true;
-    let controller = new AbortController();
-    const fetch = async () => {
-      try {
-        setIsLoading(true)
-        const response = await privateAxios.get(
-          `${ADD_QUESTIONNAIRE}/${id}`,
-          {
-            signal: controller.signal,
-          }
+    //Refr for Toaster
+    const myRef = React.useRef();
+    //Toaster Message setter
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
+    //method to call all error toaster from this method
+    const setErrorToaster = (error) => {
+        // console.log("error",error)
+        setToasterDetails(
+            {
+                titleMessage: "Error",
+                descriptionMessage:
+                    error?.response?.data?.message &&
+                    typeof error.response.data.message === "string"
+                        ? error.response.data.message
+                        : "Something went wrong!",
+                messageType: "error",
+            },
+            () => myRef.current()
         );
+    };
+    const [value, setValue] = React.useState(0);
+    // questionnaire id
+    const { id } = useParams();
+
+    /* Popup */
+    const style = {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 400,
+        bgcolor: "background.paper",
+        border: "2px solid #000",
+        boxShadow: 24,
+        p: 4,
+    };
+
+    const [globalSectionTitleError, setGlobalSectionTitleError] = useState({
+        errMsg: "",
+    });
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    const navigate = useNavigate();
+
+    const [questionnaire, setQuestionnaire] = useState({
+        uuid: id,
+        version: "", // TBD
+        title: "",
+        sections: [
+            {
+                id: "",
+                isRequired: true,
+                uuid: uuidv4(),
+                sectionTitle: "",
+                description: "",
+                layout: "form", // form | table
+                isActive: true,
+                questions: [
+                    {
+                        uuid: uuidv4(),
+                        questionTitle: "",
+                        inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings, boolean
+                        validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
+                        defaultValue: "", // Will only be there in case of the inputType which requires the default value
+                        isRequired: true,
+                        options: ["", ""], // multiple values from which user can select
+                    },
+                ],
+                value: 1,
+            },
+        ],
+        isDraft: true,
+        isPublished: false,
+        createdAt: Date,
+        updatedAt: Date,
+        createdBy: "",
+        updatedBy: "",
+    });
+    useEffect(() => {
+        let isMounted = true;
+        let controller = new AbortController();
+        const fetch = async () => {
+            try {
+        setIsLoading(true)
+                const response = await privateAxios.get(
+                    `${ADD_QUESTIONNAIRE}/${id}`,
+                    {
+                        signal: controller.signal,
+                    }
+                );
         setIsLoading(false)
-        // console.log("response from fetch questionnaire", response);
-        isMounted && setQuestionnaire({ ...response.data });
-      } catch (error) {
+                // console.log("response from fetch questionnaire", response);
+                isMounted && setQuestionnaire({ ...response.data });
+            } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
         setIsLoading(false)
-        // setErrorToaster(error)
-        // console.log("error from fetch questionnaire", error);
-      }
-    };
-    fetch();
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, []);
+                // setErrorToaster(error)
+                // console.log("error from fetch questionnaire", error);
+            }
+        };
+        fetch();
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
+    }, []);
 
-  const addSection = () => {
-    // console.log("questionnare: ",questionnaire)
-    setQuestionnaire({
-      ...questionnaire,
-      sections: [
-        ...questionnaire.sections,
-        {
-          id: "",
-          uuid: uuidv4(),
-          srNo: "", // TBD
-          sectionTitle: "",
-          description: "",
-          layout: "form", // form | table
-          isActive: true,
-          questions: [
-            {
-              uuid: uuidv4(),
-              questionTitle: "",
-              inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings, boolean
-              validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
-              defaultValue: "", // Will only be there in case of the inputType which requires the default value
-              isRequired: true,
-              options: ["",""], // multiple values from which user can select
-            },
-          ],
-          value: questionnaire.sections.length + 1,
-        },
-      ],
-    });
-    setValue(questionnaire.sections.length);
-  };
+    const addSection = () => {
+        // console.log("questionnare: ",questionnaire)
+        setQuestionnaire({
+            ...questionnaire,
+            sections: [
+                ...questionnaire.sections,
+                {
+                    id: "",
+                    uuid: uuidv4(),
+                    srNo: "", // TBD
+                    sectionTitle: "",
+                    description: "",
+                    layout: "form", // form | table
+                    isActive: true,
+                    questions: [
+                        {
+                            uuid: uuidv4(),
+                            questionTitle: "",
+                            inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings, boolean
+                            validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
+                            defaultValue: "", // Will only be there in case of the inputType which requires the default value
+                            isRequired: true,
+                            options: ["", ""], // multiple values from which user can select
+                        },
+                    ],
+                    value: questionnaire.sections.length + 1,
+                },
+            ],
+        });
+        setValue(questionnaire.sections.length);
+    };
 
     // console.log("questionnaire---", questionnaire.sections);
 
-  return (
-    <div className="page-wrapper">
-       <Toaster
-        myRef={myRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
-      />
-      <div className="breadcrumb-wrapper">
-        <div className="container">
-          <ul className="breadcrumb">
-            <li>
-              <Link to="/questionnaires">Questionnaire</Link>
-            </li>
-            <li>Add Questionnaire</li>
-          </ul>
-        </div>
-      </div>
-      <section>
+    return (
+        <div className="page-wrapper">
+            <Toaster
+                myRef={myRef}
+                titleMessage={toasterDetails.titleMessage}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                messageType={toasterDetails.messageType}
+            />
+            <div className="breadcrumb-wrapper">
+                <div className="container">
+                    <ul className="breadcrumb">
+                        <li>
+                            <Link to="/questionnaires">Questionnaire</Link>
+                        </li>
+                        <li>Add Questionnaire</li>
+                    </ul>
+                </div>
+            </div>
+            <section>
         {
           isLoading ? <div className="loader-blk">
-          <img src={Loader2} alt="Loading" />
+                  <img src={Loader2} alt="Loading" />
       </div> : <div className="container">
-          <div className="form-header flex-between">
-            <h2 className="heading2">Add Questionnaire</h2>
-          </div>
-          <div className="que-ttl-blk">
-            <div className="form-group">
-              <label htmlFor="emailid">
-                Questionnaire Title <span className="mandatory">*</span>
-              </label>
-              <TextField
-                className={`input-field ${
-                  questionnaire.title === "" &&
-                  globalSectionTitleError?.errMsg &&
-                  "input-error"
-                }`}
-                id="outlined-basic"
-                value={questionnaire.title}
-                placeholder="Enter questionnaire title"
-                // inputProps={{
-                //   maxLength: 500,
-                // }}
-                variant="outlined"
-                onChange={(e) => {
-                  setQuestionnaire({
-                    ...questionnaire,
-                    title: e.target.value,
-                  });
-                }}
-                onBlur={(e) => setQuestionnaire({...questionnaire, title : e.target.value?.trim()}) }
-                helperText={
-                  questionnaire.title === "" && globalSectionTitleError?.errMsg
-                    ? "Enter the questionnaire title"
-                    : " "
-                }
-              />
-            </div>
-          </div>
+                    <div className="form-header flex-between">
+                        <h2 className="heading2">Add Questionnaire</h2>
+                    </div>
+                    <div className="que-ttl-blk">
+                        <div className="form-group">
+                            <label htmlFor="emailid">
+                                Questionnaire Title{" "}
+                                <span className="mandatory">*</span>
+                            </label>
+                            <TextField
+                                className={`input-field ${
+                                    questionnaire.title === "" &&
+                                    globalSectionTitleError?.errMsg &&
+                                    "input-error"
+                                }`}
+                                id="outlined-basic"
+                                value={questionnaire.title}
+                                placeholder="Enter questionnaire title"
+                                // inputProps={{
+                                //   maxLength: 500,
+                                // }}
+                                variant="outlined"
+                                onChange={(e) => {
+                                    setQuestionnaire({
+                                        ...questionnaire,
+                                        title: e.target.value,
+                                    });
+                                }}
+                                onBlur={(e) =>
+                                    setQuestionnaire({
+                                        ...questionnaire,
+                                        title: e.target.value?.trim(),
+                                    })
+                                }
+                                helperText={
+                                    questionnaire.title === "" &&
+                                    globalSectionTitleError?.errMsg
+                                        ? "Enter the questionnaire title"
+                                        : " "
+                                }
+                            />
+                        </div>
+                    </div>
 
                     <div className="section-form-sect">
                         <div className="section-tab-blk flex-between">
@@ -309,7 +316,10 @@ const [isLoading, setIsLoading] = useState(false)
                                         </span>
                                     </div>
                                     <div className="tertiary-btn-blk">
-                                        <span className="addmore-icon" onClick={addSection}>
+                                        <span
+                                            className="addmore-icon"
+                                            onClick={addSection}
+                                        >
                                             <i className="fa fa-plus"></i>
                                         </span>
                                         <span

@@ -8,27 +8,28 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import PublishedQuestionnaires from "./PublishedQuestionnaires";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { TabPanel } from "../../utils/tabUtils/TabPanel";
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+// function TabPanel(props) {
+//     const { children, value, index, ...other } = props;
 
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-        </div>
-    );
-}
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
+//     return (
+//         <div
+//             role="tabpanel"
+//             hidden={value !== index}
+//             id={`simple-tabpanel-${index}`}
+//             aria-labelledby={`simple-tab-${index}`}
+//             {...other}
+//         >
+//             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+//         </div>
+//     );
+// }
+// TabPanel.propTypes = {
+//     children: PropTypes.node,
+//     index: PropTypes.number.isRequired,
+//     value: PropTypes.number.isRequired,
+// };
 
 function a11yProps(index) {
     return {
@@ -38,7 +39,7 @@ function a11yProps(index) {
 }
 function QuestionnairesList() {
     //custom hook to set title of page
-useDocumentTitle("Questionnaires")
+    useDocumentTitle("Questionnaires");
     const navigate = useNavigate();
     const addQuestionnaire = () => {
         navigate(`/questionnaires/add-questionnaire/${uuidv4()}`);
@@ -73,9 +74,9 @@ useDocumentTitle("Questionnaires")
             ? []
             : Object.values(privilege?.privileges);
     let moduleAccesForMember = privilegeArray
-        .filter((data) => data?.moduleId?.name === "Members")
+        .filter((data) => data?.moduleId?.name === "Questionnaire")
         .map((data) => ({
-            member: {
+            questionnaire: {
                 list: data?.list,
                 view: data?.view,
                 edit: data?.edit,
@@ -104,13 +105,12 @@ useDocumentTitle("Questionnaires")
                 <div className="container">
                     <div className="form-header member-form-header flex-between">
                         <div className="form-header-left-blk flex-start">
-                            <h2 className="heading2 mr-40">
-                                Questionnaires
-                            </h2>
+                            <h2 className="heading2 mr-40">Questionnaires</h2>
                         </div>
                         <div className="form-header-right-txt">
                             {(SUPER_ADMIN == true ||
-                                moduleAccesForMember[0]?.member?.add) && (
+                                moduleAccesForMember[0]?.questionnaire
+                                    ?.add) && (
                                 <div className="form-btn">
                                     <button
                                         type="submit"

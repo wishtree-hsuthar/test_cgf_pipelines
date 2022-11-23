@@ -7,12 +7,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import FillAssesmentSection from "./FillAssessmentSection";
 import {
-  ACCEPT_ASSESSMENT,
-  ADD_QUESTIONNAIRE,
-  ASSESSMENTS,
-  DECLINE_ASSESSMENT,
-  FETCH_ASSESSMENT_BY_ID,
-  SUBMIT_ASSESSMENT_AS_DRAFT,
+    ACCEPT_ASSESSMENT,
+    ADD_QUESTIONNAIRE,
+    ASSESSMENTS,
+    DECLINE_ASSESSMENT,
+    DOWNLOAD_ASSESSMENT,
+    FETCH_ASSESSMENT_BY_ID,
+    SUBMIT_ASSESSMENT_AS_DRAFT,
 } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
@@ -22,6 +23,8 @@ import Input from "../../components/Input";
 import { useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 export const AlphaRegEx = /^[a-z]+$/i;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
@@ -239,31 +242,98 @@ function FillAssessment() {
           section?.columnValues
         );
 
-        section?.rowValues.map((row) => {
-          row?.cells?.map((cell) => {
-            if (
-              transformedColValues[cell?.columnId].columnType !== "prefilled" &&
-              (!currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`] ||
-                currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`]
-                  .length === 0)
-            ) {
-              sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
-                "This is required field";
+                section?.rowValues.map((row) => {
+                    row?.cells?.map((cell) => {
+                        console.log(
+                            "table layout cell",
+                            transformedColValues[cell?.columnId]
+                        );
+                        if (
+                            transformedColValues[cell?.columnId].columnType !==
+                                "prefilled" &&
+                            saveAsDraft === false &&
+                            (!currentSectionAnswers[
+                                `${cell?.columnId}.${row?.uuid}`
+                            ] ||
+                                currentSectionAnswers[
+                                    `${cell?.columnId}.${row?.uuid}`
+                                ].length === 0)
+                        ) {
+                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                                "This is required field";
+                            setTabValue(index);
+                        } else if (
+                            transformedColValues[cell?.columnId].columnType !==
+                                "prefilled" &&
+                            transformedColValues[cell?.columnId]?.validation ==
+                                "alphabets" &&
+                            currentSectionAnswers[
+                                `${cell?.columnId}.${row?.uuid}`
+                            ]?.length > 0 &&
+                            !AlphaRegEx.test(
+                                currentSectionAnswers[
+                                    `${cell?.columnId}.${row?.uuid}`
+                                ]
+                            )
+                        ) {
+                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                                "This is alphabets only field";
+                            setTabValue(index);
+                            console.log("in table alphabets only");
+                        } else if (
+                            transformedColValues[cell?.columnId].columnType !==
+                                "prefilled" &&
+                            transformedColValues[cell?.columnId]?.validation ==
+                                "numeric" &&
+                            currentSectionAnswers[
+                                `${cell?.columnId}.${row?.uuid}`
+                            ]?.length > 0 &&
+                            !NumericRegEx.test(
+                                currentSectionAnswers[
+                                    `${cell?.columnId}.${row?.uuid}`
+                                ]
+                            )
+                        ) {
+                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                                "This is numeric only field";
+                            setTabValue(index);
+                            console.log("in table numeric only");
+                        } else if (
+                            transformedColValues[cell?.columnId].columnType !==
+                                "prefilled" &&
+                            transformedColValues[cell?.columnId]?.validation ==
+                                "alphaNum" &&
+                            currentSectionAnswers[
+                                `${cell?.columnId}.${row?.uuid}`
+                            ]?.length > 0 &&
+                            !AlphaNumRegEx.test(
+                                currentSectionAnswers[
+                                    `${cell?.columnId}.${row?.uuid}`
+                                ]
+                            )
+                        ) {
+                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                                "This is alphaNum field";
+                            setTabValue(index);
+                            console.log("in table alphaNum only");
+                        } else {
+                            delete sectionErrors[
+                                `${cell?.columnId}.${row?.uuid}`
+                            ];
+                        }
+                    });
+                });
             } else {
-              delete sectionErrors[`${cell?.columnId}.${row?.uuid}`];
-            }
-          });
-        });
-      } else {
-        // form validators
-        section?.questions.map((question) => {
-          if (
-            question.isRequired &&
-            (!currentSectionAnswers[question?.uuid] ||
-              currentSectionAnswers[question?.uuid].length === 0) &&
-            saveAsDraft === false
-          ) {
-            console.log("error from required");
+                // form validators
+                section?.questions.map((question) => {
+                    if (
+                        question.isRequired &&
+                        (!currentSectionAnswers[question?.uuid] ||
+                            currentSectionAnswers[question?.uuid].length ===
+                                0) &&
+                        saveAsDraft === false
+                    ) {
+                        console.log("error from required");
 
             sectionErrors[question?.uuid] = "This is required field";
             setTabValue(index);
@@ -312,45 +382,51 @@ function FillAssessment() {
     }
   };
 
-  // API for declining assessments
-  const onSubmitReason = async (data) => {
-    console.log("comment", data);
-    try {
-      const response = await privateAxios.post(
-        DECLINE_ASSESSMENT + params.id + "/decline",
-        {
-          comment: data.comment,
+    // API for declining assessments
+    const onSubmitReason = async (data) => {
+        console.log("comment", data);
+        try {
+            const response = await privateAxios.post(
+                DECLINE_ASSESSMENT + params.id + "/decline",
+                {
+                    comment: data.comment,
+                }
+            );
+            console.log(
+                "Response from backend for decline assessment",
+                response
+            );
+            if (response.status == 201) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success",
+                        descriptionMessage: response?.data?.message,
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/assessment-list");
+                }, 3000);
+            }
+        } catch (error) {
+            console.log("error response from backen decline assessment");
+            setToasterDetails(
+                {
+                    titleMessage: "Success",
+                    descriptionMessage:
+                        error?.response?.data?.message &&
+                        typeof error.response.data.message === "string"
+                            ? error.response.data.message
+                            : "Something went wrong!",
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
         }
-      );
-      console.log("Response from backend for decline assessment", response);
-      if (response.status == 201) {
-        setToasterDetails(
-          {
-            titleMessage: "Success",
-            descriptionMessage: response?.data?.message,
-            messageType: "success",
-          },
-          () => myRef.current()
-        );
-      }
-    } catch (error) {
-      console.log("error response from backen decline assessment");
-      setToasterDetails(
-        {
-          titleMessage: "Success",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something went wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
-    }
-    setOpenDeleteDialogBox(false);
-    // reset({});
-  };
+        setOpenDeleteDialogBox(false);
+        // reset({});
+    };
 
   //API for accepting assessments
   const onAcceptAssessments = async () => {
@@ -392,7 +468,46 @@ function FillAssessment() {
     console.log("UseEffect Errors", errors);
   }, [errors]);
 
-  const [datevalue, setDateValue] = React.useState(null);
+    const [datevalue, setDateValue] = React.useState(null);
+    const [isActive, setActive] = useState("false");
+    const handleToggle = () => {
+        setActive(!isActive);
+    };
+
+    // download assessment
+    const downloadAssessment = async () => {
+        try {
+            const response = await privateAxios.get(
+                DOWNLOAD_ASSESSMENT + params.id + "/download",
+                {
+                    responseType: "blob",
+                }
+            );
+            console.log("resposne from download  assessment ", response);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute(
+                "download",
+                `Assessment - ${new Date().toISOString()}.xls`
+            );
+            document.body.appendChild(link);
+            link.click();
+            if (response.status == 200) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage: "Download successfull!",
+
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+            }
+        } catch (error) {
+            console.log("Error from download  Assessment", error);
+        }
+    };
 
   return (
     <div className="page-wrapper">
@@ -468,7 +583,26 @@ function FillAssessment() {
         <div className="container">
           <div className="form-header flex-between">
             <h2 className="heading2">{questionnaire.title}</h2>
+                        <span
+                            className="form-header-right-txt"
+                            onClick={handleToggle}
+                        >
+                            <span className="crud-operation">
+                                <MoreVertIcon />
+                            </span>
+                            <div
+                                className="crud-toggle-wrap"
+                                style={{ display: isActive ? "none" : "block" }}
+                            >
+                                <ul className="crud-toggle-list">
+                                    <li onClick={downloadAssessment}>
+                                        Export to Excel
+                                    </li>
+                                </ul>
+                            </div>
+                        </span>
           </div>
+
           <div className="section-form-sect">
             <div className="section-tab-blk flex-between preview-tab-blk">
               <div className="section-tab-leftblk">

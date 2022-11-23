@@ -103,7 +103,7 @@ const helperTextForAddOperationMember = {
 };
 function AddOperationMember() {
     //custom hook to set title of page
-    useDocumentTitle("Add Operation Member")
+    useDocumentTitle("Add Operation Member");
     const {
         register,
         handleSubmit,
@@ -127,7 +127,7 @@ function AddOperationMember() {
     });
 
     const navigate = useNavigate();
-    const [memberCompanies, setMemberCompanies] = useState();
+    const [memberCompanies, setMemberCompanies] = useState([]);
     const [disableReportingManager, setDisableReportingManager] =
         useState(true);
     const [countries, setCountries] = useState();
@@ -201,11 +201,19 @@ function AddOperationMember() {
                 if ((response.status = 200)) {
                     isMounted &&
                         setMemberCompanies(
-                            response?.data.map((data) => ({
-                                _id: data?._id,
-                                companyName: data?.companyName,
-                                companyType: data?.companyType,
-                            }))
+                            response?.data
+                                .map((data) => ({
+                                    _id: data?._id,
+                                    companyName: data?.companyName,
+                                    companyType: data?.companyType,
+                                }))
+                                .sort((a, b) =>
+                                    a.companyName > b.companyName
+                                        ? 1
+                                        : b.companyName > a.companyName
+                                        ? -1
+                                        : 0
+                                )
                         );
                 }
 
@@ -410,7 +418,7 @@ function AddOperationMember() {
                                                 <Dropdown
                                                     control={control}
                                                     name="salutation"
-                                                    placeholder="Mr."
+                                                    // placeholder="Mr."
                                                     myHelper={
                                                         helperTextForAddOperationMember
                                                     }
@@ -469,12 +477,14 @@ function AddOperationMember() {
                                                     e.target.value?.trim()
                                                 )
                                             }
-                                            myHelper={helperTextForAddOperationMember}
+                                            myHelper={
+                                                helperTextForAddOperationMember
+                                            }
                                             control={control}
                                             placeholder={"Enter title"}
                                             rules={{
                                                 maxLength: 50,
-                                                minLength:3
+                                                minLength: 3,
                                             }}
                                         />
                                     </div>
@@ -496,12 +506,10 @@ function AddOperationMember() {
                                             myHelper={
                                                 helperTextForAddOperationMember
                                             }
-                                            placeholder={
-                                                "Enter department"
-                                            }
+                                            placeholder={"Enter department"}
                                             rules={{
                                                 maxLength: 50,
-                                                minLength:3
+                                                minLength: 3,
                                             }}
                                         />
                                     </div>
@@ -679,9 +687,7 @@ function AddOperationMember() {
                                                 myHelper={
                                                     helperTextForAddOperationMember
                                                 }
-                                                placeholder={
-                                                    "1234567890"
-                                                }
+                                                placeholder={"1234567890"}
                                                 rules={{
                                                     maxLength: 15,
                                                     minLength: 3,
