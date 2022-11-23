@@ -267,7 +267,7 @@ function AddOperationMember() {
             const response = await privateAxios.get(
                 isCGF
                     ? FETCH_OPERATION_MEMBER +
-                          cgfMember[0]._id +
+                          cgfMember[0]?._id +
                           "/master/external"
                     : FETCH_OPERATION_MEMBER + id + "/master/internal"
             );
@@ -339,7 +339,7 @@ function AddOperationMember() {
     };
 
     const handleCGFStaffChange = (e) => {
-        let cgfCompany = memberCompanies.filter(
+        let cgfCompany = memberCompanies?.filter(
             (company) => company.companyName === "CGF"
         );
         console.log(e);

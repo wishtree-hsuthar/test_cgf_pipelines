@@ -181,7 +181,7 @@ useDocumentTitle("Login")
                                                     "input-error"
                                                 }`}
                                                 id="outlined-basic"
-                                                placeholder="Enter email"
+                                                placeholder="example@domain.com"
                                                 variant="outlined"
                                                 {...register("email")}
                                                 helperText={

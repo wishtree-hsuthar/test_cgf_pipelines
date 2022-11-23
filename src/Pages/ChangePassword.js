@@ -94,7 +94,7 @@ const ChangePassword = () => {
         setToasterDetails(
           {
             titleMessage: "Hurray!",
-            descriptionMessage: response.data.message,
+            descriptionMessage: "Password updated successfully!",
             messageType: "success",
           },
           () => toasterRef.current()
@@ -155,7 +155,7 @@ const ChangePassword = () => {
                       type={values.showConfirmPassword ? "text" : "password"}
                       // value={values.confirmPassword}
                       // onChange={handleChange('confirmPassword')}
-                      placeholder="Enter Old password"
+                      placeholder="Enter old password"
                       className={`input-field ${
                         errors.oldPassword && "input-error"
                       }`}

@@ -434,11 +434,11 @@ const AddAssessment = () => {
                             value={datevalue}
                             onChange={(event) => {
                               setDateValue(event);
-                              console.log("date" + "  " + event.toISOString());
+                              // console.log("date" + "  " + event.toISOString());
                               setValue(
                                 "dueDate",
 
-                                event.toISOString()
+                                event?.toISOString()
                               );
                             }}
                             renderInput={(params) => (

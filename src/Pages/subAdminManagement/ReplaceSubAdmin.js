@@ -34,19 +34,19 @@ const tableHead = [
     {
         id: "",
         disablePadding: true,
-        label: "Select User",
+        label: "",
         width: "10%",
     },
     {
-        id: "subAdminName",
+        id: "name",
         disablePadding: true,
-        label: "CGF Admin Name",
+        label: "Name",
         width: "30%",
     },
     {
-        id: "emailId",
+        id: "email",
         disablePadding: false,
-        label: "Email Id",
+        label: "Email",
         width: "40%",
     },
     {
@@ -241,16 +241,7 @@ const ReplaceSubAdmin = () => {
 
     //on Click of visibility icon
 
-    console.log(
-        "page: ",
-        page,
-        "rows Per Page: ",
-        rowsPerPage,
-        "order: ",
-        order,
-        "order By: ",
-        orderBy
-    );
+    console.log("selected user: ",selectedUser)
 
     const replaceUser = async () => {
         try {
@@ -343,14 +334,13 @@ const ReplaceSubAdmin = () => {
                 info1={
                     <p>
                         {" "}
-                        On replacing a cgf admin, all the statistics and record
-                        would get transfer to the new member.
+                        On replacing a sub admin, all the existing management will be transferred to the new sub admin
                     </p>
                 }
                 info2={
                     <p>
                         {" "}
-                        Are you sure you want to replace{" "}
+                        Are you sure want to replace{" "}
                         <b> {cgfAdmin.name} </b>?{" "}
                     </p>
                 }
@@ -435,7 +425,7 @@ const ReplaceSubAdmin = () => {
                             onClick={openReplaceDailogBox}
                             className="primary-button add-button replace-assign-btn"
                         >
-                            Replace
+                            Assign
                         </button>
                     </div>
                 </div>

@@ -2043,7 +2043,7 @@ input:-webkit-autofill:active {
     font-family: "ProximaNova-semiBold", serif, sans-serif;
 }
 .preview-que-blk .MuiTypography-root {
-    font-family: "ProximaNova-Regular" !important;
+    font-family: "ProximaNova-Regular",serif, sans-serif !important;
 }
 
 .que-half-sect input,

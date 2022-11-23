@@ -60,7 +60,7 @@ useDocumentTitle("Forgot Password")
                 setMessageType("success");
                 setMessageTitle("Success");
                 setMessageDescription(
-                    "Reset password link has been successfully sent on the entered email address! Kindly check your email to reset your password"
+                    "Reset password link has been successfully sent on the entered email address! Kindly check your email to reset your password!"
                 );
                 setTimeout(() => {
                     toasterRef.current();
@@ -134,7 +134,7 @@ useDocumentTitle("Forgot Password")
                                                     "input-error"
                                                 }`}
                                                 id="outlined-basic"
-                                                placeholder="Enter email"
+                                                placeholder="example@domain.com"
                                                 variant="outlined"
                                                 {...register("email")}
                                                 error={

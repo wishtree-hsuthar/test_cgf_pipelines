@@ -191,6 +191,7 @@ const RolesList = () => {
             setIsLoading(false);
         }
     };
+    
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();

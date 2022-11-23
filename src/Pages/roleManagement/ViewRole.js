@@ -34,23 +34,23 @@ import { TabPanel } from "../../utils/tabUtils/TabPanel";
 
 const tableHead = [
     {
-        id: "name",
+        id: "cgfAdmins.name",
         disablePadding: false,
         width: "20%",
         label: "Name",
     },
     {
-        id: "email",
+        id: "cgfAdmins.email",
         disablePadding: false,
         label: "Email",
     },
     {
-        id: "createdAt",
+        id: "cgfAdmins.createdAt",
         disablePadding: false,
         label: "Created On",
     },
     {
-        id: "isActive",
+        id: "cgfAdmins.isActive",
         disablePadding: false,
         label: "Status",
     },
@@ -71,7 +71,7 @@ const ViewRole = () => {
     });
 
     // state to manage loader
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     //code to get id from url
     const params = useParams();
@@ -251,7 +251,7 @@ const ViewRole = () => {
         });
         setRecords([...users]);
     };
-    const updateFileds = (data) => {
+    const updateFileds = async (data) => {
         console.log("data", data);
         updateUsers(data);
         setTotalRecords(data?.totalCgfAdmins ?? 0);
@@ -270,12 +270,13 @@ const ViewRole = () => {
             try {
                 setIsLoading(true);
                 const response = await axios.get(
-                    REACT_APP_API_ENDPOINT + `roles/${params.id}`
+                    REACT_APP_API_ENDPOINT + `roles/${params.id}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`
                 );
-                isMounted && updateFileds(response?.data);
+                isMounted && await updateFileds(response?.data);
                 setIsLoading(false);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
+                setIsLoading(false);
                 isMounted &&
                     setToasterDetails(
                         {
@@ -289,7 +290,6 @@ const ViewRole = () => {
                         },
                         () => myRef.current()
                     );
-                setIsLoading(false);
             }
         })();
         return () => {
@@ -468,7 +468,7 @@ const ViewRole = () => {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label htmlFor="roleName">
-                                            No of Users{" "}
+                                            No. of Users{" "}
                                             <span className="mandatory">*</span>
                                         </label>
                                         <TextField

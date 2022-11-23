@@ -90,7 +90,7 @@ export const memberHelper = {
         required: "Enter country code",
         maxLength: "Max char limit exceed",
         minLength: "minimum 3 characters required",
-        validate: "Enter phone number",
+        validate: "Enter the phone number",
     },
     roleId: {
         required: "Select the role",

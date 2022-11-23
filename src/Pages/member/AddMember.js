@@ -39,19 +39,19 @@ const cgfCategories = ["Manufacturer", "Retailer", "Other"];
 // Object.keys(categories)
 // categories[category] = Array of activities[]
 const cgfActivitiesManufacturer = [
-    "None",
     "Apparel",
-    "Food Manufacturer",
-    "Non-food manufacturer",
+    "Food manufacturer",
     "Household care",
+    "None",
+    "Non-food manufacturer",
     "Personal care & beauty",
 ];
 const cgfActivitiesRetailer = [
-    "Department Store",
+    "Department store",
     "Ecommerce",
     "Food/Non food retailer",
-    "food retailer",
-    "food service",
+    "Food retailer",
+    "Food service",
     "Grocery",
     "Health/beauty drugstore",
     "Non food retailer",
