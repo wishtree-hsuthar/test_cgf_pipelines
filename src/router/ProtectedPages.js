@@ -54,22 +54,35 @@ const ProtectedPages = () => {
                 <Route
                     path="/users/cgf-admin/add-sub-admin"
                     element={
-                        // <RequireAuth allowedRoles={["Super Admin", "Sub Admin"]}>
-                        <AddSubAdmin />
-                        // </RequireAuth>
+                        <RequireAuth moduleName={""} page={""}>
+                            <AddSubAdmin />
+                        </RequireAuth>
                     }
                 />
                 <Route
                     path="/users/cgf-admin/view-sub-admin/:id"
-                    element={<ViewSubAdmin />}
+                    element={
+                        <RequireAuth moduleName={""} page={""}>
+                            <ViewSubAdmin />
+                        </RequireAuth>
+                    }
                 />
+
                 <Route
                     path="/users/cgf-admin/edit-sub-admin/:id"
-                    element={<EditSubAdmin />}
+                    element={
+                        <RequireAuth>
+                            <EditSubAdmin />
+                        </RequireAuth>
+                    }
                 />
                 <Route
                     path="/users/cgf-admin/replace-sub-admin/:id"
-                    element={<ReplaceSubAdmin />}
+                    element={
+                        <RequireAuth page={""} moduleName={""}>
+                            <ReplaceSubAdmin />
+                        </RequireAuth>
+                    }
                 />
 
                 <Route
@@ -167,7 +180,14 @@ const ProtectedPages = () => {
                 />
                 <Route
                     path="/users/operation-member/replace-operation-member/:id"
-                    element={<ReplaceOperationMember />}
+                    element={
+                        <RequireAuth
+                            page={"delete"}
+                            moduleName={"Operation Members"}
+                        >
+                            <ReplaceOperationMember />
+                        </RequireAuth>
+                    }
                 />
                 <Route
                     path="/questionnaires"

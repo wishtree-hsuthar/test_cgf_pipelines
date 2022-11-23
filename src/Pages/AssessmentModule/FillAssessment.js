@@ -11,6 +11,7 @@ import {
     ADD_QUESTIONNAIRE,
     ASSESSMENTS,
     DECLINE_ASSESSMENT,
+    DOWNLOAD_ASSESSMENT,
     FETCH_ASSESSMENT_BY_ID,
     SUBMIT_ASSESSMENT_AS_DRAFT,
 } from "../../api/Url";
@@ -21,6 +22,8 @@ import Input from "../../components/Input";
 import { useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 export const AlphaRegEx = /^[a-z]+$/i;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
@@ -77,9 +80,9 @@ const helperTextForReason = {
 };
 
 function FillAssessment() {
-     //custom hook to set title of page
-useDocumentTitle("Fill Assessment")
-   
+    //custom hook to set title of page
+    useDocumentTitle("Fill Assessment");
+
     const { handleSubmit, reset, control, setValue } = useForm({
         // defaultValues: {
         //     comment: "",
@@ -247,9 +250,14 @@ useDocumentTitle("Fill Assessment")
 
                 section?.rowValues.map((row) => {
                     row?.cells?.map((cell) => {
+                        console.log(
+                            "table layout cell",
+                            transformedColValues[cell?.columnId]
+                        );
                         if (
                             transformedColValues[cell?.columnId].columnType !==
                                 "prefilled" &&
+                            saveAsDraft === false &&
                             (!currentSectionAnswers[
                                 `${cell?.columnId}.${row?.uuid}`
                             ] ||
@@ -259,6 +267,61 @@ useDocumentTitle("Fill Assessment")
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is required field";
+                            setTabValue(index);
+                        } else if (
+                            transformedColValues[cell?.columnId].columnType !==
+                                "prefilled" &&
+                            transformedColValues[cell?.columnId]?.validation ==
+                                "alphabets" &&
+                            currentSectionAnswers[
+                                `${cell?.columnId}.${row?.uuid}`
+                            ]?.length > 0 &&
+                            !AlphaRegEx.test(
+                                currentSectionAnswers[
+                                    `${cell?.columnId}.${row?.uuid}`
+                                ]
+                            )
+                        ) {
+                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                                "This is alphabets only field";
+                            setTabValue(index);
+                            console.log("in table alphabets only");
+                        } else if (
+                            transformedColValues[cell?.columnId].columnType !==
+                                "prefilled" &&
+                            transformedColValues[cell?.columnId]?.validation ==
+                                "numeric" &&
+                            currentSectionAnswers[
+                                `${cell?.columnId}.${row?.uuid}`
+                            ]?.length > 0 &&
+                            !NumericRegEx.test(
+                                currentSectionAnswers[
+                                    `${cell?.columnId}.${row?.uuid}`
+                                ]
+                            )
+                        ) {
+                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                                "This is numeric only field";
+                            setTabValue(index);
+                            console.log("in table numeric only");
+                        } else if (
+                            transformedColValues[cell?.columnId].columnType !==
+                                "prefilled" &&
+                            transformedColValues[cell?.columnId]?.validation ==
+                                "alphaNum" &&
+                            currentSectionAnswers[
+                                `${cell?.columnId}.${row?.uuid}`
+                            ]?.length > 0 &&
+                            !AlphaNumRegEx.test(
+                                currentSectionAnswers[
+                                    `${cell?.columnId}.${row?.uuid}`
+                                ]
+                            )
+                        ) {
+                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                                "This is alphaNum field";
+                            setTabValue(index);
+                            console.log("in table alphaNum only");
                         } else {
                             delete sectionErrors[
                                 `${cell?.columnId}.${row?.uuid}`
@@ -424,6 +487,45 @@ useDocumentTitle("Fill Assessment")
     }, [errors]);
 
     const [datevalue, setDateValue] = React.useState(null);
+    const [isActive, setActive] = useState("false");
+    const handleToggle = () => {
+        setActive(!isActive);
+    };
+
+    // download assessment
+    const downloadAssessment = async () => {
+        try {
+            const response = await privateAxios.get(
+                DOWNLOAD_ASSESSMENT + params.id + "/download",
+                {
+                    responseType: "blob",
+                }
+            );
+            console.log("resposne from download  assessment ", response);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute(
+                "download",
+                `Assessment - ${new Date().toISOString()}.xls`
+            );
+            document.body.appendChild(link);
+            link.click();
+            if (response.status == 200) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage: "Download successfull!",
+
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+            }
+        } catch (error) {
+            console.log("Error from download  Assessment", error);
+        }
+    };
 
     return (
         <div className="page-wrapper">
@@ -509,7 +611,26 @@ useDocumentTitle("Fill Assessment")
                 <div className="container">
                     <div className="form-header flex-between">
                         <h2 className="heading2">{questionnaire.title}</h2>
+                        <span
+                            className="form-header-right-txt"
+                            onClick={handleToggle}
+                        >
+                            <span className="crud-operation">
+                                <MoreVertIcon />
+                            </span>
+                            <div
+                                className="crud-toggle-wrap"
+                                style={{ display: isActive ? "none" : "block" }}
+                            >
+                                <ul className="crud-toggle-list">
+                                    <li onClick={downloadAssessment}>
+                                        Export to Excel
+                                    </li>
+                                </ul>
+                            </div>
+                        </span>
                     </div>
+
                     <div className="section-form-sect">
                         <div className="section-tab-blk flex-between preview-tab-blk">
                             <div className="section-tab-leftblk">

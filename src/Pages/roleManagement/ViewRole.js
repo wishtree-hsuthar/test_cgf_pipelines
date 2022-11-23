@@ -30,6 +30,7 @@ import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { TabPanel } from "../../utils/tabUtils/TabPanel";
 
 const tableHead = [
     {
@@ -57,7 +58,7 @@ const tableHead = [
 
 const ViewRole = () => {
     //custom hook to set title of page
-    useDocumentTitle("View Role")
+    useDocumentTitle("View Role");
     //Refr for Toaster
     const myRef = React.useRef();
     //order in which records needs to show
@@ -129,27 +130,27 @@ const ViewRole = () => {
     };
 
     //code from Member List
-    function TabPanel(props) {
-        const { children, value, index, ...other } = props;
+    // function TabPanel(props) {
+    //     const { children, value, index, ...other } = props;
 
-        return (
-            <div
-                role="tabpanel"
-                hidden={value !== index}
-                id={`simple-tabpanel-${index}`}
-                aria-labelledby={`simple-tab-${index}`}
-                {...other}
-            >
-                {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-            </div>
-        );
-    }
+    //     return (
+    //         <div
+    //             role="tabpanel"
+    //             hidden={value !== index}
+    //             id={`simple-tabpanel-${index}`}
+    //             aria-labelledby={`simple-tab-${index}`}
+    //             {...other}
+    //         >
+    //             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    //         </div>
+    //     );
+    // }
 
-    TabPanel.propTypes = {
-        children: PropTypes.node,
-        index: PropTypes.number.isRequired,
-        value: PropTypes.number.isRequired,
-    };
+    // TabPanel.propTypes = {
+    //     children: PropTypes.node,
+    //     index: PropTypes.number.isRequired,
+    //     value: PropTypes.number.isRequired,
+    // };
 
     const [value, setValue] = React.useState(0);
 
@@ -231,8 +232,8 @@ const ViewRole = () => {
             delete object["address"];
             delete object["isCGFStaff"];
             delete object["isOperationMember"];
-            delete object["isMemberRepresentative"]
-            delete object["isCGFAdmin"]
+            delete object["isMemberRepresentative"];
+            delete object["isCGFAdmin"];
 
             delete object["__v"];
             object["createdAt"] = new Date(

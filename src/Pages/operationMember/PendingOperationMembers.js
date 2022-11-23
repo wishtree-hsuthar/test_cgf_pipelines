@@ -128,7 +128,6 @@ function PendingOperationMembers({
 
             // object["role"] = object["data"]["subRoleId"].name;
             // object["role"] = object["data"]["subRole"][0].name;
-            object["_id"] = object["_id"];
 
             object["name"] = object["data"].name;
             object["email"] = object["data"].email;
@@ -300,7 +299,7 @@ function PendingOperationMembers({
                 info1={
                     <p>
                         On withdrawal, operation member will not be able to
-                        verify their account?
+                        verify their account.
                     </p>
                 }
                 info2={<p>Do you want to withdraw the invitation?</p>}
