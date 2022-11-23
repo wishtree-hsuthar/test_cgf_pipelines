@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
@@ -11,9 +11,13 @@ import PreviewSection from "./PreviewSection";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../../api/axios";
 import "../../../Pages/PreviewDemo.css";
-import { ADD_QUESTIONNAIRE } from "../../../api/Url";
+import { ADD_QUESTIONNAIRE, DOWNLOAD_QUESTIONNAIRES } from "../../../api/Url";
 import { useDocumentTitle } from "../../../utils/useDocumentTitle";
 import { useSelector } from "react-redux";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import useCallbackState from "../../../utils/useCallBackState";
+import Toaster from "../../../components/Toaster";
+import { TabPanel } from "../../../utils/tabUtils/TabPanel";
 
 const ITEM_HEIGHT = 22;
 const MenuProps = {
@@ -23,27 +27,27 @@ const MenuProps = {
         },
     },
 };
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+// function TabPanel(props) {
+//     const { children, value, index, ...other } = props;
 
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box>{children}</Box>}
-        </div>
-    );
-}
+//     return (
+//         <div
+//             role="tabpanel"
+//             hidden={value !== index}
+//             id={`simple-tabpanel-${index}`}
+//             aria-labelledby={`simple-tab-${index}`}
+//             {...other}
+//         >
+//             {value === index && <Box>{children}</Box>}
+//         </div>
+//     );
+// }
 
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
+// TabPanel.propTypes = {
+//     children: PropTypes.node,
+//     index: PropTypes.number.isRequired,
+//     value: PropTypes.number.isRequired,
+// };
 
 function a11yProps(index) {
     return {
@@ -68,6 +72,13 @@ function PreviewQuestionnaire() {
     const [value, setValue] = useState(0);
     //custom hook to set title of page
     useDocumentTitle("Preview Questionnaire");
+    //Toaster Message setter
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
+    const myRef = useRef();
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -117,9 +128,54 @@ function PreviewQuestionnaire() {
         };
     }, []);
     const [datevalue, setDateValue] = React.useState(null);
+    const [isActive, setActive] = useState("false");
+    const handleToggle = () => {
+        setActive(!isActive);
+    };
+
+    // download assessment
+    const downloadAssessment = async () => {
+        try {
+            const response = await privateAxios.get(
+                DOWNLOAD_QUESTIONNAIRES + params.id + "/download",
+                {
+                    responseType: "blob",
+                }
+            );
+            console.log("resposne from download  questionnaire ", response);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute(
+                "download",
+                `Questionnaire - ${new Date().toISOString()}.xls`
+            );
+            document.body.appendChild(link);
+            link.click();
+            if (response.status == 200) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage: "Download successfull!",
+
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+            }
+        } catch (error) {
+            console.log("Error from download  questionnaire", error);
+        }
+    };
 
     return (
         <div className="page-wrapper">
+            <Toaster
+                myRef={myRef}
+                titleMessage={toasterDetails.titleMessage}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                messageType={toasterDetails.messageType}
+            />
             <div className="breadcrumb-wrapper">
                 <div className="container">
                     <ul className="breadcrumb">
@@ -155,6 +211,24 @@ function PreviewQuestionnaire() {
                 <div className="container">
                     <div className="form-header flex-between">
                         <h2 className="heading2">{questionnaire.title}</h2>
+                        <span
+                            className="form-header-right-txt"
+                            onClick={handleToggle}
+                        >
+                            <span className="crud-operation">
+                                <MoreVertIcon />
+                            </span>
+                            <div
+                                className="crud-toggle-wrap"
+                                style={{ display: isActive ? "none" : "block" }}
+                            >
+                                <ul className="crud-toggle-list">
+                                    <li onClick={downloadAssessment}>
+                                        Export to Excel
+                                    </li>
+                                </ul>
+                            </div>
+                        </span>
                     </div>
                     {/* <div className="que-ttl-blk">
                         <div className="form-group mb-0">

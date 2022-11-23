@@ -7,32 +7,38 @@ import DownloadIcon from "@mui/icons-material/Download";
 import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";
 import Toaster from "../../components/Toaster";
-import { ADD_SUB_ADMIN, FETCH_ROLES, WITHDRAW_SUB_ADMIN } from "../../api/Url";
+import {
+    ADD_SUB_ADMIN,
+    DOWNLOAD_CGF_ADMIN,
+    FETCH_ROLES,
+    WITHDRAW_SUB_ADMIN,
+} from "../../api/Url";
 import DialogBox from "../../components/DialogBox";
 import OnBoardedSubAdminsTable from "./OnBoardedSubAdminsTable";
 import PendingCGFAdmins from "./PendingCGFAdmins";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { TabPanel } from "../../utils/tabUtils/TabPanel";
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+// function TabPanel(props) {
+//     const { children, value, index, ...other } = props;
 
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-        </div>
-    );
-}
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
+//     return (
+//         <div
+//             role="tabpanel"
+//             hidden={value !== index}
+//             id={`simple-tabpanel-${index}`}
+//             aria-labelledby={`simple-tab-${index}`}
+//             {...other}
+//         >
+//             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+//         </div>
+//     );
+// }
+// TabPanel.propTypes = {
+//     children: PropTypes.node,
+//     index: PropTypes.number.isRequired,
+//     value: PropTypes.number.isRequired,
+// };
 
 function a11yProps(index) {
     return {
@@ -43,7 +49,7 @@ function a11yProps(index) {
 
 const SubAdminList = () => {
     //custom hook to set title of page
-    useDocumentTitle("CGF Admins")
+    useDocumentTitle("CGF Admins");
     // const dispatch = useDispatch();
     const [value, setValue] = React.useState(0);
 
@@ -159,8 +165,7 @@ const SubAdminList = () => {
             object["role"] = object["subRole"][0].name;
             object["name"] = object["data"].name;
             object["email"] = object["data"].email;
-            object["_id"] = object["_id"];
-            object["createdAt"] = object["createdAt"];
+            // object["createdAt"] = object["createdAt"];
             // delete object["data"]["subRoleId"];
             // delete object["data"]["subRole"][0].name;
             delete object["subRole"];
@@ -330,6 +335,34 @@ const SubAdminList = () => {
         setValue(newValue);
     };
 
+    const downloadCGFAdmins = async () => {
+        try {
+            const response = await privateAxios.get(DOWNLOAD_CGF_ADMIN, {
+                responseType: "blob",
+            });
+            console.log("resposne from download cgf admins", response);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `${Date.now()}.xls`);
+            document.body.appendChild(link);
+            link.click();
+            if (response.status == 200) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage: "Download successfull!",
+
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+            }
+        } catch (error) {
+            console.log("Error from download cgf admins", error);
+        }
+    };
+
     console.log("selected roles---", selectedRoles);
 
     console.log("Selected status filter---", selectedStatusFilter);
@@ -373,7 +406,10 @@ const SubAdminList = () => {
                             <h2 className="heading2">CGF Admins</h2>
                         </div>
                         <div className="form-header-right-txt">
-                            <div className="tertiary-btn-blk mr-20">
+                            <div
+                                className="tertiary-btn-blk mr-20"
+                                onClick={downloadCGFAdmins}
+                            >
                                 <span className="download-icon">
                                     <DownloadIcon />
                                 </span>
