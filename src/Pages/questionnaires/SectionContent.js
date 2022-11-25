@@ -4,7 +4,7 @@ import {
     MenuItem,
     Select,
     TextField,
-  Tooltip,
+    Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
@@ -37,53 +37,53 @@ const SectionContent = ({
     const [tableErr, setTableErr] = useState("");
     const ITEM_HEIGHT = 22;
 
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5,
-      },
-    },
-  };
-  //Refr for Toaster
-  const myRef = React.useRef();
-  //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
-  //method to call all error toaster from this method
-  const setErrorToaster = (error) => {
-    // console.log("error", error);
-    setToasterDetails(
-      {
-        titleMessage: "Error",
-        descriptionMessage:
-          error?.response?.data?.message &&
-          typeof error.response.data.message === "string"
-            ? error.response.data.message
-            : "Something went wrong!",
-        messageType: "error",
-      },
-      () => myRef.current()
-    );
-  };
-  // console.log("global title error", globalSectionTitleError);
-  const onDialogPrimaryButtonClickHandler = () => {
-    deleteSection(uuid);
-  };
-  const onDialogPrimaryButtonClickHandler1 = () => {
-    handleSubmitSection()
-    setOpenDialog1(false)
-  }
-  const onDialogSecondaryButtonClickHandler = () => {
-    setOpenDialog(false);
-  };
-  const onDialogSecondaryButtonClickHandler1 = () => {
-    setOpenDialog1(false)
-  }
-  const deleteSection = (uuid) => {
-    let tempQuestionnare = { ...questionnaire };
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5,
+            },
+        },
+    };
+    //Refr for Toaster
+    const myRef = React.useRef();
+    //Toaster Message setter
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
+    //method to call all error toaster from this method
+    const setErrorToaster = (error) => {
+        // console.log("error", error);
+        setToasterDetails(
+            {
+                titleMessage: "Error",
+                descriptionMessage:
+                    error?.response?.data?.message &&
+                    typeof error.response.data.message === "string"
+                        ? error.response.data.message
+                        : "Something went wrong!",
+                messageType: "error",
+            },
+            () => myRef.current()
+        );
+    };
+    // console.log("global title error", globalSectionTitleError);
+    const onDialogPrimaryButtonClickHandler = () => {
+        deleteSection(uuid);
+    };
+    const onDialogPrimaryButtonClickHandler1 = () => {
+        handleSubmitSection();
+        setOpenDialog1(false);
+    };
+    const onDialogSecondaryButtonClickHandler = () => {
+        setOpenDialog(false);
+    };
+    const onDialogSecondaryButtonClickHandler1 = () => {
+        setOpenDialog1(false);
+    };
+    const deleteSection = (uuid) => {
+        let tempQuestionnare = { ...questionnaire };
 
         let tempSections = tempQuestionnare.sections.filter(
             (section) => section.uuid !== uuid
@@ -143,28 +143,26 @@ const SectionContent = ({
             option: "",
         };
         await questionnaire?.sections[index]?.questions?.map(
-            
-      (question, questionIdx) => {
-                  if (question?.questionTitle === "") {
-                      // console.log("is Error");
-                      tempError["questionTitle"] = "Enter question title";
-                      countError++;
-                  }
-                  //   console.log("question in validate section map",question)
-                  if (
-                      ["dropdown", "checkbox", "radioGroup"].includes(
+            (question, questionIdx) => {
+                if (question?.questionTitle === "") {
+                    // console.log("is Error");
+                    tempError["questionTitle"] = "Enter question title";
+                    countError++;
+                }
+                //   console.log("question in validate section map",question)
+                if (
+                    ["dropdown", "checkbox", "radioGroup"].includes(
                         question?.inputType
                     )
-                  ) {
-                      question?.options?.map((option) => {
-                          if (option === "") {
-                              tempError["option"] = "Enter option";
-                              countError++;
-                          }
-                      });
-                  }
-      }
-            
+                ) {
+                    question?.options?.map((option) => {
+                        if (option === "") {
+                            tempError["option"] = "Enter option";
+                            countError++;
+                        }
+                    });
+                }
+            }
         );
 
         setErr({ ...tempError });
@@ -270,14 +268,14 @@ const SectionContent = ({
         setQuestionnaire(tempQuestionnare);
     };
     const handleInputBlur = (e) => {
-        const {  name, value  } = e.target;
-        let tempQuestionnaire = {  ...questionnaire  };;
-        tempQuestionnaire.sections[index][name] = value?.trim();;
-        setQuestionnaire(tempQuestionnaire);;
-    };;
+        const { name, value } = e.target;
+        let tempQuestionnaire = { ...questionnaire };
+        tempQuestionnaire.sections[index][name] = value?.trim();
+        setQuestionnaire(tempQuestionnaire);
+    };
     const handleSubmitSection = async (e, isPublished) => {
         e?.preventDefault();
-        const response = await validateSection();;
+        const response = await validateSection();
         if (response) {
             await saveSection(undefined, isPublished);
             return true;
@@ -288,126 +286,142 @@ const SectionContent = ({
 
     const params = useParams();
     const [openDialog, setOpenDialog] = useState(false);
-  const [openDialog1, setOpenDialog1] = useState(false);
+    const [openDialog1, setOpenDialog1] = useState(false);
 
-  const saveSection = async (questionnaireObj, isPublished) => {
-    try {
-      const response = await privateAxios.post(
-        ADD_QUESTIONNAIRE,
-        questionnaireObj ? questionnaireObj : questionnaire
-      );
-      if (response.status === 201) {
-        const fetch = async () => {
-          try {
-            const response = await privateAxios.get(
-              `${ADD_QUESTIONNAIRE}/${params?.id}`
+    const saveSection = async (questionnaireObj, isPublished) => {
+        try {
+            const response = await privateAxios.post(
+                ADD_QUESTIONNAIRE,
+                questionnaireObj ? questionnaireObj : questionnaire
             );
-            // console.log("response from fetch questionnaire", response);
-            setQuestionnaire({ ...response.data });
-            setToasterDetails(
-              {
-                titleMessage: "Success!",
-                descriptionMessage: `${
-                  isPublished
-                    ? "Questionnaire published successfully!"
-                    : "Section details saved successfully!"
-                }`,
-                messageType: "success",
-              },
-              () => myRef.current()
-            );
-            return true;
-            // console.log("response from save section", response);
-          } catch (error) {
+            if (response.status === 201) {
+                const fetch = async () => {
+                    try {
+                        const response = await privateAxios.get(
+                            `${ADD_QUESTIONNAIRE}/${params?.id}`
+                        );
+                        // console.log("response from fetch questionnaire", response);
+
+                        setQuestionnaire({ ...response.data });
+                        setToasterDetails(
+                            {
+                                titleMessage: "Success!",
+                                descriptionMessage: `${
+                                    isPublished
+                                        ? "Questionnaire published successfully!"
+                                        : "Section details saved successfully!"
+                                }`,
+                                messageType: "success",
+                            },
+                            () => myRef.current()
+                        );
+
+                        setTimeout(() => navigate("/questionnaires"), 3000);
+
+                        return true;
+                        // console.log("response from save section", response);
+                    } catch (error) {
+                        setErrorToaster(error);
+                        return false;
+                        // console.log("error from fetch questionnaire", error);
+                    }
+                };
+                fetch();
+            }
+        } catch (error) {
             setErrorToaster(error);
             return false;
-            // console.log("error from fetch questionnaire", error);
-          }
-        };
-        fetch();
-      }
-    } catch (error) {
-      setErrorToaster(error);
-      return false;
-      // console.log("error from section component", error);
-    }
-  };
-  const onCancelClickHandler = () => {
-    setOpenDialog1(true)
-    // return navigate("/questionnaires");
-  };
-  const onPublishButtonClickHandler = async (e) => {
-    console.log("inside publist button click");
-    const response = await handleSubmitSection(e, true);
-    if (response) {
-      try {
-        await privateAxios.put(`${ADD_QUESTIONNAIRE}/publish/${params?.id}`);
-        setTimeout(() => navigate("/questionnaires"), 3000);
-      } catch (error) {
-        setErrorToaster(error);
-      }
-    }
-  };
-  const [sectionObj, setSectionObj] = useState({ ...section });
-  // console.log("questionnaire after submiting questionnaire", sectionObj);
-  // console.log("Questionnaire: ", questionnaire);
-  return (
-    // <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
-    <div className="sect-form-card-wrapper">
-      <Toaster
-        myRef={myRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
-      />
-      <DialogBox
-        title={
-          <p>
-            Delete Section{" "}
-            {section?.sectionTitle && '"' + section?.sectionTitle + '"'}
-          </p>
+            // console.log("error from section component", error);
         }
-        info1={
-          <p>
-            On deleting all the details of this section would get deleted and
-            this will be an irreversible action
-          </p>
+    };
+    const onCancelClickHandler = () => {
+        setOpenDialog1(true);
+        // return navigate("/questionnaires");
+    };
+    const onPublishButtonClickHandler = async (e) => {
+        console.log("inside publist button click");
+        const response = await handleSubmitSection(e, true);
+        if (response) {
+            try {
+                await privateAxios.put(
+                    `${ADD_QUESTIONNAIRE}/publish/${params?.id}`
+                );
+                setTimeout(() => navigate("/questionnaires"), 3000);
+            } catch (error) {
+                setErrorToaster(error);
+            }
         }
-        info2={
-          <p>
-            Are you want to remove <b>{section?.sectionTitle}</b>?
-          </p>
-        }
-        primaryButtonText="Delete"
-        secondaryButtonText="Cancel"
-        onPrimaryModalButtonClickHandler={onDialogPrimaryButtonClickHandler}
-        onSecondaryModalButtonClickHandler={onDialogSecondaryButtonClickHandler}
-        openModal={openDialog}
-        setOpenModal={setOpenDialog}
-      />
-      {/* Dialog box for cancel */}
-      <DialogBox
-        title={
-          <p>
-            Cancel Questionnaire{" "}
-            {questionnaire?.title && '"' + questionnaire?.title + '"'}
-          </p>
-        }
-        info1={<p>All the saved sections will save a draft</p>}
-        info2={<p>Are you sure want to cancel the form?</p>}
-        primaryButtonText="Yes"
-        secondaryButtonText="No"
-        onPrimaryModalButtonClickHandler={onDialogPrimaryButtonClickHandler1}
-        onSecondaryModalButtonClickHandler={onDialogSecondaryButtonClickHandler1}
-        openModal={openDialog1}
-        setOpenModal={setOpenDialog1}
-      />
-      <div className="sect-form-card-info">
-        <div className="sect-form-innercard-blk">
-          {questionnaire.sections.length > 1 && (
-            <div className="sect-ttl-blk flex-between">
-              <div className="sect-leftblk">
-                {/* <h2 className="subheading">
+    };
+    const [sectionObj, setSectionObj] = useState({ ...section });
+    // console.log("questionnaire after submiting questionnaire", sectionObj);
+    // console.log("Questionnaire: ", questionnaire);
+    return (
+        // <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
+        <div className="sect-form-card-wrapper">
+            <Toaster
+                myRef={myRef}
+                titleMessage={toasterDetails.titleMessage}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                messageType={toasterDetails.messageType}
+            />
+            <DialogBox
+                title={
+                    <p>
+                        Delete Section{" "}
+                        {section?.sectionTitle &&
+                            '"' + section?.sectionTitle + '"'}
+                    </p>
+                }
+                info1={
+                    <p>
+                        On deleting all the details of this section would get
+                        deleted and this will be an irreversible action
+                    </p>
+                }
+                info2={
+                    <p>
+                        Are you want to remove <b>{section?.sectionTitle}</b>?
+                    </p>
+                }
+                primaryButtonText="Delete"
+                secondaryButtonText="Cancel"
+                onPrimaryModalButtonClickHandler={
+                    onDialogPrimaryButtonClickHandler
+                }
+                onSecondaryModalButtonClickHandler={
+                    onDialogSecondaryButtonClickHandler
+                }
+                openModal={openDialog}
+                setOpenModal={setOpenDialog}
+            />
+            {/* Dialog box for cancel */}
+            <DialogBox
+                title={
+                    <p>
+                        Cancel Questionnaire{" "}
+                        {questionnaire?.title &&
+                            '"' + questionnaire?.title + '"'}
+                    </p>
+                }
+                info1={<p>All the saved sections will save a draft</p>}
+                info2={<p>Are you sure want to cancel the form?</p>}
+                primaryButtonText="Yes"
+                secondaryButtonText="No"
+                onPrimaryModalButtonClickHandler={
+                    onDialogPrimaryButtonClickHandler1
+                }
+                onSecondaryModalButtonClickHandler={
+                    onDialogSecondaryButtonClickHandler1
+                }
+                openModal={openDialog1}
+                setOpenModal={setOpenDialog1}
+            />
+            <div className="sect-form-card-info">
+                <div className="sect-form-innercard-blk">
+                    {questionnaire.sections.length > 1 && (
+                        <div className="sect-ttl-blk flex-between">
+                            <div className="sect-leftblk">
+                                {/* <h2 className="subheading">
                                 {`Section ${value}`}{" "}
                             </h2> */}
                             </div>
@@ -424,16 +438,18 @@ const SectionContent = ({
                                 </span> */}
                                     <span className="sect-icon-blk delete-iconblk">
                                         <Tooltip title="Delete section">
-                      <img
-                                              onClick={() => setOpenDialog(true)}
-                                              src={
-                                                process.env.PUBLIC_URL +
-                                                "/images/delete-icon.svg"
-                                            }
-                                              alt=""
-                                          />
-                                      </Tooltip>
-                  </span>
+                                            <img
+                                                onClick={() =>
+                                                    setOpenDialog(true)
+                                                }
+                                                src={
+                                                    process.env.PUBLIC_URL +
+                                                    "/images/delete-icon.svg"
+                                                }
+                                                alt=""
+                                            />
+                                        </Tooltip>
+                                    </span>
                                 </div>
                             </div>
                         </div>

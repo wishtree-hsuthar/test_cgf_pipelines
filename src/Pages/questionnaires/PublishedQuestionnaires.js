@@ -65,6 +65,8 @@ const PublishedQuestionnaires = ({
             // delete object["createdAt"];
             delete object["isDraft"];
             delete object["isPublished"];
+            delete object["vNo"];
+            // delete object[""];
             // delete object["title"];
             // delete object["updatedAt"];
             // object["uuid"] = object["uuid"];

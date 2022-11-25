@@ -287,6 +287,7 @@ const ReplaceOperationMember = () => {
     };
     const handleNo = () => {
         console.log("No replcae");
+        navigate("/users/operation-members");
     };
     const openReplaceDailogBox = () => {
         setOpen(true);
@@ -308,14 +309,18 @@ const ReplaceOperationMember = () => {
                 info1={
                     <p>
                         {" "}
-                        On replacing an operation member, all the statistics & records ownership would get transferred to the new operation member
+                        On replacing an operation member, all the statistics &
+                        records ownership would get transferred to the new
+                        operation member
                     </p>
                 }
                 info2={
                     <p>
                         {" "}
-                        Are you want to replace{" "}
-                        <b> {operationMember.name} </b>?{" "}
+                        Are you want to replace <b>
+                            {" "}
+                            {operationMember.name}{" "}
+                        </b>?{" "}
                     </p>
                 }
                 primaryButtonText="Yes"

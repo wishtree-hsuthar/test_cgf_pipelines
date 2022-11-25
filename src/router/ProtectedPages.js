@@ -36,6 +36,7 @@ import AssignAssessmentToOperationMember from "../Pages/AssessmentModule/AssignA
 import FillAssessment from "../Pages/AssessmentModule/FillAssessment";
 import ReplaceOperationMember from "../Pages/operationMember/ReplaceOperationMember";
 import ChangePassword from "../Pages/ChangePassword";
+import VersionHistory from "../Pages/questionnaires/VersionHistory";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -211,6 +212,10 @@ const ProtectedPages = () => {
                     element={<PreviewQuestionnaire />}
                 />
                 <Route
+                    path="/questionnaires/preview-questionnaire-version/:id"
+                    element={<PreviewQuestionnaire />}
+                />
+                <Route
                     path="/assessments/add-assessment"
                     element={
                         <RequireAuth page={"add"} moduleName={"Assessment"}>
@@ -245,6 +250,10 @@ const ProtectedPages = () => {
                 <Route path="/preview" element={<PreviewDemo />} />
                 <Route path="*" element={<FallBackUI />} />
                 <Route path="/change-password" element={<ChangePassword />} />
+                <Route
+                    path="/questionnaire-version-history/:id"
+                    element={<VersionHistory />}
+                />
             </Route>
         </Routes>
     );
