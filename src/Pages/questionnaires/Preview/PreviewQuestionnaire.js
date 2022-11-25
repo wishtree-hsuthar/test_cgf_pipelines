@@ -190,9 +190,11 @@ function PreviewQuestionnaire(props) {
                                 Questionnaire
                             </Link>
                         </li>
-                        {(SUPER_ADMIN == true ||
+                        {(SUPER_ADMIN === true ||
                             moduleAccesForMember[0]?.questionnaire?.add) &&
-                            !params["*"].includes("version") && (
+                            !params["*"].includes("version") &&
+                            !questionnaire?.isDraft &&
+                            !questionnaire?.isPublished && (
                                 <li>
                                     <a
                                         onClick={() =>
@@ -203,6 +205,24 @@ function PreviewQuestionnaire(props) {
                                         style={{ cursor: "pointer" }}
                                     >
                                         Add Questionnaire
+                                    </a>
+                                </li>
+                            )}
+                        {(SUPER_ADMIN === true ||
+                            moduleAccesForMember[0]?.questionnaire?.add) &&
+                            !params["*"].includes("version") &&
+                            (questionnaire?.isDraft ||
+                                questionnaire?.isPublished) && (
+                                <li>
+                                    <a
+                                        onClick={() =>
+                                            navigate(
+                                                `/questionnaires/add-questionnaire/${params.id}`
+                                            )
+                                        }
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        Edit Questionnaire
                                     </a>
                                 </li>
                             )}
@@ -247,15 +267,36 @@ function PreviewQuestionnaire(props) {
                                     <li onClick={downloadAssessment}>
                                         Export to Excel
                                     </li>
-                                    <li
-                                        onClick={() =>
-                                            navigate(
-                                                `/questionnaire-version-history/${params.id}`
-                                            )
-                                        }
-                                    >
-                                        Version history
-                                    </li>
+                                    {!params["*"].includes("version") &&
+                                        !questionnaire?.isDraft && (
+                                            <li
+                                                onClick={() =>
+                                                    navigate(
+                                                        `/questionnaire-version-history/${params.id}`
+                                                    )
+                                                }
+                                            >
+                                                Version history
+                                            </li>
+                                        )}
+                                    {!params["*"].includes("version") && (
+                                        <li
+                                            onClick={() =>
+                                                navigate(
+                                                    `/questionnaires/add-questionnaire/${params.id}`
+                                                )
+                                            }
+                                        >
+                                            {(SUPER_ADMIN === true ||
+                                                moduleAccesForMember[0]
+                                                    ?.questionnaire?.add) &&
+                                            !params["*"].includes("version") &&
+                                            !questionnaire?.isDraft &&
+                                            !questionnaire?.isPublished
+                                                ? "Add Questionnaire"
+                                                : "Edit Questionnaire"}
+                                        </li>
+                                    )}
                                 </ul>
                             </div>
                         </span>
