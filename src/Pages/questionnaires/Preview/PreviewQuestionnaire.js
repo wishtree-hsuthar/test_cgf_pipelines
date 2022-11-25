@@ -68,7 +68,7 @@ const dropdownData = [
     { id: 3, label: "Dropdown" },
 ];
 
-function PreviewQuestionnaire() {
+function PreviewQuestionnaire(props) {
     const [value, setValue] = useState(0);
     //custom hook to set title of page
     useDocumentTitle("Preview Questionnaire");
@@ -84,6 +84,8 @@ function PreviewQuestionnaire() {
     };
     const params = useParams();
     const navigate = useNavigate();
+    console.log("params in questionnaire", params["*"].includes("version"));
+    console.log("props in questionnaire", props);
     const [questionnaire, setQuestionnaire] = useState({});
 
     const privilege = useSelector((state) => state?.user?.privilege);
@@ -188,22 +190,61 @@ function PreviewQuestionnaire() {
                                 Questionnaire
                             </Link>
                         </li>
-                        {(SUPER_ADMIN == true ||
-                            moduleAccesForMember[0]?.questionnaire?.add) && (
+                        {(SUPER_ADMIN === true ||
+                            moduleAccesForMember[0]?.questionnaire?.add) &&
+                            !params["*"].includes("version") &&
+                            !questionnaire?.isDraft &&
+                            !questionnaire?.isPublished && (
+                                <li>
+                                    <a
+                                        onClick={() =>
+                                            navigate(
+                                                `/questionnaires/add-questionnaire/${params.id}`
+                                            )
+                                        }
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        Add Questionnaire
+                                    </a>
+                                </li>
+                            )}
+                        {(SUPER_ADMIN === true ||
+                            moduleAccesForMember[0]?.questionnaire?.add) &&
+                            !params["*"].includes("version") &&
+                            (questionnaire?.isDraft ||
+                                questionnaire?.isPublished) && (
+                                <li>
+                                    <a
+                                        onClick={() =>
+                                            navigate(
+                                                `/questionnaires/add-questionnaire/${params.id}`
+                                            )
+                                        }
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        Edit Questionnaire
+                                    </a>
+                                </li>
+                            )}
+                        {params["*"].includes("version") && (
                             <li>
                                 <a
                                     onClick={() =>
                                         navigate(
-                                            `/questionnaires/add-questionnaire/${params.id}`
+                                            `/questionnaire-version-history/${params.id}`
                                         )
                                     }
                                     style={{ cursor: "pointer" }}
                                 >
-                                    Add Questionnaire
+                                    Questionnaire History
                                 </a>
                             </li>
                         )}
-                        <li>Preview Questionnaire</li>
+                        {params["*"].includes("version") ? (
+                            <li>Preview Questionnaire History</li>
+                        ) : (
+                            <li>Preview Questionnaire </li>
+                        )}
                     </ul>
                 </div>
             </div>
@@ -226,6 +267,36 @@ function PreviewQuestionnaire() {
                                     <li onClick={downloadAssessment}>
                                         Export to Excel
                                     </li>
+                                    {!params["*"].includes("version") &&
+                                        !questionnaire?.isDraft && (
+                                            <li
+                                                onClick={() =>
+                                                    navigate(
+                                                        `/questionnaire-version-history/${params.id}`
+                                                    )
+                                                }
+                                            >
+                                                Version history
+                                            </li>
+                                        )}
+                                    {!params["*"].includes("version") && (
+                                        <li
+                                            onClick={() =>
+                                                navigate(
+                                                    `/questionnaires/add-questionnaire/${params.id}`
+                                                )
+                                            }
+                                        >
+                                            {(SUPER_ADMIN === true ||
+                                                moduleAccesForMember[0]
+                                                    ?.questionnaire?.add) &&
+                                            !params["*"].includes("version") &&
+                                            !questionnaire?.isDraft &&
+                                            !questionnaire?.isPublished
+                                                ? "Add Questionnaire"
+                                                : "Edit Questionnaire"}
+                                        </li>
+                                    )}
                                 </ul>
                             </div>
                         </span>

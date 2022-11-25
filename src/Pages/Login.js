@@ -27,7 +27,7 @@ const loginFormSchema = yup.object().shape({
 });
 const Login = (prop) => {
     //custom hook to set title of page
-useDocumentTitle("Login")
+    useDocumentTitle("Login");
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
         descriptionMessage: "",
@@ -113,9 +113,22 @@ useDocumentTitle("Login")
             }
         } catch (error) {
             console.log("error from submit login method", error);
-
             if (error.response.status == 401) {
-                setToasterDetails(
+                return setToasterDetails(
+                    {
+                        titleMessage: "Invalid Credentials",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+            }
+
+            if (
+                error.response.status == 401 &&
+                error.response.message === "Unauthorized"
+            ) {
+                return setToasterDetails(
                     {
                         titleMessage: "Invalid Credentials",
                         descriptionMessage: "Email or password is incorrect!",
@@ -125,7 +138,7 @@ useDocumentTitle("Login")
                 );
             }
             if (error.response.status == 400) {
-                setToasterDetails(
+                return setToasterDetails(
                     {
                         titleMessage: "Session Active",
                         descriptionMessage: error?.response?.data?.message,
@@ -165,7 +178,9 @@ useDocumentTitle("Login")
                                         className="img-fluid"
                                     />
                                 </div>
-                                <h2 className="heading1 text-uppercase">Log in</h2>
+                                <h2 className="heading1 text-uppercase">
+                                    Log in
+                                </h2>
                                 <div className="login-form">
                                     <form
                                         onSubmit={handleSubmit(submitLoginData)}
@@ -173,7 +188,9 @@ useDocumentTitle("Login")
                                         <div className="form-group">
                                             <label for="emailid">
                                                 Email{" "}
-                                                <span className="mandatory">*</span>
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
                                             </label>
                                             <TextField
                                                 className={`input-field ${
@@ -194,7 +211,9 @@ useDocumentTitle("Login")
                                         <div className="form-group">
                                             <label for="password">
                                                 Password{" "}
-                                                <span className="mandatory">*</span>
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
                                             </label>
                                             <div className="password-field">
                                                 <OutlinedInput
