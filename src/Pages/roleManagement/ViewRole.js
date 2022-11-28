@@ -451,7 +451,7 @@ const ViewRole = () => {
                                             disabled
                                             multiline
                                             inputProps={{ maxLength: 500 }}
-                                            className="input-textarea"
+                                            className="input-textarea textarea-overflow"
                                             //   className={`input-field ${error && "input-error"}`}
                                             id="outlined-basic"
                                             placeholder="Enter description"
@@ -486,7 +486,7 @@ const ViewRole = () => {
                                 </div>
                             </div>
                             <div className="form-header-left-blk flex-start">
-                                <div className="member-tab-wrapper">
+                                <div className="member-tab-wrapper view-role-tab-wrapper">
                                     <Box
                                         sx={{
                                             borderBottom: 1,

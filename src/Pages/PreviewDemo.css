@@ -47,9 +47,12 @@
 .checkbox-with-label .Mui-disabled svg {
     color: rgba(30, 30, 30, 0.5) !important;
 }
-/* .preview-que-blk:last-child {
+.que-preview .preview-que-blk:last-child {
     margin-bottom: 0;
-} */
+}
+.que-preview .preview-que-blk:last-child .form-group {
+    margin-bottom: 0;
+}
 /* .preview-que-blk .form-group {
     flex: 0 0 50%;
     max-width: 50%;

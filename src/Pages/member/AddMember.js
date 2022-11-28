@@ -27,6 +27,38 @@ import { memberHelper } from "../../utils/helpertext";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
+//Parent company (Ideally get from backend)
+const parentCompany = [
+    "Google",
+    "MicroSoft",
+    "Nike",
+    "Adobe",
+    "Falcon",
+    "Apple",
+    "TSMC",
+    "Relience",
+    "Adani",
+    "Ford",
+    "Uber",
+    "wishtree",
+]
+
+//City (Ideally get from backend)
+const cityValue = [
+    "Mumbai",
+    "Paris",
+    "London",
+    "New york",
+    "Sydney",
+    "Melbourne",
+    "Perth",
+    "Toronto",
+    "Vancour",
+    "Texas",
+    "Delhi",
+    "Tokyo",
+]
+
 //CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
 
@@ -483,7 +515,7 @@ useDocumentTitle("Add Member")
                                                         PaperComponent={({
                                                             children,
                                                         }) => (
-                                                            <Paper className="autocomplete-option-txt">
+                                                            <Paper className={parentCompany?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
                                                                 {children}
                                                             </Paper>
                                                         )}
@@ -524,20 +556,7 @@ useDocumentTitle("Add Member")
                                                         selectOnFocus
                                                         handleHomeEndKeys
                                                         id="free-solo-with-text-demo"
-                                                        options={[
-                                                            "Google",
-                                                            "MicroSoft",
-                                                            "Nike",
-                                                            "Adobe",
-                                                            "Falcon",
-                                                            "Apple",
-                                                            "TSMC",
-                                                            "Relience",
-                                                            "Adani",
-                                                            "Ford",
-                                                            "Uber",
-                                                            "wishtree",
-                                                        ]}
+                                                        options={parentCompany}
                                                         // getOptionLabel={(option) => {
 
                                                         //   // Value selected with enter, right from the input
@@ -578,7 +597,7 @@ useDocumentTitle("Add Member")
                                                                         ""
                                                                     )
                                                                 }
-                                                                placeholder="Enter parent Company"
+                                                                placeholder="Enter parent company"
                                                             />
                                                         )}
                                                     />
@@ -764,7 +783,7 @@ useDocumentTitle("Add Member")
                                                                 PaperComponent={({
                                                                     children,
                                                                 }) => (
-                                                                    <Paper className="autocomplete-option-txt">
+                                                                    <Paper className={arrOfCountryCode?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
                                                                         {
                                                                             children
                                                                         }
@@ -963,7 +982,7 @@ useDocumentTitle("Add Member")
                                                         PaperComponent={({
                                                             children,
                                                         }) => (
-                                                            <Paper className="autocomplete-option-txt">
+                                                            <Paper className={cityValue?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
                                                                 {children}
                                                             </Paper>
                                                         )}
@@ -1003,20 +1022,7 @@ useDocumentTitle("Add Member")
                                                         selectOnFocus
                                                         handleHomeEndKeys
                                                         id="free-solo-with-text-demo"
-                                                        options={[
-                                                            "Mumbai",
-                                                            "Paris",
-                                                            "London",
-                                                            "New york",
-                                                            "Sydney",
-                                                            "Melbourne",
-                                                            "Perth",
-                                                            "Toronto",
-                                                            "Vancour",
-                                                            "Texas",
-                                                            "Delhi",
-                                                            "Tokyo",
-                                                        ]}
+                                                        options={cityValue}
                                                         // getOptionLabel={(option) => {
                                                         //   // Value selected with enter, right from the input
                                                         //   if (typeof option === "string") {
@@ -1362,7 +1368,7 @@ useDocumentTitle("Add Member")
                                                                 PaperComponent={({
                                                                     children,
                                                                 }) => (
-                                                                    <Paper className="autocomplete-option-txt">
+                                                                    <Paper className={arrOfCountryCode?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
                                                                         {
                                                                             children
                                                                         }

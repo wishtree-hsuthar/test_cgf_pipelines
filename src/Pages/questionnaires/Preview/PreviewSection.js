@@ -30,7 +30,7 @@ function PreviewSection({
       {/* </div> */}
       {/* </div> */}
       <div className="preview-card-wrapper">
-        <div className="preview-que-wrap">
+        <div className="preview-que-wrap que-preview">
           {section?.layout === "form" ? (
             section.questions.map((question) => (
               <PreviewQuestions key={question?.uuid} question={question} />

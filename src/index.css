@@ -235,7 +235,7 @@ h3 {
 
 .form-header {
     padding: 0 0 20px;
-    border-bottom: 1px solid #1e1e1e;
+    border-bottom: 1px solid rgba(30, 30, 30, 0.5);
 }
 
 .form-header-right-txt {
@@ -532,8 +532,9 @@ ul.breadcrumb li a:hover {
 .input-textarea textarea {
     height: 80px !important;
     padding: 15px !important;
-    line-height: 14px;
+    line-height: 18px;
     box-sizing: border-box;
+    
 }
 
 .input-textarea textarea .MuiInputBase-input {
@@ -549,9 +550,7 @@ ul.breadcrumb li a:hover {
 .input-textarea-error fieldset {
     border-color: #e53850;
 }
-.table-blk-role .MuiTableCell-head {
-    padding: 15px !important;
-}
+
 .loader-blk {
     text-align: center;
     width: 200px;
@@ -1358,8 +1357,8 @@ input:-webkit-autofill:active {
     max-width: 34%;
 }
 .sect-card-form-rightfield .form-group {
-    flex: 0 0 46%;
-    max-width: 46%;
+    flex: 0 0 100%;
+    max-width: 100%;
 }
 .section-form-sect {
     margin: 0 0 50px;
@@ -2407,9 +2406,25 @@ input:-webkit-autofill:active {
 .country-code-auto-search .Mui-disabled input{height: 40px !important;}
 .country-code .Mui-disabled input{height: 40px !important;}
 .country-code .Mui-disabled{padding-right: 0 !important;}
-.replace-admin-table .radio-btn-field .MuiRadio-root{width: 35px;margin: 0 auto;}
+.replace-admin-table .radio-btn-field .MuiRadio-root{width: 35px;margin: 0 auto 0 25px;}
 
 input::-ms-reveal {
     display: none;
 }
+.select-placeholder{color: rgba(30, 30, 30, 0.5);}
+.select-field p.MuiFormHelperText-root.Mui-disabled{background: none !important;}
 
+
+.view-role-tab-wrapper .tabs-sect .MuiTab-root{padding-top: 0 !important;}
+.textarea-overflow textarea.Mui-disabled{overflow: visible !important;}
+.autocomplete-option-limit > ul{height: 155px !important;}
+.operation-member-left-blk {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+.mb-10{margin-bottom: 10px !important;}
+/* .autosize-textarea{width: 100%;resize: vertical;padding: 10px 15px 0 !important;font-size: 14px;font-family: 'ProximaNova-Regular';border-color: rgba(30, 30, 30, 0.5) !important;border-radius: 3px !important;outline: none;}
+.autosize-textarea:focus {
+    border-color: #4596d1 !important;
+    border-width: 1px !important;
+} */

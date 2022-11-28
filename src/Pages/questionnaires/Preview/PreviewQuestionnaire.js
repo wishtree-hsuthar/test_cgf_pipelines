@@ -15,11 +15,11 @@ import { ADD_QUESTIONNAIRE } from "../../../api/Url";
 import { useDocumentTitle } from "../../../utils/useDocumentTitle";
 import { useSelector } from "react-redux";
 
-const ITEM_HEIGHT = 22;
+const ITEM_HEIGHT = 42;
 const MenuProps = {
     PaperProps: {
         style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
+            maxHeight: ITEM_HEIGHT * 4,
         },
     },
 };

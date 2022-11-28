@@ -642,6 +642,16 @@ function EditOperationMember() {
                                                         fieldState: { error },
                                                     }) => (
                                                         <Autocomplete
+                                                            PaperComponent={({
+                                                                children,
+                                                            }) => (
+                                                                <Paper className={countries?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
+                                                                    {children}
+                                                                </Paper>
+                                                            )}
+                                                            popupIcon={
+                                                                <KeyboardArrowDownRoundedIcon />
+                                                            }
                                                             {...field}
                                                             onChange={(
                                                                 event,
@@ -865,6 +875,16 @@ function EditOperationMember() {
                                                 }) => (
                                                     <Autocomplete
                                                         {...field}
+                                                        PaperComponent={({
+                                                            children,
+                                                        }) => (
+                                                            <Paper className={memberCompanies?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
+                                                                {children}
+                                                            </Paper>
+                                                        )}
+                                                        popupIcon={
+                                                            <KeyboardArrowDownRoundedIcon />
+                                                        }
                                                         disableClearable
                                                         disabled
                                                         // value={

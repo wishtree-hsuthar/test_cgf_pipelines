@@ -424,7 +424,7 @@ const EditSubAdmin = () => {
                                                             PaperComponent={({
                                                                 children,
                                                             }) => (
-                                                                <Paper className="autocomplete-option-txt">
+                                                                <Paper className={countries?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
                                                                     {children}
                                                                 </Paper>
                                                             )}
@@ -592,10 +592,11 @@ const EditSubAdmin = () => {
                                                 placeholder={"Select role"}
                                             />
 
-                                            <p className={`input-error-msg`}>
-                                                {errors.role?.message}
-                                            </p>
+                                            
                                         </div>
+                                        <p className={`input-error-msg`}>
+                                                {errors.role?.message}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="card-form-field">

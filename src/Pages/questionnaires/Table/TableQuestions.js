@@ -15,11 +15,11 @@ import { useState } from "react";
 import { set } from "react-hook-form";
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 
-const ITEM_HEIGHT = 22;
+const ITEM_HEIGHT = 42;
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: ITEM_HEIGHT * 4.5,
+      maxHeight: ITEM_HEIGHT * 4,
     },
   },
 };
@@ -151,6 +151,10 @@ const TableQuestions = ({
     // console.log("Questionnaire: ", questionnaire);
   }, [questionnaire]);
 
+  const Placeholder = ({ children }) => {
+    return <div className="select-placeholder">{children}</div>;
+  };
+
   return (
     <div className="que-column-layout-sect">
       {questionnaire &&
@@ -233,6 +237,7 @@ const TableQuestions = ({
                             IconComponent={(props) => (
                               <KeyboardArrowDownRoundedIcon {...props} />
                             )}
+                            renderValue={column?.validation !== "" ? undefined : () => <Placeholder>Select validator</Placeholder>}
                             displayEmpty
                             name="validation"
                             value={column?.validation}
@@ -240,9 +245,9 @@ const TableQuestions = ({
                             className="select-dropdown"
                             MenuProps={MenuProps}
                           >
-                            <MenuItem disabled value="">
+                            {/* <MenuItem disabled value="">
                               Select Validator
-                            </MenuItem>
+                            </MenuItem> */}
                             {validationOptions &&
                               validationOptions.map((option) => (
                                 <MenuItem key={option?._id} value={option?._id}>

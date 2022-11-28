@@ -497,7 +497,7 @@ const EditRole = () => {
                 <div className="form-btn flex-between add-members-btn">
                   <button
                     type="reset"
-                    style={{ marginTop: "30px" }}
+                    style={{ marginTop: "20px" }}
                     className="secondary-button mr-10"
                     onClick={onClickCancelHandler}
                   >
@@ -506,7 +506,7 @@ const EditRole = () => {
                   <button
                     type="submit"
                     className="primary-button"
-                    style={{ marginTop: "30px" }}
+                    style={{ marginTop: "20px" }}
                   >
                     Update
                   </button>

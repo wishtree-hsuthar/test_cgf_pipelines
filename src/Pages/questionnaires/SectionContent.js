@@ -35,12 +35,12 @@ const SectionContent = ({
     const [err, setErr] = useState({ questionTitle: "", option: "" });
     // state to handle errors in table layout
     const [tableErr, setTableErr] = useState("");
-    const ITEM_HEIGHT = 22;
+    const ITEM_HEIGHT = 42;
 
   const MenuProps = {
     PaperProps: {
       style: {
-        maxHeight: ITEM_HEIGHT * 4.5,
+        maxHeight: ITEM_HEIGHT * 4,
       },
     },
   };
@@ -469,7 +469,7 @@ const SectionContent = ({
                                         />
                                     </div>
                                 </div>
-                                <div className="sect-card-form-rightfield flex-between">
+                                <div className="sect-card-form-rightfield">
                                     <div className="form-group">
                                         <label htmlFor="layout">
                                             Layout{" "}

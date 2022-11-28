@@ -20,13 +20,21 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 
-const ITEM_HEIGHT = 22;
+const ITEM_HEIGHT = 42;
 const MenuProps = {
     PaperProps: {
         style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
+            maxHeight: ITEM_HEIGHT * 4,
         },
     },
+    anchorOrigin: {
+        vertical: "center",
+        horizontal: "center"
+    },
+    transformOrigin: {
+        vertical: "center",
+        horizontal: "center"
+    }
 };
 
 const PreviewQuestions = ({ question }) => {
