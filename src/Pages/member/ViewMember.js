@@ -828,22 +828,6 @@ const ViewMember = () => {
                     </div>
                     {/* </div> */}
                   </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      {/* <div className="select-field"> */}
-                      <label htmlFor="replacedMember">
-                        Replaced Member Company{" "}
-                        <span className="mandatory">*</span>
-                      </label>
-                      <Input
-                        isDisabled
-                        control={control}
-                        name="replacedMember"
-                        placeholder="Enter replaced company"
-                      />
-                    </div>
-                    {/* </div> */}
-                  </div>
                 </div>
               </div>
               <div className="card-inner-wrap">

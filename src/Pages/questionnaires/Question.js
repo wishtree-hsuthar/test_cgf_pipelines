@@ -132,7 +132,14 @@ const Question = ({
       name: "Alphabets",
     },
   ];
-
+  const ITEM_HEIGHT = 42;
+  const MenuProps = {
+      PaperProps: {
+          style: {
+              maxHeight: ITEM_HEIGHT * 4,
+          },
+      },
+  };
   //method to handle delete question
   const deleteQuestionHandler = (uuid, questionIdx) => {
     //deleting question from questionnaire
@@ -322,10 +329,11 @@ const Question = ({
                     name="validation"
                     value={question?.validation}
                     onChange={(e) => onQuestionChangeHandler(e, questionIdx)}
+                    renderValue={question?.validation !== "" ? undefined : ()  => "Select validation"}
                   >
-                    <MenuItem disabled value="">
+                    {/* <MenuItem disabled value="">
                       Select validation
-                    </MenuItem>
+                    </MenuItem> */}
                     {validationOptions &&
                       validationOptions.map((option) => (
                         <MenuItem key={option?._id} value={option?._id}>

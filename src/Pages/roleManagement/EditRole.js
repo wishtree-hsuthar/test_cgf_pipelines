@@ -32,21 +32,21 @@ const descriptionMessage = "";
 const messageType = "";
 
 const EditRole = () => {
-  useDocumentTitle("Edit Role")
+  useDocumentTitle("Edit Role");
   const params = useParams();
 
   // state to manage loader
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading1, setIsLoading1] = useState(false);
 
-  const navigate = useNavigate();
-  const [toasterDetails, setToasterDetails] = useCallbackState({
+  const navigate2 = useNavigate();
+  const [toasterDetails2, setToasterDetails2] = useCallbackState({
     titleMessage,
     descriptionMessage,
     messageType,
   });
   // let temp = {};
   //Ref for Toaster
-  const myRef = React.useRef();
+  const myRef2 = React.useRef();
 
   let editDefault = {
     roleName: "",
@@ -69,7 +69,7 @@ const EditRole = () => {
     },
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit1 = async (data) => {
     try {
       console.log("input Data: ", data, "Previleges: ", previleges);
       let previlegesForBackend = JSON.parse(JSON.stringify(previleges));
@@ -78,30 +78,33 @@ const EditRole = () => {
         delete previlegesForBackend[p_key]["name"];
       });
       console.log("previleges : ", previlegesForBackend);
-      const response = await axios.put(REACT_APP_API_ENDPOINT + `roles/${params.id}`, {
-        description: data.description,
-        isActive: data.status === "active" ? true : false,
-        privileges: previlegesForBackend,
-      });
+      const response = await axios.put(
+        REACT_APP_API_ENDPOINT + `roles/${params.id}`,
+        {
+          description: data.description,
+          isActive: data.status === "active" ? true : false,
+          privileges: previlegesForBackend,
+        }
+      );
       console.log("response", response);
-      setToasterDetails(
-            {
-              titleMessage: "Success!",
-              descriptionMessage: "Role details updated successfully!",
-              messageType: "success",
-            },
-            () => myRef.current()
-          )
+      setToasterDetails2(
+        {
+          titleMessage: "Success!",
+          descriptionMessage: "Role details updated successfully!",
+          messageType: "success",
+        },
+        () => myRef2.current()
+      );
       console.log("Default Values", editDefault);
       reset({
-        roleName : "",
+        roleName: "",
         status: "active",
-        description: ""
+        description: "",
       });
-      setTimeout(() => navigate(`/roles/view-role/${params.id}`), 3000);
+      setTimeout(() => navigate2(`/roles/view-role/${params.id}`), 3000);
     } catch (error) {
       console.log("error", error);
-      setToasterDetails(
+      setToasterDetails2(
         {
           titleMessage: "Error",
           descriptionMessage:
@@ -111,19 +114,20 @@ const EditRole = () => {
               : "Something went wrong!",
           messageType: "error",
         },
-        () => myRef.current()
+        () => myRef2.current()
       );
     }
   };
-  const onClickCancelHandler = () => {
-    navigate(`/roles/view-role/${params.id}`);
+  const onClickCancelHandler2 = () => {
+    navigate2(`/roles/view-role/${params.id}`);
   };
-  const createPrevileges = (tempPrivileges) => {
+  const createPrevileges2 = (tempPrivileges) => {
     console.log("temp data", tempPrivileges);
     Object.keys(tempPrivileges).forEach((tempPriv) => {
       // console.log("temp Previ value",tempPrivileges[tempPriv])
       temp[tempPriv] = {
         add: tempPrivileges[tempPriv]["add"],
+        fill: tempPrivileges[tempPriv]["fill"],
         // assign: tempPrivileges[tempPriv]["assign"],
         delete: tempPrivileges[tempPriv]["delete"],
         edit: tempPrivileges[tempPriv]["edit"],
@@ -135,10 +139,14 @@ const EditRole = () => {
           tempPrivileges[tempPriv]["delete"] &&
           tempPrivileges[tempPriv]["edit"] &&
           tempPrivileges[tempPriv]["view"] &&
-          tempPrivileges[tempPriv]["list"],
+          tempPrivileges[tempPriv]["list"] &&
+          (tempPrivileges[tempPriv]["moduleId"]["name"] === "Assessment"
+            ? tempPrivileges[tempPriv]["fill"]
+            : true),
         name: tempPrivileges[tempPriv]["moduleId"]["name"],
       };
     });
+    console.log("temp",temp)
     setPrevileges({ ...temp });
   };
   const updateEditFields = (data) => {
@@ -148,20 +156,22 @@ const EditRole = () => {
       status: data.isActive ? "active" : "inactive",
       description: data.description,
     });
-    createPrevileges(data.privileges);
+    createPrevileges2(data.privileges);
   };
-  const getRoleById = async() => {
+  const getRoleById = async () => {
     try {
-      setIsLoading(true);
-      const response = await axios.get(REACT_APP_API_ENDPOINT + `roles/${params.id}`);
+      setIsLoading1(true);
+      const response = await axios.get(
+        REACT_APP_API_ENDPOINT + `roles/${params.id}`
+      );
       console.log("response: ", response);
       updateEditFields(response.data);
-      setIsLoading(false);
+      setIsLoading1(false);
     } catch (error) {
       console.log("Error", error);
       if (error?.code === "ERR_CANCELED") return;
-      setIsLoading(false);
-      setToasterDetails(
+      setIsLoading1(false);
+      setToasterDetails2(
         {
           titleMessage: "Error",
           descriptionMessage:
@@ -171,26 +181,27 @@ const EditRole = () => {
               : "Something went wrong!",
           messageType: "error",
         },
-        () => myRef.current()
+        () => myRef2.current()
       );
     }
-  }
+  };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    isMounted && getRoleById()
+    isMounted && getRoleById();
     return () => {
       isMounted = false;
       controller.abort();
     };
   }, []);
+  console.log("Privilege",previleges)
   return (
     <div className="page-wrapper">
       <Toaster
-        myRef={myRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
+        myRef={myRef2}
+        titleMessage={toasterDetails2.titleMessage}
+        descriptionMessage={toasterDetails2.descriptionMessage}
+        messageType={toasterDetails2.messageType}
       />
       <div className="breadcrumb-wrapper">
         <div className="container">
@@ -210,12 +221,12 @@ const EditRole = () => {
           <div className="form-header flex-between">
             <h2 className="heading2">Edit Role</h2>
           </div>
-          {isLoading ? (
+          {isLoading1 ? (
             <div className="loader-blk">
-            <img src={Loader2} alt="Loading" />
-          </div>
+              <img src={Loader2} alt="Loading" />
+            </div>
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit1)}>
               <div className="card-wrapper">
                 <div className="card-blk flex-between">
                   <div className="card-form-field">
@@ -326,20 +337,23 @@ const EditRole = () => {
                               width="16%"
                             >
                               <span className="sorted-blk">Modules</span>
-                              
                             </TableCell>
-                            <TableCell className="table-header"><span className="sorted-blk">List</span></TableCell>
-                            <TableCell align="center" className="table-header">
-                            <span className="sorted-blk">Add</span>
-                            </TableCell>
-                            <TableCell align="center" className="table-header">
-                            <span className="sorted-blk">Edit</span>
+                            <TableCell className="table-header"><span className="sorted-blk">Fill</span></TableCell>
+
+                            <TableCell className="table-header">
+                              <span className="sorted-blk">List</span>
                             </TableCell>
                             <TableCell align="center" className="table-header">
-                            <span className="sorted-blk">View</span>
+                              <span className="sorted-blk">Add</span>
                             </TableCell>
                             <TableCell align="center" className="table-header">
-                            <span className="sorted-blk">Delete</span>
+                              <span className="sorted-blk">Edit</span>
+                            </TableCell>
+                            <TableCell align="center" className="table-header">
+                              <span className="sorted-blk">View</span>
+                            </TableCell>
+                            <TableCell align="center" className="table-header">
+                              <span className="sorted-blk">Delete</span>
                             </TableCell>
                             {/* <TableCell
                               align="center"
@@ -349,7 +363,7 @@ const EditRole = () => {
                               Assign to Member
                             </TableCell> */}
                             <TableCell align="center" className="table-header">
-                            <span className="sorted-blk">All</span>
+                              <span className="sorted-blk">All</span>
                             </TableCell>
                           </TableRow>
                         </TableHead>
@@ -360,6 +374,24 @@ const EditRole = () => {
                                 <TableCell>
                                   {previleges[previleg]["name"]}
                                 </TableCell>
+                                <TableCell align="center" padding="checkbox">
+                                  <Checkbox
+                                    disabled={previleges[previleg]["name"] != "Assessment"}
+                                    className="table-checkbox"
+                                    checked={previleges[previleg]["fill"]}
+                                    onChange={() =>
+                                      setPrevileges((previous) => ({
+                                        ...previous,
+                                        [previleg]: {
+                                          ...previous[previleg],
+                                          fill: !previous[previleg]["fill"],
+                                          all: false,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                </TableCell>
+                                
                                 <TableCell align="center" padding="checkbox">
                                   <Checkbox
                                     className="table-checkbox"
@@ -479,7 +511,7 @@ const EditRole = () => {
                                           add: !previous[previleg]["all"],
                                           edit: !previous[previleg]["all"],
                                           delete: !previous[previleg]["all"],
-                                          assign: !previous[previleg]["all"],
+                                          fill : previleges[previleg]["name"] === "Assessment" && !previous[previleg]["all"]
                                         },
                                       }))
                                     }
@@ -499,7 +531,7 @@ const EditRole = () => {
                     type="reset"
                     style={{ marginTop: "30px" }}
                     className="secondary-button mr-10"
-                    onClick={onClickCancelHandler}
+                    onClick={onClickCancelHandler2}
                   >
                     Cancel
                   </button>

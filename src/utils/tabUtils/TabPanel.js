@@ -15,7 +15,7 @@ export function TabPanel(props) {
         >
             {value === index && (
                 <Box>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>
