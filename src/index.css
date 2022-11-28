@@ -534,7 +534,7 @@ ul.breadcrumb li a:hover {
     padding: 15px !important;
     line-height: 18px;
     box-sizing: border-box;
-    
+    overflow-y: auto !important;
 }
 
 .input-textarea textarea .MuiInputBase-input {
@@ -2428,3 +2428,13 @@ input::-ms-reveal {
     border-color: #4596d1 !important;
     border-width: 1px !important;
 } */
+
+.que-ttl-left {
+    flex: 0 0 82%;
+    max-width: 82%;
+}
+.que-ttl-right{flex: 0 0 15%;
+    max-width: 15%;}
+.que-ttl-blk .que-ttl-right .MuiInputBase-input {
+    font-family: 'ProximaNova-Regular', serif, sans-serif !important;
+}
