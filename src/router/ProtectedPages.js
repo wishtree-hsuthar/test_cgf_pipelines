@@ -36,6 +36,7 @@ import AssignAssessmentToOperationMember from "../Pages/AssessmentModule/AssignA
 import FillAssessment from "../Pages/AssessmentModule/FillAssessment";
 import ReplaceOperationMember from "../Pages/operationMember/ReplaceOperationMember";
 import ChangePassword from "../Pages/ChangePassword";
+import VersionHistory from "../Pages/questionnaires/VersionHistory";
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -54,22 +55,35 @@ const ProtectedPages = () => {
                 <Route
                     path="/users/cgf-admin/add-sub-admin"
                     element={
-                        // <RequireAuth allowedRoles={["Super Admin", "Sub Admin"]}>
-                        <AddSubAdmin />
-                        // </RequireAuth>
+                        <RequireAuth moduleName={""} page={""}>
+                            <AddSubAdmin />
+                        </RequireAuth>
                     }
                 />
                 <Route
                     path="/users/cgf-admin/view-sub-admin/:id"
-                    element={<ViewSubAdmin />}
+                    element={
+                        <RequireAuth moduleName={""} page={""}>
+                            <ViewSubAdmin />
+                        </RequireAuth>
+                    }
                 />
+
                 <Route
                     path="/users/cgf-admin/edit-sub-admin/:id"
-                    element={<EditSubAdmin />}
+                    element={
+                        <RequireAuth>
+                            <EditSubAdmin />
+                        </RequireAuth>
+                    }
                 />
                 <Route
                     path="/users/cgf-admin/replace-sub-admin/:id"
-                    element={<ReplaceSubAdmin />}
+                    element={
+                        <RequireAuth page={""} moduleName={""}>
+                            <ReplaceSubAdmin />
+                        </RequireAuth>
+                    }
                 />
 
                 <Route
@@ -167,7 +181,14 @@ const ProtectedPages = () => {
                 />
                 <Route
                     path="/users/operation-member/replace-operation-member/:id"
-                    element={<ReplaceOperationMember />}
+                    element={
+                        <RequireAuth
+                            page={"delete"}
+                            moduleName={"Operation Members"}
+                        >
+                            <ReplaceOperationMember />
+                        </RequireAuth>
+                    }
                 />
                 <Route
                     path="/questionnaires"
@@ -188,6 +209,10 @@ const ProtectedPages = () => {
                 />
                 <Route
                     path="/questionnaires/preview-questionnaire/:id"
+                    element={<PreviewQuestionnaire />}
+                />
+                <Route
+                    path="/questionnaires/preview-questionnaire-version/:id"
                     element={<PreviewQuestionnaire />}
                 />
                 <Route
@@ -225,6 +250,10 @@ const ProtectedPages = () => {
                 <Route path="/preview" element={<PreviewDemo />} />
                 <Route path="*" element={<FallBackUI />} />
                 <Route path="/change-password" element={<ChangePassword />} />
+                <Route
+                    path="/questionnaire-version-history/:id"
+                    element={<VersionHistory />}
+                />
             </Route>
         </Routes>
     );

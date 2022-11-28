@@ -151,7 +151,7 @@ useDocumentTitle("Assign Assessment")
             delete object["isCGFStaff"];
             delete object["isOperationMember"];
             delete object["isMemberRepresentative"];
-            object["name"] = object["name"];
+            // object["name"] = object["name"];
             // delete object["name"];
 
             keysOrder.forEach((k) => {
@@ -303,7 +303,6 @@ useDocumentTitle("Assign Assessment")
         } catch (error) {
             console.log("Error from re-assign assessment", error);
             if (
-                error?.response?.status == 400 ||
                 error?.response?.status == 400
             ) {
                 setToasterDetails(

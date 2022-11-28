@@ -7,12 +7,13 @@ import axios from "axios";
 
 //Internal Imports
 import TableComponent from "../../components/TableComponent";
-import { MEMBER } from "../../api/Url";
+import { DOWNLOAD_MEMBERS, MEMBER } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { privateAxios } from "../../api/axios";
 
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
@@ -27,7 +28,7 @@ const tableHead = [
     {
         id: "name",
         disablePadding: false,
-        label: "Name",
+        label: "Representative",
     },
     {
         id: "email",
@@ -42,7 +43,7 @@ const tableHead = [
     {
         id: "totalOperationMembers",
         disablePadding: false,
-        label: "Operation Team Members",
+        label: "Ops. Members",
     },
     {
         id: "createdBy",
@@ -53,7 +54,7 @@ const tableHead = [
     {
         id: "createdAt",
         disablePadding: false,
-        label: "Onboarded On",
+        label: "Created At",
     },
     {
         id: "isActive",
@@ -65,7 +66,7 @@ const tableHead = [
 
 const MemberList = () => {
     //custom hook to set title of page
-useDocumentTitle("Members")
+    useDocumentTitle("Members");
     const navigate = useNavigate();
     //Refr for Toaster
     const myRef = React.useRef();
@@ -270,6 +271,37 @@ useDocumentTitle("Members")
             url = url + `&companyType=${filters.companyType}`;
         return url;
     };
+    // download members
+    const downloadMembers = async () => {
+        try {
+            const response = await privateAxios.get(DOWNLOAD_MEMBERS, {
+                responseType: "blob",
+            });
+            console.log("resposne from download  members ", response);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute(
+                "download",
+                `Members - ${new Date().toISOString()}.xls`
+            );
+            document.body.appendChild(link);
+            link.click();
+            if (response.status == 200) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage: "Download successfull!",
+
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+            }
+        } catch (error) {
+            console.log("Error from download  members", error);
+        }
+    };
     const getMembers = async (isMounted, controller) => {
         try {
             let url = generateUrl();
@@ -282,8 +314,8 @@ useDocumentTitle("Members")
             setIsLoading(false);
             updateRecords(response?.data);
         } catch (error) {
-            setIsLoading(false);
             if (error?.code === "ERR_CANCELED") return;
+            setIsLoading(false);
             isMounted &&
                 setToasterDetails(
                     {
@@ -327,7 +359,10 @@ useDocumentTitle("Members")
                             <h2 className="heading2 mr-40">Members</h2>
                         </div>
                         <div className="form-header-right-txt">
-                            <div className="tertiary-btn-blk mr-20">
+                            <div
+                                className="tertiary-btn-blk mr-20"
+                                onClick={downloadMembers}
+                            >
                                 <span className="download-icon">
                                     <DownloadIcon />
                                 </span>

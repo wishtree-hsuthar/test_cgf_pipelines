@@ -14,7 +14,7 @@ import Loader2 from "../../assets/Loader/Loader2.svg";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
-const tableHead = [
+const tableHead1 = [
     {
         id: "name",
         // width: "30%",
@@ -47,23 +47,23 @@ const RolesList = () => {
     //custom hook to set title of page
     useDocumentTitle("Roles")
     //Refr for Toaster
-    const myRef = React.useRef();
+    const myRef3 = React.useRef();
     //Toaster Message setter
-    const [toasterDetails, setToasterDetails] = useCallbackState({
+    const [toasterDetails3, setToasterDetails3] = useCallbackState({
         titleMessage: "",
         descriptionMessage: "",
         messageType: "success",
     });
 
     // state to manage loader
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading2, setIsLoading2] = useState(false);
 
     //state to hold search timeout delay
     const [searchTimeout, setSearchTimeout] = useState("none");
     //state to hold wheather to make api call or not
     const [makeApiCall, setMakeApiCall] = useState(true);
 
-    const navigate = useNavigate();
+    const navigate3 = useNavigate();
     //order in which records needs to show
     const keysOrder = [
         "_id",
@@ -142,7 +142,7 @@ const RolesList = () => {
     };
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
-        return navigate(`view-role/${id}`);
+        return navigate3(`view-role/${id}`);
     };
     const generateUrl = () => {
         console.log("filters", filters);
@@ -164,18 +164,18 @@ const RolesList = () => {
     ) => {
         try {
             let url = generateUrl();
-            setIsLoading(true);
+            setIsLoading2(true);
             const response = await axios.get(url, {
                 signal: controller.signal,
             });
             console.log("Response: ", response);
             setTotalRecords(parseInt(response.headers["x-total-count"]));
             updateRecords(response.data);
-            setIsLoading(false);
+            setIsLoading2(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             isMounted &&
-                setToasterDetails(
+                setToasterDetails3(
                     {
                         titleMessage: "Error",
                         descriptionMessage:
@@ -186,11 +186,12 @@ const RolesList = () => {
 
                         messageType: "error",
                     },
-                    () => myRef.current()
+                    () => myRef3.current()
                 );
-            setIsLoading(false);
+            setIsLoading2(false);
         }
     };
+    
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
@@ -209,10 +210,10 @@ const RolesList = () => {
     return (
         <div className="page-wrapper">
             <Toaster
-                myRef={myRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
+                myRef={myRef3}
+                titleMessage={toasterDetails3.titleMessage}
+                descriptionMessage={toasterDetails3.descriptionMessage}
+                messageType={toasterDetails3.messageType}
             />
             <section>
                 <div className="container">
@@ -245,7 +246,7 @@ const RolesList = () => {
                                         type="submit"
                                         className="primary-button add-button"
                                         onClick={() =>
-                                            navigate("/roles/add-role")
+                                            navigate3("/roles/add-role")
                                         }
                                     >
                                         Add Role
@@ -317,14 +318,14 @@ const RolesList = () => {
                                 </div>
                             </div>
                         </div>
-                        {isLoading ? (
+                        {isLoading2 ? (
                             <div className="loader-blk">
                                 <img src={Loader2} alt="Loading" />
                             </div>
                         ) : (
                             <div className="member-info-wrapper table-content-wrap table-content-width table-footer-btm-space">
                                 <TableComponent
-                                    tableHead={tableHead}
+                                    tableHead={tableHead1}
                                     records={records}
                                     handleChangePage1={handleTablePageChange}
                                     handleChangeRowsPerPage1={

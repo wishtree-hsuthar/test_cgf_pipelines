@@ -1,10 +1,10 @@
 import {
-    Autocomplete,
-    FormControlLabel,
-    Paper,
-    Radio,
-    RadioGroup,
-    TextField,
+  Autocomplete,
+  FormControlLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  TextField,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import React, { useEffect, useState } from "react";
@@ -13,12 +13,12 @@ import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import {
-    COUNTRIES,
-    FETCH_ROLES,
-    MEMBER,
-    REGIONCOUNTRIES,
-    REGIONS,
-    STATES,
+  COUNTRIES,
+  FETCH_ROLES,
+  MEMBER,
+  REGIONCOUNTRIES,
+  REGIONS,
+  STATES,
 } from "../../api/Url";
 import axios from "axios";
 import useCallbackState from "../../utils/useCallBackState";
@@ -71,389 +71,381 @@ const cgfCategories = ["Manufacturer", "Retailer", "Other"];
 // Object.keys(categories)
 // categories[category] = Array of activities[]
 const cgfActivitiesManufacturer = [
-    "None",
-    "Apparel",
-    "Food Manufacturer",
-    "Non-food manufacturer",
-    "Household care",
-    "Personal care & beauty",
+  "Apparel",
+  "Food manufacturer",
+  "Household care",
+  "None",
+  "Non-food manufacturer",
+  "Personal care & beauty",
 ];
 const cgfActivitiesRetailer = [
-    "Department Store",
-    "Ecommerce",
-    "Food/Non food retailer",
-    "food retailer",
-    "food service",
-    "Grocery",
-    "Health/beauty drugstore",
-    "Non food retailer",
-    "Wholesaler",
+  "Department store",
+  "Ecommerce",
+  "Food/Non food retailer",
+  "Food retailer",
+  "Food service",
+  "Grocery",
+  "Health/beauty drugstore",
+  "Non food retailer",
+  "Wholesaler",
 ];
 
 const AddMember = () => {
-    //custom hook to set title of page
-useDocumentTitle("Add Member")
-    const navigate = useNavigate();
-    // Refr for Toaster
-    const myRef = React.useRef();
-    //Toaster Message setter
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
-    //method to call all error toaster from this method
-    const setErrorToaster = (error) => {
-        console.log("error", error);
-        setToasterDetails(
-            {
-                titleMessage: "Error",
-                descriptionMessage:
-                    error?.response?.data?.message &&
-                    typeof error.response.data.message === "string"
-                        ? error.response.data.message
-                        : "Something went wrong!",
-                messageType: "error",
-            },
-            () => myRef.current()
-        );
-    };
-    const defaultValues = {
-        memberCompany: "",
-        companyType: "Internal",
-        parentCompany: "",
-        cgfCategory: "Manufacturer",
-        cgfActivity: "",
-        corporateEmail: "",
-        countryCode: "",
-        phoneNumber: "",
-        websiteUrl: "",
-        region: "",
-        country: "",
-        state: "",
-        city: "",
-        address: "",
-        cgfOfficeRegion: "",
-        cgfOfficeCountry: "",
-        cgfOffice: "",
-        memberContactSalutation: "Mr.",
-        memberContactFullName: "",
-        title: "",
-        department: "",
-        memberContactCountryCode: "",
-        memberContactEmail: "",
-        memberContactPhoneNuber: "",
-        roleId: "",
-    };
-    //to hold all regions
-    const [arrOfRegions, setArrOfRegions] = useState([]);
-    //to hold array of countries for perticular region for Company Adress
-    const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
-    //to hold array of Country states
-    const [arrOfStateCountry, setArrOfStateCountry] = useState([]);
-    const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
+  //custom hook to set title of page
+  useDocumentTitle("Add Member");
+  const navigate = useNavigate();
+  // Refr for Toaster
+  const myRef = React.useRef();
+  //Toaster Message setter
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
+  });
+  //method to call all error toaster from this method
+  const setErrorToaster = (error) => {
+    console.log("error", error);
+    setToasterDetails(
+      {
+        titleMessage: "Error",
+        descriptionMessage:
+          error?.response?.data?.message &&
+          typeof error.response.data.message === "string"
+            ? error.response.data.message
+            : "Something went wrong!",
+        messageType: "error",
+      },
+      () => myRef.current()
+    );
+  };
+  const defaultValues = {
+    memberCompany: "",
+    companyType: "Internal",
+    parentCompany: "",
+    cgfCategory: "Manufacturer",
+    cgfActivity: "",
+    corporateEmail: "",
+    countryCode: "",
+    phoneNumber: "",
+    websiteUrl: "",
+    region: "",
+    country: "",
+    state: "",
+    city: "",
+    address: "",
+    cgfOfficeRegion: "",
+    cgfOfficeCountry: "",
+    cgfOffice: "",
+    memberContactSalutation: "Mr.",
+    memberContactFullName: "",
+    title: "",
+    department: "",
+    memberContactCountryCode: "",
+    memberContactEmail: "",
+    memberContactPhoneNuber: "",
+    roleId: "",
+  };
+  //to hold all regions
+  const [arrOfRegions, setArrOfRegions] = useState([]);
+  //to hold array of countries for perticular region for Company Adress
+  const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
+  //to hold array of Country states
+  const [arrOfStateCountry, setArrOfStateCountry] = useState([]);
+  const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
 
-    //to hold array of countries for perticular region for CGF Office details
-    const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
-        useState([]);
+  //to hold array of countries for perticular region for CGF Office details
+  const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
+    useState([]);
 
-    // To fetch and set roles
-    const [roles, setRoles] = useState([]);
+  // To fetch and set roles
+  const [roles, setRoles] = useState([]);
 
-    const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
-        reValidateMode: "onChange",
-        defaultValues: defaultValues,
-    });
-    const onSubmitFunctionCall = async (data) => {
-        console.log("data", data);
-        try {
-            let backendObject = {
-                parentCompany: data.parentCompany,
-                countryCode: data.countryCode,
-                phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
-                website: data.websiteUrl ? data.websiteUrl : undefined,
-                state: data.state,
-                city: data.city,
-                companyName: data.memberCompany,
-                companyType: data.companyType,
-                cgfCategory: data.cgfCategory,
-                cgfActivity: data.cgfActivity ? data.cgfActivity : "NA",
-                corporateEmail: data.corporateEmail,
-                region: data.region,
-                country: data.country,
-                address: data.address,
-                cgfOfficeRegion: data.cgfOfficeRegion,
-                cgfOfficeCountry: data.cgfOfficeCountry,
-                cgfOffice: data.cgfOffice,
-                memberRepresentative: {
-                    title: data.title,
-                    department: data.department,
-                    salutation: data.memberContactSalutation,
-                    name: data.memberContactFullName,
-                    email: data.memberContactEmail,
-                    countryCode: data.memberContactCountryCode,
-                    phoneNumber: data.memberContactPhoneNuber
-                        ? parseInt(data.memberContactPhoneNuber)
-                        : "",
-                    roleId: data.roleId,
-                },
-            };
-            const response = await axios.post(MEMBER, { ...backendObject });
-            console.log("response : ", response);
-            setToasterDetails(
-                {
-                    titleMessage: "Success!",
-                    descriptionMessage: "New member added successfully!",
-                    messageType: "success",
-                },
-                () => myRef.current()
-            );
-            console.log("Default values: ", defaultValues);
-            reset({ defaultValues });
-            return true;
-        } catch (error) {
-            setErrorToaster(error);
-            return false;
-        }
-    };
-    // On Click cancel handler
-    const onClickCancelHandler = () => {
-        reset({ defaultValues });
-        navigate("/users/members");
-    };
-    const onSubmit = async (data) => {
-        console.log("data", data);
-        const isSubmited = await onSubmitFunctionCall(data);
-        console.log("is Submited", isSubmited);
-        isSubmited && setTimeout(() => navigate("/users/members"), 3000);
-    };
-    //method to handle on add more button click handler
-    const onAddMoreButtonClickHandler = (data) => {
-        onSubmitFunctionCall(data);
-    };
-    //method to handle region change for cgf office
+  const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
+    reValidateMode: "onChange",
+    defaultValues: defaultValues,
+  });
+  const onSubmitFunctionCall = async (data) => {
+    console.log("data", data);
+    try {
+      let backendObject = {
+        parentCompany: data.parentCompany,
+        countryCode: data.countryCode,
+        phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
+        website: data.websiteUrl ? data.websiteUrl : undefined,
+        state: data.state,
+        city: data.city,
+        companyName: data.memberCompany,
+        companyType: data.companyType,
+        cgfCategory: data.cgfCategory,
+        cgfActivity: data.cgfActivity ? data.cgfActivity : "NA",
+        corporateEmail: data.corporateEmail,
+        region: data.region,
+        country: data.country,
+        address: data.address,
+        cgfOfficeRegion: data.cgfOfficeRegion,
+        cgfOfficeCountry: data.cgfOfficeCountry,
+        cgfOffice: data.cgfOffice,
+        memberRepresentative: {
+          title: data.title,
+          department: data.department,
+          salutation: data.memberContactSalutation,
+          name: data.memberContactFullName,
+          email: data.memberContactEmail,
+          countryCode: data.memberContactCountryCode,
+          phoneNumber: data.memberContactPhoneNuber
+            ? parseInt(data.memberContactPhoneNuber)
+            : "",
+          roleId: data.roleId,
+        },
+      };
+      const response = await axios.post(MEMBER, { ...backendObject });
+      console.log("response : ", response);
+      setToasterDetails(
+        {
+          titleMessage: "Success!",
+          descriptionMessage: "New member added successfully!",
+          messageType: "success",
+        },
+        () => myRef.current()
+      );
+      console.log("Default values: ", defaultValues);
+      reset({ defaultValues });
+      return true;
+    } catch (error) {
+      setErrorToaster(error);
+      return false;
+    }
+  };
+  // On Click cancel handler
+  const onClickCancelHandler = () => {
+    reset({ defaultValues });
+    navigate("/users/members");
+  };
+  const onSubmit = async (data) => {
+    console.log("data", data);
+    const isSubmited = await onSubmitFunctionCall(data);
+    console.log("is Submited", isSubmited);
+    isSubmited && setTimeout(() => navigate("/users/members"), 3000);
+  };
+  //method to handle on add more button click handler
+  const onAddMoreButtonClickHandler = (data) => {
+    onSubmitFunctionCall(data);
+  };
+  //method to handle region change for cgf office
 
-    const formatRegionCountries = (regionCountries) => {
-        regionCountries.forEach(
-            (country, id) =>
-                (regionCountries[id] = country.hasOwnProperty("_id")
-                    ? country.name
-                    : country)
-        );
-        console.log("arr of country ", regionCountries);
-        return regionCountries;
-    };
+  const formatRegionCountries = (regionCountries) => {
+    regionCountries.forEach(
+      (country, id) =>
+        (regionCountries[id] = country.hasOwnProperty("_id")
+          ? country.name
+          : country)
+    );
+    console.log("arr of country ", regionCountries);
+    return regionCountries;
+  };
 
-    //method to handle country change
-    const onCountryChangeHandler = async (e) => {
-        console.log("Inside Country Change ", e.target.value);
-        setValue("country", e.target.value);
-        const stateCountries = await axios.get(STATES + `/${e.target.value}`);
-        setArrOfStateCountry(stateCountries.data);
-        console.log("state countries: ", stateCountries);
-        setValue("state", "");
-        trigger("country");
-    };
-    //method to handle office Region Change Handler
-    const cgfOfficeRegionChangeHandler = async (e) => {
-        setValue("cgfOfficeRegion", e.target.value);
-        setValue("cgfOfficeCountry", "");
-        trigger("cgfOfficeRegion");
-        const countriesOnRegion = await getCountries(watch("cgfOfficeRegion"));
-        const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries(
-            countriesOnRegion.data
-        );
-        setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
-    };
-    //method to set region and update other fields accordingly
-    const onRegionChangeHandler = async (e) => {
-        console.log("region: ", e.target.value);
-        setValue("country", "");
-        setValue("state", "");
-        setValue("city", "");
-        setValue("region", e.target.value);
-        trigger("region");
-        const countriesOnRegion = await getCountries(watch("region"));
-        console.log("countries", countriesOnRegion);
-        const arrOfCountryRegionsTemp = formatRegionCountries(
-            countriesOnRegion.data
-        );
-        setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
-    };
+  //method to handle country change
+  const onCountryChangeHandler = async (e) => {
+    console.log("Inside Country Change ", e.target.value);
+    setValue("country", e.target.value);
+    const stateCountries = await axios.get(STATES + `/${e.target.value}`);
+    setArrOfStateCountry(stateCountries.data);
+    console.log("state countries: ", stateCountries);
+    setValue("state", "");
+    trigger("country");
+  };
+  //method to handle office Region Change Handler
+  const cgfOfficeRegionChangeHandler = async (e) => {
+    setValue("cgfOfficeRegion", e.target.value);
+    setValue("cgfOfficeCountry", "");
+    trigger("cgfOfficeRegion");
+    const countriesOnRegion = await getCountries(watch("cgfOfficeRegion"));
+    const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries(
+      countriesOnRegion.data
+    );
+    setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
+  };
+  //method to set region and update other fields accordingly
+  const onRegionChangeHandler = async (e) => {
+    console.log("region: ", e.target.value);
+    setValue("country", "");
+    setValue("state", "");
+    setValue("city", "");
+    setValue("region", e.target.value);
+    trigger("region");
+    const countriesOnRegion = await getCountries(watch("region"));
+    console.log("countries", countriesOnRegion);
+    const arrOfCountryRegionsTemp = formatRegionCountries(
+      countriesOnRegion.data
+    );
+    setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
+  };
 
-    const getCountryCode = async (controller) => {
-        try {
-            const response = await axios.get(COUNTRIES, {
-                signal: controller.signal,
-            });
-            let arrOfCountryCodeTemp = [];
-            response.data.forEach((code, id) => {
-                if (!code.countryCode) return;
-                arrOfCountryCodeTemp.push(code.countryCode);
-            });
-            const countryCodeSet = new Set(arrOfCountryCodeTemp);
-            setArrOfCountryCode([...countryCodeSet]);
-        } catch (error) {
-            if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
-        }
-    };
-    const getCountries = async (region) => {
-        try {
-            return await axios.get(REGIONCOUNTRIES + `/${region}`);
-            // return regionCountries;
-        } catch (error) {
-            if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
-            return [];
-        }
-    };
-    const getRegions = async (controller) => {
-        try {
-            const regions = await axios.get(REGIONS, {
-                signal: controller.signal,
-            });
-            // console.log("regions ", regions.data);
-            setArrOfRegions(regions.data);
-            return arrOfRegions;
-        } catch (error) {
-            if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
-            return [];
-        }
-    };
+  const getCountryCode = async (controller) => {
+    try {
+      const response = await axios.get(COUNTRIES, {
+        signal: controller.signal,
+      });
+      let arrOfCountryCodeTemp = [];
+      response.data.forEach((code, id) => {
+        if (!code.countryCode) return;
+        arrOfCountryCodeTemp.push(code.countryCode);
+      });
+      const countryCodeSet = new Set(arrOfCountryCodeTemp);
+      setArrOfCountryCode([...countryCodeSet]);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setErrorToaster(error);
+    }
+  };
+  const getCountries = async (region) => {
+    try {
+      return await axios.get(REGIONCOUNTRIES + `/${region}`);
+      // return regionCountries;
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setErrorToaster(error);
+      return [];
+    }
+  };
+  const getRegions = async (controller) => {
+    try {
+      const regions = await axios.get(REGIONS, {
+        signal: controller.signal,
+      });
+      // console.log("regions ", regions.data);
+      setArrOfRegions(regions.data);
+      return arrOfRegions;
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setErrorToaster(error);
+      return [];
+    }
+  };
 
-    // Fetch roles
-    let fetchRoles = async () => {
-        try {
-            const response = await privateAxios.get(FETCH_ROLES);
-            console.log("Response from fetch roles - ", response);
-            setRoles(response.data);
-        } catch (error) {
-            console.log("Error from fetch roles", error);
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
-            setTimeout(() => {
-                navigate("/login");
-            }, 3000);
-        }
-    };
+  // Fetch roles
+  let fetchRoles = async () => {
+    try {
+      const response = await privateAxios.get(FETCH_ROLES);
+      console.log("Response from fetch roles - ", response);
+      setRoles(response.data);
+    } catch (error) {
+      console.log("Error from fetch roles", error);
+      setToasterDetails(
+        {
+          titleMessage: "Oops!",
+          descriptionMessage: error?.response?.data?.message,
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    }
+  };
 
-    //prevent form submission on press of enter key
-    const checkKeyDown = (e) => {
-        if (e.code === "Enter") e.preventDefault();
-    };
+  //prevent form submission on press of enter key
+  const checkKeyDown = (e) => {
+    if (e.code === "Enter") e.preventDefault();
+  };
 
-    const categoryChangeHandler = (e) => {
-        setValue("cgfCategory", e.target.value);
-        trigger("cgfCategory");
-        setValue("cgfActivity", "");
-    };
-    const phoneNumberChangeHandler = (e, name, code) => {
-        console.log(
-            "on number change",
-            e.target.value,
-            "name: ",
-            name,
-            "code",
-            code
-        );
-        setValue(name, e.target.value);
-        trigger(name);
-        trigger(code);
-    };
-    useEffect(() => {
-        // let isMounted = true;
-        const controller = new AbortController();
-        arrOfRegions.length === 0 && getRegions(controller);
-        arrOfCountryCode.length === 0 && getCountryCode(controller);
-        roles.length === 0 && fetchRoles();
+  const categoryChangeHandler = (e) => {
+    setValue("cgfCategory", e.target.value);
+    trigger("cgfCategory");
+    setValue("cgfActivity", "");
+  };
+  const phoneNumberChangeHandler = (e, name, code) => {
+    console.log(
+      "on number change",
+      e.target.value,
+      "name: ",
+      name,
+      "code",
+      code
+    );
+    setValue(name, e.target.value);
+    trigger(name);
+    trigger(code);
+  };
+  useEffect(() => {
+    // let isMounted = true;
+    const controller = new AbortController();
+    arrOfRegions.length === 0 && getRegions(controller);
+    arrOfCountryCode.length === 0 && getCountryCode(controller);
+    roles.length === 0 && fetchRoles();
 
-        return () => {
-            // isMounted = false;
-            controller.abort();
-        };
-    }, [watch]);
-    // console.log("selected Region", watch("region"));
-    return (
-        <div className="page-wrapper">
-            <Toaster
-                myRef={myRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
-            />
-            <div className="breadcrumb-wrapper">
-                <div className="container">
-                    <ul className="breadcrumb">
-                        <li>
-                            <Link to="/users/members">Members</Link>
-                        </li>
-                        <li>Add Member</li>
-                    </ul>
-                </div>
+    return () => {
+      // isMounted = false;
+      controller.abort();
+    };
+  }, [watch]);
+  // console.log("selected Region", watch("region"));
+  return (
+    <div className="page-wrapper">
+      <Toaster
+        myRef={myRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
+      <div className="breadcrumb-wrapper">
+        <div className="container">
+          <ul className="breadcrumb">
+            <li>
+              <Link to="/users/members">Members</Link>
+            </li>
+            <li>Add Member</li>
+          </ul>
+        </div>
+      </div>
+      <section>
+        <div className="container">
+          <div className="form-header flex-between">
+            <h2 className="heading2">Add Member</h2>
+            <div className="form-header-right-txt">
+              <div className="tertiary-btn-blk">
+                <span className="addmore-icon">
+                  <i className="fa fa-plus"></i>
+                </span>
+                <span
+                  className="addmore-txt"
+                  onClick={handleSubmit(onAddMoreButtonClickHandler)}
+                >
+                  Save & Add More
+                </span>
+              </div>
             </div>
-            <section>
-                <div className="container">
-                    <div className="form-header flex-between">
-                        <h2 className="heading2">Add Member</h2>
-                        <div className="form-header-right-txt">
-                            <div className="tertiary-btn-blk">
-                                <span className="addmore-icon">
-                                    <i className="fa fa-plus"></i>
-                                </span>
-                                <span
-                                    className="addmore-txt"
-                                    onClick={handleSubmit(
-                                        onAddMoreButtonClickHandler
-                                    )}
-                                >
-                                    Save & Add More
-                                </span>
-                            </div>
-                        </div>
+          </div>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            onKeyDown={(e) => checkKeyDown(e)}
+          >
+            <div className="card-wrapper">
+              <div className="card-inner-wrap">
+                <h2 className="sub-heading1">Company Detail</h2>
+                <div className="card-blk flex-between">
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="memberCompany">
+                        Member Company <span className="mandatory">*</span>
+                      </label>
+                      <Input
+                        control={control}
+                        name="memberCompany"
+                        placeholder="Enter member company"
+                        onBlur={(e) =>
+                          setValue("memberCompany", e.target.value?.trim())
+                        }
+                        myHelper={memberHelper}
+                        rules={{
+                          required: true,
+                          maxLength: 50,
+                          minLength: 3,
+                        }}
+                      />
                     </div>
-                    <form
-                        onSubmit={handleSubmit(onSubmit)}
-                        onKeyDown={(e) => checkKeyDown(e)}
-                    >
-                        <div className="card-wrapper">
-                            <div className="card-inner-wrap">
-                                <h2 className="sub-heading1">Company Detail</h2>
-                                <div className="card-blk flex-between">
-                                    <div className="card-form-field">
-                                        <div className="form-group">
-                                            <label htmlFor="memberCompany">
-                                                Member Company{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
-                                            </label>
-                                            <Input
-                                                control={control}
-                                                name="memberCompany"
-                                                placeholder="Enter member company"
-                                                onBlur={(e) =>
-                                                    setValue(
-                                                        "memberCompany",
-                                                        e.target.value?.trim()
-                                                    )
-                                                }
-                                                myHelper={memberHelper}
-                                                rules={{
-                                                    required: true,
-                                                    maxLength: 50,
-                                                    minLength: 3,
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
+                  </div>
 
                                     <div className="card-form-field">
                                         <div className="form-group">
@@ -1495,44 +1487,44 @@ useDocumentTitle("Add Member")
                                                 </span>
                                             </label>
 
-                                            <div>
-                                                <Dropdown
-                                                    name="roleId"
-                                                    control={control}
-                                                    options={roles}
-                                                    rules={{
-                                                        required: true,
-                                                    }}
-                                                    myHelper={memberHelper}
-                                                    placeholder={"Select role"}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="form-btn flex-between add-members-btn">
-                                <button
-                                    type="reset"
-                                    onClick={onClickCancelHandler}
-                                    className="secondary-button mr-10"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    //   onClick={}
-                                    className="primary-button add-button"
-                                >
-                                    Save
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                      <div>
+                        <Dropdown
+                          name="roleId"
+                          control={control}
+                          options={roles}
+                          rules={{
+                            required: true,
+                          }}
+                          myHelper={memberHelper}
+                          placeholder={"Select role"}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </section>
+              </div>
+              <div className="form-btn flex-between add-members-btn">
+                <button
+                  type="reset"
+                  onClick={onClickCancelHandler}
+                  className="secondary-button mr-10"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  //   onClick={}
+                  className="primary-button add-button"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-    );
+      </section>
+    </div>
+  );
 };
 
 export default AddMember;

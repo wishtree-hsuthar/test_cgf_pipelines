@@ -31,11 +31,11 @@ const inputTypeOptions = [
   },
   {
     _id: "textbox",
-    name: "Textbox",
+    name: "Text box",
   },
   {
     _id: "dropdown",
-    name: "Dropdown",
+    name: "Drop down",
   },
   {
     _id: "date",
@@ -229,7 +229,7 @@ const TableQuestions = ({
                       </div>
                     </div>
                     <div className="form-group">
-                      <label htmlFor="emailid">Response Validator</label>
+                      <label htmlFor="emailid">Validation</label>
                       <div className="select-field">
                         <FormControl className="fullwidth-field">
                           <Select

@@ -79,10 +79,10 @@ function FillAssesmentSection({
                 info1={
                     <p>
                         On canceling all the entered details of the section will
-                        not save.
+                        not save,
                     </p>
                 }
-                info2={<p>Do you want to cancel filling assessment?</p>}
+                info2={<p>Do you want to cancel?</p>}
                 primaryButtonText={"Yes"}
                 secondaryButtonText={"No"}
                 onPrimaryModalButtonClickHandler={() => {

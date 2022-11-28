@@ -30,19 +30,20 @@ const helperTextForCGFAdmin = {
     },
     phoneNumber: {
         maxLength: "Max digits limit exceed",
-        minLength: "Number must contain atleast 3 digits",
+        minLength: "minimum 3 characters required",
         validate: "Enter the phone number",
         pattern: "Invalid format",
     },
     name: {
         required: "Enter the CGF admin name",
         maxLength: "Max char limit exceed",
-        minLength: "Name must contain atleast 3 characters",
+        minLength: "minimum 3 characters required",
         pattern: "Invalid format",
     },
     email: {
         required: "Enter the email",
         pattern: "Invalid format",
+        minLength: "minimum 3 characters required"
     },
     subRoleId: {
         required: "Select the role",
@@ -286,6 +287,7 @@ const AddSubAdmin = () => {
                                             rules={{
                                                 required: true,
                                                 maxLength: 50,
+                                                minLength:3,
                                                 pattern:
                                                     /^[A-Za-z]+[A-Za-z ]*$/,
                                             }}
@@ -325,11 +327,12 @@ const AddSubAdmin = () => {
                                                 )
                                             }
                                             control={control}
-                                            placeholder={"Enter email"}
+                                            placeholder={"example@domain.com"}
                                             myHelper={helperTextForCGFAdmin}
                                             rules={{
-                                                required: true,
+                                                required: true,  
                                                 maxLength: 50,
+                                                minLength: 3,
                                                 pattern:
                                                     /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                                             }}
@@ -619,7 +622,7 @@ const AddSubAdmin = () => {
                                                 control={control}
                                                 myHelper={helperTextForCGFAdmin}
                                                 placeholder={
-                                                    "Enter phone number"
+                                                    "1234567890"
                                                 }
                                                 rules={{
                                                     maxLength: 15,

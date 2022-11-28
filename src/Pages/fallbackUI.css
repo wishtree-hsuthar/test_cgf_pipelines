@@ -1,7 +1,7 @@
 /* fall back ui css  */
 .error-status {
     text-align: center;
-    font-family: 'ProximaNova-Semibold';
+    font-family: 'ProximaNova-Semibold', serif, sans-serif;
     letter-spacing: 0px;
     color: #1e1e1e;
     opacity: 1;
@@ -12,7 +12,7 @@
 .oops {
     
     text-align: center;
-    font-family: 'ProximaNova-Regular';
+    font-family: 'ProximaNova-Regular', serif, sans-serif;
     letter-spacing: 0px;
     color: #787878;
     opacity: 1;
@@ -22,7 +22,7 @@
 }
 .page-not-found {
     text-align: center;
-    font-family: 'ProximaNova-Regular';
+    font-family: 'ProximaNova-Regular', serif, sans-serif;
     letter-spacing: 0px;
     color: #787878;
     opacity: 1;

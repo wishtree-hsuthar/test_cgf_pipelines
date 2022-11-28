@@ -139,7 +139,14 @@ const Question = ({
       name: "Alphabets",
     },
   ];
-
+  const ITEM_HEIGHT = 42;
+  const MenuProps = {
+      PaperProps: {
+          style: {
+              maxHeight: ITEM_HEIGHT * 4,
+          },
+      },
+  };
   //method to handle delete question
   const deleteQuestionHandler = (uuid, questionIdx) => {
     //deleting question from questionnaire
