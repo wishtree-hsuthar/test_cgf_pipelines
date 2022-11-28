@@ -30,6 +30,9 @@ function Dropdown({
             },
         },
     };
+    const Placeholder = ({ children }) => {
+        return <div className="select-placeholder">{children}</div>;
+      };
     // const [showPlaceholder, setShowPlaceholder] = useState(true);
     console.log("options", options);
     return (
@@ -49,6 +52,9 @@ function Dropdown({
                     // onFocus={(e) => setShowPlaceholder(false)}
                     inputRef={ref}
                     fullWidth={true}
+                    renderValue={
+                        value !== "" ? undefined : () => <Placeholder>{placeholder}</Placeholder>
+                      }
                 >
                     {/* <MenuItem
                         disabled

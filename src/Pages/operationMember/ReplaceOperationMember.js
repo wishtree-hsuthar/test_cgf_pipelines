@@ -371,7 +371,7 @@ const ReplaceOperationMember = () => {
                         </div>
                     </div>
 
-                    <div className="member-info-wrapper table-content-wrap">
+                    <div className="member-info-wrapper table-content-wrap replace-admin-table">
                         <div className="member-data-sect">
                             <TableComponent
                                 tableHead={tableHead}

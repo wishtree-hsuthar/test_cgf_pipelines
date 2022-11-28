@@ -578,7 +578,7 @@ function AddOperationMember() {
                                                             PaperComponent={({
                                                                 children,
                                                             }) => (
-                                                                <Paper className="autocomplete-option-txt">
+                                                                <Paper className={countries?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
                                                                     {children}
                                                                 </Paper>
                                                             )}
@@ -820,7 +820,7 @@ function AddOperationMember() {
                                                             PaperComponent={({
                                                                 children,
                                                             }) => (
-                                                                <Paper className="autocomplete-option-txt">
+                                                                <Paper className={memberCompanies?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
                                                                     {children}
                                                                 </Paper>
                                                             )}

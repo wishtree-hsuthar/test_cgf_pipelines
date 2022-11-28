@@ -12,11 +12,11 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
 
-const ITEM_HEIGHT = 22;
+const ITEM_HEIGHT = 42;
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: ITEM_HEIGHT * 4.5,
+      maxHeight: ITEM_HEIGHT * 4,
     },
   },
 };

@@ -27,11 +27,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import dayjs from 'dayjs';
 
-const ITEM_HEIGHT = 22;
+const ITEM_HEIGHT = 42;
 const MenuProps = {
     PaperProps: {
         style: {
-            maxHeight: ITEM_HEIGHT * 4.5
+            maxHeight: ITEM_HEIGHT * 4
         },
     },
 };

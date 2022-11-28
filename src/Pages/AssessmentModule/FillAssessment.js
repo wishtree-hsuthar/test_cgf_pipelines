@@ -28,14 +28,14 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 export const AlphaRegEx = /^[a-z]+$/i;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
-const ITEM_HEIGHT = 22;
+const ITEM_HEIGHT = 42;
 const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5,
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4,
+        },
     },
-  },
-};
+  }
 
 const getTransformedColumns = (columns) => {
   let transformedColumns = {};

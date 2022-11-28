@@ -402,7 +402,7 @@ const EditSubAdmin = () => {
                               <Autocomplete
                                 className={`${error && "autocomplete-error"}`}
                                 PaperComponent={({ children }) => (
-                                  <Paper className="autocomplete-option-txt">
+                                  <Paper className={countries?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
                                     {children}
                                   </Paper>
                                 )}
@@ -500,56 +500,57 @@ const EditSubAdmin = () => {
                         Role <span className="mandatory">*</span>
                       </label>
 
-                      <div className="select-field">
-                        <Dropdown
-                          name="subRoleId"
-                          control={control}
-                          options={roles}
-                          rules={{
-                            required: true,
-                          }}
-                          isDisabled
-                          myHelper={helperTextForCGFAdmin}
-                          placeholder={"Select role"}
-                        />
+                                        <div className="select-field">
+                                            <Dropdown
+                                                name="subRoleId"
+                                                control={control}
+                                                options={roles}
+                                                rules={{
+                                                    required: true,
+                                                }}
+                                                isDisabled
+                                                myHelper={helperTextForCGFAdmin}
+                                                placeholder={"Select role"}
+                                            />
 
-                        <p className={`input-error-msg`}>
-                          {errors.role?.message}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="status">Status</label>
-                      <div className="radio-btn-field">
-                        <Controller
-                          name="status"
-                          control={control}
-                          render={({ field }) => (
-                            <RadioGroup
-                              {...field}
-                              // value={editDefault && editDefault.status}
-                              aria-labelledby="demo-radio-buttons-group-label"
-                              name="radio-buttons-group"
-                              className="radio-btn"
-                            >
-                              <FormControlLabel
-                                value="active"
-                                control={<Radio />}
-                                label="Active"
-                              />
-                              <FormControlLabel
-                                value="inactive"
-                                control={<Radio />}
-                                label="Inactive"
-                              />
-                            </RadioGroup>
-                          )}
-                        />
-                      </div>
-                    </div>
-                  </div>
+                                            
+                                        </div>
+                                        <p className={`input-error-msg`}>
+                                                {errors.role?.message}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="card-form-field">
+                                    <div className="form-group">
+                                        <label htmlFor="status">Status</label>
+                                        <div className="radio-btn-field">
+                                            <Controller
+                                                name="status"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <RadioGroup
+                                                        {...field}
+                                                        // value={editDefault && editDefault.status}
+                                                        aria-labelledby="demo-radio-buttons-group-label"
+                                                        name="radio-buttons-group"
+                                                        className="radio-btn"
+                                                    >
+                                                        <FormControlLabel
+                                                            value="active"
+                                                            control={<Radio />}
+                                                            label="Active"
+                                                        />
+                                                        <FormControlLabel
+                                                            value="inactive"
+                                                            control={<Radio />}
+                                                            label="Inactive"
+                                                        />
+                                                    </RadioGroup>
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
 
                   <div className="form-btn flex-between add-members-btn">
                     <button

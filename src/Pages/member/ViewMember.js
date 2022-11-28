@@ -1266,9 +1266,24 @@ const ViewMember = () => {
                 </div>
               </div>
 
-              <div className="form-header member-form-header flex-between">
-                <div className="form-header-left-blk flex-start">
+              <div className="form-header member-form-header flex-between mb-10">
+                <div className="operation-member-left-blk">
                   {/* <h2 className="heading2 mr-40">Members</h2> */}
+                  <div className="searchbar">
+                      <input
+                        type="text"
+                        value={search}
+                        name="search"
+                        placeholder="Search"
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && setMakeApiCall(true)
+                        }
+                        onChange={onSearchChangeHandler}
+                      />
+                      <button type="submit">
+                        <i className="fa fa-search"></i>
+                      </button>
+                    </div>
                 </div>
                 <div className="form-header-right-txt">
                   <div className="tertiary-btn-blk mr-20">
@@ -1295,21 +1310,7 @@ const ViewMember = () => {
               <div className="member-filter-sect">
                 <div className="member-filter-wrap flex-between">
                   <div className="member-filter-left">
-                    <div className="searchbar">
-                      <input
-                        type="text"
-                        value={search}
-                        name="search"
-                        placeholder="Search"
-                        onKeyDown={(e) =>
-                          e.key === "Enter" && setMakeApiCall(true)
-                        }
-                        onChange={onSearchChangeHandler}
-                      />
-                      <button type="submit">
-                        <i className="fa fa-search"></i>
-                      </button>
-                    </div>
+                    
                   </div>
                   <div className="member-filter-right">
                     <div className="filter-select-wrap flex-between">

@@ -28,6 +28,36 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
+//Parent company (Ideally get from backend)
+const parentCompany = [
+  "Google",
+  "MicroSoft",
+  "Nike",
+  "Adobe",
+  "Falcon",
+  "Apple",
+  "TSMC",
+  "Relience",
+  "Adani",
+  "Ford",
+  "Uber",
+  "wishtree",
+]
+//City (Ideally get from backend)
+const cityValue = [
+  "Mumbai",
+  "Paris",
+  "London",
+  "New york",
+  "Sydney",
+  "Melbourne",
+  "Perth",
+  "Toronto",
+  "Vancour",
+  "Texas",
+  "Delhi",
+  "Tokyo",
+]
 //CGF Categories (Ideally get from backend)
 const cgfCategories1 = ["Manufacturer", "Retailer", "Other"];
 const cgfActivitiesManufacturer1 = [
@@ -523,6 +553,13 @@ const EditMember = () => {
                             <Autocomplete
                               disabled
                               className="searchable-input"
+                              PaperComponent={({
+                                children,
+                              }) => (
+                                  <Paper className={parentCompany?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
+                                      {children}
+                                  </Paper>
+                              )}
                               {...field}
                               onSubmit={() => setValue("parentCompany", "")}
                               onChange={(event, newValue) => {
@@ -542,20 +579,7 @@ const EditMember = () => {
                               selectOnFocus
                               handleHomeEndKeys
                               id="free-solo-with-text-demo"
-                              options={[
-                                "Google",
-                                "MicroSoft",
-                                "Nike",
-                                "Adobe",
-                                "Falcon",
-                                "Apple",
-                                "TSMC",
-                                "Relience",
-                                "Adani",
-                                "Ford",
-                                "Uber",
-                                "wishtree",
-                              ]}
+                              options={parentCompany}
                               // getOptionLabel={(option) => {
                               //   // Value selected with enter, right from the input
                               //   if (typeof option === "string") {
@@ -691,7 +715,7 @@ const EditMember = () => {
                                 <Autocomplete
                                   popupIcon={<KeyboardArrowDownRoundedIcon />}
                                   PaperComponent={({ children }) => (
-                                    <Paper className="autocomplete-option-txt">
+                                    <Paper className={arrOfCountryCode?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
                                       {children}
                                     </Paper>
                                   )}
@@ -852,6 +876,13 @@ const EditMember = () => {
                             <Autocomplete
                               {...field}
                               className="searchable-input"
+                              PaperComponent={({
+                                children,
+                              }) => (
+                                  <Paper className={cityValue?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
+                                      {children}
+                                  </Paper>
+                              )}
                               disabled={!watch("state")}
                               onSubmit={() => setValue("city", "")}
                               onChange={(event, newValue) => {
@@ -868,20 +899,7 @@ const EditMember = () => {
                               selectOnFocus
                               handleHomeEndKeys
                               id="free-solo-with-text-demo"
-                              options={[
-                                "Mumbai",
-                                "Paris",
-                                "London",
-                                "New york",
-                                "Sydney",
-                                "Melbourne",
-                                "Perth",
-                                "Toronto",
-                                "Vancour",
-                                "Texas",
-                                "Delhi",
-                                "Tokyo",
-                              ]}
+                              options={cityValue}
                               // getOptionLabel={(option) => {
                               //   // Value selected with enter, right from the input
                               //   if (typeof option === "string") {
@@ -1148,7 +1166,7 @@ const EditMember = () => {
                                   className={`${error && "autocomplete-error"}`}
                                   popupIcon={<KeyboardArrowDownRoundedIcon />}
                                   PaperComponent={({ children }) => (
-                                    <Paper className="autocomplete-option-txt">
+                                    <Paper className={arrOfCountryCode?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
                                       {children}
                                     </Paper>
                                   )}

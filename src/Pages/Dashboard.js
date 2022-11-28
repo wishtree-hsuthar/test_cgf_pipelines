@@ -17,7 +17,7 @@ export const Dashboard = (props) => {
                             }
                             className="mb-30"
                         />
-                        <h1 className="coming-soon-txt">Coming Soon!</h1>
+                        <h1 className="coming-soon-txt">Coming Soon...</h1>
                     </div>
                 </div>
             </section>

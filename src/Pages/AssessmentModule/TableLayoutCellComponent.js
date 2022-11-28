@@ -173,7 +173,7 @@ const TableLayoutCellComponent = ({
                 )}
             {transformedColumns[cell.columnId] &&
                 transformedColumns[cell.columnId].columnType === "date" && (
-                    <FormControl>
+                    <FormControl fullWidth>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 value={answer}

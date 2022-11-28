@@ -19,13 +19,13 @@ import useCallbackState from "../../../utils/useCallBackState";
 import Toaster from "../../../components/Toaster";
 import { TabPanel } from "../../../utils/tabUtils/TabPanel";
 
-const ITEM_HEIGHT = 22;
+const ITEM_HEIGHT = 42;
 const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5,
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4,
+        },
     },
-  },
 };
 // function TabPanel(props) {
 //     const { children, value, index, ...other } = props;

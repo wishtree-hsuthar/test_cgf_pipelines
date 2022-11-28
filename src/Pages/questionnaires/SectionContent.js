@@ -35,55 +35,55 @@ const SectionContent = ({
     const [err, setErr] = useState({ questionTitle: "", option: "" });
     // state to handle errors in table layout
     const [tableErr, setTableErr] = useState("");
-    const ITEM_HEIGHT = 22;
+    const ITEM_HEIGHT = 42;
 
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5,
-            },
-        },
-    };
-    //Refr for Toaster
-    const myRef = React.useRef();
-    //Toaster Message setter
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
-    //method to call all error toaster from this method
-    const setErrorToaster = (error) => {
-        // console.log("error", error);
-        setToasterDetails(
-            {
-                titleMessage: "Error",
-                descriptionMessage:
-                    error?.response?.data?.message &&
-                    typeof error.response.data.message === "string"
-                        ? error.response.data.message
-                        : "Something went wrong!",
-                messageType: "error",
-            },
-            () => myRef.current()
-        );
-    };
-    // console.log("global title error", globalSectionTitleError);
-    const onDialogPrimaryButtonClickHandler = () => {
-        deleteSection(uuid);
-    };
-    const onDialogPrimaryButtonClickHandler1 = () => {
-        handleSubmitSection();
-        setOpenDialog1(false);
-    };
-    const onDialogSecondaryButtonClickHandler = () => {
-        setOpenDialog(false);
-    };
-    const onDialogSecondaryButtonClickHandler1 = () => {
-        setOpenDialog1(false);
-    };
-    const deleteSection = (uuid) => {
-        let tempQuestionnare = { ...questionnaire };
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4,
+      },
+    },
+  };
+  //Refr for Toaster
+  const myRef = React.useRef();
+  //Toaster Message setter
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
+  });
+  //method to call all error toaster from this method
+  const setErrorToaster = (error) => {
+    // console.log("error", error);
+    setToasterDetails(
+      {
+        titleMessage: "Error",
+        descriptionMessage:
+          error?.response?.data?.message &&
+          typeof error.response.data.message === "string"
+            ? error.response.data.message
+            : "Something went wrong!",
+        messageType: "error",
+      },
+      () => myRef.current()
+    );
+  };
+  // console.log("global title error", globalSectionTitleError);
+  const onDialogPrimaryButtonClickHandler = () => {
+    deleteSection(uuid);
+  };
+  const onDialogPrimaryButtonClickHandler1 = () => {
+    handleSubmitSection()
+    setOpenDialog1(false)
+  }
+  const onDialogSecondaryButtonClickHandler = () => {
+    setOpenDialog(false);
+  };
+  const onDialogSecondaryButtonClickHandler1 = () => {
+    setOpenDialog1(false)
+  }
+  const deleteSection = (uuid) => {
+    let tempQuestionnare = { ...questionnaire };
 
         let tempSections = tempQuestionnare.sections.filter(
             (section) => section.uuid !== uuid
@@ -484,7 +484,7 @@ const SectionContent = ({
                                         />
                                     </div>
                                 </div>
-                                <div className="sect-card-form-rightfield flex-between">
+                                <div className="sect-card-form-rightfield">
                                     <div className="form-group">
                                         <label htmlFor="layout">
                                             Layout{" "}
