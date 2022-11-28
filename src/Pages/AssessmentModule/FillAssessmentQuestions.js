@@ -47,7 +47,9 @@ const FillAssessmentQuestion = ({
     };
 
     let questionUUID = question?.uuid;
-
+    const handleOnKeyDownChange = (e) => {
+        e.preventDefault();
+      };
     const handleChecked = (e) => {
         const { name, value, checked } = e.target;
         let values = answer;
@@ -240,9 +242,11 @@ const FillAssessmentQuestion = ({
                     onChange={(newValue) =>
                         handleAnswersChange(questionUUID, newValue)
                     }
+                    
                     renderInput={(params) => (
                         <TextField
                             {...params}
+                            onKeyDown={handleOnKeyDownChange}
                             helperText={!answer && error ? error : ""}
                         />
                     )}

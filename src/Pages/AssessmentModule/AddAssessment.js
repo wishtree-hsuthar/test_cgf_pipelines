@@ -259,218 +259,191 @@ const AddAssessment = () => {
                     assignedMember: "",
                     // name: .assignedMember?.companyName,
 
-                    assignedOperationMember: "",
-                    dueDate: "",
-                    remarks: "",
-                    questionnaireId: "",
-                });
-                // Add success toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Success!",
-                        descriptionMessage: "Assessment added sucessfully!",
-                        messageType: "success",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/assessment-list");
-                }, 2000);
-            }
-        } catch (error) {
-            if (error.response.status === 401) {
-                console.log("Unauthorized user access");
-                // Add error toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
-            if (error.response.status === 400) {
-                console.log("something went wrong");
-                // Add error toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
-            if (error.response.status === 403) {
-                console.log("something went wrong");
-                // Add error toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
-        }
-    };
-    return (
-        <div className="page-wrapper">
-            <Toaster
-                messageType={toasterDetails.messageType}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                myRef={toasterRef}
-                titleMessage={toasterDetails.titleMessage}
-            />
-            <div className="breadcrumb-wrapper">
-                <div className="container">
-                    <ul className="breadcrumb">
-                        <li>
-                            <Link to="/assessment-list">Assessments</Link>
-                        </li>
-                        <li>Add Assessment</li>
-                    </ul>
-                </div>
+          assignedOperationMember: "",
+          dueDate: "",
+          remarks: "",
+          questionnaireId: "",
+        });
+        // Add success toaster here
+        setToasterDetails(
+          {
+            titleMessage: "Success!",
+            descriptionMessage: "Assessment added sucessfully!",
+            messageType: "success",
+          },
+          () => toasterRef.current()
+        );
+        setTimeout(() => {
+          navigate("/assessment-list");
+        }, 2000);
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        console.log("Unauthorized user access");
+        // Add error toaster here
+        setToasterDetails(
+          {
+            titleMessage: "Oops!",
+            descriptionMessage: error?.response?.data?.message,
+            messageType: "error",
+          },
+          () => toasterRef.current()
+        );
+      }
+      if (error.response.status === 400) {
+        console.log("something went wrong");
+        // Add error toaster here
+        setToasterDetails(
+          {
+            titleMessage: "Oops!",
+            descriptionMessage: error?.response?.data?.message,
+            messageType: "error",
+          },
+          () => toasterRef.current()
+        );
+      }
+      if (error.response.status === 403) {
+        console.log("something went wrong");
+        // Add error toaster here
+        setToasterDetails(
+          {
+            titleMessage: "Oops!",
+            descriptionMessage: "Something went wrong",
+            messageType: "error",
+          },
+          () => toasterRef.current()
+        );
+      }
+    }
+  };
+
+  //method to prevent typing on date field
+  const handleOnKeyDownChange = (e) => {
+    e.preventDefault();
+  };
+  return (
+    <div className="page-wrapper">
+      <Toaster
+        messageType={toasterDetails.messageType}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        myRef={toasterRef}
+        titleMessage={toasterDetails.titleMessage}
+      />
+      <div className="breadcrumb-wrapper">
+        <div className="container">
+          <ul className="breadcrumb">
+            <li>
+              <Link to="/assessment-list">Assessments</Link>
+            </li>
+            <li>Add Assessment</li>
+          </ul>
+        </div>
+      </div>
+      <section>
+        <div className="container">
+          <form onSubmit={handleSubmit(submitAssessments)}>
+            <div className="form-header flex-between">
+              <h2 className="heading2">Add Assessment</h2>
             </div>
-            <section>
-                <div className="container">
-                    <form onSubmit={handleSubmit(submitAssessments)}>
-                        <div className="form-header flex-between">
-                            <h2 className="heading2">Add Assessment</h2>
-                        </div>
-                        <div className="card-wrapper">
-                            <div className="card-blk flex-between">
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>
-                                            Assessment Title{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Input
-                                            name={"title"}
-                                            control={control}
-                                            onBlur={(e) =>
-                                                setValue(
-                                                    "title",
-                                                    e.target.value?.trim()
-                                                )
-                                            }
-                                            myHelper={helperTextForAssessment}
-                                            placeholder={
-                                                "Enter assessment title"
-                                            }
-                                            rules={{
-                                                required: "true",
-                                                minLength: 3,
-                                                maxLength: 50,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>
-                                            Assessment Type{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Dropdown
-                                            control={control}
-                                            name="assessmentType"
-                                            placeholder={
-                                                "Select assessment type"
-                                            }
-                                            myHelper={helperTextForAssessment}
-                                            rules={{ required: true }}
-                                            options={questionnares}
-                                            myOnChange={
-                                                handleChangeForAssessmentModule
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>
-                                            Member Company{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Dropdown
-                                            control={control}
-                                            name={"assignedMember"}
-                                            myOnChange={
-                                                handleChangeForMemberCompany
-                                            }
-                                            placeholder={
-                                                "Select member company"
-                                            }
-                                            myHelper={helperTextForAssessment}
-                                            rules={{ required: true }}
-                                            options={
-                                                memberCompaniesForAddAssessments
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>
-                                            Operation Member{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Dropdown
-                                            control={control}
-                                            // isDisabled={
-                                            //     !watch("assignedMember")
-                                            // }
-                                            isDisabled={!isCGFStaff}
-                                            name={"assignedOperationMember"}
-                                            placeholder={
-                                                "Select operation member "
-                                            }
-                                            myHelper={helperTextForAssessment}
-                                            rules={{ required: true }}
-                                            options={
-                                                operationMemberForAddAssessments
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>
-                                            Due Date{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Controller
-                                            name="dueDate"
-                                            control={control}
-                                            rules={{ required: true }}
-                                            render={({
-                                                field,
-                                                fieldState: { error },
-                                            }) => (
-                                                <LocalizationProvider
-                                                    dateAdapter={AdapterDayjs}
-                                                >
-                                                    <DatePicker
-                                                        disablePast
-                                                        className="datepicker-blk"
-                                                        // value={datevalue}
-                                                        components={{
-                                                            OpenPickerIcon:
-                                                                DateRangeOutlinedIcon,
-                                                        }}
-                                                        // inputFormat={
-                                                        //     "MM/DD/YYYY"
-                                                        // }
-                                                        value={datevalue}
-                                                        onChange={(event) => {
-                                                            setDateValue(event);
-                                                            // console.log("date" + "  " + event.toISOString());
-                                                            setValue(
-                                                                "dueDate",
+            <div className="card-wrapper">
+              <div className="card-blk flex-between">
+                <div className="card-form-field">
+                  <div className="form-group">
+                    <label>
+                      Assessment Title <span className="mandatory">*</span>
+                    </label>
+                    <Input
+                      name={"title"}
+                      control={control}
+                      onBlur={(e) => setValue("title", e.target.value?.trim())}
+                      myHelper={helperTextForAssessment}
+                      placeholder={"Enter assessment title"}
+                      rules={{
+                        required: "true",
+                        minLength: 3,
+                        maxLength: 50,
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="card-form-field">
+                  <div className="form-group">
+                    <label>
+                      Assessment Type <span className="mandatory">*</span>
+                    </label>
+                    <Dropdown
+                      control={control}
+                      name="assessmentType"
+                      placeholder={"Select assessment type"}
+                      myHelper={helperTextForAssessment}
+                      rules={{ required: true }}
+                      options={questionnares}
+                      myOnChange={handleChangeForAssessmentModule}
+                    />
+                  </div>
+                </div>
+                <div className="card-form-field">
+                  <div className="form-group">
+                    <label>
+                      Member Company <span className="mandatory">*</span>
+                    </label>
+                    <Dropdown
+                      control={control}
+                      name={"assignedMember"}
+                      myOnChange={handleChangeForMemberCompany}
+                      placeholder={"Select member company"}
+                      myHelper={helperTextForAssessment}
+                      rules={{ required: true }}
+                      options={memberCompaniesForAddAssessments}
+                    />
+                  </div>
+                </div>
+                <div className="card-form-field">
+                  <div className="form-group">
+                    <label>
+                      Operation Member <span className="mandatory">*</span>
+                    </label>
+                    <Dropdown
+                      control={control}
+                      // isDisabled={
+                      //     !watch("assignedMember")
+                      // }
+                      isDisabled={!isCGFStaff}
+                      name={"assignedOperationMember"}
+                      placeholder={"Select operation member "}
+                      myHelper={helperTextForAssessment}
+                      rules={{ required: true }}
+                      options={operationMemberForAddAssessments}
+                    />
+                  </div>
+                </div>
+                <div className="card-form-field">
+                  <div className="form-group">
+                    <label>
+                      Due Date <span className="mandatory">*</span>
+                    </label>
+                    <Controller
+                      name="dueDate"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field, fieldState: { error } }) => (
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            disablePast
+                            className="datepicker-blk"
+                            // value={datevalue}
+                            components={{
+                              OpenPickerIcon: DateRangeOutlinedIcon,
+                            }}
+                            // inputFormat={
+                            //     "MM/DD/YYYY"
+                            // }
+                            value={datevalue}
+                            onChange={(event) => {
+                              setDateValue(event);
+                              // console.log("date" + "  " + event.toISOString());
+                              setValue(
+                                "dueDate",
 
                                                                 event?.toISOString()
                                                             );
@@ -484,6 +457,7 @@ const AddAssessment = () => {
                                                                     error &&
                                                                     "input-error"
                                                                 }`}
+                                onKeyDown={handleOnKeyDownChange}
                                                                 error
                                                                 helperText={
                                                                     error
