@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Box } from "@mui/material";
+import {
+    TextField,
+    Box,
+    FormControl,
+    Select,
+    MenuItem,
+    FormHelperText,
+} from "@mui/material";
 import { Tab, Tabs, Tooltip } from "@mui/material";
 import PropTypes from "prop-types";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -14,6 +21,7 @@ import useCallbackState from "../../utils/useCallBackState";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 // function TabPanel(props) {
 //   const { children, value, index, ...other } = props;
@@ -42,12 +50,19 @@ function a11yProps(index) {
         "aria-controls": `simple-tabpanel-${index}`,
     };
 }
-
+const ITEM_HEIGHT = 22;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5,
+        },
+    },
+};
 function AddNewQuestionnaire() {
     //custom hook to set title of page
     useDocumentTitle("Add Questionnaire");
-// state to manage to loader
-const [isLoading, setIsLoading] = useState(false)
+    // state to manage to loader
+    const [isLoading, setIsLoading] = useState(false);
     //Refr for Toaster
     const myRef = React.useRef();
     //Toaster Message setter
@@ -126,31 +141,32 @@ const [isLoading, setIsLoading] = useState(false)
                 value: 1,
             },
         ],
-        isDraft: true,
-        isPublished: false,
+        // isDraft: true,
+        // isPublished: false,
         createdAt: Date,
         updatedAt: Date,
         createdBy: "",
         updatedBy: "",
+        isActive: true,
     });
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
         const fetch = async () => {
             try {
-        setIsLoading(true)
+                setIsLoading(true);
                 const response = await privateAxios.get(
                     `${ADD_QUESTIONNAIRE}/${id}`,
                     {
                         signal: controller.signal,
                     }
                 );
-        setIsLoading(false)
-                // console.log("response from fetch questionnaire", response);
+                setIsLoading(false);
+                console.log("response from fetch questionnaire", response);
                 isMounted && setQuestionnaire({ ...response.data });
             } catch (error) {
-        if (error?.code === "ERR_CANCELED") return;
-        setIsLoading(false)
+                if (error?.code === "ERR_CANCELED") return;
+                setIsLoading(false);
                 // setErrorToaster(error)
                 // console.log("error from fetch questionnaire", error);
             }
@@ -210,158 +226,222 @@ const [isLoading, setIsLoading] = useState(false)
                         <li>
                             <Link to="/questionnaires">Questionnaire</Link>
                         </li>
-                        <li>Add Questionnaire</li>
+                        {questionnaire?.isDraft ||
+                        questionnaire?.isPublished ? (
+                            <li>Edit Questionnaire</li>
+                        ) : (
+                            <li>Add Questionnaire</li>
+                        )}
                     </ul>
                 </div>
             </div>
             <section>
-        {
-          isLoading ? <div className="loader-blk">
-                  <img src={Loader2} alt="Loading" />
-      </div> : <div className="container">
-                    <div className="form-header flex-between">
-                        <h2 className="heading2">Add Questionnaire</h2>
+                {isLoading ? (
+                    <div className="loader-blk">
+                        <img src={Loader2} alt="Loading" />
                     </div>
-                    <div className="que-ttl-blk">
-                        <div className="form-group">
-                            <label htmlFor="emailid">
-                                Questionnaire Title{" "}
-                                <span className="mandatory">*</span>
-                            </label>
-                            <TextField
-                                className={`input-field ${
-                                    questionnaire.title === "" &&
-                                    globalSectionTitleError?.errMsg &&
-                                    "input-error"
-                                }`}
-                                id="outlined-basic"
-                                value={questionnaire.title}
-                                placeholder="Enter questionnaire title"
-                                // inputProps={{
-                                //   maxLength: 500,
-                                // }}
-                                variant="outlined"
-                                onChange={(e) => {
-                                    setQuestionnaire({
-                                        ...questionnaire,
-                                        title: e.target.value,
-                                    });
-                                }}
-                                onBlur={(e) =>
-                                    setQuestionnaire({
-                                        ...questionnaire,
-                                        title: e.target.value?.trim(),
-                                    })
-                                }
-                                helperText={
-                                    questionnaire.title === "" &&
-                                    globalSectionTitleError?.errMsg
-                                        ? "Enter the questionnaire title"
-                                        : " "
-                                }
-                            />
+                ) : (
+                    <div className="container">
+                        <div className="form-header flex-between">
+                            {questionnaire?.isDraft ||
+                            questionnaire?.isPublished ? (
+                                <h2 className="heading2">Edit Questionnaire</h2>
+                            ) : (
+                                <h2 className="heading2">Add Questionnaire</h2>
+                            )}
                         </div>
-                    </div>
-
-                    <div className="section-form-sect">
-                        <div className="section-tab-blk flex-between">
-                            <div className="section-tab-leftblk">
-                                <Box
-                                    sx={{
-                                        borderBottom: 1,
-                                        borderColor: "divider",
+                        <div className="que-ttl-blk">
+                            <div className="form-group">
+                                <label htmlFor="emailid">
+                                    Questionnaire Title{" "}
+                                    <span className="mandatory">*</span>
+                                </label>
+                                <TextField
+                                    className={`input-field ${
+                                        questionnaire.title === "" &&
+                                        globalSectionTitleError?.errMsg &&
+                                        "input-error"
+                                    }`}
+                                    id="outlined-basic"
+                                    value={questionnaire.title}
+                                    placeholder="Enter questionnaire title"
+                                    // inputProps={{
+                                    //   maxLength: 500,
+                                    // }}
+                                    disabled={
+                                        questionnaire?.isPublished ||
+                                        questionnaire?.isDraft
+                                    }
+                                    variant="outlined"
+                                    onChange={(e) => {
+                                        setQuestionnaire({
+                                            ...questionnaire,
+                                            title: e.target.value,
+                                        });
                                     }}
-                                    className="tabs-sect que-tab-sect"
-                                >
-                                    <Tabs
-                                        value={value}
-                                        onChange={handleChange}
-                                        aria-label="basic tabs example"
-                                    >
-                                        {questionnaire.sections.map(
-                                            (section, index, id) => (
-                                                <Tooltip
-                                                    key={section?.uuid}
-                                                    title={section.sectionTitle}
-                                                    placement="bottom-start"
-                                                >
-                                                    <Tab
-                                                        className="section-tab-item"
-                                                        label={`section ${
-                                                            index + 1
-                                                        }`}
-                                                        {...a11yProps(index)}
-                                                    />
-                                                </Tooltip>
-                                            )
-                                        )}
-                                    </Tabs>
-                                </Box>
+                                    onBlur={(e) =>
+                                        setQuestionnaire({
+                                            ...questionnaire,
+                                            title: e.target.value?.trim(),
+                                        })
+                                    }
+                                    helperText={
+                                        questionnaire.title === "" &&
+                                        globalSectionTitleError?.errMsg
+                                            ? "Enter the questionnaire title"
+                                            : " "
+                                    }
+                                />
                             </div>
-                            <div className="section-tab-rightblk">
-                                <div className="form-header-right-txt">
-                                    <div
-                                        onClick={() =>
-                                            navigate(
-                                                `/questionnaires/preview-questionnaire/${id}`
-                                            )
-                                        }
-                                        className="tertiary-btn-blk mr-20"
-                                    >
-                                        <span className="preview-icon">
-                                            <VisibilityOutlinedIcon />
-                                        </span>
-                                        <span className="addmore-txt">
-                                            Preview
-                                        </span>
-                                    </div>
-                                    <div className="tertiary-btn-blk">
-                                        <span
-                                            className="addmore-icon"
-                                            onClick={addSection}
+                            <div className="form-group">
+                                <label htmlFor="status">
+                                    Status <span className="mandatory">*</span>
+                                </label>
+                                <div className="select-field">
+                                    <FormControl className="fullwidth-field">
+                                        <Select
+                                            IconComponent={(props) => (
+                                                <KeyboardArrowDownRoundedIcon
+                                                    {...props}
+                                                />
+                                            )}
+                                            value={
+                                                questionnaire?.isActive
+                                                    ? "active"
+                                                    : "inActive"
+                                            }
+                                            onChange={(e) => {
+                                                setQuestionnaire({
+                                                    ...questionnaire,
+                                                    isActive:
+                                                        e.target.value ===
+                                                        "active"
+                                                            ? true
+                                                            : false,
+                                                });
+                                            }}
+                                            MenuProps={MenuProps}
+                                            name={"isActive"}
                                         >
-                                            <i className="fa fa-plus"></i>
-                                        </span>
-                                        <span
-                                            onClick={addSection}
-                                            className="addmore-txt"
-                                        >
-                                            Add Section
-                                        </span>
-                                    </div>
+                                            <MenuItem value={"active"} selected>
+                                                Active
+                                            </MenuItem>
+                                            <MenuItem value={"inActive"}>
+                                                Inactive
+                                            </MenuItem>
+                                        </Select>
+                                        <FormHelperText> </FormHelperText>
+                                    </FormControl>
                                 </div>
                             </div>
                         </div>
-                        <div className="que-tab-data">
-                            {questionnaire.sections.map((section, index) => (
-                                <TabPanel
-                                    key={section?.uuid}
-                                    value={value}
-                                    index={index}
-                                >
-                                    <SectionContent
-                                        setQuestionnaire={setQuestionnaire}
-                                        questionnaire={questionnaire}
-                                        value={section.value}
-                                        uuid={section.uuid}
-                                        setValue={setValue}
-                                        index={index}
-                                        section={section}
-                                        tabChange={handleChange}
-                                        globalSectionTitleError={
-                                            globalSectionTitleError
-                                        }
-                                        setGlobalSectionTitleError={
-                                            setGlobalSectionTitleError
-                                        }
-                                    />
-                                </TabPanel>
-                            ))}
+
+                        <div className="section-form-sect">
+                            <div className="section-tab-blk flex-between">
+                                <div className="section-tab-leftblk">
+                                    <Box
+                                        sx={{
+                                            borderBottom: 1,
+                                            borderColor: "divider",
+                                        }}
+                                        className="tabs-sect que-tab-sect"
+                                    >
+                                        <Tabs
+                                            value={value}
+                                            onChange={handleChange}
+                                            aria-label="basic tabs example"
+                                        >
+                                            {questionnaire.sections.map(
+                                                (section, index, id) => (
+                                                    <Tooltip
+                                                        key={section?.uuid}
+                                                        title={
+                                                            section.sectionTitle
+                                                        }
+                                                        placement="bottom-start"
+                                                    >
+                                                        <Tab
+                                                            className="section-tab-item"
+                                                            label={`section ${
+                                                                index + 1
+                                                            }`}
+                                                            {...a11yProps(
+                                                                index
+                                                            )}
+                                                        />
+                                                    </Tooltip>
+                                                )
+                                            )}
+                                        </Tabs>
+                                    </Box>
+                                </div>
+                                <div className="section-tab-rightblk">
+                                    <div className="form-header-right-txt">
+                                        <div
+                                            onClick={() =>
+                                                navigate(
+                                                    `/questionnaires/preview-questionnaire/${id}`
+                                                )
+                                            }
+                                            className="tertiary-btn-blk mr-20"
+                                        >
+                                            <span className="preview-icon">
+                                                <VisibilityOutlinedIcon />
+                                            </span>
+                                            <span className="addmore-txt">
+                                                Preview
+                                            </span>
+                                        </div>
+                                        <div className="tertiary-btn-blk">
+                                            <span
+                                                className="addmore-icon"
+                                                onClick={addSection}
+                                            >
+                                                <i className="fa fa-plus"></i>
+                                            </span>
+                                            <span
+                                                onClick={addSection}
+                                                className="addmore-txt"
+                                            >
+                                                Add Section
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="que-tab-data">
+                                {questionnaire.sections.map(
+                                    (section, index) => (
+                                        <TabPanel
+                                            key={section?.uuid}
+                                            value={value}
+                                            index={index}
+                                        >
+                                            <SectionContent
+                                                setQuestionnaire={
+                                                    setQuestionnaire
+                                                }
+                                                questionnaire={questionnaire}
+                                                value={section.value}
+                                                uuid={section.uuid}
+                                                setValue={setValue}
+                                                index={index}
+                                                section={section}
+                                                tabChange={handleChange}
+                                                globalSectionTitleError={
+                                                    globalSectionTitleError
+                                                }
+                                                setGlobalSectionTitleError={
+                                                    setGlobalSectionTitleError
+                                                }
+                                            />
+                                        </TabPanel>
+                                    )
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-        
-        }
+                )}
             </section>
         </div>
     );

@@ -15,247 +15,249 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import {
-  ADD_ASSESSMENTS,
-  ADD_QUESTIONNAIRE,
-  ASSESSMENTS,
-  FETCH_OPERATION_MEMBER,
-  MEMBER,
-  MEMBER_DROPDOWN,
-  MEMBER_OPERATION_MEMBERS,
+    ADD_ASSESSMENTS,
+    ADD_QUESTIONNAIRE,
+    ASSESSMENTS,
+    FETCH_OPERATION_MEMBER,
+    MEMBER,
+    MEMBER_DROPDOWN,
+    MEMBER_OPERATION_MEMBERS,
 } from "../../api/Url";
 import { date } from "yup";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const helperTextForAssessment = {
-  title: {
-    required: "Enter the assessment title",
-    minLength: "minimum 3 characters required",
-  },
-  assessmentType: {
-    required: "Select the assessment type",
-  },
-  assignedMember: {
-    required: "Select the member company",
-  },
-  assignedOperationMember: {
-    required: "Select the operation member",
-  },
-  dueDate: {
-    required: "Select the due date",
-  },
-  remarks: {
-    minLength: "minimum 3 characters required",
-    maxLength: "Reached max limit",
-  },
+    title: {
+        required: "Enter the assessment title",
+        minLength: "minimum 3 characters required",
+    },
+    assessmentType: {
+        required: "Select the assessment type",
+    },
+    assignedMember: {
+        required: "Select the member company",
+    },
+    assignedOperationMember: {
+        required: "Select the operation member",
+    },
+    dueDate: {
+        required: "Select the due date",
+    },
+    remarks: {
+        minLength: "minimum 3 characters required",
+        maxLength: "Reached max limit",
+    },
 };
 const AddAssessment = () => {
-  //custom hook to set title of page
-  useDocumentTitle("Add Assessment");
+    //custom hook to set title of page
+    useDocumentTitle("Add Assessment");
 
-  const [datevalue, setDateValue] = useState();
-  const [
-    memberCompaniesForAddAssessments,
-    setMemberCompaniesForAddAssessments,
-  ] = useState([]);
-  const [
-    operationMemberForAddAssessments,
-    setOperationMemberForAddAssessments,
-  ] = useState([]);
-  const [memberRepresentatives, setMemberRepresentatives] = useState([]);
-  const [questionnares, setQuestionnares] = useState([]);
-  const [questionnaresObj, setQuestionnaresObj] = useState([]);
-  const navigate = useNavigate();
-  const toasterRef = useRef();
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
-  const {
-    handleSubmit,
-    formState: { errors },
-    control,
-    watch,
-    reset,
-    setValue,
-    trigger,
-  } = useForm({
-    defaultValues: {
-      title: "",
-      assessmentType: "",
-      assignedMember: "",
-      assignedOperationMember: "",
-      dueDate: new Date(),
-      remarks: "",
-      questionnaireId: "",
-    },
-  });
-  const [isCGFStaff, setIsCGFStaff] = useState(false);
+    const [datevalue, setDateValue] = useState();
+    const [
+        memberCompaniesForAddAssessments,
+        setMemberCompaniesForAddAssessments,
+    ] = useState([]);
+    const [
+        operationMemberForAddAssessments,
+        setOperationMemberForAddAssessments,
+    ] = useState([]);
+    const [memberRepresentatives, setMemberRepresentatives] = useState([]);
+    const [questionnares, setQuestionnares] = useState([]);
+    const [questionnaresObj, setQuestionnaresObj] = useState([]);
+    const navigate = useNavigate();
+    const toasterRef = useRef();
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
+    const {
+        handleSubmit,
+        formState: { errors },
+        control,
+        watch,
+        reset,
+        setValue,
+        trigger,
+    } = useForm({
+        defaultValues: {
+            title: "",
+            assessmentType: "",
+            assignedMember: "",
+            assignedOperationMember: "",
+            dueDate: new Date(),
+            remarks: "",
+            questionnaireId: "",
+        },
+    });
+    const [isCGFStaff, setIsCGFStaff] = useState(false);
 
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
+    useEffect(() => {
+        let isMounted = true;
+        const controller = new AbortController();
 
-    const fetchMemberCompaniesForAddAssesments = async () => {
-      try {
-        const response = await privateAxios.get(MEMBER_DROPDOWN, {
-          signal: controller.signal,
-        });
+        const fetchMemberCompaniesForAddAssesments = async () => {
+            try {
+                const response = await privateAxios.get(MEMBER_DROPDOWN, {
+                    signal: controller.signal,
+                });
 
+                console.log(
+                    "response from fetch member companies for add assessments",
+                    response
+                );
+                isMounted &&
+                    setMemberCompaniesForAddAssessments(
+                        response.data.map((data) => ({
+                            _id: data._id,
+                            name: data.companyName,
+                        }))
+                    );
+                setMemberRepresentatives(response.data);
+            } catch (error) {
+                console.log("Error from fetch member company api", error);
+            }
+        };
+        fetchMemberCompaniesForAddAssesments();
+
+        const fetchQuestionnaires = async () => {
+            try {
+                const response = await privateAxios.get(
+                    ADD_QUESTIONNAIRE + "/master",
+                    {
+                        signal: controller.signal,
+                    }
+                );
+                console.log("response from questionnaires api", response.data);
+                isMounted &&
+                    setQuestionnares(response.data.map((data) => data.title));
+                setQuestionnaresObj(
+                    response.data.map((data) => ({
+                        _id: data.uuid,
+                        name: data.title,
+                    }))
+                );
+            } catch (error) {
+                console.log("Error from fetch questionnaires", error);
+            }
+        };
+        fetchQuestionnaires();
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
+    }, []);
+
+    const fetchOperationMembersAccordingToMemberCompanyForAddAssessment =
+        async (id, isCGFStaff) => {
+            try {
+                const response = await privateAxios.get(
+                    // FETCH_OPERATION_MEMBER + id
+                    isCGFStaff
+                        ? FETCH_OPERATION_MEMBER + id + "/master/internal"
+                        : FETCH_OPERATION_MEMBER + id
+                );
+                console.log(
+                    "Response from fetch operation member according to member company",
+                    response
+                );
+                setOperationMemberForAddAssessments(
+                    response.data.map((data) => ({
+                        _id: data._id,
+                        name: data.name,
+                    }))
+                );
+                let representative = response.data.filter(
+                    (data) => data?.isMemberRepresentative
+                );
+                console.log("Representative---", representative);
+                console.log("is Cgf staff---", isCGFStaff);
+                isCGFStaff
+                    ? setValue("assignedOperationMember", "")
+                    : setValue(
+                          "assignedOperationMember",
+                          representative[0]?._id ? representative[0]?._id : ""
+                      );
+            } catch (error) {
+                console.log(
+                    "Error from from fetch operation member according to member company",
+                    error
+                );
+            }
+        };
+
+    const handleChangeForMemberCompany = (e) => {
+        setValue("assignedMember", e.target.value);
+        console.log("assignedMember", e.target.value);
+        console.log("member representatives-----", memberRepresentatives);
+
+        let cgfCompany = memberCompaniesForAddAssessments.filter(
+            (data) => data._id === e.target.value
+        );
+        console.log("cgf company-----", cgfCompany);
+
+        let memberRepresentative = memberRepresentatives.filter(
+            (data) => data._id === e.target.value
+        );
+
+        if (cgfCompany[0].name === "CGF") {
+            setIsCGFStaff(true);
+            fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+                e.target.value,
+                true
+            );
+        } else {
+            setIsCGFStaff(false);
+            fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
+                e.target.value,
+                false
+            );
+        }
+
+        console.log("member representative----", memberRepresentative);
+
+        // trigger("assignedOperationMember");
+        trigger("assignedMember");
+    };
+
+    const handleChangeForAssessmentModule = (e) => {
+        console.log("assessment type", e);
+        let filterQuestionnaireById = questionnaresObj.filter(
+            (questionnare) => questionnare.name === e.target.value
+        );
+        console.log("filtered questionnaire", filterQuestionnaireById);
+        setValue("questionnaireId", filterQuestionnaireById[0]._id);
+        setValue("assessmentType", e.target.value);
+        trigger("assessmentType");
+    };
+
+    const submitAssessments = async (data) => {
+        console.log("data from on submit", data);
+
+        let someDate = new Date(data.dueDate);
+        let setUTCHoursForDueDate = new Date(
+            someDate.setDate(someDate.getDate() + 1)
+        );
+        let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
         console.log(
-          "response from fetch member companies for add assessments",
-          response
+            "data after converting to ISOstring",
+            new Date(ISOdate).toISOString()
         );
-        isMounted &&
-          setMemberCompaniesForAddAssessments(
-            response.data.map((data) => ({
-              _id: data._id,
-              name: data.companyName,
-            }))
-          );
-        setMemberRepresentatives(response.data);
-      } catch (error) {
-        console.log("Error from fetch member company api", error);
-      }
-    };
-    fetchMemberCompaniesForAddAssesments();
+        data = {
+            ...data,
+            dueDate: new Date(setUTCHoursForDueDate),
+        };
 
-    const fetchQuestionnaires = async () => {
-      try {
-        const response = await privateAxios.get(ADD_QUESTIONNAIRE, {
-          signal: controller.signal,
-        });
-        console.log("response from questionnaires api", response.data);
-        isMounted && setQuestionnares(response.data.map((data) => data.title));
-        setQuestionnaresObj(
-          response.data.map((data) => ({
-            _id: data.uuid,
-            name: data.title,
-          }))
-        );
-      } catch (error) {
-        console.log("Error from fetch questionnaires", error);
-      }
-    };
-    fetchQuestionnaires();
-
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, []);
-
-  const fetchOperationMembersAccordingToMemberCompanyForAddAssessment = async (
-    id,
-    isCGFStaff
-  ) => {
-    try {
-      const response = await privateAxios.get(
-        // FETCH_OPERATION_MEMBER + id
-        isCGFStaff
-          ? FETCH_OPERATION_MEMBER + id + "/master/internal"
-          : FETCH_OPERATION_MEMBER + id
-      );
-      console.log(
-        "Response from fetch operation member according to member company",
-        response
-      );
-      setOperationMemberForAddAssessments(
-        response.data.map((data) => ({
-          _id: data._id,
-          name: data.name,
-        }))
-      );
-      let representative = response.data.filter(
-        (data) => data?.isMemberRepresentative
-      );
-      console.log("Representative---", representative);
-      console.log("is Cgf staff---", isCGFStaff);
-      isCGFStaff
-        ? setValue("assignedOperationMember", "")
-        : setValue(
-            "assignedOperationMember",
-            representative[0]?._id ? representative[0]?._id : ""
-          );
-    } catch (error) {
-      console.log(
-        "Error from from fetch operation member according to member company",
-        error
-      );
-    }
-  };
-
-  const handleChangeForMemberCompany = (e) => {
-    setValue("assignedMember", e.target.value);
-    console.log("assignedMember", e.target.value);
-    console.log("member representatives-----", memberRepresentatives);
-
-    let cgfCompany = memberCompaniesForAddAssessments.filter(
-      (data) => data._id === e.target.value
-    );
-    console.log("cgf company-----", cgfCompany);
-
-    let memberRepresentative = memberRepresentatives.filter(
-      (data) => data._id === e.target.value
-    );
-
-    if (cgfCompany[0].name === "CGF") {
-      setIsCGFStaff(true);
-      fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
-        e.target.value,
-        true
-      );
-    } else {
-      setIsCGFStaff(false);
-      fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
-        e.target.value,
-        false
-      );
-    }
-
-    console.log("member representative----", memberRepresentative);
-
-    // trigger("assignedOperationMember");
-    trigger("assignedMember");
-  };
-
-  const handleChangeForAssessmentModule = (e) => {
-    console.log("assessment type", e);
-    let filterQuestionnaireById = questionnaresObj.filter(
-      (questionnare) => questionnare.name === e.target.value
-    );
-    console.log("filtered questionnaire", filterQuestionnaireById);
-    setValue("questionnaireId", filterQuestionnaireById[0]._id);
-    setValue("assessmentType", e.target.value);
-    trigger("assessmentType");
-  };
-
-  const submitAssessments = async (data) => {
-    console.log("data from on submit", data);
-
-    let someDate = new Date(data.dueDate);
-    let setUTCHoursForDueDate = new Date(
-      someDate.setDate(someDate.getDate() + 1)
-    );
-    let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
-    console.log(
-      "data after converting to ISOstring",
-      new Date(ISOdate).toISOString()
-    );
-    data = {
-      ...data,
-      dueDate: new Date(setUTCHoursForDueDate),
-    };
-
-    try {
-      const response = await privateAxios.post(ADD_ASSESSMENTS, data);
-      if (response.status === 201) {
-        console.log("response from add assessments", response);
-        reset({
-          title: "",
-          assessmentType: "",
-          assignedMember: "",
-          // name: .assignedMember?.companyName,
+        try {
+            const response = await privateAxios.post(ADD_ASSESSMENTS, data);
+            if (response.status === 201) {
+                console.log("response from add assessments", response);
+                reset({
+                    title: "",
+                    assessmentType: "",
+                    assignedMember: "",
+                    // name: .assignedMember?.companyName,
 
           assignedOperationMember: "",
           dueDate: "",
@@ -443,89 +445,109 @@ const AddAssessment = () => {
                               setValue(
                                 "dueDate",
 
-                                event?.toISOString()
-                              );
-                            }}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                className={` input-field ${
-                                  error && "input-error"
-                                }`}
+                                                                event?.toISOString()
+                                                            );
+                                                        }}
+                                                        renderInput={(
+                                                            params
+                                                        ) => (
+                                                            <TextField
+                                                                {...params}
+                                                                className={` input-field ${
+                                                                    error &&
+                                                                    "input-error"
+                                                                }`}
                                 onKeyDown={handleOnKeyDownChange}
-                                error
-                                helperText={
-                                  error
-                                    ? helperTextForAssessment.dueDate[
-                                        error.type
-                                      ]
-                                    : " "
-                                }
-                              />
-                            )}
-                            // {...field}
-                          />
-                        </LocalizationProvider>
-                      )}
-                    />
-                  </div>
+                                                                error
+                                                                helperText={
+                                                                    error
+                                                                        ? helperTextForAssessment
+                                                                              .dueDate[
+                                                                              error
+                                                                                  .type
+                                                                          ]
+                                                                        : " "
+                                                                }
+                                                            />
+                                                        )}
+                                                        // {...field}
+                                                    />
+                                                </LocalizationProvider>
+                                            )}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="card-form-field">
+                                    <div className="form-group">
+                                        <label>Remarks/Comments</label>
+                                        <Controller
+                                            name="remarks"
+                                            control={control}
+                                            rules={{
+                                                // required: true,
+                                                minLength: 3,
+                                                maxLength: 250,
+                                            }}
+                                            render={({
+                                                field,
+                                                fieldState: { error },
+                                            }) => (
+                                                <TextField
+                                                    multiline
+                                                    {...field}
+                                                    onBlur={(e) =>
+                                                        setValue(
+                                                            "remarks",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
+                                                    inputProps={{
+                                                        maxLength: 250,
+                                                    }}
+                                                    className={`input-textarea ${
+                                                        error &&
+                                                        "input-textarea-error"
+                                                    }`}
+                                                    id="outlined-basic"
+                                                    placeholder="Enter remarks/comments"
+                                                    helperText={
+                                                        error
+                                                            ? helperTextForAssessment
+                                                                  .remarks[
+                                                                  error.type
+                                                              ]
+                                                            : " "
+                                                    }
+                                                    variant="outlined"
+                                                />
+                                            )}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-btn flex-between add-members-btn">
+                                    <button
+                                        type={"reset"}
+                                        onClick={() =>
+                                            navigate("/assessment-list")
+                                        }
+                                        className="secondary-button mr-10"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="primary-button add-button"
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div className="card-form-field">
-                  <div className="form-group">
-                    <label>Remarks/Comments</label>
-                    <Controller
-                      name="remarks"
-                      control={control}
-                      rules={{
-                        // required: true,
-                        minLength: 3,
-                        maxLength: 250,
-                      }}
-                      render={({ field, fieldState: { error } }) => (
-                        <TextField
-                          multiline
-                          {...field}
-                          onBlur={(e) =>
-                            setValue("remarks", e.target.value?.trim())
-                          }
-                          inputProps={{
-                            maxLength: 250,
-                          }}
-                          className={`input-textarea ${
-                            error && "input-textarea-error"
-                          }`}
-                          id="outlined-basic"
-                          placeholder="Enter remarks/comments"
-                          helperText={
-                            error
-                              ? helperTextForAssessment.remarks[error.type]
-                              : " "
-                          }
-                          variant="outlined"
-                        />
-                      )}
-                    />
-                  </div>
-                </div>
-                <div className="form-btn flex-between add-members-btn">
-                  <button
-                    type={"reset"}
-                    onClick={() => navigate("/assessment-list")}
-                    className="secondary-button mr-10"
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="primary-button add-button">
-                    Save
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
+            </section>
         </div>
-      </section>
-    </div>
-  );
+    );
 };
 
 export default AddAssessment;

@@ -562,7 +562,7 @@ const ViewRole = () => {
                                   <TableCell>
                                     {temp[previleg]["name"]}
                                   </TableCell>
-                                  <TableCell>
+                                  <TableCell align="center" padding="checkbox">
                                   <Checkbox
                                       disabled
                                       className="table-checkbox"

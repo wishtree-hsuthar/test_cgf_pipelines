@@ -197,7 +197,7 @@ function EditAssessment() {
 
     const fetchQuestionnaires = async () => {
       try {
-        const response = await privateAxios.get(ADD_QUESTIONNAIRE, {
+        const response = await privateAxios.get(ADD_QUESTIONNAIRE + "/master", {
           signal: controller.signal,
         });
         console.log("response from questionnaires api", response.data);
@@ -366,9 +366,9 @@ function EditAssessment() {
   const handleToggle = () => {
     setActive(!isActive);
   };
-  const onDialogPrimaryButtonClickHandler = async() => {
+  const onDialogPrimaryButtonClickHandler = async () => {
     try {
-      await axios.delete(FETCH_ASSESSMENT_BY_ID+`${params?.id}`)
+      await axios.delete(FETCH_ASSESSMENT_BY_ID + `${params?.id}`);
       setToasterDetails(
         {
           titleMessage: "Success",
@@ -392,11 +392,9 @@ function EditAssessment() {
         },
         () => toasterRef.current()
       );
-    }
-    finally {
+    } finally {
       setOpenDialog(false);
     }
-
   };
   const onDialogSecondaryButtonClickHandler = () => {
     navigate("/assessment-list");
@@ -417,7 +415,8 @@ function EditAssessment() {
         title={<p>Delete assessment "{watch("title")}"!</p>}
         info1={
           <p>
-            Once the assignment is deleted, all the related information would be lost. 
+            Once the assignment is deleted, all the related information would be
+            lost.
           </p>
         }
         info2={<p>Do you want to continue?</p>}
@@ -444,28 +443,28 @@ function EditAssessment() {
             <div className="form-header flex-between">
               <h2 className="heading2">Edit Assessment</h2>
               <span className="form-header-right-txt" onClick={handleToggle}>
-              <span
-                className={`crud-operation ${
-                  isActive && "crud-operation-active"
-                }`}
-              >
-                <MoreVertIcon />
-              </span>
-              <div
-                className="crud-toggle-wrap"
-                style={{ display: isActive ? "block" : "none" }}
-              >
-                <ul className="crud-toggle-list">
-                  {/* <li onClick={() => navigate(`/roles/edit-role/${params.id}`)}>
+                <span
+                  className={`crud-operation ${
+                    isActive && "crud-operation-active"
+                  }`}
+                >
+                  <MoreVertIcon />
+                </span>
+                <div
+                  className="crud-toggle-wrap"
+                  style={{ display: isActive ? "block" : "none" }}
+                >
+                  <ul className="crud-toggle-list">
+                    {/* <li onClick={() => navigate(`/roles/edit-role/${params.id}`)}>
                     Edit
                   </li> */}
-                  <li onClick={() => setOpenDialog(true)}>Delete</li>
-                </ul>
-              </div>
-              {/* <CustomModal /> */}
-            </span>
+                    <li onClick={() => setOpenDialog(true)}>Delete</li>
+                  </ul>
+                </div>
+                {/* <CustomModal /> */}
+              </span>
             </div>
-           
+
             {isLoading ? (
               <div className="loader-blk">
                 <img src={Loader2} alt="Loading" />

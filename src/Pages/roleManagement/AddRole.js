@@ -415,7 +415,7 @@ const AddRole = () => {
                               <TableCell>
                                 {previleges1[previleg]["name"]}
                               </TableCell>
-                              <TableCell>
+                              <TableCell align="center" padding="checkbox">
                               <Checkbox
                                   disabled={previleges1[previleg]["name"] != "Assessment"}
                                   className="table-checkbox"
