@@ -250,7 +250,8 @@ function AddNewQuestionnaire() {
                                 <h2 className="heading2">Add Questionnaire</h2>
                             )}
                         </div>
-                        <div className="que-ttl-blk">
+                        <div className="que-ttl-blk flex-between">
+                            <div className="que-ttl-left">
                             <div className="form-group">
                                 <label htmlFor="emailid">
                                     Questionnaire Title{" "}
@@ -293,6 +294,8 @@ function AddNewQuestionnaire() {
                                     }
                                 />
                             </div>
+                            </div>
+                            <div className="que-ttl-right">
                             <div className="form-group">
                                 <label htmlFor="status">
                                     Status <span className="mandatory">*</span>
@@ -333,6 +336,7 @@ function AddNewQuestionnaire() {
                                         <FormHelperText> </FormHelperText>
                                     </FormControl>
                                 </div>
+                            </div>
                             </div>
                         </div>
 
