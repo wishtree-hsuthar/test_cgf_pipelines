@@ -142,7 +142,7 @@ function AddOperationMember() {
     // conditionally render textfield or searchable textfield
     const [showTextField, setShowTextField] = useState(false);
     // cgf as member company
-    const [cgfMember, setCgfMember] = useState();
+    const [cgfMember, setCgfMember] = useState([]);
     const [roles, setRoles] = useState([]);
     // Fetch and set roles
     let fetchRoles = async () => {

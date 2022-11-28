@@ -314,6 +314,11 @@ const AddAssessment = () => {
       }
     }
   };
+
+  //method to prevent typing on date field
+  const handleOnKeyDownChange = (e) => {
+    e.preventDefault();
+  };
   return (
     <div className="page-wrapper">
       <Toaster
@@ -447,6 +452,7 @@ const AddAssessment = () => {
                                 className={` input-field ${
                                   error && "input-error"
                                 }`}
+                                onKeyDown={handleOnKeyDownChange}
                                 error
                                 helperText={
                                   error

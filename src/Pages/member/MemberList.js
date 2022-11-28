@@ -28,7 +28,7 @@ const tableHead = [
     {
         id: "name",
         disablePadding: false,
-        label: "Name",
+        label: "Representative",
     },
     {
         id: "email",
@@ -43,7 +43,7 @@ const tableHead = [
     {
         id: "totalOperationMembers",
         disablePadding: false,
-        label: "Operation Team Members",
+        label: "Ops. Members",
     },
     {
         id: "createdBy",
@@ -54,7 +54,7 @@ const tableHead = [
     {
         id: "createdAt",
         disablePadding: false,
-        label: "Onboarded On",
+        label: "Created At",
     },
     {
         id: "isActive",

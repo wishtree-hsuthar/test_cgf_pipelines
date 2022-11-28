@@ -192,6 +192,7 @@ const SectionContent = ({
         return false;
     };
 
+    
     const sectionLayoutChangeHandler = (e) => {
         const { name, value } = e.target;
         console.log("name:", name, "value:", value);
@@ -389,11 +390,10 @@ const SectionContent = ({
       <DialogBox
         title={
           <p>
-            Cancel Questionnaire{" "}
-            {questionnaire?.title && '"' + questionnaire?.title + '"'}
+            Cancel Questionnaire
           </p>
         }
-        info1={<p>All the saved sections will save a draft</p>}
+        info1={<p>All the saved sections will save a draft.</p>}
         info2={<p>Are you sure want to cancel the form?</p>}
         primaryButtonText="Yes"
         secondaryButtonText="No"

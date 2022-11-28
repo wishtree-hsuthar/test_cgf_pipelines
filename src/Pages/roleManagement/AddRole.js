@@ -28,12 +28,12 @@ import {useDocumentTitle} from "../../utils/useDocumentTitle"
 
 const AddRole = () => {
   useDocumentTitle("Add Role")   
-  const navigate = useNavigate();
+  const navigate1 = useNavigate();
 
   //Refr for Toaster
   const myRef = React.useRef();
   //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
+  const [toasterDetails1, setToasterDetails1] = useCallbackState({
     titleMessage: "",
     descriptionMessage: "",
     messageType: "success",
@@ -66,13 +66,14 @@ const AddRole = () => {
     },
   };
 
-  const [previleges, setPrevileges] = useState({ ...temp });
+  const [previleges1, setPrevileges1] = useState({ ...temp });
 
-  const createPrevileges = () => {
+  const createPrevileges1 = () => {
     console.log("modules in side create prive func",modules)
     modules.forEach((module) => 
        temp[module.moduleId] = {
         name: module.moduleName,
+        fill: false,
         list: false,
         add: false,
         edit: false,
@@ -82,7 +83,7 @@ const AddRole = () => {
         all: false,
       }
     );
-    setPrevileges({ ...temp });
+    setPrevileges1({ ...temp });
   };
 
   const createModules = (data) => {
@@ -93,21 +94,21 @@ const AddRole = () => {
           moduleId: module._id,
         })
     );
-    createPrevileges()
+    createPrevileges1()
   };
 
   const { control, reset, setValue, handleSubmit } =
     useForm({
       defaultValues: defaultValues,
     });
-  const onSubmit = async (data) => {
+  const onSubmit1 = async (data) => {
     console.log("inside on Submit")
-    let previlegesForBackend = JSON.parse(JSON.stringify(previleges));
+    let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
     Object.keys(previlegesForBackend).forEach((p_key) => {
       delete previlegesForBackend[p_key]["all"];
       delete previlegesForBackend[p_key]["name"];
     });
-    // console.log("previleges : ", previlegesForBackend);
+    // console.log("previleges1 : ", previlegesForBackend);
     //backend call
     try {
       await axios.post(REACT_APP_API_ENDPOINT + "roles", {
@@ -116,7 +117,7 @@ const AddRole = () => {
         isActive: data.status === "active" ? true : false,
         privileges: previlegesForBackend,
       });
-      setToasterDetails(
+      setToasterDetails1(
         {
           titleMessage: "Hurray!",
           descriptionMessage: "New role added successfully!",
@@ -126,10 +127,10 @@ const AddRole = () => {
       );
       reset({ defaultValues });
       getSystemModules()
-      setTimeout(() => navigate("/roles"), 3000);
+      setTimeout(() => navigate1("/roles"), 3000);
     } catch (error) {
       console.log("error", error);
-      setToasterDetails(
+      setToasterDetails1(
         {
           titleMessage: "Error",
           descriptionMessage:
@@ -143,16 +144,16 @@ const AddRole = () => {
       );
     }
   };
-  const onSubmitAddMoreClickHandler = async (data) => {
-    console.log("on Submit", data, "previleges on Submit", previleges);
-    let previlegesForBackend = JSON.parse(JSON.stringify(previleges));
+  const onSubmitAddMoreClickHandler1 = async (data) => {
+    console.log("on Submit", data, "previleges1 on Submit", previleges1);
+    let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
     Object.keys(previlegesForBackend).forEach((p_key) => {
       console.log("key", p_key);
       delete previlegesForBackend[p_key]["all"];
       delete previlegesForBackend[p_key]["name"];
     });
 
-    console.log("pBack", previlegesForBackend, "pFront", previleges);
+    console.log("pBack", previlegesForBackend, "pFront", previleges1);
 
     //backend call
     try {
@@ -162,7 +163,7 @@ const AddRole = () => {
         isActive: data.status === "active" ? true : false,
         privileges: previlegesForBackend,
       });
-      setToasterDetails(
+      setToasterDetails1(
         {
           titleMessage: "Hurray!",
           descriptionMessage: "New role added successfully",
@@ -173,7 +174,7 @@ const AddRole = () => {
       reset({defaultValues})
       getSystemModules()
     } catch (error) {
-      setToasterDetails(
+      setToasterDetails1(
         {
           titleMessage: "Error",
           descriptionMessage:
@@ -187,10 +188,10 @@ const AddRole = () => {
       );
     }
   };
-  const onClickCancelHandler = () => {
+  const onClickCancelHandler1 = () => {
     console.log("inside on click cancel")
     reset({defaultValues})
-    return navigate("/roles");
+    return navigate1("/roles");
   };
   const getSystemModules = async() => {
     try {
@@ -198,7 +199,7 @@ const AddRole = () => {
       createModules(data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      setToasterDetails(
+      setToasterDetails1(
         {
           titleMessage: "Error",
           descriptionMessage:
@@ -227,9 +228,9 @@ const AddRole = () => {
     <div className="page-wrapper">
       <Toaster
         myRef={myRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
+        titleMessage={toasterDetails1.titleMessage}
+        descriptionMessage={toasterDetails1.descriptionMessage}
+        messageType={toasterDetails1.messageType}
       />
       <div className="breadcrumb-wrapper">
         <div className="container">
@@ -252,14 +253,14 @@ const AddRole = () => {
                 </span>
                 <span
                   className="addmore-txt"
-                  onClick={handleSubmit(onSubmitAddMoreClickHandler)}
+                  onClick={handleSubmit(onSubmitAddMoreClickHandler1)}
                 >
                   Save & Add More
                 </span>
               </div>
             </div>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit1)}>
             <div className="card-wrapper">
               <div className="card-blk flex-between">
                 <div className="card-form-field">
@@ -380,6 +381,7 @@ const AddRole = () => {
                               <span className="sorted-blk">Modules</span>
                               
                             </TableCell>
+                            <TableCell className="table-header"><span className="sorted-blk">Fill</span></TableCell>
                             <TableCell className="table-header"><span className="sorted-blk">List</span></TableCell>
                             <TableCell align="center" className="table-header">
                             <span className="sorted-blk">Add</span>
@@ -406,18 +408,36 @@ const AddRole = () => {
                           </TableRow>
                         </TableHead>
                       <TableBody>
-                        {Object.keys(previleges).map((previleg, _id) => {
+                        {Object.keys(previleges1).map((previleg, _id) => {
+                          console.log("previleg",previleges1[previleg]["name"])
                           return (
                             <TableRow key={previleg} hover>
                               <TableCell>
-                                {previleges[previleg]["name"]}
+                                {previleges1[previleg]["name"]}
+                              </TableCell>
+                              <TableCell>
+                              <Checkbox
+                                  disabled={previleges1[previleg]["name"] != "Assessment"}
+                                  className="table-checkbox"
+                                  checked={previleges1[previleg]["fill"]}
+                                  onChange={() =>
+                                    setPrevileges1((previous) => ({
+                                      ...previous,
+                                      [previleg]: {
+                                        ...previous[previleg],
+                                        fill: !previous[previleg]["fill"],
+                                        all: false,
+                                      },
+                                    }))
+                                  }
+                                />
                               </TableCell>
                               <TableCell align="center" padding="checkbox">
                                 <Checkbox
                                   className="table-checkbox"
-                                  checked={previleges[previleg]["list"]}
+                                  checked={previleges1[previleg]["list"]}
                                   onChange={() =>
-                                    setPrevileges((previous) => ({
+                                    setPrevileges1((previous) => ({
                                       ...previous,
                                       [previleg]: {
                                         ...previous[previleg],
@@ -431,9 +451,9 @@ const AddRole = () => {
                               <TableCell align="center" padding="checkbox">
                                 <Checkbox
                                   className="table-checkbox"
-                                  checked={previleges[previleg]["add"]}
+                                  checked={previleges1[previleg]["add"]}
                                   onChange={() =>
-                                    setPrevileges((previous) => ({
+                                    setPrevileges1((previous) => ({
                                       ...previous,
                                       [previleg]: {
                                         ...previous[previleg],
@@ -449,9 +469,9 @@ const AddRole = () => {
                               <TableCell align="center" padding="checkbox">
                                 <Checkbox
                                   className="table-checkbox"
-                                  checked={previleges[previleg]["edit"]}
+                                  checked={previleges1[previleg]["edit"]}
                                   onChange={() =>
-                                    setPrevileges((previous) => ({
+                                    setPrevileges1((previous) => ({
                                       ...previous,
                                       [previleg]: {
                                         ...previous[previleg],
@@ -467,9 +487,9 @@ const AddRole = () => {
                               <TableCell align="center" padding="checkbox">
                                 <Checkbox
                                   className="table-checkbox"
-                                  checked={previleges[previleg]["view"]}
+                                  checked={previleges1[previleg]["view"]}
                                   onChange={() =>
-                                    setPrevileges((previous) => ({
+                                    setPrevileges1((previous) => ({
                                       ...previous,
                                       [previleg]: {
                                         ...previous[previleg],
@@ -484,9 +504,9 @@ const AddRole = () => {
                               <TableCell align="center" padding="checkbox">
                                 <Checkbox
                                   className="table-checkbox"
-                                  checked={previleges[previleg]["delete"]}
+                                  checked={previleges1[previleg]["delete"]}
                                   onChange={() =>
-                                    setPrevileges((previous) => ({
+                                    setPrevileges1((previous) => ({
                                       ...previous,
                                       [previleg]: {
                                         ...previous[previleg],
@@ -503,9 +523,9 @@ const AddRole = () => {
                               {/* <TableCell align="center" padding="checkbox">
                                 <Checkbox
                                   className="table-checkbox"
-                                  checked={previleges[previleg]["assign"]}
+                                  checked={previleges1[previleg]["assign"]}
                                   onChange={() =>
-                                    setPrevileges((previous) => ({
+                                    setPrevileges1((previous) => ({
                                       ...previous,
                                       [previleg]: {
                                         ...previous[previleg],
@@ -519,9 +539,9 @@ const AddRole = () => {
                               <TableCell align="center" padding="checkbox">
                                 <Checkbox
                                   className="table-checkbox"
-                                  checked={previleges[previleg]["all"]}
+                                  checked={previleges1[previleg]["all"]}
                                   onChange={() =>
-                                    setPrevileges((previous) => ({
+                                    setPrevileges1((previous) => ({
                                       ...previous,
                                       [previleg]: {
                                         ...previous[previleg],
@@ -531,6 +551,7 @@ const AddRole = () => {
                                         add: !previous[previleg]["all"],
                                         edit: !previous[previleg]["all"],
                                         delete: !previous[previleg]["all"],
+                                        fill : previleges1[previleg]["name"] === "Assessment" && !previous[previleg]["all"]
                                         // assign: !previous[previleg]["all"],
                                       },
                                     }))
@@ -551,7 +572,7 @@ const AddRole = () => {
                   type="reset"
                   style={{ marginTop: "20px" }}
                   className="secondary-button mr-10"
-                  onClick={onClickCancelHandler}
+                  onClick={onClickCancelHandler1}
                 >
                   Cancel
                 </button>

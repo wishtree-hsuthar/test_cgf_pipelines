@@ -24,6 +24,9 @@ const TableLayoutCellComponent = ({
     error,
 }) => {
     const [showMore, setShowMore] = useState(false);
+    const handleOnKeyDownChange = (e) => {
+        e.preventDefault();
+      };
     console.log("answer", answer);
     return (
         <>
@@ -187,6 +190,7 @@ const TableLayoutCellComponent = ({
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
+                                        onKeyDown={handleOnKeyDownChange}
                                         className={`input-field${
                                             !answer &&
                                             error &&

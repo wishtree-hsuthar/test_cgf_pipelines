@@ -26,7 +26,7 @@ function Dropdown({
     const MenuProps = {
         PaperProps: {
             style: {
-                maxHeight: ITEM_HEIGHT * 5.5,
+                maxHeight: ITEM_HEIGHT * 4,
             },
         },
     };
