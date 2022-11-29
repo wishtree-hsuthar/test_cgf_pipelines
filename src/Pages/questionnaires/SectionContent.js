@@ -190,7 +190,6 @@ const SectionContent = ({
         return false;
     };
 
-    
     const sectionLayoutChangeHandler = (e) => {
         const { name, value } = e.target;
         console.log("name:", name, "value:", value);
@@ -397,11 +396,7 @@ const SectionContent = ({
             />
             {/* Dialog box for cancel */}
             <DialogBox
-                title={
-                    <p>
-                        Cancel Questionnaire
-                    </p>
-                }
+                title={<p>Cancel Questionnaire</p>}
                 info1={<p>All the saved sections will save a draft</p>}
                 info2={<p>Are you sure want to cancel the form?</p>}
                 primaryButtonText="Yes"
@@ -620,7 +615,9 @@ const SectionContent = ({
                     onClick={handleSubmitSection}
                     className="outlined-button add-button mr-10"
                 >
-                    Save
+                    {questionnaire?.isDraft || questionnaire?.isPublished
+                        ? "Update"
+                        : "Save"}
                 </button>
                 <button
                     type="submit"

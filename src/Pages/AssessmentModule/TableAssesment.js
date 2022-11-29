@@ -45,6 +45,7 @@ const TableAssessment = ({
     handleAnswersChange,
     handleAnswersBlur,
     errors,
+    viewMode,
 }) => {
     const tranformedColumnValues = getTransformedColumns(columnValues);
     const tranformedRowValues = getTransformedRows(rowValues);
@@ -67,7 +68,10 @@ const TableAssessment = ({
                                     <TableRow>
                                         {columnValues?.map(
                                             (column, columnId) => (
-                                                <TableCell key={column?.uuid} width="200px">
+                                                <TableCell
+                                                    key={column?.uuid}
+                                                    width="200px"
+                                                >
                                                     <div className="que-table-column-info">
                                                         <div className="que-column-ttlblk">
                                                             <div
@@ -130,11 +134,16 @@ const TableAssessment = ({
                                                                 handleAnswersChange={
                                                                     handleAnswersChange
                                                                 }
-                                                                handleAnswersBlur={handleAnswersBlur}
+                                                                handleAnswersBlur={
+                                                                    handleAnswersBlur
+                                                                }
                                                                 error={
                                                                     errors[
                                                                         `${cell?.columnId}.${row?.uuid}`
                                                                     ] ?? ""
+                                                                }
+                                                                viewMode={
+                                                                    viewMode
                                                                 }
                                                             />
                                                         </TableCell>

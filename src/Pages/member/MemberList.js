@@ -263,7 +263,7 @@ const MemberList = () => {
         };
 
         // let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=&order=${order}`;
-        let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${namesMappings[orderBy]}&order=${order}`;
+        let url = `${MEMBER}/list?page=${page}&size=${rowsPerPage}&orderBy=${namesMappings[orderBy]}&order=${order}`;
         if (search?.length >= 3) url = url + `&search=${search}`;
         if (filters?.status !== "all" && filters?.status !== "none")
             url = url + `&status=${filters.status}`;

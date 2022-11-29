@@ -104,7 +104,7 @@ const ViewOperationMembers = () => {
         let controller = new AbortController();
         const fetchMemberComapany = async () => {
             try {
-                const response = await privateAxios.get(MEMBER, {
+                const response = await privateAxios.get(MEMBER + "/list", {
                     signal: controller.signal,
                 });
                 console.log(

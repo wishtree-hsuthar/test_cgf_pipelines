@@ -25,7 +25,7 @@ export const MEMBER_DROPDOWN = `${REACT_APP_API_ENDPOINT}members/master`;
 export const MEMBER_OPERATION_MEMBERS = `${REACT_APP_API_ENDPOINT}operation-member/member`;
 
 //sub admin
-export const FETCH_ROLES = `${REACT_APP_API_ENDPOINT}roles`;
+export const FETCH_ROLES = `${REACT_APP_API_ENDPOINT}roles/list`;
 export const ADD_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin`;
 export const FETCH_SUB_ADMIN_BY_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/`;
 export const UPDATE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/`;
@@ -50,15 +50,15 @@ export const ADD_QUESTIONNAIRE = `${REACT_APP_API_ENDPOINT}questionnaires`;
 export const FETCH_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const UPDATE_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const SUBMIT_ASSESSMENT_AS_DRAFT = `${REACT_APP_API_ENDPOINT}assessments/`;
-export const ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
+export const ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/list/`;
 export const ADD_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const REASSIGN_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const ACCEPT_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const DECLINE_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
 
 // download
-export const DOWNLOAD_CGF_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/download`;
-export const DOWNLOAD_MEMBERS = `${REACT_APP_API_ENDPOINT}members/download`;
-export const DOWNLOAD_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/download`;
-export const DOWNLOAD_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
-export const DOWNLOAD_QUESTIONNAIRES = `${REACT_APP_API_ENDPOINT}questionnaires/`;
+export const DOWNLOAD_CGF_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/list/download`;
+export const DOWNLOAD_MEMBERS = `${REACT_APP_API_ENDPOINT}members/list/download`;
+export const DOWNLOAD_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/list/download`;
+export const DOWNLOAD_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/list/download`;
+export const DOWNLOAD_QUESTIONNAIRES = `${REACT_APP_API_ENDPOINT}questionnaires/list/download`;

@@ -57,9 +57,9 @@ const tableHead = [
     },
 ];
 const AssessmentList = () => {
-     //custom hook to set title of page
-useDocumentTitle("Assessments")
-   
+    //custom hook to set title of page
+    useDocumentTitle("Assessments");
+
     const keysOrder = [
         "uuid",
         "_id",
@@ -98,6 +98,8 @@ useDocumentTitle("Assessments")
     const [records, setRecords] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [selected, setSelected] = useState([]);
+    // const [icons, setIcons] = useState([])
+    let icons = [];
 
     const onSearchChangeHandler = (e) => {
         console.log("event", e.key);
@@ -145,7 +147,6 @@ useDocumentTitle("Assessments")
 
         return url;
     };
-    
 
     const getAssessments = async (
         isMounted = true,
@@ -240,10 +241,7 @@ useDocumentTitle("Assessments")
 
     const userAuth = useSelector((state) => state?.user?.userObj);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    const MEMBER_REPRESENTATIVE =
-        privilege?.name === "Member Representative" ? true : false;
-    const OPERATION_MEMBER =
-        privilege?.name === "Operation Member" ? true : false;
+
     let privilegeArray =
         userAuth?.roleId?.name === "Super Admin"
             ? []
@@ -254,12 +252,35 @@ useDocumentTitle("Assessments")
         .map((data) => ({
             assessment: {
                 list: data?.list,
-                view: data?.view,
+                visibility: data?.view,
                 edit: data?.edit,
                 delete: data?.delete,
                 add: data?.add,
+                fill: data?.fill,
             },
         }));
+
+    let assessmentAccessObj = { ...moduleAccesForAssessment[0]?.assessment };
+    console.log("assessment access object", assessmentAccessObj);
+    let handleActionIcons = () => {
+        let icon = Object.entries(assessmentAccessObj).filter(
+            (key) => key[1] === true && icons.push(key[0])
+        );
+        console.log("icon----", icon);
+        if (SUPER_ADMIN) {
+            icons = ["edit", "visibility"];
+            return icons;
+        } else if (icons.includes("fill")) {
+            icons.push("send");
+            console.log("in else if icons---", icons);
+
+            return icons;
+        }
+        console.log(" in else  icons---");
+
+        return icons;
+    };
+    console.log("icons---", icons);
 
     return (
         <div>
@@ -333,12 +354,13 @@ useDocumentTitle("Assessments")
                                         totalRecords={totalRecords}
                                         orderBy={orderBy}
                                         icons={
-                                            SUPER_ADMIN
-                                                ? ["visibility", "edit"]
-                                                : moduleAccesForAssessment[0]
-                                                      ?.assessment?.delete
-                                                ? ["visibility", "edit"]
-                                                : ["fill", "send"]
+                                            // SUPER_ADMIN
+                                            //     ? ["visibility", "edit"]
+                                            //     : moduleAccesForAssessment[0]
+                                            //           ?.assessment?.delete
+                                            //     ? ["visibility", "edit"]
+                                            //     : ["fill", "send"]
+                                            handleActionIcons()
                                         }
                                         onClickVisibilityIconHandler1={
                                             onClickVisibilityIconHandler

@@ -45,7 +45,7 @@ const tableHead1 = [
 
 const RolesList = () => {
     //custom hook to set title of page
-    useDocumentTitle("Roles")
+    useDocumentTitle("Roles");
     //Refr for Toaster
     const myRef3 = React.useRef();
     //Toaster Message setter
@@ -146,7 +146,7 @@ const RolesList = () => {
     };
     const generateUrl = () => {
         console.log("filters", filters);
-        let url = `${REACT_APP_API_ENDPOINT}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${REACT_APP_API_ENDPOINT}roles/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3) url = url + `&search=${search}`;
         if (filters?.status !== "none" && filters?.status !== "all")
             url = url + `&status=${filters.status}`;
@@ -191,7 +191,7 @@ const RolesList = () => {
             setIsLoading2(false);
         }
     };
-    
+
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();

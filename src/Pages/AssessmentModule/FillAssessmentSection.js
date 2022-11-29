@@ -154,6 +154,7 @@ function FillAssesmentSection({
                             handleAnswersChange={handleAnswersChange}
                             handleAnswersBlur={handleAnswersBlur}
                             errors={errors ?? {}}
+                            viewMode={viewMode}
                         />
                     )}
                 </div>
