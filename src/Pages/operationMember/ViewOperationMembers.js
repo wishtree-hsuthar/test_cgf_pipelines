@@ -309,7 +309,7 @@ const ViewOperationMembers = () => {
                 title={
                     <p>
                         Delete operation member "
-                        {fetchOperationMemberDetaills.name}"
+                        {fetchOperationMemberDetaills?.name}"
                     </p>
                 }
                 info1={
