@@ -34,8 +34,8 @@ function FillAssesmentSection({
     errors,
     handleSetErrors,
     handleFormSubmit,
-    viewMode,
-    setViewMode,
+    editMode,
+    setEditMode,
 }) {
     const navigate = useNavigate();
     const params = useParams();
@@ -141,8 +141,8 @@ function FillAssesmentSection({
                                 error={errors[question?.uuid] ?? ""}
                                 handleAnswersChange={handleAnswersChange}
                                 handleAnswersBlur={handleAnswersBlur}
-                                viewMode={viewMode}
-                                setViewMode={setViewMode}
+                                editMode={editMode}
+                                setEditMode={setEditMode}
                             />
                         ))
                     ) : (
@@ -154,11 +154,11 @@ function FillAssesmentSection({
                             handleAnswersChange={handleAnswersChange}
                             handleAnswersBlur={handleAnswersBlur}
                             errors={errors ?? {}}
-                            viewMode={viewMode}
+                            editMode={editMode}
                         />
                     )}
                 </div>
-                {viewMode ? (
+                {editMode && !params["*"].includes("view") ? (
                     <div className="form-btn flex-between add-members-btn que-page-btn">
                         <button
                             type="reset"

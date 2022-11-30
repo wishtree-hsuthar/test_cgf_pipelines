@@ -45,7 +45,7 @@ const TableAssessment = ({
     handleAnswersChange,
     handleAnswersBlur,
     errors,
-    viewMode,
+    editMode,
 }) => {
     const tranformedColumnValues = getTransformedColumns(columnValues);
     const tranformedRowValues = getTransformedRows(rowValues);
@@ -142,8 +142,8 @@ const TableAssessment = ({
                                                                         `${cell?.columnId}.${row?.uuid}`
                                                                     ] ?? ""
                                                                 }
-                                                                viewMode={
-                                                                    viewMode
+                                                                editMode={
+                                                                    editMode
                                                                 }
                                                             />
                                                         </TableCell>

@@ -170,15 +170,17 @@ function OperationMemberList() {
                                 </h2>
                             </div>
                             <div className="form-header-right-txt">
-                                <div
-                                    className="tertiary-btn-blk mr-20"
-                                    onClick={downloadOperationMembers}
-                                >
-                                    <span className="download-icon">
-                                        <DownloadIcon />
-                                    </span>
-                                    Download
-                                </div>
+                                {value == 0 && (
+                                    <div
+                                        className="tertiary-btn-blk mr-20"
+                                        onClick={downloadOperationMembers}
+                                    >
+                                        <span className="download-icon">
+                                            <DownloadIcon />
+                                        </span>
+                                        Download
+                                    </div>
+                                )}
                                 {(SUPER_ADMIN === true ||
                                     moduleAccessForOperationMember[0]
                                         .operationMember.add === true) &&

@@ -17,6 +17,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import { useParams } from "react-router-dom";
 
 export const AlphaRegEx = /^[a-z]+$/i;
 export const NumericRegEx = /^[0-9]+$/i;
@@ -37,8 +38,8 @@ const FillAssessmentQuestion = ({
     answer,
     handleAnswersChange,
     handleAnswersBlur,
-    viewMode,
-    setViewMode,
+    editMode,
+    setEditMode,
 }) => {
     let questionLabel = question.questionTitle;
     let errorObject = {
@@ -49,7 +50,7 @@ const FillAssessmentQuestion = ({
     let questionUUID = question?.uuid;
     const handleOnKeyDownChange = (e) => {
         e.preventDefault();
-      };
+    };
     const handleChecked = (e) => {
         const { name, value, checked } = e.target;
         let values = answer;
@@ -63,10 +64,23 @@ const FillAssessmentQuestion = ({
         handleAnswersChange(name, values);
     };
 
+    const params = useParams();
+    console.log(
+        "disabled in form section question",
+        editMode && params["*"].includes("view")
+    );
+    console.log("viewmode in form section question", editMode);
+    console.log(
+        "params in form section question",
+        params["*"].includes("view")
+    );
+
     let questionComponent =
         question.inputType === "singleTextbox" ? (
             <TextField
-                disabled={!viewMode}
+                disabled={
+                    (editMode && params["*"].includes("view")) || !editMode
+                }
                 placeholder={`Enter text here`}
                 value={answer ?? ""}
                 name={questionUUID}
@@ -114,7 +128,7 @@ const FillAssessmentQuestion = ({
             />
         ) : question.inputType === "textarea" ? (
             <TextField
-                disabled={!viewMode}
+                disabled={!editMode && !params["*"].includes("view")}
                 placeholder={`Enter text here`}
                 multiline
                 value={answer ?? ""}
@@ -174,7 +188,7 @@ const FillAssessmentQuestion = ({
             <div className="radio-btn-field">
                 <FormControl>
                     <RadioGroup
-                        //  disabled={viewMode}
+                        //  disabled={editMode}
 
                         aria-labelledby="demo-radio-buttons-group-label"
                         className="radio-btn radio-btn-vertical"
@@ -189,7 +203,10 @@ const FillAssessmentQuestion = ({
                                 value={option}
                                 control={
                                     <Radio
-                                        disabled={!viewMode}
+                                        disabled={
+                                            !editMode &&
+                                            !params["*"].includes("view")
+                                        }
                                         checked={answer === option}
                                     />
                                 }
@@ -214,7 +231,14 @@ const FillAssessmentQuestion = ({
                                     name={questionUUID}
                                     className="checkbox-with-label"
                                     value={option}
-                                    control={<Checkbox disabled={!viewMode} />}
+                                    control={
+                                        <Checkbox
+                                            disabled={
+                                                !editMode &&
+                                                !params["*"].includes("view")
+                                            }
+                                        />
+                                    }
                                     checked={answer.includes(option)}
                                     onChange={handleChecked}
                                     label={option}
@@ -237,12 +261,11 @@ const FillAssessmentQuestion = ({
                     components={{
                         OpenPickerIcon: DateRangeOutlinedIcon,
                     }}
-                    disabled={!viewMode}
+                    disabled={!editMode && !params["*"].includes("view")}
                     value={answer ?? ""}
                     onChange={(newValue) =>
                         handleAnswersChange(questionUUID, newValue)
                     }
-                    
                     renderInput={(params) => (
                         <TextField
                             {...params}

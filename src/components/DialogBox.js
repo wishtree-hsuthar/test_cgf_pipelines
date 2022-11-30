@@ -14,6 +14,7 @@ const DialogBox = ({
     openModal,
     setOpenModal,
     isModalForm,
+    handleCloseRedirect,
 }) => {
     // css for modal
     const style = {
@@ -68,9 +69,11 @@ const DialogBox = ({
                         </h2>
 
                         <span
-                            hidden={isModalForm}
+                            // hidden={isModalForm}
                             className="popup-close-icon"
-                            onClick={handleClose}
+                            onClick={
+                                isModalForm ? handleCloseRedirect : handleClose
+                            }
                         >
                             <CloseIcon />
                         </span>
