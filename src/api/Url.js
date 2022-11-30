@@ -19,7 +19,6 @@ export const COUNTRIES = `${REACT_APP_API_ENDPOINT}master/country/list`;
 export const STATES = `${REACT_APP_API_ENDPOINT}master/country`;
 export const CITES = `${REACT_APP_API_ENDPOINT}master/cities`;
 
-
 //Member
 export const MEMBER = `${REACT_APP_API_ENDPOINT}members`;
 export const MEMBER_DROPDOWN = `${REACT_APP_API_ENDPOINT}members/master`;
@@ -65,3 +64,4 @@ export const DOWNLOAD_MEMBERS = `${REACT_APP_API_ENDPOINT}members/list/download`
 export const DOWNLOAD_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/list/download`;
 export const DOWNLOAD_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/list/download`;
 export const DOWNLOAD_QUESTIONNAIRES = `${REACT_APP_API_ENDPOINT}questionnaires/list/download`;
+export const DOWNLOAD_QUESTIONNAIRES_BY_ID = `${REACT_APP_API_ENDPOINT}questionnaires/`;
