@@ -56,9 +56,9 @@ const tableHead = [
 ];
 
 const AssignAssessmentToOperationMember = () => {
-     //custom hook to set title of page
-useDocumentTitle("Assign Assessment")
-   
+    //custom hook to set title of page
+    useDocumentTitle("Assign Assessment");
+
     const keysOrder = ["_id", "name", "email"];
 
     const [page, setPage] = React.useState(1);
@@ -112,9 +112,9 @@ useDocumentTitle("Assign Assessment")
         console.log("Search", search);
         // console.log("assessment?")
 
-        let url = `${MEMBER_OPERATION_MEMBERS}/${memberId}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
-            url = `${MEMBER_OPERATION_MEMBERS}/${memberId}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+            url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
         return memberId && url;
     };
@@ -135,6 +135,7 @@ useDocumentTitle("Assign Assessment")
             delete object["uuid"];
             delete object["phoneNumber"];
             delete object["createdAt"];
+            delete object["memberData"];
             // object["role"] = object["subRole"][0].name;
             delete object["department"];
             delete object["isDeleted"];
@@ -302,9 +303,7 @@ useDocumentTitle("Assign Assessment")
             }
         } catch (error) {
             console.log("Error from re-assign assessment", error);
-            if (
-                error?.response?.status == 400
-            ) {
+            if (error?.response?.status == 400) {
                 setToasterDetails(
                     {
                         titleMessage: "Error",

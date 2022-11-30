@@ -10,6 +10,7 @@ import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import { useParams } from "react-router-dom";
 export const AlphaRegEx = /^[a-z]+$/i;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
@@ -22,9 +23,10 @@ const TableLayoutCellComponent = ({
     handleAnswersChange,
     handleAnswersBlur,
     error,
-    viewMode,
+    editMode,
 }) => {
     const [showMore, setShowMore] = useState(false);
+    const params = useParams();
     const handleOnKeyDownChange = (e) => {
         e.preventDefault();
     };
@@ -99,7 +101,10 @@ const TableLayoutCellComponent = ({
                                 ? "input-error"
                                 : ""
                         }`}
-                        disabled={!viewMode}
+                        disabled={
+                            (editMode && params["*"].includes("view")) ||
+                            !editMode
+                        }
                         placeholder="Enter text here"
                         value={answer}
                         name={`${cell.columnId}.${rowId}`}
@@ -141,7 +146,11 @@ const TableLayoutCellComponent = ({
                                 )}
                                 name={`${cell.columnId}.${rowId}`}
                                 displayEmpty
-                                disabled={!viewMode}
+                                disabled={
+                                    (editMode &&
+                                        params["*"].includes("view")) ||
+                                    !editMode
+                                }
                                 value={answer}
                                 className={`${
                                     !answer && error && error?.length !== 0
@@ -193,7 +202,11 @@ const TableLayoutCellComponent = ({
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        disabled={!viewMode}
+                                        disabled={
+                                            (editMode &&
+                                                params["*"].includes("view")) ||
+                                            !editMode
+                                        }
                                         onKeyDown={handleOnKeyDownChange}
                                         className={`input-field${
                                             !answer &&
