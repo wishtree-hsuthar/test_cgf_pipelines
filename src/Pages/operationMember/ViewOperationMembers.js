@@ -449,6 +449,9 @@ const ViewOperationMembers = () => {
                             rules={{ required: true }}
                             render={({ field, fieldState: { error } }) => (
                               <Autocomplete
+                               disabled
+                               popupIcon={<KeyboardArrowDownRoundedIcon />}
+                               className="phone-number-disable"
                                 {...field}
                                 options={countries}
                                 autoHighlight

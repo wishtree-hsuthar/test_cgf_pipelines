@@ -183,6 +183,11 @@ const Header = () => {
     const [hoverStatus, setHover] = useState(false);
     const [hoverNameStatus, setNameHover] = useState(false);
 
+    const handleChangePassword = () => {
+        navigate('/change-password')
+        setAnchorElUser(null);
+        setActive(!isActive);
+    };
     return (
         <AppBar position="sticky" className="header-sect">
             <div className="nav">
@@ -593,11 +598,7 @@ const Header = () => {
                                                                 </div>
                                                                 <div
                                                                     className="tertiary-btn-blk mt-20"
-                                                                    onClick={() =>
-                                                                        navigate(
-                                                                            "/change-password"
-                                                                        )
-                                                                    }
+                                                                    onClick={handleChangePassword}
                                                                 >
                                                                     <span className="addmore-txt">
                                                                         Change
