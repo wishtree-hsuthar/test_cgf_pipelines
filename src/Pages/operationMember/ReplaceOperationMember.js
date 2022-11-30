@@ -60,6 +60,7 @@ const ReplaceOperationMember = () => {
 
     const { id } = useParams();
     //state to hold search timeout delay
+    const [selectedOperationMember, setSelectedOperationMember] = useState({});
     const [searchTimeout, setSearchTimeout] = useState(null);
     const [selected, setSelected] = React.useState([]);
     const [order, setOrder] = React.useState("asc");
@@ -94,9 +95,9 @@ const ReplaceOperationMember = () => {
     const generateUrl = (multiFilterString) => {
         console.log("Search", search);
 
-        let url = `${ADD_OPERATION_MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${ADD_OPERATION_MEMBER}/${id}/replaces/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
-            url = `${ADD_OPERATION_MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+            url = `${ADD_OPERATION_MEMBER}/${id}/replaces/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
         return url;
     };
@@ -229,10 +230,20 @@ const ReplaceOperationMember = () => {
                 }
             );
             if (response.status == 201) {
+                console.log(
+                    selectedOperationMember[0].name +
+                        " has replaced " +
+                        operationMember.name +
+                        " successfully!"
+                );
                 setToasterDetails(
                     {
                         titleMessage: "Success",
-                        descriptionMessage: response?.data?.message,
+                        descriptionMessage:
+                            selectedOperationMember[0].name +
+                            " has replaced " +
+                            operationMember.name +
+                            " successfully!",
                         messageType: "success",
                     },
                     () => myRef.current()
@@ -295,6 +306,9 @@ const ReplaceOperationMember = () => {
     const selectSingleUser = (id) => {
         console.log("select single user---", id);
         setSelectedUser(id);
+        setSelectedOperationMember({
+            ...records.filter((data) => data._id === id ?? { name: data.name }),
+        });
     };
     return (
         <div class="page-wrapper">
