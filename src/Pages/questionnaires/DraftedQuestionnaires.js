@@ -32,9 +32,14 @@ function DraftedQuestionnaires({
             disablePadding: false,
             label: "Created At",
         },
+        {
+            id: "isActive",
+            disablePadding: false,
+            label: "Status",
+          },
     ];
 
-    const keysOrder = ["_id", "title", "uuid", "createdAt"];
+    const keysOrder = ["_id", "title", "uuid", "createdAt","isActive"];
 
     //code of tablecomponent
     const [pageDraftedQuestionnaire, setPageDraftedQuestionnaire] = useState(1);
@@ -64,6 +69,7 @@ function DraftedQuestionnaires({
             // delete object["uuid"];
             // delete object["createdAt"];
             delete object["isDraft"];
+            // delete object["isActive"]
             delete object["isPublished"];
             // delete object["title"];
             // delete object["updatedAt"];

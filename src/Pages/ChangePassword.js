@@ -152,7 +152,7 @@ const ChangePassword = () => {
                     <OutlinedInput
                       fullWidth
                       id="outlined-adornment-password"
-                      type={values.showConfirmPassword ? "text" : "password"}
+                      type={values.showOldPassword ? "text" : "password"}
                       // value={values.confirmPassword}
                       // onChange={handleChange('confirmPassword')}
                       placeholder="Enter old password"
@@ -221,7 +221,7 @@ const ChangePassword = () => {
                     // onChange={handleChange('password')}
                     placeholder="Enter new password"
                     className={`input-field ${
-                      errors.newpassword && "input-error"
+                      errors?.newPassword && "input-error"
                     }`}
                     inputProps={{
                       maxLength: 15,

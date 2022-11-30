@@ -258,77 +258,71 @@ function PendingCGFAdmins({
         filters,
         makeApiCall,
 
-        setMakeApiCall,
-        searchTimeout,
-        pageForPendingTab,
-        rowsPerPageForPendingTab,
-        orderByForPending,
-        orderForPendingTab,
-    ]);
-    {
-        console.log("makeApiCall outside UseEffect ", makeApiCall);
-        // console.log("order", order, "order BY", orderBy);
-    }
-    return (
-        <>
-            <DialogBox
-                title={
-                    <p>
-                        Withdraw{" "}
-                        {withdrawInviteUser
-                            ? withdrawInviteUser[0]?.name
-                            : "CGF admin"}
-                        's Invitation
-                    </p>
-                }
-                info1={
-                    <p>
-                        On withdrawal, CGF admin will not be able to verify
-                        their account.
-                    </p>
-                }
-                info2={<p>Do you want to withdraw the invitation?</p>}
-                primaryButtonText={"Yes"}
-                secondaryButtonText={"No"}
-                onPrimaryModalButtonClickHandler={() => {
-                    withdrawInviteById();
-                }}
-                onSecondaryModalButtonClickHandler={() => {
-                    setOpenDeleteDialogBox(false);
-                }}
-                openModal={openDeleteDialogBox}
-                setOpenModal={setOpenDeleteDialogBox}
-            />
-            {isLoading ? (
-                <div className="loader-blk">
-                    <img src={Loader2} alt="Loading" />
-                </div>
-            ) : (
-                <TableComponent
-                    tableHead={pendingTableColumnHead}
-                    records={recordsForPendingTab}
-                    handleChangePage1={handlePendingTablePageChange}
-                    handleChangeRowsPerPage1={
-                        handleRowsPerPageChangeForPendingTab
-                    }
-                    page={pageForPendingTab}
-                    rowsPerPage={rowsPerPageForPendingTab}
-                    totalRecords={totalRecordsForPendingTab}
-                    orderBy={orderByForPending}
-                    icons={["delete"]}
-                    // onClickVisibilityIconHandler1={
-                    //     onClickDeleteIconHandler
-                    // }
-                    onClickDeleteIconHandler1={onClickDeleteIconHandler}
-                    order={orderForPendingTab}
-                    setOrder={setOrderForPendingTab}
-                    setOrderBy={setOrderByForPendingTab}
-                    setCheckBoxes={false}
-                    onRowClick={false}
-                />
-            )}
-        </>
-    );
+    setMakeApiCall,
+    searchTimeout,
+    pageForPendingTab,
+    rowsPerPageForPendingTab,
+    orderByForPending,
+    orderForPendingTab,
+  ]);
+  {
+    console.log("makeApiCall outside UseEffect ", makeApiCall);
+    // console.log("order", order, "order BY", orderBy);
+  }
+  return (
+    <>
+      <DialogBox
+        title={
+          <p>
+            Withdraw "{withdrawInviteUser && `${withdrawInviteUser[0]?.name}`}
+            's" Invitation
+          </p>
+        }
+        info1={
+          <p>
+            On withdrawal, CGF admin will not be able to verify their account.
+          </p>
+        }
+        info2={<p>Do you want to withdraw the invitation?</p>}
+        primaryButtonText={"Yes"}
+        secondaryButtonText={"No"}
+        onPrimaryModalButtonClickHandler={() => {
+          withdrawInviteById();
+        }}
+        onSecondaryModalButtonClickHandler={() => {
+          setOpenDeleteDialogBox(false);
+        }}
+        openModal={openDeleteDialogBox}
+        setOpenModal={setOpenDeleteDialogBox}
+      />
+      {isLoading ? (
+        <div className="loader-blk">
+          <img src={Loader2} alt="Loading" />
+        </div>
+      ) : (
+        <TableComponent
+          tableHead={pendingTableColumnHead}
+          records={recordsForPendingTab}
+          handleChangePage1={handlePendingTablePageChange}
+          handleChangeRowsPerPage1={handleRowsPerPageChangeForPendingTab}
+          page={pageForPendingTab}
+          rowsPerPage={rowsPerPageForPendingTab}
+          totalRecords={totalRecordsForPendingTab}
+          orderBy={orderByForPending}
+          icons={["delete"]}
+          // onClickVisibilityIconHandler1={
+          //     onClickDeleteIconHandler
+          // }
+          onClickDeleteIconHandler1={onClickDeleteIconHandler}
+          order={orderForPendingTab}
+          setOrder={setOrderForPendingTab}
+          setOrderBy={setOrderByForPendingTab}
+          setCheckBoxes={false}
+          onRowClick={false}
+        />
+      )}
+    </>
+  );
 }
 
 export default PendingCGFAdmins;

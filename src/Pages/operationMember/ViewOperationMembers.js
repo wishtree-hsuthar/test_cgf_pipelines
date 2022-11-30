@@ -309,7 +309,7 @@ const ViewOperationMembers = () => {
                 title={
                     <p>
                         Delete operation member "
-                        {fetchOperationMemberDetaills.name}"
+                        {fetchOperationMemberDetaills?.name}"
                     </p>
                 }
                 info1={
@@ -495,7 +495,10 @@ const ViewOperationMembers = () => {
                                                             },
                                                         }) => (
                                                             <Autocomplete
-                                                                {...field}
+                                                               disabled
+                               popupIcon={<KeyboardArrowDownRoundedIcon />}
+                               className="phone-number-disable"
+                                {...field}
                                                                 options={
                                                                     countries
                                                                 }
