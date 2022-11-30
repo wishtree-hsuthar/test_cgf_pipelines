@@ -14,7 +14,7 @@
     padding: 0 10px;
 }
 .table-header span {
-    font-size: 16px;
+    font-size: 15px;
     color: #1e1e1e !important;
     font-family: "ProximaNova-Semibold", serif, sans-serif;
 }
@@ -218,7 +218,7 @@
 }
 
 .table-blk-role .MuiTableCell-head {
-    padding: 20px !important;
+    padding: 0 20px !important;
     text-align: center;
 }
 .table-blk-role td {

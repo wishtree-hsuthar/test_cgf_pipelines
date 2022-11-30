@@ -30,6 +30,9 @@ function Dropdown({
             },
         },
     };
+    const Placeholder = ({ children }) => {
+        return <div className="select-placeholder">{children}</div>;
+      };
     // const [showPlaceholder, setShowPlaceholder] = useState(true);
     console.log("options", options);
     return (
@@ -45,10 +48,13 @@ function Dropdown({
                     value={value}
                     placeholder={placeholder}
                     onChange={myOnChange ? myOnChange : onChange} // send value to hook form
-                    renderValue={value !== "" ? undefined : ()  => placeholder}
+                    //renderValue={value !== "" ? undefined : ()  => placeholder}
                     // onFocus={(e) => setShowPlaceholder(false)}
                     inputRef={ref}
                     fullWidth={true}
+                    renderValue={
+                        value !== "" ? undefined : () => <Placeholder>{placeholder}</Placeholder>
+                      }
                 >
                     {/* <MenuItem
                         disabled

@@ -41,11 +41,11 @@ import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import dayjs from "dayjs";
 import "../../../Pages/PreviewDemo.css";
 
-const ITEM_HEIGHT = 22;
+const ITEM_HEIGHT = 42;
 const MenuProps = {
     PaperProps: {
         style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
+            maxHeight: ITEM_HEIGHT * 4,
         },
     },
 };

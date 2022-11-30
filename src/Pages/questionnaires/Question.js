@@ -18,7 +18,14 @@ import Switch from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
 
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-
+const ITEM_HEIGHT = 42;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4,
+        },
+    },
+  }
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
   height: 16,
@@ -247,6 +254,11 @@ const Question = ({
     return () => {};
   }, [err]);
   // console.log("Error inside question: ",err)
+
+  const Placeholder = ({ children }) => {
+    return <div className="select-placeholder">{children}</div>;
+  };
+
   return (
     <div
       className={`que-card-blk ${
@@ -292,6 +304,7 @@ const Question = ({
               <FormControl className="fullwidth-field">
                 <div className="select-field">
                   <Select
+                  MenuProps={MenuProps}
                     placeholder="Select Input type"
                     IconComponent={(props) => (
                       <KeyboardArrowDownRoundedIcon {...props} />
@@ -321,6 +334,7 @@ const Question = ({
                       question.inputType !== "singleTextbox" &&
                       question.inputType !== "textarea"
                     }
+                    renderValue={question?.validation !== "" ? undefined : () => <Placeholder>Select validation</Placeholder>}
                     placeholder="Select Input validation"
                     displayEmpty
                     IconComponent={(props) => (
@@ -329,7 +343,6 @@ const Question = ({
                     name="validation"
                     value={question?.validation}
                     onChange={(e) => onQuestionChangeHandler(e, questionIdx)}
-                    renderValue={question?.validation !== "" ? undefined : ()  => "Select validation"}
                   >
                     {/* <MenuItem disabled value="">
                       Select validation
