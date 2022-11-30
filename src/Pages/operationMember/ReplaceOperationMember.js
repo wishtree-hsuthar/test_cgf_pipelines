@@ -305,7 +305,7 @@ const ReplaceOperationMember = () => {
                 titleMessage={toasterDetails.titleMessage}
             />
             <DialogBox
-                title={<p> Replace Operation Member {operationMember.name} </p>}
+                title={<p> Replace Operation Member "{operationMember?.name}" </p>}
                 info1={
                     <p>
                         {" "}

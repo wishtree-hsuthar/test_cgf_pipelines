@@ -267,9 +267,8 @@ function PendingCGFAdmins({
       <DialogBox
         title={
           <p>
-            Withdraw{" "}
-            {withdrawInviteUser ? withdrawInviteUser[0]?.name : "CGF admin"}
-            's Invitation
+            Withdraw "{withdrawInviteUser && `${withdrawInviteUser[0]?.name}`}
+            's" Invitation
           </p>
         }
         info1={

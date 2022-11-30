@@ -18,6 +18,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import useCallbackState from "../../../utils/useCallBackState";
 import Toaster from "../../../components/Toaster";
 import { TabPanel } from "../../../utils/tabUtils/TabPanel";
+import DialogBox from "../../../components/DialogBox";
+import axios from "axios";
 
 const ITEM_HEIGHT = 42;
 const MenuProps = {
@@ -26,7 +28,8 @@ const MenuProps = {
             maxHeight: ITEM_HEIGHT * 4,
         },
     },
-};
+  }
+// };
 // function TabPanel(props) {
 //     const { children, value, index, ...other } = props;
 
@@ -72,6 +75,7 @@ function PreviewQuestionnaire(props) {
   const [value, setValue] = useState(0);
   //custom hook to set title of page
   useDocumentTitle("Preview Questionnaire");
+  const [openDialog, setOpenDialog] = useState(false);
   //Toaster Message setter
   const [toasterDetails, setToasterDetails] = useCallbackState({
     titleMessage: "",
@@ -130,7 +134,7 @@ function PreviewQuestionnaire(props) {
     };
   }, []);
   const [datevalue, setDateValue] = React.useState(null);
-  const [isActive, setActive] = useState("false");
+  const [isActive, setActive] = useState(false);
   const handleToggle = () => {
     setActive(!isActive);
   };
@@ -169,9 +173,67 @@ function PreviewQuestionnaire(props) {
       console.log("Error from download  questionnaire", error);
     }
   };
+  const deleteQuestionnaire = async (deletionType) => {
+    try {
+      console.log("Questionnaire", questionnaire);
+      await axios.delete(ADD_QUESTIONNAIRE + `/${questionnaire?.uuid}`, {
+        data: {
+          deletionType: deletionType,
+        },
+      });
+      setToasterDetails(
+        {
+          titleMessage: "Success",
+          descriptionMessage: `${deletionType === 'inactive' ? "Questionnaire inactivated successfully!" : "Questionnaire deleted successfully!"}`,
+          messageType: "success",
+        },
+        () => myRef.current()
+      );
+      return setTimeout(() => navigate("/questionnaires"), 3000);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      // console.log(toasterDetails);
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something went wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+    } finally {
+      setOpenDialog(false);
+    }
+  }
+  const onDialogPrimaryButtonClickHandler = async () => {
+   deleteQuestionnaire('delete')
+  };
+  const onDialogSecondaryButtonClickHandler = () => {
+    deleteQuestionnaire('inactive')
+  };
 
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
+      <DialogBox
+        title={<p>Delete Questionnaire</p>}
+        info1={
+          <p>
+            Deleting the questionnaire will also delete the related assessments.
+            we recommend you make the questionnaire inactive.
+          </p>
+        }
+        info2={<p>Are you sure you want to delete the questionnaire?</p>}
+        primaryButtonText="Delete Anyway"
+        secondaryButtonText="Inactive"
+        onPrimaryModalButtonClickHandler={onDialogPrimaryButtonClickHandler}
+        onSecondaryModalButtonClickHandler={onDialogSecondaryButtonClickHandler}
+        openModal={openDialog}
+        setOpenModal={setOpenDialog}
+      />
       <Toaster
         myRef={myRef}
         titleMessage={toasterDetails.titleMessage}
@@ -235,13 +297,12 @@ function PreviewQuestionnaire(props) {
               )}
             {params["*"].includes("version") && (
               <li>
-                
                 <Link
-                    to={`/questionnaire-version-history/${params.id}`}
-                    style={{ cursor: "pointer" }}
-                  >
-                    Questionnaire History
-                  </Link>
+                  to={`/questionnaire-version-history/${params.id}`}
+                  style={{ cursor: "pointer" }}
+                >
+                  Questionnaire History
+                </Link>
               </li>
             )}
             {params["*"].includes("version") ? (
@@ -257,12 +318,16 @@ function PreviewQuestionnaire(props) {
           <div className="form-header flex-between">
             <h2 className="heading2">{questionnaire.title}</h2>
             <span className="form-header-right-txt" onClick={handleToggle}>
-              <span className="crud-operation">
+              <span
+                className={`crud-operation ${
+                  isActive && "crud-operation-active"
+                }`}
+              >
                 <MoreVertIcon />
               </span>
               <div
                 className="crud-toggle-wrap"
-                style={{ display: isActive ? "none" : "block" }}
+                style={{ display: isActive ? "block" : "none" }}
               >
                 <ul className="crud-toggle-list">
                   <li onClick={downloadAssessment}>Export to Excel</li>
@@ -295,6 +360,9 @@ function PreviewQuestionnaire(props) {
                         : "Edit Questionnaire"}
                     </li>
                   )}
+                  <li onClick={() => setOpenDialog(true)}>
+                    Delete Questionnaire
+                  </li>
                 </ul>
               </div>
             </span>

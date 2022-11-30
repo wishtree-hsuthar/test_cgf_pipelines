@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
+  CITES,
   COUNTRIES,
   FETCH_ROLES,
   MEMBER,
@@ -42,7 +43,7 @@ const parentCompany = [
   "Ford",
   "Uber",
   "wishtree",
-]
+];
 //City (Ideally get from backend)
 const cityValue = [
   "Mumbai",
@@ -57,7 +58,7 @@ const cityValue = [
   "Texas",
   "Delhi",
   "Tokyo",
-]
+];
 //CGF Categories (Ideally get from backend)
 const cgfCategories1 = ["Manufacturer", "Retailer", "Other"];
 const cgfActivitiesManufacturer1 = [
@@ -147,6 +148,8 @@ const EditMember = () => {
   //to hold array of countries for perticular region for CGF Office details
   const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
     useState([]);
+  const [arrOfCites, setArrOfCites] = useState([]);
+
   // state to manage loader
   const [isLoading, setIsLoading] = useState(true);
   const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
@@ -271,6 +274,27 @@ const EditMember = () => {
     setValue("cgfCategory", e.target.value);
     trigger("cgfCategory");
     setValue("cgfActivity", "");
+  };
+  const getCites = async () => {
+    try {
+      const response = await axios.get(
+        CITES +
+          `/?region=${watch("region")}?country=${watch(
+            "country"
+          )}?state=${watch("state")}`
+      );
+      setArrOfCites(response.data);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setErrorToaster1(error);
+    }
+  };
+
+  //method to handle state change
+  const onStateChangeHandler = async (e) => {
+    setValue("state", e.target.value);
+    setValue("city", "");
+    getCites();
   };
   const getCountryCode1 = async (controller) => {
     try {
@@ -553,12 +577,16 @@ const EditMember = () => {
                             <Autocomplete
                               disabled
                               className="searchable-input"
-                              PaperComponent={({
-                                children,
-                              }) => (
-                                  <Paper className={parentCompany?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
-                                      {children}
-                                  </Paper>
+                              PaperComponent={({ children }) => (
+                                <Paper
+                                  className={
+                                    parentCompany?.length > 5
+                                      ? "autocomplete-option-txt autocomplete-option-limit"
+                                      : "autocomplete-option-txt"
+                                  }
+                                >
+                                  {children}
+                                </Paper>
                               )}
                               {...field}
                               onSubmit={() => setValue("parentCompany", "")}
@@ -715,7 +743,13 @@ const EditMember = () => {
                                 <Autocomplete
                                   popupIcon={<KeyboardArrowDownRoundedIcon />}
                                   PaperComponent={({ children }) => (
-                                    <Paper className={arrOfCountryCode?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
+                                    <Paper
+                                      className={
+                                        arrOfCountryCode?.length > 5
+                                          ? "autocomplete-option-txt autocomplete-option-limit"
+                                          : "autocomplete-option-txt"
+                                      }
+                                    >
                                       {children}
                                     </Paper>
                                   )}
@@ -861,6 +895,7 @@ const EditMember = () => {
                           control={control}
                           name="state"
                           placeholder="Enter state"
+                          myOnChange={onStateChangeHandler}
                           myHelper={memberHelper}
                           options={arrOfStateCountry}
                         />
@@ -876,12 +911,16 @@ const EditMember = () => {
                             <Autocomplete
                               {...field}
                               className="searchable-input"
-                              PaperComponent={({
-                                children,
-                              }) => (
-                                  <Paper className={cityValue?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
-                                      {children}
-                                  </Paper>
+                              PaperComponent={({ children }) => (
+                                <Paper
+                                  className={
+                                    arrOfCites?.length > 5
+                                      ? "autocomplete-option-txt autocomplete-option-limit"
+                                      : "autocomplete-option-txt"
+                                  }
+                                >
+                                  {children}
+                                </Paper>
                               )}
                               disabled={!watch("state")}
                               onSubmit={() => setValue("city", "")}
@@ -899,7 +938,7 @@ const EditMember = () => {
                               selectOnFocus
                               handleHomeEndKeys
                               id="free-solo-with-text-demo"
-                              options={cityValue}
+                              options={arrOfCites}
                               // getOptionLabel={(option) => {
                               //   // Value selected with enter, right from the input
                               //   if (typeof option === "string") {
@@ -1166,7 +1205,13 @@ const EditMember = () => {
                                   className={`${error && "autocomplete-error"}`}
                                   popupIcon={<KeyboardArrowDownRoundedIcon />}
                                   PaperComponent={({ children }) => (
-                                    <Paper className={arrOfCountryCode?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
+                                    <Paper
+                                      className={
+                                        arrOfCountryCode?.length > 5
+                                          ? "autocomplete-option-txt autocomplete-option-limit"
+                                          : "autocomplete-option-txt"
+                                      }
+                                    >
                                       {children}
                                     </Paper>
                                   )}

@@ -14,8 +14,11 @@ export const CHANGE_PASSWORD = `${REACT_APP_API_ENDPOINT}auth/reset`;
 //master
 export const REGIONS = `${REACT_APP_API_ENDPOINT}master/region/list`;
 export const REGIONCOUNTRIES = `${REACT_APP_API_ENDPOINT}master/region`;
+export const PARENT_COMPINES = `${REACT_APP_API_ENDPOINT}master/compnies`;
 export const COUNTRIES = `${REACT_APP_API_ENDPOINT}master/country/list`;
 export const STATES = `${REACT_APP_API_ENDPOINT}master/country`;
+export const CITES = `${REACT_APP_API_ENDPOINT}master/cities`;
+
 
 //Member
 export const MEMBER = `${REACT_APP_API_ENDPOINT}members`;
