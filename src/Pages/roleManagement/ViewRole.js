@@ -173,75 +173,70 @@ const ViewRole = () => {
   // let records = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
   // const tempRows = [...records];
 
-  const handleTablePageChange = (newPage) => {
-    setPage(newPage);
-  };
-  const handleRowsPerPageChange = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(1);
-  };
-  const onClickVisibilityIconHandler = (id) => {
-    console.log("id", id);
-    return navigate4(`/users/cgf-admin/view-sub-admin/${id}`);
-  };
-  const createPrevileges3 = (tempPrivileges) => {
-    console.log("temp data", tempPrivileges);
-    Object.keys(tempPrivileges).forEach((tempPriv) => {
-      console.log(
-        "temp Previ value",
-        tempPrivileges[tempPriv]["moduleId"]["name"]
-      );
-      privileges[tempPriv] = {
-        add: tempPrivileges[tempPriv]["add"],
-        fill: tempPrivileges[tempPriv]["fill"],
-        // assign: tempPrivileges[tempPriv]["assign"],
-        delete: tempPrivileges[tempPriv]["delete"],
-        view: tempPrivileges[tempPriv]["view"],
-        edit: tempPrivileges[tempPriv]["edit"],
-        list: tempPrivileges[tempPriv]["list"],
-        all:
-          tempPrivileges[tempPriv]["add"] &&
-          // tempPrivileges[tempPriv]["assign"] &&
-          tempPrivileges[tempPriv]["delete"] &&
-          tempPrivileges[tempPriv]["edit"] &&
-          tempPrivileges[tempPriv]["view"] &&
-          tempPrivileges[tempPriv]["list"] &&
-          (tempPrivileges[tempPriv]["moduleId"]["name"] === "Assessment"
-            ? tempPrivileges[tempPriv]["fill"]
-            : true),
-        name: tempPrivileges[tempPriv]["moduleId"]["name"],
-      };
-    });
-    console.log("previleges", privileges);
-    setTemp(privileges);
-  };
-  const updateUsers = (data) => {
-    const users = data?.cgfAdmins;
-    console.log("Users: ", users);
-    users.forEach((object) => {
-      delete object["countryCode"];
-      delete object["createdBy"];
-      delete object["isDeleted"];
-      delete object["isReplaced"];
-      delete object["password"];
-      delete object["phoneNumber"];
-      delete object["roleId"];
-      delete object["salt"];
-      delete object["subRoleId"];
-      delete object["updatedAt"];
-      delete object["updatedBy"];
-      delete object["uuid"];
-      delete object["memberId"];
-      delete object["title"];
-      delete object["department"];
-      delete object["salutation"];
-      delete object["reportingManager"];
-      delete object["operationType"];
-      delete object["address"];
-      delete object["isCGFStaff"];
-      delete object["isOperationMember"];
-      delete object["isMemberRepresentative"];
-      delete object["isCGFAdmin"];
+    const handleTablePageChange = (newPage) => {
+        setPage(newPage);
+    };
+    const handleRowsPerPageChange = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(1);
+    };
+    const onClickVisibilityIconHandler = (id) => {
+        console.log("id", id);
+        return navigate4(`/users/cgf-admin/view-sub-admin/${id}`);
+    };
+    const createPrevileges3 = (tempPrivileges) => {
+        console.log("temp data", tempPrivileges);
+        Object.keys(tempPrivileges).forEach((tempPriv) => {
+            // console.log("temp Previ value",tempPrivileges[tempPriv])
+            privileges[tempPriv] = {
+                add: tempPrivileges[tempPriv]["add"],
+                fill: tempPrivileges[tempPriv]["fill"],
+                // assign: tempPrivileges[tempPriv]["assign"],
+                delete: tempPrivileges[tempPriv]["delete"],
+                view: tempPrivileges[tempPriv]["view"],
+                edit: tempPrivileges[tempPriv]["edit"],
+                list: tempPrivileges[tempPriv]["list"],
+                all:
+                    tempPrivileges[tempPriv]["add"] &&
+                    // tempPrivileges[tempPriv]["assign"] &&
+                    tempPrivileges[tempPriv]["delete"] &&
+                    tempPrivileges[tempPriv]["edit"] &&
+                    tempPrivileges[tempPriv]["view"] &&
+                    tempPrivileges[tempPriv]["list"] && (tempPrivileges[tempPriv]["moduleId"]["name"] === "Assessment"
+                    ? tempPrivileges[tempPriv]["fill"]
+                    : true),
+                name: tempPrivileges[tempPriv]["moduleId"]["name"],
+            };
+        });
+        setTemp(privileges);
+    };
+    const updateUsers = (data) => {
+        const users = data?.cgfAdmins;
+        console.log("Users: ", users);
+        users.forEach((object) => {
+            delete object["countryCode"];
+            delete object["createdBy"];
+            delete object["isDeleted"];
+            delete object["isReplaced"];
+            delete object["password"];
+            delete object["phoneNumber"];
+            delete object["roleId"];
+            delete object["salt"];
+            delete object["subRoleId"];
+            delete object["updatedAt"];
+            delete object["updatedBy"];
+            delete object["uuid"];
+            delete object["memberId"];
+            delete object["title"];
+            delete object["department"];
+            delete object["salutation"];
+            delete object["reportingManager"];
+            delete object["operationType"];
+            delete object["address"];
+            delete object["isCGFStaff"];
+            delete object["isOperationMember"];
+            delete object["isMemberRepresentative"];
+            delete object["isCGFAdmin"];
 
       delete object["__v"];
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(

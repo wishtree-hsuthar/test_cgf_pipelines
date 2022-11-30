@@ -75,7 +75,7 @@ function FillAssesmentSection({
     return (
         <>
             <DialogBox
-                title={<p>Cancel</p>}
+                title={<p>Cancel assessment</p>}
                 info1={
                     <p>
                         On canceling all the entered details of the section will

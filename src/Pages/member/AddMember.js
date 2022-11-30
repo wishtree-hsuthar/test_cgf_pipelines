@@ -152,6 +152,9 @@ const AddMember = () => {
   //to hold array of Country states
   const [arrOfStateCountry, setArrOfStateCountry] = useState([]);
   const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
+  const [arrOfParentCompany, setArrOfParentCompany] = useState([]);
+  const [arrOfCites, setArrOfCites] = useState([])
+  console.log("arrOfCities",arrOfCites)
 
   //to hold array of countries for perticular region for CGF Office details
   const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
@@ -345,6 +348,16 @@ const AddMember = () => {
     }
   };
 
+  const getParentCompany = async (controller) => {
+    try {
+      const response = await axios.get(PARENT_COMPINES,{signal: controller.signal});
+      setArrOfParentCompany(response?.data);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setErrorToaster(error);
+    }
+  };
+
   //prevent form submission on press of enter key
   const checkKeyDown = (e) => {
     if (e.code === "Enter") e.preventDefault();
@@ -381,6 +394,7 @@ const AddMember = () => {
     };
   }, [watch]);
   // console.log("selected Region", watch("region"));
+  console.log("arrOfparentCompnies",arrOfParentCompany)
   return (
     <div className="page-wrapper">
       <Toaster
@@ -447,109 +461,80 @@ const AddMember = () => {
                     </div>
                   </div>
 
-                                    <div className="card-form-field">
-                                        <div className="form-group">
-                                            <label htmlFor="companyType">
-                                                Company Type{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
-                                            </label>
-                                            <div className="radio-btn-field">
-                                                <Controller
-                                                    name="companyType"
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <RadioGroup
-                                                            {...field}
-                                                            aria-labelledby="demo-radio-buttons-group-label"
-                                                            name="radio-buttons-group"
-                                                            className="radio-btn"
-                                                        >
-                                                            <FormControlLabel
-                                                                value="Internal"
-                                                                control={
-                                                                    <Radio />
-                                                                }
-                                                                label="Internal"
-                                                            />
-                                                            <FormControlLabel
-                                                                value="External"
-                                                                control={
-                                                                    <Radio />
-                                                                }
-                                                                label="External"
-                                                            />
-                                                        </RadioGroup>
-                                                    )}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card-form-field">
-                                        <div className="form-group">
-                                            <label htmlFor="parentCompany">
-                                                Parent Company
-                                            </label>
-                                            <Controller
-                                                name="parentCompany"
-                                                control={control}
-                                                render={({
-                                                    field,
-                                                    fieldState: { error },
-                                                }) => (
-                                                    <Autocomplete
-                                                        disableClearable
-                                                        // open={true}
-                                                        // openOnFocus={true}
-                                                        // noOptionsText={"No options"}
-                                                        {...field}
-                                                        PaperComponent={({
-                                                            children,
-                                                        }) => (
-                                                            <Paper className={parentCompany?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
-                                                                {children}
-                                                            </Paper>
-                                                        )}
-                                                        className="searchable-input"
-                                                        onBlur={(e) =>
-                                                            setValue(
-                                                                "parentCompany",
-                                                                e.target.value?.trim()
-                                                            )
-                                                        }
-                                                        onSubmit={() =>
-                                                            setValue(
-                                                                "parentCompany",
-                                                                ""
-                                                            )
-                                                        }
-                                                        onChange={(
-                                                            event,
-                                                            newValue
-                                                        ) => {
-                                                            console.log(
-                                                                "new Value ",
-                                                                newValue
-                                                            );
-                                                            if (newValue) {
-                                                                typeof newValue ===
-                                                                "object"
-                                                                    ? setValue(
-                                                                          "parentCompany",
-                                                                          newValue.name
-                                                                      )
-                                                                    : setValue(
-                                                                          "parentCompany",
-                                                                          newValue
-                                                                      );
-                                                            }
-                                                        }}
-                                                        selectOnFocus
-                                                        handleHomeEndKeys
-                                                        id="free-solo-with-text-demo"
-                                                        options={parentCompany}
-                                                        // getOptionLabel={(option) => {
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="companyType">
+                        Company Type <span className="mandatory">*</span>
+                      </label>
+                      <div className="radio-btn-field">
+                        <Controller
+                          name="companyType"
+                          control={control}
+                          render={({ field }) => (
+                            <RadioGroup
+                              {...field}
+                              aria-labelledby="demo-radio-buttons-group-label"
+                              name="radio-buttons-group"
+                              className="radio-btn"
+                            >
+                              <FormControlLabel
+                                value="Internal"
+                                control={<Radio />}
+                                label="Internal"
+                              />
+                              <FormControlLabel
+                                value="External"
+                                control={<Radio />}
+                                label="External"
+                              />
+                            </RadioGroup>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="parentCompany">Parent Company</label>
+                      <Controller
+                        name="parentCompany"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                          <Autocomplete
+                            disableClearable
+                            // open={true}
+                            // openOnFocus={true}
+                            // noOptionsText={"No options"}
+                            {...field}
+                            PaperComponent={({ children }) => (
+                              <Paper
+                                className={
+                                  arrOfParentCompany?.length > 5
+                                    ? "autocomplete-option-txt autocomplete-option-limit"
+                                    : "autocomplete-option-txt"
+                                }
+                              >
+                                {children}
+                              </Paper>
+                            )}
+                            className="searchable-input"
+                            onBlur={(e) =>
+                              setValue("parentCompany", e.target.value?.trim())
+                            }
+                            onSubmit={() => setValue("parentCompany", "")}
+                            onChange={(event, newValue) => {
+                              console.log("new Value ", newValue);
+                              if (newValue) {
+                                typeof newValue === "object"
+                                  ? setValue("parentCompany", newValue.name)
+                                  : setValue("parentCompany", newValue);
+                              }
+                            }}
+                            selectOnFocus
+                            handleHomeEndKeys
+                            id="free-solo-with-text-demo"
+                            options={arrOfParentCompany && arrOfParentCompany}
+                            // getOptionLabel={(option) => {
 
                                                         //   // Value selected with enter, right from the input
                                                         //   if (typeof option === "string") {
