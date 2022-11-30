@@ -48,7 +48,7 @@ function Dropdown({
                     value={value}
                     placeholder={placeholder}
                     onChange={myOnChange ? myOnChange : onChange} // send value to hook form
-                    renderValue={value !== "" ? undefined : ()  => placeholder}
+                    //renderValue={value !== "" ? undefined : ()  => placeholder}
                     // onFocus={(e) => setShowPlaceholder(false)}
                     inputRef={ref}
                     fullWidth={true}

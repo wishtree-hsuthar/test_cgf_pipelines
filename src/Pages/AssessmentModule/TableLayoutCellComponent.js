@@ -22,11 +22,12 @@ const TableLayoutCellComponent = ({
     handleAnswersChange,
     handleAnswersBlur,
     error,
+    viewMode,
 }) => {
     const [showMore, setShowMore] = useState(false);
     const handleOnKeyDownChange = (e) => {
         e.preventDefault();
-      };
+    };
     console.log("answer", answer);
     return (
         <>
@@ -98,6 +99,7 @@ const TableLayoutCellComponent = ({
                                 ? "input-error"
                                 : ""
                         }`}
+                        disabled={!viewMode}
                         placeholder="Enter text here"
                         value={answer}
                         name={`${cell.columnId}.${rowId}`}
@@ -139,6 +141,7 @@ const TableLayoutCellComponent = ({
                                 )}
                                 name={`${cell.columnId}.${rowId}`}
                                 displayEmpty
+                                disabled={!viewMode}
                                 value={answer}
                                 className={`${
                                     !answer && error && error?.length !== 0
@@ -190,6 +193,7 @@ const TableLayoutCellComponent = ({
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
+                                        disabled={!viewMode}
                                         onKeyDown={handleOnKeyDownChange}
                                         className={`input-field${
                                             !answer &&

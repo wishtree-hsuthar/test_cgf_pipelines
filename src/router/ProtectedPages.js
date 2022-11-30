@@ -245,7 +245,11 @@ const ProtectedPages = () => {
                 />
                 <Route
                     path="/assessment-list/fill-assessment/:id"
-                    element={<FillAssessment />}
+                    element={
+                        // <RequireAuth moduleName={"Assessment"} page={"fill"}>
+                        <FillAssessment />
+                        // </RequireAuth>
+                    }
                 />
                 <Route path="/preview" element={<PreviewDemo />} />
                 <Route path="*" element={<FallBackUI />} />

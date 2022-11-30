@@ -66,12 +66,13 @@ const tableHead = [
 
 const ReplaceSubAdmin = () => {
     //custom hook to set title of page
-    useDocumentTitle("Replace CGF Admin")
+    useDocumentTitle("Replace CGF Admin");
     const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [isLoading, setIsLoading] = useState(false);
     const [cgfAdmin, setCgfAdmin] = useState({});
+    const [selectedCGFAdmin, setSelectedCGFAdmin] = useState({});
     const { id } = useParams();
     //state to hold search timeout delay
     const [searchTimeout, setSearchTimeout] = useState(null);
@@ -110,9 +111,9 @@ const ReplaceSubAdmin = () => {
     const generateUrl = (multiFilterString) => {
         console.log("Search", search);
 
-        let url = `${ADD_SUB_ADMIN}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${ADD_SUB_ADMIN}/${id}/replaces/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
-            url = `${ADD_SUB_ADMIN}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+            url = `${ADD_SUB_ADMIN}/${id}/replaces/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
         return url;
     };
@@ -133,14 +134,14 @@ const ReplaceSubAdmin = () => {
             delete object["uuid"];
             delete object["phoneNumber"];
             delete object["createdAt"];
-            object["role"] = object["subRole"][0].name;
+            // object["role"] = object["subRole"][0].name;
             delete object["subRole"];
             delete object["subRoleId"];
             delete object["isActive"];
             delete object["createdBy"];
             delete object["updatedBy"];
             delete object["isReplaced"];
-            delete object["isCGFAdmin"]
+            delete object["isCGFAdmin"];
 
             replaceHeaderKeyOrder.forEach((k) => {
                 const v = object[k];
@@ -166,7 +167,7 @@ const ReplaceSubAdmin = () => {
             setTotalRecords(parseInt(response.headers["x-total-count"]));
             console.log("Response from sub admin api get", response);
 
-            updateRecords(response.data.filter((data) => data._id !== id));
+            updateRecords(response.data);
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
@@ -241,24 +242,27 @@ const ReplaceSubAdmin = () => {
 
     //on Click of visibility icon
 
-    console.log("selected user: ",selectedUser)
+    console.log("selected user: ", selectedUser);
 
     const replaceUser = async () => {
         try {
             const response = await privateAxios.post(
                 REPLACE_SUB_ADMIN + "replace",
-
                 {
                     replacingTo: id,
-
                     replacingWith: selectedUser,
                 }
             );
             if (response.status == 201) {
+                console.log(
+                    selectedCGFAdmin[0]?.name + " has replaced ",
+                    cgfAdmin.name + " successfully!"
+                );
                 setToasterDetails(
                     {
                         titleMessage: "Success",
-                        descriptionMessage: response?.data?.message,
+                        descriptionMessage: `${selectedCGFAdmin[0]?.name} has replaced
+                        ${cgfAdmin.name} successfully!`,
                         messageType: "success",
                     },
                     () => myRef.current()
@@ -309,10 +313,12 @@ const ReplaceSubAdmin = () => {
 
     const handleYes = () => {
         console.log("Yes replcae" + id + " replace id with", selectedUser);
+
         replaceUser();
     };
     const handleNo = () => {
         console.log("No replcae");
+        setOpen(false);
     };
     const openReplaceDailogBox = () => {
         setOpen(true);
@@ -320,6 +326,9 @@ const ReplaceSubAdmin = () => {
     const selectSingleUser = (id) => {
         console.log("select single user---", id);
         setSelectedUser(id);
+        setSelectedCGFAdmin({
+            ...records.filter((data) => data._id == id ?? { name: data.name }),
+        });
     };
     return (
         <div className="page-wrapper">
@@ -334,14 +343,17 @@ const ReplaceSubAdmin = () => {
                 info1={
                     <p>
                         {" "}
-                        On replacing a sub admin, all the existing management will be transferred to the new sub admin
+                        On replacing a sub admin, all the existing management
+                        will be transferred to the new sub admin
                     </p>
                 }
                 info2={
                     <p>
                         {" "}
-                        Are you sure want to replace{" "}
-                        <b> {cgfAdmin.name} </b>?{" "}
+                        Are you sure want to replace <b>
+                            {" "}
+                            {cgfAdmin.name}{" "}
+                        </b>?{" "}
                     </p>
                 }
                 primaryButtonText="Yes"

@@ -92,7 +92,7 @@ function DraftedQuestionnaires({
     };
     const generateUrl = () => {
         // console.log("Search", search);
-        let url = `${ADD_QUESTIONNAIRE}/drafted?page=${pageDraftedQuestionnaire}&size=${rowsPerPageDraftedQuestionnaire}&orderBy=${orderByDraftedQuestionnaire}&order=${orderDraftedQuestionnaire}`;
+        let url = `${ADD_QUESTIONNAIRE}/drafted/list?page=${pageDraftedQuestionnaire}&size=${rowsPerPageDraftedQuestionnaire}&orderBy=${orderByDraftedQuestionnaire}&order=${orderDraftedQuestionnaire}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
         return url;
