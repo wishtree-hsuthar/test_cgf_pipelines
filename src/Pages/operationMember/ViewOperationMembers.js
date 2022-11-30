@@ -495,7 +495,10 @@ const ViewOperationMembers = () => {
                                                             },
                                                         }) => (
                                                             <Autocomplete
-                                                                {...field}
+                                                               disabled
+                               popupIcon={<KeyboardArrowDownRoundedIcon />}
+                               className="phone-number-disable"
+                                {...field}
                                                                 options={
                                                                     countries
                                                                 }
