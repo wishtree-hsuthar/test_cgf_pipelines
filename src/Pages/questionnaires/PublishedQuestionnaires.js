@@ -88,7 +88,7 @@ const PublishedQuestionnaires = ({
 
     const generateUrl = () => {
         console.log("Search", search);
-        let url = `${ADD_QUESTIONNAIRE}?page=${pagePublishedQuestionnaire}&size=${rowsPerPagePublishedQuestionnaire}&orderBy=${orderByPublishedQuestionnaire}&order=${orderPublishedQuestionnaire}`;
+        let url = `${ADD_QUESTIONNAIRE}/list?page=${pagePublishedQuestionnaire}&size=${rowsPerPagePublishedQuestionnaire}&orderBy=${orderByPublishedQuestionnaire}&order=${orderPublishedQuestionnaire}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
         return url;
