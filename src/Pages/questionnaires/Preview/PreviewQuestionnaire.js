@@ -345,7 +345,7 @@ function PreviewQuestionnaire(props) {
                                 <MoreVertIcon />
                             </span>
                             <div
-                                className="crud-toggle-wrap"
+                                className="crud-toggle-wrap que-crud-toggle-wrap"
                                 style={{ display: isActive ? "block" : "none" }}
                             >
                                 <ul className="crud-toggle-list">
