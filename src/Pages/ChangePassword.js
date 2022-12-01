@@ -39,6 +39,7 @@ const ChangePassword = () => {
   const {
     handleSubmit,
     register,
+    setValue,
     reset,
     formState: { errors },
   } = useForm({
@@ -194,6 +195,7 @@ const ChangePassword = () => {
                         </InputAdornment>
                       }
                       {...register("oldPassword")}
+                      onBlur={(e) => setValue("oldPassword",e.target.value.trim())}
                       error={errors.oldPassword ? true : false}
                     />
                     <p className={`password-error`}>
@@ -258,6 +260,7 @@ const ChangePassword = () => {
                       </InputAdornment>
                     }
                     {...register("newPassword")}
+                    onBlur={(e) => setValue("newPassword",e.target.value.trim())}
                     error={errors.password ? true : false}
                   />
                   <p className={`password-error`}>
@@ -321,6 +324,7 @@ const ChangePassword = () => {
                       </InputAdornment>
                     }
                     {...register("confirmPassword")}
+                    onBlur={(e) => setValue("confirmPassword",e.target.value.trim())}
                     error={errors.confirmPassword ? true : false}
                   />
                   <p className={`password-error`}>
