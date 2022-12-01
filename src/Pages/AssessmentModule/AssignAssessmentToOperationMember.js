@@ -110,9 +110,18 @@ const AssignAssessmentToOperationMember = () => {
     };
     const generateUrl = () => {
         console.log("Search", search);
-        // console.log("assessment?")
+        console.log(
+            "assessment?",
+            assessment,
+            window.location.pathname.split("/")[-1]
+        );
 
-        let url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${FETCH_ASSESSMENT_BY_ID}${window.location.pathname
+            .split("/")
+            .at(
+                -1
+            )}/reassignto/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        // let url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
             url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
