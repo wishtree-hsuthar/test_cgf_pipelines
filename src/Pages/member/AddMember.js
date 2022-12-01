@@ -261,7 +261,7 @@ const AddMember = () => {
   };
   const getCites = async () => {
     try {
-        const response = await axios.get(CITES+`/?region=${watch("region")}?country=${watch("country")}?state=${watch("state")}`)
+        const response = await axios.get(CITES+`/?region=${watch("region")}&country=${watch("country")}&state=${watch("state")}`)
         setArrOfCites(response.data)
     } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
