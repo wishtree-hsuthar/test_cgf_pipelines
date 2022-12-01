@@ -24,6 +24,7 @@ useDocumentTitle("Forgot Password")
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
         reset,
     } = useForm({
@@ -137,6 +138,7 @@ useDocumentTitle("Forgot Password")
                                                 placeholder="example@domain.com"
                                                 variant="outlined"
                                                 {...register("email")}
+                                                onBlur={(e) => setValue("email",e.target.value.trim())}
                                                 error={
                                                     errors.email ? true : false
                                                 }
