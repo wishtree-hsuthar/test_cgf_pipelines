@@ -246,7 +246,7 @@ const ViewSubAdmin = () => {
         titleMessage={toasterDetails.titleMessage}
       />
       <DialogBox
-        title={<p> Delete CGF Admin {fetchedSubAdminDetails?.name} </p>}
+        title={<p> Delete CGF Admin "{fetchedSubAdminDetails?.name}" </p>}
         info1={
           <p>
             We recommend you to replace this CGF admin with the new one because

@@ -405,16 +405,19 @@ const SubAdminList = () => {
                         <div className="form-header-left-blk flex-start">
                             <h2 className="heading2">CGF Admins</h2>
                         </div>
+
                         <div className="form-header-right-txt">
-                            <div
-                                className="tertiary-btn-blk mr-20"
-                                onClick={downloadCGFAdmins}
-                            >
-                                <span className="download-icon">
-                                    <DownloadIcon />
-                                </span>
-                                Download
-                            </div>
+                            {value == 0 && (
+                                <div
+                                    className="tertiary-btn-blk mr-20"
+                                    onClick={downloadCGFAdmins}
+                                >
+                                    <span className="download-icon">
+                                        <DownloadIcon />
+                                    </span>
+                                    Download
+                                </div>
+                            )}
                             {value === 0 && (
                                 <div className="form-btn">
                                     <button

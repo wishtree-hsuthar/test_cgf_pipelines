@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Backdrop, Box, Modal, Fade } from "@mui/material";
+import { Backdrop, Box, Modal, Fade, Tooltip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const DialogBox = ({
@@ -14,6 +14,7 @@ const DialogBox = ({
     openModal,
     setOpenModal,
     isModalForm,
+    handleCloseRedirect,
 }) => {
     // css for modal
     const style = {
@@ -45,6 +46,11 @@ const DialogBox = ({
     const onSecondaryButtonClickHandler = () => {
         onSecondaryModalButtonClickHandler();
     };
+    let dialogTitle = "";
+    typeof title?.props?.children === "object"
+        ? title?.props?.children?.map((value) => (dialogTitle += value))
+        : (dialogTitle = title?.props?.children);
+    console.log("dialogTitle", dialogTitle);
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -62,15 +68,24 @@ const DialogBox = ({
             <Fade in={openModal}>
                 <Box sx={style} className="popup-box">
                     <div id="transition-modal-title" className="popup-ttl-blk">
-                        <h2 className="popup-ttl heading2">
-                            {/* {title} */}
-                            {title}
-                        </h2>
+                        {console.log("title", title)}
+                        {dialogTitle?.length <= 50 ? (
+                            <h2 className="popup-ttl heading2">{title}</h2>
+                        ) : (
+                            <Tooltip title={dialogTitle}>
+                                <h2 className="popup-ttl heading2">
+                                    {" "}
+                                    {dialogTitle?.slice(0, 50)}..."
+                                </h2>
+                            </Tooltip>
+                        )}
 
                         <span
-                            hidden={isModalForm}
+                            // hidden={isModalForm}
                             className="popup-close-icon"
-                            onClick={handleClose}
+                            onClick={
+                                isModalForm ? handleCloseRedirect : handleClose
+                            }
                         >
                             <CloseIcon />
                         </span>

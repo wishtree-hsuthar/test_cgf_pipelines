@@ -99,7 +99,7 @@ function EditAssessment() {
         async (id, isCGFStaff) => {
             try {
                 const response = await privateAxios.get(
-                    FETCH_OPERATION_MEMBER + id
+                    FETCH_OPERATION_MEMBER + id + "/list"
                     // isCGFStaff
                     //     ? FETCH_OPERATION_MEMBER + id + "/master/internal"
                     //     : FETCH_OPERATION_MEMBER + id

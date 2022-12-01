@@ -339,7 +339,7 @@ const ReplaceSubAdmin = () => {
                 titleMessage={toasterDetails.titleMessage}
             />
             <DialogBox
-                title={<p> Replace CGF admin {cgfAdmin.name} </p>}
+                title={<p> Replace CGF admin "{cgfAdmin?.name}" </p>}
                 info1={
                     <p>
                         {" "}

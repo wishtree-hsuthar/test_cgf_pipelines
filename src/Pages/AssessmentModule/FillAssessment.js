@@ -104,7 +104,7 @@ function FillAssessment() {
     const [assessmentQuestionnaire, setAssessmentQuestionnaire] = useState({});
     const [errorQuestion, setErrorQuestion] = useState("");
     const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
-    const [viewMode, setViewMode] = useState(false);
+    const [editMode, setEditMode] = useState(false);
 
     const [errors, setErrors] = useState({});
 
@@ -131,18 +131,18 @@ function FillAssessment() {
             assessment?.assignedOperationMember?._id
     );
     const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
-
+    console.log("params", params["*"].includes("view"));
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
         // setOpenDeleteDialogBox(
         //     userAuth._id === assessment?.assignedOperationMember?._id
         // );
-        setViewMode(
-            userAuth._id === assessment?.assignedOperationMember?._id
-                ? true
-                : false
-        );
+        // setEditMode(
+        //     userAuth._id === assessment?.assignedOperationMember?._id
+        //         ? true
+        //         : false
+        // );
         const fetchQuestionnaire = async (id) => {
             try {
                 const response = await privateAxios.get(
@@ -169,7 +169,7 @@ function FillAssessment() {
                 );
                 setIsLoading(false);
                 console.log("response from fetch assessment", response);
-                setViewMode(
+                setEditMode(
                     userAuth?._id ===
                         response?.data?.assignedOperationMember?._id
                 );
@@ -181,7 +181,9 @@ function FillAssessment() {
                 fetchQuestionnaire(response?.data?.questionnaireId);
                 setOpenDeleteDialogBox(
                     userAuth._id ===
-                        response?.data?.assignedOperationMember?._id
+                        response?.data?.assignedOperationMember?._id &&
+                        !params["*"].includes("view") &&
+                        response?.data?.assessmentStatus == "Pending"
                 );
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
@@ -534,6 +536,10 @@ function FillAssessment() {
         }
     };
 
+    const handleCloseRedirect = () => {
+        navigate("/assessment-list");
+    };
+
     return (
         <div className="page-wrapper">
             <DialogBox
@@ -591,6 +597,7 @@ function FillAssessment() {
                 openModal={openDeleteDialogBox}
                 setOpenModal={setOpenDeleteDialogBox}
                 isModalForm={true}
+                handleCloseRedirect={handleCloseRedirect}
             />
             <Toaster
                 myRef={myRef}
@@ -712,8 +719,8 @@ function FillAssessment() {
                                                 handleFormSubmit={
                                                     handleFormSubmit
                                                 }
-                                                viewMode={viewMode}
-                                                setViewMode={setViewMode}
+                                                editMode={editMode}
+                                                setEditMode={setEditMode}
                                             />
                                         </TabPanel>
                                     )

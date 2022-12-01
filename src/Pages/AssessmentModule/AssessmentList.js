@@ -124,7 +124,7 @@ const AssessmentList = () => {
     };
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
-        return navigate(`/assessment-list/fill-assessment/${id}`);
+        return navigate(`/assessment-list/view-assessment/${id}`);
     };
 
     const onClickEditIconHandler = (uuid) => {
