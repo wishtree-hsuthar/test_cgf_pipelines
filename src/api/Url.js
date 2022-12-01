@@ -65,3 +65,6 @@ export const DOWNLOAD_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-mem
 export const DOWNLOAD_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/list/download`;
 export const DOWNLOAD_QUESTIONNAIRES = `${REACT_APP_API_ENDPOINT}questionnaires/list/download`;
 export const DOWNLOAD_QUESTIONNAIRES_BY_ID = `${REACT_APP_API_ENDPOINT}questionnaires/`;
+
+//roles
+export const VIEW_ROLE = `${REACT_APP_API_ENDPOINT}roles/`;
