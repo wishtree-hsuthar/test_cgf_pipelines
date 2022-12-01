@@ -254,7 +254,7 @@ const AssessmentList = () => {
                 list: data?.list,
                 visibility: data?.view,
                 edit: data?.edit,
-                delete: data?.delete,
+                // delete: data?.delete,
                 add: data?.add,
                 fill: data?.fill,
             },

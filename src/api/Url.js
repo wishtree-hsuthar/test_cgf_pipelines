@@ -66,5 +66,9 @@ export const DOWNLOAD_CGF_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/list/
 export const DOWNLOAD_MEMBERS = `${REACT_APP_API_ENDPOINT}members/list/download`;
 export const DOWNLOAD_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/list/download`;
 export const DOWNLOAD_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/list/download`;
+export const DOWNLOAD_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const DOWNLOAD_QUESTIONNAIRES = `${REACT_APP_API_ENDPOINT}questionnaires/list/download`;
 export const DOWNLOAD_QUESTIONNAIRES_BY_ID = `${REACT_APP_API_ENDPOINT}questionnaires/`;
+
+// roles
+export const ROLE_BY_ID = `${REACT_APP_API_ENDPOINT}roles/`;
