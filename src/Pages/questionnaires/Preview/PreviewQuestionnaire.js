@@ -156,10 +156,7 @@ function PreviewQuestionnaire(props) {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute(
-                "download",
-                `Questionnaire - ${new Date().toISOString()}.xls`
-            );
+            link.setAttribute("download", `Questionnaire - ${new Date()}.xls`);
             document.body.appendChild(link);
             link.click();
             if (response.status == 200) {

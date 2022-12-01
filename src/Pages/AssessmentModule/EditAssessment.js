@@ -121,7 +121,7 @@ function EditAssessment() {
                 console.log("Representative---", representative);
                 console.log("is Cgf staff---", isCGFStaff);
                 isCGFStaff
-                    ? setValue("assignedOperationMember")
+                    ? setValue("assignedOperationMember", "")
                     : setValue(
                           "assignedOperationMember",
                           representative[0]._id

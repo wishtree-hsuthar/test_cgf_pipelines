@@ -90,7 +90,7 @@ function OperationMemberList() {
             link.href = url;
             link.setAttribute(
                 "download",
-                `Operation Members - ${new Date().toISOString()}.xls`
+                `Operation Members - ${new Date()}.xls`
             );
             document.body.appendChild(link);
             link.click();

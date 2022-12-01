@@ -25,6 +25,8 @@ import {
     DELETE_OPERATION_MEMBER,
     MEMBER,
     COUNTRIES,
+    FETCH_ROLES,
+    ROLE_BY_ID,
 } from "../../api/Url";
 
 import useCallbackState from "../../utils/useCallBackState";
@@ -51,6 +53,7 @@ const defaultValues = {
     isActive: "",
     reportingManager: "",
     isCGFStaff: "",
+    role: "",
 };
 const ViewOperationMembers = () => {
     //custom hook to set title of page
@@ -99,6 +102,15 @@ const ViewOperationMembers = () => {
         "member operation privilege",
         moduleAccessForOperationMember[0]?.operationMember
     );
+    const fetchRole = async (id) => {
+        try {
+            const response = await privateAxios.get(ROLE_BY_ID + id);
+            console.log("response for fetch role", response);
+            reset({ role: response?.data?.name });
+        } catch (error) {
+            console.log("error in fetchRole", error);
+        }
+    };
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -191,7 +203,9 @@ const ViewOperationMembers = () => {
                     isActive: response?.data?.isActive,
                     isCGFStaff:
                         response?.data?.isCGFStaff === true ? "true" : "false",
+                    role: response?.data?.roleId,
                 });
+                fetchRole(response?.data?.roleId);
                 setIsLoading(false);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
@@ -495,10 +509,12 @@ const ViewOperationMembers = () => {
                                                             },
                                                         }) => (
                                                             <Autocomplete
-                                                               disabled
-                               popupIcon={<KeyboardArrowDownRoundedIcon />}
-                               className="phone-number-disable"
-                                {...field}
+                                                                disabled
+                                                                popupIcon={
+                                                                    <KeyboardArrowDownRoundedIcon />
+                                                                }
+                                                                className="phone-number-disable"
+                                                                {...field}
                                                                 options={
                                                                     countries
                                                                 }
@@ -752,6 +768,23 @@ const ViewOperationMembers = () => {
                                             <Input
                                                 control={control}
                                                 name="replacedOperationMember"
+                                                // myHelper={myHelper}
+                                                placeholder={"N/A"}
+                                                isDisabled
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="">
+                                                Role{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Input
+                                                control={control}
+                                                name="role"
                                                 // myHelper={myHelper}
                                                 placeholder={"N/A"}
                                                 isDisabled
