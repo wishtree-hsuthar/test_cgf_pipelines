@@ -2483,3 +2483,7 @@ input::-ms-reveal {
     width: 165px;
     left: -138px;
 }
+.crud-toggle-wrap.assessment-crud-toggle-wrap {
+    width: 125px;
+    left: -100px;
+}
