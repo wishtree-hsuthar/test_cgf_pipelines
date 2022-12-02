@@ -266,9 +266,7 @@ function AddOperationMember() {
         try {
             const response = await privateAxios.get(
                 isCGF
-                    ? FETCH_OPERATION_MEMBER +
-                          cgfMember[0]?._id +
-                          "/master/external"
+                    ? FETCH_OPERATION_MEMBER + cgfMember[0]?._id + "/master/rm"
                     : FETCH_OPERATION_MEMBER + id + "/master/internal"
             );
             if (response.status == 200) {
@@ -578,7 +576,14 @@ function AddOperationMember() {
                                                             PaperComponent={({
                                                                 children,
                                                             }) => (
-                                                                <Paper className={countries?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
+                                                                <Paper
+                                                                    className={
+                                                                        countries?.length >
+                                                                        5
+                                                                            ? "autocomplete-option-txt autocomplete-option-limit"
+                                                                            : "autocomplete-option-txt"
+                                                                    }
+                                                                >
                                                                     {children}
                                                                 </Paper>
                                                             )}
@@ -820,7 +825,14 @@ function AddOperationMember() {
                                                             PaperComponent={({
                                                                 children,
                                                             }) => (
-                                                                <Paper className={memberCompanies?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
+                                                                <Paper
+                                                                    className={
+                                                                        memberCompanies?.length >
+                                                                        5
+                                                                            ? "autocomplete-option-txt autocomplete-option-limit"
+                                                                            : "autocomplete-option-txt"
+                                                                    }
+                                                                >
                                                                     {children}
                                                                 </Paper>
                                                             )}
