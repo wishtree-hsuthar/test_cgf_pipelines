@@ -50,7 +50,7 @@ const DialogBox = ({
     typeof title?.props?.children === "object"
         ? title?.props?.children?.map((value) => (dialogTitle += value))
         : (dialogTitle = title?.props?.children);
-    console.log("dialogTitle", dialogTitle);
+    // console.log("dialogTitle", dialogTitle);
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -68,7 +68,7 @@ const DialogBox = ({
             <Fade in={openModal}>
                 <Box sx={style} className="popup-box">
                     <div id="transition-modal-title" className="popup-ttl-blk">
-                        {console.log("title", title)}
+                        {/* {console.log("title", title)} */}
                         {dialogTitle?.length <= 50 ? (
                             <h2 className="popup-ttl heading2">{title}</h2>
                         ) : (

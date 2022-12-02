@@ -57,77 +57,77 @@ const tableHead = [
 ];
 
 const ViewRole = () => {
-    //custom hook to set title of page
-    useDocumentTitle("View Role");
-    //Refr for Toaster
-    const myRef4 = React.useRef();
-    //order in which records needs to show
-    const keysOrder = ["_id", "name", "email", "createdAt", "isActive"];
-    //Toaster Message setter
-    const [toasterDetails4, setToasterDetails4] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
+  //custom hook to set title of page
+  useDocumentTitle("View Role");
+  //Refr for Toaster
+  const myRef4 = React.useRef();
+  //order in which records needs to show
+  const keysOrder = ["_id", "name", "email", "createdAt", "isActive"];
+  //Toaster Message setter
+  const [toasterDetails4, setToasterDetails4] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
+  });
 
-    // state to manage loader
-    const [isLoading3, setIsLoading3] = useState(true);
+  // state to manage loader
+  const [isLoading3, setIsLoading3] = useState(true);
 
   //code to get id from url
   const params = useParams();
 
-    //varialble to hold privileges
-    let privileges = {};
-    // Dialog box code
-    const [fieldValues, setFieldValues] = useState({
-        roleName: "",
-        status: "",
-        description: "",
-        subAdmin: "",
-    });
-    const [openDialog, setOpenDialog] = useState(false);
-    const onDialogPrimaryButtonClickHandler = async () => {
-        try {
-            await axios.delete(REACT_APP_API_ENDPOINT + `roles/${params.id}`);
-            setToasterDetails4(
-                {
-                    titleMessage: "Success",
-                    descriptionMessage: `${fieldValues.roleName} deleted!`,
-                    messageType: "success",
-                },
-                () => myRef4.current()
-            );
-            return setTimeout(() => navigate4("/roles"), 3000);
-        } catch (error) {
-            console.log("error on delete", error);
-            if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
-            setToasterDetails4(
-                {
-                    titleMessage: "Error",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something went wrong!",
-                    messageType: "error",
-                },
-                () => myRef4.current()
-            );
-        } finally {
-            setOpenDialog(false);
-        }
-    };
-    const onDialogSecondaryButtonClickHandler = () => {
-        navigate4("/roles");
-    };
+  //varialble to hold privileges
+  let privileges = {};
+  // Dialog box code
+  const [fieldValues, setFieldValues] = useState({
+    roleName: "",
+    status: "",
+    description: "",
+    subAdmin: "",
+  });
+  const [openDialog, setOpenDialog] = useState(false);
+  const onDialogPrimaryButtonClickHandler = async () => {
+    try {
+      await axios.delete(REACT_APP_API_ENDPOINT + `roles/${params.id}`);
+      setToasterDetails4(
+        {
+          titleMessage: "Success",
+          descriptionMessage: `${fieldValues.roleName} deleted!`,
+          messageType: "success",
+        },
+        () => myRef4.current()
+      );
+      return setTimeout(() => navigate4("/roles"), 3000);
+    } catch (error) {
+      console.log("error on delete", error);
+      if (error?.code === "ERR_CANCELED") return;
+      // console.log(toasterDetails);
+      setToasterDetails4(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something went wrong!",
+          messageType: "error",
+        },
+        () => myRef4.current()
+      );
+    } finally {
+      setOpenDialog(false);
+    }
+  };
+  const onDialogSecondaryButtonClickHandler = () => {
+    navigate4("/roles");
+  };
 
-    //code form View Member
-    const navigate4 = useNavigate();
-    const [isActive, setActive] = useState(false);
-    const handleToggle = () => {
-        setActive(!isActive);
-    };
+  //code form View Member
+  const navigate4 = useNavigate();
+  const [isActive, setActive] = useState(false);
+  const handleToggle = () => {
+    setActive(!isActive);
+  };
 
   //code from Member List
   // function TabPanel(props) {
@@ -173,67 +173,71 @@ const ViewRole = () => {
   // let records = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
   // const tempRows = [...records];
 
-    const handleTablePageChange = (newPage) => {
-        setPage(newPage);
-    };
-    const handleRowsPerPageChange = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(1);
-    };
-    const onClickVisibilityIconHandler = (id) => {
-        console.log("id", id);
-        return navigate4(`/users/cgf-admin/view-sub-admin/${id}`);
-    };
-    const createPrevileges3 = (tempPrivileges) => {
-        console.log("temp data", tempPrivileges);
-        Object.keys(tempPrivileges).forEach((tempPriv) => {
-            // console.log("temp Previ value",tempPrivileges[tempPriv])
-            privileges[tempPriv] = {
-                add: tempPrivileges[tempPriv]["add"],
-                // assign: tempPrivileges[tempPriv]["assign"],
-                delete: tempPrivileges[tempPriv]["delete"],
-                view: tempPrivileges[tempPriv]["view"],
-                edit: tempPrivileges[tempPriv]["edit"],
-                list: tempPrivileges[tempPriv]["list"],
-                all:
-                    tempPrivileges[tempPriv]["add"] &&
-                    // tempPrivileges[tempPriv]["assign"] &&
-                    tempPrivileges[tempPriv]["delete"] &&
-                    tempPrivileges[tempPriv]["edit"] &&
-                    tempPrivileges[tempPriv]["view"] &&
-                    tempPrivileges[tempPriv]["list"],
-                name: tempPrivileges[tempPriv]["moduleId"]["name"],
-            };
-        });
-        setTemp(privileges);
-    };
-    const updateUsers = (data) => {
-        const users = data?.cgfAdmins;
-        console.log("Users: ", users);
-        users.forEach((object) => {
-            delete object["countryCode"];
-            delete object["createdBy"];
-            delete object["isDeleted"];
-            delete object["isReplaced"];
-            delete object["password"];
-            delete object["phoneNumber"];
-            delete object["roleId"];
-            delete object["salt"];
-            delete object["subRoleId"];
-            delete object["updatedAt"];
-            delete object["updatedBy"];
-            delete object["uuid"];
-            delete object["memberId"];
-            delete object["title"];
-            delete object["department"];
-            delete object["salutation"];
-            delete object["reportingManager"];
-            delete object["operationType"];
-            delete object["address"];
-            delete object["isCGFStaff"];
-            delete object["isOperationMember"];
-            delete object["isMemberRepresentative"];
-            delete object["isCGFAdmin"];
+  const handleTablePageChange = (newPage) => {
+    setPage(newPage);
+  };
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(1);
+  };
+  const onClickVisibilityIconHandler = (id) => {
+    console.log("id", id);
+    return navigate4(`/users/cgf-admin/view-sub-admin/${id}`);
+  };
+  const createPrevileges3 = (tempPrivileges) => {
+    console.log("temp data", tempPrivileges);
+    Object.keys(tempPrivileges).forEach((tempPriv) => {
+      // console.log("temp Previ value",tempPrivileges[tempPriv])
+      privileges[tempPriv] = {
+        add: tempPrivileges[tempPriv]["add"],
+        fill: tempPrivileges[tempPriv]["fill"],
+        // assign: tempPrivileges[tempPriv]["assign"],
+        delete: tempPrivileges[tempPriv]["delete"],
+        view: tempPrivileges[tempPriv]["view"],
+        edit: tempPrivileges[tempPriv]["edit"],
+        list: tempPrivileges[tempPriv]["list"],
+        all:
+          tempPrivileges[tempPriv]["add"] &&
+          // tempPrivileges[tempPriv]["assign"] &&
+          tempPrivileges[tempPriv]["delete"] &&
+          tempPrivileges[tempPriv]["edit"] &&
+          tempPrivileges[tempPriv]["view"] &&
+          tempPrivileges[tempPriv]["list"] &&
+          (tempPrivileges[tempPriv]["moduleId"]["name"] === "Assessment"
+            ? tempPrivileges[tempPriv]["fill"]
+            : true),
+        name: tempPrivileges[tempPriv]["moduleId"]["name"],
+      };
+    });
+    setTemp(privileges);
+  };
+  const updateUsers = (data) => {
+    const users = data?.cgfAdmins;
+    console.log("Users: ", users);
+    users.forEach((object) => {
+      delete object["countryCode"];
+      delete object["createdBy"];
+      delete object["isDeleted"];
+      delete object["isReplaced"];
+      delete object["password"];
+      delete object["phoneNumber"];
+      delete object["roleId"];
+      delete object["salt"];
+      delete object["subRoleId"];
+      delete object["updatedAt"];
+      delete object["updatedBy"];
+      delete object["uuid"];
+      delete object["memberId"];
+      delete object["title"];
+      delete object["department"];
+      delete object["salutation"];
+      delete object["reportingManager"];
+      delete object["operationType"];
+      delete object["address"];
+      delete object["isCGFStaff"];
+      delete object["isOperationMember"];
+      delete object["isMemberRepresentative"];
+      delete object["isCGFAdmin"];
 
       delete object["__v"];
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
@@ -308,9 +312,7 @@ const ViewRole = () => {
         messageType={toasterDetails4.messageType}
       />
       <DialogBox
-        title={
-          <p>Delete role "{fieldValues ? fieldValues.roleName : ""}"</p>
-        }
+        title={<p>Delete role "{fieldValues ? fieldValues.roleName : ""}"</p>}
         info1={
           <p>
             On deleting all the CGF admins to whom assign this role the access
@@ -555,11 +557,14 @@ const ViewRole = () => {
                                     {temp[previleg]["name"]}
                                   </TableCell>
                                   <TableCell align="center" padding="checkbox">
-                                  <Checkbox
-                                      disabled
-                                      className="table-checkbox"
-                                      checked={temp[previleg]["fill"]}
-                                    />
+                                    {temp[previleg]["name"] ===
+                                      "Assessment" && (
+                                      <Checkbox
+                                        disabled
+                                        className="table-checkbox"
+                                        checked={temp[previleg]["fill"]}
+                                      />
+                                    )}
                                   </TableCell>
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox

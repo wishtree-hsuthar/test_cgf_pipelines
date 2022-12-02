@@ -641,7 +641,7 @@ function FillAssessment() {
                                 <MoreVertIcon />
                             </span>
                             <div
-                                className="crud-toggle-wrap"
+                                className="crud-toggle-wrap assessment-crud-toggle-wrap"
                                 style={{ display: isActive ? "none" : "block" }}
                             >
                                 <ul className="crud-toggle-list">

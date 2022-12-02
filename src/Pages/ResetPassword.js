@@ -36,6 +36,7 @@ useDocumentTitle("Reset Password")
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
         reset,
     } = useForm({
@@ -246,6 +247,8 @@ useDocumentTitle("Reset Password")
                                                         </InputAdornment>
                                                     }
                                                     {...register("newPassword")}
+                                                    onBlur={(e) => setValue("newPassword",e.target.value.trim())}
+
                                                 />
                                                 <p className={`password-error`}>
                                                     {errors?.newPassword ? (
@@ -323,6 +326,8 @@ useDocumentTitle("Reset Password")
                                                     {...register(
                                                         "confirmPassword"
                                                     )}
+                                                    onBlur={(e) => setValue("confirmPassword",e.target.value.trim())}
+
                                                 />
                                                 <p className={`password-error`}>
                                                     {errors?.confirmPassword ? (

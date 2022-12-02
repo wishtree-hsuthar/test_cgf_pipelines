@@ -43,6 +43,7 @@ const Login = (prop) => {
 
     const {
         register,
+        setValue,
         handleSubmit,
         formState: { errors },
     } = useForm({
@@ -201,6 +202,7 @@ const Login = (prop) => {
                                                 placeholder="example@domain.com"
                                                 variant="outlined"
                                                 {...register("email")}
+                                                onBlur={(e) => setValue("email",e.target.value.trim())}
                                                 helperText={
                                                     errors.email
                                                         ? errors.email.message
@@ -269,6 +271,7 @@ const Login = (prop) => {
                                                         </InputAdornment>
                                                     }
                                                     {...register("password")}
+                                                    onBlur={(e) => setValue("password",e.target.value.trim())}
                                                 />
                                                 <p className={`password-error`}>
                                                     {errors?.password ? (

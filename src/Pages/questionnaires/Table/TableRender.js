@@ -124,7 +124,7 @@ const TableRender = ({
                                 {rowId + 1}.
                               </span>
                               {questionnaire?.sections[sectionIndex]?.rowValues
-                                ?.length > 2 &&
+                                ?.length > 1 &&
                                 (isPreview || (
                                   <Tooltip title="Delete row">
                                     <span

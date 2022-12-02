@@ -34,7 +34,7 @@ function Dropdown({
         return <div className="select-placeholder">{children}</div>;
       };
     // const [showPlaceholder, setShowPlaceholder] = useState(true);
-    console.log("options", options);
+    // console.log("options", options);
     return (
         <FormControl className="select-reusable" disabled={isDisabled}>
             

@@ -283,11 +283,12 @@ const EditMember = () => {
     try {
       const response = await axios.get(
         CITES +
-          `/?region=${watch("region")}?country=${watch(
+          `/?region=${watch("region")}&country=${watch(
             "country"
-          )}?state=${watch("state")}`
+          )}&state=${watch("state")}`
       );
-      setArrOfCites(response.data);
+       console.log("cites from backend",response?.data)
+      setArrOfCites(response?.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setErrorToaster1(error);
@@ -802,7 +803,7 @@ const EditMember = () => {
                                       }}
                                       onChange={() => trigger("countryCode")}
                                       // onSubmit={() => setValue("countryCode", "")}
-                                      placeholder={"Select country code"}
+                                      placeholder={"+91"}
                                       helperText={
                                         error
                                           ? memberHelper.countryCode[
@@ -957,7 +958,7 @@ const EditMember = () => {
                               selectOnFocus
                               handleHomeEndKeys
                               id="free-solo-with-text-demo"
-                              options={arrOfCites}
+                              options={arrOfCites && arrOfCites}
                               // getOptionLabel={(option) => {
                               //   // Value selected with enter, right from the input
                               //   if (typeof option === "string") {

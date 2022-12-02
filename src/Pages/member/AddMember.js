@@ -379,7 +379,7 @@ const AddMember = () => {
             const response = await axios.get(PARENT_COMPINES, {
                 signal: controller.signal,
             });
-            setArrOfParentCompany(response);
+            setArrOfParentCompany(response?.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             setErrorToaster(error);
@@ -423,6 +423,7 @@ const AddMember = () => {
         };
     }, [watch]);
     // console.log("selected Region", watch("region"));
+    console.log("arrOfparentCompnies", arrOfParentCompany);
     return (
         <div className="page-wrapper">
             <Toaster
@@ -606,6 +607,7 @@ const AddMember = () => {
                                                         handleHomeEndKeys
                                                         id="free-solo-with-text-demo"
                                                         options={
+                                                            arrOfParentCompany &&
                                                             arrOfParentCompany
                                                         }
                                                         // getOptionLabel={(option) => {

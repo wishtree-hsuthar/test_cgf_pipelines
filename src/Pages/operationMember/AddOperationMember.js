@@ -272,9 +272,7 @@ function AddOperationMember() {
         try {
             const response = await privateAxios.get(
                 isCGF
-                    ? FETCH_OPERATION_MEMBER +
-                          cgfMember[0]?._id +
-                          "/master/external"
+                    ? FETCH_OPERATION_MEMBER + cgfMember[0]?._id + "/master/rm"
                     : FETCH_OPERATION_MEMBER + id + "/master/internal"
             );
             if (response.status == 200) {

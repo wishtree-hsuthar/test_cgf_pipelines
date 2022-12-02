@@ -110,9 +110,18 @@ const AssignAssessmentToOperationMember = () => {
     };
     const generateUrl = () => {
         console.log("Search", search);
-        // console.log("assessment?")
+        console.log(
+            "assessment?",
+            assessment,
+            window.location.pathname.split("/")[-1]
+        );
 
-        let url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        let url = `${FETCH_ASSESSMENT_BY_ID}${window.location.pathname
+            .split("/")
+            .at(
+                -1
+            )}/reassignto/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
+        // let url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
             url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
@@ -407,7 +416,7 @@ const AssignAssessmentToOperationMember = () => {
                         </div>
                     </div>
 
-                    <div className="member-info-wrapper table-content-wrap">
+                    <div className="member-info-wrapper table-content-wrap replace-admin-table">
                         <div className="member-data-sect">
                             <TableComponent
                                 tableHead={tableHead}
