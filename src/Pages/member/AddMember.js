@@ -156,6 +156,7 @@ const AddMember = () => {
   const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
   const [arrOfParentCompany, setArrOfParentCompany] = useState([]);
   const [arrOfCites, setArrOfCites] = useState([])
+  console.log("arrOfCities",arrOfCites)
 
   //to hold array of countries for perticular region for CGF Office details
   const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
@@ -260,7 +261,7 @@ const AddMember = () => {
   };
   const getCites = async () => {
     try {
-        const response = await axios.get(CITES+`/?region=${watch("region")}?country=${watch("country")}?state=${watch("state")}`)
+        const response = await axios.get(CITES+`/?region=${watch("region")}&country=${watch("country")}&state=${watch("state")}`)
         setArrOfCites(response.data)
     } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
@@ -367,7 +368,7 @@ const AddMember = () => {
   const getParentCompany = async (controller) => {
     try {
       const response = await axios.get(PARENT_COMPINES,{signal: controller.signal});
-      setArrOfParentCompany(response);
+      setArrOfParentCompany(response?.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setErrorToaster(error);
@@ -411,6 +412,7 @@ const AddMember = () => {
     };
   }, [watch]);
   // console.log("selected Region", watch("region"));
+  console.log("arrOfparentCompnies",arrOfParentCompany)
   return (
     <div className="page-wrapper">
       <Toaster
@@ -549,7 +551,7 @@ const AddMember = () => {
                             selectOnFocus
                             handleHomeEndKeys
                             id="free-solo-with-text-demo"
-                            options={arrOfParentCompany}
+                            options={arrOfParentCompany && arrOfParentCompany}
                             // getOptionLabel={(option) => {
 
                             //   // Value selected with enter, right from the input

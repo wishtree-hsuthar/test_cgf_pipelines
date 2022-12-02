@@ -190,6 +190,7 @@ const ViewRole = () => {
             // console.log("temp Previ value",tempPrivileges[tempPriv])
             privileges[tempPriv] = {
                 add: tempPrivileges[tempPriv]["add"],
+                fill: tempPrivileges[tempPriv]["fill"],
                 // assign: tempPrivileges[tempPriv]["assign"],
                 delete: tempPrivileges[tempPriv]["delete"],
                 view: tempPrivileges[tempPriv]["view"],
@@ -201,7 +202,9 @@ const ViewRole = () => {
                     tempPrivileges[tempPriv]["delete"] &&
                     tempPrivileges[tempPriv]["edit"] &&
                     tempPrivileges[tempPriv]["view"] &&
-                    tempPrivileges[tempPriv]["list"],
+                    tempPrivileges[tempPriv]["list"] && (tempPrivileges[tempPriv]["moduleId"]["name"] === "Assessment"
+                    ? tempPrivileges[tempPriv]["fill"]
+                    : true),
                 name: tempPrivileges[tempPriv]["moduleId"]["name"],
             };
         });

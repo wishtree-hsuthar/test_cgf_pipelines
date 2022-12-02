@@ -356,8 +356,12 @@ textarea:disabled {
 .select-field fieldset {
     border-color: rgba(30, 30, 30, 0.5);
 }
-.select-field:hover fieldset{border-color: rgba(30, 30, 30, 0.8) !important;}
-.select-field:hover .Mui-disabled fieldset{border-color: rgba(30, 30, 30, 0.15) !important;}
+.select-field:hover fieldset {
+    border-color: rgba(30, 30, 30, 0.8) !important;
+}
+.select-field:hover .Mui-disabled fieldset {
+    border-color: rgba(30, 30, 30, 0.15) !important;
+}
 /* .select-field::before {
     font-size: 14px;
     content: "\f078";
@@ -603,7 +607,7 @@ ul.breadcrumb li a:hover {
     width: 100%;
 }
 
-.select-field input{
+.select-field input {
     height: 45px;
 }
 .select-field fieldset {
@@ -2042,7 +2046,7 @@ input:-webkit-autofill:active {
     font-family: "ProximaNova-semiBold", serif, sans-serif;
 }
 .preview-que-blk .MuiTypography-root {
-    font-family: "ProximaNova-Regular",serif, sans-serif !important;
+    font-family: "ProximaNova-Regular", serif, sans-serif !important;
 }
 
 .que-half-sect input,
@@ -2383,7 +2387,9 @@ input:-webkit-autofill:active {
     height: 100%;
     vertical-align: top;
 }
-.preview-que-wrap .que-table-render td{padding: 19px 16px;}
+.preview-que-wrap .que-table-render td {
+    padding: 19px 16px;
+}
 .que-table-render th {
     position: sticky;
     z-index: 2;
@@ -2397,32 +2403,65 @@ input:-webkit-autofill:active {
     flex: 0 0 33%;
     max-width: 33%;
 }
-.card-inner-wrap:last-child{margin-bottom: 20px;}
-.required-toggle-btnblk .MuiSwitch-switchBase:hover, .required-toggle-btnblk .MuiSwitch-switchBase.Mui-checked:hover{background: none;}
-.required-toggle-btnblk .MuiSwitch-thumb{box-shadow: none !important;}
-.que-table-render td textarea{overflow: visible !important;}
-.MuiTooltip-tooltip{font-family: "ProximaNova-Regular", serif, sans-serif !important;}
-.country-code-auto-search .Mui-disabled.MuiInputBase-root {padding-right: 0 !important;}
-.country-code-auto-search .Mui-disabled input{height: 40px !important;}
-.country-code .Mui-disabled input{height: 40px !important;}
-.country-code .Mui-disabled{padding-right: 0 !important;}
-.replace-admin-table .radio-btn-field .MuiRadio-root{width: 35px;margin: 0 auto 0 25px;}
+.card-inner-wrap:last-child {
+    margin-bottom: 20px;
+}
+.required-toggle-btnblk .MuiSwitch-switchBase:hover,
+.required-toggle-btnblk .MuiSwitch-switchBase.Mui-checked:hover {
+    background: none;
+}
+.required-toggle-btnblk .MuiSwitch-thumb {
+    box-shadow: none !important;
+}
+.que-table-render td textarea {
+    overflow: visible !important;
+}
+.MuiTooltip-tooltip {
+    font-family: "ProximaNova-Regular", serif, sans-serif !important;
+}
+.country-code-auto-search .Mui-disabled.MuiInputBase-root {
+    padding-right: 0 !important;
+}
+.country-code-auto-search .Mui-disabled input {
+    height: 40px !important;
+}
+.country-code .Mui-disabled input {
+    height: 40px !important;
+}
+.country-code .Mui-disabled {
+    padding-right: 0 !important;
+}
+.replace-admin-table .radio-btn-field .MuiRadio-root {
+    width: 35px;
+    margin: 0 auto 0 25px;
+}
 
 input::-ms-reveal {
     display: none;
 }
-.select-placeholder{color: rgba(30, 30, 30, 0.5);}
-.select-field p.MuiFormHelperText-root.Mui-disabled{background: none !important;}
+.select-placeholder {
+    color: rgba(30, 30, 30, 0.5);
+}
+.select-field p.MuiFormHelperText-root.Mui-disabled {
+    background: none !important;
+}
 
-
-.view-role-tab-wrapper .tabs-sect .MuiTab-root{padding-top: 0 !important;}
-.textarea-overflow textarea.Mui-disabled{overflow: visible !important;}
-.autocomplete-option-limit > ul{height: 155px !important;}
+.view-role-tab-wrapper .tabs-sect .MuiTab-root {
+    padding-top: 0 !important;
+}
+.textarea-overflow textarea.Mui-disabled {
+    overflow: visible !important;
+}
+.autocomplete-option-limit > ul {
+    height: 155px !important;
+}
 .operation-member-left-blk {
     flex: 0 0 50%;
     max-width: 50%;
 }
-.mb-10{margin-bottom: 10px !important;}
+.mb-10 {
+    margin-bottom: 10px !important;
+}
 /* .autosize-textarea{width: 100%;resize: vertical;padding: 10px 15px 0 !important;font-size: 14px;font-family: 'ProximaNova-Regular';border-color: rgba(30, 30, 30, 0.5) !important;border-radius: 3px !important;outline: none;}
 .autosize-textarea:focus {
     border-color: #4596d1 !important;
@@ -2433,8 +2472,14 @@ input::-ms-reveal {
     flex: 0 0 82%;
     max-width: 82%;
 }
-.que-ttl-right{flex: 0 0 15%;
-    max-width: 15%;}
+.que-ttl-right {
+    flex: 0 0 15%;
+    max-width: 15%;
+}
 .que-ttl-blk .que-ttl-right .MuiInputBase-input {
-    font-family: 'ProximaNova-Regular', serif, sans-serif !important;
+    font-family: "ProximaNova-Regular", serif, sans-serif !important;
+}
+.crud-toggle-wrap.que-crud-toggle-wrap {
+    width: 165px;
+    left: -138px;
 }

@@ -21,10 +21,12 @@ import "react-phone-number-input/style.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { privateAxios } from "../../api/axios";
 import {
-  GET_OPERATION_MEMBER_BY_ID,
-  DELETE_OPERATION_MEMBER,
-  MEMBER,
-  COUNTRIES,
+    GET_OPERATION_MEMBER_BY_ID,
+    DELETE_OPERATION_MEMBER,
+    MEMBER,
+    COUNTRIES,
+    FETCH_ROLES,
+    ROLE_BY_ID,
 } from "../../api/Url";
 
 import useCallbackState from "../../utils/useCallBackState";
@@ -38,19 +40,20 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const defaultValues = {
-  memberCompany: "",
-  companyType: "Internal",
-  countryCode: "",
-  phoneNumber: "",
-  address: "",
-  title: "",
-  department: "",
-  email: "",
-  operationType: "",
-  memberId: "",
-  isActive: "",
-  reportingManager: "",
-  isCGFStaff: "",
+    memberCompany: "",
+    companyType: "Internal",
+    countryCode: "",
+    phoneNumber: "",
+    address: "",
+    title: "",
+    department: "",
+    email: "",
+    operationType: "",
+    memberId: "",
+    isActive: "",
+    reportingManager: "",
+    isCGFStaff: "",
+    role: "",
 };
 const ViewOperationMembers = () => {
   //custom hook to set title of page
@@ -69,50 +72,59 @@ const ViewOperationMembers = () => {
     messageType: "",
   });
 
-  const [isActive, setActive] = useState("false");
-  const [countries, setCountries] = useState([]);
-  const [memberCompanies, setMemberCompanies] = useState();
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [value, setValue] = useState({
-    name: "India",
-    countryCode: "+91",
-    department: "",
-  });
-  const [fetchOperationMemberDetaills, setFetchOperationMemberDetaills] =
-    useState({});
-  const [open, setOpen] = React.useState(false);
-  const privilege = useSelector((state) => state.user?.privilege);
-  const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-  let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
-  let moduleAccessForOperationMember = privilegeArray
-    .filter((data) => data?.moduleId?.name === "Operation Members")
-    .map((data) => ({
-      operationMember: {
-        list: data.list,
-        view: data.view,
-        edit: data.edit,
-        delete: data.delete,
-        add: data.add,
-      },
-    }));
-  console.log(
-    "member operation privilege",
-    moduleAccessForOperationMember[0]?.operationMember
-  );
-  useEffect(() => {
-    let isMounted = true;
-    let controller = new AbortController();
-    const fetchMemberComapany = async () => {
-      try {
-        const response = await privateAxios.get(MEMBER + "/list", {
-          signal: controller.signal,
-        });
-        console.log(
-          "member company---",
-          response.data.map((data) => {
-            console.log("member company=", data.companyName);
-          })
-        );
+    const [isActive, setActive] = useState("false");
+    const [countries, setCountries] = useState([]);
+    const [memberCompanies, setMemberCompanies] = useState();
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [value, setValue] = useState({
+        name: "India",
+        countryCode: "+91",
+        department: "",
+    });
+    const [fetchOperationMemberDetaills, setFetchOperationMemberDetaills] =
+        useState({});
+    const [open, setOpen] = React.useState(false);
+    const privilege = useSelector((state) => state.user?.privilege);
+    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
+    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+    let moduleAccessForOperationMember = privilegeArray
+        .filter((data) => data?.moduleId?.name === "Operation Members")
+        .map((data) => ({
+            operationMember: {
+                list: data.list,
+                view: data.view,
+                edit: data.edit,
+                delete: data.delete,
+                add: data.add,
+            },
+        }));
+    console.log(
+        "member operation privilege",
+        moduleAccessForOperationMember[0]?.operationMember
+    );
+    const fetchRole = async (id) => {
+        try {
+            const response = await privateAxios.get(ROLE_BY_ID + id);
+            console.log("response for fetch role", response);
+            reset({ role: response?.data?.name });
+        } catch (error) {
+            console.log("error in fetchRole", error);
+        }
+    };
+    useEffect(() => {
+        let isMounted = true;
+        let controller = new AbortController();
+        const fetchMemberComapany = async () => {
+            try {
+                const response = await privateAxios.get(MEMBER + "/list", {
+                    signal: controller.signal,
+                });
+                console.log(
+                    "member company---",
+                    response.data.map((data) => {
+                        console.log("member company=", data.companyName);
+                    })
+                );
 
         if ((response.status = 200)) {
           isMounted &&
@@ -188,7 +200,9 @@ const ViewOperationMembers = () => {
           name: response?.data?.name,
           isActive: response?.data?.isActive,
           isCGFStaff: response?.data?.isCGFStaff === true ? "true" : "false",
+                    role: response?.data?.roleId,
         });
+                fetchRole(response?.data?.roleId);
         setIsLoading(false);
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
@@ -437,10 +451,12 @@ const ViewOperationMembers = () => {
                             }}
                             render={({ field, fieldState: { error } }) => (
                               <Autocomplete
-                                disabled
-                                popupIcon={<KeyboardArrowDownRoundedIcon />}
-                                className="phone-number-disable"
-                                {...field}
+                                 disabled
+                                                                 popupIcon={
+                                                                    <KeyboardArrowDownRoundedIcon />
+                                                                }
+                                                                 className="phone-number-disable"
+                                                                {...field}
                                 options={countries}
                                 autoHighlight
                                 // placeholder="Select country code"
@@ -644,6 +660,23 @@ const ViewOperationMembers = () => {
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
+                                            <label htmlFor="">
+                                                Role{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Input
+                                                control={control}
+                                                name="role"
+                                                // myHelper={myHelper}
+                                                placeholder={"N/A"}
+                                                isDisabled
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
                       <label htmlFor="status">Status</label>
                       <div className="radio-btn-field">
                         <Controller

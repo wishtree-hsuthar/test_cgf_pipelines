@@ -14,14 +14,17 @@ export const CHANGE_PASSWORD = `${REACT_APP_API_ENDPOINT}auth/reset`;
 //master
 export const REGIONS = `${REACT_APP_API_ENDPOINT}master/region/list`;
 export const REGIONCOUNTRIES = `${REACT_APP_API_ENDPOINT}master/region`;
-export const PARENT_COMPINES = `${REACT_APP_API_ENDPOINT}master/compnies`;
+// export const PARENT_COMPINES = `${REACT_APP_API_ENDPOINT}master/compnies`;
 export const COUNTRIES = `${REACT_APP_API_ENDPOINT}master/country/list`;
 export const STATES = `${REACT_APP_API_ENDPOINT}master/country`;
-export const CITES = `${REACT_APP_API_ENDPOINT}master/cities`;
+// export const CITES = `${REACT_APP_API_ENDPOINT}master/cities`;
+
 
 //Member
 export const MEMBER = `${REACT_APP_API_ENDPOINT}members`;
 export const MEMBER_DROPDOWN = `${REACT_APP_API_ENDPOINT}members/master`;
+export const PARENT_COMPINES = `${REACT_APP_API_ENDPOINT}members/parentCompanies/master`;
+export const CITES = `${REACT_APP_API_ENDPOINT}members/cities/master`;
 
 //Operation member
 export const MEMBER_OPERATION_MEMBERS = `${REACT_APP_API_ENDPOINT}operation-member/member`;
@@ -63,8 +66,11 @@ export const DOWNLOAD_CGF_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/list/
 export const DOWNLOAD_MEMBERS = `${REACT_APP_API_ENDPOINT}members/list/download`;
 export const DOWNLOAD_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/list/download`;
 export const DOWNLOAD_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/list/download`;
+export const DOWNLOAD_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const DOWNLOAD_QUESTIONNAIRES = `${REACT_APP_API_ENDPOINT}questionnaires/list/download`;
 export const DOWNLOAD_QUESTIONNAIRES_BY_ID = `${REACT_APP_API_ENDPOINT}questionnaires/`;
-
 //roles
 export const VIEW_ROLE = `${REACT_APP_API_ENDPOINT}roles/`;
+// roles
+export const ROLE_BY_ID = `${REACT_APP_API_ENDPOINT}roles/`;
+

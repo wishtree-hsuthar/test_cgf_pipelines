@@ -12,6 +12,7 @@ import {
     ASSESSMENTS,
     DECLINE_ASSESSMENT,
     DOWNLOAD_ASSESSMENT,
+    DOWNLOAD_ASSESSMENT_BY_ID,
     FETCH_ASSESSMENT_BY_ID,
     SUBMIT_ASSESSMENT_AS_DRAFT,
 } from "../../api/Url";
@@ -505,7 +506,7 @@ function FillAssessment() {
     const downloadAssessment = async () => {
         try {
             const response = await privateAxios.get(
-                DOWNLOAD_ASSESSMENT + params.id + "/download",
+                DOWNLOAD_ASSESSMENT_BY_ID + params.id + "/download",
                 {
                     responseType: "blob",
                 }
@@ -514,10 +515,7 @@ function FillAssessment() {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute(
-                "download",
-                `Assessment - ${new Date().toISOString()}.xls`
-            );
+            link.setAttribute("download", `Assessment - ${new Date()}.xls`);
             document.body.appendChild(link);
             link.click();
             if (response.status == 200) {
