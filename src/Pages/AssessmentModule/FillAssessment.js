@@ -543,19 +543,25 @@ function FillAssessment() {
             <DialogBox
                 title={<p>Accept/Reject Assessment </p>}
                 info1={
-                    <p>
-                        Member company :
-                        {assessment?.assignedMember?.companyName}
-                        <br />
-                        Assessment title :{assessment?.title}
-                        <br />
-                        Assessment type :{assessment?.assessmentType}
-                        <br />
-                        Due date :
-                        {new Date(assessment?.dueDate).toLocaleDateString()}
-                        <br />
+                    <p className="accrej-txtwrap">
+                        <span className="accrej-txtblk">
+                            <span className="accrej-label">Member company :</span>
+                            <span className="accrej-desc">{assessment?.assignedMember?.companyName}</span>
+                        </span>
+                        <span className="accrej-txtblk">
+                        <span className="accrej-label">Assessment title :</span>
+                        <span className="accrej-desc">{assessment?.title}</span>
+                        </span>
+                        <span className="accrej-txtblk">
+                        <span className="accrej-label">Assessment type :</span>
+                        <span className="accrej-desc">{assessment?.assessmentType}</span>
+                        </span>
+                        <span className="accrej-txtblk">
+                        <span className="accrej-label">Due date :</span>
+                        <span className="accrej-desc">{new Date(assessment?.dueDate).toLocaleDateString()}</span>
+                        </span>
                         On Accepting this assessment you need to fill this
-                        assessmentin given time, and on rejecting this
+                        assessment in given time, and on rejecting this
                         assessment you need to mention reason for it
                     </p>
                 }
@@ -579,6 +585,7 @@ function FillAssessment() {
                                 className={`input-textarea ${
                                     error && "input-textarea-error"
                                 }`}
+                                style={{marginBottom:'10px'}}
                                 id="outlined-basic"
                                 placeholder="Enter reason"
                                 helperText={
