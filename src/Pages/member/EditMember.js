@@ -803,7 +803,7 @@ const EditMember = () => {
                                       }}
                                       onChange={() => trigger("countryCode")}
                                       // onSubmit={() => setValue("countryCode", "")}
-                                      placeholder={"Select country code"}
+                                      placeholder={"+91"}
                                       helperText={
                                         error
                                           ? memberHelper.countryCode[

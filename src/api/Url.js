@@ -69,6 +69,8 @@ export const DOWNLOAD_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/list/do
 export const DOWNLOAD_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const DOWNLOAD_QUESTIONNAIRES = `${REACT_APP_API_ENDPOINT}questionnaires/list/download`;
 export const DOWNLOAD_QUESTIONNAIRES_BY_ID = `${REACT_APP_API_ENDPOINT}questionnaires/`;
-
+//roles
+export const VIEW_ROLE = `${REACT_APP_API_ENDPOINT}roles/`;
 // roles
 export const ROLE_BY_ID = `${REACT_APP_API_ENDPOINT}roles/`;
+

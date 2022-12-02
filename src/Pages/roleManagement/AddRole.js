@@ -24,10 +24,10 @@ import Toaster from "../../components/Toaster";
 import "../../components/TableComponent.css";
 import useCallbackState from "../../utils/useCallBackState";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
-import {useDocumentTitle} from "../../utils/useDocumentTitle"
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const AddRole = () => {
-  useDocumentTitle("Add Role")   
+  useDocumentTitle("Add Role");
   const navigate1 = useNavigate();
 
   //Refr for Toaster
@@ -39,8 +39,8 @@ const AddRole = () => {
     messageType: "success",
   });
   //array to hold modules available
-  let modules = []
-  console.log("modules",modules)
+  let modules = [];
+  console.log("modules", modules);
   //variable to hold privileges
   let temp = {};
 
@@ -69,19 +69,20 @@ const AddRole = () => {
   const [previleges1, setPrevileges1] = useState({ ...temp });
 
   const createPrevileges1 = () => {
-    console.log("modules in side create prive func",modules)
-    modules.forEach((module) => 
-       temp[module.moduleId] = {
-        name: module.moduleName,
-        fill: false,
-        list: false,
-        add: false,
-        edit: false,
-        view: false,
-        delete: false,
-        // assign: false,
-        all: false,
-      }
+    console.log("modules in side create prive func", modules);
+    modules.forEach(
+      (module) =>
+        (temp[module.moduleId] = {
+          name: module.moduleName,
+          fill: false,
+          list: false,
+          add: false,
+          edit: false,
+          view: false,
+          delete: false,
+          // assign: false,
+          all: false,
+        })
     );
     setPrevileges1({ ...temp });
   };
@@ -94,15 +95,14 @@ const AddRole = () => {
           moduleId: module._id,
         })
     );
-    createPrevileges1()
+    createPrevileges1();
   };
 
-  const { control, reset, setValue, handleSubmit } =
-    useForm({
-      defaultValues: defaultValues,
-    });
+  const { control, reset, setValue, handleSubmit } = useForm({
+    defaultValues: defaultValues,
+  });
   const onSubmit1 = async (data) => {
-    console.log("inside on Submit")
+    console.log("inside on Submit");
     let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
     Object.keys(previlegesForBackend).forEach((p_key) => {
       delete previlegesForBackend[p_key]["all"];
@@ -126,7 +126,7 @@ const AddRole = () => {
         () => myRef.current()
       );
       reset({ defaultValues });
-      getSystemModules()
+      getSystemModules();
       setTimeout(() => navigate1("/roles"), 3000);
     } catch (error) {
       console.log("error", error);
@@ -171,8 +171,8 @@ const AddRole = () => {
         },
         () => myRef.current()
       );
-      reset({defaultValues})
-      getSystemModules()
+      reset({ defaultValues });
+      getSystemModules();
     } catch (error) {
       setToasterDetails1(
         {
@@ -189,13 +189,15 @@ const AddRole = () => {
     }
   };
   const onClickCancelHandler1 = () => {
-    console.log("inside on click cancel")
-    reset({defaultValues})
+    console.log("inside on click cancel");
+    reset({ defaultValues });
     return navigate1("/roles");
   };
-  const getSystemModules = async() => {
+  const getSystemModules = async () => {
     try {
-      const { data } = await axios.get(REACT_APP_API_ENDPOINT + "system-modules");
+      const { data } = await axios.get(
+        REACT_APP_API_ENDPOINT + "system-modules"
+      );
       createModules(data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
@@ -212,12 +214,12 @@ const AddRole = () => {
         () => myRef.current()
       );
     }
-  }
-  
+  };
+
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    isMounted && getSystemModules()
+    isMounted && getSystemModules();
     return () => {
       isMounted = false;
       controller.abort();
@@ -371,66 +373,78 @@ const AddRole = () => {
                 <Paper sx={{ width: "100%" }}>
                   <TableContainer>
                     <Table sx={{ minWidth: 750 }}>
-                    <TableHead>
-                          <TableRow>
-                            <TableCell
-                              align="left"
-                              className="table-header"
-                              width="16%"
-                            >
-                              <span className="sorted-blk">Modules</span>
-                              
-                            </TableCell>
-                            <TableCell className="table-header"><span className="sorted-blk">Fill</span></TableCell>
-                            <TableCell className="table-header"><span className="sorted-blk">List</span></TableCell>
-                            <TableCell align="center" className="table-header">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            align="left"
+                            className="table-header"
+                            width="16%"
+                          >
+                            <span className="sorted-blk">Modules</span>
+                          </TableCell>
+                          <TableCell className="table-header">
+                            <span className="sorted-blk">Fill</span>
+                          </TableCell>
+                          <TableCell className="table-header">
+                            <span className="sorted-blk">List</span>
+                          </TableCell>
+                          <TableCell align="center" className="table-header">
                             <span className="sorted-blk">Add</span>
-                            </TableCell>
-                            <TableCell align="center" className="table-header">
+                          </TableCell>
+                          <TableCell align="center" className="table-header">
                             <span className="sorted-blk">Edit</span>
-                            </TableCell>
-                            <TableCell align="center" className="table-header">
+                          </TableCell>
+                          <TableCell align="center" className="table-header">
                             <span className="sorted-blk">View</span>
-                            </TableCell>
-                            <TableCell align="center" className="table-header">
+                          </TableCell>
+                          <TableCell align="center" className="table-header">
                             <span className="sorted-blk">Delete</span>
-                            </TableCell>
-                            {/* <TableCell
+                          </TableCell>
+                          {/* <TableCell
                               align="center"
                               className="table-header"
                               width="16%"
                             >
                               Assign to Member
                             </TableCell> */}
-                            <TableCell align="center" className="table-header">
+                          <TableCell align="center" className="table-header">
                             <span className="sorted-blk">All</span>
-                            </TableCell>
-                          </TableRow>
-                        </TableHead>
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
                       <TableBody>
                         {Object.keys(previleges1).map((previleg, _id) => {
-                          console.log("previleg",previleges1[previleg]["name"])
+                          console.log(
+                            "previleg",
+                            previleges1[previleg]["name"]
+                          );
                           return (
                             <TableRow key={previleg} hover>
                               <TableCell>
                                 {previleges1[previleg]["name"]}
                               </TableCell>
                               <TableCell align="center" padding="checkbox">
-                              <Checkbox
-                                  disabled={previleges1[previleg]["name"] != "Assessment"}
-                                  className="table-checkbox"
-                                  checked={previleges1[previleg]["fill"]}
-                                  onChange={() =>
-                                    setPrevileges1((previous) => ({
-                                      ...previous,
-                                      [previleg]: {
-                                        ...previous[previleg],
-                                        fill: !previous[previleg]["fill"],
-                                        all: false,
-                                      },
-                                    }))
-                                  }
-                                />
+                                {previleges1[previleg]["name"] ===
+                                  "Assessment" && (
+                                  <Checkbox
+                                    disabled={
+                                      previleges1[previleg]["name"] !=
+                                      "Assessment"
+                                    }
+                                    className="table-checkbox"
+                                    checked={previleges1[previleg]["fill"]}
+                                    onChange={() =>
+                                      setPrevileges1((previous) => ({
+                                        ...previous,
+                                        [previleg]: {
+                                          ...previous[previleg],
+                                          fill: !previous[previleg]["fill"],
+                                          all: false,
+                                        },
+                                      }))
+                                    }
+                                  />
+                                )}
                               </TableCell>
                               <TableCell align="center" padding="checkbox">
                                 <Checkbox
@@ -551,7 +565,10 @@ const AddRole = () => {
                                         add: !previous[previleg]["all"],
                                         edit: !previous[previleg]["all"],
                                         delete: !previous[previleg]["all"],
-                                        fill : previleges1[previleg]["name"] === "Assessment" && !previous[previleg]["all"]
+                                        fill:
+                                          previleges1[previleg]["name"] ===
+                                            "Assessment" &&
+                                          !previous[previleg]["all"],
                                         // assign: !previous[previleg]["all"],
                                       },
                                     }))

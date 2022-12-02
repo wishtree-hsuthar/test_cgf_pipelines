@@ -23,12 +23,12 @@ import Input from "../../components/Input";
 import axios from "axios";
 import {
   COUNTRIES,
-  FETCH_ROLES,
   MEMBER,
   MEMBER_OPERATION_MEMBERS,
   REGIONCOUNTRIES,
   REGIONS,
   STATES,
+  VIEW_ROLE,
 } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
@@ -187,12 +187,12 @@ const ViewMember = () => {
       delete object["memberData"];
       // delete object["createdBy"]
       object.assessment = object["assessment"]?.toString() ?? "0";
-      console.log(
-        "type of created By",
-        typeof object["createdBy"],
-        "createdBy",
-        object["createdBy"]
-      );
+      // console.log(
+      //     "type of created By",
+      //     typeof object["createdBy"],
+      //     "createdBy",
+      //     object["createdBy"]
+      // );
       object["createdAt"] = new Date(object["createdAt"])?.toLocaleDateString(
         "en-US",
         {
@@ -248,10 +248,10 @@ const ViewMember = () => {
 
   //method for time based searching
   const onSearchChangeHandler = (e) => {
-    console.log("event", e.key);
+    // console.log("event", e.key);
     if (searchTimeout) clearTimeout(searchTimeout);
     setMakeApiCall(false);
-    console.log("search values", e.target.value);
+    // console.log("search values", e.target.value);
     setSearch(e.target.value);
     setSearchTimeout(
       setTimeout(() => {
@@ -293,7 +293,7 @@ const ViewMember = () => {
   });
   //method to call all error toaster from this method
   const setErrorToaster = (error) => {
-    console.log("error", error);
+    // console.log("error", error);
     setToasterDetails(
       {
         titleMessage: "Error",
@@ -335,6 +335,7 @@ const ViewMember = () => {
     memberContactPhoneNuber: "",
     totalOperationMembers: "",
     createdBy: "",
+    roleId: "",
   };
   //code to get id from url
   const param = useParams();
@@ -383,7 +384,6 @@ const ViewMember = () => {
   };
   //state to hold member data send by back end
   const [member, setMember] = useState({});
-  console.log("member", member);
   //to hold all regions
   const [arrOfRegions, setArrOfRegions] = useState([]);
   //to hold array of countries for perticular region for Company Adress
@@ -398,7 +398,7 @@ const ViewMember = () => {
   const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
     useState([]);
 
-  const { control, reset, watch, trigger } = useForm({
+  const { control, reset, watch, setValue, trigger } = useForm({
     defaultValues: defaultValues,
   });
   const formatRegionCountries = (regionCountries) => {
@@ -429,7 +429,7 @@ const ViewMember = () => {
       const countryCodeSet = new Set(arrOfCountryCodeTemp);
       setArrOfCountryCode([...countryCodeSet]);
     } catch (error) {
-      console.log("error inside get Country code", error);
+      // console.log("error inside get Country code", error);
       if (error?.code === "ERR_CANCELED") return;
       isMounted && setErrorToaster(error);
     }
@@ -438,7 +438,7 @@ const ViewMember = () => {
   const getCountries = async (region) => {
     let controller = new AbortController();
     try {
-      console.log("region: ", region);
+      // console.log("region: ", region);
       if (region) {
         return await axios.get(REGIONCOUNTRIES + `/${region}`, {
           signal: controller.signal,
@@ -446,7 +446,7 @@ const ViewMember = () => {
       }
       return [];
     } catch (error) {
-      console.log("Error inside get Countres", error);
+      // console.log("Error inside get Countres", error);
       if (error?.code === "ERR_CANCELED") return;
       setErrorToaster(error);
       return [];
@@ -460,10 +460,10 @@ const ViewMember = () => {
       const regions = await axios.get(REGIONS, {
         signal: controller.signal,
       });
-      console.log("regions ", regions);
+      // console.log("regions ", regions);
       setArrOfRegions(regions?.data ?? []);
       const countriesOnRegion1 = await getCountries(watch("region"));
-      console.log("countries", countriesOnRegion1);
+      // console.log("countries", countriesOnRegion1);
       const arrOfCountryRegionsTemp1 = formatRegionCountries(
         countriesOnRegion1?.data
       );
@@ -475,7 +475,7 @@ const ViewMember = () => {
       }
 
       const countriesOnRegion2 = await getCountries(watch("cgfOfficeRegion"));
-      console.log("countriesOnRegion2", countriesOnRegion2);
+      // console.log("countriesOnRegion2", countriesOnRegion2);
       const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries(
         countriesOnRegion2.data
       );
@@ -485,7 +485,7 @@ const ViewMember = () => {
       // getCountries()
       return arrOfRegions;
     } catch (error) {
-      console.log("Inside get Regions catch", error);
+      // console.log("Inside get Regions catch", error);
       if (error?.code === "ERR_CANCELED") return;
       isMounted && setErrorToaster(error);
       return [];
@@ -501,6 +501,7 @@ const ViewMember = () => {
         signal: controller.signal,
       });
       const data = response.data;
+      const roleName =  await getRoleNameByRoleId(isMounted, controller, data);
       console.log("data: ", data);
       setMember({ ...data });
       reset({
@@ -535,9 +536,10 @@ const ViewMember = () => {
         status: data?.memberRepresentativeId[0]?.isActive
           ? "active"
           : "inactive",
-        totalOperationMembers: totalRecords?.toString() ?? "N/A",
+        totalOperationMembers: data?.totalOperationMembers ?? "N/A",
         createdBy: data?.createdBy["name"] ?? "N/A",
-        roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
+        roleId: roleName
+        // roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
       });
       setIsLoading(false);
     } catch (error) {
@@ -548,27 +550,7 @@ const ViewMember = () => {
     // console.log("response for member: ", response);
   };
 
-  // Fetch roles
-  let fetchRoles = async () => {
-    try {
-      const response = await privateAxios.get(FETCH_ROLES);
-      console.log("Response from fetch roles - ", response);
-      setRoles(response.data);
-    } catch (error) {
-      console.log("Error from fetch roles", error);
-      setToasterDetails(
-        {
-          titleMessage: "Oops!",
-          descriptionMessage: error?.response?.data?.message,
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
-    }
-  };
+  console.log("member", member);
   const getOperationMemberByMemberId = async (controller) => {
     try {
       let url = generateUrl();
@@ -593,10 +575,10 @@ const ViewMember = () => {
           responseType: "blob",
         }
       );
-      console.log(
-        "resposne from download operation members in view member page",
-        response
-      );
+      // console.log(
+      //     "resposne from download operation members in view member page",
+      //     response
+      // );
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -615,7 +597,19 @@ const ViewMember = () => {
         );
       }
     } catch (error) {
-      console.log("Error from download cgf admins", error);
+      // console.log("Error from download cgf admins", error);
+    }
+  };
+  const getRoleNameByRoleId = async (isMounted, controller, data) => {
+    try {
+      const roleId = data?.memberRepresentativeId?.[0]?.roleId;
+      const response = await axios.get(VIEW_ROLE + roleId);
+      console.log("response", response?.data?.name);
+      return response?.data?.name
+    } catch (error) {
+      console.log("error in get role", error);
+      if (error?.code === "ERR_CANCELED") return;
+      setErrorToaster(error);
     }
   };
   useEffect(() => {
@@ -623,13 +617,13 @@ const ViewMember = () => {
     const controller = new AbortController();
     (async () => {
       isMounted && makeApiCall && (await getMemberByID(isMounted, controller));
+      //   isMounted && makeApiCall && (await getRoleNameByRoleId(isMounted, controller));
       isMounted && (await getCountryCode(isMounted, controller));
       isMounted && (await getRegions(isMounted, controller));
       // getRegions(controller)
       isMounted &&
         makeApiCall &&
         (await getOperationMemberByMemberId(controller));
-      isMounted && fetchRoles();
     })();
     // makeApiCall && getMembers(isMounted, controller);
     return () => {
@@ -705,20 +699,18 @@ const ViewMember = () => {
                 style={{ display: isActive ? "block" : "none" }}
               >
                 <ul className="crud-toggle-list">
-                  {member?.memberRepresentativeId?.length > 0 && (
-                    <li
-                      hidden={
-                        SUPER_ADMIN
-                          ? false
-                          : !moduleAccesForMember[0]?.member.edit
-                      }
-                      onClick={() =>
-                        navigate(`/users/members/edit-member/${param.id}`)
-                      }
-                    >
-                      Edit
-                    </li>
-                  )}
+                  <li
+                    hidden={
+                      SUPER_ADMIN
+                        ? false
+                        : !moduleAccesForMember[0]?.member.edit
+                    }
+                    onClick={() =>
+                      navigate(`/users/members/edit-member/${param.id}`)
+                    }
+                  >
+                    Edit
+                  </li>
                   <li
                     hidden={
                       SUPER_ADMIN
@@ -1286,7 +1278,13 @@ const ViewMember = () => {
 
                       <div>
                         {/* <Input/> */}
-                        <Dropdown
+                        <Input
+                          isDisabled
+                          control={control}
+                          name="roleId"
+                          placeholder="N/A"
+                        />
+                        {/* <Dropdown
                           name="roleId"
                           control={control}
                           options={roles}
@@ -1295,8 +1293,8 @@ const ViewMember = () => {
                           }}
                           isDisabled
                           // myHelper={memberHelper}
-                          placeholder={"Select role"}
-                        />
+                          placeholder={"Select role"} */}
+                        {/* /> */}
                       </div>
                     </div>
                   </div>
