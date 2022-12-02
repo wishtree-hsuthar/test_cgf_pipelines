@@ -146,7 +146,7 @@ const EditRole = () => {
         name: tempPrivileges[tempPriv]["moduleId"]["name"],
       };
     });
-    console.log("temp",temp)
+    console.log("temp", temp);
     setPrevileges({ ...temp });
   };
   const updateEditFields = (data) => {
@@ -194,7 +194,7 @@ const EditRole = () => {
       controller.abort();
     };
   }, []);
-  console.log("Privilege",previleges)
+  console.log("Privilege", previleges);
   return (
     <div className="page-wrapper">
       <Toaster
@@ -338,7 +338,9 @@ const EditRole = () => {
                             >
                               <span className="sorted-blk">Modules</span>
                             </TableCell>
-                            <TableCell className="table-header"><span className="sorted-blk">Fill</span></TableCell>
+                            <TableCell className="table-header">
+                              <span className="sorted-blk">Fill</span>
+                            </TableCell>
 
                             <TableCell className="table-header">
                               <span className="sorted-blk">List</span>
@@ -375,23 +377,25 @@ const EditRole = () => {
                                   {previleges[previleg]["name"]}
                                 </TableCell>
                                 <TableCell align="center" padding="checkbox">
-                                  <Checkbox
-                                    disabled={previleges[previleg]["name"] != "Assessment"}
-                                    className="table-checkbox"
-                                    checked={previleges[previleg]["fill"]}
-                                    onChange={() =>
-                                      setPrevileges((previous) => ({
-                                        ...previous,
-                                        [previleg]: {
-                                          ...previous[previleg],
-                                          fill: !previous[previleg]["fill"],
-                                          all: false,
-                                        },
-                                      }))
-                                    }
-                                  />
+                                  {previleges[previleg]["name"] ===
+                                    "Assessment" && (
+                                    <Checkbox
+                                      className="table-checkbox"
+                                      checked={previleges[previleg]["fill"]}
+                                      onChange={() =>
+                                        setPrevileges((previous) => ({
+                                          ...previous,
+                                          [previleg]: {
+                                            ...previous[previleg],
+                                            fill: !previous[previleg]["fill"],
+                                            all: false,
+                                          },
+                                        }))
+                                      }
+                                    />
+                                  )}
                                 </TableCell>
-                                
+
                                 <TableCell align="center" padding="checkbox">
                                   <Checkbox
                                     className="table-checkbox"
@@ -511,7 +515,10 @@ const EditRole = () => {
                                           add: !previous[previleg]["all"],
                                           edit: !previous[previleg]["all"],
                                           delete: !previous[previleg]["all"],
-                                          fill : previleges[previleg]["name"] === "Assessment" && !previous[previleg]["all"]
+                                          fill:
+                                            previleges[previleg]["name"] ===
+                                              "Assessment" &&
+                                            !previous[previleg]["all"],
                                         },
                                       }))
                                     }
