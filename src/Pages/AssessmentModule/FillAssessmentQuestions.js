@@ -128,7 +128,9 @@ const FillAssessmentQuestion = ({
             />
         ) : question.inputType === "textarea" ? (
             <TextField
-                disabled={!editMode && !params["*"].includes("view")}
+                disabled={
+                    (editMode && params["*"].includes("view")) || !editMode
+                }
                 placeholder={`Enter text here`}
                 multiline
                 value={answer ?? ""}

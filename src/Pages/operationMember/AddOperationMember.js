@@ -123,6 +123,7 @@ function AddOperationMember() {
             // memberId: "",
             // companyType: "",
             isCGFStaff: false,
+            roleId: "",
         },
     });
 
@@ -150,6 +151,11 @@ function AddOperationMember() {
             const response = await privateAxios.get(FETCH_ROLES);
             console.log("Response from fetch roles - ", response);
             setRoles(response.data);
+            response.data.filter(
+                (data) =>
+                    data.name === "Operation Member" &&
+                    reset({ roleId: data._id })
+            );
         } catch (error) {
             console.log("Error from fetch roles", error);
             setToasterDetails(
@@ -578,7 +584,14 @@ function AddOperationMember() {
                                                             PaperComponent={({
                                                                 children,
                                                             }) => (
-                                                                <Paper className={countries?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
+                                                                <Paper
+                                                                    className={
+                                                                        countries?.length >
+                                                                        5
+                                                                            ? "autocomplete-option-txt autocomplete-option-limit"
+                                                                            : "autocomplete-option-txt"
+                                                                    }
+                                                                >
                                                                     {children}
                                                                 </Paper>
                                                             )}
@@ -820,7 +833,14 @@ function AddOperationMember() {
                                                             PaperComponent={({
                                                                 children,
                                                             }) => (
-                                                                <Paper className={memberCompanies?.length > 5 ? "autocomplete-option-txt autocomplete-option-limit" : "autocomplete-option-txt"}>
+                                                                <Paper
+                                                                    className={
+                                                                        memberCompanies?.length >
+                                                                        5
+                                                                            ? "autocomplete-option-txt autocomplete-option-limit"
+                                                                            : "autocomplete-option-txt"
+                                                                    }
+                                                                >
                                                                     {children}
                                                                 </Paper>
                                                             )}

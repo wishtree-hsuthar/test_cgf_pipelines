@@ -544,6 +544,16 @@ function FillAssessment() {
                 title={<p>Accept/Reject Assessment </p>}
                 info1={
                     <p>
+                        Member company :
+                        {assessment?.assignedMember?.companyName}
+                        <br />
+                        Assessment title :{assessment?.title}
+                        <br />
+                        Assessment type :{assessment?.assessmentType}
+                        <br />
+                        Due date :
+                        {new Date(assessment?.dueDate).toLocaleDateString()}
+                        <br />
                         On Accepting this assessment you need to fill this
                         assessmentin given time, and on rejecting this
                         assessment you need to mention reason for it
