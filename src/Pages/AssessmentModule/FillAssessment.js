@@ -602,9 +602,7 @@ function FillAssessment() {
                                 ).toLocaleDateString()}
                             </span>
                         </span>
-                        On Accepting this assessment you need to fill this
-                        assessment in given time, and on rejecting this
-                        assessment you need to mention reason for it
+                       Click “Accept” if you want to fill out the assessment . Or else, provide a reason and reject the assessment, if you don’t want to continue with it.
                     </p>
                 }
                 info2={
