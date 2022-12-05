@@ -37,53 +37,53 @@ const SectionContent = ({
     const [tableErr, setTableErr] = useState("");
     const ITEM_HEIGHT = 42;
 
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4,
-      },
-    },
-  };
-  //Refr for Toaster
-  const myRef = React.useRef();
-  //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
-  //method to call all error toaster from this method
-  const setErrorToaster = (error) => {
-    // console.log("error", error);
-    setToasterDetails(
-      {
-        titleMessage: "Error",
-        descriptionMessage:
-          error?.response?.data?.message &&
-          typeof error.response.data.message === "string"
-            ? error.response.data.message
-            : "Something went wrong!",
-        messageType: "error",
-      },
-      () => myRef.current()
-    );
-  };
-  // console.log("global title error", globalSectionTitleError);
-  const onDialogPrimaryButtonClickHandler = () => {
-    deleteSection(uuid);
-  };
-  const onDialogPrimaryButtonClickHandler1 = () => {
-    handleSubmitSection()
-    setOpenDialog1(false)
-  }
-  const onDialogSecondaryButtonClickHandler = () => {
-    setOpenDialog(false);
-  };
-  const onDialogSecondaryButtonClickHandler1 = () => {
-    setOpenDialog1(false)
-  }
-  const deleteSection = (uuid) => {
-    let tempQuestionnare = { ...questionnaire };
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4,
+            },
+        },
+    };
+    //Refr for Toaster
+    const myRef = React.useRef();
+    //Toaster Message setter
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
+    //method to call all error toaster from this method
+    const setErrorToaster = (error) => {
+        // console.log("error", error);
+        setToasterDetails(
+            {
+                titleMessage: "Error",
+                descriptionMessage:
+                    error?.response?.data?.message &&
+                    typeof error.response.data.message === "string"
+                        ? error.response.data.message
+                        : "Something went wrong!",
+                messageType: "error",
+            },
+            () => myRef.current()
+        );
+    };
+    // console.log("global title error", globalSectionTitleError);
+    const onDialogPrimaryButtonClickHandler = () => {
+        deleteSection(uuid);
+    };
+    const onDialogPrimaryButtonClickHandler1 = () => {
+        handleSubmitSection();
+        setOpenDialog1(false);
+    };
+    const onDialogSecondaryButtonClickHandler = () => {
+        setOpenDialog(false);
+    };
+    const onDialogSecondaryButtonClickHandler1 = () => {
+        setOpenDialog1(false);
+    };
+    const deleteSection = (uuid) => {
+        let tempQuestionnare = { ...questionnaire };
 
         let tempSections = tempQuestionnare.sections.filter(
             (section) => section.uuid !== uuid
@@ -277,8 +277,7 @@ const SectionContent = ({
         e?.preventDefault();
         const response = await validateSection();
         if (response) {
-            await saveSection(undefined, isPublished);
-            return true;
+            return await saveSection(undefined, isPublished);
         }
         return false;
         // validateSection() && saveSection()
@@ -317,8 +316,8 @@ const SectionContent = ({
                         );
 
                         setTimeout(() => navigate("/questionnaires"), 3000);
-
-                        return true;
+                        return response.data.uuid;
+                        // return true;
                         // console.log("response from save section", response);
                     } catch (error) {
                         setErrorToaster(error);
@@ -344,7 +343,7 @@ const SectionContent = ({
         if (response) {
             try {
                 await privateAxios.put(
-                    `${ADD_QUESTIONNAIRE}/publish/${params?.id}`
+                    `${ADD_QUESTIONNAIRE}/publish/${response}`
                 );
                 setTimeout(() => navigate("/questionnaires"), 3000);
             } catch (error) {

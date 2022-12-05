@@ -247,7 +247,7 @@ function FillAssessment() {
     const handleFormSubmit = (e, saveAsDraft) => {
         e.preventDefault();
         const tempErrors = {};
-
+        let sections = [];
         questionnaire?.sections?.map((section, index) => {
             let sectionErrors = errors[section?.uuid] ?? {};
             let currentSectionAnswers =
@@ -277,7 +277,8 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is required field";
-                            setTabValue(index);
+                            sections.push(index);
+                            // setTabValue(index);
                         } else if (
                             transformedColValues[cell?.columnId].columnType !==
                                 "prefilled" &&
@@ -294,8 +295,9 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is alphabets only field";
-                            setTabValue(index);
+                            // setTabValue(index);
                             console.log("in table alphabets only");
+                            sections.push(index);
                         } else if (
                             transformedColValues[cell?.columnId].columnType !==
                                 "prefilled" &&
@@ -312,8 +314,9 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is numeric only field";
-                            setTabValue(index);
+                            // setTabValue(index);
                             console.log("in table numeric only");
+                            sections.push(index);
                         } else if (
                             transformedColValues[cell?.columnId].columnType !==
                                 "prefilled" &&
@@ -330,8 +333,9 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is alphaNum field";
-                            setTabValue(index);
+                            // setTabValue(index);
                             console.log("in table alphaNum only");
+                            sections.push(index);
                         } else {
                             delete sectionErrors[
                                 `${cell?.columnId}.${row?.uuid}`
@@ -350,10 +354,12 @@ function FillAssessment() {
                         saveAsDraft === false
                     ) {
                         console.log("error from required");
-
+                        console.log("section no", index);
                         sectionErrors[question?.uuid] =
                             "This is required field";
-                        setTabValue(index);
+                        sections.push(index);
+
+                        // setTabValue(index);
                     } else if (
                         question.validation === "alphabets" &&
                         currentSectionAnswers[question?.uuid] &&
@@ -365,7 +371,9 @@ function FillAssessment() {
 
                         sectionErrors[question?.uuid] =
                             "Please enter alphabets field";
-                        setTabValue(index);
+                        sections.push(index);
+
+                        // setTabValue(index);
                     } else if (
                         question.validation === "numeric" &&
                         currentSectionAnswers[question?.uuid] &&
@@ -381,7 +389,8 @@ function FillAssessment() {
                         );
                         sectionErrors[question?.uuid] =
                             "This is nummeric field";
-                        setTabValue(index);
+                        // setTabValue(index);
+                        sections.push(index);
                     } else if (
                         question.validation === "alphanumeric" &&
                         currentSectionAnswers[question?.uuid] &&
@@ -391,12 +400,16 @@ function FillAssessment() {
                     ) {
                         sectionErrors[question?.uuid] =
                             "This is alphanumeric field";
-                        setTabValue(index);
+                        // setTabValue(index);
+                        sections.push(index);
                     } else {
                         delete sectionErrors[question?.uuid];
                     }
                 });
             }
+
+            console.log("sections array = ", sections);
+            setTabValue(sections.length > 0 ?? sections[0]);
 
             tempErrors[section?.uuid] = { ...sectionErrors };
         });
