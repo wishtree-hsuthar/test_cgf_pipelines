@@ -27,7 +27,7 @@ const tableHead = [
     {
         id: "",
         disablePadding: true,
-        label: "Select User",
+        label: "",
         width: "10%",
     },
     {
@@ -319,7 +319,9 @@ const ReplaceOperationMember = () => {
                 titleMessage={toasterDetails.titleMessage}
             />
             <DialogBox
-                title={<p> Replace Operation Member "{operationMember?.name}" </p>}
+                title={
+                    <p> Replace Operation Member "{operationMember?.name}" </p>
+                }
                 info1={
                     <p>
                         {" "}
@@ -422,7 +424,7 @@ const ReplaceOperationMember = () => {
                             onClick={openReplaceDailogBox}
                             className="primary-button add-button replace-assign-btn"
                         >
-                            Assign
+                            Replace
                         </button>
                     </div>
                 </div>
