@@ -437,7 +437,7 @@ const ReplaceSubAdmin = () => {
                             onClick={openReplaceDailogBox}
                             className="primary-button add-button replace-assign-btn"
                         >
-                            Assign
+                            Replace
                         </button>
                     </div>
                 </div>
