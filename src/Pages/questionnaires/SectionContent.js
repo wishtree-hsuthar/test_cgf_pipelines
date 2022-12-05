@@ -316,7 +316,6 @@ const SectionContent = ({
                         );
 
                         setTimeout(() => navigate("/questionnaires"), 3000);
-                        return response.data.uuid;
                         // return true;
                         // console.log("response from save section", response);
                     } catch (error) {
@@ -327,6 +326,7 @@ const SectionContent = ({
                 };
                 fetch();
             }
+            return response.data.uuid;
         } catch (error) {
             setErrorToaster(error);
             return false;
