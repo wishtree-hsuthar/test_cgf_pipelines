@@ -317,15 +317,13 @@ const ViewOperationMembers = () => {
         }
         info1={
           <p>
-            We recommend you to replace this operation member with the new one
-            because deleting all the statistics & records would get deleted and
-            this will be an irreversible action
+            Deleting all the details will be an irreversible action, we recommend you replace them instead.
           </p>
         }
         info2={
           <p>
             {" "}
-            Are you want to delete <b>{fetchOperationMemberDetaills.name}</b>?
+            Do you still want to delete <b>{fetchOperationMemberDetaills.name}</b>?
           </p>
         }
         onPrimaryModalButtonClickHandler={handleDeleteOperationMember}

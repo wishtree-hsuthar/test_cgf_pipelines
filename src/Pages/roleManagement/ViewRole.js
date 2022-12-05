@@ -315,15 +315,12 @@ const ViewRole = () => {
         title={<p>Delete role "{fieldValues ? fieldValues.roleName : ""}"</p>}
         info1={
           <p>
-            On deleting all the CGF admins to whom assign this role the access
-            for the system would get deleted and this will be an irreversible
-            action
+            On deleting a role, all the users associated with it will lose access to the system. 
           </p>
         }
         info2={
           <p>
-            Are you sure you want to delete{" "}
-            <b>{fieldValues ? fieldValues.roleName : "Role"}</b>?
+            Do you still want to continue?
           </p>
         }
         primaryButtonText="Delete"

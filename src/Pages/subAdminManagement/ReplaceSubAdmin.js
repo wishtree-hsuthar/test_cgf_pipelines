@@ -342,15 +342,13 @@ const ReplaceSubAdmin = () => {
                 title={<p> Replace CGF admin "{cgfAdmin?.name}" </p>}
                 info1={
                     <p>
-                        {" "}
-                        On replacing a sub admin, all the existing management
-                        will be transferred to the new sub admin
+                        On replacing, all the existing management will be shifted to the new CGF admin. 
                     </p>
                 }
                 info2={
                     <p>
                         {" "}
-                        Are you sure want to replace <b>
+                        Do you still want to replace <b>
                             {" "}
                             {cgfAdmin.name}{" "}
                         </b>?{" "}
