@@ -91,7 +91,7 @@ const TableLayoutCellComponent = ({
                                 ? "input-error"
                                 : answer &&
                                   transformedColumns[cell.columnId]
-                                      ?.validation === "alphaNum" &&
+                                      ?.validation === "alphanumeric" &&
                                   !AlphaNumRegEx.test(answer)
                                 ? "input-error"
                                 : answer &&
@@ -129,7 +129,7 @@ const TableLayoutCellComponent = ({
                                 ? error
                                 : answer &&
                                   transformedColumns[cell.columnId]
-                                      ?.validation === "alphaNum" &&
+                                      ?.validation === "alphanumeric" &&
                                   !AlphaNumRegEx.test(answer)
                                 ? error
                                 : " "

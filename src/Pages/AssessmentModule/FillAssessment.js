@@ -182,7 +182,9 @@ function FillAssessment() {
                         ...response.data.answers,
                     });
                 fetchQuestionnaire(response?.data?.questionnaireId);
-                setReOpenAssessmentDialogBox(response?.data?.isSubmitted);
+                setReOpenAssessmentDialogBox(
+                    response?.data?.isSubmitted && !params["*"].includes("view")
+                );
                 setOpenDeleteDialogBox(
                     userAuth._id ===
                         response?.data?.assignedOperationMember?._id &&
@@ -324,7 +326,7 @@ function FillAssessment() {
                             transformedColValues[cell?.columnId].columnType !==
                                 "prefilled" &&
                             transformedColValues[cell?.columnId]?.validation ==
-                                "alphaNum" &&
+                                "alphanumeric" &&
                             currentSectionAnswers[
                                 `${cell?.columnId}.${row?.uuid}`
                             ]?.length > 0 &&
@@ -335,9 +337,9 @@ function FillAssessment() {
                             )
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
-                                "This is alphaNum field";
+                                "This is alphanumeric field";
                             // setTabValue(index);
-                            console.log("in table alphaNum only");
+                            console.log("in table alphanumeric only");
                             sections.push(index);
                         } else {
                             delete sectionErrors[
