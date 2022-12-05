@@ -108,6 +108,8 @@ function FillAssessment() {
     const [editMode, setEditMode] = useState(false);
 
     const [errors, setErrors] = useState({});
+    const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
+        useState(false);
 
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -180,6 +182,7 @@ function FillAssessment() {
                         ...response.data.answers,
                     });
                 fetchQuestionnaire(response?.data?.questionnaireId);
+                setReOpenAssessmentDialogBox(response?.data?.isSubmitted);
                 setOpenDeleteDialogBox(
                     userAuth._id ===
                         response?.data?.assignedOperationMember?._id &&
@@ -247,7 +250,7 @@ function FillAssessment() {
     const handleFormSubmit = (e, saveAsDraft) => {
         e.preventDefault();
         const tempErrors = {};
-
+        let sections = [];
         questionnaire?.sections?.map((section, index) => {
             let sectionErrors = errors[section?.uuid] ?? {};
             let currentSectionAnswers =
@@ -277,7 +280,8 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is required field";
-                            setTabValue(index);
+                            sections.push(index);
+                            // setTabValue(index);
                         } else if (
                             transformedColValues[cell?.columnId].columnType !==
                                 "prefilled" &&
@@ -294,8 +298,9 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is alphabets only field";
-                            setTabValue(index);
+                            // setTabValue(index);
                             console.log("in table alphabets only");
+                            sections.push(index);
                         } else if (
                             transformedColValues[cell?.columnId].columnType !==
                                 "prefilled" &&
@@ -312,8 +317,9 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is numeric only field";
-                            setTabValue(index);
+                            // setTabValue(index);
                             console.log("in table numeric only");
+                            sections.push(index);
                         } else if (
                             transformedColValues[cell?.columnId].columnType !==
                                 "prefilled" &&
@@ -330,8 +336,9 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is alphaNum field";
-                            setTabValue(index);
+                            // setTabValue(index);
                             console.log("in table alphaNum only");
+                            sections.push(index);
                         } else {
                             delete sectionErrors[
                                 `${cell?.columnId}.${row?.uuid}`
@@ -350,10 +357,12 @@ function FillAssessment() {
                         saveAsDraft === false
                     ) {
                         console.log("error from required");
-
+                        console.log("section no", index);
                         sectionErrors[question?.uuid] =
                             "This is required field";
-                        setTabValue(index);
+                        sections.push(index);
+
+                        // setTabValue(index);
                     } else if (
                         question.validation === "alphabets" &&
                         currentSectionAnswers[question?.uuid] &&
@@ -365,7 +374,9 @@ function FillAssessment() {
 
                         sectionErrors[question?.uuid] =
                             "Please enter alphabets field";
-                        setTabValue(index);
+                        sections.push(index);
+
+                        // setTabValue(index);
                     } else if (
                         question.validation === "numeric" &&
                         currentSectionAnswers[question?.uuid] &&
@@ -381,7 +392,8 @@ function FillAssessment() {
                         );
                         sectionErrors[question?.uuid] =
                             "This is nummeric field";
-                        setTabValue(index);
+                        // setTabValue(index);
+                        sections.push(index);
                     } else if (
                         question.validation === "alphanumeric" &&
                         currentSectionAnswers[question?.uuid] &&
@@ -391,12 +403,17 @@ function FillAssessment() {
                     ) {
                         sectionErrors[question?.uuid] =
                             "This is alphanumeric field";
-                        setTabValue(index);
+                        // setTabValue(index);
+                        sections.push(index);
                     } else {
                         delete sectionErrors[question?.uuid];
                     }
                 });
             }
+
+            console.log("sections array = ", sections);
+            console.log("sections index[0] = ", sections[0]);
+            setTabValue(sections.length > 0 ? sections[0] : 0);
 
             tempErrors[section?.uuid] = { ...sectionErrors };
         });
@@ -538,13 +555,54 @@ function FillAssessment() {
         navigate("/assessment-list");
     };
 
+    const handleReOpenAssessment = () => {
+        saveAssessmentAsDraft(true);
+        setReOpenAssessmentDialogBox(false);
+    };
+    const handleCloseReopenAssessment = () => {
+        setReOpenAssessmentDialogBox(false);
+        navigate("/assessment-list");
+    };
+
     return (
         <div className="page-wrapper">
             <DialogBox
                 title={<p>Accept/Reject Assessment </p>}
                 info1={
-                    <p>
-                       Click “Accept” if you want to fill out the assessment. Or else, provide a reason and reject the assessment, if you don’t want to continue with it.
+                    <p className="accrej-txtwrap">
+                        <span className="accrej-txtblk">
+                            <span className="accrej-label">
+                                Member company :
+                            </span>
+                            <span className="accrej-desc">
+                                {assessment?.assignedMember?.companyName}
+                            </span>
+                        </span>
+                        <span className="accrej-txtblk">
+                            <span className="accrej-label">
+                                Assessment title :
+                            </span>
+                            <span className="accrej-desc">
+                                {assessment?.title}
+                            </span>
+                        </span>
+                        <span className="accrej-txtblk">
+                            <span className="accrej-label">
+                                Assessment type :
+                            </span>
+                            <span className="accrej-desc">
+                                {assessment?.assessmentType}
+                            </span>
+                        </span>
+                        <span className="accrej-txtblk">
+                            <span className="accrej-label">Due date :</span>
+                            <span className="accrej-desc">
+                                {new Date(
+                                    assessment?.dueDate
+                                ).toLocaleDateString()}
+                            </span>
+                        </span>
+                       Click “Accept” if you want to fill out the assessment . Or else, provide a reason and reject the assessment, if you don’t want to continue with it.
                     </p>
                 }
                 info2={
@@ -567,6 +625,7 @@ function FillAssessment() {
                                 className={`input-textarea ${
                                     error && "input-textarea-error"
                                 }`}
+                                style={{ marginBottom: "10px" }}
                                 id="outlined-basic"
                                 placeholder="Enter reason"
                                 helperText={
@@ -592,6 +651,28 @@ function FillAssessment() {
                 )}
                 openModal={openDeleteDialogBox}
                 setOpenModal={setOpenDeleteDialogBox}
+                isModalForm={true}
+                handleCloseRedirect={handleCloseRedirect}
+            />
+            <DialogBox
+                title={<p>Re-open Assessment ?</p>}
+                info1={" "}
+                info2={
+                    <p>
+                        Are you sure you want to edit the given submitted
+                        assessment?
+                    </p>
+                }
+                primaryButtonText={"Yes"}
+                secondaryButtonText={"No"}
+                onPrimaryModalButtonClickHandler={() =>
+                    handleReOpenAssessment()
+                }
+                onSecondaryModalButtonClickHandler={() =>
+                    handleCloseReopenAssessment()
+                }
+                openModal={reOpenAssessmentDialogBox}
+                setOpenModal={setReOpenAssessmentDialogBox}
                 isModalForm={true}
                 handleCloseRedirect={handleCloseRedirect}
             />

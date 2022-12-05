@@ -24,30 +24,30 @@ import {
 import Toaster from "../../components/Toaster";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 const tableHead = [
-  {
-    id: "",
-    disablePadding: true,
-    label: "Select User",
-    width: "10%",
-  },
-  {
-    id: "name",
-    disablePadding: true,
-    label: "Operation Member",
-    width: "30%",
-  },
-  {
-    id: "email",
-    disablePadding: false,
-    label: "Email",
-    width: "40%",
-  },
-  {
-    id: "role",
-    disablePadding: false,
-    label: "Role",
-    width: "20%",
-  },
+    {
+        id: "",
+        disablePadding: true,
+        label: "",
+        width: "10%",
+    },
+    {
+        id: "name",
+        disablePadding: true,
+        label: "Operation Member",
+        width: "30%",
+    },
+    {
+        id: "email",
+        disablePadding: false,
+        label: "Email",
+        width: "40%",
+    },
+    {
+        id: "role",
+        disablePadding: false,
+        label: "Role",
+        width: "20%",
+    },
 ];
 const ReplaceOperationMember = () => {
   //custom hook to set title of page
@@ -373,47 +373,51 @@ const ReplaceOperationMember = () => {
             </div>
           </div>
 
-          <div className="member-info-wrapper table-content-wrap replace-admin-table">
-            <div className="member-data-sect">
-              <TableComponent
-                tableHead={tableHead}
-                records={records}
-                handleChangePage1={handleTableTesterPageChange}
-                handleChangeRowsPerPage1={handleTableTesterRowsPerPageChange}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                totalRecords={totalRecords}
-                orderBy={orderBy}
-                order={order}
-                setOrder={setOrder}
-                setOrderBy={setOrderBy}
-                selected={selected}
-                setSelected={setSelected}
-                setCheckBoxes={false}
-                setSingleSelect={true}
-                handleSingleUserSelect={selectSingleUser}
-                selectedUser={selectedUser}
-              />
-            </div>
-          </div>
-          <div className="form-btn flex-between add-members-btn mb-20">
-            <button
-              onClick={() => navigate("/users/operation-members")}
-              className="secondary-button mr-10"
-            >
-              Cancel
-            </button>
-            <button
-              disabled={selectedUser === ""}
-              onClick={openReplaceDailogBox}
-              className="primary-button add-button replace-assign-btn"
-            >
-              Assign
-            </button>
-          </div>
+                    <div className="member-info-wrapper table-content-wrap replace-admin-table">
+                        <div className="member-data-sect">
+                            <TableComponent
+                                tableHead={tableHead}
+                                records={records}
+                                handleChangePage1={handleTableTesterPageChange}
+                                handleChangeRowsPerPage1={
+                                    handleTableTesterRowsPerPageChange
+                                }
+                                page={page}
+                                rowsPerPage={rowsPerPage}
+                                totalRecords={totalRecords}
+                                orderBy={orderBy}
+                                order={order}
+                                setOrder={setOrder}
+                                setOrderBy={setOrderBy}
+                                selected={selected}
+                                setSelected={setSelected}
+                                setCheckBoxes={false}
+                                setSingleSelect={true}
+                                handleSingleUserSelect={selectSingleUser}
+                                selectedUser={selectedUser}
+                            />
+                        </div>
+                    </div>
+                    <div className="form-btn flex-between add-members-btn mb-20">
+                        <button
+                            onClick={() => navigate("/users/operation-members")}
+                            className="secondary-button mr-10"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            disabled={selectedUser === ""}
+                            onClick={openReplaceDailogBox}
+                            className="primary-button add-button replace-assign-btn"
+                        >
+                            Replace
+                        </button>
+                    </div>
+                </div>
+            </section>
         </div>
-      </section>
-    </div>
+      // </section>
+    // </div>
   );
 };
 

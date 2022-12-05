@@ -123,6 +123,7 @@ function AddOperationMember() {
             // memberId: "",
             // companyType: "",
             isCGFStaff: false,
+            roleId: "",
         },
     });
 
@@ -150,6 +151,11 @@ function AddOperationMember() {
             const response = await privateAxios.get(FETCH_ROLES);
             console.log("Response from fetch roles - ", response);
             setRoles(response.data);
+            response.data.filter(
+                (data) =>
+                    data.name === "Operation Member" &&
+                    reset({ roleId: data._id })
+            );
         } catch (error) {
             console.log("Error from fetch roles", error);
             setToasterDetails(

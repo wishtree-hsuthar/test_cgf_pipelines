@@ -259,25 +259,24 @@ const SectionContent = ({
     const { name, value } = e.target;
     let tempQuestionnare = { ...questionnaire };
 
-    tempQuestionnare.sections[index][name] = value;
-    setQuestionnaire(tempQuestionnare);
-  };
-  const handleInputBlur = (e) => {
-    const { name, value } = e.target;
-    let tempQuestionnaire = { ...questionnaire };
-    tempQuestionnaire.sections[index][name] = value?.trim();
-    setQuestionnaire(tempQuestionnaire);
-  };
-  const handleSubmitSection = async (e, isPublished) => {
-    e?.preventDefault();
-    const response = await validateSection();
-    if (response) {
-      await saveSection(undefined, isPublished);
-      return true;
-    }
-    return false;
-    // validateSection() && saveSection()
-  };
+        tempQuestionnare.sections[index][name] = value;
+        setQuestionnaire(tempQuestionnare);
+    };
+    const handleInputBlur = (e) => {
+        const { name, value } = e.target;
+        let tempQuestionnaire = { ...questionnaire };
+        tempQuestionnaire.sections[index][name] = value?.trim();
+        setQuestionnaire(tempQuestionnaire);
+    };
+    const handleSubmitSection = async (e, isPublished) => {
+        e?.preventDefault();
+        const response = await validateSection();
+        if (response) {
+            return await saveSection(undefined, isPublished);
+        }
+        return false;
+        // validateSection() && saveSection()
+    };
 
   const params = useParams();
   const [openDialog, setOpenDialog] = useState(false);
@@ -312,8 +311,7 @@ const SectionContent = ({
             );
 
             setTimeout(() => navigate("/questionnaires"), 3000);
-
-            return true;
+            // return true;
             // console.log("response from save section", response);
           } catch (error) {
             setErrorToaster(error);
@@ -323,6 +321,7 @@ const SectionContent = ({
         };
         fetch();
       }
+            return response.data.uuid;
     } catch (error) {
       setErrorToaster(error);
       return false;
@@ -338,7 +337,7 @@ const SectionContent = ({
     const response = await handleSubmitSection(e, true);
     if (response) {
       try {
-        await privateAxios.put(`${ADD_QUESTIONNAIRE}/publish/${params?.id}`);
+        await privateAxios.put(`${ADD_QUESTIONNAIRE}/publish/${response}`);
         setTimeout(() => navigate("/questionnaires"), 3000);
       } catch (error) {
         setErrorToaster(error);

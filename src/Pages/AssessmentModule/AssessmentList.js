@@ -13,6 +13,10 @@ import { ASSESSMENTS } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const tableHead = [
+    // {
+    //     id: "isUserAuthorizedToFillAssessment",
+    // },
+
     {
         id: "title",
         width: "30%",
@@ -69,6 +73,7 @@ const AssessmentList = () => {
         "assignedOperationMember.name",
         "assessmentStatus",
         "dueDate",
+        "isUserAuthorizedToFillAssessment",
     ];
     const navigate = useNavigate();
     //Refr for Toaster
@@ -200,6 +205,10 @@ const AssessmentList = () => {
             object["assignedMember.name"] = object["assignedMember"]["name"];
             object["assignedOperationMember.name"] =
                 object["assignedOperationMember"]["name"];
+            object["isUserAuthorizedToFillAssessment"] =
+                userAuth._id === object["assignedOperationMember"]["_id"]
+                    ? true
+                    : false;
             // object["title"] = object["title"];
             // object["assessmentType"] = object["assessmentType"];
 
@@ -209,6 +218,7 @@ const AssessmentList = () => {
             delete object["memberCompany"];
             delete object["questionnaireId"];
             delete object["isMemberRepresentative"];
+
             object["dueDate"] = new Date(object["dueDate"]).toLocaleDateString(
                 "en-US",
                 { month: "2-digit", day: "2-digit", year: "numeric" }

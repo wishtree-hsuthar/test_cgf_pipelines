@@ -305,7 +305,10 @@ export default function TableComponent({
                                                         if (
                                                             cell !== "_id" &&
                                                             cell !== "uuid" &&
-                                                            cell !== "isActive"
+                                                            cell !==
+                                                                "isActive" &&
+                                                            cell !==
+                                                                "isUserAuthorizedToFillAssessment"
                                                         ) {
                                                             return row[cell]
                                                                 ?.length <=
@@ -480,7 +483,7 @@ export default function TableComponent({
                                                             "send"
                                                         ) &&
                                                             row?.assessmentStatus ==
-                                                                "Accepted" && (
+                                                                "In progress" && (
                                                                 <span className="icon">
                                                                     <Tooltip title="Assign to Operation Member">
                                                                         <GroupAddOutlinedIcon
@@ -502,26 +505,27 @@ export default function TableComponent({
                                                             )}
                                                         {icons.includes(
                                                             "fill"
-                                                        ) && (
-                                                            <span className="icon">
-                                                                <Tooltip title="Fill Assessment">
-                                                                    <PostAddIcon
-                                                                        onClick={() =>
-                                                                            onClickFillAssessmentHandler(
-                                                                                row.uuid
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                    {/* <img
+                                                        ) &&
+                                                            row.isUserAuthorizedToFillAssessment && (
+                                                                <span className="icon">
+                                                                    <Tooltip title="Fill Assessment">
+                                                                        <PostAddIcon
+                                                                            onClick={() =>
+                                                                                onClickFillAssessmentHandler(
+                                                                                    row.uuid
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                        {/* <img
                                                                         src={
                                                                             "/images/delete-icon.svg"
                                                                         }
                                                                         
                                                                         }
                                                                     /> */}
-                                                                </Tooltip>
-                                                            </span>
-                                                        )}
+                                                                    </Tooltip>
+                                                                </span>
+                                                            )}
                                                     </TableCell>
                                                 )}
                                             </TableRow>

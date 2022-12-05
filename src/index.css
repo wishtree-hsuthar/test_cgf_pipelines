@@ -898,7 +898,7 @@ input[type=checkbox]:checked:before {
 }
 .popup-ttl-blk {
     /* border-bottom: 1px solid rgba(30, 30, 30, 0.5); */
-    padding: 30px 0 10px;
+    padding: 30px 0 0;
     position: relative;
     outline: none;
     text-align: center;
@@ -2486,4 +2486,25 @@ input::-ms-reveal {
 .crud-toggle-wrap.assessment-crud-toggle-wrap {
     width: 125px;
     left: -100px;
+}
+.accrej-txtwrap{display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;margin-bottom: 30px !important;}
+.accrej-txtblk {
+    max-width: 48%;
+    flex: 0 0 48%;
+    margin: 0 0 30px;display: flex;justify-content: flex-start; 
+}
+.accrej-label {
+    max-width: 50%;
+    flex: 0 0 50%;
+    text-align: left;font-family: "Proxima Nova Semibold", serif, sans-serif;text-align: right;margin-right: 5px;
+}
+.accrej-desc {
+    max-width: 48%;
+    flex: 0 0 48%;
+    text-align: left;
+}
+.input-textarea .MuiInputBase-root:hover fieldset {
+    border-color: rgba(30, 30, 30, 0.8) !important;
 }
