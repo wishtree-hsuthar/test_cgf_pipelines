@@ -259,24 +259,24 @@ const SectionContent = ({
     const { name, value } = e.target;
     let tempQuestionnare = { ...questionnaire };
 
-        tempQuestionnare.sections[index][name] = value;
-        setQuestionnaire(tempQuestionnare);
-    };
-    const handleInputBlur = (e) => {
-        const { name, value } = e.target;
-        let tempQuestionnaire = { ...questionnaire };
-        tempQuestionnaire.sections[index][name] = value?.trim();
-        setQuestionnaire(tempQuestionnaire);
-    };
-    const handleSubmitSection = async (e, isPublished) => {
-        e?.preventDefault();
-        const response = await validateSection();
-        if (response) {
-            return await saveSection(undefined, isPublished);
-        }
-        return false;
-        // validateSection() && saveSection()
-    };
+    tempQuestionnare.sections[index][name] = value;
+    setQuestionnaire(tempQuestionnare);
+  };
+  const handleInputBlur = (e) => {
+    const { name, value } = e.target;
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire.sections[index][name] = value?.trim();
+    setQuestionnaire(tempQuestionnaire);
+  };
+  const handleSubmitSection = async (e, isPublished) => {
+    e?.preventDefault();
+    const response = await validateSection();
+    if (response) {
+      return await saveSection(undefined, isPublished);
+    }
+    return false;
+    // validateSection() && saveSection()
+  };
 
   const params = useParams();
   const [openDialog, setOpenDialog] = useState(false);
@@ -321,7 +321,7 @@ const SectionContent = ({
         };
         fetch();
       }
-            return response.data.uuid;
+      return response.data.uuid;
     } catch (error) {
       setErrorToaster(error);
       return false;
@@ -365,12 +365,14 @@ const SectionContent = ({
         }
         info1={
           <p>
-            On deleting, all the details of this section would get deleted and this will be an irreversible action.
+            On deleting, all the details of this section would get deleted and
+            this will be an irreversible action.
           </p>
         }
         info2={
           <p>
-            Do you still want to delete the <b>{section?.sectionTitle ? section?.sectionTitle : "Section"}</b>?
+            Do you still want to delete the{" "}
+            <b>{section?.sectionTitle ? section?.sectionTitle : "Section"}</b>?
           </p>
         }
         primaryButtonText="Delete"
