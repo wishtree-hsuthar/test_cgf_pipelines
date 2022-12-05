@@ -9,12 +9,12 @@ const VersionHistory = () => {
     const params = useParams();
     const navigate = useNavigate();
     const versionHistoryTableHeadColumns = [
-        {
-            id: "title",
+        // {
+        //     id: "title",
 
-            disablePadding: false,
-            label: "Title",
-        },
+        //     disablePadding: false,
+        //     label: "Title",
+        // },
 
         // {
         //     id: "uuid",
@@ -33,6 +33,12 @@ const VersionHistory = () => {
             // width: "30%",
             disablePadding: false,
             label: "Version Date",
+        },
+        {
+            id: "createdBy",
+            // width: "30%",
+            disablePadding: false,
+            label: "Created By",
         },
     ];
     const [versionHistoryPage, setVersionHistoryPage] = React.useState(1);
@@ -60,22 +66,23 @@ const VersionHistory = () => {
     };
 
     const updateRecordsForVersionHistory = (data) => {
-        const onboardedKeysOrder = ["title", "vNo", "date"];
+        const onboardedKeysOrder = ["vNo", "date", "createdBy"];
 
         console.log("data before update----", data);
 
         let staleData = data;
         staleData.forEach((object) => {
-            object["date"] = new Date(object["createdAt"]).toLocaleDateString(
+            object["date"] = new Date(object["createdAt"]).toLocaleString(
                 "en-US",
-                {
-                    month: "2-digit",
-                    day: "2-digit",
-                    year: "numeric",
-                }
+                { hour12: false }
+                // {
+                //     month: "2-digit",
+                //     day: "2-digit",
+                //     year: "numeric",
+                // }
             );
             object["vNo"] = "v" + object["vNo"];
-            // delete object["title"];
+            delete object["title"];
             delete object["createdAt"];
 
             onboardedKeysOrder.forEach((k) => {
