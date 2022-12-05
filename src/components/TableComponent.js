@@ -483,7 +483,7 @@ export default function TableComponent({
                                                             "send"
                                                         ) &&
                                                             row?.assessmentStatus ==
-                                                                "Accepted" && (
+                                                                "In progress" && (
                                                                 <span className="icon">
                                                                     <Tooltip title="Assign to Operation Member">
                                                                         <GroupAddOutlinedIcon

@@ -108,6 +108,8 @@ function FillAssessment() {
     const [editMode, setEditMode] = useState(false);
 
     const [errors, setErrors] = useState({});
+    const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
+        useState(false);
 
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -180,6 +182,7 @@ function FillAssessment() {
                         ...response.data.answers,
                     });
                 fetchQuestionnaire(response?.data?.questionnaireId);
+                setReOpenAssessmentDialogBox(response?.data?.isSubmitted);
                 setOpenDeleteDialogBox(
                     userAuth._id ===
                         response?.data?.assignedOperationMember?._id &&
@@ -409,7 +412,8 @@ function FillAssessment() {
             }
 
             console.log("sections array = ", sections);
-            setTabValue(sections.length > 0 ?? sections[0]);
+            console.log("sections index[0] = ", sections[0]);
+            setTabValue(sections.length > 0 ? sections[0] : 0);
 
             tempErrors[section?.uuid] = { ...sectionErrors };
         });
@@ -551,6 +555,15 @@ function FillAssessment() {
         navigate("/assessment-list");
     };
 
+    const handleReOpenAssessment = () => {
+        saveAssessmentAsDraft(true);
+        setReOpenAssessmentDialogBox(false);
+    };
+    const handleCloseReopenAssessment = () => {
+        setReOpenAssessmentDialogBox(false);
+        navigate("/assessment-list");
+    };
+
     return (
         <div className="page-wrapper">
             <DialogBox
@@ -558,20 +571,36 @@ function FillAssessment() {
                 info1={
                     <p className="accrej-txtwrap">
                         <span className="accrej-txtblk">
-                            <span className="accrej-label">Member company :</span>
-                            <span className="accrej-desc">{assessment?.assignedMember?.companyName}</span>
+                            <span className="accrej-label">
+                                Member company :
+                            </span>
+                            <span className="accrej-desc">
+                                {assessment?.assignedMember?.companyName}
+                            </span>
                         </span>
                         <span className="accrej-txtblk">
-                        <span className="accrej-label">Assessment title :</span>
-                        <span className="accrej-desc">{assessment?.title}</span>
+                            <span className="accrej-label">
+                                Assessment title :
+                            </span>
+                            <span className="accrej-desc">
+                                {assessment?.title}
+                            </span>
                         </span>
                         <span className="accrej-txtblk">
-                        <span className="accrej-label">Assessment type :</span>
-                        <span className="accrej-desc">{assessment?.assessmentType}</span>
+                            <span className="accrej-label">
+                                Assessment type :
+                            </span>
+                            <span className="accrej-desc">
+                                {assessment?.assessmentType}
+                            </span>
                         </span>
                         <span className="accrej-txtblk">
-                        <span className="accrej-label">Due date :</span>
-                        <span className="accrej-desc">{new Date(assessment?.dueDate).toLocaleDateString()}</span>
+                            <span className="accrej-label">Due date :</span>
+                            <span className="accrej-desc">
+                                {new Date(
+                                    assessment?.dueDate
+                                ).toLocaleDateString()}
+                            </span>
                         </span>
                         On Accepting this assessment you need to fill this
                         assessment in given time, and on rejecting this
@@ -598,7 +627,7 @@ function FillAssessment() {
                                 className={`input-textarea ${
                                     error && "input-textarea-error"
                                 }`}
-                                style={{marginBottom:'10px'}}
+                                style={{ marginBottom: "10px" }}
                                 id="outlined-basic"
                                 placeholder="Enter reason"
                                 helperText={
@@ -624,6 +653,28 @@ function FillAssessment() {
                 )}
                 openModal={openDeleteDialogBox}
                 setOpenModal={setOpenDeleteDialogBox}
+                isModalForm={true}
+                handleCloseRedirect={handleCloseRedirect}
+            />
+            <DialogBox
+                title={<p>Re-open Assessment ?</p>}
+                info1={" "}
+                info2={
+                    <p>
+                        Are you sure you want to edit the given submitted
+                        assessment?
+                    </p>
+                }
+                primaryButtonText={"Yes"}
+                secondaryButtonText={"No"}
+                onPrimaryModalButtonClickHandler={() =>
+                    handleReOpenAssessment()
+                }
+                onSecondaryModalButtonClickHandler={() =>
+                    handleCloseReopenAssessment()
+                }
+                openModal={reOpenAssessmentDialogBox}
+                setOpenModal={setReOpenAssessmentDialogBox}
                 isModalForm={true}
                 handleCloseRedirect={handleCloseRedirect}
             />
