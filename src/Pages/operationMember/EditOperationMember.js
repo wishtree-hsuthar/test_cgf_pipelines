@@ -389,7 +389,7 @@ function EditOperationMember() {
     const editOperationMember = async (data, navigateToListPage) => {
         data = {
             ...data,
-            phoneNumber: Number(data?.phoneNumber),
+            phoneNumber: data?.phoneNumber ? parseInt(data.phoneNumber) : "",
             isActive: data?.isActive === "true" ? true : false,
         };
         try {
