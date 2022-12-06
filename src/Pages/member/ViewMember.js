@@ -829,7 +829,7 @@ const ViewMember = () => {
                         isDisabled
                         control={control}
                         name="cgfCategory"
-                        placeholder="Select category"
+                        placeholder="N/A"
                         options={cgfCategories}
                       />
                     </div>
@@ -845,7 +845,7 @@ const ViewMember = () => {
                         isDisabled
                         control={control}
                         name="cgfActivity"
-                        placeholder="Select activity"
+                        placeholder="N/A"
                         options={
                           watch("cgfCategory") === "Manufacturer"
                             ? cgfActivitiesManufacturer
@@ -869,7 +869,7 @@ const ViewMember = () => {
                         isDisabled
                         control={control}
                         name="corporateEmail"
-                        placeholder="Enter email"
+                        placeholder="N/A"
                       />
                     </div>
                   </div>
@@ -907,7 +907,7 @@ const ViewMember = () => {
                           isDisabled
                           control={control}
                           name="phoneNumber"
-                          placeholder="Enter phone number"
+                          placeholder=""
                         />
                       </div>
                     </div>

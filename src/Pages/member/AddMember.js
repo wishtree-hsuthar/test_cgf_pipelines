@@ -256,16 +256,18 @@ const AddMember = () => {
     setArrOfStateCountry(stateCountries.data);
     console.log("state countries: ", stateCountries);
     setValue("state", "");
+    setValue("city", "");
+    getCites();
     trigger("country");
   };
   const getCites = async () => {
     try {
-      const response = await axios.get(
-        CITES +
-          `/?region=${watch("region")}&country=${watch(
-            "country"
-          )}&state=${watch("state")}`
-      );
+      let url =
+        CITES + `/?region=${watch("region")}&country=${watch("country")}`;
+      if (watch("state")) {
+        url += `&state=${watch("state")}`
+      }
+      const response = await axios.get(url);
       setArrOfCites(response.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
@@ -875,7 +877,7 @@ const AddMember = () => {
                                 </Paper>
                               )
                             }
-                            disabled={!watch("state")}
+                            disabled={!watch("country")}
                             onSubmit={() => setValue("city", "")}
                             onChange={(event, newValue) => {
                               console.log("new Value ", newValue);
