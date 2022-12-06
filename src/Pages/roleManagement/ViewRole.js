@@ -28,29 +28,33 @@ import DialogBox from "../../components/DialogBox";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
-import { REACT_APP_API_ENDPOINT } from "../../api/Url";
+import {
+  GET_ROLE_BY_ID,
+  GET_USER_BY_ROLE,
+  REACT_APP_API_ENDPOINT,
+} from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 
 const tableHead = [
   {
-    id: "cgfAdmins.name",
+    id: "name",
     disablePadding: false,
     width: "20%",
     label: "Name",
   },
   {
-    id: "cgfAdmins.email",
+    id: "email",
     disablePadding: false,
     label: "Email",
   },
   {
-    id: "cgfAdmins.createdAt",
+    id: "createdAt",
     disablePadding: false,
     label: "Created On",
   },
   {
-    id: "cgfAdmins.isActive",
+    id: "isActive",
     disablePadding: false,
     label: "Status",
   },
@@ -212,9 +216,9 @@ const ViewRole = () => {
     setTemp(privileges);
   };
   const updateUsers = (data) => {
-    const users = data?.cgfAdmins;
-    console.log("Users: ", users);
-    users.forEach((object) => {
+    // const users = data?.cgfAdmins;
+    // console.log("Users: ", users);
+    data.forEach((object) => {
       delete object["countryCode"];
       delete object["createdBy"];
       delete object["isDeleted"];
@@ -254,12 +258,12 @@ const ViewRole = () => {
         object[k] = v;
       });
     });
-    setRecords([...users]);
+    setRecords([...data]);
   };
   const updateFileds = async (data) => {
     console.log("data", data);
-    updateUsers(data);
-    setTotalRecords(data?.totalCgfAdmins ?? 0);
+    // updateUsers(data);
+    // setTotalRecords(data?.totalCgfAdmins ?? 0);
     setFieldValues({
       roleName: data?.name,
       description: data?.description,
@@ -268,36 +272,52 @@ const ViewRole = () => {
     });
     createPrevileges3(data.privileges);
   };
+  const getRoleById = async (isMounted, controller) => {
+    try {
+      setIsLoading3(true);
+      const response = await axios.get(GET_ROLE_BY_ID + params.id);
+      // console.log("response",response)
+      // const response = await axios.get(
+      //   REACT_APP_API_ENDPOINT +
+      //     `roles/${params.id}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`
+      // );
+      isMounted && (await updateFileds(response?.data));
+      setIsLoading3(false);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setIsLoading3(false);
+      isMounted &&
+        setToasterDetails4(
+          {
+            titleMessage: "Error",
+            descriptionMessage:
+              error?.response?.data?.message &&
+              typeof error.response.data.message === "string"
+                ? error.response.data.message
+                : "Something went wrong!",
+            messageType: "error",
+          },
+          () => myRef4.current()
+        );
+    }
+  };
+  const getUsersByRole = async () => {
+    try {
+      const response = await axios.get(
+        GET_USER_BY_ROLE + params?.id + `/users?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`
+      );
+      updateUsers(response?.data)
+      setTotalRecords(response?.headers?.['x-total-count'])
+      console.log("response:- ", response);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    (async () => {
-      try {
-        setIsLoading3(true);
-        const response = await axios.get(
-          REACT_APP_API_ENDPOINT +
-            `roles/${params.id}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`
-        );
-        isMounted && (await updateFileds(response?.data));
-        setIsLoading3(false);
-      } catch (error) {
-        if (error?.code === "ERR_CANCELED") return;
-        setIsLoading3(false);
-        isMounted &&
-          setToasterDetails4(
-            {
-              titleMessage: "Error",
-              descriptionMessage:
-                error?.response?.data?.message &&
-                typeof error.response.data.message === "string"
-                  ? error.response.data.message
-                  : "Something went wrong!",
-              messageType: "error",
-            },
-            () => myRef4.current()
-          );
-      }
-    })();
+    getRoleById(isMounted, controller);
+    getUsersByRole();
     return () => {
       isMounted = false;
       controller.abort();
@@ -315,14 +335,11 @@ const ViewRole = () => {
         title={<p>Delete role "{fieldValues ? fieldValues.roleName : ""}"</p>}
         info1={
           <p>
-            On deleting a role, all the users associated with it will lose access to the system. 
+            On deleting a role, all the users associated with it will lose
+            access to the system.
           </p>
         }
-        info2={
-          <p>
-            Do you still want to continue?
-          </p>
-        }
+        info2={<p>Do you still want to continue?</p>}
         primaryButtonText="Delete"
         secondaryButtonText="Cancel"
         onPrimaryModalButtonClickHandler={onDialogPrimaryButtonClickHandler}
