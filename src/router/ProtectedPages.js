@@ -28,7 +28,7 @@ import AddNewQuestionnaire from "../Pages/questionnaires/AddNewQuestionnaire";
 import PreviewQuestionnaire from "../Pages/questionnaires/Preview/PreviewQuestionnaire";
 // import PreviewDemo from "../Pages/PreviewDemo";
 import PreviewDemo from "../Pages/questionnaires/Preview/PreviewDemo";
-import Preview from "../Pages/questionnaires/Preview";
+// import Preview from "../Pages/questionnaires/Preview";
 import AddAssessment from "../Pages/AssessmentModule/AddAssessment";
 import AssessmentList from "../Pages/AssessmentModule/AssessmentList";
 import EditAssessment from "../Pages/AssessmentModule/EditAssessment";
@@ -90,7 +90,7 @@ const ProtectedPages = () => {
                     path="/questionnaires/add-questionnaires"
                     element={<AddQuestionnaires />}
                 /> */}
-                <Route path="/questionnaires/preview" element={<Preview />} />
+                {/* <Route path="/questionnaires/preview" element={<Preview />} /> */}
 
                 {/* Role Management Routes */}
                 <Route path="/roles" element={<RolesList />} />

@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { DOWNLOAD_OPERATION_MEMBER } from "../../api/Url";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
+import { downloadFunction } from "../../utils/downloadFunction";
 // function TabPanel(props) {
 //     const { children, value, index, ...other } = props;
 
@@ -51,7 +52,7 @@ function OperationMemberList() {
         descriptionMessage: "",
         messageType: "success",
     });
-    const toasterRef = useRef();
+    const operationMemberRef = useRef();
     const [search, setSearch] = useState("");
     const [value, setValue] = React.useState(0);
     const [makeApiCall, setMakeApiCall] = useState(true);
@@ -101,7 +102,7 @@ function OperationMemberList() {
 
                         messageType: "success",
                     },
-                    () => toasterRef.current()
+                    () => operationMemberRef.current()
                 );
             }
         } catch (error) {
@@ -153,7 +154,7 @@ function OperationMemberList() {
                     setOpenModal={setOpenDeleteDialogBox}
                 /> */}
                 <Toaster
-                    myRef={toasterRef}
+                    myRef={operationMemberRef}
                     titleMessage={toasterDetails.titleMessage}
                     descriptionMessage={toasterDetails.descriptionMessage}
                     messageType={toasterDetails.messageType}
@@ -172,7 +173,15 @@ function OperationMemberList() {
                                 {value == 0 && (
                                     <div
                                         className="tertiary-btn-blk mr-20"
-                                        onClick={downloadOperationMembers}
+                                        onClick={() =>
+                                            downloadFunction(
+                                                "Operation Members",
+                                                setToasterDetails,
+                                                // params.id,
+                                                operationMemberRef,
+                                                DOWNLOAD_OPERATION_MEMBER
+                                            )
+                                        }
                                     >
                                         <span className="download-icon">
                                             <DownloadIcon />
@@ -400,7 +409,7 @@ function OperationMemberList() {
                                     setSearch={setSearch}
                                     setFilters={setFilters}
                                     setToasterDetails={setToasterDetails}
-                                    myRef={toasterRef}
+                                    myRef={operationMemberRef}
                                 />
                             </TabPanel>
                         </div>

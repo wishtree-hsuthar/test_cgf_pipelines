@@ -25,6 +25,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { downloadFunction } from "../../utils/downloadFunction";
 
 export const AlphaRegEx = /^[a-z]+$/i;
 export const NumericRegEx = /^[0-9]+$/i;
@@ -521,38 +522,6 @@ function FillAssessment() {
         setActive(!isActive);
     };
 
-    // download assessment
-    const downloadAssessment = async () => {
-        try {
-            const response = await privateAxios.get(
-                DOWNLOAD_ASSESSMENT_BY_ID + params.id + "/download",
-                {
-                    responseType: "blob",
-                }
-            );
-            console.log("resposne from download  assessment ", response);
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", `Assessment - ${new Date()}.xls`);
-            document.body.appendChild(link);
-            link.click();
-            if (response.status == 200) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Success!",
-                        descriptionMessage: "Download successfull!",
-
-                        messageType: "success",
-                    },
-                    () => myRef.current()
-                );
-            }
-        } catch (error) {
-            console.log("Error from download  Assessment", error);
-        }
-    };
-
     const handleCloseRedirect = () => {
         navigate("/assessment-list");
     };
@@ -604,7 +573,9 @@ function FillAssessment() {
                                 ).toLocaleDateString()}
                             </span>
                         </span>
-                       Click “Accept” if you want to fill out the assessment . Or else, provide a reason and reject the assessment, if you don’t want to continue with it.
+                        Click “Accept” if you want to fill out the assessment .
+                        Or else, provide a reason and reject the assessment, if
+                        you don’t want to continue with it.
                     </p>
                 }
                 info2={
@@ -716,7 +687,17 @@ function FillAssessment() {
                                 style={{ display: isActive ? "none" : "block" }}
                             >
                                 <ul className="crud-toggle-list">
-                                    <li onClick={downloadAssessment}>
+                                    <li
+                                        onClick={() =>
+                                            downloadFunction(
+                                                "Assessment",
+                                                setToasterDetails,
+                                                params.id,
+                                                myRef,
+                                                DOWNLOAD_ASSESSMENT_BY_ID
+                                            )
+                                        }
+                                    >
                                         Export to Excel
                                     </li>
                                 </ul>
