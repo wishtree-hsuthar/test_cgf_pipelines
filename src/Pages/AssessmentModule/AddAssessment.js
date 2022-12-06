@@ -201,7 +201,7 @@ const AddAssessment = () => {
             (data) => data._id === e.target.value
         );
 
-        if (cgfCompany[0].name === "CGF") {
+        if (cgfCompany[0].name === "The Consumer Goods Forum") {
             setIsCGFStaff(true);
             fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
                 e.target.value,
@@ -235,19 +235,28 @@ const AddAssessment = () => {
     const submitAssessments = async (data) => {
         console.log("data from on submit", data);
 
-        let someDate = new Date(data.dueDate);
-        let setUTCHoursForDueDate = new Date(
-            someDate.setDate(someDate.getDate() + 1)
+        let someDate = new Date(data.dueDate).setDate(
+            new Date(data.dueDate).getDate() - 1
         );
-        let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
+        // let setUTCHoursForDueDate = new Date(
+        //     someDate.setDate(someDate.getDate())
+        // );
+        // let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
         console.log(
             "data after converting to ISOstring",
-            new Date(ISOdate).toISOString()
+            // new Date(ISOdate).toISOString()
+            new Date(
+                new Date(someDate).setUTCHours(23, 59, 59, 59)
+            ).toISOString()
         );
         data = {
             ...data,
-            dueDate: new Date(setUTCHoursForDueDate),
+            dueDate: new Date(
+                new Date(someDate).setUTCHours(23, 59, 59, 59)
+            ).toISOString(),
         };
+
+        console.log("submitted data", data);
 
         try {
             const response = await privateAxios.post(ADD_ASSESSMENTS, data);

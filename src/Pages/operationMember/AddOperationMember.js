@@ -201,7 +201,10 @@ function AddOperationMember() {
                 );
 
                 setCgfMember(
-                    response.data.filter((data) => data.companyName === "CGF")
+                    response.data.filter(
+                        (data) =>
+                            data.companyName === "The Consumer Goods Forum"
+                    )
                 );
 
                 if ((response.status = 200)) {
@@ -344,7 +347,7 @@ function AddOperationMember() {
 
     const handleCGFStaffChange = (e) => {
         let cgfCompany = memberCompanies?.filter(
-            (company) => company.companyName === "CGF"
+            (company) => company.companyName === "The Consumer Goods Forum"
         );
         console.log(e);
         console.log(cgfCompany[0]._id);
@@ -978,20 +981,46 @@ function AddOperationMember() {
                                 <div className="card-form-field">
                                     <div className="form-group">
                                         <label htmlFor="">Address</label>
-                                        <Input
+                                        <Controller
+                                            name="address"
                                             control={control}
-                                            name={"address"}
-                                            onBlur={(e) =>
-                                                setValue(
-                                                    "address",
-                                                    e.target.value?.trim()
-                                                )
-                                            }
-                                            rules={{}}
-                                            myHelper={
-                                                helperTextForAddOperationMember
-                                            }
-                                            placeholder={"Enter address"}
+                                            rules={{
+                                                minLength: 3,
+                                                maxLength: 250,
+                                            }}
+                                            render={({
+                                                field,
+                                                fieldState: { error },
+                                            }) => (
+                                                <TextField
+                                                    multiline
+                                                    {...field}
+                                                    onBlur={(e) =>
+                                                        setValue(
+                                                            "address",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
+                                                    inputProps={{
+                                                        maxLength: 250,
+                                                    }}
+                                                    className={`input-textarea ${
+                                                        error &&
+                                                        "input-textarea-error"
+                                                    }`}
+                                                    id="outlined-basic"
+                                                    placeholder="Enter address"
+                                                    helperText={
+                                                        error
+                                                            ? helperTextForAddOperationMember
+                                                                  .address[
+                                                                  error.type
+                                                              ]
+                                                            : " "
+                                                    }
+                                                    variant="outlined"
+                                                />
+                                            )}
                                         />
                                     </div>
                                 </div>
