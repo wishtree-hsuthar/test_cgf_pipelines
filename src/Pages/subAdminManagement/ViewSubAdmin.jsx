@@ -498,7 +498,8 @@ const ViewSubAdmin = () => {
                                             disabled={true}
                                             value={
                                                 fetchedSubAdminDetails
-                                                    ?.replacedUsers[0].name
+                                                    ?.replacedUsers[0]?.name ??
+                                                "N/A"
                                             }
                                             helperText={" "}
                                         />
