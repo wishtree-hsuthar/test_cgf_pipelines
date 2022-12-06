@@ -360,7 +360,11 @@ function AddNewQuestionnaire() {
                   <div className="form-header-right-txt">
                     <div
                       onClick={onPreviewClickHandler}
-                      className="tertiary-btn-blk mr-20"
+                      className={`tertiary-btn-blk ${
+                        (questionnaire?.isDraft ||
+                          questionnaire?.isPublished) ||
+                        "disabled-tertiary-btn"
+                      }  mr-20`}
                     >
                       <span className="preview-icon">
                         <VisibilityOutlinedIcon />
