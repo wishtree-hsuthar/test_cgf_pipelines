@@ -2487,13 +2487,18 @@ input::-ms-reveal {
     width: 125px;
     left: -100px;
 }
-.accrej-txtwrap{display: flex;
+.accrej-txtwrap {
+    display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;margin-bottom: 30px !important;}
+    flex-wrap: wrap;
+    margin-bottom: 30px !important;
+}
 .accrej-txtblk {
     max-width: 48%;
     flex: 0 0 48%;
-    margin: 0 0 30px;display: flex;justify-content: flex-start; 
+    margin: 0 0 30px;
+    display: flex;
+    justify-content: flex-start;
 }
 .accrej-label {
     max-width: 50%;
@@ -2510,7 +2515,16 @@ input::-ms-reveal {
 .input-textarea .MuiInputBase-root:hover fieldset {
     border-color: rgba(30, 30, 30, 0.8) !important;
 }
-.disabled-tertiary-btn{pointer-events: none;cursor: default;}
-.disabled-tertiary-btn .addmore-txt {color: rgba(0, 0, 0, 0.26);}
-.disabled-tertiary-btn .preview-icon{color: rgba(0, 0, 0, 0.26);}
-.input-textarea .Mui-disabled.MuiInputBase-root:hover fieldset{border-color: rgba(30, 30, 30, 0.15) !important;}
+.disabled-tertiary-btn {
+    pointer-events: none;
+    cursor: default;
+}
+.disabled-tertiary-btn .addmore-txt {
+    color: rgba(0, 0, 0, 0.26);
+}
+.disabled-tertiary-btn .preview-icon {
+    color: rgba(0, 0, 0, 0.26);
+}
+.input-textarea .Mui-disabled.MuiInputBase-root:hover fieldset {
+    border-color: rgba(30, 30, 30, 0.15) !important;
+}

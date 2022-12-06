@@ -242,50 +242,54 @@ const ViewSubAdmin = () => {
     //     ) : null;
     // };
 
-  return (
-    <div className="page-wrapper">
-      <Toaster
-        messageType={toasterDetails.messageType}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        myRef={toasterRef}
-        titleMessage={toasterDetails.titleMessage}
-      />
-      <DialogBox
-        title={<p> Delete CGF Admin "{fetchedSubAdminDetails?.name}" </p>}
-        info1={
-          <p>
-            Deleting all the details will be an irreversible action, we recommend you replace them instead.
-          </p>
-        }
-        info2={
-          <p>
-            Do you still want to delete <b>{fetchedSubAdminDetails?.name}</b>?
-          </p>
-        }
-        onPrimaryModalButtonClickHandler={handleDeleteSubAdmin}
-        onSecondaryModalButtonClickHandler={() => {
-          setOpenDeleteDialog(false);
-          navigate(`/users/cgf-admin/replace-sub-admin/${params.id}`);
-        }}
-        primaryButtonText={"Delete anyway"}
-        secondaryButtonText={"Replace"}
-        openModal={openDeleteDialog}
-        setOpenModal={setOpenDeleteDialog}
-      />
-      <div className="breadcrumb-wrapper">
-        <div className="container">
-          <ul className="breadcrumb">
-            <li>
-              <Link to="/users/cgf-admin/">CGF Admins</Link>
-            </li>
-            <li>View CGF Admin</li>
-          </ul>
-        </div>
-      </div>
-      <section>
-        <div className="container">
-          <div className="form-header flex-between">
-            <h2 className="heading2">View CGF Admin</h2>
+    return (
+        <div className="page-wrapper">
+            <Toaster
+                messageType={toasterDetails.messageType}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                myRef={toasterRef}
+                titleMessage={toasterDetails.titleMessage}
+            />
+            <DialogBox
+                title={
+                    <p> Delete CGF Admin "{fetchedSubAdminDetails?.name}" </p>
+                }
+                info1={
+                    <p>
+                        Deleting all the details will be an irreversible action,
+                        we recommend you replace them instead.
+                    </p>
+                }
+                info2={
+                    <p>
+                        Do you still want to delete{" "}
+                        <b>{fetchedSubAdminDetails?.name}</b>?
+                    </p>
+                }
+                onPrimaryModalButtonClickHandler={handleDeleteSubAdmin}
+                onSecondaryModalButtonClickHandler={() => {
+                    setOpenDeleteDialog(false);
+                    navigate(`/users/cgf-admin/replace-sub-admin/${params.id}`);
+                }}
+                primaryButtonText={"Delete anyway"}
+                secondaryButtonText={"Replace"}
+                openModal={openDeleteDialog}
+                setOpenModal={setOpenDeleteDialog}
+            />
+            <div className="breadcrumb-wrapper">
+                <div className="container">
+                    <ul className="breadcrumb">
+                        <li>
+                            <Link to="/users/cgf-admin/">CGF Admins</Link>
+                        </li>
+                        <li>View CGF Admin</li>
+                    </ul>
+                </div>
+            </div>
+            <section>
+                <div className="container">
+                    <div className="form-header flex-between">
+                        <h2 className="heading2">View CGF Admin</h2>
 
                         <span
                             className="form-header-right-txt"
@@ -492,7 +496,10 @@ const ViewSubAdmin = () => {
                                             placeholder="Enter email address"
                                             variant="outlined"
                                             disabled={true}
-                                            value={"N/A"}
+                                            value={
+                                                fetchedSubAdminDetails
+                                                    ?.replacedUsers[0].name
+                                            }
                                             helperText={" "}
                                         />
                                     </div>

@@ -193,6 +193,7 @@ function OnboardedOperationMember({
             delete object["operationType"];
             delete object["reportingManager"];
             delete object["memberId"];
+            delete object["assessmentCount"];
 
             onboardedKeysOrder.forEach((k) => {
                 const v = object[k];

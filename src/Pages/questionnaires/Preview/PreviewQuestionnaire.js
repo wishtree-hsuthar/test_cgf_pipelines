@@ -24,6 +24,7 @@ import Toaster from "../../../components/Toaster";
 import { TabPanel } from "../../../utils/tabUtils/TabPanel";
 import DialogBox from "../../../components/DialogBox";
 import axios from "axios";
+import { downloadFunction } from "../../../utils/downloadFunction";
 
 const ITEM_HEIGHT = 42;
 const MenuProps = {
@@ -86,7 +87,7 @@ function PreviewQuestionnaire(props) {
         descriptionMessage: "",
         messageType: "success",
     });
-    const myRef = useRef();
+    const questionnaireRef = useRef();
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -144,36 +145,36 @@ function PreviewQuestionnaire(props) {
     };
 
     // download assessment
-    const downloadAssessment = async () => {
-        try {
-            const response = await privateAxios.get(
-                DOWNLOAD_QUESTIONNAIRES_BY_ID + params.id + "/download",
-                {
-                    responseType: "blob",
-                }
-            );
-            console.log("resposne from download  questionnaire ", response);
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", `Questionnaire - ${new Date()}.xls`);
-            document.body.appendChild(link);
-            link.click();
-            if (response.status == 200) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Success!",
-                        descriptionMessage: "Download successfull!",
+    // const downloadAssessment = async () => {
+    //     try {
+    //         const response = await privateAxios.get(
+    //             DOWNLOAD_QUESTIONNAIRES_BY_ID + params.id + "/download",
+    //             {
+    //                 responseType: "blob",
+    //             }
+    //         );
+    //         console.log("resposne from download  questionnaire ", response);
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement("a");
+    //         link.href = url;
+    //         link.setAttribute("download", `Questionnaire - ${new Date()}.xls`);
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         if (response.status == 200) {
+    //             setToasterDetails(
+    //                 {
+    //                     titleMessage: "Success!",
+    //                     descriptionMessage: "Download successfull!",
 
-                        messageType: "success",
-                    },
-                    () => myRef.current()
-                );
-            }
-        } catch (error) {
-            console.log("Error from download  questionnaire", error);
-        }
-    };
+    //                     messageType: "success",
+    //                 },
+    //                 () => myRef.current()
+    //             );
+    //         }
+    //     } catch (error) {
+    //         console.log("Error from download  questionnaire", error);
+    //     }
+    // };
     const deleteQuestionnaire = async (deletionType) => {
         try {
             console.log("Questionnaire", questionnaire);
@@ -192,7 +193,7 @@ function PreviewQuestionnaire(props) {
                     }`,
                     messageType: "success",
                 },
-                () => myRef.current()
+                () => questionnaireRef.current()
             );
             return setTimeout(() => navigate("/questionnaires"), 3000);
         } catch (error) {
@@ -208,7 +209,7 @@ function PreviewQuestionnaire(props) {
                             : "Something went wrong!",
                     messageType: "error",
                 },
-                () => myRef.current()
+                () => questionnaireRef.current()
             );
         } finally {
             setOpenDialog(false);
@@ -250,7 +251,7 @@ function PreviewQuestionnaire(props) {
                 setOpenModal={setOpenDialog}
             />
             <Toaster
-                myRef={myRef}
+                myRef={questionnaireRef}
                 titleMessage={toasterDetails.titleMessage}
                 descriptionMessage={toasterDetails.descriptionMessage}
                 messageType={toasterDetails.messageType}
@@ -349,7 +350,17 @@ function PreviewQuestionnaire(props) {
                                 style={{ display: isActive ? "block" : "none" }}
                             >
                                 <ul className="crud-toggle-list">
-                                    <li onClick={downloadAssessment}>
+                                    <li
+                                        onClick={() =>
+                                            downloadFunction(
+                                                "Questionnaire",
+                                                setToasterDetails,
+                                                params.id,
+                                                questionnaireRef,
+                                                DOWNLOAD_QUESTIONNAIRES_BY_ID
+                                            )
+                                        }
+                                    >
                                         Export to Excel
                                     </li>
                                     {!params["*"].includes("version") &&

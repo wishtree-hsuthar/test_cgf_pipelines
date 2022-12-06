@@ -565,7 +565,7 @@ const AddMember = () => {
                             selectOnFocus
                             handleHomeEndKeys
                             id="free-solo-with-text-demo"
-                            options={arrOfParentCompany && arrOfParentCompany}
+                            options={arrOfParentCompany}
                             // getOptionLabel={(option) => {
 
                             //   // Value selected with enter, right from the input

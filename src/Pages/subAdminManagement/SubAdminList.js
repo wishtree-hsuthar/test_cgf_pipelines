@@ -18,6 +18,7 @@ import OnBoardedSubAdminsTable from "./OnBoardedSubAdminsTable";
 import PendingCGFAdmins from "./PendingCGFAdmins";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
+import { downloadFunction } from "../../utils/downloadFunction";
 
 // function TabPanel(props) {
 //     const { children, value, index, ...other } = props;
@@ -54,7 +55,7 @@ const SubAdminList = () => {
     const [value, setValue] = React.useState(0);
 
     //Refr for Toaster
-    const myRef = React.useRef();
+    const cgfAdminRef = React.useRef();
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
@@ -217,7 +218,7 @@ const SubAdminList = () => {
                         descriptionMessage: response?.data?.message,
                         messageType: "success",
                     },
-                    () => myRef.current()
+                    () => cgfAdminRef.current()
                 );
                 getSubAdminPending();
                 setOpenDeleteDialogBox(false);
@@ -291,7 +292,7 @@ const SubAdminList = () => {
 
                         messageType: "error",
                     },
-                    () => myRef.current()
+                    () => cgfAdminRef.current()
                 );
             setIsLoading(false);
         }
@@ -335,33 +336,33 @@ const SubAdminList = () => {
         setValue(newValue);
     };
 
-    const downloadCGFAdmins = async () => {
-        try {
-            const response = await privateAxios.get(DOWNLOAD_CGF_ADMIN, {
-                responseType: "blob",
-            });
-            console.log("resposne from download cgf admins", response);
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", `CGF-Admins - ${new Date()}.xls`);
-            document.body.appendChild(link);
-            link.click();
-            if (response.status == 200) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Success!",
-                        descriptionMessage: "Download successfull!",
+    // const downloadCGFAdmins = async () => {
+    //     try {
+    //         const response = await privateAxios.get(DOWNLOAD_CGF_ADMIN, {
+    //             responseType: "blob",
+    //         });
+    //         console.log("resposne from download cgf admins", response);
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement("a");
+    //         link.href = url;
+    //         link.setAttribute("download", `CGF-Admins - ${new Date()}.xls`);
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         if (response.status == 200) {
+    //             setToasterDetails(
+    //                 {
+    //                     titleMessage: "Success!",
+    //                     descriptionMessage: "Download successfull!",
 
-                        messageType: "success",
-                    },
-                    () => myRef.current()
-                );
-            }
-        } catch (error) {
-            console.log("Error from download cgf admins", error);
-        }
-    };
+    //                     messageType: "success",
+    //                 },
+    //                 () => myRef.current()
+    //             );
+    //         }
+    //     } catch (error) {
+    //         console.log("Error from download cgf admins", error);
+    //     }
+    // };
 
     console.log("selected roles---", selectedRoles);
 
@@ -392,7 +393,7 @@ const SubAdminList = () => {
                 setOpenModal={setOpenDeleteDialogBox}
             />
             <Toaster
-                myRef={myRef}
+                myRef={cgfAdminRef}
                 titleMessage={toasterDetails.titleMessage}
                 descriptionMessage={toasterDetails.descriptionMessage}
                 messageType={toasterDetails.messageType}
@@ -410,7 +411,14 @@ const SubAdminList = () => {
                             {value == 0 && (
                                 <div
                                     className="tertiary-btn-blk mr-20"
-                                    onClick={downloadCGFAdmins}
+                                    onClick={() =>
+                                        downloadFunction(
+                                            "CGF Admins",
+                                            setToasterDetails,
+                                            cgfAdminRef,
+                                            DOWNLOAD_CGF_ADMIN
+                                        )
+                                    }
                                 >
                                     <span className="download-icon">
                                         <DownloadIcon />
@@ -545,7 +553,7 @@ const SubAdminList = () => {
                                 setMakeApiCall={setMakeApiCall}
                                 search={search}
                                 filters={filters}
-                                myRef={myRef}
+                                myRef={cgfAdminRef}
                                 selectedRoles={selectedRoles}
                                 toasterDetails={toasterDetails}
                                 setToasterDetails={setToasterDetails}

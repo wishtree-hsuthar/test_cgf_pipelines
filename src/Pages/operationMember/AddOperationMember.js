@@ -131,7 +131,7 @@ function AddOperationMember() {
     const [memberCompanies, setMemberCompanies] = useState([]);
     const [disableReportingManager, setDisableReportingManager] =
         useState(true);
-    const [countries, setCountries] = useState();
+    const [countries, setCountries] = useState([]);
     const [reportingManagers, setReportingManagers] = useState();
     const toasterRef = useRef();
     const [toasterDetails, setToasterDetails] = useCallbackState({

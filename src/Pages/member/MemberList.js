@@ -14,6 +14,7 @@ import Toaster from "../../components/Toaster";
 import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { privateAxios } from "../../api/axios";
+import { downloadFunction } from "../../utils/downloadFunction";
 
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
@@ -69,7 +70,7 @@ const MemberList = () => {
     useDocumentTitle("Members");
     const navigate = useNavigate();
     //Refr for Toaster
-    const myRef = React.useRef();
+    const memberRef = React.useRef();
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
@@ -272,33 +273,33 @@ const MemberList = () => {
         return url;
     };
     // download members
-    const downloadMembers = async () => {
-        try {
-            const response = await privateAxios.get(DOWNLOAD_MEMBERS, {
-                responseType: "blob",
-            });
-            console.log("resposne from download  members ", response);
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", `Members - ${new Date()}.xls`);
-            document.body.appendChild(link);
-            link.click();
-            if (response.status == 200) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Success!",
-                        descriptionMessage: "Download successfull!",
+    // const downloadMembers = async () => {
+    //     try {
+    //         const response = await privateAxios.get(DOWNLOAD_MEMBERS, {
+    //             responseType: "blob",
+    //         });
+    //         console.log("resposne from download  members ", response);
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement("a");
+    //         link.href = url;
+    //         link.setAttribute("download", `Members - ${new Date()}.xls`);
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         if (response.status == 200) {
+    //             setToasterDetails(
+    //                 {
+    //                     titleMessage: "Success!",
+    //                     descriptionMessage: "Download successfull!",
 
-                        messageType: "success",
-                    },
-                    () => myRef.current()
-                );
-            }
-        } catch (error) {
-            console.log("Error from download  members", error);
-        }
-    };
+    //                     messageType: "success",
+    //                 },
+    //                 () => myRef.current()
+    //             );
+    //         }
+    //     } catch (error) {
+    //         console.log("Error from download  members", error);
+    //     }
+    // };
     const getMembers = async (isMounted, controller) => {
         try {
             let url = generateUrl();
@@ -325,7 +326,7 @@ const MemberList = () => {
 
                         messageType: "error",
                     },
-                    () => myRef.current()
+                    () => memberRef.current()
                 );
         }
     };
@@ -344,7 +345,7 @@ const MemberList = () => {
     return (
         <div className="page-wrapper">
             <Toaster
-                myRef={myRef}
+                myRef={memberRef}
                 titleMessage={toasterDetails.titleMessage}
                 descriptionMessage={toasterDetails.descriptionMessage}
                 messageType={toasterDetails.messageType}
@@ -358,7 +359,15 @@ const MemberList = () => {
                         <div className="form-header-right-txt">
                             <div
                                 className="tertiary-btn-blk mr-20"
-                                onClick={downloadMembers}
+                                onClick={() =>
+                                    downloadFunction(
+                                        "Members",
+                                        setToasterDetails,
+                                        // params.id,
+                                        memberRef,
+                                        DOWNLOAD_MEMBERS
+                                    )
+                                }
                             >
                                 <span className="download-icon">
                                     <DownloadIcon />

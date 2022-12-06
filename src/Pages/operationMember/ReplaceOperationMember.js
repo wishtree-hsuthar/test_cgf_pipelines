@@ -10,7 +10,6 @@ import PropTypes from "prop-types";
 
 import DialogBox from "../../components/DialogBox";
 
-import TableTester from "../../components/TableTester";
 import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";

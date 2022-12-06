@@ -950,7 +950,7 @@ const EditMember = () => {
                               selectOnFocus
                               handleHomeEndKeys
                               id="free-solo-with-text-demo"
-                              options={arrOfCites && arrOfCites}
+                              options={arrOfCites}
                               // getOptionLabel={(option) => {
                               //   // Value selected with enter, right from the input
                               //   if (typeof option === "string") {
