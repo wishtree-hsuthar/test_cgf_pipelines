@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 import DialogBox from "../../components/DialogBox";
 
-import TableTester from "../../components/TableTester";
 import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";

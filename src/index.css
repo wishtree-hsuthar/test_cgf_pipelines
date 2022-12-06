@@ -2498,7 +2498,10 @@ input::-ms-reveal {
 .accrej-label {
     max-width: 50%;
     flex: 0 0 50%;
-    text-align: left;font-family: "Proxima Nova Semibold", serif, sans-serif;text-align: right;margin-right: 5px;
+    /* text-align: left; */
+    font-family: "Proxima Nova Semibold", serif, sans-serif;
+    text-align: right;
+    margin-right: 5px;
 }
 .accrej-desc {
     max-width: 48%;

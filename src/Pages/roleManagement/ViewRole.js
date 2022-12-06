@@ -34,23 +34,23 @@ import { TabPanel } from "../../utils/tabUtils/TabPanel";
 
 const tableHead = [
   {
-    id: "cgfAdmins.name",
+    id: "name",
     disablePadding: false,
     width: "20%",
     label: "Name",
   },
   {
-    id: "cgfAdmins.email",
+    id: "email",
     disablePadding: false,
     label: "Email",
   },
   {
-    id: "cgfAdmins.createdAt",
+    id: "createdAt",
     disablePadding: false,
     label: "Created On",
   },
   {
-    id: "cgfAdmins.isActive",
+    id: "isActive",
     disablePadding: false,
     label: "Status",
   },

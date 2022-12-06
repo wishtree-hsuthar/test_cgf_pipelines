@@ -85,7 +85,7 @@ const AddAssessment = () => {
             assessmentType: "",
             assignedMember: "",
             assignedOperationMember: "",
-            dueDate: new Date(),
+            dueDate: "",
             remarks: "",
             questionnaireId: "",
         },
@@ -471,7 +471,7 @@ const AddAssessment = () => {
                                                         //     "MM/DD/YYYY"
                                                         // }
                                                         value={datevalue}
-                                                        onChange={(event) => {
+                                                        onChange={(event = "") => {
                                                             setDateValue(event);
                                                             // console.log("date" + "  " + event.toISOString());
                                                             setValue(
