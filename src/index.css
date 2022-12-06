@@ -2498,7 +2498,9 @@ input::-ms-reveal {
 .accrej-label {
     max-width: 50%;
     flex: 0 0 50%;
-    text-align: left;font-family: "Proxima Nova Semibold", serif, sans-serif;text-align: right;margin-right: 5px;
+    font-family: "Proxima Nova Semibold", serif, sans-serif;
+    text-align: right;
+    margin-right: 5px;
 }
 .accrej-desc {
     max-width: 48%;
@@ -2508,3 +2510,7 @@ input::-ms-reveal {
 .input-textarea .MuiInputBase-root:hover fieldset {
     border-color: rgba(30, 30, 30, 0.8) !important;
 }
+.disabled-tertiary-btn{pointer-events: none;cursor: default;}
+.disabled-tertiary-btn .addmore-txt {color: rgba(0, 0, 0, 0.26);}
+.disabled-tertiary-btn .preview-icon{color: rgba(0, 0, 0, 0.26);}
+.input-textarea .Mui-disabled.MuiInputBase-root:hover fieldset{border-color: rgba(30, 30, 30, 0.15) !important;}
