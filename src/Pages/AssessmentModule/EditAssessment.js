@@ -346,7 +346,7 @@ function EditAssessment() {
             (data) => data._id === e.target.value
         );
 
-        if (cgfCompany[0].name === "CGF") {
+        if (cgfCompany[0].name === "The Consumer Goods Forum") {
             setIsCGFStaff(true);
             fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
                 e.target.value,

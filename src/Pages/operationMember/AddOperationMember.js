@@ -201,7 +201,10 @@ function AddOperationMember() {
                 );
 
                 setCgfMember(
-                    response.data.filter((data) => data.companyName === "CGF")
+                    response.data.filter(
+                        (data) =>
+                            data.companyName === "The Consumer Goods Forum"
+                    )
                 );
 
                 if ((response.status = 200)) {
@@ -344,7 +347,7 @@ function AddOperationMember() {
 
     const handleCGFStaffChange = (e) => {
         let cgfCompany = memberCompanies?.filter(
-            (company) => company.companyName === "CGF"
+            (company) => company.companyName === "The Consumer Goods Forum"
         );
         console.log(e);
         console.log(cgfCompany[0]._id);
