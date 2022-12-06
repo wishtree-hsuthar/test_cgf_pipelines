@@ -151,7 +151,7 @@ function FillAssesmentSection({
           )}
         </div>
         {editMode && !params["*"].includes("view") ? (
-          <div className="form-btn flex-between add-members-btn que-page-btn">
+          <div className="form-btn flex-between add-members-btn">
             <button
               type="reset"
               onClick={() => setOpenCancelDailog(true)}
