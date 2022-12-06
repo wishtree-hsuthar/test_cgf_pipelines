@@ -293,7 +293,7 @@ function AddOperationMember() {
     const addOperationMember = async (data, navigateToListPage) => {
         data = {
             ...data,
-            phoneNumber: Number(data?.phoneNumber),
+            phoneNumber: data?.phoneNumber ? parseInt(data.phoneNumber) : "",
             isCGFStaff: data.isCGFStaff === "true" ? true : false,
             memberId:
                 data.isCGFStaff === "true" ? cgfMember[0]._id : data.memberId,
