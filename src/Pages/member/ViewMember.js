@@ -80,7 +80,7 @@ const ViewMember = () => {
             label: "Email",
         },
         {
-            id: "assessment",
+            id: "assessmentCount",
             disablePadding: false,
             //   width: "30%",
             label: "Assessment",
@@ -107,7 +107,7 @@ const ViewMember = () => {
         "_id",
         "name",
         "email",
-        "assessment",
+        "assessmentCount",
         "createdBy",
         "createdAt",
         "isActive",
@@ -185,8 +185,11 @@ const ViewMember = () => {
             delete object["isCGFStaff"];
             delete object["isOperationMember"];
             delete object["memberData"];
+            // delete object["isActive"];
+            object["assessmentCount"] = `${object["assessmentCount"]}`;
+            // delete object["assessmentCount"];
             // delete object["createdBy"]
-            object.assessment = object["assessment"]?.toString() ?? "0";
+            // object.assessment = object["assessment"]?.toString() ?? "0";
             // console.log(
             //     "type of created By",
             //     typeof object["createdBy"],
@@ -895,7 +898,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="cgfCategory"
-                                                placeholder="Select category"
+                                                placeholder="N/A"
                                                 options={cgfCategories}
                                             />
                                         </div>
@@ -914,7 +917,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="cgfActivity"
-                                                placeholder="Select activity"
+                                                placeholder="N/A"
                                                 options={
                                                     watch("cgfCategory") ===
                                                     "Manufacturer"
@@ -944,7 +947,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="corporateEmail"
-                                                placeholder="Enter email"
+                                                placeholder="N/A"
                                             />
                                         </div>
                                     </div>
@@ -999,7 +1002,7 @@ const ViewMember = () => {
                                                     isDisabled
                                                     control={control}
                                                     name="phoneNumber"
-                                                    placeholder="Enter phone number"
+                                                    placeholder=""
                                                 />
                                             </div>
                                         </div>

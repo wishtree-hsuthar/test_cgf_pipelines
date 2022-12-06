@@ -73,4 +73,6 @@ export const DOWNLOAD_QUESTIONNAIRES_BY_ID = `${REACT_APP_API_ENDPOINT}questionn
 export const VIEW_ROLE = `${REACT_APP_API_ENDPOINT}roles/`;
 // roles
 export const ROLE_BY_ID = `${REACT_APP_API_ENDPOINT}roles/`;
+export const GET_ROLE_BY_ID = `${REACT_APP_API_ENDPOINT}roles/`;
+export const GET_USER_BY_ROLE = `${REACT_APP_API_ENDPOINT}roles/`;
 

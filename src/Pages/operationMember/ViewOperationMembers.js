@@ -54,6 +54,7 @@ const defaultValues = {
     reportingManager: "",
     isCGFStaff: "",
     role: "",
+    replacedOperationMember: "",
 };
 const ViewOperationMembers = () => {
     //custom hook to set title of page
@@ -204,6 +205,8 @@ const ViewOperationMembers = () => {
                     isCGFStaff:
                         response?.data?.isCGFStaff === true ? "true" : "false",
                     role: response?.data?.roleId,
+                    replacedOperationMember:
+                        response?.data?.replacedUsers[0].name,
                 });
                 fetchRole(response?.data?.roleId);
                 setIsLoading(false);

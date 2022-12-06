@@ -172,7 +172,7 @@ const EditMember = () => {
         phoneNumber: parseInt(data.phoneNumber),
         website: data.websiteUrl,
         state: data.state,
-        city: data.state,
+        city: data.city,
         companyName: data.memberCompany,
         companyType: data.companyType,
         cgfCategory: data.cgfCategory,
@@ -244,6 +244,8 @@ const EditMember = () => {
     // console.log("Inside Country Change ", e.target.value);
     setValue("country", e.target.value);
     setValue("state", "");
+    setValue("city", "");
+    getCites();
     trigger("country");
     try {
       if (watch("country")) {
@@ -279,12 +281,12 @@ const EditMember = () => {
   };
   const getCites = async () => {
     try {
-      const response = await axios.get(
-        CITES +
-          `/?region=${watch("region")}&country=${watch(
-            "country"
-          )}&state=${watch("state")}`
-      );
+      let url =
+        CITES + `/?region=${watch("region")}&country=${watch("country")}`;
+      if (watch("state")) {
+        url += `&state=${watch("state")}`;
+      }
+      const response = await axios.get(url);
       console.log("cites from backend", response?.data);
       setArrOfCites(response?.data);
     } catch (error) {
@@ -432,6 +434,7 @@ const EditMember = () => {
         roleId: data?.memberRepresentativeId[0]?.roleId,
       });
       setMember(response.data);
+      getCites();
       setDisableMember(
         response?.data?.memberRepresentativeId?.length > 0 ? false : true
       );
@@ -931,7 +934,7 @@ const EditMember = () => {
                                   </Paper>
                                 )
                               }
-                              disabled={!watch("state")}
+                              disabled={!watch("country")}
                               onSubmit={() => setValue("city", "")}
                               onChange={(event, newValue) => {
                                 console.log("new Value ", newValue);
