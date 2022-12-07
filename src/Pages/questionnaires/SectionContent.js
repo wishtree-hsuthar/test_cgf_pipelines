@@ -131,43 +131,45 @@ const SectionContent = ({
         return countError;
     };
 
-    const validateSection = async () => {
-        let countError = 0;
-        if (questionnaire?.sections[index]?.layout === "table") {
-            countError = await validateTableQuestions(countError);
+  const validateSection = async () => {
+    let countError = 0;
+    if (questionnaire?.sections[index]?.layout === "table") {
+      countError = await validateTableQuestions(countError);
+    }
+    else{
+      console.log("count Error", countError);
+      //Rajkumar's save section
+      let tempError = {
+        questionTitle: "",
+        option: "",
+      };
+      await questionnaire?.sections[index]?.questions?.map(
+        (question, questionIdx) => {
+          if (question?.questionTitle === "") {
+            // console.log("is Error");
+            tempError["questionTitle"] = "Enter question title";
+            countError++;
+          }
+          //   console.log("question in validate section map",question)
+          if (
+            ["dropdown", "checkbox", "radioGroup"].includes(question?.inputType)
+          ) {
+            question?.options?.map((option) => {
+              if (option === "") {
+                tempError["option"] = "Enter option";
+                countError++;
+              }
+            });
+          }
         }
-        console.log("count Error", countError);
-        //Rajkumar's save section
-        let tempError = {
-            questionTitle: "",
-            option: "",
-        };
-        await questionnaire?.sections[index]?.questions?.map(
-            (question, questionIdx) => {
-                if (question?.questionTitle === "") {
-                    // console.log("is Error");
-                    tempError["questionTitle"] = "Enter question title";
-                    countError++;
-                }
-                //   console.log("question in validate section map",question)
-                if (
-                    ["dropdown", "checkbox", "radioGroup"].includes(
-                        question?.inputType
-                    )
-                ) {
-                    question?.options?.map((option) => {
-                        if (option === "") {
-                            tempError["option"] = "Enter option";
-                            countError++;
-                        }
-                    });
-                }
-            }
-        );
+      );
+      setErr({ ...tempError });
+    }
+    
 
-        setErr({ ...tempError });
-        //Madhav's save section
-        // console.log("questionnaire", questionnaire);
+    
+    //Madhav's save section
+    // console.log("questionnaire", questionnaire);
 
         if (questionnaire?.title === "") {
             setGlobalSectionTitleError({ errMsg: "Section title required" });
@@ -190,79 +192,81 @@ const SectionContent = ({
         return false;
     };
 
-    const sectionLayoutChangeHandler = (e) => {
-        const { name, value } = e.target;
-        console.log("name:", name, "value:", value);
-        let tempQuestionnaire = { ...questionnaire };
-        console.log("tempQuestionnaire: ", tempQuestionnaire);
-        tempQuestionnaire.sections[index]["layout"] = value;
-        //check if layout is table remove form layout questions and add initial rows and colums
-        if (value === "table") {
-            delete tempQuestionnaire?.sections[index]?.questions;
-            const initialId = uuidv4();
-            tempQuestionnaire.sections[index].columnValues = [
-                {
-                    uuid: initialId,
-                    title: "",
-                    columnType: "textbox",
-                    options: ["", ""],
-                    validation: "",
-                },
-            ];
-            tempQuestionnaire.sections[index].rowValues = [
-                {
-                    uuid: uuidv4(),
-                    cells: [
-                        {
-                            columnId: initialId, // UUID of the column
-                            value: "",
-                        },
-                    ],
-                },
-                {
-                    uuid: uuidv4(),
-                    cells: [
-                        {
-                            columnId: initialId, // UUID of the column
-                            value: "",
-                        },
-                    ],
-                },
-            ];
-        }
-        //check if layout is form then remove table questions and add form inital question
-        if (value === "form") {
-            delete tempQuestionnaire?.sections[index]?.columnValues;
-            delete tempQuestionnaire?.sections[index]?.rowValues;
-            tempQuestionnaire.sections[index].questions = [
-                {
-                    uuid: uuidv4(),
-                    questionTitle: "",
-                    inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings, boolean
-                    validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
-                    defaultValue: "", // Will only be there in case of the inputType which requires the default value
-                    isRequired: true,
-                    options: ["", ""], // multiple values from which user can select
-                },
-            ];
-        }
-        console.log("tempQuestionnaire after layout update", tempQuestionnaire);
-        setQuestionnaire(tempQuestionnaire);
-    };
-    const handleStatusChange = (e) => {
-        // console.log("inside Status change handler");
-        const { name, value } = e.target;
-        let tempQuestionnare = { ...questionnaire };
-        if (value === "active") {
-            tempQuestionnare.sections[index].isActive = true;
-        }
-        if (value === "inActive")
-            tempQuestionnare.sections[index].isActive = false;
-        setQuestionnaire(tempQuestionnare);
-    };
-    const handleInputSection = (e) => {
-        const { name, value } = e.target;
-        let tempQuestionnare = { ...questionnaire };
+  const sectionLayoutChangeHandler = (e) => {
+    const { name, value } = e.target;
+    console.log("name:", name, "value:", value);
+    let tempQuestionnaire = { ...questionnaire };
+    console.log("tempQuestionnaire: ", tempQuestionnaire);
+    tempQuestionnaire.sections[index]["layout"] = value;
+    //check if layout is table remove form layout questions and add initial rows and colums
+    if (value === "table") {
+      tempQuestionnaire.sections[index].questions = []
+      // delete tempQuestionnaire?.sections[index]?.questions;
+      const initialId = uuidv4();
+      tempQuestionnaire.sections[index].columnValues = [
+        {
+          uuid: initialId,
+          title: "",
+          columnType: "textbox",
+          options: ["", ""],
+          validation: "",
+        },
+      ];
+      tempQuestionnaire.sections[index].rowValues = [
+        {
+          uuid: uuidv4(),
+          cells: [
+            {
+              columnId: initialId, // UUID of the column
+              value: "",
+            },
+          ],
+        },
+        {
+          uuid: uuidv4(),
+          cells: [
+            {
+              columnId: initialId, // UUID of the column
+              value: "",
+            },
+          ],
+        },
+      ];
+    }
+    //check if layout is form then remove table questions and add form inital question
+    if (value === "form") {
+      tempQuestionnaire.sections[index].columnValues = []
+      tempQuestionnaire.sections[index].rowValues = []
+      // delete tempQuestionnaire?.sections[index]?.columnValues;
+      // delete tempQuestionnaire?.sections[index]?.rowValues;
+      tempQuestionnaire.sections[index].questions = [
+        {
+          uuid: uuidv4(),
+          questionTitle: "",
+          inputType: "singleTextbox", // single textbox, multi textbox, dropdown, checkbox, radio group, calendar, ratings, boolean
+          validation: "", // isRequired, maxLength, minLength, alpha, alphaNumeric, numeric
+          defaultValue: "", // Will only be there in case of the inputType which requires the default value
+          isRequired: true,
+          options: ["", ""], // multiple values from which user can select
+        },
+      ];
+    }
+    console.log("tempQuestionnaire after layout update", tempQuestionnaire);
+    setQuestionnaire(tempQuestionnaire);
+  };
+  const handleStatusChange = (e) => {
+    // console.log("inside Status change handler");
+    const { name, value } = e.target;
+    let tempQuestionnare = { ...questionnaire };
+    if (value === "active") {
+      tempQuestionnare.sections[index].isActive = true;
+    }
+    if (value === "inActive") tempQuestionnare.sections[index].isActive = false;
+    setQuestionnaire(tempQuestionnare);
+  };
+  const handleInputSection = (e) => {
+    const { name, value } = e.target;
+    let tempQuestionnare = { ...questionnaire };
 
         tempQuestionnare.sections[index][name] = value;
         setQuestionnaire(tempQuestionnare);
