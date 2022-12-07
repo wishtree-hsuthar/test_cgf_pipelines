@@ -363,7 +363,7 @@ const MemberList = () => {
                                     downloadFunction(
                                         "Members",
                                         setToasterDetails,
-                                        // params.id,
+                                        false,
                                         memberRef,
                                         DOWNLOAD_MEMBERS
                                     )
