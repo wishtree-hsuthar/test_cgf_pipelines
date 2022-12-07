@@ -198,7 +198,7 @@ const SectionContent = ({
     tempQuestionnaire.sections[index]["layout"] = value;
     //check if layout is table remove form layout questions and add initial rows and colums
     if (value === "table") {
-      tempQuestionnaire.sections[index].questions = ""
+      tempQuestionnaire.sections[index].questions = []
       // delete tempQuestionnaire?.sections[index]?.questions;
       const initialId = uuidv4();
       tempQuestionnaire.sections[index].columnValues = [
@@ -233,8 +233,8 @@ const SectionContent = ({
     }
     //check if layout is form then remove table questions and add form inital question
     if (value === "form") {
-      tempQuestionnaire.sections[index].columnValues = ""
-      tempQuestionnaire.sections[index].rowValues = ""
+      tempQuestionnaire.sections[index].columnValues = []
+      tempQuestionnaire.sections[index].rowValues = []
       // delete tempQuestionnaire?.sections[index]?.columnValues;
       // delete tempQuestionnaire?.sections[index]?.rowValues;
       tempQuestionnaire.sections[index].questions = [
