@@ -16,6 +16,7 @@
 
 # Environment
 .env
+.env.uat
 .env.development
 .env.production
 .env.staging
@@ -28,4 +29,3 @@ yarn-error.log*
 .scannerwork
 
 /node_modules
-/build

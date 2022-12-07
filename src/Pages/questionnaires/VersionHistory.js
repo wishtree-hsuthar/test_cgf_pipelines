@@ -71,6 +71,8 @@ const VersionHistory = () => {
         console.log("data before update----", data);
 
         let staleData = data;
+        let title = data.filter((data) => data.uuid === params.id);
+        setQuestionnaireTitle(title[0].title);
         staleData.forEach((object) => {
             object["date"] = new Date(object["createdAt"]).toLocaleString(
                 "en-US",
@@ -112,8 +114,8 @@ const VersionHistory = () => {
             console.log("Response from version history api get", response);
 
             updateRecordsForVersionHistory([...response.data]);
-            let title = response.data.filter((data) => data.uuid === params.id);
-            setQuestionnaireTitle(title[0].title);
+            // let title = response.data.filter((data) => data.uuid === params.id);
+            // setQuestionnaireTitle(title[0].title);
             // console.log("title from questionnaire = ", title);
             // setIsLoading(false);
         } catch (error) {
