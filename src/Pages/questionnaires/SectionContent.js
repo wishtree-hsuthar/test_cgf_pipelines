@@ -134,34 +134,38 @@ const SectionContent = ({
     if (questionnaire?.sections[index]?.layout === "table") {
       countError = await validateTableQuestions(countError);
     }
-    console.log("count Error", countError);
-    //Rajkumar's save section
-    let tempError = {
-      questionTitle: "",
-      option: "",
-    };
-    await questionnaire?.sections[index]?.questions?.map(
-      (question, questionIdx) => {
-        if (question?.questionTitle === "") {
-          // console.log("is Error");
-          tempError["questionTitle"] = "Enter question title";
-          countError++;
+    else{
+      console.log("count Error", countError);
+      //Rajkumar's save section
+      let tempError = {
+        questionTitle: "",
+        option: "",
+      };
+      await questionnaire?.sections[index]?.questions?.map(
+        (question, questionIdx) => {
+          if (question?.questionTitle === "") {
+            // console.log("is Error");
+            tempError["questionTitle"] = "Enter question title";
+            countError++;
+          }
+          //   console.log("question in validate section map",question)
+          if (
+            ["dropdown", "checkbox", "radioGroup"].includes(question?.inputType)
+          ) {
+            question?.options?.map((option) => {
+              if (option === "") {
+                tempError["option"] = "Enter option";
+                countError++;
+              }
+            });
+          }
         }
-        //   console.log("question in validate section map",question)
-        if (
-          ["dropdown", "checkbox", "radioGroup"].includes(question?.inputType)
-        ) {
-          question?.options?.map((option) => {
-            if (option === "") {
-              tempError["option"] = "Enter option";
-              countError++;
-            }
-          });
-        }
-      }
-    );
+      );
+      setErr({ ...tempError });
+    }
+    
 
-    setErr({ ...tempError });
+    
     //Madhav's save section
     // console.log("questionnaire", questionnaire);
 
@@ -194,7 +198,8 @@ const SectionContent = ({
     tempQuestionnaire.sections[index]["layout"] = value;
     //check if layout is table remove form layout questions and add initial rows and colums
     if (value === "table") {
-      delete tempQuestionnaire?.sections[index]?.questions;
+      tempQuestionnaire.sections[index].questions = ""
+      // delete tempQuestionnaire?.sections[index]?.questions;
       const initialId = uuidv4();
       tempQuestionnaire.sections[index].columnValues = [
         {
@@ -228,8 +233,10 @@ const SectionContent = ({
     }
     //check if layout is form then remove table questions and add form inital question
     if (value === "form") {
-      delete tempQuestionnaire?.sections[index]?.columnValues;
-      delete tempQuestionnaire?.sections[index]?.rowValues;
+      tempQuestionnaire.sections[index].columnValues = ""
+      tempQuestionnaire.sections[index].rowValues = ""
+      // delete tempQuestionnaire?.sections[index]?.columnValues;
+      // delete tempQuestionnaire?.sections[index]?.rowValues;
       tempQuestionnaire.sections[index].questions = [
         {
           uuid: uuidv4(),
