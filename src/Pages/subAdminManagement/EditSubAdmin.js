@@ -219,7 +219,7 @@ const EditSubAdmin = () => {
       const response = await privateAxios.put(UPDATE_SUB_ADMIN + params.id, {
         name: data.name,
         subRoleId: data.role,
-        phoneNumber: parseInt(data.phoneNumber),
+        phoneNumber:data.phoneNumber ? parseInt(data.phoneNumber) : "",
         countryCode: data.countryCode,
         isActive: data.status === "active" ? true : false,
       });

@@ -308,6 +308,11 @@ const ViewRole = () => {
       );
       updateUsers(response?.data)
       setTotalRecords(response?.headers?.['x-total-count'])
+      setFieldValues({
+        ...fieldValues,
+        subAdmin: response?.headers?.['x-total-count']
+        
+      })
       console.log("response:- ", response);
     } catch (error) {
       console.log("error", error);

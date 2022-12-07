@@ -206,7 +206,7 @@ const ViewOperationMembers = () => {
                         response?.data?.isCGFStaff === true ? "true" : "false",
                     role: response?.data?.roleId,
                     replacedOperationMember:
-                        response?.data?.replacedUsers[0].name,
+                        response?.data?.replacedUsers[0]?.name ?? "N/A",
                 });
                 fetchRole(response?.data?.roleId);
                 setIsLoading(false);

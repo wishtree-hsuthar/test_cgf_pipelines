@@ -415,6 +415,7 @@ const SubAdminList = () => {
                                         downloadFunction(
                                             "CGF Admins",
                                             setToasterDetails,
+                                            false,
                                             cgfAdminRef,
                                             DOWNLOAD_CGF_ADMIN
                                         )

@@ -74,39 +74,39 @@ function OperationMemberList() {
         moduleAccessForOperationMember[0]?.operationMember
     );
 
-    const downloadOperationMembers = async () => {
-        try {
-            const response = await privateAxios.get(DOWNLOAD_OPERATION_MEMBER, {
-                responseType: "blob",
-            });
-            console.log(
-                "resposne from download operation members admins",
-                response
-            );
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute(
-                "download",
-                `Operation Members - ${new Date()}.xls`
-            );
-            document.body.appendChild(link);
-            link.click();
-            if (response.status == 200) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Success!",
-                        descriptionMessage: "Download successfull!",
+    // const downloadOperationMembers = async () => {
+    //     try {
+    //         const response = await privateAxios.get(DOWNLOAD_OPERATION_MEMBER, {
+    //             responseType: "blob",
+    //         });
+    //         console.log(
+    //             "resposne from download operation members admins",
+    //             response
+    //         );
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement("a");
+    //         link.href = url;
+    //         link.setAttribute(
+    //             "download",
+    //             `Operation Members - ${new Date()}.xls`
+    //         );
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         if (response.status == 200) {
+    //             setToasterDetails(
+    //                 {
+    //                     titleMessage: "Success!",
+    //                     descriptionMessage: "Download successfull!",
 
-                        messageType: "success",
-                    },
-                    () => operationMemberRef.current()
-                );
-            }
-        } catch (error) {
-            console.log("Error from download operation members", error);
-        }
-    };
+    //                     messageType: "success",
+    //                 },
+    //                 () => operationMemberRef.current()
+    //             );
+    //         }
+    //     } catch (error) {
+    //         console.log("Error from download operation members", error);
+    //     }
+    // };
     const onSearchChangeHandler = (e) => {
         console.log("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
@@ -175,7 +175,7 @@ function OperationMemberList() {
                                             downloadFunction(
                                                 "Operation Members",
                                                 setToasterDetails,
-                                                // params.id,
+                                                false,
                                                 operationMemberRef,
                                                 DOWNLOAD_OPERATION_MEMBER
                                             )
