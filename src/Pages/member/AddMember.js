@@ -640,9 +640,9 @@ const AddMember = () => {
                           },
                         }}
                         options={
-                          watch("cgfCategory") === "Manufacturer"
-                            ? cgfActivitiesManufacturer
-                            : cgfActivitiesRetailer
+                          watch("cgfCategory") === "Retailer"
+                            ? cgfActivitiesRetailer
+                            : cgfActivitiesManufacturer
                         }
                         isDisabled={watch("cgfCategory") === "Other"}
                       />

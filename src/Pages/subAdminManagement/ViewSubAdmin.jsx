@@ -26,6 +26,7 @@ import Toaster from "../../components/Toaster";
 import DialogBox from "../../components/DialogBox";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { PlayCircle } from "@mui/icons-material";
 
 const ViewSubAdmin = () => {
     //custom hook to set title of page
@@ -332,7 +333,7 @@ const ViewSubAdmin = () => {
                                         </label>
                                         <TextField
                                             id="outlined-basic"
-                                            placeholder="Enter sub admin name"
+                                            placeholder="N/A"
                                             variant="outlined"
                                             className={`input-field`}
                                             disabled={true}
@@ -350,7 +351,7 @@ const ViewSubAdmin = () => {
                                         <TextField
                                             className={`input-field `}
                                             id="outlined-basic"
-                                            placeholder="Enter email address"
+                                            placeholder="N/A"
                                             variant="outlined"
                                             disabled={true}
                                             value={
@@ -403,11 +404,13 @@ const ViewSubAdmin = () => {
                                                     renderInput={(params) => (
                                                         <TextField
                                                             {...params}
+                                                            placeholder="N/A"
                                                             inputProps={{
                                                                 ...params.inputProps,
                                                                 autoComplete:
                                                                     "", // disable autocomplete and autofill
                                                             }}
+                                                            
                                                             // value={value}
                                                             // onChange={(e) =>
                                                             //     setValue(e.target.value)
@@ -429,7 +432,7 @@ const ViewSubAdmin = () => {
                                                 //     errors.email && "input-error"
                                                 // }`}
                                                 id="outlined-basic"
-                                                placeholder="Enter phone number"
+                                                placeholder="N/A"
                                                 variant="outlined"
                                                 // {...register("phoneNumber")}
                                                 disabled
