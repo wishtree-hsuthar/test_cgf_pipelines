@@ -199,7 +199,7 @@ const AddSubAdmin = () => {
         );
         data = {
             ...data,
-            phoneNumber: Number(data.phoneNumber),
+            phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
             // roleId: authUser.roleId._id,
         };
 

@@ -628,7 +628,7 @@ const ViewMember = () => {
         } catch (error) {
             console.log("error in get role", error);
             if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
+            // setErrorToaster(error);
         }
     };
     useEffect(() => {
