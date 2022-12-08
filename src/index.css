@@ -775,9 +775,6 @@ select:focus {
 /* .member-filter-wrap {
   margin: 30px 0;
 } */
-.mb-30 {
-    margin-bottom: 30px;
-}
 .mr-20 {
     margin-right: 20px;
 }
@@ -1160,7 +1157,7 @@ input[type=checkbox]:checked:before {
     color: rgba(30, 30, 30, 1) !important;
 }
 .radio-btn .Mui-disabled svg:first-child path {
-    color: rgba(30, 30, 30, 0.2);
+    color: rgba(30, 30, 30, 0.5);
 }
 
 .dashboard-sect {
@@ -1768,7 +1765,7 @@ input:-webkit-autofill:active {
     color: #d98c08;
 }
 .mb-30 {
-    margin-bottom: 30px;
+    margin-bottom: 30px !important;
 }
 .mb-20 {
     margin-bottom: 20px;
@@ -2219,7 +2216,9 @@ input:-webkit-autofill:active {
     background: none !important;
     box-shadow: none;
     z-index: 1;
+    -webkit-text-fill-color: rgba(30, 30, 30, 0.5) !important;
 }
+.preview-que-blk .que-half-sect .datepicker-blk input {-webkit-text-fill-color: rgba(30, 30, 30, 0.5) !important;}
 .que-half-sect .datepicker-blk .MuiInputAdornment-root {
     z-index: 1;
 }
@@ -2494,22 +2493,26 @@ input::-ms-reveal {
     margin-bottom: 30px !important;
 }
 .accrej-txtblk {
-    max-width: 48%;
-    flex: 0 0 48%;
-    margin: 0 0 30px;
+    max-width: 100%;
+    flex: 0 0 100%;
+    margin: 0 0 10px;
     display: flex;
     justify-content: flex-start;
+    align-items: flex-start;
 }
 .accrej-label {
-    max-width: 50%;
-    flex: 0 0 50%;
+    max-width: 24%;
+    flex: 0 0 24%;
     font-family: "Proxima Nova Semibold", serif, sans-serif;
-    text-align: right;
-    margin-right: 5px;
+    text-align: left;
+    margin-right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;text-transform: capitalize;
 }
 .accrej-desc {
-    max-width: 48%;
-    flex: 0 0 48%;
+    max-width: 75%;
+    flex: 0 0 75%;
     text-align: left;
 }
 .input-textarea .MuiInputBase-root:hover fieldset {
@@ -2528,3 +2531,8 @@ input::-ms-reveal {
 .input-textarea .Mui-disabled.MuiInputBase-root:hover fieldset {
     border-color: rgba(30, 30, 30, 0.15) !important;
 }
+.que-half-sect .Mui-focused input:read-only ~ fieldset, .que-half-sect .Mui-focused textarea:read-only ~ fieldset {
+    border: none !important;
+}
+.preview-que-blk .que-half-sect .select-field .MuiSelect-select{-webkit-text-fill-color: rgba(30, 30, 30, 0.5) !important;}
+.radio-btn .Mui-disabled svg{color: rgba(30, 30, 30, 0.5) !important;}

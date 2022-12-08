@@ -543,15 +543,7 @@ function FillAssessment() {
                     <p className="accrej-txtwrap">
                         <span className="accrej-txtblk">
                             <span className="accrej-label">
-                                Member company :
-                            </span>
-                            <span className="accrej-desc">
-                                {assessment?.assignedMember?.companyName}
-                            </span>
-                        </span>
-                        <span className="accrej-txtblk">
-                            <span className="accrej-label">
-                                Assessment title :
+                                Assessment title <span>:</span>
                             </span>
                             <span className="accrej-desc">
                                 {assessment?.title}
@@ -559,14 +551,22 @@ function FillAssessment() {
                         </span>
                         <span className="accrej-txtblk">
                             <span className="accrej-label">
-                                Assessment type :
+                                Assessment type <span>:</span>
                             </span>
                             <span className="accrej-desc">
                                 {assessment?.assessmentType}
                             </span>
                         </span>
                         <span className="accrej-txtblk">
-                            <span className="accrej-label">Due date :</span>
+                            <span className="accrej-label">
+                                Member company <span>:</span>
+                            </span>
+                            <span className="accrej-desc">
+                                {assessment?.assignedMember?.companyName}
+                            </span>
+                        </span>
+                        <span className="accrej-txtblk">
+                            <span className="accrej-label">Due date <span>:</span></span>
                             <span className="accrej-desc">
                                 {new Date(
                                     assessment?.dueDate
@@ -631,7 +631,7 @@ function FillAssessment() {
                 title={<p>Re-open Assessment ?</p>}
                 info1={" "}
                 info2={
-                    <p>
+                    <p className="mb-30">
                         Are you sure you want to edit the given submitted
                         assessment?
                     </p>
