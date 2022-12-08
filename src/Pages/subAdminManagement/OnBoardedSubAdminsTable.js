@@ -5,6 +5,7 @@ import { ADD_SUB_ADMIN } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
+import Toaster from "../../components/Toaster";
 const onBoardedTableColumnHead = [
     {
         id: "name",
@@ -69,9 +70,12 @@ function OnBoardedSubAdminsTable({
     //state to hold wheather to make api call or not
     // const [makeApiCall, setMakeApiCall] = useState(true);
     //Refr for Toaster
-    const myRef = React.useRef();
+    const onBoardedCGFAdminRef = React.useRef();
     //Toaster Message setter
-    const [toasterDetails, setToasterDetails] = useCallbackState({
+    const [
+        onBoardedCgfAdmintoasterDetails,
+        setonBoardedCgfAdmintoasterDetails,
+    ] = useCallbackState({
         titleMessage: "",
         descriptionMessage: "",
         messageType: "success",
@@ -160,6 +164,17 @@ function OnBoardedSubAdminsTable({
 
             if (error?.response?.status == 401) {
                 // navigate("/login");
+                setonBoardedCgfAdmintoasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session Expired",
+                        messageType: "error",
+                    },
+                    () => onBoardedCGFAdminRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
             }
             setIsLoading(false);
         }
@@ -202,6 +217,14 @@ function OnBoardedSubAdminsTable({
     ]);
     return (
         <>
+            <Toaster
+                myRef={onBoardedCGFAdminRef}
+                titleMessage={onBoardedCgfAdmintoasterDetails.titleMessage}
+                descriptionMessage={
+                    onBoardedCgfAdmintoasterDetails.descriptionMessage
+                }
+                messageType={onBoardedCgfAdmintoasterDetails.messageType}
+            />
             {isLoading ? (
                 <div className="loader-blk">
                     <img src={Loader2} alt="Loading" />

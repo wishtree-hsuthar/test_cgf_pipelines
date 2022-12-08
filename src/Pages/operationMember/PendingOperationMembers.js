@@ -60,6 +60,7 @@ function PendingOperationMembers({
     setSearch,
     setFilters,
 }) {
+    const navigate = useNavigate();
     // state to manage loaders
     const [isLoading, setIsLoading] = useState(true);
     const [
@@ -210,6 +211,19 @@ function PendingOperationMembers({
             }
         } catch (error) {
             console.log("error from withdrawInvite id operation member", error);
+            if (error?.response?.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session Expired",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            }
         }
     };
 
@@ -256,6 +270,19 @@ function PendingOperationMembers({
                 "Error from get all pending operation member  tab table-------",
                 error
             );
+            if (error?.response?.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session Expired",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            }
             isMounted &&
                 setToasterDetails(
                     {

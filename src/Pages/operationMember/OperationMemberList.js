@@ -396,6 +396,8 @@ function OperationMemberList() {
                                     setFilters={setFilters}
                                     searchTimeout={searchTimeout}
                                     setSearchTimeout={setSearchTimeout}
+                                    setToasterDetails={setToasterDetails}
+                                    myRef={operationMemberRef}
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={1}>
