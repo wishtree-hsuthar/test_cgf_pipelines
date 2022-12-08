@@ -246,6 +246,60 @@ const Header = () => {
                                             </a>
                                         </li>
                                         {(SUPER_ADMIN ||
+                                            moduleAccessForAssessment[0]
+                                                ?.assessment?.list) && (
+                                            <li
+                                                className={
+                                                    location.pathname.includes(
+                                                        "/assessment-list"
+                                                    )
+                                                        ? "list-item active"
+                                                        : "list-item"
+                                                }
+                                            >
+                                                <a
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                    onClick={() =>
+                                                        navigate(
+                                                            "/assessment-list"
+                                                        )
+                                                    }
+                                                >
+                                                    Assessments
+                                                </a>
+                                            </li>
+                                        )}
+
+                                        {(SUPER_ADMIN ||
+                                            moduleAccessForQuestionnaire[0]
+                                                ?.questionnaire?.list) && (
+                                            <li
+                                                className={
+                                                    location.pathname.includes(
+                                                        "/questionnaires"
+                                                    )
+                                                        ? "list-item active"
+                                                        : "list-item"
+                                                }
+                                            >
+                                                <a
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                    onClick={() =>
+                                                        navigate(
+                                                            "/questionnaires"
+                                                        )
+                                                    }
+                                                >
+                                                    Questionnaires
+                                                </a>
+                                            </li>
+                                        )}
+
+                                        {(SUPER_ADMIN ||
                                             moduleAccessForOperationMember[0]
                                                 .operationMember.list ||
                                             moduleAccesForMember[0].member
@@ -352,33 +406,8 @@ const Header = () => {
                                                 </ul>
                                             </li>
                                         )}
-
-                                        {(SUPER_ADMIN ||
-                                            moduleAccessForAssessment[0]
-                                                ?.assessment?.list) && (
-                                            <li
-                                                className={
-                                                    location.pathname.includes(
-                                                        "/assessment-list"
-                                                    )
-                                                        ? "list-item active"
-                                                        : "list-item"
-                                                }
-                                            >
-                                                <a
-                                                    style={{
-                                                        cursor: "pointer",
-                                                    }}
-                                                    onClick={() =>
-                                                        navigate(
-                                                            "/assessment-list"
-                                                        )
-                                                    }
-                                                >
-                                                    Assessments
-                                                </a>
-                                            </li>
-                                        )}
+        
+                                        
 
                                         {SUPER_ADMIN && (
                                             <li
@@ -401,36 +430,11 @@ const Header = () => {
                                                             "none",
                                                     }}
                                                 >
-                                                    Roles and Privileges
+                                                    Roles Management
                                                 </a>
                                             </li>
                                         )}
-                                        {(SUPER_ADMIN ||
-                                            moduleAccessForQuestionnaire[0]
-                                                ?.questionnaire?.list) && (
-                                            <li
-                                                className={
-                                                    location.pathname.includes(
-                                                        "/questionnaires"
-                                                    )
-                                                        ? "list-item active"
-                                                        : "list-item"
-                                                }
-                                            >
-                                                <a
-                                                    style={{
-                                                        cursor: "pointer",
-                                                    }}
-                                                    onClick={() =>
-                                                        navigate(
-                                                            "/questionnaires"
-                                                        )
-                                                    }
-                                                >
-                                                    Questionnaires
-                                                </a>
-                                            </li>
-                                        )}
+                                        
                                     </ul>
                                 </div>
                             </div>
