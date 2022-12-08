@@ -237,7 +237,17 @@ function OnboardedOperationMember({
             console.log("Error from getSubAdmin-------", error);
 
             if (error?.response?.status == 401) {
-                navigate("/login");
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session Expired",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
             }
         }
     };

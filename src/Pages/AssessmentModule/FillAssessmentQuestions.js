@@ -19,7 +19,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { useParams } from "react-router-dom";
 
-export const AlphaRegEx = /^[a-z]+$/i;
+export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
 

@@ -166,9 +166,19 @@ function AddOperationMember() {
                 },
                 () => toasterRef.current()
             );
-            setTimeout(() => {
-                navigate("/login");
-            }, 3000);
+            if (error?.response?.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session Expired",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            }
         }
     };
 
@@ -229,6 +239,19 @@ function AddOperationMember() {
                 console.log("member company---", memberCompanies);
             } catch (error) {
                 console.log("error from fetch member company", error);
+                if (error?.response?.status == 401) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: "Session Expired",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                }
             }
         };
         let fetchCountries = async () => {
@@ -288,6 +311,19 @@ function AddOperationMember() {
             }
         } catch (error) {
             console.log("error from fetching reporting managers", error);
+            if (error?.response?.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session Expired",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            }
         }
     };
     const addOperationMember = async (data, navigateToListPage) => {
@@ -324,6 +360,19 @@ function AddOperationMember() {
                 "error in submit data for add operation member method",
                 error
             );
+            if (error?.response?.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session Expired",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            }
             setToasterDetails(
                 {
                     titleMessage: "Oops!",
@@ -359,7 +408,7 @@ function AddOperationMember() {
             fetchReportingManagers("", true);
             setValue("reportingManager", "");
         } else {
-            setValue("companyType", "External");
+            setValue("companyType", "N/A");
             setValue("memberId", "");
             // trigger("memberId");
             setShowTextField(false);
@@ -903,7 +952,13 @@ function AddOperationMember() {
                                                             // sx={{ width: 200 }}
                                                             options={
                                                                 memberCompanies
-                                                                    ? memberCompanies
+                                                                    ? memberCompanies.filter(
+                                                                          (
+                                                                              data
+                                                                          ) =>
+                                                                              data.companyName !==
+                                                                              "The Consumer Goods Forum"
+                                                                      )
                                                                     : []
                                                             }
                                                             placeholder="Select country code"

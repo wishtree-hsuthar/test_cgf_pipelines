@@ -27,7 +27,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { downloadFunction } from "../../utils/downloadFunction";
 
-export const AlphaRegEx = /^[a-z]+$/i;
+export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
 const ITEM_HEIGHT = 42;

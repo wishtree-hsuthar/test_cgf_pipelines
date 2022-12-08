@@ -99,7 +99,7 @@ function EditAssessment() {
         async (id, isCGFStaff) => {
             try {
                 const response = await privateAxios.get(
-                    FETCH_OPERATION_MEMBER + id + "/list"
+                    FETCH_OPERATION_MEMBER + id + "/master"
                     // isCGFStaff
                     //     ? FETCH_OPERATION_MEMBER + id + "/master/internal"
                     //     : FETCH_OPERATION_MEMBER + id
@@ -166,7 +166,7 @@ function EditAssessment() {
                 // fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
                 //     response.data?.assignedMember?._id
                 // );
-                fetchMember();
+                fetchMember(response.data.assignedMember?._id);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
                 setIsLoading(false);
@@ -227,10 +227,10 @@ function EditAssessment() {
         };
     }, []);
 
-    const fetchMember = async () => {
+    const fetchMember = async (id) => {
         try {
             const response = await privateAxios.get(
-                ADD_OPERATION_MEMBER + "/list"
+                ADD_OPERATION_MEMBER + "/member/" + id + "/master"
             );
             console.log("Member fetched", response.data);
             setOperationMemberForAddAssessments(
@@ -539,6 +539,7 @@ function EditAssessment() {
                                                 placeholder={
                                                     "Select assessment "
                                                 }
+                                                isDisabled
                                                 myHelper={
                                                     helperTextForAssessment
                                                 }

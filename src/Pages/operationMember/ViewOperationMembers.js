@@ -762,14 +762,7 @@ const ViewOperationMembers = () => {
                                                         }`}
                                                         id="outlined-basic"
                                                         placeholder="N/A"
-                                                        // helperText={
-                                                        //     error
-                                                        //         ?
-                                                        //               .address[
-                                                        //               error.type
-                                                        //           ]
-                                                        //         : " "
-                                                        // }
+                                                        helperText={" "}
                                                         variant="outlined"
                                                     />
                                                 )}
