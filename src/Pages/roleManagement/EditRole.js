@@ -388,7 +388,13 @@ const EditRole = () => {
                                           [previleg]: {
                                             ...previous[previleg],
                                             fill: !previous[previleg]["fill"],
-                                            all: false,
+                                            all:
+                                              !previous[previleg]["fill"] &&
+                                              previous[previleg]["list"] &&
+                                              previous[previleg]["add"] &&
+                                              previous[previleg]["edit"] &&
+                                              previous[previleg]["view"] &&
+                                              previous[previleg]["delete"],
                                           },
                                         }))
                                       }
@@ -406,7 +412,11 @@ const EditRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           list: !previous[previleg]["list"],
-                                          all: false,
+                                          all: !previous[previleg]["list"] &&
+                                          previous[previleg]["add"] &&
+                                          previous[previleg]["edit"] &&
+                                          previous[previleg]["view"] &&
+                                          previous[previleg]["delete"],
                                         },
                                       }))
                                     }
@@ -424,7 +434,9 @@ const EditRole = () => {
                                           add: !previous[previleg]["add"],
                                           list: !previous[previleg]["add"],
                                           view: !previous[previleg]["add"],
-                                          all: false,
+                                          all: !previous[previleg]["add"] &&
+                                          previous[previleg]["edit"] &&
+                                          previous[previleg]["delete"],
                                         },
                                       }))
                                     }
@@ -442,7 +454,9 @@ const EditRole = () => {
                                           edit: !previous[previleg]["edit"],
                                           list: !previous[previleg]["edit"],
                                           view: !previous[previleg]["edit"],
-                                          all: false,
+                                          all: previous[previleg]["add"] &&
+                                          !previous[previleg]["edit"] &&
+                                          previous[previleg]["delete"],
                                         },
                                       }))
                                     }
@@ -459,7 +473,10 @@ const EditRole = () => {
                                           ...previous[previleg],
                                           view: !previous[previleg]["view"],
                                           list: !previous[previleg]["view"],
-                                          all: false,
+                                          all: previous[previleg]["add"] &&
+                                          previous[previleg]["edit"] &&
+                                          !previous[previleg]["view"] &&
+                                          previous[previleg]["delete"],
                                         },
                                       }))
                                     }
@@ -478,7 +495,8 @@ const EditRole = () => {
                                           list: !previous[previleg]["delete"],
                                           edit: !previous[previleg]["delete"],
                                           view: !previous[previleg]["delete"],
-                                          all: false,
+                                          all: previous[previleg]["add"] &&
+                                          !previous[previleg]["delete"],
                                         },
                                       }))
                                     }

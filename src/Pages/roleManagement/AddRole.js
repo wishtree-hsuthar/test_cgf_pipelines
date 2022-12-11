@@ -40,7 +40,7 @@ const AddRole = () => {
   });
   //array to hold modules available
   let modules = [];
-  console.log("modules", modules);
+  // console.log("modules", modules);
   //variable to hold privileges
   let temp = {};
 
@@ -69,7 +69,7 @@ const AddRole = () => {
   const [previleges1, setPrevileges1] = useState({ ...temp });
 
   const createPrevileges1 = () => {
-    console.log("modules in side create prive func", modules);
+    // console.log("modules in side create prive func", modules);
     modules.forEach(
       (module) =>
         (temp[module.moduleId] = {
@@ -129,7 +129,7 @@ const AddRole = () => {
       getSystemModules();
       setTimeout(() => navigate1("/roles"), 3000);
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setToasterDetails1(
         {
           titleMessage: "Error",
@@ -145,15 +145,15 @@ const AddRole = () => {
     }
   };
   const onSubmitAddMoreClickHandler1 = async (data) => {
-    console.log("on Submit", data, "previleges1 on Submit", previleges1);
+    // console.log("on Submit", data, "previleges1 on Submit", previleges1);
     let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
     Object.keys(previlegesForBackend).forEach((p_key) => {
-      console.log("key", p_key);
+      // console.log("key", p_key);
       delete previlegesForBackend[p_key]["all"];
       delete previlegesForBackend[p_key]["name"];
     });
 
-    console.log("pBack", previlegesForBackend, "pFront", previleges1);
+    // console.log("pBack", previlegesForBackend, "pFront", previleges1);
 
     //backend call
     try {
@@ -189,7 +189,7 @@ const AddRole = () => {
     }
   };
   const onClickCancelHandler1 = () => {
-    console.log("inside on click cancel");
+    // console.log("inside on click cancel");
     reset({ defaultValues });
     return navigate1("/roles");
   };
@@ -215,7 +215,7 @@ const AddRole = () => {
       );
     }
   };
-
+  const checkForAllPrivilege = (tempModule, priv) => {};
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -439,7 +439,13 @@ const AddRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           fill: !previous[previleg]["fill"],
-                                          all: false,
+                                          all:
+                                            !previous[previleg]["fill"] &&
+                                            previous[previleg]["list"] &&
+                                            previous[previleg]["add"] &&
+                                            previous[previleg]["edit"] &&
+                                            previous[previleg]["view"] &&
+                                            previous[previleg]["delete"],
                                         },
                                       }))
                                     }
@@ -456,7 +462,12 @@ const AddRole = () => {
                                       [previleg]: {
                                         ...previous[previleg],
                                         list: !previous[previleg]["list"],
-                                        all: false,
+                                        all:
+                                          !previous[previleg]["list"] &&
+                                          previous[previleg]["add"] &&
+                                          previous[previleg]["edit"] &&
+                                          previous[previleg]["view"] &&
+                                          previous[previleg]["delete"],
                                       },
                                     }))
                                   }
@@ -474,7 +485,10 @@ const AddRole = () => {
                                         add: !previous[previleg]["add"],
                                         list: !previous[previleg]["add"],
                                         view: !previous[previleg]["add"],
-                                        all: false,
+                                        all:
+                                          !previous[previleg]["add"] &&
+                                          previous[previleg]["edit"] &&
+                                          previous[previleg]["delete"],
                                       },
                                     }))
                                   }
@@ -492,7 +506,10 @@ const AddRole = () => {
                                         edit: !previous[previleg]["edit"],
                                         list: !previous[previleg]["edit"],
                                         view: !previous[previleg]["edit"],
-                                        all: false,
+                                        all:
+                                          previous[previleg]["add"] &&
+                                          !previous[previleg]["edit"] &&
+                                          previous[previleg]["delete"],
                                       },
                                     }))
                                   }
@@ -509,7 +526,11 @@ const AddRole = () => {
                                         ...previous[previleg],
                                         view: !previous[previleg]["view"],
                                         list: !previous[previleg]["view"],
-                                        all: false,
+                                        all:
+                                          previous[previleg]["add"] &&
+                                          previous[previleg]["edit"] &&
+                                          !previous[previleg]["view"] &&
+                                          previous[previleg]["delete"],
                                       },
                                     }))
                                   }
@@ -528,7 +549,9 @@ const AddRole = () => {
                                         list: !previous[previleg]["delete"],
                                         edit: !previous[previleg]["delete"],
                                         view: !previous[previleg]["delete"],
-                                        all: false,
+                                        all:
+                                          previous[previleg]["add"] &&
+                                          !previous[previleg]["delete"],
                                       },
                                     }))
                                   }

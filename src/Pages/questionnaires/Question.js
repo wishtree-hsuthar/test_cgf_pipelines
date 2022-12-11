@@ -20,12 +20,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 const ITEM_HEIGHT = 42;
 const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4,
-        },
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4,
     },
-  }
+  },
+};
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
   height: 16,
@@ -141,11 +141,11 @@ const Question = ({
   ];
   const ITEM_HEIGHT = 42;
   const MenuProps = {
-      PaperProps: {
-          style: {
-              maxHeight: ITEM_HEIGHT * 4,
-          },
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4,
       },
+    },
   };
   //method to handle delete question
   const deleteQuestionHandler = (uuid, questionIdx) => {
@@ -304,7 +304,7 @@ const Question = ({
               <FormControl className="fullwidth-field">
                 <div className="select-field">
                   <Select
-                  MenuProps={MenuProps}
+                    MenuProps={MenuProps}
                     placeholder="Select Input type"
                     IconComponent={(props) => (
                       <KeyboardArrowDownRoundedIcon {...props} />
@@ -334,7 +334,11 @@ const Question = ({
                       question.inputType !== "singleTextbox" &&
                       question.inputType !== "textarea"
                     }
-                    renderValue={question?.validation !== "" ? undefined : () => <Placeholder>Select validation</Placeholder>}
+                    renderValue={
+                      question?.validation !== ""
+                        ? undefined
+                        : () => <Placeholder>Select validation</Placeholder>
+                    }
                     placeholder="Select Input validation"
                     displayEmpty
                     IconComponent={(props) => (
@@ -436,25 +440,30 @@ const Question = ({
           ))}
         <div className="que-card-icon-sect">
           <div className="que-card-icon-blk">
-            <div className="que-card-icon add-que-iconblk mr-40">
-              <Tooltip title="Add Question">
-                <img
-                  onClick={addQuestionHandler}
-                  src={process.env.PUBLIC_URL + "/images/add-question-icon.svg"}
-                  alt=""
-                />
-              </Tooltip>
-            </div>
+            {questionIdx === questionsLength - 1 && (
+              <div className="que-card-icon add-que-iconblk mr-40">
+                <Tooltip title="Add Question">
+                  <img
+                    onClick={addQuestionHandler}
+                    src={
+                      process.env.PUBLIC_URL + "/images/add-question-icon.svg"
+                    }
+                    alt=""
+                  />
+                </Tooltip>
+              </div>
+            )}
+
             {questionsLength !== 1 && (
               <div className="que-card-icon delete-iconblk mr-40">
                 <Tooltip title="Delete Question">
-                <img
-                  onClick={() =>
-                    deleteQuestionHandler(question?.uuid, questionIdx)
-                  }
-                  src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
-                  alt=""
-                />
+                  <img
+                    onClick={() =>
+                      deleteQuestionHandler(question?.uuid, questionIdx)
+                    }
+                    src={process.env.PUBLIC_URL + "/images/delete-icon.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </div>
             )}

@@ -3,11 +3,14 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
+import Loader2 from "../../assets/Loader/Loader2.svg";
 import TableComponent from "../../components/TableComponent";
 
 const VersionHistory = () => {
     const params = useParams();
     const navigate = useNavigate();
+      // state to manage loader
+      const [isLoading, setIsLoading] = useState(false);
     const versionHistoryTableHeadColumns = [
         // {
         //     id: "title",
@@ -103,7 +106,7 @@ const VersionHistory = () => {
     ) => {
         try {
             let url = generateUrl();
-            // setIsLoading(true);
+            setIsLoading(true);
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
@@ -117,7 +120,7 @@ const VersionHistory = () => {
             // let title = response.data.filter((data) => data.uuid === params.id);
             // setQuestionnaireTitle(title[0].title);
             // console.log("title from questionnaire = ", title);
-            // setIsLoading(false);
+            setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             // console.log(toasterDetails);
@@ -126,7 +129,7 @@ const VersionHistory = () => {
             if (error?.response?.status == 401) {
                 // navigate("/login");
             }
-            // setIsLoading(false);
+            setIsLoading(false);
         }
     };
     console.log("title from questionnaire = ", questionnaireTitle);
@@ -252,7 +255,10 @@ const VersionHistory = () => {
                         </div>
                     </div>
                     <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
-                        <TableComponent
+                        {
+                            isLoading ? <div className="loader-blk">
+                            <img src={Loader2} alt="Loading" />
+                        </div> :  <TableComponent
                             tableHead={versionHistoryTableHeadColumns}
                             records={versionHistoryRecords}
                             handleChangePage1={handleTablePageChange}
@@ -274,6 +280,8 @@ const VersionHistory = () => {
                             onRowClick={true}
                             isQuestionnare={true}
                         />
+                        }
+                       
                     </div>
                 </div>
             </section>

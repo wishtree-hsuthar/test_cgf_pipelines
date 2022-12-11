@@ -160,7 +160,7 @@ const Header = () => {
         const comparename =
             textnameElementRef.current.scrollWidth >
             textnameElementRef.current.clientWidth;
-        console.log("compare: ", compare);
+        // console.log("compare: ", compare);
         setHover(compare);
         setNameHover(comparename);
     };
