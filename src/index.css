@@ -2382,7 +2382,7 @@ input:-webkit-autofill:active {
     position: relative !important;
 }
 .que-table-render td {
-    padding: 19px 16px 0;
+    padding: 19px 15px 0;
     height: 100%;
     vertical-align: top;
 }
@@ -2536,3 +2536,14 @@ input::-ms-reveal {
 }
 .preview-que-blk .que-half-sect .select-field .MuiSelect-select{-webkit-text-fill-color: rgba(30, 30, 30, 0.5) !important;}
 .radio-btn .Mui-disabled svg{color: rgba(30, 30, 30, 0.5) !important;}
+
+/* Instruction table css */
+.instruct-table-sect table .MuiTableCell-root{white-space: initial !important;padding: 15px !important;vertical-align: top;}
+.instruct-table-sect table tr{height: auto;}
+.instruct-table-listblk {margin-left: 17px;}
+.instruct-table-sect table tr td:first-child{width: 28%;}
+.instruct-red{color: red !important;font-family: 'ProximaNova-Semibold' !important;}
+.instruct-txt-bold-underline{text-decoration: underline;font-family: 'ProximaNova-Semibold';}
+.instruct-table-sect {margin-bottom: 50px;}
+.instruct-table-sect .table-content-wrap .table-blk{padding-bottom: 0;}
+.replace-cgf-admin-btnblk{margin-bottom: 50px;}
