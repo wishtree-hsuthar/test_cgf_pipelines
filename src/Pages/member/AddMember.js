@@ -28,41 +28,11 @@ import Toaster from "../../components/Toaster";
 import { memberHelper } from "../../utils/helpertext";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { cgfCategories, cgfActivitiesManufacturer, cgfActivitiesRetailer } from "../../utils/MemberModuleUtil";
+
 
 //Parent company (Ideally get from backend)
-const parentCompany = [
-  "Google",
-  "MicroSoft",
-  "Nike",
-  "Adobe",
-  "Falcon",
-  "Apple",
-  "TSMC",
-  "Relience",
-  "Adani",
-  "Ford",
-  "Uber",
-  "wishtree",
-];
-
-//City (Ideally get from backend)
-const cityValue = [
-  "Mumbai",
-  "Paris",
-  "London",
-  "New york",
-  "Sydney",
-  "Melbourne",
-  "Perth",
-  "Toronto",
-  "Vancour",
-  "Texas",
-  "Delhi",
-  "Tokyo",
-];
-
 //CGF Categories (Ideally get from backend)
-const cgfCategories = ["Manufacturer", "Retailer", "Other"];
 
 //Suggestion from het implement it later
 // const categories = {
@@ -72,25 +42,7 @@ const cgfCategories = ["Manufacturer", "Retailer", "Other"];
 
 // Object.keys(categories)
 // categories[category] = Array of activities[]
-const cgfActivitiesManufacturer = [
-  "Apparel",
-  "Food manufacturer",
-  "Household care",
-  "None",
-  "Non-food manufacturer",
-  "Personal care & beauty",
-];
-const cgfActivitiesRetailer = [
-  "Department store",
-  "Ecommerce",
-  "Food/Non food retailer",
-  "Food retailer",
-  "Food service",
-  "Grocery",
-  "Health/beauty drugstore",
-  "Non food retailer",
-  "Wholesaler",
-];
+
 
 const AddMember = () => {
   //custom hook to set title of page
@@ -148,17 +100,17 @@ const AddMember = () => {
     roleId: "",
   };
   //to hold all regions
-  const [arrOfRegions, setArrOfRegions] = useState([]);
+  const [arrOfRegionsAddMember, setArrOfRegionsAddMember] = useState([]);
   //to hold array of countries for perticular region for Company Adress
-  const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
+  const [arrOfCountryRegionsAddMember, setArrOfCountryRegionsAddMember] = useState([]);
   //to hold array of Country states
-  const [arrOfStateCountry, setArrOfStateCountry] = useState([]);
-  const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
-  const [arrOfParentCompany, setArrOfParentCompany] = useState([]);
-  const [arrOfCites, setArrOfCites] = useState([]);
+  const [arrOfStateCountryAddMember, setArrOfStateCountryAddMember] = useState([]);
+  const [arrOfCountryCodeAddMember, setArrOfCountryCodeAddMember] = useState([]);
+  const [arrOfParentCompanyAddMember, setArrOfParentCompanyAddMember] = useState([]);
+  const [arrOfCitesAddMember, setArrOfCitesAddMember] = useState([]);
 
   //to hold array of countries for perticular region for CGF Office details
-  const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
+  const [arrOfCgfOfficeCountryRegionsAddMember, setArrOfCgfOfficeCountryRegionsAddMember] =
     useState([]);
 
   // To fetch and set roles
@@ -253,7 +205,7 @@ const AddMember = () => {
     console.log("Inside Country Change ", e.target.value);
     setValue("country", e.target.value);
     const stateCountries = await axios.get(STATES + `/${e.target.value}`);
-    setArrOfStateCountry(stateCountries.data);
+    setArrOfStateCountryAddMember(stateCountries.data);
     console.log("state countries: ", stateCountries);
     setValue("state", "");
     setValue("city", "");
@@ -268,7 +220,7 @@ const AddMember = () => {
         url += `&state=${watch("state")}`
       }
       const response = await axios.get(url);
-      setArrOfCites(response.data);
+      setArrOfCitesAddMember(response.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setErrorToaster(error);
@@ -289,7 +241,7 @@ const AddMember = () => {
     const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries(
       countriesOnRegion.data
     );
-    setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
+    setArrOfCgfOfficeCountryRegionsAddMember([...arrOfCgfOfficeCountryRegionsTemp]);
   };
   //method to set region and update other fields accordingly
   const onRegionChangeHandler = async (e) => {
@@ -304,7 +256,7 @@ const AddMember = () => {
     const arrOfCountryRegionsTemp = formatRegionCountries(
       countriesOnRegion.data
     );
-    setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
+    setArrOfCountryRegionsAddMember([...arrOfCountryRegionsTemp]);
   };
 
   const getCountryCode = async (controller) => {
@@ -318,7 +270,7 @@ const AddMember = () => {
         arrOfCountryCodeTemp.push(code.countryCode);
       });
       const countryCodeSet = new Set(arrOfCountryCodeTemp);
-      setArrOfCountryCode([...countryCodeSet]);
+      setArrOfCountryCodeAddMember([...countryCodeSet]);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setErrorToaster(error);
@@ -340,8 +292,8 @@ const AddMember = () => {
         signal: controller.signal,
       });
       // console.log("regions ", regions.data);
-      setArrOfRegions(regions.data);
-      return arrOfRegions;
+      setArrOfRegionsAddMember(regions.data);
+      return arrOfRegionsAddMember;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setErrorToaster(error);
@@ -380,7 +332,7 @@ const AddMember = () => {
       const response = await axios.get(PARENT_COMPINES, {
         signal: controller.signal,
       });
-      setArrOfParentCompany(response?.data);
+      setArrOfParentCompanyAddMember(response?.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setErrorToaster(error);
@@ -413,9 +365,9 @@ const AddMember = () => {
   useEffect(() => {
     // let isMounted = true;
     const controller = new AbortController();
-    arrOfRegions.length === 0 && getRegions(controller);
-    arrOfCountryCode.length === 0 && getCountryCode(controller);
-    arrOfParentCompany?.length === 0 && getParentCompany(controller);
+    arrOfRegionsAddMember.length === 0 && getRegions(controller);
+    arrOfCountryCodeAddMember.length === 0 && getCountryCode(controller);
+    arrOfParentCompanyAddMember?.length === 0 && getParentCompany(controller);
     roles.length === 0 && fetchRoles();
 
     return () => {
@@ -424,7 +376,7 @@ const AddMember = () => {
     };
   }, [watch]);
   // console.log("selected Region", watch("region"));
-  console.log("arrOfparentCompnies", arrOfParentCompany);
+  console.log("arrOfparentCompnies", arrOfParentCompanyAddMember);
   return (
     <div className="page-wrapper">
       <Toaster
@@ -540,7 +492,7 @@ const AddMember = () => {
                               watch("parentCompany")?.length > 0 && (
                                 <Paper
                                   className={
-                                    arrOfParentCompany?.length > 5
+                                    arrOfParentCompanyAddMember?.length > 5
                                       ? "autocomplete-option-txt autocomplete-option-limit"
                                       : "autocomplete-option-txt"
                                   }
@@ -565,7 +517,7 @@ const AddMember = () => {
                             selectOnFocus
                             handleHomeEndKeys
                             id="free-solo-with-text-demo"
-                            options={arrOfParentCompany}
+                            options={arrOfParentCompanyAddMember}
                             // getOptionLabel={(option) => {
 
                             //   // Value selected with enter, right from the input
@@ -715,7 +667,7 @@ const AddMember = () => {
                                 PaperComponent={({ children }) => (
                                   <Paper
                                     className={
-                                      arrOfCountryCode?.length > 5
+                                      arrOfCountryCodeAddMember?.length > 5
                                         ? "autocomplete-option-txt autocomplete-option-limit"
                                         : "autocomplete-option-txt"
                                     }
@@ -723,7 +675,7 @@ const AddMember = () => {
                                     {children}
                                   </Paper>
                                 )}
-                                options={arrOfCountryCode}
+                                options={arrOfCountryCodeAddMember}
                                 autoHighlight
                                 // placeholder="Select country code"
                                 // getOptionLabel={(country) => country.name + " " + country}
@@ -819,7 +771,7 @@ const AddMember = () => {
                         placeholder="Select region"
                         myHelper={memberHelper}
                         rules={{ required: true }}
-                        options={arrOfRegions}
+                        options={arrOfRegionsAddMember}
                       />
                     </div>
                   </div>
@@ -836,7 +788,7 @@ const AddMember = () => {
                         placeholder="Select country"
                         myHelper={memberHelper}
                         rules={{ required: true }}
-                        options={arrOfCountryRegions}
+                        options={arrOfCountryRegionsAddMember}
                       />
                     </div>
                   </div>
@@ -850,7 +802,7 @@ const AddMember = () => {
                         myOnChange={onStateChangeHandler}
                         placeholder="Select state"
                         myHelper={memberHelper}
-                        options={arrOfStateCountry}
+                        options={arrOfStateCountryAddMember}
                       />
                     </div>
                   </div>
@@ -868,7 +820,7 @@ const AddMember = () => {
                               watch("city") && (
                                 <Paper
                                   className={
-                                    arrOfCites?.length > 5
+                                    arrOfCitesAddMember?.length > 5
                                       ? "autocomplete-option-txt autocomplete-option-limit"
                                       : "autocomplete-option-txt"
                                   }
@@ -893,7 +845,7 @@ const AddMember = () => {
                             selectOnFocus
                             handleHomeEndKeys
                             id="free-solo-with-text-demo"
-                            options={arrOfCites}
+                            options={arrOfCitesAddMember}
                             // getOptionLabel={(option) => {
                             //   // Value selected with enter, right from the input
                             //   if (typeof option === "string") {
@@ -976,7 +928,7 @@ const AddMember = () => {
                         placeholder="Select region"
                         myHelper={memberHelper}
                         rules={{ required: true }}
-                        options={arrOfRegions}
+                        options={arrOfRegionsAddMember}
                       />
                     </div>
                   </div>
@@ -992,7 +944,7 @@ const AddMember = () => {
                         placeholder="Select country"
                         myHelper={memberHelper}
                         rules={{ required: true }}
-                        options={arrOfCgfOfficeCountryRegions}
+                        options={arrOfCgfOfficeCountryRegionsAddMember}
                       />
                     </div>
                   </div>
@@ -1151,7 +1103,7 @@ const AddMember = () => {
                                 PaperComponent={({ children }) => (
                                   <Paper
                                     className={
-                                      arrOfCountryCode?.length > 5
+                                      arrOfCountryCodeAddMember?.length > 5
                                         ? "autocomplete-option-txt autocomplete-option-limit"
                                         : "autocomplete-option-txt"
                                     }
@@ -1174,7 +1126,7 @@ const AddMember = () => {
                                   trigger("memberContactPhoneNuber");
                                 }}
                                 // sx={{ width: 200 }}
-                                options={arrOfCountryCode}
+                                options={arrOfCountryCodeAddMember}
                                 autoHighlight
                                 placeholder="+91"
                                 // getOptionLabel={(country) => country.name + " " + country}
