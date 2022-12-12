@@ -72,7 +72,7 @@ const AddMember = () => {
       () => myRef.current()
     );
   };
-  const defaultValues = {
+  const defaultValuesAddMember = {
     memberCompany: "",
     companyType: "Internal",
     parentCompany: "",
@@ -118,12 +118,12 @@ const AddMember = () => {
 
   const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
     reValidateMode: "onChange",
-    defaultValues: defaultValues,
+    defaultValues: defaultValuesAddMember,
   });
-  const onSubmitFunctionCall = async (data) => {
+  const onSubmitFunctionCallAddMember = async (data) => {
     console.log("data", data);
     try {
-      let backendObject = {
+      let backendObjectAddMember = {
         parentCompany: data.parentCompany,
         countryCode: data.countryCode,
         phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
@@ -154,7 +154,7 @@ const AddMember = () => {
           roleId: data.roleId,
         },
       };
-      const response = await axios.post(MEMBER, { ...backendObject });
+      const response = await axios.post(MEMBER, { ...backendObjectAddMember });
       console.log("response : ", response);
       setToasterDetails(
         {
@@ -164,8 +164,8 @@ const AddMember = () => {
         },
         () => myRef.current()
       );
-      console.log("Default values: ", defaultValues);
-      reset({ defaultValues });
+      console.log("Default values: ", defaultValuesAddMember);
+      reset({ defaultValuesAddMember });
       return true;
     } catch (error) {
       setErrorToaster(error);
@@ -173,23 +173,23 @@ const AddMember = () => {
     }
   };
   // On Click cancel handler
-  const onClickCancelHandler = () => {
-    reset({ defaultValues });
+  const onClickCancelHandlerAddMember = () => {
+    reset({ defaultValuesAddMember });
     navigate("/users/members");
   };
-  const onSubmit = async (data) => {
+  const onSubmitAddMember = async (data) => {
     console.log("data", data);
-    const isSubmited = await onSubmitFunctionCall(data);
+    const isSubmited = await onSubmitFunctionCallAddMember(data);
     console.log("is Submited", isSubmited);
     isSubmited && setTimeout(() => navigate("/users/members"), 3000);
   };
   //method to handle on add more button click handler
-  const onAddMoreButtonClickHandler = (data) => {
-    onSubmitFunctionCall(data);
+  const onAddMoreButtonClickHandlerAddMember = (data) => {
+    onSubmitFunctionCallAddMember(data);
   };
   //method to handle region change for cgf office
 
-  const formatRegionCountries = (regionCountries) => {
+  const formatRegionCountriesAddMember = (regionCountries) => {
     regionCountries.forEach(
       (country, id) =>
         (regionCountries[id] = country.hasOwnProperty("_id")
@@ -201,7 +201,7 @@ const AddMember = () => {
   };
 
   //method to handle country change
-  const onCountryChangeHandler = async (e) => {
+  const onCountryChangeHandlerAddMember = async (e) => {
     console.log("Inside Country Change ", e.target.value);
     setValue("country", e.target.value);
     const stateCountries = await axios.get(STATES + `/${e.target.value}`);
@@ -209,10 +209,10 @@ const AddMember = () => {
     console.log("state countries: ", stateCountries);
     setValue("state", "");
     setValue("city", "");
-    getCites();
+    getCitesAddMember();
     trigger("country");
   };
-  const getCites = async () => {
+  const getCitesAddMember = async () => {
     try {
       let url =
         CITES + `/?region=${watch("region")}&country=${watch("country")}`;
@@ -227,39 +227,39 @@ const AddMember = () => {
     }
   };
   //method to handle state change
-  const onStateChangeHandler = async (e) => {
+  const onStateChangeHandlerAddMember = async (e) => {
     setValue("state", e.target.value);
     setValue("city", "");
-    getCites();
+    getCitesAddMember();
   };
   //method to handle office Region Change Handler
-  const cgfOfficeRegionChangeHandler = async (e) => {
+  const cgfOfficeRegionChangeHandlerAddMember = async (e) => {
     setValue("cgfOfficeRegion", e.target.value);
     setValue("cgfOfficeCountry", "");
     trigger("cgfOfficeRegion");
-    const countriesOnRegion = await getCountries(watch("cgfOfficeRegion"));
-    const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries(
+    const countriesOnRegion = await getCountriesAddMember(watch("cgfOfficeRegion"));
+    const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountriesAddMember(
       countriesOnRegion.data
     );
     setArrOfCgfOfficeCountryRegionsAddMember([...arrOfCgfOfficeCountryRegionsTemp]);
   };
   //method to set region and update other fields accordingly
-  const onRegionChangeHandler = async (e) => {
+  const onRegionChangeHandlerAddMember = async (e) => {
     console.log("region: ", e.target.value);
     setValue("country", "");
     setValue("state", "");
     setValue("city", "");
     setValue("region", e.target.value);
     trigger("region");
-    const countriesOnRegion = await getCountries(watch("region"));
+    const countriesOnRegion = await getCountriesAddMember(watch("region"));
     console.log("countries", countriesOnRegion);
-    const arrOfCountryRegionsTemp = formatRegionCountries(
+    const arrOfCountryRegionsTemp = formatRegionCountriesAddMember(
       countriesOnRegion.data
     );
     setArrOfCountryRegionsAddMember([...arrOfCountryRegionsTemp]);
   };
 
-  const getCountryCode = async (controller) => {
+  const getCountryCodeAddMember = async (controller) => {
     try {
       const response = await axios.get(COUNTRIES, {
         signal: controller.signal,
@@ -276,7 +276,7 @@ const AddMember = () => {
       setErrorToaster(error);
     }
   };
-  const getCountries = async (region) => {
+  const getCountriesAddMember = async (region) => {
     try {
       return await axios.get(REGIONCOUNTRIES + `/${region}`);
       // return regionCountries;
@@ -286,7 +286,7 @@ const AddMember = () => {
       return [];
     }
   };
-  const getRegions = async (controller) => {
+  const getRegionsAddMember = async (controller) => {
     try {
       const regions = await axios.get(REGIONS, {
         signal: controller.signal,
@@ -302,7 +302,7 @@ const AddMember = () => {
   };
 
   // Fetch roles
-  let fetchRoles = async () => {
+  let fetchRolesAddMember = async () => {
     try {
       const response = await privateAxios.get(FETCH_ROLES);
       console.log("Response from fetch roles - ", response);
@@ -327,7 +327,7 @@ const AddMember = () => {
     }
   };
 
-  const getParentCompany = async (controller) => {
+  const getParentCompanyAddMember = async (controller) => {
     try {
       const response = await axios.get(PARENT_COMPINES, {
         signal: controller.signal,
@@ -344,12 +344,12 @@ const AddMember = () => {
     if (e.code === "Enter") e.preventDefault();
   };
 
-  const categoryChangeHandler = (e) => {
+  const categoryChangeHandlerAddMember = (e) => {
     setValue("cgfCategory", e.target.value);
     trigger("cgfCategory");
     setValue("cgfActivity", "");
   };
-  const phoneNumberChangeHandler = (e, name, code) => {
+  const phoneNumberChangeHandlerAddMember = (e, name, code) => {
     console.log(
       "on number change",
       e.target.value,
@@ -365,10 +365,10 @@ const AddMember = () => {
   useEffect(() => {
     // let isMounted = true;
     const controller = new AbortController();
-    arrOfRegionsAddMember.length === 0 && getRegions(controller);
-    arrOfCountryCodeAddMember.length === 0 && getCountryCode(controller);
-    arrOfParentCompanyAddMember?.length === 0 && getParentCompany(controller);
-    roles.length === 0 && fetchRoles();
+    arrOfRegionsAddMember.length === 0 && getRegionsAddMember(controller);
+    arrOfCountryCodeAddMember.length === 0 && getCountryCodeAddMember(controller);
+    arrOfParentCompanyAddMember?.length === 0 && getParentCompanyAddMember(controller);
+    roles.length === 0 && fetchRolesAddMember();
 
     return () => {
       // isMounted = false;
@@ -406,7 +406,7 @@ const AddMember = () => {
                 </span>
                 <span
                   className="addmore-txt"
-                  onClick={handleSubmit(onAddMoreButtonClickHandler)}
+                  onClick={handleSubmit(onAddMoreButtonClickHandlerAddMember)}
                 >
                   Save & Add More
                 </span>
@@ -414,7 +414,7 @@ const AddMember = () => {
             </div>
           </div>
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmitAddMember)}
             onKeyDown={(e) => checkKeyDown(e)}
           >
             <div className="card-wrapper">
@@ -561,7 +561,7 @@ const AddMember = () => {
                         placeholder="Select category"
                         myHelper={memberHelper}
                         rules={{ required: true }}
-                        myOnChange={categoryChangeHandler}
+                        myOnChange={categoryChangeHandlerAddMember}
                         options={cgfCategories}
                       />
                     </div>
@@ -711,7 +711,7 @@ const AddMember = () => {
                           placeholder="1234567890"
                           myHelper={memberHelper}
                           myOnChange={(e) =>
-                            phoneNumberChangeHandler(
+                            phoneNumberChangeHandlerAddMember(
                               e,
                               "phoneNumber",
                               "countryCode"
@@ -766,7 +766,7 @@ const AddMember = () => {
                       </label>
                       <Dropdown
                         control={control}
-                        myOnChange={onRegionChangeHandler}
+                        myOnChange={onRegionChangeHandlerAddMember}
                         name="region"
                         placeholder="Select region"
                         myHelper={memberHelper}
@@ -784,7 +784,7 @@ const AddMember = () => {
                         isDisabled={!watch("region")}
                         control={control}
                         name="country"
-                        myOnChange={onCountryChangeHandler}
+                        myOnChange={onCountryChangeHandlerAddMember}
                         placeholder="Select country"
                         myHelper={memberHelper}
                         rules={{ required: true }}
@@ -799,7 +799,7 @@ const AddMember = () => {
                         isDisabled={!watch("country")}
                         control={control}
                         name="state"
-                        myOnChange={onStateChangeHandler}
+                        myOnChange={onStateChangeHandlerAddMember}
                         placeholder="Select state"
                         myHelper={memberHelper}
                         options={arrOfStateCountryAddMember}
@@ -924,7 +924,7 @@ const AddMember = () => {
                       <Dropdown
                         control={control}
                         name="cgfOfficeRegion"
-                        myOnChange={cgfOfficeRegionChangeHandler}
+                        myOnChange={cgfOfficeRegionChangeHandlerAddMember}
                         placeholder="Select region"
                         myHelper={memberHelper}
                         rules={{ required: true }}
@@ -1161,7 +1161,7 @@ const AddMember = () => {
                           control={control}
                           name="memberContactPhoneNuber"
                           myOnChange={(e) =>
-                            phoneNumberChangeHandler(
+                            phoneNumberChangeHandlerAddMember(
                               e,
                               "memberContactPhoneNuber",
                               "memberContactCountryCode"
@@ -1217,7 +1217,7 @@ const AddMember = () => {
               <div className="form-btn flex-between add-members-btn">
                 <button
                   type="reset"
-                  onClick={onClickCancelHandler}
+                  onClick={onClickCancelHandlerAddMember}
                   className="secondary-button mr-10"
                 >
                   Cancel

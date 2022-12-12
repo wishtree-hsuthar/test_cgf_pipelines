@@ -50,27 +50,27 @@ function PendingCGFAdmins({
     toasterDetails,
     setToasterDetails,
 }) {
-    const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
-    const [withdrawInviteid, setWithdrawInviteid] = useState("");
-    const [withdrawInviteUser, setWithdrawInviteUser] = useState([]);
+    const [openDeleteDialogBoxPendingCGFAdmin, setOpenDeleteDialogBoxPendingCGFAdmin] = useState(false);
+    const [withdrawInviteidPendingCGFAdmin, setWithdrawInviteidPendingCGFAdmin] = useState("");
+    const [withdrawInviteUserPendingCGFAdmin, setWithdrawInviteUserPendingCGFAdmin] = useState([]);
 
     // state to manage loader
     const [isLoading, setIsLoading] = useState(true);
 
     //state to hold search timeout delay
-    const [searchTimeout, setSearchTimeout] = useState(null);
+    const [searchTimeoutPendingCGFAdmin, setSearchTimeoutPendingCGFAdmin] = useState(null);
     //state to hold wheather to make api call or not
 
     const navigate = useNavigate();
     //(onboarded users/cgf-admin/ table) order in which records needs to show
-    const [pageForPendingTab, setPageForPendingTab] = React.useState(1);
-    const [rowsPerPageForPendingTab, setRowsPerPageForPendingTab] =
+    const [pageForPendingTabCGFAdmin, setPageForPendingTabCGFAdmin] = React.useState(1);
+    const [rowsPerPageForPendingTabCGFAdmin, setRowsPerPageForPendingTabCGFAdmin] =
         React.useState(10);
-    const [orderForPendingTab, setOrderForPendingTab] = React.useState("desc");
+    const [orderForPendingTabCGFAdmin, setOrderForPendingTabCGFAdmin] = React.useState("desc");
     const [orderByForPending, setOrderByForPendingTab] =
         React.useState("createdAt");
-    const [recordsForPendingTab, setRecordsForPendingTab] = React.useState([]);
-    const [totalRecordsForPendingTab, setTotalRecordsForPendingTab] =
+    const [recordsForPendingTabCGFAdmin, setRecordsForPendingTabCGFAdmin] = React.useState([]);
+    const [totalRecordsForPendingTabCGFAdmin, setTotalRecordsForPendingTabCGFAdmin] =
         React.useState(0);
 
     const pendingKeysOrder = [
@@ -135,38 +135,38 @@ function PendingCGFAdmins({
             "data in updaterecords method in pending method",
             staleData
         );
-        setRecordsForPendingTab([...staleData]);
+        setRecordsForPendingTabCGFAdmin([...staleData]);
     };
 
     //page change method for pending tab
-    const handlePendingTablePageChange = (newPage) => {
-        setPageForPendingTab(newPage);
+    const handlePendingTablePageChangeCGFAdmin = (newPage) => {
+        setPageForPendingTabCGFAdmin(newPage);
     };
 
     // rows per page method for pending tab
-    const handleRowsPerPageChangeForPendingTab = (event) => {
+    const handleRowsPerPageChangeForPendingTabCGFAdmin = (event) => {
         console.log("rows per page", event);
-        setRowsPerPageForPendingTab(parseInt(event.target.value, 10));
-        setPageForPendingTab(1);
+        setRowsPerPageForPendingTabCGFAdmin(parseInt(event.target.value, 10));
+        setPageForPendingTabCGFAdmin(1);
     };
 
     //  on click delete icon open delete modal
-    const onClickDeleteIconHandler = async (id) => {
+    const onClickDeleteIconHandlerCGFAdmin = async (id) => {
         console.log("id for delete", id);
-        setOpenDeleteDialogBox(true);
-        setWithdrawInviteid(id);
-        console.log("records: ", recordsForPendingTab);
-        const withdrawCgfAdmin = recordsForPendingTab.filter(
+        setOpenDeleteDialogBoxPendingCGFAdmin(true);
+        setWithdrawInviteidPendingCGFAdmin(id);
+        console.log("records: ", recordsForPendingTabCGFAdmin);
+        const withdrawCgfAdmin = recordsForPendingTabCGFAdmin.filter(
             (user) => user?._id === id
         );
         console.log("Withdraw user", withdrawCgfAdmin);
-        setWithdrawInviteUser([...withdrawCgfAdmin]);
+        setWithdrawInviteUserPendingCGFAdmin([...withdrawCgfAdmin]);
     };
 
-    const withdrawInviteById = async () => {
+    const withdrawInviteByIdCGFAdmin = async () => {
         try {
             const response = await privateAxios.delete(
-                WITHDRAW_SUB_ADMIN + withdrawInviteid
+                WITHDRAW_SUB_ADMIN + withdrawInviteidPendingCGFAdmin
             );
             if (response.status == 200) {
                 console.log("user invite withdrawn successfully");
@@ -178,8 +178,8 @@ function PendingCGFAdmins({
                     },
                     () => myRef.current()
                 );
-                getSubAdminPending();
-                setOpenDeleteDialogBox(false);
+                getSubAdminPendingCGFAdmin();
+                setOpenDeleteDialogBoxPendingCGFAdmin(false);
             }
         } catch (error) {
             if (error?.response?.status == 401) {
@@ -200,28 +200,28 @@ function PendingCGFAdmins({
     };
 
     // url for pending tab
-    const generateUrlForPendingTab = () => {
+    const generateUrlForPendingTabCGFAdmin = () => {
         console.log("filters", filters);
         console.log("Search", search);
-        let url = `${ADD_SUB_ADMIN}/pending/list?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
+        let url = `${ADD_SUB_ADMIN}/pending/list?page=${pageForPendingTabCGFAdmin}&size=${rowsPerPageForPendingTabCGFAdmin}&orderBy=${orderByForPending}&order=${orderForPendingTabCGFAdmin}`;
 
         if (search?.length >= 3) url += `&search=${search}`;
 
         return url;
     };
 
-    const getSubAdminPending = async (
+    const getSubAdminPendingCGFAdmin = async (
         isMounted = true,
         controller = new AbortController()
     ) => {
         try {
-            let url = generateUrlForPendingTab();
+            let url = generateUrlForPendingTabCGFAdmin();
             setIsLoading(true);
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
             // console.log(response.headers["x-total-count"]);
-            setTotalRecordsForPendingTab(
+            setTotalRecordsForPendingTabCGFAdmin(
                 parseInt(response.headers["x-total-count"])
             );
             console.log(
@@ -273,12 +273,12 @@ function PendingCGFAdmins({
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
-        makeApiCall && getSubAdminPending(isMounted, controller);
+        makeApiCall && getSubAdminPendingCGFAdmin(isMounted, controller);
         console.log("makeApiCall", makeApiCall);
         console.log("inside use Effect");
         return () => {
             isMounted = false;
-            clearTimeout(searchTimeout);
+            clearTimeout(searchTimeoutPendingCGFAdmin);
             controller.abort();
         };
     }, [
@@ -286,11 +286,11 @@ function PendingCGFAdmins({
         makeApiCall,
 
         setMakeApiCall,
-        searchTimeout,
-        pageForPendingTab,
-        rowsPerPageForPendingTab,
+        searchTimeoutPendingCGFAdmin,
+        pageForPendingTabCGFAdmin,
+        rowsPerPageForPendingTabCGFAdmin,
         orderByForPending,
-        orderForPendingTab,
+        orderForPendingTabCGFAdmin,
     ]);
     {
         console.log("makeApiCall outside UseEffect ", makeApiCall);
@@ -302,7 +302,7 @@ function PendingCGFAdmins({
                 title={
                     <p>
                         Withdraw "
-                        {withdrawInviteUser && `${withdrawInviteUser[0]?.name}`}
+                        {withdrawInviteUserPendingCGFAdmin && `${withdrawInviteUserPendingCGFAdmin[0]?.name}`}
                         's" Invitation
                     </p>
                 }
@@ -316,13 +316,13 @@ function PendingCGFAdmins({
                 primaryButtonText={"Yes"}
                 secondaryButtonText={"No"}
                 onPrimaryModalButtonClickHandler={() => {
-                    withdrawInviteById();
+                    withdrawInviteByIdCGFAdmin();
                 }}
                 onSecondaryModalButtonClickHandler={() => {
-                    setOpenDeleteDialogBox(false);
+                    setOpenDeleteDialogBoxPendingCGFAdmin(false);
                 }}
-                openModal={openDeleteDialogBox}
-                setOpenModal={setOpenDeleteDialogBox}
+                openModal={openDeleteDialogBoxPendingCGFAdmin}
+                setOpenModal={setOpenDeleteDialogBoxPendingCGFAdmin}
             />
             {isLoading ? (
                 <div className="loader-blk">
@@ -331,22 +331,22 @@ function PendingCGFAdmins({
             ) : (
                 <TableComponent
                     tableHead={pendingTableColumnHead}
-                    records={recordsForPendingTab}
-                    handleChangePage1={handlePendingTablePageChange}
+                    records={recordsForPendingTabCGFAdmin}
+                    handleChangePage1={handlePendingTablePageChangeCGFAdmin}
                     handleChangeRowsPerPage1={
-                        handleRowsPerPageChangeForPendingTab
+                        handleRowsPerPageChangeForPendingTabCGFAdmin
                     }
-                    page={pageForPendingTab}
-                    rowsPerPage={rowsPerPageForPendingTab}
-                    totalRecords={totalRecordsForPendingTab}
+                    page={pageForPendingTabCGFAdmin}
+                    rowsPerPage={rowsPerPageForPendingTabCGFAdmin}
+                    totalRecords={totalRecordsForPendingTabCGFAdmin}
                     orderBy={orderByForPending}
                     icons={["delete"]}
                     // onClickVisibilityIconHandler1={
-                    //     onClickDeleteIconHandler
+                    //     onClickDeleteIconHandlerCGFAdmin
                     // }
-                    onClickDeleteIconHandler1={onClickDeleteIconHandler}
-                    order={orderForPendingTab}
-                    setOrder={setOrderForPendingTab}
+                    onClickDeleteIconHandler1={onClickDeleteIconHandlerCGFAdmin}
+                    order={orderForPendingTabCGFAdmin}
+                    setOrder={setOrderForPendingTabCGFAdmin}
                     setOrderBy={setOrderByForPendingTab}
                     setCheckBoxes={false}
                     onRowClick={false}
