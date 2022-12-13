@@ -136,7 +136,6 @@ const SubAdminList = () => {
 
         let staleData = data;
         staleData.forEach((cgfAdmin) => {
-            // console.log("subRole-------", cgfAdmin["data"]["subRoleId"].name);
             delete cgfAdmin["updatedAt"];
             delete cgfAdmin["data"]["description"];
             delete cgfAdmin["data"]["countryCode"];
@@ -151,7 +150,6 @@ const SubAdminList = () => {
             delete cgfAdmin["tokenExpiry"];
             delete cgfAdmin["tokenType"];
 
-            // delete cgfAdmin["isActive"];
             cgfAdmin["createdAt"] = new Date(
                 cgfAdmin["createdAt"]
             ).toLocaleDateString("en-US", {
@@ -160,14 +158,9 @@ const SubAdminList = () => {
                 year: "numeric",
             });
 
-            // cgfAdmin["role"] = cgfAdmin["data"]["subRoleId"].name;
-            // cgfAdmin["role"] = cgfAdmin["data"]["subRole"][0].name;
             cgfAdmin["role"] = cgfAdmin["subRole"][0].name;
             cgfAdmin["name"] = cgfAdmin["data"].name;
             cgfAdmin["email"] = cgfAdmin["data"].email;
-            // cgfAdmin["createdAt"] = cgfAdmin["createdAt"];
-            // delete cgfAdmin["data"]["subRoleId"];
-            // delete cgfAdmin["data"]["subRole"][0].name;
             delete cgfAdmin["subRole"];
             delete cgfAdmin["data"];
             delete cgfAdmin["memberData"];
@@ -261,7 +254,7 @@ const SubAdminList = () => {
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
+            
             setTotalRecordsForPendingTab(
                 parseInt(response.headers["x-total-count"])
             );
@@ -274,7 +267,7 @@ const SubAdminList = () => {
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
+            
             console.log(
                 "Error from getSubAdmin pending tab table-------",
                 error
@@ -301,7 +294,7 @@ const SubAdminList = () => {
         () => {
             let isMounted = true;
             const controller = new AbortController();
-            // makeApiCall && getSubAdminPending(isMounted, controller);
+        
             fetchRolesForCGFAdmin();
             console.log("makeApiCall", makeApiCall);
             console.log("inside use Effect");
@@ -326,7 +319,7 @@ const SubAdminList = () => {
         // console.log("order", order, "order BY", orderBy);
     }
 
-    // let roles = ["System-Administrator", "Co-ordinator"];
+    
     const [selectedRoles, setSelectedRoles] = useState([]);
     const [selectedStatusFilter, setSelectedStatusFilter] = useState("");
 
@@ -557,10 +550,6 @@ const SubAdminList = () => {
                                 selectedRoles={selectedRoles}
                                 toasterDetails={toasterDetails}
                                 setToasterDetails={setToasterDetails}
-                                // setWithdrawInviteid={setWithdrawInviteid}
-                                // setOpenDeleteDialogBox={setOpenDeleteDialogBox}
-                                // openDeleteDialogBox={openDeleteDialogBox}
-                                // withdrawInviteById={withdrawInviteid}
                             />
                         </TabPanel>
                     </div>

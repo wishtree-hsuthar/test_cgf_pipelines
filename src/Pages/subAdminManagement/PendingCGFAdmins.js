@@ -86,7 +86,6 @@ function PendingCGFAdmins({
 
         let staleData = data;
         staleData.forEach((object) => {
-            // console.log("subRole-------", object["data"]["subRoleId"].name);
             delete object["updatedAt"];
             delete object["data"]["description"];
             delete object["data"]["countryCode"];
@@ -102,7 +101,7 @@ function PendingCGFAdmins({
             delete object["tokenExpiry"];
             delete object["tokenType"];
 
-            // delete object["isActive"];
+
             object["createdAt"] = new Date(
                 object["createdAt"]
             ).toLocaleDateString("en-US", {
@@ -111,15 +110,9 @@ function PendingCGFAdmins({
                 year: "numeric",
             });
 
-            // object["role"] = object["data"]["subRoleId"].name;
-            // object["role"] = object["data"]["subRole"][0].name;
             object["role"] = object["subRole"][0].name;
             object["name"] = object["data"]["name"];
             object["email"] = object["data"].email;
-            // object["_id"] = object["_id"];
-            // object["createdAt"] = object["createdAt"];
-            // delete object["data"]["subRoleId"];
-            // delete object["data"]["subRole"][0].name;
             delete object["createdBy"];
             delete object["subRole"];
             delete object["data"];
@@ -220,7 +213,7 @@ function PendingCGFAdmins({
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
+            
             setTotalRecordsForPendingTabCGFAdmin(
                 parseInt(response.headers["x-total-count"])
             );
@@ -233,7 +226,7 @@ function PendingCGFAdmins({
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
+            
             if (error?.response?.status == 401) {
                 setToasterDetails(
                     {
@@ -294,7 +287,7 @@ function PendingCGFAdmins({
     ]);
     {
         console.log("makeApiCall outside UseEffect ", makeApiCall);
-        // console.log("order", order, "order BY", orderBy);
+        
     }
     return (
         <>

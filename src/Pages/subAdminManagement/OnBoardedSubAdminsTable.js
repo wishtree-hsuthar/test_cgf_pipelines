@@ -59,10 +59,6 @@ function OnBoardedSubAdminsTable({
     const [records, setRecords] = React.useState([]);
     const [totalRecords, setTotalRecords] = React.useState(0);
     const [selected, setSelected] = useState([]);
-    // const [search, setSearch] = useState("");
-    // const [filters, setFilters] = useState({
-    //     status: "all",
-    // });
     const [isLoading, setIsLoading] = useState(true);
 
     //state to hold search timeout delay
@@ -110,7 +106,6 @@ function OnBoardedSubAdminsTable({
             delete onboardedCGFAdmin["uuid"];
             delete onboardedCGFAdmin["phoneNumber"];
             delete onboardedCGFAdmin["isCGFAdmin"];
-            // delete onboardedCGFAdmin["_id"];
             onboardedCGFAdmin["createdAt"] = new Date(
                 onboardedCGFAdmin["createdAt"]
             ).toLocaleDateString("en-US", {
@@ -151,7 +146,6 @@ function OnBoardedSubAdminsTable({
             const onBoardedCGFAdmin = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(onBoardedCGFAdmin.headers["x-total-count"]);
             setTotalRecords(parseInt(onBoardedCGFAdmin.headers["x-total-count"]));
             console.log("Response from sub admin api get", onBoardedCGFAdmin);
 
@@ -159,11 +153,10 @@ function OnBoardedSubAdminsTable({
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
             console.log("Error from getSubAdmin-------", error);
 
             if (error?.onBoardedCGFAdmin?.status == 401) {
-                // navigate("/login");
+
                 setonBoardedCgfAdmintoasterDetails(
                     {
                         titleMessage: "Oops!",

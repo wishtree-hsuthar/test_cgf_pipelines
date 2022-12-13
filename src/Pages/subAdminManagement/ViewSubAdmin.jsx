@@ -40,7 +40,6 @@ const ViewSubAdmin = () => {
     const [modalData, setData] = useState();
 
     const [isActive, setActive] = useState("false");
-    // const [countries, setCountries] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [value, setValue] = useState({
         name: "India",
@@ -180,64 +179,7 @@ const ViewSubAdmin = () => {
         boxShadow: 24,
         p: 4,
     };
-    // const CustomModal = () => {
-    //     return modalData ? (
-    //         <Modal
-    //             aria-labelledby="transition-modal-title"
-    //             aria-describedby="transition-modal-description"
-    //             open={open}
-    //             onClose={handleClose}
-    //             closeAfterTransition
-    //             BackdropComponent={Backdrop}
-    //             BackdropProps={{
-    //                 timeout: 500,
-    //             }}
-    //             className="popup-blk"
-    //         >
-    //             <Fade in={open}>
-    //                 <Box sx={style} className="popup-box">
-    //                     <div
-    //                         id="transition-modal-title"
-    //                         className="popup-ttl-blk"
-    //                     >
-    //                         <h2 className="popup-ttl heading2">
-    //                             {modalData.title}
-    //                         </h2>
-    //                         <span
-    //                             className="popup-close-icon"
-    //                             onClick={handleClose}
-    //                         >
-    //                             <CloseIcon />
-    //                         </span>
-    //                     </div>
-    //                     <div
-    //                         id="transition-modal-description"
-    //                         className="popup-body"
-    //                     >
-    //                         <div className="popup-content-blk text-center">
-    //                             <p>open{modalData.info}</p>
-    //                             <div className="form-btn flex-center">
-    //                                 <button
-    //                                     type="submit"
-    //                                     className="secondary-button mr-10"
-    //                                 >
-    //                                     {modalData.secondarybtn}
-    //                                 </button>
-    //                                 <button
-    //                                     type="submit"
-    //                                     className="primary-button"
-    //                                 >
-    //                                     {modalData.primarybtn}
-    //                                 </button>
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                 </Box>
-    //             </Fade>
-    //         </Modal>
-    //     ) : null;
-    // };
-
+    
     return (
         <div className="page-wrapper">
             <Toaster

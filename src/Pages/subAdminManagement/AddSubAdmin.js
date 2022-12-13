@@ -51,7 +51,6 @@ const AddSubAdmin = () => {
     const authUser = useSelector((state) => state.user.userObj);
     const navigate = useNavigate();
     const {
-        register,
         handleSubmit,
         watch,
         formState: { errors },
@@ -70,11 +69,9 @@ const AddSubAdmin = () => {
     });
     const location = useLocation();
     console.log(location);
-    // const [value, setValue] = useState({});
     const [roleSelected, setRoleSelected] = useState("");
     const [countriesAddCGFAdmin, setCountriesAddCGFAdmin] = useState([]);
     const [rolesAddCGFAdmin, setRolesAddCGFAdmin] = useState([]);
-    const [defaultRole, setDefaultRole] = useState("");
     const toasterRef = useRef();
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
@@ -129,10 +126,6 @@ const AddSubAdmin = () => {
                     let tempCountryCodeSet = new Set(tempCountryCode);
                     setCountriesAddCGFAdmin([...tempCountryCodeSet]);
                 }
-                // isMounted &&
-                //     setCountries(
-                //         response?.data.map((country) => country.countryCode)
-                //     );
             } catch (error) {
                 console.log("error from countries api", error);
                 setToasterDetails(
@@ -149,10 +142,6 @@ const AddSubAdmin = () => {
         fetchRoles();
         addCGFAdminFetchCountries();
 
-        // return () => {
-        //     isMounted = false;
-        //     // controller.abort();
-        // };
     }, []);
     console.log("countriess----", countriesAddCGFAdmin);
 
@@ -199,7 +188,6 @@ const AddSubAdmin = () => {
 
         console.log("new phone number", data);
         addSubAdminData(data);
-        // navigate("/users/cgf-admin/");
         setTimeout(() => {
             navigate("/users/cgf-admin/");
         }, 3000);

@@ -121,7 +121,6 @@ const ReplaceSubAdmin = () => {
             delete object["uuid"];
             delete object["phoneNumber"];
             delete object["createdAt"];
-            // object["role"] = object["subRole"][0].name;
             delete object["subRole"];
             delete object["subRoleId"];
             delete object["isActive"];
@@ -150,7 +149,6 @@ const ReplaceSubAdmin = () => {
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
             setTotalReplaceCGFAdminRecords(parseInt(response.headers["x-total-count"]));
             console.log("Response from sub admin api get", response);
 
@@ -158,7 +156,6 @@ const ReplaceSubAdmin = () => {
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
             console.log("Error from getSubAdmin-------", error);
             isMounted &&
                 setToasterDetails(
