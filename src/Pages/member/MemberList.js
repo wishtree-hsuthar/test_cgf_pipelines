@@ -189,7 +189,6 @@ const MemberList = () => {
             object.totalOperationMembers =
                 object["totalOperationMembers"]?.toString();
             delete object["representative"];
-            // delete object["createdBy"];
             delete object["memberRepresentativeId"];
             keysOrder.forEach((k) => {
                 const v = object[k];
@@ -262,7 +261,6 @@ const MemberList = () => {
             isActive: "status",
         };
 
-        // let url = `${MEMBER}?membeListPage=${page}&size=${rowsPerPage}&orderBy=&order=${order}`;
         let url = `${MEMBER}/list?page=${membeListPage}&size=${memberListrowsPerPage}&orderBy=${namesMappings[orderByMemberList]}&order=${memberListOrder}`;
         if (searchMember?.length >= 3) url = url + `&search=${searchMember}`;
         if (memberFilters?.status !== "all" && memberFilters?.status !== "none")
@@ -339,8 +337,6 @@ const MemberList = () => {
             controller.abort();
         };
     }, [membeListPage, memberListrowsPerPage, orderByMemberList, memberListOrder, memberFilters, makeApiCallMemberList]);
-    // console.log("recordsMemberList: ", recordsMemberList);
-    // console.log("memberFilters: ", memberFilters);
     return (
         <div className="page-wrapper">
             <Toaster

@@ -129,7 +129,6 @@ const EditMember = () => {
         ...backendObject,
       });
       reset(defaultValues);
-      // console.log("response : ", response);
       setToasterDetailsEditMember(
         {
           titleMessage: "Success!",
@@ -167,7 +166,6 @@ const EditMember = () => {
 
   //method to handle country change
   const onCountryChangeHandler1 = async (e) => {
-    // console.log("Inside Country Change ", e.target.value);
     setValue("country", e.target.value);
     setValue("state", "");
     setValue("city", "");
@@ -185,14 +183,12 @@ const EditMember = () => {
 
   //method to set region and update other fields accordingly
   const onRegionChangeHandler1 = async (e) => {
-    // console.log("region: ", e.target.value);
     setValue("country", "");
     setValue("state", "");
     setValue("city", "");
     setValue("region", e.target.value);
     trigger("region");
     const countriesOnRegion = await getCountries1(watch("region"));
-    // console.log("countries", countriesOnRegion);
     const arrOfCountryRegionsTemp = formatRegionCountries1(
       countriesOnRegion?.data
     );
@@ -260,10 +256,10 @@ const EditMember = () => {
       const regions = await axios.get(REGIONS, {
         signal: controller.signal,
       });
-      // console.log("regions ", regions.data);
+      
       setArrOfRegions(regions?.data);
       const countriesOnRegion1 = await getCountries1(watch("region"));
-      // console.log("countries", countriesOnRegion1);
+      
       const arrOfCountryRegionsTemp1 = formatRegionCountries1(
         countriesOnRegion1.data
       );
@@ -325,7 +321,6 @@ const EditMember = () => {
     try {
       setIsLoading(true);
       const response = await axios.get(MEMBER + `/${param.id}`);
-      // console.log("response for member: ", response);
       const data = response.data;
       setIsLoading(false);
       reset({

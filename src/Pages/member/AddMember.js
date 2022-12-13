@@ -265,7 +265,6 @@ const AddMember = () => {
       const regions = await axios.get(REGIONS, {
         signal: controller.signal,
       });
-      // console.log("regions ", regions.data);
       setArrOfRegionsAddMember(regions.data);
       return arrOfRegionsAddMember;
     } catch (error) {
@@ -337,7 +336,6 @@ const AddMember = () => {
     trigger(code);
   };
   useEffect(() => {
-    // let isMounted = true;
     const controller = new AbortController();
     arrOfRegionsAddMember.length === 0 && getRegionsAddMember(controller);
     arrOfCountryCodeAddMember.length === 0 && getCountryCodeAddMember(controller);
@@ -345,11 +343,10 @@ const AddMember = () => {
     addMemberRoles.length === 0 && fetchRolesAddMember();
 
     return () => {
-      // isMounted = false;
       controller.abort();
     };
   }, [watch]);
-  // console.log("selected Region", watch("region"));
+  
   console.log("arrOfparentCompnies", arrOfParentCompanyAddMember);
   return (
     <div className="page-wrapper">
@@ -494,13 +491,6 @@ const AddMember = () => {
                             options={arrOfParentCompanyAddMember}
                             // getOptionLabel={(option) => {
 
-                            //   // Value selected with enter, right from the input
-                            //   if (typeof option === "string") {
-                            //     // console.log("option inside type string",option)
-                            //     return option;
-                            //   }
-                            //   return option;
-                            // }}
                             renderOption={(props, option) => (
                               <li className="searchable-inputlist" {...props}>
                                 {option}
