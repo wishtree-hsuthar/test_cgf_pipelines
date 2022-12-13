@@ -28,7 +28,7 @@ import Toaster from "../../components/Toaster";
 import { memberHelper } from "../../utils/helpertext";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { cgfCategories, cgfActivitiesManufacturer, cgfActivitiesRetailer } from "../../utils/MemberModuleUtil";
+import { cgfCategories, cgfActivitiesManufacturer, cgfActivitiesRetailer, defaultValues } from "../../utils/MemberModuleUtil";
 
 
 //Parent company (Ideally get from backend)
@@ -51,7 +51,7 @@ const AddMember = () => {
   // Refr for Toaster
   const myRef = React.useRef();
   //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
+  const [toasterDetailsAddMember, setToasterDetailsAddMember] = useCallbackState({
     titleMessage: "",
     descriptionMessage: "",
     messageType: "success",
@@ -59,7 +59,7 @@ const AddMember = () => {
   //method to call all error toaster from this method
   const setErrorToaster = (error) => {
     console.log("error", error);
-    setToasterDetails(
+    setToasterDetailsAddMember(
       {
         titleMessage: "Error",
         descriptionMessage:
@@ -72,7 +72,7 @@ const AddMember = () => {
       () => myRef.current()
     );
   };
-  const defaultValuesAddMember = {
+  const defaultValues = {
     memberCompany: "",
     companyType: "Internal",
     parentCompany: "",
@@ -113,12 +113,12 @@ const AddMember = () => {
   const [arrOfCgfOfficeCountryRegionsAddMember, setArrOfCgfOfficeCountryRegionsAddMember] =
     useState([]);
 
-  // To fetch and set roles
-  const [roles, setRoles] = useState([]);
+  // To fetch and set addMemberRoles
+  const [addMemberRoles, addMemberSetRoles] = useState([]);
 
   const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
     reValidateMode: "onChange",
-    defaultValues: defaultValuesAddMember,
+    defaultValues: defaultValues,
   });
   const onSubmitFunctionCallAddMember = async (data) => {
     console.log("data", data);
@@ -156,7 +156,7 @@ const AddMember = () => {
       };
       const response = await axios.post(MEMBER, { ...backendObjectAddMember });
       console.log("response : ", response);
-      setToasterDetails(
+      setToasterDetailsAddMember(
         {
           titleMessage: "Success!",
           descriptionMessage: "New member added successfully!",
@@ -164,8 +164,8 @@ const AddMember = () => {
         },
         () => myRef.current()
       );
-      console.log("Default values: ", defaultValuesAddMember);
-      reset({ defaultValuesAddMember });
+      console.log("Default values: ", defaultValues);
+      reset({ defaultValues });
       return true;
     } catch (error) {
       setErrorToaster(error);
@@ -174,7 +174,7 @@ const AddMember = () => {
   };
   // On Click cancel handler
   const onClickCancelHandlerAddMember = () => {
-    reset({ defaultValuesAddMember });
+    reset({ defaultValues });
     navigate("/users/members");
   };
   const onSubmitAddMember = async (data) => {
@@ -301,19 +301,19 @@ const AddMember = () => {
     }
   };
 
-  // Fetch roles
+  // Fetch addMemberRoles
   let fetchRolesAddMember = async () => {
     try {
       const response = await privateAxios.get(FETCH_ROLES);
-      console.log("Response from fetch roles - ", response);
-      setRoles(response.data);
+      console.log("Response from fetch addMemberRoles - ", response);
+      addMemberSetRoles(response.data);
       response.data.filter(
         (data) =>
           data.name === "Member Representative" && reset({ roleId: data._id })
       );
     } catch (error) {
-      console.log("Error from fetch roles", error);
-      setToasterDetails(
+      console.log("Error from fetch addMemberRoles", error);
+      setToasterDetailsAddMember(
         {
           titleMessage: "Oops!",
           descriptionMessage: error?.response?.data?.message,
@@ -368,7 +368,7 @@ const AddMember = () => {
     arrOfRegionsAddMember.length === 0 && getRegionsAddMember(controller);
     arrOfCountryCodeAddMember.length === 0 && getCountryCodeAddMember(controller);
     arrOfParentCompanyAddMember?.length === 0 && getParentCompanyAddMember(controller);
-    roles.length === 0 && fetchRolesAddMember();
+    addMemberRoles.length === 0 && fetchRolesAddMember();
 
     return () => {
       // isMounted = false;
@@ -381,9 +381,9 @@ const AddMember = () => {
     <div className="page-wrapper">
       <Toaster
         myRef={myRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
+        titleMessage={toasterDetailsAddMember.titleMessage}
+        descriptionMessage={toasterDetailsAddMember.descriptionMessage}
+        messageType={toasterDetailsAddMember.messageType}
       />
       <div className="breadcrumb-wrapper">
         <div className="container">
@@ -1202,7 +1202,7 @@ const AddMember = () => {
                         <Dropdown
                           name="roleId"
                           control={control}
-                          options={roles}
+                          options={addMemberRoles}
                           rules={{
                             required: true,
                           }}

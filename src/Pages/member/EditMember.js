@@ -71,7 +71,7 @@ const EditMember = () => {
   // Refr for Toaster
   const myRef = React.useRef();
   //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
+  const [toasterDetailsEditMember, setToasterDetailsEditMember] = useCallbackState({
     titleMessage: "",
     descriptionMessage: "",
     messageType: "success",
@@ -79,7 +79,7 @@ const EditMember = () => {
   //method to call all error toaster from this method
   const setErrorToaster1 = (error) => {
     console.log("error", error);
-    setToasterDetails(
+    setToasterDetailsEditMember(
       {
         titleMessage: "Error",
         descriptionMessage:
@@ -157,7 +157,7 @@ const EditMember = () => {
       });
       reset(defaultValues1);
       // console.log("response : ", response);
-      setToasterDetails(
+      setToasterDetailsEditMember(
         {
           titleMessage: "Success!",
           descriptionMessage: "Member details updated successfully!",
@@ -335,7 +335,7 @@ const EditMember = () => {
       setRoles(response.data);
     } catch (error) {
       console.log("Error from fetch roles", error);
-      setToasterDetails(
+      setToasterDetailsEditMember(
         {
           titleMessage: "Oops!",
           descriptionMessage: error?.response?.data?.message,
@@ -437,9 +437,9 @@ const EditMember = () => {
     <div className="page-wrapper">
       <Toaster
         myRef={myRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
+        titleMessage={toasterDetailsEditMember.titleMessage}
+        descriptionMessage={toasterDetailsEditMember.descriptionMessage}
+        messageType={toasterDetailsEditMember.messageType}
       />
       <div className="breadcrumb-wrapper">
         <div className="container">

@@ -69,7 +69,7 @@ const DialogBox = ({
                 <Box sx={style} className="popup-box">
                     <div id="transition-modal-title" className="popup-ttl-blk">
                         {/* {console.log("title", title)} */}
-                        {dialogTitle?.length <= 50 ? (
+                        {dialogTitle?.length <= 47 ? (
                             <h2 className="popup-ttl heading2">{title}</h2>
                         ) : (
                             <Tooltip title={dialogTitle}>

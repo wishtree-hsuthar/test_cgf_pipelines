@@ -35,6 +35,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import {defaultValues} from "../../utils/MemberModuleUtil"
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -289,7 +290,7 @@ const ViewMember = () => {
   //Refr for Toaster
   const myRef = React.useRef();
   //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
+  const [toasterDetailsViewMember, setToasterDetailsViewMember] = useCallbackState({
     titleMessage: "",
     descriptionMessage: "",
     messageType: "success",
@@ -297,7 +298,7 @@ const ViewMember = () => {
   //method to call all error toaster from this method
   const setErrorToaster = (error) => {
     // console.log("error", error);
-    setToasterDetails(
+    setToasterDetailsViewMember(
       {
         titleMessage: "Error",
         descriptionMessage:
@@ -310,36 +311,7 @@ const ViewMember = () => {
       () => myRef.current()
     );
   };
-  const defaultValues = {
-    memberCompany: "",
-    companyType: "Internal",
-    parentCompany: "",
-    cgfCategory: "Manufacturer",
-    cgfActivity: "",
-    replacedMember: "",
-    corporateEmail: "",
-    countryCode: "",
-    phoneNumber: "",
-    websiteUrl: "",
-    region: "",
-    country: "",
-    state: "",
-    city: "",
-    address: "",
-    cgfOfficeRegion: "",
-    cgfOfficeCountry: "",
-    cgfOffice: "",
-    memberContactSalutation: "Mr.",
-    memberContactFullName: "",
-    title: "",
-    department: "",
-    memberContactCountryCode: "",
-    memberContactEmail: "",
-    memberContactPhoneNuber: "",
-    totalOperationMembers: "",
-    createdBy: "",
-    roleId: "",
-  };
+  
   //code to get id from url
   const param = useParams();
   //code form View Member
@@ -352,7 +324,7 @@ const ViewMember = () => {
   const onDialogPrimaryButtonClickHandler = async () => {
     try {
       await axios.delete(MEMBER + `/${param.id}`);
-      setToasterDetails(
+      setToasterDetailsViewMember(
         {
           titleMessage: "Success",
           descriptionMessage: `${member?.companyName || "Member"} deleted!`,
@@ -364,9 +336,9 @@ const ViewMember = () => {
     } catch (error) {
       // console.log("error on delete", error);
       if (error?.code === "ERR_CANCELED") return;
-      // console.log(toasterDetails);
+      // console.log(toasterDetailsViewMember);
       setErrorToaster(error);
-      // setToasterDetails(
+      // setToasterDetailsViewMember(
       //   {
       //     titleMessage: "Error",
       //     descriptionMessage:
@@ -589,7 +561,7 @@ const ViewMember = () => {
       document.body.appendChild(link);
       link.click();
       if (response.status == 200) {
-        setToasterDetails(
+        setToasterDetailsViewMember(
           {
             titleMessage: "Success!",
             descriptionMessage: "Download successfull!",
@@ -649,9 +621,9 @@ const ViewMember = () => {
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
       <Toaster
         myRef={myRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
+        titleMessage={toasterDetailsViewMember.titleMessage}
+        descriptionMessage={toasterDetailsViewMember.descriptionMessage}
+        messageType={toasterDetailsViewMember.messageType}
       />
       <DialogBox
         title={
