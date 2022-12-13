@@ -19,7 +19,6 @@ export const COUNTRIES = `${REACT_APP_API_ENDPOINT}master/country/list`;
 export const STATES = `${REACT_APP_API_ENDPOINT}master/country`;
 // export const CITES = `${REACT_APP_API_ENDPOINT}master/cities`;
 
-
 //Member
 export const MEMBER = `${REACT_APP_API_ENDPOINT}members`;
 export const MEMBER_DROPDOWN = `${REACT_APP_API_ENDPOINT}members/master`;
@@ -30,7 +29,7 @@ export const CITES = `${REACT_APP_API_ENDPOINT}members/cities/master`;
 export const MEMBER_OPERATION_MEMBERS = `${REACT_APP_API_ENDPOINT}operation-member/member`;
 
 //sub admin
-export const FETCH_ROLES = `${REACT_APP_API_ENDPOINT}roles/list`;
+export const FETCH_ROLES = `${REACT_APP_API_ENDPOINT}roles/master`;
 export const ADD_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin`;
 export const FETCH_SUB_ADMIN_BY_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/`;
 export const UPDATE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/`;
@@ -75,4 +74,3 @@ export const VIEW_ROLE = `${REACT_APP_API_ENDPOINT}roles/`;
 export const ROLE_BY_ID = `${REACT_APP_API_ENDPOINT}roles/`;
 export const GET_ROLE_BY_ID = `${REACT_APP_API_ENDPOINT}roles/`;
 export const GET_USER_BY_ROLE = `${REACT_APP_API_ENDPOINT}roles/`;
-
