@@ -65,17 +65,10 @@ const PublishedQuestionnaires = ({
       delete questionnaireObject["updatedAt"];
 
       delete questionnaireObject["__v"];
-
-      // delete questionnaireObject["uuid"];
-      // delete questionnaireObject["createdAt"];
       delete questionnaireObject["isDraft"];
       delete questionnaireObject["isPublished"];
       // delete questionnaireObject["isActive"]
       delete questionnaireObject["vNo"];
-      // delete questionnaireObject[""];
-      // delete questionnaireObject["title"];
-      // delete questionnaireObject["updatedAt"];
-      // questionnaireObject["uuid"] = questionnaireObject["uuid"];
       questionnaireObject["createdAt"] = new Date(questionnaireObject["createdAt"]).toLocaleDateString(
         "en-US",
         {
@@ -109,7 +102,6 @@ const PublishedQuestionnaires = ({
     userAuth?.roleId?.name === "Super Admin"
       ? []
       : Object.values(privilege?.privileges);
-  // let publishedQuestionnairePrivilgeArray = privilege ? Object.values(privilege?.privileges) : [];
   let moduleAccesForMember = publishedQuestionnairePrivilgeArray
     .filter((data) => data?.moduleId?.name === "Questionnaire")
     .map((data) => ({
@@ -136,7 +128,6 @@ const PublishedQuestionnaires = ({
       const response = await privateAxios.get(url, {
         signal: controller.signal,
       });
-      // console.log(response.headers["x-total-count"]);
       setTotalRecordsPublishedQuestionnaire(
         parseInt(response.headers["x-total-count"])
       );

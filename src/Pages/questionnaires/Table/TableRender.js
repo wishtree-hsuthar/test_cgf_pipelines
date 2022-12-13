@@ -41,7 +41,6 @@ const TableRender = ({
 
   // on delete Row click handler
   const onRowDeleteClickHandler = (rowId) => {
-    // console.log("Inside row Delete method");
     let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire?.sections[sectionIndex]?.rowValues?.splice(rowId, 1);
     setQuestionnaire(tempQuestionnaire);

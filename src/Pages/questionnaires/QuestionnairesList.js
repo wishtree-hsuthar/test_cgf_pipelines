@@ -8,27 +8,6 @@ import PublishedQuestionnaires from "./PublishedQuestionnaires";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 
-// function TabPanel(props) {
-//     const { children, value, index, ...other } = props;
-
-//     return (
-//         <div
-//             role="tabpanel"
-//             hidden={value !== index}
-//             id={`simple-tabpanel-${index}`}
-//             aria-labelledby={`simple-tab-${index}`}
-//             {...other}
-//         >
-//             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-//         </div>
-//     );
-// }
-// TabPanel.propTypes = {
-//     children: PropTypes.node,
-//     index: PropTypes.number.isRequired,
-//     value: PropTypes.number.isRequired,
-// };
-
 function a11yPropsQuestionnaireList(index) {
     return {
         id: `simple-tab-${index}`,
@@ -51,15 +30,12 @@ function QuestionnairesList() {
     const [questionnaireValue, setQuestionnaireValue] = React.useState(0);
 
     const onQuestionnaireSearchChangeHandler = (e) => {
-        // console.log("event", e.key);
         if (searchTimeoutQuestionnaire) clearTimeout(searchTimeoutQuestionnaire);
         setMakeApiCallQuestionnaire(false);
-        // console.log("searchQuestionnaire values", e.target.value);
         setSearchQuestionnaire(e.target.value);
         setSearchTimeoutQuestionnaire(
             setTimeout(() => {
                 setMakeApiCallQuestionnaire(true);
-                // setPage(1);
             }, 1000)
         );
     };
@@ -82,10 +58,6 @@ function QuestionnairesList() {
                 add: data?.add,
             },
         }));
-    // console.log(
-    //     "module access member in view member",
-    //     moduleAccesForMember[0]?.member
-    // );
 
 
     const handleChange = (event, newValue) => {

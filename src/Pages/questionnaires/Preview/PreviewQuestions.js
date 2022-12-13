@@ -33,7 +33,7 @@ const MenuProps = {
 };
 
 const PreviewQuestions = ({ question }) => {
-  //   const [datevalue, setDateValue] = React.useState(null);
+  
 
   let questionLabel = question.questionTitle;
 

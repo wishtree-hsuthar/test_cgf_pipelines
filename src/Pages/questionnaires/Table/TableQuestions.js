@@ -65,14 +65,11 @@ const TableQuestions = ({
   const [openModal, setOpenModal] = useState(false);
   const [modalIndex, setModalIndex] = useState(-1)
   const onColumnChangeHandler = (event, columnId) => {
-    // console.log("Event: ", event.target.name, "columnId", columnId);
     const { name, value } = event.target;
     let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire.sections[sectionIndex].columnValues[columnId][name] =
       value;
     setQuestionnaire(tempQuestionnaire);
-    // const {name, value} = e.target;
-    // console.log("Questionnaire:- ", questionnaire);
   };
  const onColumnBlurHandler = (event, columnId) => {
   const { name, value } = event.target;
@@ -120,8 +117,7 @@ const TableQuestions = ({
           value: "",
         });
       }
-    );
-    // console.log("Temp Questionnaire: ", tempQuestionnaire);
+    )
     setQuestionnaire(tempQuestionnaire);
   };
 
@@ -146,7 +142,7 @@ const TableQuestions = ({
     setModalIndex(columnIdx) 
   }
   useEffect(() => {
-    // console.log("Questionnaire: ", questionnaire);
+    
   }, [questionnaire]);
 
   const Placeholder = ({ children }) => {

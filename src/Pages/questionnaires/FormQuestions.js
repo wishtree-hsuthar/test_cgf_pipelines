@@ -46,38 +46,7 @@ const FormQuestions = ({
   err,
   setErr,
 }) => {
-  // const [errArray, setErrArray] = useState([{ questionTitle: "" }]);
-  // const [err, setErr] = useState({ questionTitle: "", option: "" });
-
-  // const [sectionIndex, setSectionIndex] = useState(0);
-
-  // const [questionnaire, setQuestionnaire] = useState({ ...questionnaireFormat });
-
   //On click of Save button handler
-  const onSectionSubmitHandler = () => {
-    let tempError = {
-      questionTitle: "",
-      option: "",
-    };
-    questionnaire?.sections[sectionIndex]?.questions?.map(
-      (question, questionIdx) => {
-        if (question?.questionTitle === "") {
-          tempError.questionTitle = "Enter question title";
-        }
-        if (
-          ["dropdown", "checkbox", "radioGroup"].includes(question?.inputType)
-        ) {
-          question?.options?.map((option) => {
-            if (option === "") {
-              tempError.option = "Enter option";
-            }
-          });
-        }
-      }
-    );
-
-    setErr({ ...tempError });
-  };
   // console.log("section Index",sectionIndex,"questionnaire",questionnaire)
   return (
     <>

@@ -56,8 +56,6 @@ function DraftedQuestionnaires({
         totalRecordsDraftedQuestionnaire,
         setTotalRecordsDraftedQuestionnaire,
     ] = useState(0);
-    const [selectedDraftedQuestionnaire, setSelectedDraftedQuestionnaire] =
-        useState([]);
 
     const updateRecords = (data) => {
         data.forEach((object) => {
@@ -65,15 +63,8 @@ function DraftedQuestionnaires({
 
             delete object["__v"];
 
-            // delete object["uuid"];
-            // delete object["createdAt"];
             delete object["isDraft"];
-            // delete object["isActive"]
             delete object["isPublished"];
-            // delete object["title"];
-            // delete object["updatedAt"];
-            // object["uuid"] = object["uuid"];
-            // object["creted"]
             object["createdAt"] = new Date(
                 object["createdAt"]
             ).toLocaleDateString("en-US", {
@@ -90,7 +81,6 @@ function DraftedQuestionnaires({
         setRecordsDraftedQuestionnaire([...data]);
     };
     const generateUrl = () => {
-        // console.log("Search", search);
         let url = `${ADD_QUESTIONNAIRE}/drafted/list?page=${pageDraftedQuestionnaire}&size=${rowsPerPageDraftedQuestionnaire}&orderBy=${orderByDraftedQuestionnaire}&order=${orderDraftedQuestionnaire}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
@@ -105,7 +95,7 @@ function DraftedQuestionnaires({
         userAuth?.roleId?.name === "Super Admin"
             ? []
             : Object.values(privilege?.privileges);
-    // let draftedQuestionnairePrivilgeArray = privilege ? Object.values(privilege?.privileges) : [];
+    
     let moduleAccesForMember = draftedQuestionnairePrivilgeArray
         .filter((data) => data?.moduleId?.name === "Questionnaire")
         .map((data) => ({
@@ -117,10 +107,6 @@ function DraftedQuestionnaires({
                 add: data?.add,
             },
         }));
-    // console.log(
-    //     "module access member in view member",
-    //     moduleAccesForMember[0]?.member
-    // );
 
     const getQuestionnaire = async (
         isMounted = true,
@@ -132,17 +118,17 @@ function DraftedQuestionnaires({
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
+            
             setTotalRecordsDraftedQuestionnaire(
                 parseInt(response.headers["x-total-count"])
             );
-            // console.log("Response from sub admin api get", response);
+            
 
             updateRecords([...response.data]);
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log("Error from questionnaire-------", error);
+            
 
             if (error?.response?.status == 401) {
                 navigate("/login");
@@ -162,15 +148,13 @@ function DraftedQuestionnaires({
     };
 
     const onClickVisibilityIconHandler = (uuid) => {
-        // console.log("id", uuid);
+        
         return navigate(`/questionnaires/preview-questionnaire/${uuid}`);
     };
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
         makeApiCall && getQuestionnaire(isMounted, controller);
-        // console.log("makeApiCall", makeApiCall);
-        // console.log("inside use Effect");
         return () => {
             isMounted = false;
             clearTimeout(searchTimeout);

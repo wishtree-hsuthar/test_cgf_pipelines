@@ -6,41 +6,21 @@ import {
   Select,
   MenuItem,
   FormHelperText,
+  Tab,
+  Tabs,
+  Tooltip,
 } from "@mui/material";
-import { Tab, Tabs, Tooltip } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import SectionContent from "./SectionContent";
 import { v4 as uuidv4 } from "uuid";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
-import Toaster from "../../components/Toaster";
-import useCallbackState from "../../utils/useCallBackState";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
-// function TabPanel(props) {
-//   const { children, value, index, ...other } = props;
-
-//   return (
-//     <div
-//       role="tabpanel"
-//       hidden={value !== index}
-//       id={`simple-tabpanel-${index}`}
-//       aria-labelledby={`simple-tab-${index}`}
-//       {...other}
-//     >
-//       {value === index && <Box>{children}</Box>}
-//     </div>
-//   );
-// }
-// TabPanel.propTypes = {
-//   children: PropTypes.node,
-//   index: PropTypes.number.isRequired,
-//   value: PropTypes.number.isRequired,
-// };
 
 function a11yProps(index) {
   return {
@@ -61,46 +41,9 @@ function AddNewQuestionnaire() {
   useDocumentTitle("Add Questionnaire");
   // state to manage to loader
   const [isLoading, setIsLoading] = useState(false);
-  //Refr for Toaster
-  const myRef = React.useRef();
-  //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
-  //method to call all error toaster from this method
-  const setErrorToaster = (error) => {
-    // console.log("error",error)
-    setToasterDetails(
-      {
-        titleMessage: "Error",
-        descriptionMessage:
-          error?.response?.data?.message &&
-          typeof error.response.data.message === "string"
-            ? error.response.data.message
-            : "Something went wrong!",
-        messageType: "error",
-      },
-      () => myRef.current()
-    );
-  };
   const [value, setValue] = React.useState(0);
   // questionnaire id
   const { id } = useParams();
-
-  /* Popup */
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
 
   const [globalSectionTitleError, setGlobalSectionTitleError] = useState({
     errMsg: "",
@@ -162,8 +105,6 @@ function AddNewQuestionnaire() {
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
         setIsLoading(false);
-        // setErrorToaster(error)
-        // console.log("error from fetch questionnaire", error);
       }
     };
     fetch();
@@ -208,16 +149,11 @@ function AddNewQuestionnaire() {
     setValue(questionnaire.sections.length);
   };
 
-  // console.log("questionnaire---", questionnaire.sections);
+  
 
   return (
     <div className="page-wrapper">
-      <Toaster
-        myRef={myRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
-      />
+     
       <div className="breadcrumb-wrapper">
         <div className="container">
           <ul className="breadcrumb">
@@ -359,8 +295,8 @@ function AddNewQuestionnaire() {
                     <div
                       onClick={onPreviewClickHandler}
                       className={`tertiary-btn-blk ${
-                        (questionnaire?.isDraft ||
-                          questionnaire?.isPublished) ||
+                        questionnaire?.isDraft ||
+                        questionnaire?.isPublished ||
                         "disabled-tertiary-btn"
                       }  mr-20`}
                     >
