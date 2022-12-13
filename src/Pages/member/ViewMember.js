@@ -704,18 +704,21 @@ const ViewMember = () => {
                 style={{ display: isActive ? "block" : "none" }}
               >
                 <ul className="crud-toggle-list">
-                  <li
-                    hidden={
-                      SUPER_ADMIN
-                        ? false
-                        : !moduleAccesForMember[0]?.member.edit
-                    }
-                    onClick={() =>
-                      navigate(`/users/members/edit-member/${param.id}`)
-                    }
-                  >
-                    Edit
-                  </li>
+                  {member?.memberRepresentativeId?.length > 0 && (
+                    <li
+                      hidden={
+                        SUPER_ADMIN
+                          ? false
+                          : !moduleAccesForMember[0]?.member.edit
+                      }
+                      onClick={() =>
+                        navigate(`/users/members/edit-member/${param.id}`)
+                      }
+                    >
+                      Edit
+                    </li>
+                  )}
+
                   <li
                     hidden={
                       SUPER_ADMIN

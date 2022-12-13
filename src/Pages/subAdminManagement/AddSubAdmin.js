@@ -78,8 +78,8 @@ const AddSubAdmin = () => {
     console.log(location);
     // const [value, setValue] = useState({});
     const [roleSelected, setRoleSelected] = useState("");
-    const [countries, setCountries] = useState([]);
-    const [roles, setRoles] = useState([]);
+    const [countriesAddCGFAdmin, setCountriesAddCGFAdmin] = useState([]);
+    const [rolesAddCGFAdmin, setRolesAddCGFAdmin] = useState([]);
     const [defaultRole, setDefaultRole] = useState("");
     const toasterRef = useRef();
     const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -88,7 +88,7 @@ const AddSubAdmin = () => {
         messageType: "error",
     });
 
-    const phoneNumberChangeHandler = (e, name, code) => {
+    const phoneNumberChangeHandlerAddCGFAdmin = (e, name, code) => {
         console.log("inside on Change");
         setValue(name, e.target.value);
         trigger(name);
@@ -102,8 +102,11 @@ const AddSubAdmin = () => {
                 const response = await privateAxios.get(FETCH_ROLES, {
                     signal: controller.signal,
                 });
-                console.log("Response from fetch roles - ", response);
-                setRoles(response.data);
+                console.log(
+                    "Response from fetch rolesAddCGFAdmin - ",
+                    response
+                );
+                setRolesAddCGFAdmin(response.data);
                 response.data.filter(
                     (data) =>
                         data.name === "CGF Admin" &&
@@ -111,7 +114,7 @@ const AddSubAdmin = () => {
                 );
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
-                console.log("Error from fetch roles", error);
+                console.log("Error from fetch rolesAddCGFAdmin", error);
                 if (error?.response?.status === 401) {
                     isMounted &&
                         setToasterDetails(
@@ -142,7 +145,7 @@ const AddSubAdmin = () => {
                 }
             }
         };
-        let fetchCountries = async () => {
+        let addCGFAdminFetchCountries = async () => {
             try {
                 const response = await axios.get(COUNTRIES, {
                     signal: controller.signal,
@@ -153,7 +156,7 @@ const AddSubAdmin = () => {
                         (country) => country.countryCode
                     );
                     let tempCountryCodeSet = new Set(tempCountryCode);
-                    setCountries([...tempCountryCodeSet]);
+                    setCountriesAddCGFAdmin([...tempCountryCodeSet]);
                 }
                 // isMounted &&
                 //     setCountries(
@@ -191,14 +194,14 @@ const AddSubAdmin = () => {
             }
         };
         fetchRoles();
-        fetchCountries();
+        addCGFAdminFetchCountries();
 
         return () => {
             isMounted = false;
             controller.abort();
         };
     }, []);
-    console.log("countriess----", countries);
+    console.log("countriess----", countriesAddCGFAdmin);
 
     const handleRoleSelection = (e) => {
         setRoleSelected(e.target.value);
@@ -246,7 +249,7 @@ const AddSubAdmin = () => {
             }
         }
     };
-    const handleOnSubmit = async (data) => {
+    const handleOnsubmitAddCGFAdmin = async (data) => {
         data.countryCode = data.countryCode.slice(
             data.countryCode.indexOf("+")
         );
@@ -264,13 +267,13 @@ const AddSubAdmin = () => {
         }, 3000);
     };
 
-    const handleSaveAndMore = (data) => {
+    const handleSaveAndMoreAddCGFAdmin = (data) => {
         data.countryCode = data.countryCode.slice(
             data.countryCode.indexOf("+")
         );
         data = {
             ...data,
-            phoneNumber: Number(data.phoneNumber),
+            phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
             // roleId: authUser.roleId._id,
         };
 
@@ -305,15 +308,17 @@ const AddSubAdmin = () => {
             <section>
                 <div className="container">
                     <form
-                        onSubmit={handleSubmit(handleOnSubmit)}
-                        // onKeyDown={handleSubmit(handleOnSubmit)}
+                        onSubmit={handleSubmit(handleOnsubmitAddCGFAdmin)}
+                        // onKeyDown={handleSubmit(handleOnsubmitAddCGFAdmin)}
                     >
                         <div className="form-header flex-between">
                             <h2 className="heading2">Add CGF Admin</h2>
                             <div className="form-header-right-txt">
                                 <div
                                     className="tertiary-btn-blk"
-                                    onClick={handleSubmit(handleSaveAndMore)}
+                                    onClick={handleSubmit(
+                                        handleSaveAndMoreAddCGFAdmin
+                                    )}
                                 >
                                     <span className="addmore-icon">
                                         <i className="fa fa-plus"></i>
@@ -436,7 +441,7 @@ const AddSubAdmin = () => {
                                                             }) => (
                                                                 <Paper
                                                                     className={
-                                                                        countries?.length >
+                                                                        countriesAddCGFAdmin?.length >
                                                                         5
                                                                             ? "autocomplete-option-txt autocomplete-option-limit"
                                                                             : "autocomplete-option-txt"
@@ -479,8 +484,8 @@ const AddSubAdmin = () => {
                                                                 );
                                                             }}
                                                             options={
-                                                                countries
-                                                                    ? countries
+                                                                countriesAddCGFAdmin
+                                                                    ? countriesAddCGFAdmin
                                                                     : []
                                                             }
                                                             autoHighlight
@@ -534,7 +539,7 @@ const AddSubAdmin = () => {
                                             <Input
                                                 name={"phoneNumber"}
                                                 myOnChange={(e) =>
-                                                    phoneNumberChangeHandler(
+                                                    phoneNumberChangeHandlerAddCGFAdmin(
                                                         e,
                                                         "phoneNumber",
                                                         "countryCode"
@@ -598,7 +603,7 @@ const AddSubAdmin = () => {
                                             <Dropdown
                                                 name="subRoleId"
                                                 control={control}
-                                                options={roles}
+                                                options={rolesAddCGFAdmin}
                                                 rules={{
                                                     required: true,
                                                 }}

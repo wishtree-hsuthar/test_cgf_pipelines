@@ -24,13 +24,13 @@ function DraftedQuestionnaires({
     const tableHead = [
         {
             id: "title",
-            width: "30%",
+            // width: "30%",
             disablePadding: false,
             label: "Questionnaire Title",
         },
         {
             id: "createdAt",
-            width: "30%",
+            // width: "30%",
             disablePadding: false,
             label: "Created At",
         },
@@ -202,7 +202,7 @@ function DraftedQuestionnaires({
         pageDraftedQuestionnaire,
         rowsPerPageDraftedQuestionnaire,
         orderByDraftedQuestionnaire,
-        orderByDraftedQuestionnaire,
+        orderDraftedQuestionnaire,
 
         makeApiCall,
         setMakeApiCall,

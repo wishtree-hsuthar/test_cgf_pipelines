@@ -67,8 +67,8 @@ const ReplaceSubAdmin = () => {
     //custom hook to set title of page
     useDocumentTitle("Replace CGF Admin");
     const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
-    const [page, setPage] = React.useState(1);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [replaceCGFAdminPage, setReplaceCGFAdminPage] = React.useState(1);
+    const [replaceCGFAdminRowsPerPage, setReplaceCGFAdminRowsPerPage] = React.useState(10);
     const [isLoading, setIsLoading] = useState(false);
     const [cgfAdmin, setCgfAdmin] = useState({});
     const [selectedCGFAdmin, setSelectedCGFAdmin] = useState({});
@@ -77,14 +77,14 @@ const ReplaceSubAdmin = () => {
     const [searchTimeout, setSearchTimeout] = useState(null);
 
     //array to get array of selected rows ids
-    const [selected, setSelected] = React.useState([]);
-    const [order, setOrder] = React.useState("asc");
-    const [orderBy, setOrderBy] = React.useState("operationalMember");
-    const [selectedUser, setSelectedUser] = useState("");
-    const [makeApiCall, setMakeApiCall] = useState(true);
-    const [records, setRecords] = React.useState([]);
-    const [totalRecords, setTotalRecords] = React.useState(0);
-    const [search, setSearch] = useState("");
+    const [selectedCGFAdminsArray, setSelectedCGFAdminsArray] = React.useState([]);
+    const [replaceCGFAdminOrder, setReplaceCGFAdminOrder] = React.useState("asc");
+    const [replaceCGFAdminOrderBy, setOrderBy] = React.useState("operationalMember");
+    const [selectedReplacedCGFAdminUser, setSelectedReplacedCGFAdminUser] = useState("");
+    const [makeApiCallReplaceCGFAdmin, setMakeApiCallReplaceCGFAdmin] = useState(true);
+    const [replaceCGFAdminRecords, setReplaceCGFAdminRecords] = React.useState([]);
+    const [totalReplaceCGFAdminRecords, setTotalReplaceCGFAdminRecords] = React.useState(0);
+    const [searchCGFAdmin, setSearchCGFAdmin] = useState("");
     const navigate = useNavigate();
     const myRef = React.useRef();
     //Toaster Message setter
@@ -97,22 +97,22 @@ const ReplaceSubAdmin = () => {
     const onSearchChangeHandler = (e) => {
         console.log("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
-        setMakeApiCall(false);
+        setMakeApiCallReplaceCGFAdmin(false);
         console.log("search values", e.target.value);
-        setSearch(e.target.value);
+        setSearchCGFAdmin(e.target.value);
         setSearchTimeout(
             setTimeout(() => {
-                setMakeApiCall(true);
-                setPage(1);
+                setMakeApiCallReplaceCGFAdmin(true);
+                setReplaceCGFAdminPage(1);
             }, 1000)
         );
     };
     const generateUrl = (multiFilterString) => {
-        console.log("Search", search);
+        console.log("Search", searchCGFAdmin);
 
-        let url = `${ADD_SUB_ADMIN}/${id}/replaces/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
-        if (search?.length >= 3)
-            url = `${ADD_SUB_ADMIN}/${id}/replaces/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+        let url = `${ADD_SUB_ADMIN}/${id}/replaces/list?page=${replaceCGFAdminPage}&size=${replaceCGFAdminRowsPerPage}&orderBy=${replaceCGFAdminOrderBy}&replaceCGFAdminOrder=${replaceCGFAdminOrder}`;
+        if (searchCGFAdmin?.length >= 3)
+            url = `${ADD_SUB_ADMIN}/${id}/replaces/list?page=${replaceCGFAdminPage}&size=${replaceCGFAdminRowsPerPage}&orderBy=${replaceCGFAdminOrderBy}&replaceCGFAdminOrder=${replaceCGFAdminOrder}&search=${searchCGFAdmin}`;
 
         return url;
     };
@@ -149,7 +149,7 @@ const ReplaceSubAdmin = () => {
             });
         });
         console.log("data in updaterecords method", staleData);
-        setRecords([...staleData]);
+        setReplaceCGFAdminRecords([...staleData]);
     };
     // fetch users/cgf-admin/
     const getSubAdmin = async (
@@ -163,7 +163,7 @@ const ReplaceSubAdmin = () => {
                 signal: controller.signal,
             });
             // console.log(response.headers["x-total-count"]);
-            setTotalRecords(parseInt(response.headers["x-total-count"]));
+            setTotalReplaceCGFAdminRecords(parseInt(response.headers["x-total-count"]));
             console.log("Response from sub admin api get", response);
 
             updateRecords(response.data);
@@ -239,8 +239,8 @@ const ReplaceSubAdmin = () => {
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
-        makeApiCall && getSubAdmin(isMounted, controller);
-        console.log("makeApiCall", makeApiCall);
+        makeApiCallReplaceCGFAdmin && getSubAdmin(isMounted, controller);
+        console.log("makeApiCallReplaceCGFAdmin", makeApiCallReplaceCGFAdmin);
         console.log("inside use Effect");
         fetchSubAdmin(isMounted, controller);
 
@@ -249,22 +249,22 @@ const ReplaceSubAdmin = () => {
             clearTimeout(searchTimeout);
             controller.abort();
         };
-    }, [page, rowsPerPage, orderBy, order, makeApiCall]);
+    }, [replaceCGFAdminPage, replaceCGFAdminRowsPerPage, replaceCGFAdminOrderBy, replaceCGFAdminOrder, makeApiCallReplaceCGFAdmin]);
     //page change handler
     const handleTableTesterPageChange = (newPage) => {
         console.log("new Page", newPage);
-        setPage(newPage);
+        setReplaceCGFAdminPage(newPage);
     };
 
     //rows per page change handler
     const handleTableTesterRowsPerPageChange = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(1);
+        setReplaceCGFAdminRowsPerPage(parseInt(event.target.value, 10));
+        setReplaceCGFAdminPage(1);
     };
 
     //on Click of visibility icon
 
-    console.log("selected user: ", selectedUser);
+    console.log("selectedCGFAdminsArray user: ", selectedReplacedCGFAdminUser);
 
     const replaceUser = async () => {
         try {
@@ -272,7 +272,7 @@ const ReplaceSubAdmin = () => {
                 REPLACE_SUB_ADMIN + "replace",
                 {
                     replacingTo: id,
-                    replacingWith: selectedUser,
+                    replacingWith: selectedReplacedCGFAdminUser,
                 }
             );
             if (response.status == 201) {
@@ -338,7 +338,7 @@ const ReplaceSubAdmin = () => {
     console.log("Search text---", searchText);
 
     const handleYes = () => {
-        console.log("Yes replcae" + id + " replace id with", selectedUser);
+        console.log("Yes replcae" + id + " replace id with", selectedReplacedCGFAdminUser);
 
         replaceUser();
     };
@@ -351,9 +351,9 @@ const ReplaceSubAdmin = () => {
     };
     const selectSingleUser = (id) => {
         console.log("select single user---", id);
-        setSelectedUser(id);
+        setSelectedReplacedCGFAdminUser(id);
         setSelectedCGFAdmin({
-            ...records.filter((data) => data._id == id ?? { name: data.name }),
+            ...replaceCGFAdminRecords.filter((data) => data._id == id ?? { name: data.name }),
         });
     };
     return (
@@ -429,24 +429,24 @@ const ReplaceSubAdmin = () => {
                         <div className="member-data-sect replace-admin-table">
                             <TableComponent
                                 tableHead={tableHead}
-                                records={records}
+                                records={replaceCGFAdminRecords}
                                 handleChangePage1={handleTableTesterPageChange}
                                 handleChangeRowsPerPage1={
                                     handleTableTesterRowsPerPageChange
                                 }
-                                page={page}
-                                rowsPerPage={rowsPerPage}
-                                totalRecords={totalRecords}
-                                orderBy={orderBy}
-                                order={order}
-                                setOrder={setOrder}
+                                page={replaceCGFAdminPage}
+                                rowsPerPage={replaceCGFAdminRowsPerPage}
+                                totalRecords={totalReplaceCGFAdminRecords}
+                                orderBy={replaceCGFAdminOrderBy}
+                                order={replaceCGFAdminOrder}
+                                setOrder={setReplaceCGFAdminOrder}
                                 setOrderBy={setOrderBy}
-                                selected={selected}
-                                setSelected={setSelected}
+                                selected={selectedCGFAdminsArray}
+                                setSelected={setSelectedCGFAdminsArray}
                                 setCheckBoxes={false}
                                 setSingleSelect={true}
                                 handleSingleUserSelect={selectSingleUser}
-                                selectedUser={selectedUser}
+                                selectedUser={selectedReplacedCGFAdminUser}
                             />
                         </div>
                     </div>
@@ -458,7 +458,7 @@ const ReplaceSubAdmin = () => {
                             Cancel
                         </button>
                         <button
-                            disabled={selectedUser === ""}
+                            disabled={selectedReplacedCGFAdminUser === ""}
                             onClick={openReplaceDailogBox}
                             className="primary-button add-button replace-assign-btn"
                         >

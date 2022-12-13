@@ -32,7 +32,7 @@ import useCallbackState from "../../utils/useCallBackState";
 //     value: PropTypes.number.isRequired,
 // };
 
-function a11yProps(index) {
+function a11yPropsQuestionnaireList(index) {
     return {
         id: `simple-tab-${index}`,
         "aria-controls": `simple-tabpanel-${index}`,
@@ -41,27 +41,27 @@ function a11yProps(index) {
 function QuestionnairesList() {
     //custom hook to set title of page
     useDocumentTitle("Questionnaires");
-    const navigate = useNavigate();
+    const navigateQuestionnaire = useNavigate();
     const addQuestionnaire = () => {
-        navigate(`/questionnaires/add-questionnaire/${uuidv4()}`);
+        navigateQuestionnaire(`/questionnaires/add-questionnaire/${uuidv4()}`);
     };
-    const [searchTimeout, setSearchTimeout] = useState(null);
+    const [searchTimeoutQuestionnaire, setSearchTimeoutQuestionnaire] = useState(null);
     //state to hold wheather to make api call or not
-    const [makeApiCall, setMakeApiCall] = useState(true);
+    const [makeApiCallQuestionnaire, setMakeApiCallQuestionnaire] = useState(true);
 
     //state to hold search keyword
-    const [search, setSearch] = useState("");
-    const [value, setValue] = React.useState(0);
+    const [searchQuestionnaire, setSearchQuestionnaire] = useState("");
+    const [questionnaireValue, setQuestionnaireValue] = React.useState(0);
 
-    const onSearchChangeHandler = (e) => {
+    const onQuestionnaireSearchChangeHandler = (e) => {
         // console.log("event", e.key);
-        if (searchTimeout) clearTimeout(searchTimeout);
-        setMakeApiCall(false);
-        // console.log("search values", e.target.value);
-        setSearch(e.target.value);
-        setSearchTimeout(
+        if (searchTimeoutQuestionnaire) clearTimeout(searchTimeoutQuestionnaire);
+        setMakeApiCallQuestionnaire(false);
+        // console.log("searchQuestionnaire values", e.target.value);
+        setSearchQuestionnaire(e.target.value);
+        setSearchTimeoutQuestionnaire(
             setTimeout(() => {
-                setMakeApiCall(true);
+                setMakeApiCallQuestionnaire(true);
                 // setPage(1);
             }, 1000)
         );
@@ -90,14 +90,9 @@ function QuestionnairesList() {
     //     moduleAccesForMember[0]?.member
     // );
 
-    const [filters, setFilters] = useState({
-        companyType: "",
-        createdBy: "",
-        status: "",
-    });
 
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setQuestionnaireValue(newValue);
     };
 
     return (
@@ -136,17 +131,17 @@ function QuestionnairesList() {
                                         className="tabs-sect"
                                     >
                                         <Tabs
-                                            value={value}
+                                            value={questionnaireValue}
                                             onChange={handleChange}
                                             aria-label="basic tabs example"
                                         >
                                             <Tab
                                                 label="Published"
-                                                {...a11yProps(0)}
+                                                {...a11yPropsQuestionnaireList(0)}
                                             />
                                             <Tab
                                                 label="Drafted"
-                                                {...a11yProps(1)}
+                                                {...a11yPropsQuestionnaireList(1)}
                                             />
                                         </Tabs>
                                     </Box>
@@ -156,14 +151,14 @@ function QuestionnairesList() {
                                 <div className="searchbar">
                                     <input
                                         type="text"
-                                        value={search}
+                                        value={searchQuestionnaire}
                                         name="search"
                                         placeholder="Search"
                                         onKeyDown={(e) =>
                                             e.key === "Enter" &&
-                                            setMakeApiCall(true)
+                                            setMakeApiCallQuestionnaire(true)
                                         }
-                                        onChange={onSearchChangeHandler}
+                                        onChange={onQuestionnaireSearchChangeHandler}
                                     />
                                     <button type="submit">
                                         <i className="fa fa-search"></i>
@@ -210,22 +205,22 @@ function QuestionnairesList() {
                         </div>
                     </div>
                     <div className="member-info-wrapper table-content-wrap">
-                        <TabPanel value={value} index={1}>
+                        <TabPanel value={questionnaireValue} index={1}>
                             <DraftedQuestionnaires
-                                makeApiCall={makeApiCall}
-                                setMakeApiCall={setMakeApiCall}
-                                search={search}
-                                setSearch={setSearch}
-                                searchTimeout={searchTimeout}
+                                makeApiCall={makeApiCallQuestionnaire}
+                                setMakeApiCall={setMakeApiCallQuestionnaire}
+                                search={searchQuestionnaire}
+                                setSearch={setSearchQuestionnaire}
+                                searchTimeoutQuestionnaire={searchTimeoutQuestionnaire}
                             />
                         </TabPanel>
-                        <TabPanel value={value} index={0}>
+                        <TabPanel value={questionnaireValue} index={0}>
                             <PublishedQuestionnaires
-                                makeApiCall={makeApiCall}
-                                setMakeApiCall={setMakeApiCall}
-                                search={search}
-                                setSearch={setSearch}
-                                searchTimeout={searchTimeout}
+                                makeApiCall={makeApiCallQuestionnaire}
+                                setMakeApiCall={setMakeApiCallQuestionnaire}
+                                search={searchQuestionnaire}
+                                setSearch={setSearchQuestionnaire}
+                                searchTimeoutQuestionnaire={searchTimeoutQuestionnaire}
                             />
                         </TabPanel>
                     </div>

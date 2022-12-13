@@ -28,58 +28,11 @@ import { memberHelper } from "../../utils/helpertext";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-
-//Parent company (Ideally get from backend)
-const parentCompany = [
-  "Google",
-  "MicroSoft",
-  "Nike",
-  "Adobe",
-  "Falcon",
-  "Apple",
-  "TSMC",
-  "Relience",
-  "Adani",
-  "Ford",
-  "Uber",
-  "wishtree",
-];
-//City (Ideally get from backend)
-const cityValue = [
-  "Mumbai",
-  "Paris",
-  "London",
-  "New york",
-  "Sydney",
-  "Melbourne",
-  "Perth",
-  "Toronto",
-  "Vancour",
-  "Texas",
-  "Delhi",
-  "Tokyo",
-];
-//CGF Categories (Ideally get from backend)
-const cgfCategories1 = ["Manufacturer", "Retailer", "Other"];
-const cgfActivitiesManufacturer1 = [
-  "Apparel",
-  "Food manufacturer",
-  "Household care",
-  "None",
-  "Non-food manufacturer",
-  "Personal care & beauty",
-];
-const cgfActivitiesRetailer1 = [
-  "Department store",
-  "Ecommerce",
-  "Food/Non food retailer",
-  "Food retailer",
-  "Food service",
-  "Grocery",
-  "Health/beauty drugstore",
-  "Non food retailer",
-  "Wholesaler",
-];
+import {
+  cgfActivitiesManufacturer,
+  cgfActivitiesRetailer,
+  cgfCategories,
+} from "../../utils/MemberModuleUtil";
 
 const EditMember = () => {
   //custom hook to set title of page
@@ -588,13 +541,7 @@ const EditMember = () => {
                               disabled
                               className="searchable-input"
                               PaperComponent={({ children }) => (
-                                <Paper
-                                  className={
-                                    parentCompany?.length > 5
-                                      ? "autocomplete-option-txt autocomplete-option-limit"
-                                      : "autocomplete-option-txt"
-                                  }
-                                >
+                                <Paper className={"autocomplete-option-txt"}>
                                   {children}
                                 </Paper>
                               )}
@@ -617,7 +564,7 @@ const EditMember = () => {
                               selectOnFocus
                               handleHomeEndKeys
                               id="free-solo-with-text-demo"
-                              options={parentCompany}
+                              // options={parentCompany}
                               // getOptionLabel={(option) => {
                               //   // Value selected with enter, right from the input
                               //   if (typeof option === "string") {
@@ -659,7 +606,7 @@ const EditMember = () => {
                           myHelper={memberHelper}
                           rules={{ required: true }}
                           myOnChange={categoryChangeHandler1}
-                          options={cgfCategories1}
+                          options={cgfCategories}
                         />
                       </div>
                       {/* </div> */}
@@ -690,8 +637,8 @@ const EditMember = () => {
                           }}
                           options={
                             watch("cgfCategory") === "Manufacturer"
-                              ? cgfActivitiesManufacturer1
-                              : cgfActivitiesRetailer1
+                              ? cgfActivitiesManufacturer
+                              : cgfActivitiesRetailer
                           }
                           isDisabled={watch("cgfCategory") === "Other"}
                         />

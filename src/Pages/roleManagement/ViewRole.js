@@ -268,7 +268,7 @@ const ViewRole = () => {
       roleName: data?.name,
       description: data?.description,
       status: data?.isActive ? "active" : "inactive",
-      subAdmin: data?.totalCgfAdmins ?? 0,
+      subAdmin: 0,
     });
     createPrevileges3(data.privileges);
   };
@@ -304,15 +304,16 @@ const ViewRole = () => {
   const getUsersByRole = async () => {
     try {
       const response = await axios.get(
-        GET_USER_BY_ROLE + params?.id + `/users?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`
+        GET_USER_BY_ROLE +
+          params?.id +
+          `/users?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`
       );
-      updateUsers(response?.data)
-      setTotalRecords(response?.headers?.['x-total-count'])
-      setFieldValues({
-        ...fieldValues,
-        subAdmin: response?.headers?.['x-total-count']
-        
-      })
+      setTotalRecords(response?.headers?.["x-total-count"]);
+      updateUsers(response?.data);
+      setFieldValues(previous => ({
+        ...previous,
+        subAdmin: response?.headers?.["x-total-count"],
+      }));
       console.log("response:- ", response);
     } catch (error) {
       console.log("error", error);
@@ -321,8 +322,11 @@ const ViewRole = () => {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    getRoleById(isMounted, controller);
-    getUsersByRole();
+    (async () => {
+      await getRoleById(isMounted, controller);
+      await getUsersByRole();
+    })();
+
     return () => {
       isMounted = false;
       controller.abort();
