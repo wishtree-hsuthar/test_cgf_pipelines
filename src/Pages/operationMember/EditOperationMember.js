@@ -144,11 +144,12 @@ function EditOperationMember() {
         register,
         handleSubmit,
         formState: { errors },
-        reset,
+
         control,
         setValue,
         trigger,
         watch,
+        reset,
     } = useForm({
         defaultValues: defaultValues,
     });
@@ -195,7 +196,7 @@ function EditOperationMember() {
         }
     };
     // fetch all countries and its objects
-    const fetchCountries = async (controller) => {
+    const fetchCountries = async (isMounted, controller) => {
         try {
             const response = await privateAxios.get(COUNTRIES, {
                 signal: controller.signal,
@@ -204,22 +205,23 @@ function EditOperationMember() {
             // isMounted &&
             setCountries(response.data.map((country) => country?.countryCode));
         } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+
             console.log("error from countries api", error);
-            if (error?.response?.status == 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                navigate("/login");
-            }
+
+            // isMounted &&
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
         }
     };
     // Fetch all member comapanies
-    const fetchMemberComapany = async (controller) => {
+    const fetchMemberComapany = async (isMounted, controller) => {
         try {
             const response = await privateAxios.get(MEMBER + "/list", {
                 signal: controller.signal,
@@ -232,18 +234,20 @@ function EditOperationMember() {
             );
 
             if (response.status == 200) {
-                // isMounted &&
-                setMemberCompanies(
-                    response.data.map((data) => ({
-                        _id: data?._id,
-                        companyName: data?.companyName,
-                        companyType: data?.companyType,
-                    }))
-                );
+                isMounted &&
+                    setMemberCompanies(
+                        response.data.map((data) => ({
+                            _id: data?._id,
+                            companyName: data?.companyName,
+                            companyType: data?.companyType,
+                        }))
+                    );
             }
 
             console.log("member company---", memberCompanies);
         } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+
             console.log("error from fetch member company", error);
         }
     };
@@ -326,30 +330,47 @@ function EditOperationMember() {
             // fetchReportingManagers(operationMember?.memberId?._id);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
+            if (error?.response?.status === 401) {
+                isMounted &&
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: "Session timeout",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            }
             setIsLoading(false);
             console.log("error from edit operation members", error);
         }
     };
 
     // fetch & set Roles
-    let fetchRoles = async () => {
+    let fetchRoles = async (isMounted, controller) => {
         try {
-            const response = await privateAxios.get(FETCH_ROLES);
+            const response = await privateAxios.get(FETCH_ROLES, {
+                signal: controller.signal,
+            });
             console.log("Response from fetch roles - ", response);
             setRoles(response.data);
         } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+
             console.log("Error from fetch roles", error);
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => toasterRef.current()
-            );
-            setTimeout(() => {
-                navigate("/login");
-            }, 3000);
+
+            // isMounted &&
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
         }
     };
     const phoneNumberChangeHandler = (e, name, code) => {
@@ -371,7 +392,7 @@ function EditOperationMember() {
 
         countries.length === 0 && fetchCountries(controller);
         memberCompanies.length === 0 && fetchMemberComapany(controller);
-        roles.length === 0 && fetchRoles();
+        roles.length === 0 && fetchRoles(isMounted, controller);
 
         fetchOperationMember(controller, isMounted);
 

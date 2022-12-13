@@ -15,26 +15,6 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { DOWNLOAD_OPERATION_MEMBER } from "../../api/Url";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import { downloadFunction } from "../../utils/downloadFunction";
-// function TabPanel(props) {
-//     const { children, value, index, ...other } = props;
-
-//     return (
-//         <div
-//             role="tabpanel"
-//             hidden={value !== index}
-//             id={`simple-tabpanel-${index}`}
-//             aria-labelledby={`simple-tab-${index}`}
-//             {...other}
-//         >
-//             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-//         </div>
-//     );
-// }
-// TabPanel.propTypes = {
-//     children: PropTypes.node,
-//     index: PropTypes.number.isRequired,
-//     value: PropTypes.number.isRequired,
-// };
 
 function a11yProps(index) {
     return {
@@ -74,39 +54,6 @@ function OperationMemberList() {
         moduleAccessForOperationMember[0]?.operationMember
     );
 
-    // const downloadOperationMembers = async () => {
-    //     try {
-    //         const response = await privateAxios.get(DOWNLOAD_OPERATION_MEMBER, {
-    //             responseType: "blob",
-    //         });
-    //         console.log(
-    //             "resposne from download operation members admins",
-    //             response
-    //         );
-    //         const url = window.URL.createObjectURL(new Blob([response.data]));
-    //         const link = document.createElement("a");
-    //         link.href = url;
-    //         link.setAttribute(
-    //             "download",
-    //             `Operation Members - ${new Date()}.xls`
-    //         );
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         if (response.status == 200) {
-    //             setToasterDetails(
-    //                 {
-    //                     titleMessage: "Success!",
-    //                     descriptionMessage: "Download successfull!",
-
-    //                     messageType: "success",
-    //                 },
-    //                 () => operationMemberRef.current()
-    //             );
-    //         }
-    //     } catch (error) {
-    //         console.log("Error from download operation members", error);
-    //     }
-    // };
     const onSearchChangeHandler = (e) => {
         console.log("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
@@ -251,139 +198,7 @@ function OperationMemberList() {
                                     </button>
                                 </div>
                             </div>
-                            <div className="member-filter-right">
-                                {/* <div className="filter-select-wrap flex-between">
-                                    <div className="filter-select-field">
-                                        <div className="dropdown-field">
-                                            <Select
-                                                value={filters.companyType}
-                                                // defaultValue="none"
-                                                displayEmpty
-                                                onChange={(e) => {
-                                                    setFilters({
-                                                        ...filters,
-                                                        companyType:
-                                                            e.target.value,
-                                                    });
-                                                }}
-                                                renderValue={(value) => {
-                                                    if (value.length < 1) {
-                                                        return (
-                                                            <em>
-                                                                Select company
-                                                                type
-                                                            </em>
-                                                        );
-                                                    } else {
-                                                        return value;
-                                                    }
-                                                }}
-                                            >
-                                                <MenuItem disabled value="">
-                                                    Select Company Type
-                                                </MenuItem>
-                                                <MenuItem
-                                                    key={"internal"}
-                                                    value={"internal"}
-                                                >
-                                                    Internal
-                                                </MenuItem>
-                                                <MenuItem
-                                                    key={"external"}
-                                                    value={"external"}
-                                                >
-                                                    External
-                                                </MenuItem>
-                                            </Select>
-                                        </div>
-                                    </div>
-                                    <div className="filter-select-field">
-                                        <div className="dropdown-field">
-                                            <Select
-                                                value={filters.createdBy}
-                                                // defaultValue="none"
-                                                displayEmpty
-                                                onChange={(e) => {
-                                                    setFilters({
-                                                        ...filters,
-                                                        createdBy:
-                                                            e.target.value,
-                                                    });
-                                                }}
-                                                renderValue={(value) => {
-                                                    if (value.length < 1) {
-                                                        return (
-                                                            <em>
-                                                                Select created
-                                                                By
-                                                            </em>
-                                                        );
-                                                    } else {
-                                                        return value;
-                                                    }
-                                                }}
-                                            >
-                                                <MenuItem disabled value="">
-                                                    Select created by
-                                                </MenuItem>
-                                                <MenuItem
-                                                    key={"internal"}
-                                                    value={"internal"}
-                                                >
-                                                    Internal
-                                                </MenuItem>
-                                                <MenuItem
-                                                    key={"external"}
-                                                    value={"external"}
-                                                >
-                                                    External
-                                                </MenuItem>
-                                            </Select>
-                                        </div>
-                                    </div>
-
-                                    <div className="filter-select-field">
-                                        <div className="dropdown-field">
-                                            <Select
-                                                value={filters.status}
-                                                displayEmpty
-                                                onChange={(e) =>
-                                                    // onFilterChangeHandler(e)
-                                                    setFilters({
-                                                        ...filters,
-                                                        status: e.target.value,
-                                                    })
-                                                }
-                                                renderValue={(value) => {
-                                                    if (value.length < 1) {
-                                                        return (
-                                                            <em>
-                                                                Select status
-                                                            </em>
-                                                        );
-                                                    } else {
-                                                        return value;
-                                                    }
-                                                }}
-                                                name="status"
-                                            >
-                                                <MenuItem value="">
-                                                    Select status
-                                                </MenuItem>
-                                                <MenuItem value="inactive">
-                                                    In-active
-                                                </MenuItem>
-                                                <MenuItem value="active">
-                                                    Active
-                                                </MenuItem>
-                                                <MenuItem value="all">
-                                                    All
-                                                </MenuItem>
-                                            </Select>
-                                        </div>
-                                    </div>
-                                </div> */}
-                            </div>
+                            <div className="member-filter-right"></div>
                         </div>
                         <div className="member-info-wrapper table-content-wrap">
                             <TabPanel value={value} index={0}>

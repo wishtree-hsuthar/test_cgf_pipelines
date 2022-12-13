@@ -174,7 +174,17 @@ const AssessmentList = () => {
             console.log("Error from assessments-------", error);
 
             if (error?.response?.status == 401) {
-                navigate("/login");
+                setToasterDetails(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
             }
             setIsLoading(false);
         }
@@ -244,7 +254,7 @@ const AssessmentList = () => {
     }, [page, rowsPerPage, orderBy, order, makeApiCall]);
 
     const addAssessment = () => {
-        navigate("/assessments/add-assessment");
+        navigate("/assessment-list/add-assessment");
     };
 
     const privilege = useSelector((state) => state?.user?.privilege);
@@ -294,6 +304,12 @@ const AssessmentList = () => {
 
     return (
         <div>
+            <Toaster
+                messageType={toasterDetails.messageType}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                myRef={myRef}
+                titleMessage={toasterDetails.titleMessage}
+            />
             <div className="page-wrapper">
                 <section>
                     <div className="container">

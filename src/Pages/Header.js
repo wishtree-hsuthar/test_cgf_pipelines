@@ -184,7 +184,7 @@ const Header = () => {
     const [hoverNameStatus, setNameHover] = useState(false);
 
     const handleChangePassword = () => {
-        navigate('/change-password')
+        navigate("/change-password");
         setAnchorElUser(null);
         setActive(!isActive);
     };
@@ -406,14 +406,13 @@ const Header = () => {
                                                 </ul>
                                             </li>
                                         )}
-        
-                                        
 
                                         {SUPER_ADMIN && (
                                             <li
                                                 className={
-                                                    location.pathname ==
-                                                    "/roles"
+                                                    location.pathname.includes(
+                                                        "/roles"
+                                                    )
                                                         ? "list-item active"
                                                         : "list-item"
                                                 }
@@ -434,7 +433,6 @@ const Header = () => {
                                                 </a>
                                             </li>
                                         )}
-                                        
                                     </ul>
                                 </div>
                             </div>
@@ -602,7 +600,9 @@ const Header = () => {
                                                                 </div>
                                                                 <div
                                                                     className="tertiary-btn-blk mt-20"
-                                                                    onClick={handleChangePassword}
+                                                                    onClick={
+                                                                        handleChangePassword
+                                                                    }
                                                                 >
                                                                     <span className="addmore-txt">
                                                                         Change

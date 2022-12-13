@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { MenuItem, Select } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
@@ -6,6 +6,8 @@ import { privateAxios } from "../../api/axios";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { useSelector } from "react-redux";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
+import useCallbackState from "../../utils/useCallBackState";
+import Toaster from "../../components/Toaster";
 
 function DraftedQuestionnaires({
     makeApiCall,
@@ -36,10 +38,10 @@ function DraftedQuestionnaires({
             id: "isActive",
             disablePadding: false,
             label: "Status",
-          },
+        },
     ];
 
-    const keysOrder = ["_id", "title", "uuid", "createdAt","isActive"];
+    const keysOrder = ["_id", "title", "uuid", "createdAt", "isActive"];
 
     //code of tablecomponent
     const [pageDraftedQuestionnaire, setPageDraftedQuestionnaire] = useState(1);
@@ -59,6 +61,13 @@ function DraftedQuestionnaires({
     ] = useState(0);
     const [selectedDraftedQuestionnaire, setSelectedDraftedQuestionnaire] =
         useState([]);
+
+    const questionnaireDraftedToasterRef = useRef();
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
 
     const updateRecords = (data) => {
         data.forEach((object) => {
@@ -145,8 +154,20 @@ function DraftedQuestionnaires({
             if (error?.code === "ERR_CANCELED") return;
             // console.log("Error from questionnaire-------", error);
 
-            if (error?.response?.status == 401) {
-                navigate("/login");
+            if (error.response.status === 401) {
+                console.log("Unauthorized user access");
+                // Add error toaster here
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => questionnaireDraftedToasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
             }
             setIsLoading(false);
         }
@@ -189,6 +210,12 @@ function DraftedQuestionnaires({
     ]);
     return (
         <>
+            <Toaster
+                messageType={toasterDetails.messageType}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                myRef={questionnaireDraftedToasterRef}
+                titleMessage={toasterDetails.titleMessage}
+            />
             <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
                 {isLoading ? (
                     <div className="loader-blk">
