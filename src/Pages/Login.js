@@ -64,12 +64,12 @@ const Login = (prop) => {
                 if (status == 200) {
                     navigate("/home");
                 }
-                // isMounted && setUserPresent(true);
+                
             } catch (error) {
                 if (error?.response?.status == 401) {
-                    // setUserPresent(false);
+                
                     console.log("Error from app file useEffect", error);
-                    // navigate("/login");
+                
                 }
             }
         };

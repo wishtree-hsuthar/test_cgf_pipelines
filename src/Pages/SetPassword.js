@@ -36,11 +36,6 @@ useDocumentTitle("Set Password")
     } = useForm({
         resolver: yupResolver(schema),
     });
-    // useEffect(() => {
-    //     try {
-    //         console.log("In set password");
-    //     } catch (error) {}
-    // }, []);
     useEffect(() => {
         let controller = new AbortController();
         document.body.classList.add("login-page");

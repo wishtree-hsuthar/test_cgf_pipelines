@@ -32,16 +32,6 @@ const UserLoggedIn = ({ children }) => {
             //     error
             // );
             if (error?.response?.status == 401) {
-                // dispatch(resetUser());
-                // console.log("401 from userLoggedIn component");
-
-                // return (
-                //     <Navigate
-                //         to={"/login"}
-                //         state={{ from: location }}
-                //         replace
-                //     />
-                // );
                 setRequestRetry(true);
                 return navigate("/login");
             }

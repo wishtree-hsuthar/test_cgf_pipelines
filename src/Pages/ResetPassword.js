@@ -6,8 +6,6 @@ import {
   OutlinedInput as ResetPasswordOutlinedInput,
   InputAdornment as ResetPasswordInputAdornment,
 } from "@mui/material";
-// import {OutlinedInput as ResetPasswordOutlinedInput} from "@mui/material/OutlinedInput";
-// import {InputAdornment as ResetPasswordInputAdornment} from "@mui/material/InputAdornment";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";

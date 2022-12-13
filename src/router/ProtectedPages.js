@@ -24,7 +24,7 @@ import EditOperationMember from "../Pages/operationMember/EditOperationMember";
 import QuestionnairesList from "../Pages/questionnaires/QuestionnairesList";
 import AddNewQuestionnaire from "../Pages/questionnaires/AddNewQuestionnaire";
 import PreviewQuestionnaire from "../Pages/questionnaires/Preview/PreviewQuestionnaire";
-// import PreviewDemo from "../Pages/questionnaires/Preview/PreviewDemo";
+
 import AddAssessment from "../Pages/AssessmentModule/AddAssessment";
 import AssessmentList from "../Pages/AssessmentModule/AssessmentList";
 import EditAssessment from "../Pages/AssessmentModule/EditAssessment";

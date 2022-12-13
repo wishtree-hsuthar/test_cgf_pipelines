@@ -19,13 +19,13 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 import "./Header.css";
 const Header = () => {
-    // const [anchorElNav, setAnchorElNav] = React.useState(null);
+    
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [isActive, setActive] = React.useState("false");
     const userAuth = useSelector((state) => state?.user?.userObj);
     const privilege = useSelector((state) => state?.user?.privilege);
     console.log("user auth----", userAuth);
-    // const privilege = useSelector((state) => state.user?.privilege);
+    
     let initials = userAuth?.name?.split(" ");
     const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
     const MEMBER_ACCESS = userAuth?.roleId?.name == "Member";
@@ -102,19 +102,7 @@ const Header = () => {
                 delete: data.delete,
             },
         }));
-    // console.log(
-    //     "module access for member",
-    //     moduleAccesForMember[0]?.member?.list
-    // );
-    // console.log(
-    //     "module access for member",
-    //     moduleAccesForMember[0]?.member?.list
-    // );
-    // console.log(
-    //     "module access for operation member",
-    //     moduleAccessForOperationMember[0]?.operationMember?.list
-    // );
-    // console.log("modified Privilege array", modifiedPrivilegeArrayKeys);
+  
     const userNameInitials = () => {
         let letter = "";
         if (initials.length > 1) {
@@ -128,7 +116,7 @@ const Header = () => {
     const handleLogOut = async () => {
         try {
             const response = await privateAxios.post(LOGOUT_URL);
-            // console.log("Response from logout");
+            
 
             if (response.status == 201) {
                 setAnchorElUser(null);
@@ -137,16 +125,12 @@ const Header = () => {
                 navigate("/login");
             }
         } catch (error) {
-            // console.log("Error from logout API", error);
+            
             if (error?.response?.status === 401) {
                 navigate("/login");
             }
         }
     };
-    //    const truncate = (str) =>{
-    //         return str.length > 20 ? str.substring(0, 18) + "..." : str;
-
-    //     }
     const textElementRef = useRef();
     const textnameElementRef = useRef();
     const compareSize = () => {
@@ -156,7 +140,6 @@ const Header = () => {
         const comparename =
             textnameElementRef.current.scrollWidth >
             textnameElementRef.current.clientWidth;
-        // console.log("compare: ", compare);
         setHover(compare);
         setNameHover(comparename);
     };
@@ -330,7 +313,7 @@ const Header = () => {
                                                         >
                                                             <a
                                                                 onClick={() => {
-                                                                    // setActiveState(false);
+                                                                    
                                                                     setActiveStateForMembers(
                                                                         false
                                                                     );
@@ -440,12 +423,7 @@ const Header = () => {
                                     <div className="user-blk flex-between">
                                         <div className="user-img">
                                             <span className="user-name-txt">
-                                                {/* {initials?.length >= 1 &&
-                                                    initials[0].slice(0, 1) +
-                                                        initials[1]?.slice(
-                                                            0,
-                                                            1
-                                                        )} */}
+                                                
                                                 {userNameInitials()}
                                             </span>
                                         </div>
@@ -539,16 +517,6 @@ const Header = () => {
                                                         <div className="signin-user-left">
                                                             <div className="signin-user-img">
                                                                 <span className="signin-user-name-txt">
-                                                                    {/* {initials?.length >=
-                                                                        1 &&
-                                                                        initials[0].slice(
-                                                                            0,
-                                                                            1
-                                                                        ) +
-                                                                            initials[1]?.slice(
-                                                                                0,
-                                                                                1
-                                                                            )} */}
                                                                     {userNameInitials()}
                                                                 </span>
                                                             </div>
