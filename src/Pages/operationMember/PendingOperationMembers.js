@@ -90,17 +90,10 @@ function PendingOperationMembers({
       delete pendingOPMember["tokenExpiry"];
       delete pendingOPMember["tokenType"];
 
-      // delete pendingOPMember["isActive"];
-
-      // pendingOPMember["role"] = pendingOPMember["data"]["subRoleId"].name;
-      // pendingOPMember["role"] = pendingOPMember["data"]["subRole"][0].name;
-
       pendingOPMember["name"] = pendingOPMember["data"].name;
       pendingOPMember["email"] = pendingOPMember["data"].email;
-      // pendingOPMember["createdAt"] = pendingOPMember["createdAt"];
       pendingOPMember["memberCompany"] = pendingOPMember["memberData"]["companyName"];
       pendingOPMember["companyType"] = pendingOPMember["memberData"]["companyType"];
-      // pendingOPMember["createdByName"] = pendingOPMember["createdBy"]["name"];
       pendingOPMember["createdAt"] = new Date(pendingOPMember["createdAt"]).toLocaleDateString(
         "en-US",
         {
@@ -111,10 +104,8 @@ function PendingOperationMembers({
       );
       pendingOPMember["createdByName"] = pendingOPMember["createdBy"].name;
 
-      // delete pendingOPMember["data"]["subRoleId"];
-      // delete pendingOPMember["data"]["subRole"][0].name;
       delete pendingOPMember["createdBy"];
-      // delete pendingOPMember["createdAt"];
+
       delete pendingOPMember["subRole"];
       delete pendingOPMember["data"];
       delete pendingOPMember["memberData"];
@@ -211,7 +202,7 @@ function PendingOperationMembers({
           signal: controller.signal,
         }
       );
-      // console.log(response.headers["x-total-count"]);
+      
       setTotalRecordsForPendingOperationMemberTab(
         parseInt(response.headers["x-total-count"])
       );
@@ -225,7 +216,7 @@ function PendingOperationMembers({
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setIsLoading(false);
-      // console.log(toasterDetails);
+      
       console.log(
         "Error from get all pending operation member  tab table-------",
         error

@@ -14,12 +14,10 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { Link, useNavigate, useParams } from "react-router-dom";
-// import { Controller } from "react-hook-form";
 import { useForm, Controller } from "react-hook-form";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { privateAxios } from "../../api/axios";
-// import { useNavigate } from "react-router-dom";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
@@ -59,7 +57,7 @@ function EditOperationMember() {
   // state to manage loaders
   const [isLoading, setIsLoading] = useState(true);
   const {
-    register,
+
     handleSubmit,
     formState: { errors },
     reset,
@@ -236,7 +234,6 @@ function EditOperationMember() {
       console.log("response data ----", operationMember);
       let isCGFStaff = response?.data?.isCGFStaff ? true : false;
       fetchRm(response?.data?.memberId?._id, isCGFStaff);
-      // fetchReportingManagers(operationMember?.memberId?._id);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setIsLoading(false);
@@ -287,9 +284,6 @@ function EditOperationMember() {
     roles.length === 0 && fetchRoles();
 
     fetchOperationMember(controller, isMounted);
-
-    // fetchReportingManagers(operationMember?.memberId?._id);
-    // fetchRm();
 
     return () => {
       isMounted = false;
@@ -343,15 +337,7 @@ function EditOperationMember() {
 
   const handleOnSubmit = async (data) => {
     console.log("data from onsubmit", data);
-    // addOperationMember(data, false);
     editOperationMember(data);
-  };
-  const handleSaveAndMore = (data) => {
-    console.log("data from handleSaveAndMore", data);
-
-    editOperationMember(data);
-
-    reset();
   };
 
   return (

@@ -64,7 +64,6 @@ const ReplaceOperationMember = () => {
   const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
   const [opListPage, setOPPage] = React.useState(1);
   const [rowsPerPageReplaceOP, setRowsPerPageReplaceOP] = React.useState(10);
-  // const [isLoading, setIsLoading] = useState(false);
   const [operationMemberReplaceOP, setOperationMemberReplaceOP] = useState({});
 
   const { id } = useParams();
@@ -128,7 +127,6 @@ const ReplaceOperationMember = () => {
       delete object["phoneNumber"];
       delete object["createdAt"];
       object["role"] = "Operation Member";
-      // object["role"] = object["subRole"][0].name;
       delete object["subRole"];
       delete object["subRoleId"];
       delete object["isActive"];
@@ -164,16 +162,15 @@ const ReplaceOperationMember = () => {
   ) => {
     try {
       let url = generateUrl();
-      // setIsLoading(true);
       const response = await privateAxios.get(url, {
         signal: controller.signal,
       });
-      // console.log(response.headers["x-total-count"]);
+      
       setTotalRecordsReplaceOP(parseInt(response.headers["x-total-count"]));
       console.log("Response from operation member api get", response);
 
       updateRecords(response.data.filter((data) => data._id !== id));
-      // setIsLoading(false);
+      
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       console.log("Error from operation member-------", error);
@@ -181,7 +178,7 @@ const ReplaceOperationMember = () => {
       if (error?.response?.status == 401) {
         navigate("/login");
       }
-      // setIsLoading(false);
+      
     }
   };
 

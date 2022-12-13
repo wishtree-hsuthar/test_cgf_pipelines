@@ -53,7 +53,7 @@ const ViewOperationMembers = () => {
     useDocumentTitle("View Operation Member");
     // state to manage to loaders
     const [isLoading, setIsLoading] = useState(true);
-    const { control, reset, watch, trigger } = useForm({
+    const { control, reset, trigger } = useForm({
         defaultValues: defaultValues,
     });
     const navigate = useNavigate();
@@ -260,7 +260,6 @@ const ViewOperationMembers = () => {
     };
     const handleOpen = (index) => {
         setOpen(true);
-        // setData(data[index]);
         console.log("clicked", index);
         console.log(index);
         if (index === 0) {

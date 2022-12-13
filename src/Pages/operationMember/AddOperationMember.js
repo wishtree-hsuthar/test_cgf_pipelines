@@ -29,7 +29,6 @@ function AddOperationMember() {
     //custom hook to set title of page
     useDocumentTitle("Add Operation Member");
     const {
-        register,
         handleSubmit,
         formState: { errors },
         reset,
@@ -191,9 +190,7 @@ function AddOperationMember() {
                     let conutryCodeSet = new Set(tempCountryCode);
                     setCountries([...conutryCodeSet]);
                 }
-                // isMounted && setCountries(
-                //         response.data.map((country) => country?.countryCode)
-                //     );
+                
             } catch (error) {
                 console.log("error from countries api", error);
                 if (error?.response?.status == 401) {
@@ -334,7 +331,6 @@ function AddOperationMember() {
         } else {
             setValue("companyType", "N/A");
             setValue("memberId", "");
-            // trigger("memberId");
             setShowTextField(false);
             setReportingManagers();
             setValue("reportingManager", "");

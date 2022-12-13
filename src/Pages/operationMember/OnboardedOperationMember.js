@@ -96,7 +96,6 @@ function OnboardedOperationMember({
 
         let staleData = data;
         staleData.forEach((opMember) => {
-            // console.log("subRole-------", opMember["subRoleId"].name);
             delete opMember["updatedAt"];
             delete opMember["description"];
             delete opMember["countryCode"];
@@ -114,15 +113,7 @@ function OnboardedOperationMember({
             delete opMember["isMemberRepresentative"];
             delete opMember["isCGFStaff"];
             delete opMember["isOperationMember"];
-            // delete opMember["isActive"];
-
-            // opMember["role"] = opMember["data"]["subRoleId"].name;
-            // opMember["role"] = opMember["data"]["subRole"][0].name;
-            // opMember["_id"] = opMember["_id"];
-
-            // opMember.name = opMember["name"];
-            // opMember["email"] = opMember["email"];
-            // opMember["createdAt"] = opMember["createdAt"];
+        
             opMember["memberCompany"] = opMember["memberData"]["companyName"];
             opMember["companyType"] = opMember["memberData"]["companyType"];
             opMember["createdByName"] = opMember["createdBy"]["name"];
@@ -133,19 +124,12 @@ function OnboardedOperationMember({
                 day: "2-digit",
                 year: "numeric",
             });
-            // opMember["isActive"] = opMember["isActive"];
-
-            // delete opMember["data"]["subRoleId"];
-            // delete opMember["data"]["subRole"][0].name;
-            // delete opMember["isActive"];
-            // delete opMember["name"];
             delete opMember["isReplaced"];
             delete opMember["department"];
             delete opMember["title"];
             delete opMember["salutation"];
             delete opMember["createdBy"];
             delete opMember["updatedBy"];
-            // delete opMember["createdAt"];
             delete opMember["subRole"];
             delete opMember["data"];
             delete opMember["memberData"];
@@ -182,7 +166,7 @@ function OnboardedOperationMember({
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
+            
             setTotalRecordsForOnboardedOperationMemberTab(
                 parseInt(response.headers["x-total-count"])
             );

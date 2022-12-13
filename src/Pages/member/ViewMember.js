@@ -545,7 +545,6 @@ const ViewMember = () => {
     const controller = new AbortController();
     (async () => {
       isMounted && makeApiCall && (await getMemberByID(isMounted, controller));
-      //   isMounted && makeApiCall && (await getRoleNameByRoleId(isMounted, controller));
       isMounted && (await getCountryCode(isMounted, controller));
       isMounted && (await getRegions(isMounted, controller));
       // getRegions(controller)
@@ -553,7 +552,7 @@ const ViewMember = () => {
         makeApiCall &&
         (await getOperationMemberByMemberId(controller));
     })();
-    // makeApiCall && getMembers(isMounted, controller);
+
     return () => {
       isMounted = false;
       clearTimeout(searchTimeout);

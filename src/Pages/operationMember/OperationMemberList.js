@@ -13,26 +13,6 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { DOWNLOAD_OPERATION_MEMBER } from "../../api/Url";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import { downloadFunction } from "../../utils/downloadFunction";
-// function TabPanel(props) {
-//     const { children, value, index, ...other } = props;
-
-//     return (
-//         <div
-//             role="tabpanel"
-//             hidden={value !== index}
-//             id={`simple-tabpanel-${index}`}
-//             aria-labelledby={`simple-tab-${index}`}
-//             {...other}
-//         >
-//             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-//         </div>
-//     );
-// }
-// TabPanel.propTypes = {
-//     children: PropTypes.node,
-//     index: PropTypes.number.isRequired,
-//     value: PropTypes.number.isRequired,
-// };
 
 function a11yProps(index) {
     return {
@@ -114,7 +94,7 @@ function OperationMemberList() {
         setSearchTimeout(
             setTimeout(() => {
                 setMakeApiCall(true);
-                // setPage(1);
+                
             }, 1000)
         );
     };
@@ -250,137 +230,7 @@ function OperationMemberList() {
                                 </div>
                             </div>
                             <div className="member-filter-right">
-                                {/* <div className="filter-select-wrap flex-between">
-                                    <div className="filter-select-field">
-                                        <div className="dropdown-field">
-                                            <Select
-                                                value={filters.companyType}
-                                                // defaultValue="none"
-                                                displayEmpty
-                                                onChange={(e) => {
-                                                    setFilters({
-                                                        ...filters,
-                                                        companyType:
-                                                            e.target.value,
-                                                    });
-                                                }}
-                                                renderValue={(value) => {
-                                                    if (value.length < 1) {
-                                                        return (
-                                                            <em>
-                                                                Select company
-                                                                type
-                                                            </em>
-                                                        );
-                                                    } else {
-                                                        return value;
-                                                    }
-                                                }}
-                                            >
-                                                <MenuItem disabled value="">
-                                                    Select Company Type
-                                                </MenuItem>
-                                                <MenuItem
-                                                    key={"internal"}
-                                                    value={"internal"}
-                                                >
-                                                    Internal
-                                                </MenuItem>
-                                                <MenuItem
-                                                    key={"external"}
-                                                    value={"external"}
-                                                >
-                                                    External
-                                                </MenuItem>
-                                            </Select>
-                                        </div>
-                                    </div>
-                                    <div className="filter-select-field">
-                                        <div className="dropdown-field">
-                                            <Select
-                                                value={filters.createdBy}
-                                                // defaultValue="none"
-                                                displayEmpty
-                                                onChange={(e) => {
-                                                    setFilters({
-                                                        ...filters,
-                                                        createdBy:
-                                                            e.target.value,
-                                                    });
-                                                }}
-                                                renderValue={(value) => {
-                                                    if (value.length < 1) {
-                                                        return (
-                                                            <em>
-                                                                Select created
-                                                                By
-                                                            </em>
-                                                        );
-                                                    } else {
-                                                        return value;
-                                                    }
-                                                }}
-                                            >
-                                                <MenuItem disabled value="">
-                                                    Select created by
-                                                </MenuItem>
-                                                <MenuItem
-                                                    key={"internal"}
-                                                    value={"internal"}
-                                                >
-                                                    Internal
-                                                </MenuItem>
-                                                <MenuItem
-                                                    key={"external"}
-                                                    value={"external"}
-                                                >
-                                                    External
-                                                </MenuItem>
-                                            </Select>
-                                        </div>
-                                    </div>
-
-                                    <div className="filter-select-field">
-                                        <div className="dropdown-field">
-                                            <Select
-                                                value={filters.status}
-                                                displayEmpty
-                                                onChange={(e) =>
-                                                    // onFilterChangeHandler(e)
-                                                    setFilters({
-                                                        ...filters,
-                                                        status: e.target.value,
-                                                    })
-                                                }
-                                                renderValue={(value) => {
-                                                    if (value.length < 1) {
-                                                        return (
-                                                            <em>
-                                                                Select status
-                                                            </em>
-                                                        );
-                                                    } else {
-                                                        return value;
-                                                    }
-                                                }}
-                                                name="status"
-                                            >
-                                                <MenuItem value="">
-                                                    Select status
-                                                </MenuItem>
-                                                <MenuItem value="inactive">
-                                                    In-active
-                                                </MenuItem>
-                                                <MenuItem value="active">
-                                                    Active
-                                                </MenuItem>
-                                                <MenuItem value="all">
-                                                    All
-                                                </MenuItem>
-                                            </Select>
-                                        </div>
-                                    </div>
-                                </div> */}
+                              
                             </div>
                         </div>
                         <div className="member-info-wrapper table-content-wrap">
