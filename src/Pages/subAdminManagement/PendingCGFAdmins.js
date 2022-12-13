@@ -81,7 +81,7 @@ function PendingCGFAdmins({
         "createdAt",
         // "token",
     ];
-    const updatePendingRecords = (data) => {
+    const updatePendingRecordsCGFAdmin = (data) => {
         console.log("data before update----", data);
 
         let staleData = data;
@@ -229,7 +229,7 @@ function PendingCGFAdmins({
                 response
             );
 
-            updatePendingRecords(response.data);
+            updatePendingRecordsCGFAdmin(response.data);
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;

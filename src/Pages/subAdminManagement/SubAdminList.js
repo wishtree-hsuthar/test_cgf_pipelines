@@ -132,7 +132,7 @@ const SubAdminList = () => {
     //implemention of pagination on front-end
     // let records = [];
 
-    const updatePendingRecords = (data) => {
+    const updatePendingRecordsCGFAdmin = (data) => {
         console.log("data before update----", data);
 
         let staleData = data;
@@ -205,7 +205,7 @@ const SubAdminList = () => {
         setWithdrawInviteid(id);
     };
 
-    const withdrawInviteById = async () => {
+    const withdrawInviteByIdCGFAdmin = async () => {
         try {
             const response = await privateAxios.delete(
                 WITHDRAW_SUB_ADMIN + withdrawInviteid
@@ -271,7 +271,7 @@ const SubAdminList = () => {
                 response
             );
 
-            updatePendingRecords(response.data);
+            updatePendingRecordsCGFAdmin(response.data);
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
@@ -384,7 +384,7 @@ const SubAdminList = () => {
                 primaryButtonText={"Yes"}
                 secondaryButtonText={"No"}
                 onPrimaryModalButtonClickHandler={() => {
-                    withdrawInviteById();
+                    withdrawInviteByIdCGFAdmin();
                 }}
                 onSecondaryModalButtonClickHandler={() => {
                     setOpenDeleteDialogBox(false);
