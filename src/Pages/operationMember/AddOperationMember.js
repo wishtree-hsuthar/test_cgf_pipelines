@@ -24,83 +24,7 @@ import {
 } from "../../api/Url";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-const helperTextForAddOperationMember = {
-    salutation: {
-        required: "Select salutation",
-    },
-    name: {
-        required: "Enter the operation member name",
-        maxLength: "Max char limit exceed",
-        minLength: "minimum 3 characters required",
-        pattern: "Invalid format",
-    },
-    department: {
-        // required: "Enter the role name",
-        maxLength: "Max char limit exceed",
-        minLength: "minimum 3 characters required",
-        pattern: "Invalid format",
-    },
-    title: {
-        // required: "Enter the role name",
-        maxLength: "Max char limit exceed",
-        minLength: "minimum 3 characters required",
-        pattern: "Invalid format",
-    },
-    email: {
-        required: "Enter the email",
-        // maxLength: "Max char limit exceed",
-        // minLength: "Role must contain atleast 3 characters",
-        pattern: "Invalid format",
-    },
-    countryCode: {
-        required: "Enter country code",
-        validate: "Select country code",
-    },
-    phoneNumber: {
-        required: "Enter the phone number",
-        maxLength: "Max digits limit exceed",
-        minLength: "minimum 3 characters required",
-        validate: "Enter phone number",
-        // pattern: "Invalid format",
-    },
-    memberCompany: {
-        required: "Select member company",
-    },
-    operationType: {
-        required: "Select the operation type",
-        // maxLength: "Max char limit exceed",
-        // minLength: "Role must contain atleast 3 characters",
-        // pattern: "Invalid format",
-    },
-    memberId: {
-        required: "Select the member company",
-        // validate: "Select the member company",
-        // maxLength: "Max char limit exceed",
-        // minLength: "Role must contain atleast 3 characters",
-        // pattern: "Invalid format",
-    },
-    companyType: {
-        required: "Enter company type",
-        // maxLength: "Max char limit exceed",
-        // minLength: "Role must contain atleast 3 characters",
-        // pattern: "Invalid format",
-    },
-    address: {
-        required: "Enter address",
-        maxLength: "Max char limit exceed",
-        minLength: "minimum 3 characters required",
-        pattern: "Invalid format",
-    },
-    roleId: {
-        required: "Select the role",
-    },
-    reportingManager: {
-        required: "Select the reporting manager ",
-        // maxLength: "Max char limit exceed",
-        // minLength: "Role must contain atleast 3 characters",
-        // pattern: "Invalid format",
-    },
-};
+import {helperText} from "../../utils/OperationMemberModuleUtil"
 function AddOperationMember() {
     //custom hook to set title of page
     useDocumentTitle("Add Operation Member");
@@ -476,7 +400,7 @@ function AddOperationMember() {
                                                     name="salutation"
                                                     // placeholder="Mr."
                                                     myHelper={
-                                                        helperTextForAddOperationMember
+                                                        helperText
                                                     }
                                                     rules={{
                                                         required: true,
@@ -508,7 +432,7 @@ function AddOperationMember() {
                                                         "Enter full name"
                                                     }
                                                     myHelper={
-                                                        helperTextForAddOperationMember
+                                                        helperText
                                                     }
                                                     rules={{
                                                         required: true,
@@ -534,7 +458,7 @@ function AddOperationMember() {
                                                 )
                                             }
                                             myHelper={
-                                                helperTextForAddOperationMember
+                                                helperText
                                             }
                                             control={control}
                                             placeholder={"Enter title"}
@@ -560,7 +484,7 @@ function AddOperationMember() {
                                             }
                                             control={control}
                                             myHelper={
-                                                helperTextForAddOperationMember
+                                                helperText
                                             }
                                             placeholder={"Enter department"}
                                             rules={{
@@ -586,7 +510,7 @@ function AddOperationMember() {
                                             }
                                             control={control}
                                             myHelper={
-                                                helperTextForAddOperationMember
+                                                helperText
                                             }
                                             placeholder={"example@domain.com"}
                                             rules={{
@@ -718,7 +642,7 @@ function AddOperationMember() {
                                                                     }
                                                                     helperText={
                                                                         error
-                                                                            ? helperTextForAddOperationMember
+                                                                            ? helperText
                                                                                   .countryCode[
                                                                                   error
                                                                                       ?.type
@@ -748,7 +672,7 @@ function AddOperationMember() {
                                                 }
                                                 control={control}
                                                 myHelper={
-                                                    helperTextForAddOperationMember
+                                                    helperText
                                                 }
                                                 placeholder={"1234567890"}
                                                 rules={{
@@ -799,7 +723,7 @@ function AddOperationMember() {
                                             control={control}
                                             name="operationType"
                                             myHelper={
-                                                helperTextForAddOperationMember
+                                                helperText
                                             }
                                             placeholder={
                                                 "Select operation type"
@@ -995,7 +919,7 @@ function AddOperationMember() {
                                                                     }
                                                                     helperText={
                                                                         error
-                                                                            ? helperTextForAddOperationMember
+                                                                            ? helperText
                                                                                   .memberId[
                                                                                   error
                                                                                       ?.type
@@ -1027,7 +951,7 @@ function AddOperationMember() {
                                                 )
                                             }
                                             myHelper={
-                                                helperTextForAddOperationMember
+                                                helperText
                                             }
                                             placeholder={"Enter company type"}
                                         />
@@ -1067,7 +991,7 @@ function AddOperationMember() {
                                                     placeholder="Enter address"
                                                     helperText={
                                                         error
-                                                            ? helperTextForAddOperationMember
+                                                            ? helperText
                                                                   .address[
                                                                   error.type
                                                               ]
@@ -1094,7 +1018,7 @@ function AddOperationMember() {
                                             }
                                             isDisabled={disableReportingManager}
                                             myHelper={
-                                                helperTextForAddOperationMember
+                                                helperText
                                             }
                                             rules={{ required: true }}
                                             options={
@@ -1121,7 +1045,7 @@ function AddOperationMember() {
                                                     required: true,
                                                 }}
                                                 myHelper={
-                                                    helperTextForAddOperationMember
+                                                    helperText
                                                 }
                                                 placeholder={"Select role"}
                                             />

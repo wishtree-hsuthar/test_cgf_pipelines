@@ -1,13 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box } from "@mui/material";
-import Switch from "@mui/material/Switch";
-import Typography from "@mui/material/Typography";
-import { styled } from "@mui/material/styles";
 import Loader2 from "../../../assets/Loader/Loader2.svg"
 
-
-import PropTypes from "prop-types";
-import { Tabs, Tab, Tooltip } from "@mui/material";
+import { Tabs, Tab, Tooltip, Box } from "@mui/material";
 
 import PreviewSection from "./PreviewSection";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -15,7 +9,6 @@ import { privateAxios } from "../../../api/axios";
 import "../../../Pages/PreviewDemo.css";
 import {
     ADD_QUESTIONNAIRE,
-    DOWNLOAD_QUESTIONNAIRES,
     DOWNLOAD_QUESTIONNAIRES_BY_ID,
 } from "../../../api/Url";
 import { useDocumentTitle } from "../../../utils/useDocumentTitle";

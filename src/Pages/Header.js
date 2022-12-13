@@ -3,20 +3,16 @@ import {
     AppBar,
     Box,
     Toolbar,
-    Typography,
     Menu,
     Tooltip,
     MenuItem,
-    Modal,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { resetUser, setUser } from "../redux/UserSlice";
-import { GET_USER, LOGOUT_URL } from "../api/Url";
-import axios from "axios";
+import { resetUser } from "../redux/UserSlice";
+import {  LOGOUT_URL } from "../api/Url";
 import { privateAxios } from "../api/axios";
-import { Backdrop, Fade } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";

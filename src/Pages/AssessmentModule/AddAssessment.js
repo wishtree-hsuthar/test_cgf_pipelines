@@ -1,29 +1,21 @@
-import { Autocomplete, Paper, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
-// import Input from "../components/Input";
-import Input from "../../components/Input";
-import Dropdown from "../../components/Dropdown";
-import { privateAxios } from "../../api/axios";
-import useCallbackState from "../../utils/useCallBackState";
-import Toaster from "../../components/Toaster";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { privateAxios } from "../../api/axios";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
+import Toaster from "../../components/Toaster";
+import useCallbackState from "../../utils/useCallBackState";
 
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import {
   ADD_ASSESSMENTS,
-  ADD_QUESTIONNAIRE,
-  ASSESSMENTS,
-  FETCH_OPERATION_MEMBER,
-  MEMBER,
-  MEMBER_DROPDOWN,
-  MEMBER_OPERATION_MEMBERS,
+  ADD_QUESTIONNAIRE, FETCH_OPERATION_MEMBER, MEMBER_DROPDOWN
 } from "../../api/Url";
-import { date } from "yup";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const helperTextForAssessment = {
@@ -75,7 +67,6 @@ const AddAssessment = () => {
     handleSubmit,
     formState: { errors },
     control,
-    watch,
     reset,
     setValue,
     trigger,
@@ -215,7 +206,7 @@ const AddAssessment = () => {
 
     console.log("member representative----", memberRepresentative);
 
-    // trigger("assignedOperationMember");
+
     trigger("assignedMember");
     trigger("assignedOperationMember")
   };
@@ -237,10 +228,6 @@ const AddAssessment = () => {
     let someDate = new Date(data.dueDate).setDate(
       new Date(data.dueDate).getDate() - 1
     );
-    // let setUTCHoursForDueDate = new Date(
-    //     someDate.setDate(someDate.getDate())
-    // );
-    // let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
     console.log(
       "data after converting to ISOstring",
       // new Date(ISOdate).toISOString()

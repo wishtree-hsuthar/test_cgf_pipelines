@@ -13,7 +13,6 @@ import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { privateAxios } from "../../api/axios";
 import { downloadFunction } from "../../utils/downloadFunction";
 
 //Ideally get those from backend

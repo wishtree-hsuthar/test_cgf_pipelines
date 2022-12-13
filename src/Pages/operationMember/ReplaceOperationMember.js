@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
   Link,
-  Navigate,
-  useLocation,
   useNavigate,
   useParams,
 } from "react-router-dom";
-import PropTypes from "prop-types";
 
 import DialogBox from "../../components/DialogBox";
 
@@ -14,8 +11,6 @@ import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";
 import {
-  ADD_SUB_ADMIN,
-  FETCH_SUB_ADMIN_BY_ADMIN,
   GET_OPERATION_MEMBER_BY_ID,
   REPLACE_SUB_ADMIN,
   ADD_OPERATION_MEMBER,

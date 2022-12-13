@@ -6,7 +6,6 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Tooltip,
 } from "@mui/material";
 import React from "react";
 import TableLayoutCellComponent from "./TableLayoutCellComponent.js";

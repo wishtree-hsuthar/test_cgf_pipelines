@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
-import { MenuItem, Select, Tabs, Tab, Box } from "@mui/material";
-import TableComponent from "../../components/TableComponent";
+import {  Tabs, Tab, Box } from "@mui/material";
 import DraftedQuestionnaires from "./DraftedQuestionnaires";
-import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import PublishedQuestionnaires from "./PublishedQuestionnaires";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
@@ -69,11 +67,11 @@ function QuestionnairesList() {
     const privilege = useSelector((state) => state?.user?.privilege);
     const userAuth = useSelector((state) => state?.user?.userObj);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    let privilegeArray =
+    let QuestionnairePrivilgeArray =
         userAuth?.roleId?.name === "Super Admin"
             ? []
             : Object.values(privilege?.privileges);
-    let moduleAccesForMember = privilegeArray
+    let moduleAccesForMember = QuestionnairePrivilgeArray
         .filter((data) => data?.moduleId?.name === "Questionnaire")
         .map((data) => ({
             questionnaire: {

@@ -50,4 +50,5 @@ export const cgfActivitiesManufacturer = [
   totalOperationMembers: "",
   createdBy: "",
   roleId: "",
+  status: "active"
 };

@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
-import { Outlet, useLocation, Navigate } from "react-router-dom";
-import { object } from "yup";
+import {  useLocation, Navigate } from "react-router-dom";
 
 const RequireAuth = ({ children, moduleName, page }) => {
     const location = useLocation();

@@ -32,39 +32,12 @@ import {
   cgfActivitiesManufacturer,
   cgfActivitiesRetailer,
   cgfCategories,
+  defaultValues
 } from "../../utils/MemberModuleUtil";
 
 const EditMember = () => {
   //custom hook to set title of page
   useDocumentTitle("Edit Member");
-  const defaultValues1 = {
-    memberCompany: "",
-    companyType: "Internal",
-    parentCompany: "",
-    cgfCategory: "Manufacturer",
-    cgfActivity: "",
-    corporateEmail: "",
-    countryCode: "",
-    phoneNumber: "",
-    websiteUrl: "",
-    region: "",
-    country: "",
-    state: "",
-    city: "",
-    address: "",
-    cgfOfficeRegion: "",
-    cgfOfficeCountry: "",
-    cgfOffice: "",
-    memberContactSalutation: "Mr.",
-    memberContactFullName: "",
-    title: "",
-    department: "",
-    memberContactCountryCode: "",
-    memberContactEmail: "",
-    memberContactPhoneNuber: "",
-    status: "active",
-    roleId: "",
-  };
 
   const param = useParams();
   const navigate = useNavigate();
@@ -114,7 +87,7 @@ const EditMember = () => {
   const [disableMember, setDisableMember] = useState(false);
   const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
     reValidateMode: "onChange",
-    defaultValues: defaultValues1,
+    defaultValues: defaultValues,
   });
   const onSubmitFunctionCall = async (data) => {
     console.log("data", data);
@@ -155,7 +128,7 @@ const EditMember = () => {
       await axios.put(MEMBER + `/${param.id}`, {
         ...backendObject,
       });
-      reset(defaultValues1);
+      reset(defaultValues);
       // console.log("response : ", response);
       setToasterDetailsEditMember(
         {
@@ -165,14 +138,14 @@ const EditMember = () => {
         },
         () => myRef.current()
       );
-      console.log("Default values: ", defaultValues1);
+      console.log("Default values: ", defaultValues);
     } catch (error) {
       setErrorToaster1(error);
     }
   };
   // On Click cancel handler
   const onClickCancelHandler = () => {
-    reset({ defaultValues1 });
+    reset({ defaultValues });
     navigate("/users/members");
   };
   const onSubmit = (data) => {

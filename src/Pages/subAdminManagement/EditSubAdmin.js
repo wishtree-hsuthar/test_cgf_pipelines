@@ -2,10 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   TextField,
-  Select,
-  MenuItem,
   Autocomplete,
-  Box,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -16,8 +13,6 @@ import "react-phone-number-input/style.css";
 import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
 import Loader2 from "../../assets/Loader/Loader2.svg";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import {

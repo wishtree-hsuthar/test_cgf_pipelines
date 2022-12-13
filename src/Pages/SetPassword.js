@@ -6,7 +6,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { privateAxios, publicAxios } from "../api/axios";
+import { publicAxios } from "../api/axios";
 import { CONFIRM_PASSWORD, SET_PASSWORD_VERIFY_TOKEN } from "../api/Url";
 import Toaster from "../components/Toaster";
 import useCallbackState from "../utils/useCallBackState";

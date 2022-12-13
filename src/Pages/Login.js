@@ -16,7 +16,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUser, setPrivileges } from "../redux/UserSlice";
 import useCallbackState from "../utils/useCallBackState";
-import { privateAxios, publicAxios } from "../api/axios";
+import { publicAxios } from "../api/axios";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
 const loginFormSchema = yup.object().shape({
     email: yup

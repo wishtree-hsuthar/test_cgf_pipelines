@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Backdrop, Box, Modal, Fade, Tooltip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { Backdrop, Box, Fade, Modal, Tooltip } from "@mui/material";
+import PropTypes from "prop-types";
+import React from "react";
 
 const DialogBox = ({
     title,

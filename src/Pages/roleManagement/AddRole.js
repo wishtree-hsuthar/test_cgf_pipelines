@@ -5,12 +5,11 @@ import {
   FormControlLabel,
   Paper,
   Radio,
-  RadioGroup,
+  RadioGroup as AddRoleRadioGroup,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   TextField,
 } from "@mui/material";
@@ -25,6 +24,7 @@ import "../../components/TableComponent.css";
 import useCallbackState from "../../utils/useCallBackState";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import CommonTableHead from "./CommonTableHead";
 
 const AddRole = () => {
   useDocumentTitle("Add Role");
@@ -101,7 +101,7 @@ const AddRole = () => {
   const { control, reset, setValue, handleSubmit } = useForm({
     defaultValues: defaultValues,
   });
-  const addRoleOnSubmit = async (data) => {
+  const submitCall = async (data) => {
     console.log("inside on Submit");
     let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
     Object.keys(previlegesForBackend).forEach((p_key) => {
@@ -127,7 +127,7 @@ const AddRole = () => {
       );
       reset({ defaultValues });
       getSystemModules();
-      setTimeout(() => navigate1("/roles"), 3000);
+      return true
     } catch (error) {
       // console.log("error", error);
       setToasterDetails1(
@@ -142,51 +142,16 @@ const AddRole = () => {
         },
         () => myRef.current()
       );
+      return false
     }
+  }
+  const addRoleOnSubmit = async (data) => {
+     const isSubmited = await submitCall(data)
+     if(!isSubmited) return
+     setTimeout(() => navigate1("/roles"),3000)
   };
   const onSubmitAddMoreClickHandler1 = async (data) => {
-    // console.log("on Submit", data, "previleges1 on Submit", previleges1);
-    let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
-    Object.keys(previlegesForBackend).forEach((p_key) => {
-      // console.log("key", p_key);
-      delete previlegesForBackend[p_key]["all"];
-      delete previlegesForBackend[p_key]["name"];
-    });
-
-    // console.log("pBack", previlegesForBackend, "pFront", previleges1);
-
-    //backend call
-    try {
-      await axios.post(REACT_APP_API_ENDPOINT + "roles", {
-        name: data.roleName,
-        description: data.description,
-        isActive: data.status === "active" ? true : false,
-        privileges: previlegesForBackend,
-      });
-      setToasterDetails1(
-        {
-          titleMessage: "Hurray!",
-          descriptionMessage: "New role added successfully",
-          messageType: "success",
-        },
-        () => myRef.current()
-      );
-      reset({ defaultValues });
-      getSystemModules();
-    } catch (error) {
-      setToasterDetails1(
-        {
-          titleMessage: "Error",
-          descriptionMessage:
-            error?.response?.data?.message &&
-            typeof error.response.data.message === "string"
-              ? error.response.data.message
-              : "Something went wrong!",
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
-    }
+    submitCall(data)
   };
   const onClickCancelHandler1 = () => {
     // console.log("inside on click cancel");
@@ -308,7 +273,7 @@ const AddRole = () => {
                         name="status"
                         control={control}
                         render={({ field }) => (
-                          <RadioGroup
+                          <AddRoleRadioGroup
                             {...field}
                             aria-labelledby="demo-radio-buttons-group-label"
                             name="radio-buttons-group"
@@ -324,7 +289,7 @@ const AddRole = () => {
                               control={<Radio />}
                               label="Inactive"
                             />
-                          </RadioGroup>
+                          </AddRoleRadioGroup>
                         )}
                       />
                     </div>
@@ -373,45 +338,7 @@ const AddRole = () => {
                 <Paper sx={{ width: "100%" }}>
                   <TableContainer>
                     <Table sx={{ minWidth: 750 }}>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell
-                            align="left"
-                            className="table-header"
-                            width="16%"
-                          >
-                            <span className="sorted-blk">Modules</span>
-                          </TableCell>
-                          <TableCell className="table-header">
-                            <span className="sorted-blk">Fill</span>
-                          </TableCell>
-                          <TableCell className="table-header">
-                            <span className="sorted-blk">List</span>
-                          </TableCell>
-                          <TableCell align="center" className="table-header">
-                            <span className="sorted-blk">Add</span>
-                          </TableCell>
-                          <TableCell align="center" className="table-header">
-                            <span className="sorted-blk">Edit</span>
-                          </TableCell>
-                          <TableCell align="center" className="table-header">
-                            <span className="sorted-blk">View</span>
-                          </TableCell>
-                          <TableCell align="center" className="table-header">
-                            <span className="sorted-blk">Delete</span>
-                          </TableCell>
-                          {/* <TableCell
-                              align="center"
-                              className="table-header"
-                              width="16%"
-                            >
-                              Assign to Member
-                            </TableCell> */}
-                          <TableCell align="center" className="table-header">
-                            <span className="sorted-blk">All</span>
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
+                      <CommonTableHead/>
                       <TableBody>
                         {Object.keys(previleges1).map((previleg, _id) => {
                           console.log(

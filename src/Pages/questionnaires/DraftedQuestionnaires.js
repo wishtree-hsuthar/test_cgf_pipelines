@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { MenuItem, Select } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import { privateAxios } from "../../api/axios";
 import Loader2 from "../../assets/Loader/Loader2.svg";
@@ -102,12 +101,12 @@ function DraftedQuestionnaires({
 
     const userAuth = useSelector((state) => state?.user?.userObj);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    let privilegeArray =
+    let draftedQuestionnairePrivilgeArray =
         userAuth?.roleId?.name === "Super Admin"
             ? []
             : Object.values(privilege?.privileges);
-    // let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
-    let moduleAccesForMember = privilegeArray
+    // let draftedQuestionnairePrivilgeArray = privilege ? Object.values(privilege?.privileges) : [];
+    let moduleAccesForMember = draftedQuestionnairePrivilgeArray
         .filter((data) => data?.moduleId?.name === "Questionnaire")
         .map((data) => ({
             questionnaire: {

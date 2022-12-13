@@ -8,10 +8,8 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Tab, Tabs, Tooltip } from "@mui/material";
-import PropTypes from "prop-types";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Loader2 from "../../assets/Loader/Loader2.svg";
-import CloseIcon from "@mui/icons-material/Close";
 import SectionContent from "./SectionContent";
 import { v4 as uuidv4 } from "uuid";
 import { Link, useNavigate, useParams } from "react-router-dom";

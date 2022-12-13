@@ -3,7 +3,7 @@ import {
   FormControlLabel,
   Paper,
   Radio,
-  RadioGroup,
+  RadioGroup as MemberRadio,
   TextField,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
@@ -72,33 +72,7 @@ const AddMember = () => {
       () => myRef.current()
     );
   };
-  const defaultValues = {
-    memberCompany: "",
-    companyType: "Internal",
-    parentCompany: "",
-    cgfCategory: "Manufacturer",
-    cgfActivity: "",
-    corporateEmail: "",
-    countryCode: "",
-    phoneNumber: "",
-    websiteUrl: "",
-    region: "",
-    country: "",
-    state: "",
-    city: "",
-    address: "",
-    cgfOfficeRegion: "",
-    cgfOfficeCountry: "",
-    cgfOffice: "",
-    memberContactSalutation: "Mr.",
-    memberContactFullName: "",
-    title: "",
-    department: "",
-    memberContactCountryCode: "",
-    memberContactEmail: "",
-    memberContactPhoneNuber: "",
-    roleId: "",
-  };
+ 
   //to hold all regions
   const [arrOfRegionsAddMember, setArrOfRegionsAddMember] = useState([]);
   //to hold array of countries for perticular region for Company Adress
@@ -453,7 +427,7 @@ const AddMember = () => {
                           name="companyType"
                           control={control}
                           render={({ field }) => (
-                            <RadioGroup
+                            <MemberRadio
                               {...field}
                               aria-labelledby="demo-radio-buttons-group-label"
                               name="radio-buttons-group"
@@ -469,7 +443,7 @@ const AddMember = () => {
                                 control={<Radio />}
                                 label="External"
                               />
-                            </RadioGroup>
+                            </MemberRadio>
                           )}
                         />
                       </div>

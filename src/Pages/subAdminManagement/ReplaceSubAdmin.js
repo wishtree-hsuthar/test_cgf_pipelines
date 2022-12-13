@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
     Link,
-    Navigate,
-    useLocation,
     useNavigate,
     useParams,
 } from "react-router-dom";
-import PropTypes from "prop-types";
-import {
-    Box,
-    Tabs,
-    Tab,
-    Typography,
-    MenuItem,
-    Select,
-    InputLabel,
-    Checkbox,
-} from "@mui/material";
+
 import DialogBox from "../../components/DialogBox";
 
 import TableComponent from "../../components/TableComponent";

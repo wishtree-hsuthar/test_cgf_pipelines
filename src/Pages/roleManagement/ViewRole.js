@@ -10,7 +10,6 @@ import {
   Tab,
   Paper,
   TableContainer,
-  TableHead,
   TableRow,
   TableCell,
   Table,
@@ -18,7 +17,6 @@ import {
   Checkbox,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import PropTypes from "prop-types";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -35,6 +33,7 @@ import {
 } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
+import CommonTableHead from "./CommonTableHead";
 
 const tableHead = [
   {
@@ -518,60 +517,7 @@ const ViewRole = () => {
                     <Paper sx={{ width: "100%" }}>
                       <TableContainer>
                         <Table sx={{ minWidth: 750 }}>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell
-                                align="left"
-                                className="table-header"
-                                width="16%"
-                              >
-                                <span className="sorted-blk">Modules</span>
-                              </TableCell>
-                              <TableCell className="table-header">
-                                <span className="sorted-blk">Fill</span>
-                              </TableCell>
-                              <TableCell className="table-header">
-                                <span className="sorted-blk">List</span>
-                              </TableCell>
-                              <TableCell
-                                align="center"
-                                className="table-header"
-                              >
-                                <span className="sorted-blk">Add</span>
-                              </TableCell>
-                              <TableCell
-                                align="center"
-                                className="table-header"
-                              >
-                                <span className="sorted-blk">Edit</span>
-                              </TableCell>
-                              <TableCell
-                                align="center"
-                                className="table-header"
-                              >
-                                <span className="sorted-blk">View</span>
-                              </TableCell>
-                              <TableCell
-                                align="center"
-                                className="table-header"
-                              >
-                                <span className="sorted-blk">Delete</span>
-                              </TableCell>
-                              {/* <TableCell
-                              align="center"
-                              className="table-header"
-                              width="16%"
-                            >
-                              Assign to Member
-                            </TableCell> */}
-                              <TableCell
-                                align="center"
-                                className="table-header"
-                              >
-                                <span className="sorted-blk">All</span>
-                              </TableCell>
-                            </TableRow>
-                          </TableHead>
+                          <CommonTableHead/>
                           <TableBody>
                             {Object.keys(temp).map((previleg, id) => {
                               return (

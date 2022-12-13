@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MenuItem, Select } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import { privateAxios } from "../../api/axios";
 import Loader2 from "../../assets/Loader/Loader2.svg";
@@ -39,7 +38,7 @@ const PublishedQuestionnaires = ({
     },
   ];
 
-  const keysOrder = ["_id", "title", "uuid", "createdAt","isActive"];
+  const questionnaireKeysOrder = ["_id", "title", "uuid", "createdAt","isActive"];
 
   //code of tablecomponent
   const [pagePublishedQuestionnaire, setPagePublishedQuestionnaire] =
@@ -62,22 +61,22 @@ const PublishedQuestionnaires = ({
     useState([]);
 
   const updateRecords = (data) => {
-    data.forEach((object) => {
-      delete object["updatedAt"];
+    data.forEach((questionnaireObject) => {
+      delete questionnaireObject["updatedAt"];
 
-      delete object["__v"];
+      delete questionnaireObject["__v"];
 
-      // delete object["uuid"];
-      // delete object["createdAt"];
-      delete object["isDraft"];
-      delete object["isPublished"];
-      // delete object["isActive"]
-      delete object["vNo"];
-      // delete object[""];
-      // delete object["title"];
-      // delete object["updatedAt"];
-      // object["uuid"] = object["uuid"];
-      object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
+      // delete questionnaireObject["uuid"];
+      // delete questionnaireObject["createdAt"];
+      delete questionnaireObject["isDraft"];
+      delete questionnaireObject["isPublished"];
+      // delete questionnaireObject["isActive"]
+      delete questionnaireObject["vNo"];
+      // delete questionnaireObject[""];
+      // delete questionnaireObject["title"];
+      // delete questionnaireObject["updatedAt"];
+      // questionnaireObject["uuid"] = questionnaireObject["uuid"];
+      questionnaireObject["createdAt"] = new Date(questionnaireObject["createdAt"]).toLocaleDateString(
         "en-US",
         {
           month: "2-digit",
@@ -85,10 +84,10 @@ const PublishedQuestionnaires = ({
           year: "numeric",
         }
       );
-      keysOrder.forEach((k) => {
-        const v = object[k];
-        delete object[k];
-        object[k] = v;
+      questionnaireKeysOrder.forEach((k) => {
+        const v = questionnaireObject[k];
+        delete questionnaireObject[k];
+        questionnaireObject[k] = v;
       });
     });
     setRecordsPublishedQuestionnaire([...data]);
@@ -106,12 +105,12 @@ const PublishedQuestionnaires = ({
   const privilege = useSelector((state) => state?.user?.privilege);
 
   const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-  let privilegeArray =
+  let publishedQuestionnairePrivilgeArray =
     userAuth?.roleId?.name === "Super Admin"
       ? []
       : Object.values(privilege?.privileges);
-  // let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
-  let moduleAccesForMember = privilegeArray
+  // let publishedQuestionnairePrivilgeArray = privilege ? Object.values(privilege?.privileges) : [];
+  let moduleAccesForMember = publishedQuestionnairePrivilgeArray
     .filter((data) => data?.moduleId?.name === "Questionnaire")
     .map((data) => ({
       questionnaire: {

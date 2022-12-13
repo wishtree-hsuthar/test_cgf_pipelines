@@ -1,8 +1,7 @@
 import { Backdrop, Box, Fade, Modal, TextField } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 import CloseIcon from "@mui/icons-material/Close";
-import React from "react";
-import { useState } from "react";
+import React, {useState} from "react";
 
 /* Popup */
 const style = {

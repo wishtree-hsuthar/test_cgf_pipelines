@@ -9,10 +9,8 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import TableRender from "./TableRender.js";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DropdownOptionModal from "./DropdownOptionModal.js";
-import { useState } from "react";
-import { set } from "react-hook-form";
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 
 const ITEM_HEIGHT = 42;

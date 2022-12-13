@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import { Box, Tabs, Tab, Typography, MenuItem, Select } from "@mui/material";
+import { Box, Tabs, Tab} from "@mui/material";
 
 import DownloadIcon from "@mui/icons-material/Download";
 import useCallbackState from "../../utils/useCallBackState";
@@ -136,47 +135,47 @@ const SubAdminList = () => {
         console.log("data before update----", data);
 
         let staleData = data;
-        staleData.forEach((object) => {
-            // console.log("subRole-------", object["data"]["subRoleId"].name);
-            delete object["updatedAt"];
-            delete object["data"]["description"];
-            delete object["data"]["countryCode"];
-            delete object["data"]["isDeleted"];
-            delete object["__v"];
-            delete object["data"]["password"];
-            delete object["data"]["roleId"];
-            delete object["data"]["salt"];
-            delete object["data"]["uuid"];
-            delete object["data"]["phoneNumber"];
-            delete object["token"];
-            delete object["tokenExpiry"];
-            delete object["tokenType"];
+        staleData.forEach((cgfAdmin) => {
+            // console.log("subRole-------", cgfAdmin["data"]["subRoleId"].name);
+            delete cgfAdmin["updatedAt"];
+            delete cgfAdmin["data"]["description"];
+            delete cgfAdmin["data"]["countryCode"];
+            delete cgfAdmin["data"]["isDeleted"];
+            delete cgfAdmin["__v"];
+            delete cgfAdmin["data"]["password"];
+            delete cgfAdmin["data"]["roleId"];
+            delete cgfAdmin["data"]["salt"];
+            delete cgfAdmin["data"]["uuid"];
+            delete cgfAdmin["data"]["phoneNumber"];
+            delete cgfAdmin["token"];
+            delete cgfAdmin["tokenExpiry"];
+            delete cgfAdmin["tokenType"];
 
-            // delete object["isActive"];
-            object["createdAt"] = new Date(
-                object["createdAt"]
+            // delete cgfAdmin["isActive"];
+            cgfAdmin["createdAt"] = new Date(
+                cgfAdmin["createdAt"]
             ).toLocaleDateString("en-US", {
                 month: "2-digit",
                 day: "2-digit",
                 year: "numeric",
             });
 
-            // object["role"] = object["data"]["subRoleId"].name;
-            // object["role"] = object["data"]["subRole"][0].name;
-            object["role"] = object["subRole"][0].name;
-            object["name"] = object["data"].name;
-            object["email"] = object["data"].email;
-            // object["createdAt"] = object["createdAt"];
-            // delete object["data"]["subRoleId"];
-            // delete object["data"]["subRole"][0].name;
-            delete object["subRole"];
-            delete object["data"];
-            delete object["memberData"];
+            // cgfAdmin["role"] = cgfAdmin["data"]["subRoleId"].name;
+            // cgfAdmin["role"] = cgfAdmin["data"]["subRole"][0].name;
+            cgfAdmin["role"] = cgfAdmin["subRole"][0].name;
+            cgfAdmin["name"] = cgfAdmin["data"].name;
+            cgfAdmin["email"] = cgfAdmin["data"].email;
+            // cgfAdmin["createdAt"] = cgfAdmin["createdAt"];
+            // delete cgfAdmin["data"]["subRoleId"];
+            // delete cgfAdmin["data"]["subRole"][0].name;
+            delete cgfAdmin["subRole"];
+            delete cgfAdmin["data"];
+            delete cgfAdmin["memberData"];
 
             pendingKeysOrder.forEach((k) => {
-                const v = object[k];
-                delete object[k];
-                object[k] = v;
+                const v = cgfAdmin[k];
+                delete cgfAdmin[k];
+                cgfAdmin[k] = v;
             });
         });
         console.log(

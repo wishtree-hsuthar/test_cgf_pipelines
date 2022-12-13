@@ -1,7 +1,6 @@
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import { setUser, resetUser, setPrivileges } from "../redux/UserSlice";
+import { setUser, setPrivileges } from "../redux/UserSlice";
 import { GET_USER } from "../api/Url";
 import { privateAxios } from "../api/axios";
 import { useState } from "react";

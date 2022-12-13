@@ -1,35 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-    Link,
-    Navigate,
-    useLocation,
-    useNavigate,
-    useParams,
+    Link, useNavigate,
+    useParams
 } from "react-router-dom";
-import PropTypes from "prop-types";
-import {
-    Box,
-    Tabs,
-    Tab,
-    Typography,
-    MenuItem,
-    Select,
-    InputLabel,
-    Checkbox,
-} from "@mui/material";
-import DialogBox from "../../components/DialogBox";
-import TableComponent from "../../components/TableComponent";
-import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";
 import {
     FETCH_ASSESSMENT_BY_ID,
-    FETCH_OPERATION_MEMBER,
-    FETCH_SUB_ADMIN_BY_ADMIN,
-    MEMBER_OPERATION_MEMBERS,
-    REASSIGN_ASSESSMENTS,
-    REPLACE_SUB_ADMIN,
+    FETCH_OPERATION_MEMBER, MEMBER_OPERATION_MEMBERS,
+    REASSIGN_ASSESSMENTS
 } from "../../api/Url";
+import TableComponent from "../../components/TableComponent";
 import Toaster from "../../components/Toaster";
+import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const tableHead = [
@@ -62,7 +44,6 @@ const AssignAssessmentToOperationMember = () => {
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [isLoading, setIsLoading] = useState(false);
-    const [cgfAdmin, setCgfAdmin] = useState({});
     const { id } = useParams();
     //state to hold search timeout delay
     const [searchTimeout, setSearchTimeout] = useState(null);
@@ -82,7 +63,6 @@ const AssignAssessmentToOperationMember = () => {
     const navigate = useNavigate();
     const myRef = React.useRef();
 
-    const [open, setOpen] = useState();
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
@@ -119,7 +99,6 @@ const AssignAssessmentToOperationMember = () => {
             .at(
                 -1
             )}/reassignto/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
-        // let url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
             url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
 
@@ -143,7 +122,6 @@ const AssignAssessmentToOperationMember = () => {
             delete object["phoneNumber"];
             delete object["createdAt"];
             delete object["memberData"];
-            // object["role"] = object["subRole"][0].name;
             delete object["department"];
             delete object["isDeleted"];
             delete object["isActive"];
@@ -159,8 +137,6 @@ const AssignAssessmentToOperationMember = () => {
             delete object["isCGFStaff"];
             delete object["isOperationMember"];
             delete object["isMemberRepresentative"];
-            // object["name"] = object["name"];
-            // delete object["name"];
 
             keysOrder.forEach((k) => {
                 const v = object[k];
@@ -194,7 +170,6 @@ const AssignAssessmentToOperationMember = () => {
             const response = await privateAxios.get(memberId && url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
             setTotalRecords(parseInt(response.headers["x-total-count"]));
             console.log(
                 "Response from  api get operation member api",
@@ -207,7 +182,6 @@ const AssignAssessmentToOperationMember = () => {
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
             console.log("Error from operation member-------", error);
             isMounted &&
                 setToasterDetails(
@@ -228,7 +202,7 @@ const AssignAssessmentToOperationMember = () => {
                 console.log(
                     "Error status 500 while fetchiing operation member"
                 );
-                // navigate("/users/cgf-admin/");
+             
             }
         }
     };
@@ -337,8 +311,6 @@ const AssignAssessmentToOperationMember = () => {
 
             //     } catch (error) {
 
-            //     }
-            // }
             (async () => {
                 await fetchAssessment(isMounted, controller);
                 await getOperationMembers(isMounted, controller);

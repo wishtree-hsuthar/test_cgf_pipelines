@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import ClearIcon from "@mui/icons-material/Clear";
+import PropTypes from "prop-types";
+import React, { useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Toaster.css";
 function Toaster({ titleMessage, descriptionMessage, messageType, myRef }) {
   const showToasts = () => {
