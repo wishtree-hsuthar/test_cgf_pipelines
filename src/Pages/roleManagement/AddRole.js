@@ -69,7 +69,6 @@ const AddRole = () => {
   const [previleges1, setPrevileges1] = useState({ ...temp });
 
   const addRoleCreatePrivileges = () => {
-    // console.log("modules in side create prive func", modules);
     modules.forEach(
       (module) =>
         (temp[module.moduleId] = {
@@ -129,7 +128,6 @@ const AddRole = () => {
       getSystemModules();
       return true
     } catch (error) {
-      // console.log("error", error);
       setToasterDetails1(
         {
           titleMessage: "Error",
@@ -154,7 +152,6 @@ const AddRole = () => {
     submitCall(data)
   };
   const onClickCancelHandler1 = () => {
-    // console.log("inside on click cancel");
     reset({ defaultValues });
     return navigate1("/roles");
   };
@@ -180,7 +177,7 @@ const AddRole = () => {
       );
     }
   };
-  const checkForAllPrivilege = (tempModule, priv) => {};
+
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
