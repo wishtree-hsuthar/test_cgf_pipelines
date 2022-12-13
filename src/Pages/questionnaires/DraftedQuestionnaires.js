@@ -181,7 +181,7 @@ function DraftedQuestionnaires({
         pageDraftedQuestionnaire,
         rowsPerPageDraftedQuestionnaire,
         orderByDraftedQuestionnaire,
-        orderByDraftedQuestionnaire,
+        orderDraftedQuestionnaire,
 
         makeApiCall,
         setMakeApiCall,
