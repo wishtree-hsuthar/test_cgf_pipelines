@@ -124,11 +124,12 @@ const TableLayoutCellComponent = ({
             // onChange={(e) => onColumnChangeHandler(e, columnId)}
             // onChange={(e) => onInputTypeChangeHandler(e, columnId)}
             className="select-dropdown"
+            renderValue={() => <div className="select-placeholder">Select option</div>}
             MenuProps={MenuProps}
           >
-            <MenuItem value="dropdown" disabled>
+            {/* <MenuItem value="dropdown" disabled>
               Select option
-            </MenuItem>
+            </MenuItem> */}
             {column &&
               column?.options?.map((option, optionIdx) => (
                 <MenuItem key={optionIdx} value={option} disabled>

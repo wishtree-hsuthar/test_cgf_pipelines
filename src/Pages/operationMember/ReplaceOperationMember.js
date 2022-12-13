@@ -22,7 +22,7 @@ import {
 } from "../../api/Url";
 import Toaster from "../../components/Toaster";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-const tableHead = [
+const replaceOperationMemberTableHead = [
     {
         id: "",
         disablePadding: true,
@@ -51,24 +51,39 @@ const tableHead = [
 const ReplaceOperationMember = () => {
   //custom hook to set title of page
   useDocumentTitle("Replace Operation Member");
+  const setErrorToaster = (error) => {
+    console.log("error", error);
+    setToasterDetails(
+      {
+        titleMessage: "Error",
+        descriptionMessage:
+          error?.response?.data?.message &&
+          typeof error.response.data.message === "string"
+            ? error.response.data.message
+            : "Something went wrong!",
+        messageType: "error",
+      },
+      () => myRef.current()
+    );
+  };
   const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
-  const [page, setPage] = React.useState(1);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [isLoading, setIsLoading] = useState(false);
-  const [operationMember, setOperationMember] = useState({});
+  const [opListPage, setOPPage] = React.useState(1);
+  const [rowsPerPageReplaceOP, setRowsPerPageReplaceOP] = React.useState(10);
+  // const [isLoading, setIsLoading] = useState(false);
+  const [operationMemberReplaceOP, setOperationMemberReplaceOP] = useState({});
 
   const { id } = useParams();
   //state to hold search timeout delay
   const [selectedOperationMember, setSelectedOperationMember] = useState({});
-  const [searchTimeout, setSearchTimeout] = useState(null);
-  const [selected, setSelected] = React.useState([]);
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("operationalMember");
-  const [selectedUser, setSelectedUser] = useState("");
-  const [makeApiCall, setMakeApiCall] = useState(true);
-  const [records, setRecords] = React.useState([]);
-  const [totalRecords, setTotalRecords] = React.useState(0);
-  const [search, setSearch] = useState("");
+  const [searchTimeoutReplaceOP, setSearchTimeoutReplaceOP] = useState(null);
+  const [selectedReplaceOP, setSelectedReplaceOP] = React.useState([]);
+  const [orderReplaceOP, setOrderReplaceOP] = React.useState("asc");
+  const [orderByReplaceOP, setOrderByReplaceOP] = React.useState("operationalMember");
+  const [selectedUserReplaceOP, setSelectedUserReplaceOP] = useState("");
+  const [makeApiCallReplaceOP, setMakeApiCallReplaceOP] = useState(true);
+  const [recordsReplaceOP, setRecordsReplaceOP] = React.useState([]);
+  const [totalRecordsReplaceOP, setTotalRecordsReplaceOP] = React.useState(0);
+  const [seacrchReplaceOP, setSearchReplaceOP] = useState("");
   const navigate = useNavigate();
   const myRef = React.useRef();
   //Toaster Message setter
@@ -77,26 +92,26 @@ const ReplaceOperationMember = () => {
     descriptionMessage: "",
     messageType: "success",
   });
-  // search function
-  const onSearchChangeHandler = (e) => {
+  // seacrchReplaceOP function
+  const onSearchChangeHandlerReplaceOP = (e) => {
     console.log("event", e.key);
-    if (searchTimeout) clearTimeout(searchTimeout);
-    setMakeApiCall(false);
-    console.log("search values", e.target.value);
-    setSearch(e.target.value);
-    setSearchTimeout(
+    if (searchTimeoutReplaceOP) clearTimeout(searchTimeoutReplaceOP);
+    setMakeApiCallReplaceOP(false);
+    console.log("seacrchReplaceOP values", e.target.value);
+    setSearchReplaceOP(e.target.value);
+    setSearchTimeoutReplaceOP(
       setTimeout(() => {
-        setMakeApiCall(true);
-        setPage(1);
+        setMakeApiCallReplaceOP(true);
+        setOPPage(1);
       }, 1000)
     );
   };
   const generateUrl = (multiFilterString) => {
-    console.log("Search", search);
+    console.log("Search", seacrchReplaceOP);
 
-    let url = `${ADD_OPERATION_MEMBER}/${id}/replaces/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
-    if (search?.length >= 3)
-      url = `${ADD_OPERATION_MEMBER}/${id}/replaces/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
+    let url = `${ADD_OPERATION_MEMBER}/${id}/replaces/list?page=${opListPage}&size=${rowsPerPageReplaceOP}&orderBy=${orderByReplaceOP}&order=${orderReplaceOP}`;
+    if (seacrchReplaceOP?.length >= 3)
+      url = `${ADD_OPERATION_MEMBER}/${id}/replaces/list?page=${opListPage}&size=${rowsPerPageReplaceOP}&orderBy=${orderByReplaceOP}&order=${orderReplaceOP}&search=${seacrchReplaceOP}`;
 
     return url;
   };
@@ -145,7 +160,7 @@ const ReplaceOperationMember = () => {
       });
     });
     console.log("data in updaterecords method", staleData);
-    setRecords([...staleData]);
+    setRecordsReplaceOP([...staleData]);
   };
 
   const getOperationMember = async (
@@ -159,7 +174,7 @@ const ReplaceOperationMember = () => {
         signal: controller.signal,
       });
       // console.log(response.headers["x-total-count"]);
-      setTotalRecords(parseInt(response.headers["x-total-count"]));
+      setTotalRecordsReplaceOP(parseInt(response.headers["x-total-count"]));
       console.log("Response from operation member api get", response);
 
       updateRecords(response.data.filter((data) => data._id !== id));
@@ -179,7 +194,7 @@ const ReplaceOperationMember = () => {
     try {
       const response = await privateAxios.get(GET_OPERATION_MEMBER_BY_ID + id);
       console.log("response from fetch sub admin by id", response);
-      setOperationMember(response.data);
+      setOperationMemberReplaceOP(response.data);
     } catch (error) {
       if (error?.response?.status == 500) {
         console.log(
@@ -192,27 +207,27 @@ const ReplaceOperationMember = () => {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    makeApiCall && getOperationMember(isMounted, controller);
-    console.log("makeApiCall", makeApiCall);
+    makeApiCallReplaceOP && getOperationMember(isMounted, controller);
+    console.log("makeApiCallReplaceOP", makeApiCallReplaceOP);
     console.log("inside use Effect");
     fetchOperationMember();
 
     return () => {
       isMounted = false;
-      clearTimeout(searchTimeout);
+      clearTimeout(searchTimeoutReplaceOP);
       controller.abort();
     };
-  }, [page, rowsPerPage, orderBy, order, makeApiCall]);
+  }, [opListPage, rowsPerPageReplaceOP, orderByReplaceOP, orderReplaceOP, makeApiCallReplaceOP]);
 
   const handleTableTesterPageChange = (newPage) => {
     console.log("new Page", newPage);
-    setPage(newPage);
+    setOPPage(newPage);
   };
 
-  //rows per page change handler
+  //rows per opListPage change handler
   const handleTableTesterRowsPerPageChange = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(1);
+    setRowsPerPageReplaceOP(parseInt(event.target.value, 10));
+    setOPPage(1);
   };
 
   const replaceUser = async () => {
@@ -223,14 +238,14 @@ const ReplaceOperationMember = () => {
         {
           replacingTo: id,
 
-          replacingWith: selectedUser,
+          replacingWith: selectedUserReplaceOP,
         }
       );
       if (response.status == 201) {
         console.log(
           selectedOperationMember[0].name +
             " has replaced " +
-            operationMember.name +
+            operationMemberReplaceOP.name +
             " successfully!"
         );
         setToasterDetails(
@@ -239,7 +254,7 @@ const ReplaceOperationMember = () => {
             descriptionMessage:
               selectedOperationMember[0].name +
               " has replaced " +
-              operationMember.name +
+              operationMemberReplaceOP.name +
               " successfully!",
             messageType: "success",
           },
@@ -253,25 +268,11 @@ const ReplaceOperationMember = () => {
     } catch (error) {
       console.log("error from replace user");
       if (error.response.status == 400) {
-        setToasterDetails(
-          {
-            titleMessage: "Error",
-            descriptionMessage: error?.response?.data?.message,
-            messageType: "error",
-          },
-          () => myRef.current()
-        );
+        setErrorToaster(error)
         setOpen(false);
       }
       if (error.response.status == 401) {
-        setToasterDetails(
-          {
-            titleMessage: "Error",
-            descriptionMessage: error?.response?.data?.message,
-            messageType: "error",
-          },
-          () => myRef.current()
-        );
+        setErrorToaster(error)
         setOpen(false);
       }
       if (error?.response?.status == 500) {
@@ -282,15 +283,15 @@ const ReplaceOperationMember = () => {
       }
     }
   };
-  const [searchText, setSearchText] = useState("");
+  const [searchTextReplaceOP, setSearchTextReplaceOP] = useState("");
   const [open, setOpen] = useState(false);
   const handleSearchText = (e) => {
-    setSearchText(e.target.value);
+    setSearchTextReplaceOP(e.target.value);
   };
-  console.log("Search text---", searchText);
+  console.log("Search text---", searchTextReplaceOP);
 
   const handleYes = () => {
-    console.log("Yes replcae" + id + " replace id with", selectedUser);
+    console.log("Yes replcae" + id + " replace id with", selectedUserReplaceOP);
     replaceUser();
   };
   const handleNo = () => {
@@ -302,9 +303,9 @@ const ReplaceOperationMember = () => {
   };
   const selectSingleUser = (id) => {
     console.log("select single user---", id);
-    setSelectedUser(id);
+    setSelectedUserReplaceOP(id);
     setSelectedOperationMember({
-      ...records.filter((data) => data._id === id ?? { name: data.name }),
+      ...recordsReplaceOP.filter((data) => data._id === id ?? { name: data.name }),
     });
   };
   return (
@@ -316,7 +317,7 @@ const ReplaceOperationMember = () => {
         titleMessage={toasterDetails.titleMessage}
       />
       <DialogBox
-        title={<p> Replace Operation Member "{operationMember?.name}" </p>}
+        title={<p> Replace Operation Member "{operationMemberReplaceOP?.name}" </p>}
         info1={
           <p>
             On replacing an operation member, the complete ownership would get
@@ -325,7 +326,7 @@ const ReplaceOperationMember = () => {
         }
         info2={
           <p>
-            Do you still want to replace<b> {operationMember.name} </b>?{" "}
+            Do you still want to replace<b> {operationMemberReplaceOP.name} </b>?{" "}
           </p>
         }
         primaryButtonText="Yes"
@@ -361,7 +362,7 @@ const ReplaceOperationMember = () => {
                 <input
                   type="text"
                   placeholder="Search"
-                  onChange={(e) => onSearchChangeHandler(e)}
+                  onChange={(e) => onSearchChangeHandlerReplaceOP(e)}
                   name="search"
                 />
                 <button type="submit">
@@ -375,25 +376,25 @@ const ReplaceOperationMember = () => {
                     <div className="member-info-wrapper table-content-wrap replace-admin-table">
                         <div className="member-data-sect">
                             <TableComponent
-                                tableHead={tableHead}
-                                records={records}
+                                tableHead={replaceOperationMemberTableHead}
+                                records={recordsReplaceOP}
                                 handleChangePage1={handleTableTesterPageChange}
                                 handleChangeRowsPerPage1={
                                     handleTableTesterRowsPerPageChange
                                 }
-                                page={page}
-                                rowsPerPage={rowsPerPage}
-                                totalRecords={totalRecords}
-                                orderBy={orderBy}
-                                order={order}
-                                setOrder={setOrder}
-                                setOrderBy={setOrderBy}
-                                selected={selected}
-                                setSelected={setSelected}
+                                page={opListPage}
+                                rowsPerPage={rowsPerPageReplaceOP}
+                                totalRecords={totalRecordsReplaceOP}
+                                orderBy={orderByReplaceOP}
+                                order={orderReplaceOP}
+                                setOrder={setOrderReplaceOP}
+                                setOrderBy={setOrderByReplaceOP}
+                                selected={selectedReplaceOP}
+                                setSelected={setSelectedReplaceOP}
                                 setCheckBoxes={false}
                                 setSingleSelect={true}
                                 handleSingleUserSelect={selectSingleUser}
-                                selectedUser={selectedUser}
+                                selectedUser={selectedUserReplaceOP}
                             />
                         </div>
                     </div>
@@ -405,7 +406,7 @@ const ReplaceOperationMember = () => {
                             Cancel
                         </button>
                         <button
-                            disabled={selectedUser === ""}
+                            disabled={selectedUserReplaceOP === ""}
                             onClick={openReplaceDailogBox}
                             className="primary-button add-button replace-assign-btn"
                         >

@@ -52,7 +52,7 @@ const AddRole = () => {
   };
 
   //helper text content for input fields
-  const myHelper = {
+  const addRoleMyHelper = {
     roleName: {
       required: "Enter the role name",
       maxLength: "Max char limit exceed",
@@ -68,7 +68,7 @@ const AddRole = () => {
 
   const [previleges1, setPrevileges1] = useState({ ...temp });
 
-  const createPrevileges1 = () => {
+  const addRoleCreatePrivileges = () => {
     // console.log("modules in side create prive func", modules);
     modules.forEach(
       (module) =>
@@ -95,13 +95,13 @@ const AddRole = () => {
           moduleId: module._id,
         })
     );
-    createPrevileges1();
+    addRoleCreatePrivileges();
   };
 
   const { control, reset, setValue, handleSubmit } = useForm({
     defaultValues: defaultValues,
   });
-  const onSubmit1 = async (data) => {
+  const addRoleOnSubmit = async (data) => {
     console.log("inside on Submit");
     let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
     Object.keys(previlegesForBackend).forEach((p_key) => {
@@ -262,7 +262,7 @@ const AddRole = () => {
               </div>
             </div>
           </div>
-          <form onSubmit={handleSubmit(onSubmit1)}>
+          <form onSubmit={handleSubmit(addRoleOnSubmit)}>
             <div className="card-wrapper">
               <div className="card-blk flex-between">
                 <div className="card-form-field">
@@ -292,7 +292,7 @@ const AddRole = () => {
                           id="outlined-basic"
                           placeholder="Enter role name"
                           helperText={
-                            error ? myHelper.roleName[error.type] : " "
+                            error ? addRoleMyHelper.roleName[error.type] : " "
                           }
                           variant="outlined"
                         />
@@ -359,7 +359,7 @@ const AddRole = () => {
                           id="outlined-basic"
                           placeholder="Enter description"
                           helperText={
-                            error ? myHelper.description[error.type] : " "
+                            error ? addRoleMyHelper.description[error.type] : " "
                           }
                           variant="outlined"
                         />
