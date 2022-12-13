@@ -3,8 +3,7 @@ import { Box } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
-import Loader2 from "../../../assets/Loader/Loader2.svg"
-
+import Loader2 from "../../../assets/Loader/Loader2.svg";
 
 import PropTypes from "prop-types";
 import { Tabs, Tab, Tooltip } from "@mui/material";
@@ -82,7 +81,7 @@ function PreviewQuestionnaire(props) {
     const [value, setValue] = useState(0);
     //custom hook to set title of page
     useDocumentTitle("Preview Questionnaire");
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -90,7 +89,7 @@ function PreviewQuestionnaire(props) {
         descriptionMessage: "",
         messageType: "success",
     });
-    const questionnaireRef = useRef();
+    const questionnairePreviewRef = useRef();
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -123,7 +122,7 @@ function PreviewQuestionnaire(props) {
         let controller = new AbortController();
         const fetch = async () => {
             try {
-                setIsLoading(true)
+                setIsLoading(true);
                 const response = await privateAxios.get(
                     `${ADD_QUESTIONNAIRE}/${params.id}`,
                     {
@@ -132,10 +131,23 @@ function PreviewQuestionnaire(props) {
                 );
                 console.log("response from fetch questionnaire", response);
                 isMounted && setQuestionnaire({ ...response.data });
-                setIsLoading(false)
+                setIsLoading(false);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
-                setIsLoading(false)
+                setIsLoading(false);
+                if (error?.response?.status == 401) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Error",
+                            descriptionMessage: "Session timeout",
+                            messageType: "error",
+                        },
+                        () => questionnairePreviewRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                }
                 console.log("error from fetch questionnaire", error);
             }
         };
@@ -200,24 +212,39 @@ function PreviewQuestionnaire(props) {
                     }`,
                     messageType: "success",
                 },
-                () => questionnaireRef.current()
+                () => questionnairePreviewRef.current()
             );
             return setTimeout(() => navigate("/questionnaires"), 3000);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
+            if (error?.response?.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => questionnairePreviewRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            }
             // console.log(toasterDetails);
-            setToasterDetails(
-                {
-                    titleMessage: "Error",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something went wrong!",
-                    messageType: "error",
-                },
-                () => questionnaireRef.current()
-            );
+            else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            error?.response?.data?.message &&
+                            typeof error.response.data.message === "string"
+                                ? error.response.data.message
+                                : "Something went wrong!",
+                        messageType: "error",
+                    },
+                    () => questionnairePreviewRef.current()
+                );
+            }
         } finally {
             setOpenDialog(false);
         }
@@ -258,7 +285,7 @@ function PreviewQuestionnaire(props) {
                 setOpenModal={setOpenDialog}
             />
             <Toaster
-                myRef={questionnaireRef}
+                myRef={questionnairePreviewRef}
                 titleMessage={toasterDetails.titleMessage}
                 descriptionMessage={toasterDetails.descriptionMessage}
                 messageType={toasterDetails.messageType}
@@ -363,7 +390,7 @@ function PreviewQuestionnaire(props) {
                                                 "Questionnaire",
                                                 setToasterDetails,
                                                 params.id,
-                                                questionnaireRef,
+                                                questionnairePreviewRef,
                                                 DOWNLOAD_QUESTIONNAIRES_BY_ID
                                             )
                                         }
@@ -422,58 +449,67 @@ function PreviewQuestionnaire(props) {
                             />
                         </div>
                     </div> */}
-                    {
-                        isLoading ? <div className="loader-blk">
-                        <img src={Loader2} alt="Loading" />
-                    </div> : <div className="section-form-sect">
-                        <div className="section-tab-blk flex-between preview-tab-blk">
-                            <div className="section-tab-leftblk">
-                                <Box
-                                    sx={{
-                                        borderBottom: 1,
-                                        borderColor: "divider",
-                                    }}
-                                    className="tabs-sect que-tab-sect"
-                                >
-                                    <Tabs
-                                        value={value}
-                                        onChange={handleChange}
-                                        aria-label="basic tabs example"
-                                    >
-                                        {questionnaire?.sections?.map(
-                                            (section, index, id) => (
-                                                <Tooltip
-                                                    key={section?.uuid ?? id}
-                                                    title={section.sectionTitle}
-                                                    placement="bottom-start"
-                                                >
-                                                    <Tab
-                                                        className="section-tab-item"
-                                                        label={`section ${
-                                                            index + 1
-                                                        }`}
-                                                        {...a11yProps(index)}
-                                                    />
-                                                </Tooltip>
-                                            )
-                                        )}
-                                    </Tabs>
-                                </Box>
-                            </div>
+                    {isLoading ? (
+                        <div className="loader-blk">
+                            <img src={Loader2} alt="Loading" />
                         </div>
-                        <div className="preview-tab-data">
-                            {questionnaire?.sections?.map((section, index) => (
-                                <TabPanel
-                                    key={section?.uuid ?? index}
-                                    value={value}
-                                    index={index}
-                                >
-                                    <PreviewSection
-                                        questionnaire={questionnaire}
-                                        section={section}
-                                        sectionIndex={index}
-                                    />
-                                    {/* <div className="preview-card-wrapper">
+                    ) : (
+                        <div className="section-form-sect">
+                            <div className="section-tab-blk flex-between preview-tab-blk">
+                                <div className="section-tab-leftblk">
+                                    <Box
+                                        sx={{
+                                            borderBottom: 1,
+                                            borderColor: "divider",
+                                        }}
+                                        className="tabs-sect que-tab-sect"
+                                    >
+                                        <Tabs
+                                            value={value}
+                                            onChange={handleChange}
+                                            aria-label="basic tabs example"
+                                        >
+                                            {questionnaire?.sections?.map(
+                                                (section, index, id) => (
+                                                    <Tooltip
+                                                        key={
+                                                            section?.uuid ?? id
+                                                        }
+                                                        title={
+                                                            section.sectionTitle
+                                                        }
+                                                        placement="bottom-start"
+                                                    >
+                                                        <Tab
+                                                            className="section-tab-item"
+                                                            label={`section ${
+                                                                index + 1
+                                                            }`}
+                                                            {...a11yProps(
+                                                                index
+                                                            )}
+                                                        />
+                                                    </Tooltip>
+                                                )
+                                            )}
+                                        </Tabs>
+                                    </Box>
+                                </div>
+                            </div>
+                            <div className="preview-tab-data">
+                                {questionnaire?.sections?.map(
+                                    (section, index) => (
+                                        <TabPanel
+                                            key={section?.uuid ?? index}
+                                            value={value}
+                                            index={index}
+                                        >
+                                            <PreviewSection
+                                                questionnaire={questionnaire}
+                                                section={section}
+                                                sectionIndex={index}
+                                            />
+                                            {/* <div className="preview-card-wrapper">
                                         <div className="preview-que-wrap">
                                             <div className="preview-que-blk">
                                                 <div className="preview-sect-txt">
@@ -654,12 +690,12 @@ function PreviewQuestionnaire(props) {
                                             </button>
                                         </div>
                                     </div> */}
-                                </TabPanel>
-                            ))}
+                                        </TabPanel>
+                                    )
+                                )}
+                            </div>
                         </div>
-                    </div>
-                    }
-                    
+                    )}
                 </div>
             </section>
         </div>

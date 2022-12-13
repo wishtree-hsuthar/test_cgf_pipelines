@@ -4,12 +4,7 @@ import Loader2 from "../../assets/Loader/Loader2.svg";
 
 import {
     TextField,
-    Backdrop,
     Box,
-    Modal,
-    Select,
-    MenuItem,
-    Fade,
     Radio,
     RadioGroup,
     FormControlLabel,
@@ -45,12 +40,8 @@ const ViewSubAdmin = () => {
     const [modalData, setData] = useState();
 
     const [isActive, setActive] = useState("false");
-    // const [countries, setCountries] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-    const [value, setValue] = useState({
-        name: "India",
-        countryCode: "+91",
-    });
+
     const [fetchedSubAdminDetails, setFetchedSubAdminDetails] = useState({});
 
     const [open, setOpen] = React.useState(false);
@@ -80,6 +71,19 @@ const ViewSubAdmin = () => {
                 setIsLoading(false);
                 if (error?.response?.status === 500) {
                     navigate("/users/cgf-admin/");
+                }
+                if (error?.response?.status === 401) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops",
+                            descriptionMessage: "Session timeout",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
                 }
             }
         })();
@@ -111,14 +115,29 @@ const ViewSubAdmin = () => {
             }
         } catch (error) {
             console.log("error from delete API", error);
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => toasterRef.current()
-            );
+
+            if (error?.response?.status === 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+            }
         }
     };
     console.log("fetchedSubAdminDetails---", fetchedSubAdminDetails?.isActive);
@@ -142,10 +161,6 @@ const ViewSubAdmin = () => {
             setOpen(false);
             setOpenDeleteDialog(true);
         }
-    };
-
-    const handleClose = () => {
-        setOpen(false);
     };
 
     const data = [
@@ -174,74 +189,6 @@ const ViewSubAdmin = () => {
             primarybtn: "Delete Anyway",
         },
     ];
-    const style = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 400,
-        bgcolor: "background.paper",
-        border: "2px solid #000",
-        boxShadow: 24,
-        p: 4,
-    };
-    // const CustomModal = () => {
-    //     return modalData ? (
-    //         <Modal
-    //             aria-labelledby="transition-modal-title"
-    //             aria-describedby="transition-modal-description"
-    //             open={open}
-    //             onClose={handleClose}
-    //             closeAfterTransition
-    //             BackdropComponent={Backdrop}
-    //             BackdropProps={{
-    //                 timeout: 500,
-    //             }}
-    //             className="popup-blk"
-    //         >
-    //             <Fade in={open}>
-    //                 <Box sx={style} className="popup-box">
-    //                     <div
-    //                         id="transition-modal-title"
-    //                         className="popup-ttl-blk"
-    //                     >
-    //                         <h2 className="popup-ttl heading2">
-    //                             {modalData.title}
-    //                         </h2>
-    //                         <span
-    //                             className="popup-close-icon"
-    //                             onClick={handleClose}
-    //                         >
-    //                             <CloseIcon />
-    //                         </span>
-    //                     </div>
-    //                     <div
-    //                         id="transition-modal-description"
-    //                         className="popup-body"
-    //                     >
-    //                         <div className="popup-content-blk text-center">
-    //                             <p>open{modalData.info}</p>
-    //                             <div className="form-btn flex-center">
-    //                                 <button
-    //                                     type="submit"
-    //                                     className="secondary-button mr-10"
-    //                                 >
-    //                                     {modalData.secondarybtn}
-    //                                 </button>
-    //                                 <button
-    //                                     type="submit"
-    //                                     className="primary-button"
-    //                                 >
-    //                                     {modalData.primarybtn}
-    //                                 </button>
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                 </Box>
-    //             </Fade>
-    //         </Modal>
-    //     ) : null;
-    // };
 
     return (
         <div className="page-wrapper">
@@ -410,7 +357,7 @@ const ViewSubAdmin = () => {
                                                                 autoComplete:
                                                                     "", // disable autocomplete and autofill
                                                             }}
-                                                            
+
                                                             // value={value}
                                                             // onChange={(e) =>
                                                             //     setValue(e.target.value)

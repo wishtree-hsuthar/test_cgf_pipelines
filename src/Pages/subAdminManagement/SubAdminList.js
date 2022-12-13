@@ -127,7 +127,7 @@ const SubAdminList = () => {
     const [recordsForPendingTab, setRecordsForPendingTab] = React.useState([]);
     const [totalRecordsForPendingTab, setTotalRecordsForPendingTab] =
         React.useState(0);
-    const [roles, setRoles] = useState([]);
+    // const [roles, setRoles] = useState([]);
 
     //implemention of pagination on front-end
     // let records = [];
@@ -231,7 +231,7 @@ const SubAdminList = () => {
         try {
             const response = await privateAxios.get(FETCH_ROLES);
             console.log("response from fetch roles", response.data);
-            setRoles(response?.data);
+            // setRoles(response?.data);
         } catch (error) {
             console.log("error from fetchroles in pending page", error);
             if (error?.response?.status == 401) {
@@ -303,7 +303,7 @@ const SubAdminList = () => {
             let isMounted = true;
             const controller = new AbortController();
             // makeApiCall && getSubAdminPending(isMounted, controller);
-            fetchRolesForCGFAdmin();
+            // fetchRolesForCGFAdmin();
             console.log("makeApiCall", makeApiCall);
             console.log("inside use Effect");
             return () => {

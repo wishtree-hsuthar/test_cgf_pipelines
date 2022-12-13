@@ -99,7 +99,9 @@ const AddSubAdmin = () => {
         let controller = new AbortController();
         let fetchRoles = async () => {
             try {
-                const response = await privateAxios.get(FETCH_ROLES);
+                const response = await privateAxios.get(FETCH_ROLES, {
+                    signal: controller.signal,
+                });
                 console.log("Response from fetch roles - ", response);
                 setRoles(response.data);
                 response.data.filter(
@@ -108,18 +110,36 @@ const AddSubAdmin = () => {
                         reset({ subRoleId: data._id })
                 );
             } catch (error) {
+                if (error?.code === "ERR_CANCELED") return;
                 console.log("Error from fetch roles", error);
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
+                if (error?.response?.status === 401) {
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage: "Session timeout",
+                                messageType: "error",
+                            },
+                            () => toasterRef.current()
+                        );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                } else {
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage:
+                                    error?.response?.data?.message,
+                                messageType: "error",
+                            },
+                            () => toasterRef.current()
+                        );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                }
             }
         };
         let fetchCountries = async () => {
@@ -140,25 +160,43 @@ const AddSubAdmin = () => {
                 //         response?.data.map((country) => country.countryCode)
                 //     );
             } catch (error) {
+                if (error?.code === "ERR_CANCELED") return;
                 console.log("error from countries api", error);
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
+                // if (error?.response?.status === 401) {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: "Session timeout",
+                //             messageType: "error",
+                //         },
+                //         () => toasterRef.current()
+                //     );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // }
+                // else
+                //  {
+                isMounted &&
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message,
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
                 navigate("/login");
+                // }
             }
         };
         fetchRoles();
         fetchCountries();
 
-        // return () => {
-        //     isMounted = false;
-        //     // controller.abort();
-        // };
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
     }, []);
     console.log("countriess----", countries);
 
@@ -182,15 +220,30 @@ const AddSubAdmin = () => {
                 reset();
             }
         } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
             console.log("error from add sub admin page", error);
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => toasterRef.current()
-            );
+            if (error?.response?.status === 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+            }
         }
     };
     const handleOnSubmit = async (data) => {
