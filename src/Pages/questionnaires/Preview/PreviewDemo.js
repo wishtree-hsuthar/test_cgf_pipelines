@@ -190,6 +190,8 @@ function PreviewDemo() {
                                         value={value}
                                         onChange={handleChange}
                                         aria-label="basic tabs example"
+                                        variant="scrollable"
+                                        scrollButtons="auto"
                                     >
                                         <Tooltip
                                             title="HQ All Operation HRDD"

@@ -810,6 +810,8 @@ function FillAssessment() {
                                         value={value}
                                         onChange={handleChange}
                                         aria-label="basic tabs example"
+                                        variant="scrollable"
+                                        scrollButtons="auto"
                                     >
                                         {questionnaire?.sections?.map(
                                             (section, index, id) => (
