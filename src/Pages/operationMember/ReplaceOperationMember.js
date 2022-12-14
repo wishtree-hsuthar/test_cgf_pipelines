@@ -212,7 +212,8 @@ const ReplaceOperationMember = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Error",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()

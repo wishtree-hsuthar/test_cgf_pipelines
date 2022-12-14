@@ -76,7 +76,8 @@ const ViewSubAdmin = () => {
                     setToasterDetails(
                         {
                             titleMessage: "Oops",
-                            descriptionMessage: "Session timeout",
+                            descriptionMessage:
+                                "Session Timeout: Please login again",
                             messageType: "error",
                         },
                         () => toasterRef.current()
@@ -120,7 +121,8 @@ const ViewSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => toasterRef.current()

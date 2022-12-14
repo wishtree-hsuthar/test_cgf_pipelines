@@ -139,7 +139,8 @@ function PreviewQuestionnaire(props) {
                     setToasterDetails(
                         {
                             titleMessage: "Error",
-                            descriptionMessage: "Session timeout",
+                            descriptionMessage:
+                                "Session Timeout: Please login again",
                             messageType: "error",
                         },
                         () => questionnairePreviewRef.current()
@@ -221,7 +222,8 @@ function PreviewQuestionnaire(props) {
                 setToasterDetails(
                     {
                         titleMessage: "Error",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => questionnairePreviewRef.current()
@@ -325,7 +327,7 @@ function PreviewQuestionnaire(props) {
                                 </li>
                             )}
                         {(SUPER_ADMIN === true ||
-                            moduleAccesForMember[0]?.questionnaire?.add) &&
+                            moduleAccesForMember[0]?.questionnaire?.edit) &&
                             !params["*"].includes("version") &&
                             (questionnaire?.isDraft ||
                                 questionnaire?.isPublished) && (
@@ -427,9 +429,13 @@ function PreviewQuestionnaire(props) {
                                                 : "Edit Questionnaire"}
                                         </li>
                                     )}
-                                    <li onClick={() => setOpenDialog(true)}>
-                                        Delete Questionnaire
-                                    </li>
+                                    {(SUPER_ADMIN === true ||
+                                        moduleAccesForMember[0]?.questionnaire
+                                            ?.delete) && (
+                                        <li onClick={() => setOpenDialog(true)}>
+                                            Delete Questionnaire
+                                        </li>
+                                    )}
                                 </ul>
                             </div>
                         </span>

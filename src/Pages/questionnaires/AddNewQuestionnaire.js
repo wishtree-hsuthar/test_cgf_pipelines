@@ -171,7 +171,8 @@ function AddNewQuestionnaire() {
                     setToasterDetails(
                         {
                             titleMessage: "Error",
-                            descriptionMessage: "Session timeout",
+                            descriptionMessage:
+                                "Session Timeout: Please login again",
 
                             messageType: "error",
                         },

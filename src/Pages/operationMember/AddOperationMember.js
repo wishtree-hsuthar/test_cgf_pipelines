@@ -232,7 +232,8 @@ function AddOperationMember() {
                         setToasterDetails(
                             {
                                 titleMessage: "Oops!",
-                                descriptionMessage: "Session timeout",
+                                descriptionMessage:
+                                    "Session Timeout: Please login again",
                                 messageType: "error",
                             },
                             () => toasterRef.current()
@@ -305,7 +306,8 @@ function AddOperationMember() {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -354,7 +356,8 @@ function AddOperationMember() {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => toasterRef.current()

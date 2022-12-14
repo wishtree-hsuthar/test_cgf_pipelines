@@ -166,7 +166,8 @@ function FillAssessment() {
                         setToasterDetails(
                             {
                                 titleMessage: "Oops!",
-                                descriptionMessage: "Session timeout",
+                                descriptionMessage:
+                                    "Session Timeout: Please login again",
                                 messageType: "error",
                             },
                             () => myRef.current()
@@ -215,7 +216,8 @@ function FillAssessment() {
                         setToasterDetails(
                             {
                                 titleMessage: "Oops!",
-                                descriptionMessage: "Session timeout",
+                                descriptionMessage:
+                                    "Session Timeout: Please login again",
                                 messageType: "error",
                             },
                             () => myRef.current()
@@ -269,7 +271,8 @@ function FillAssessment() {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -507,7 +510,8 @@ function FillAssessment() {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -551,6 +555,7 @@ function FillAssessment() {
                     },
                     () => myRef.current()
                 );
+                setOpenDeleteDialogBox(false);
             }
         } catch (error) {
             console.log("error response from backend accept assessment");
@@ -558,7 +563,8 @@ function FillAssessment() {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()

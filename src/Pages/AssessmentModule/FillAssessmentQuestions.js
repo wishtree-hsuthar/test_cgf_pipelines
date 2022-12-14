@@ -266,7 +266,10 @@ const FillAssessmentQuestion = ({
                     disabled={!editMode && !params["*"].includes("view")}
                     value={answer ?? ""}
                     onChange={(newValue) =>
-                        handleAnswersChange(questionUUID, newValue)
+                        handleAnswersChange(
+                            questionUUID,
+                            new Date(new Date(newValue)).toLocaleDateString()
+                        )
                     }
                     renderInput={(params) => (
                         <TextField
