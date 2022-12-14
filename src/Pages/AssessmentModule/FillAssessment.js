@@ -6,6 +6,7 @@ import { Tabs, Tab, Tooltip, TextField } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import FillAssesmentSection from "./FillAssessmentSection";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import {
     ACCEPT_ASSESSMENT,
     ADD_QUESTIONNAIRE,
@@ -112,6 +113,11 @@ function FillAssessment() {
     const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
         useState(false);
 
+
+    const viewInstruction = () => {
+        navigate("/assessments/instructions");
+    };
+    
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
@@ -675,6 +681,16 @@ function FillAssessment() {
                 <div className="container">
                     <div className="form-header flex-between">
                         <h2 className="heading2">{questionnaire.title}</h2>
+                        <div className="flex-between">
+                        <div className="tertiary-btn-blk mr-20" onClick={viewInstruction}>
+                                    <span className="preview-icon">
+                                        <VisibilityOutlinedIcon />
+                                    </span>
+                                    <span className="addmore-txt">
+                                        View Instructions
+                                    </span>
+                                </div>
+                                
                         <span
                             className="form-header-right-txt"
                             onClick={handleToggle}
@@ -703,6 +719,7 @@ function FillAssessment() {
                                 </ul>
                             </div>
                         </span>
+                        </div>
                     </div>
 
                     <div className="section-form-sect">
