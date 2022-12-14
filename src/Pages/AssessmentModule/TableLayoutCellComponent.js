@@ -163,10 +163,20 @@ const TableLayoutCellComponent = ({
                                         e.target.value
                                     );
                                 }}
+                                renderValue={
+                                    answer !== ""
+                                      ? undefined
+                                      : () => (
+                                          <div className="select-placeholder">
+                                            Choose dropdown value
+                                          </div>
+                                        )
+                                  }
                             >
-                                <MenuItem value="" disabled>
+
+                                {/* <MenuItem value="" disabled>
                                     Select option
-                                </MenuItem>
+                                </MenuItem> */}
                                 {transformedColumns[cell.columnId].options.map(
                                     (option) => (
                                         <MenuItem key={option} value={option}>
@@ -188,6 +198,11 @@ const TableLayoutCellComponent = ({
                     <FormControl fullWidth>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
+                            disabled={
+                                (editMode &&
+                                    params["*"].includes("view")) ||
+                                !editMode
+                            }
                                 value={answer}
                                 className={`datepicker-blk`}
                                 components={{
@@ -202,11 +217,7 @@ const TableLayoutCellComponent = ({
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        disabled={
-                                            (editMode &&
-                                                params["*"].includes("view")) ||
-                                            !editMode
-                                        }
+                                            
                                         onKeyDown={handleOnKeyDownChange}
                                         className={`input-field${
                                             !answer &&
