@@ -349,9 +349,9 @@ const EditRole = () => {
                                           [previleg]: {
                                             ...previous[previleg],
                                             fill: !previous[previleg]["fill"],
+                                            list : !previous[previleg]["fill"],
                                             all:
                                               !previous[previleg]["fill"] &&
-                                              previous[previleg]["list"] &&
                                               previous[previleg]["add"] &&
                                               previous[previleg]["edit"] &&
                                               previous[previleg]["view"] &&

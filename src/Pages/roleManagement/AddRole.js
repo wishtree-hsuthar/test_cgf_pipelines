@@ -126,7 +126,7 @@ const AddRole = () => {
       );
       reset({ defaultValues });
       getSystemModules();
-      return true
+      return true;
     } catch (error) {
       setToasterDetails1(
         {
@@ -140,16 +140,16 @@ const AddRole = () => {
         },
         () => myRef.current()
       );
-      return false
+      return false;
     }
-  }
+  };
   const addRoleOnSubmit = async (data) => {
-     const isSubmited = await submitCall(data)
-     if(!isSubmited) return
-     setTimeout(() => navigate1("/roles"),3000)
+    const isSubmited = await submitCall(data);
+    if (!isSubmited) return;
+    setTimeout(() => navigate1("/roles"), 3000);
   };
   const onSubmitAddMoreClickHandler1 = async (data) => {
-    submitCall(data)
+    submitCall(data);
   };
   const onClickCancelHandler1 = () => {
     reset({ defaultValues });
@@ -321,7 +321,9 @@ const AddRole = () => {
                           id="outlined-basic"
                           placeholder="Enter description"
                           helperText={
-                            error ? addRoleMyHelper.description[error.type] : " "
+                            error
+                              ? addRoleMyHelper.description[error.type]
+                              : " "
                           }
                           variant="outlined"
                         />
@@ -335,7 +337,7 @@ const AddRole = () => {
                 <Paper sx={{ width: "100%" }}>
                   <TableContainer>
                     <Table sx={{ minWidth: 750 }}>
-                      <CommonTableHead/>
+                      <CommonTableHead />
                       <TableBody>
                         {Object.keys(previleges1).map((previleg, _id) => {
                           console.log(
@@ -363,9 +365,9 @@ const AddRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           fill: !previous[previleg]["fill"],
+                                          list: !previous[previleg]["fill"],
                                           all:
                                             !previous[previleg]["fill"] &&
-                                            previous[previleg]["list"] &&
                                             previous[previleg]["add"] &&
                                             previous[previleg]["edit"] &&
                                             previous[previleg]["view"] &&
