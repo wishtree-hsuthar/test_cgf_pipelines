@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { ASSESSMENTS } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 const tableHead = [
     // {
@@ -257,6 +258,10 @@ const AssessmentList = () => {
         navigate("/assessment-list/add-assessment");
     };
 
+    const viewInstruction = () => {
+        navigate("/assessments/instructions");
+    };
+
     const privilege = useSelector((state) => state?.user?.privilege);
 
     const userAuth = useSelector((state) => state?.user?.userObj);
@@ -317,7 +322,7 @@ const AssessmentList = () => {
                             <div className="form-header-left-blk flex-start">
                                 <h2 className="heading2 mr-40">Assessments</h2>
                             </div>
-                            <div className="form-header-right-txt search-and-btn-field-right">
+                            <div className="form-header-right-txt search-and-btn-field-right view-instruct-field-right">
                                 <div className="search-and-btn-field-blk mr-0">
                                     <div className="searchbar">
                                         <input
@@ -349,6 +354,14 @@ const AssessmentList = () => {
                                         </button>
                                     </div>
                                 )}
+                                <div className="tertiary-btn-blk ml-20" onClick={viewInstruction}>
+                                    <span className="preview-icon">
+                                        <VisibilityOutlinedIcon />
+                                    </span>
+                                    <span className="addmore-txt">
+                                        View Instructions
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         {/* <div className="member-filter-sect">

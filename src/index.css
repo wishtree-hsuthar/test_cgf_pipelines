@@ -2382,7 +2382,7 @@ input:-webkit-autofill:active {
     position: relative !important;
 }
 .que-table-render td {
-    padding: 19px 16px 0;
+    padding: 19px 15px 0;
     height: 100%;
     vertical-align: top;
 }
@@ -2536,3 +2536,6 @@ input::-ms-reveal {
 }
 .preview-que-blk .que-half-sect .select-field .MuiSelect-select{-webkit-text-fill-color: rgba(30, 30, 30, 0.5) !important;}
 .radio-btn .Mui-disabled svg{color: rgba(30, 30, 30, 0.5) !important;}
+
+.replace-cgf-admin-btnblk{margin-bottom: 50px;}
+.view-instruct-field-right {flex: 0 0 58%;max-width: 58%;}

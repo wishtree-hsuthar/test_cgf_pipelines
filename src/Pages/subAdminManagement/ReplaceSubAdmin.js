@@ -450,7 +450,7 @@ const ReplaceSubAdmin = () => {
                             />
                         </div>
                     </div>
-                    <div className="form-btn flex-between add-members-btn mb-20 pb-20">
+                    <div className="form-btn flex-between add-members-btn mb-20 pb-20 replace-cgf-admin-btnblk">
                         <button
                             onClick={() => navigate("/users/cgf-admin/")}
                             className="secondary-button mr-10"

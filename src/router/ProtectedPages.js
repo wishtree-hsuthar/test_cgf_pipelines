@@ -37,6 +37,8 @@ import FillAssessment from "../Pages/AssessmentModule/FillAssessment";
 import ReplaceOperationMember from "../Pages/operationMember/ReplaceOperationMember";
 import ChangePassword from "../Pages/ChangePassword";
 import VersionHistory from "../Pages/questionnaires/VersionHistory";
+import Instructions from "../Pages/AssessmentModule/Instructions";
+
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -228,6 +230,14 @@ const ProtectedPages = () => {
                     element={
                         <RequireAuth page={"list"} moduleName={"Assessment"}>
                             <AssessmentList />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="/assessments/instructions"
+                    element={
+                        <RequireAuth page={"list"} moduleName={"Assessment"}>
+                            <Instructions />
                         </RequireAuth>
                     }
                 />
