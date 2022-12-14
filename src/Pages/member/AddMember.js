@@ -28,8 +28,12 @@ import Toaster from "../../components/Toaster";
 import { memberHelper } from "../../utils/helpertext";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { cgfCategories, cgfActivitiesManufacturer, cgfActivitiesRetailer, defaultValues } from "../../utils/MemberModuleUtil";
-
+import {
+  cgfCategories,
+  cgfActivitiesManufacturer,
+  cgfActivitiesRetailer,
+  defaultValues,
+} from "../../utils/MemberModuleUtil";
 
 //Parent company (Ideally get from backend)
 //CGF Categories (Ideally get from backend)
@@ -43,7 +47,6 @@ import { cgfCategories, cgfActivitiesManufacturer, cgfActivitiesRetailer, defaul
 // Object.keys(categories)
 // categories[category] = Array of activities[]
 
-
 const AddMember = () => {
   //custom hook to set title of page
   useDocumentTitle("Add Member");
@@ -51,11 +54,13 @@ const AddMember = () => {
   // Refr for Toaster
   const myRef = React.useRef();
   //Toaster Message setter
-  const [toasterDetailsAddMember, setToasterDetailsAddMember] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
+  let tempDefaultValues = defaultValues;
+  const [toasterDetailsAddMember, setToasterDetailsAddMember] =
+    useCallbackState({
+      titleMessage: "",
+      descriptionMessage: "",
+      messageType: "success",
+    });
   //method to call all error toaster from this method
   const setErrorToaster = (error) => {
     console.log("error", error);
@@ -72,27 +77,35 @@ const AddMember = () => {
       () => myRef.current()
     );
   };
- 
+
   //to hold all regions
   const [arrOfRegionsAddMember, setArrOfRegionsAddMember] = useState([]);
   //to hold array of countries for perticular region for Company Adress
-  const [arrOfCountryRegionsAddMember, setArrOfCountryRegionsAddMember] = useState([]);
+  const [arrOfCountryRegionsAddMember, setArrOfCountryRegionsAddMember] =
+    useState([]);
   //to hold array of Country states
-  const [arrOfStateCountryAddMember, setArrOfStateCountryAddMember] = useState([]);
-  const [arrOfCountryCodeAddMember, setArrOfCountryCodeAddMember] = useState([]);
-  const [arrOfParentCompanyAddMember, setArrOfParentCompanyAddMember] = useState([]);
+  const [arrOfStateCountryAddMember, setArrOfStateCountryAddMember] = useState(
+    []
+  );
+  const [arrOfCountryCodeAddMember, setArrOfCountryCodeAddMember] = useState(
+    []
+  );
+  const [arrOfParentCompanyAddMember, setArrOfParentCompanyAddMember] =
+    useState([]);
   const [arrOfCitesAddMember, setArrOfCitesAddMember] = useState([]);
 
   //to hold array of countries for perticular region for CGF Office details
-  const [arrOfCgfOfficeCountryRegionsAddMember, setArrOfCgfOfficeCountryRegionsAddMember] =
-    useState([]);
+  const [
+    arrOfCgfOfficeCountryRegionsAddMember,
+    setArrOfCgfOfficeCountryRegionsAddMember,
+  ] = useState([]);
 
   // To fetch and set addMemberRoles
   const [addMemberRoles, addMemberSetRoles] = useState([]);
 
   const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
     reValidateMode: "onChange",
-    defaultValues: defaultValues,
+    defaultValues: tempDefaultValues,
   });
   const onSubmitFunctionCallAddMember = async (data) => {
     console.log("data", data);
@@ -138,8 +151,8 @@ const AddMember = () => {
         },
         () => myRef.current()
       );
-      console.log("Default values: ", defaultValues);
-      reset({ defaultValues });
+      console.log("Default values: ", tempDefaultValues);
+      reset({ tempDefaultValues });
       return true;
     } catch (error) {
       setErrorToaster(error);
@@ -148,7 +161,7 @@ const AddMember = () => {
   };
   // On Click cancel handler
   const onClickCancelHandlerAddMember = () => {
-    reset({ defaultValues });
+    reset({ tempDefaultValues });
     navigate("/users/members");
   };
   const onSubmitAddMember = async (data) => {
@@ -191,7 +204,7 @@ const AddMember = () => {
       let url =
         CITES + `/?region=${watch("region")}&country=${watch("country")}`;
       if (watch("state")) {
-        url += `&state=${watch("state")}`
+        url += `&state=${watch("state")}`;
       }
       const response = await axios.get(url);
       setArrOfCitesAddMember(response.data);
@@ -211,11 +224,15 @@ const AddMember = () => {
     setValue("cgfOfficeRegion", e.target.value);
     setValue("cgfOfficeCountry", "");
     trigger("cgfOfficeRegion");
-    const countriesOnRegion = await getCountriesAddMember(watch("cgfOfficeRegion"));
+    const countriesOnRegion = await getCountriesAddMember(
+      watch("cgfOfficeRegion")
+    );
     const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountriesAddMember(
       countriesOnRegion.data
     );
-    setArrOfCgfOfficeCountryRegionsAddMember([...arrOfCgfOfficeCountryRegionsTemp]);
+    setArrOfCgfOfficeCountryRegionsAddMember([
+      ...arrOfCgfOfficeCountryRegionsTemp,
+    ]);
   };
   //method to set region and update other fields accordingly
   const onRegionChangeHandlerAddMember = async (e) => {
@@ -280,10 +297,12 @@ const AddMember = () => {
       const response = await privateAxios.get(FETCH_ROLES);
       console.log("Response from fetch addMemberRoles - ", response);
       addMemberSetRoles(response.data);
-      response.data.filter(
-        (data) =>
-          data.name === "Member Representative" && reset({ roleId: data._id })
-      );
+      response.data.filter((data) => {
+        if (data.name === "Member Representative") {
+          reset({ roleId: data._id });
+          tempDefaultValues.roleId = data?._id
+        }
+      });
     } catch (error) {
       console.log("Error from fetch addMemberRoles", error);
       setToasterDetailsAddMember(
@@ -338,15 +357,17 @@ const AddMember = () => {
   useEffect(() => {
     const controller = new AbortController();
     arrOfRegionsAddMember.length === 0 && getRegionsAddMember(controller);
-    arrOfCountryCodeAddMember.length === 0 && getCountryCodeAddMember(controller);
-    arrOfParentCompanyAddMember?.length === 0 && getParentCompanyAddMember(controller);
+    arrOfCountryCodeAddMember.length === 0 &&
+      getCountryCodeAddMember(controller);
+    arrOfParentCompanyAddMember?.length === 0 &&
+      getParentCompanyAddMember(controller);
     addMemberRoles.length === 0 && fetchRolesAddMember();
 
     return () => {
       controller.abort();
     };
   }, [watch]);
-  
+
   console.log("arrOfparentCompnies", arrOfParentCompanyAddMember);
   return (
     <div className="page-wrapper">

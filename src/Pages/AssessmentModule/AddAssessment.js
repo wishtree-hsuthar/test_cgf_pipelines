@@ -14,7 +14,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
   ADD_ASSESSMENTS,
-  ADD_QUESTIONNAIRE, FETCH_OPERATION_MEMBER, MEMBER_DROPDOWN
+  ADD_QUESTIONNAIRE,
+  FETCH_OPERATION_MEMBER,
+  MEMBER_DROPDOWN,
 } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
@@ -176,7 +178,7 @@ const AddAssessment = () => {
     }
   };
 
-  const handleChangeForMemberCompany = async(e) => {
+  const handleChangeForMemberCompany = async (e) => {
     setValue("assignedMember", e.target.value);
     console.log("assignedMember", e.target.value);
     console.log("member representatives-----", memberRepresentatives);
@@ -202,13 +204,12 @@ const AddAssessment = () => {
         e.target.value,
         false
       );
+      trigger("assignedOperationMember");
     }
 
     console.log("member representative----", memberRepresentative);
 
-
     trigger("assignedMember");
-    trigger("assignedOperationMember")
   };
 
   const handleChangeForAssessmentModule = (e) => {

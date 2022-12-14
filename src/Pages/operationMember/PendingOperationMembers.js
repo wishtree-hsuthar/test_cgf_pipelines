@@ -7,12 +7,14 @@ import Loader2 from "../../assets/Loader/Loader2.svg";
 import { ADD_OPERATION_MEMBER, WITHDRAW_OPERATION_MEMBER } from "../../api/Url";
 import { tableHead } from "../../utils/OperationMemberModuleUtil";
 
-let tempTableHead = tableHead;
+let tempTableHead = JSON.parse(JSON.stringify(tableHead)) 
 tempTableHead.push({
   id: "action",
   disablePadding: false,
   label: "Action",
 });
+
+
 
 function PendingOperationMembers({
   makeApiCall,
@@ -258,7 +260,6 @@ function PendingOperationMembers({
     console.log("inside use Effect");
     return () => {
       isMounted = false;
-      // clearTimeout(searchTimeout);
       controller.abort();
     };
   }, [

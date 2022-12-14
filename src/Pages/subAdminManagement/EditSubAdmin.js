@@ -62,10 +62,7 @@ const EditSubAdmin = () => {
   const params = useParams();
   const toasterRef = useRef();
 
-  // const [value, setValue] = useState({
-  //     name: "India",
-  //     countryCode: "+91",
-  // });
+
   const [countries, setCountries] = useState([]);
   const [roles, setRoles] = useState([]);
   const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -76,7 +73,6 @@ const EditSubAdmin = () => {
   const [fetchSubAdminDetailsForEdit, setFetchSubAdminDetailsForEdit] =
     useState({});
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors },
@@ -122,7 +118,6 @@ const EditSubAdmin = () => {
           let tempCountryCodeSet = new Set(tempCountryCode);
           setCountries([...tempCountryCodeSet]);
         }
-        // isMounted && setCountries(response.data);
       } catch (error) {
         console.log("error from countries api of edit sub-admin", error);
         setToasterDetails(
@@ -196,13 +191,10 @@ const EditSubAdmin = () => {
     };
     fetchRoles();
     return () => {
-      // isMounted = false;
-      // controller.abort();
     };
   }, []);
 
   console.log("fetchdetails in edit sub admin", fetchSubAdminDetailsForEdit);
-  const [defaultPhone, setDefaultPhone] = useState("+91123456789");
 
   const location = useLocation();
   console.log(location);
@@ -251,7 +243,6 @@ const EditSubAdmin = () => {
   };
 
   const handleCancel = () => {
-    // navigate("/users/cgf-admin/view-sub-admin/" + params.id);
     navigate("/users/cgf-admin/");
   };
   return (

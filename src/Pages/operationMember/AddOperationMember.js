@@ -43,8 +43,10 @@ function AddOperationMember() {
             //     _id: "",
             //     companyName: "",
             // },
-            // memberId: "",
+            memberId: undefined,
             // companyType: "",
+            countryCode: "",
+            address: "",
             isCGFStaff: false,
             roleId: "",
         },
@@ -309,9 +311,10 @@ function AddOperationMember() {
         console.log("data from onsubmit", data);
         addOperationMember(data, false);
     };
-    const handleSaveAndMore = (data) => {
+    const handleSaveAndMore = async (data) => {
         console.log("data from handleSaveAndMore", data);
-        addOperationMember(data, true);
+        await addOperationMember(data, true);
+        setShowTextField(false)
         reset();
     };
 
@@ -330,15 +333,16 @@ function AddOperationMember() {
             setValue("reportingManager", "");
         } else {
             setValue("companyType", "N/A");
-            setValue("memberId", "");
+            setValue("memberId", undefined);
             setShowTextField(false);
             setReportingManagers();
             setValue("reportingManager", "");
 
             setDisableReportingManager(true);
         }
+        trigger("memberId")
     };
-
+    console.log("member Id",memberCompanies?._id)
     return (
         <div className="page-wrapper">
             <Toaster
@@ -822,9 +826,9 @@ function AddOperationMember() {
                                                                 <KeyboardArrowDownRoundedIcon />
                                                             }
                                                             {...field}
-                                                            value={
-                                                                memberCompanies?._id
-                                                            }
+                                                            // value={
+                                                            //     memberCompanies?._id
+                                                            // }
                                                             // clearIcon={false}
                                                             disableClearable
                                                             onChange={(

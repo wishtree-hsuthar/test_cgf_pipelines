@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { ADD_OPERATION_MEMBER } from "../../api/Url";
 import {tableHead} from "../../utils/OperationMemberModuleUtil"
 
-let tempTableHead = tableHead
+let tempTableHead = JSON.parse(JSON.stringify(tableHead)) 
 tempTableHead.push( {
     id: "isActive",
     // with: "30%",

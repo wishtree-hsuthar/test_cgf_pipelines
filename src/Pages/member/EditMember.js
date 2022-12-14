@@ -1059,7 +1059,7 @@ const EditMember = () => {
                           onBlur={(e) =>
                             setValue("title", e.target.value?.trim())
                           }
-                          placeholder="N/A"
+                          placeholder="Enter title"
                         />
                       </div>
                     </div>
@@ -1078,7 +1078,7 @@ const EditMember = () => {
                           onBlur={(e) =>
                             setValue("department", e.target.value?.trim())
                           }
-                          placeholder="N/A"
+                          placeholder="Enter department"
                         />
                       </div>
                     </div>
@@ -1178,7 +1178,7 @@ const EditMember = () => {
                                       // onSubmit={() =>
                                       //   setValue("memberContactCountryCode", "")
                                       // }
-                                      placeholder={"N/A"}
+                                      placeholder={"+91"}
                                       disabled={disableMember}
                                       helperText={
                                         error
