@@ -5,15 +5,15 @@ import { privateAxios } from "../../api/axios";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { useSelector } from "react-redux";
 import { ADD_OPERATION_MEMBER } from "../../api/Url";
-import {tableHead} from "../../utils/OperationMemberModuleUtil"
+import { tableHead } from "../../utils/OperationMemberModuleUtil";
 
-let tempTableHead = JSON.parse(JSON.stringify(tableHead)) 
-tempTableHead.push( {
+let tempTableHead = JSON.parse(JSON.stringify(tableHead));
+tempTableHead.push({
     id: "isActive",
     // with: "30%",
     disablePadding: false,
     label: "Status",
-})
+});
 
 function OnboardedOperationMember({
     makeApiCall,
@@ -113,7 +113,7 @@ function OnboardedOperationMember({
             delete opMember["isMemberRepresentative"];
             delete opMember["isCGFStaff"];
             delete opMember["isOperationMember"];
-        
+
             opMember["memberCompany"] = opMember["memberData"]["companyName"];
             opMember["companyType"] = opMember["memberData"]["companyType"];
             opMember["createdByName"] = opMember["createdBy"]["name"];
@@ -166,7 +166,7 @@ function OnboardedOperationMember({
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            
+
             setTotalRecordsForOnboardedOperationMemberTab(
                 parseInt(response.headers["x-total-count"])
             );
@@ -183,7 +183,8 @@ function OnboardedOperationMember({
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session Expired",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()

@@ -9,8 +9,9 @@ import {
     ADD_OPERATION_MEMBER,
     ADD_QUESTIONNAIRE,
     FETCH_ASSESSMENT_BY_ID,
-    FETCH_OPERATION_MEMBER, MEMBER_DROPDOWN,
-    UPDATE_ASSESSMENT_BY_ID
+    FETCH_OPERATION_MEMBER,
+    MEMBER_DROPDOWN,
+    UPDATE_ASSESSMENT_BY_ID,
 } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import Dropdown from "../../components/Dropdown";
@@ -52,20 +53,19 @@ function EditAssessment() {
     // state to manage loaders
     const [isLoading, setIsLoading] = useState(false);
 
-    const { handleSubmit, control, setValue, reset, watch, } =
-        useForm({
-            defaultValues: {
-                title: "",
-                assessmentType: "",
-                assignedMember: {
-                    _id: "",
-                    name: "",
-                },
-                assignedOperationMember: "",
-                dueDate: "",
-                remarks: "",
+    const { handleSubmit, control, setValue, reset, watch } = useForm({
+        defaultValues: {
+            title: "",
+            assessmentType: "",
+            assignedMember: {
+                _id: "",
+                name: "",
             },
-        });
+            assignedOperationMember: "",
+            dueDate: "",
+            remarks: "",
+        },
+    });
 
     // navigate function
     const navigate = useNavigate();
@@ -146,19 +146,31 @@ function EditAssessment() {
                     }
                 );
                 setIsLoading(false);
-                console.log("responseEditMember from fetch assessment", responseEditMember.data);
+                console.log(
+                    "responseEditMember from fetch assessment",
+                    responseEditMember.data
+                );
                 isMounted &&
                     reset({
                         title: responseEditMember.data.title,
                         assessmentType: responseEditMember.data.assessmentType,
-                        assignedMember: responseEditMember.data.assignedMember?._id,
+                        assignedMember:
+                            responseEditMember.data.assignedMember?._id,
                         // name: responseEditMember.data.assignedMember?.companyName,
 
                         assignedOperationMember:
-                            responseEditMember.data.assignedOperationMember?._id,
-                        dueDate: new Date(responseEditMember.data.dueDate),
+                            responseEditMember.data.assignedOperationMember
+                                ?._id,
+                        dueDate: new Date(
+                            new Date(responseEditMember.data.dueDate)
+                        ).setDate(
+                            new Date(
+                                responseEditMember.data.dueDate
+                            ).getDate() - 1
+                        ),
                         remarks: responseEditMember.data.remarks,
-                        questionnaireId: responseEditMember.data.questionnaireId,
+                        questionnaireId:
+                            responseEditMember.data.questionnaireId,
                     });
                 setQuestionnaireId(responseEditMember.data.questionnaireId);
                 fetchMember(responseEditMember.data.assignedMember?._id);
@@ -169,7 +181,8 @@ function EditAssessment() {
                         setToasterDetails(
                             {
                                 titleMessage: "Oops!",
-                                descriptionMessage: "Session timeout",
+                                descriptionMessage:
+                                    "Session Timeout: Please login again",
                                 messageType: "error",
                             },
                             () => toasterRef.current()
@@ -185,9 +198,12 @@ function EditAssessment() {
         fetchAssessment();
         const fetchMemberCompaniesForAddAssesments = async () => {
             try {
-                const responseEditMember = await privateAxios.get(MEMBER_DROPDOWN, {
-                    signal: controller.signal,
-                });
+                const responseEditMember = await privateAxios.get(
+                    MEMBER_DROPDOWN,
+                    {
+                        signal: controller.signal,
+                    }
+                );
 
                 console.log(
                     "responseEditMember from fetch member companies for add assessments",
@@ -215,9 +231,14 @@ function EditAssessment() {
                         signal: controller.signal,
                     }
                 );
-                console.log("responseEditMember from questionnaires api", responseEditMember.data);
+                console.log(
+                    "responseEditMember from questionnaires api",
+                    responseEditMember.data
+                );
                 isMounted &&
-                    setQuestionnares(responseEditMember.data.map((data) => data.title));
+                    setQuestionnares(
+                        responseEditMember.data.map((data) => data.title)
+                    );
                 setQuestionnaresObj(
                     responseEditMember.data.map((data) => ({
                         _id: data.uuid,
@@ -255,7 +276,17 @@ function EditAssessment() {
 
     const updateAssessment = async (data) => {
         console.log("data for update assessment", data);
-        data = { ...data, questionnaireId: questionnaireId };
+        data = {
+            ...data,
+            questionnaireId: questionnaireId,
+            dueDate: new Date(
+                new Date(
+                    new Date(data?.dueDate).setDate(
+                        new Date(new Date(data?.dueDate)).getDate() + 1
+                    )
+                ).setHours(0, 0, 0, 0)
+            ),
+        };
         try {
             const responseEditMember = await privateAxios.put(
                 UPDATE_ASSESSMENT_BY_ID + params.id,
@@ -295,7 +326,8 @@ function EditAssessment() {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.responseEditMember?.data?.message,
+                        descriptionMessage:
+                            error?.responseEditMember?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -308,7 +340,8 @@ function EditAssessment() {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.responseEditMember?.data?.message,
+                        descriptionMessage:
+                            error?.responseEditMember?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -346,7 +379,6 @@ function EditAssessment() {
             (data) => data._id === e.target.value
         );
         console.log("cgf company-----", cgfCompany);
-
 
         if (cgfCompany[0].name === "The Consumer Goods Forum") {
             setIsCGFStaff(true);
@@ -396,7 +428,8 @@ function EditAssessment() {
                     titleMessage: "Error",
                     descriptionMessage:
                         error?.responseEditMember?.data?.message &&
-                        typeof error.responseEditMember.data.message === "string"
+                        typeof error.responseEditMember.data.message ===
+                            "string"
                             ? error.responseEditMember.data.message
                             : "Something went wrong!",
                     messageType: "error",

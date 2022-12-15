@@ -172,9 +172,12 @@ export default function TableComponent({
     const handleChangeRowsPerPage = (event) => {
         handleChangeRowsPerPage1(event);
     };
-    const onClickVisibilityIconHandler = (id) => {
-        // console.log("Inside on click handler", e.target);
-        onClickVisibilityIconHandler1(id);
+    const onClickVisibilityIconHandler = (id, isOperationMember) => {
+        console.log("Inside on click handler", isOperationMember);
+        onClickVisibilityIconHandler1(
+            id,
+            isOperationMember ? isOperationMember : false
+        );
     };
     const onClickDeleteIconHandler = (id) => {
         onClickDeleteIconHandler1(id);
@@ -239,7 +242,9 @@ export default function TableComponent({
                                                     onClickVisibilityIconHandler(
                                                         isQuestionnare
                                                             ? row.uuid
-                                                            : row._id
+                                                            : row._id,
+                                                        row?.isOperationMember ||
+                                                            row?.isMemberRepresentative
                                                     )
                                                 }
                                                 style={{
@@ -306,7 +311,11 @@ export default function TableComponent({
                                                             cell !==
                                                                 "isActive" &&
                                                             cell !==
-                                                                "isUserAuthorizedToFillAssessment"
+                                                                "isUserAuthorizedToFillAssessment" &&
+                                                            cell !==
+                                                                "isOperationMember" &&
+                                                            cell !==
+                                                                "isMemberRepresentative"
                                                         ) {
                                                             return row[cell]
                                                                 ?.length <=
@@ -480,8 +489,10 @@ export default function TableComponent({
                                                         {icons.includes(
                                                             "send"
                                                         ) &&
-                                                            row?.assessmentStatus ==
-                                                                "In Progress" && (
+                                                            (row?.assessmentStatus ==
+                                                                "In Progress" ||
+                                                                row?.assessmentStatus ==
+                                                                    "Re-opened") && (
                                                                 <span className="icon">
                                                                     <Tooltip title="Assign to Operation Member">
                                                                         <GroupAddOutlinedIcon

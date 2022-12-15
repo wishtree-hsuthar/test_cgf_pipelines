@@ -146,7 +146,9 @@ function OnBoardedSubAdminsTable({
             const onBoardedCGFAdmin = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            setTotalRecords(parseInt(onBoardedCGFAdmin.headers["x-total-count"]));
+            setTotalRecords(
+                parseInt(onBoardedCGFAdmin.headers["x-total-count"])
+            );
             console.log("Response from sub admin api get", onBoardedCGFAdmin);
 
             updateRecords([...onBoardedCGFAdmin.data]);
@@ -156,11 +158,11 @@ function OnBoardedSubAdminsTable({
             console.log("Error from getSubAdmin-------", error);
 
             if (error?.onBoardedCGFAdmin?.status == 401) {
-
                 setonBoardedCgfAdmintoasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session Expired",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => onBoardedCGFAdminRef.current()

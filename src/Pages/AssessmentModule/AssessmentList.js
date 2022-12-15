@@ -132,7 +132,7 @@ const AssessmentList = () => {
 
     const onClickEditIconHandler = (uuid) => {
         console.log("uuid", uuid);
-        return navigate(`/assessments/edit-assessment/${uuid}`);
+        return navigate(`/assessment-list/edit-assessment/${uuid}`);
     };
     const onClickAssignAssessmentHandler = (uuid) => {
         console.log("uuid", uuid);
@@ -174,7 +174,8 @@ const AssessmentList = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Error",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -218,10 +219,15 @@ const AssessmentList = () => {
             delete object["questionnaireId"];
             delete object["isMemberRepresentative"];
 
-            object["dueDate"] = new Date(object["dueDate"]).toLocaleDateString(
-                "en-US",
-                { month: "2-digit", day: "2-digit", year: "numeric" }
-            );
+            object["dueDate"] = new Date(
+                new Date(object["dueDate"]).setDate(
+                    new Date(object["dueDate"]).getDate() - 1
+                )
+            ).toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
             keysOrder.forEach((k) => {
                 const v = object[k];
                 delete object[k];
