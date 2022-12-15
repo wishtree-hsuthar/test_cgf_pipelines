@@ -313,21 +313,36 @@ const MemberList = () => {
             updateRecords(response?.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setIsLoading(false);
-            isMounted &&
+            if (error?.response?.status === 401) {
                 setToasterDetails(
                     {
                         titleMessage: "Error",
+
                         descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
+                            "Session Timeout: Please login again",
 
                         messageType: "error",
                     },
                     () => memberRef.current()
                 );
+                navigate("/login");
+            } else {
+                setIsLoading(false);
+                isMounted &&
+                    setToasterDetails(
+                        {
+                            titleMessage: "Error",
+                            descriptionMessage:
+                                error?.response?.data?.message &&
+                                typeof error.response.data.message === "string"
+                                    ? error.response.data.message
+                                    : "Something went wrong!",
+
+                            messageType: "error",
+                        },
+                        () => memberRef.current()
+                    );
+            }
         }
     };
     useEffect(() => {

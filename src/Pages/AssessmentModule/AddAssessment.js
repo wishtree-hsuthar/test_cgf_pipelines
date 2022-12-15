@@ -253,7 +253,7 @@ const AddAssessment = () => {
         console.log("data from on submit", data);
 
         let someDate = new Date(data.dueDate).setDate(
-            new Date(data.dueDate).getDate() - 1
+            new Date(data.dueDate).getDate() + 1
         );
         // let setUTCHoursForDueDate = new Date(
         //     someDate.setDate(someDate.getDate())
@@ -262,14 +262,12 @@ const AddAssessment = () => {
         console.log(
             "data after converting to ISOstring",
             // new Date(ISOdate).toISOString()
-            new Date(
-                new Date(someDate).setUTCHours(23, 59, 59, 59)
-            ).toISOString()
+            new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString()
         );
         data = {
             ...data,
             dueDate: new Date(
-                new Date(someDate).setUTCHours(23, 59, 59, 59)
+                new Date(someDate).setHours(0, 0, 0, 0)
             ).toISOString(),
         };
 

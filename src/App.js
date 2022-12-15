@@ -1,6 +1,6 @@
 import "./index.css";
 import "./responsive.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 
 import Login from "./Pages/Login";
 import ForgetPassword from "./Pages/ForgetPassword";
@@ -17,6 +17,7 @@ import AuthOutlet from "./Pages/AuthOutlet";
 import Footer from "./components/Footer";
 import { useNavigate } from "react-router-dom";
 import FallBackUI from "./Pages/FallBackUI";
+import Loader from "./utils/Loader";
 // import AddQuestionnaires from "./Pages/questionnaires/AddQuestionnaires";
 axios.defaults.withCredentials = true;
 function App() {
@@ -25,25 +26,30 @@ function App() {
 
     return (
         <React.Fragment>
-            <Routes>
-                {/* <Route path="/questionnare" element={<AddQuestionnaires/>}/> */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/forget-password" element={<ForgetPassword />} />
-                {/* <Route path="auth/*" element={<AuthOutlet />} /> */}
-                <Route path="auth/confirm/:id" element={<SetPassword />} />
-                <Route path="auth/forgot/:id" element={<ResetPassword />} />
-                {/* <Route path="/*" element={<Layout />}> */}
-                <Route
-                    path={"/*"}
-                    element={
-                        <UserLoggedIn>
-                            <ProtectedPages />
-                        </UserLoggedIn>
-                    }
-                />
-                {/* </Route> */}
-                <Route element={<FallBackUI />} />
-            </Routes>
+            <Suspense fallback={<Loader />}>
+                <Routes>
+                    {/* <Route path="/questionnare" element={<AddQuestionnaires/>}/> */}
+                    <Route path="/login" element={<Login />} />
+                    <Route
+                        path="/forget-password"
+                        element={<ForgetPassword />}
+                    />
+                    {/* <Route path="auth/*" element={<AuthOutlet />} /> */}
+                    <Route path="auth/confirm/:id" element={<SetPassword />} />
+                    <Route path="auth/forgot/:id" element={<ResetPassword />} />
+                    {/* <Route path="/*" element={<Layout />}> */}
+                    <Route
+                        path={"/*"}
+                        element={
+                            <UserLoggedIn>
+                                <ProtectedPages />
+                            </UserLoggedIn>
+                        }
+                    />
+                    {/* </Route> */}
+                    <Route element={<FallBackUI />} />
+                </Routes>
+            </Suspense>
             <Footer />
         </React.Fragment>
     );

@@ -29,7 +29,7 @@ const pendingTableColumnHead = [
         id: "createdAt",
 
         disablePadding: false,
-        label: "Onboarded On",
+        label: "Created At",
     },
 
     {
@@ -50,28 +50,45 @@ function PendingCGFAdmins({
     toasterDetails,
     setToasterDetails,
 }) {
-    const [openDeleteDialogBoxPendingCGFAdmin, setOpenDeleteDialogBoxPendingCGFAdmin] = useState(false);
-    const [withdrawInviteidPendingCGFAdmin, setWithdrawInviteidPendingCGFAdmin] = useState("");
-    const [withdrawInviteUserPendingCGFAdmin, setWithdrawInviteUserPendingCGFAdmin] = useState([]);
+    const [
+        openDeleteDialogBoxPendingCGFAdmin,
+        setOpenDeleteDialogBoxPendingCGFAdmin,
+    ] = useState(false);
+    const [
+        withdrawInviteidPendingCGFAdmin,
+        setWithdrawInviteidPendingCGFAdmin,
+    ] = useState("");
+    const [
+        withdrawInviteUserPendingCGFAdmin,
+        setWithdrawInviteUserPendingCGFAdmin,
+    ] = useState([]);
 
     // state to manage loader
     const [isLoading, setIsLoading] = useState(true);
 
     //state to hold search timeout delay
-    const [searchTimeoutPendingCGFAdmin, setSearchTimeoutPendingCGFAdmin] = useState(null);
+    const [searchTimeoutPendingCGFAdmin, setSearchTimeoutPendingCGFAdmin] =
+        useState(null);
     //state to hold wheather to make api call or not
 
     const navigate = useNavigate();
     //(onboarded users/cgf-admin/ table) order in which records needs to show
-    const [pageForPendingTabCGFAdmin, setPageForPendingTabCGFAdmin] = React.useState(1);
-    const [rowsPerPageForPendingTabCGFAdmin, setRowsPerPageForPendingTabCGFAdmin] =
-        React.useState(10);
-    const [orderForPendingTabCGFAdmin, setOrderForPendingTabCGFAdmin] = React.useState("desc");
+    const [pageForPendingTabCGFAdmin, setPageForPendingTabCGFAdmin] =
+        React.useState(1);
+    const [
+        rowsPerPageForPendingTabCGFAdmin,
+        setRowsPerPageForPendingTabCGFAdmin,
+    ] = React.useState(10);
+    const [orderForPendingTabCGFAdmin, setOrderForPendingTabCGFAdmin] =
+        React.useState("desc");
     const [orderByForPending, setOrderByForPendingTab] =
         React.useState("createdAt");
-    const [recordsForPendingTabCGFAdmin, setRecordsForPendingTabCGFAdmin] = React.useState([]);
-    const [totalRecordsForPendingTabCGFAdmin, setTotalRecordsForPendingTabCGFAdmin] =
-        React.useState(0);
+    const [recordsForPendingTabCGFAdmin, setRecordsForPendingTabCGFAdmin] =
+        React.useState([]);
+    const [
+        totalRecordsForPendingTabCGFAdmin,
+        setTotalRecordsForPendingTabCGFAdmin,
+    ] = React.useState(0);
 
     const pendingKeysOrder = [
         "_id",
@@ -303,7 +320,8 @@ function PendingCGFAdmins({
                 title={
                     <p>
                         Withdraw "
-                        {withdrawInviteUserPendingCGFAdmin && `${withdrawInviteUserPendingCGFAdmin[0]?.name}`}
+                        {withdrawInviteUserPendingCGFAdmin &&
+                            `${withdrawInviteUserPendingCGFAdmin[0]?.name}`}
                         's" Invitation
                     </p>
                 }

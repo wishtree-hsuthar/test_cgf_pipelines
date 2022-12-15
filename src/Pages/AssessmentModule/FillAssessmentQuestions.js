@@ -173,6 +173,10 @@ const FillAssessmentQuestion = ({
                                     e.target.value
                                 )
                             }
+                            disabled={
+                                (editMode && params["*"].includes("view")) ||
+                                !editMode
+                            }
                         >
                             {question.options.map((option) => (
                                 <MenuItem key={option} value={option}>
@@ -202,6 +206,11 @@ const FillAssessmentQuestion = ({
                     >
                         {question.options.map((option) => (
                             <FormControlLabel
+                                disabled={
+                                    (editMode &&
+                                        params["*"].includes("view")) ||
+                                    !editMode
+                                }
                                 value={option}
                                 control={
                                     <Radio
@@ -233,6 +242,11 @@ const FillAssessmentQuestion = ({
                                     name={questionUUID}
                                     className="checkbox-with-label"
                                     value={option}
+                                    disabled={
+                                        (editMode &&
+                                            params["*"].includes("view")) ||
+                                        !editMode
+                                    }
                                     control={
                                         <Checkbox
                                             disabled={
@@ -268,7 +282,9 @@ const FillAssessmentQuestion = ({
                     onChange={(newValue) =>
                         handleAnswersChange(
                             questionUUID,
-                            new Date(new Date(newValue)).toLocaleDateString()
+                            new Date(new Date(newValue)).toLocaleDateString(
+                                "en"
+                            )
                         )
                     }
                     renderInput={(params) => (

@@ -158,7 +158,11 @@ function EditAssessment() {
 
                         assignedOperationMember:
                             response.data.assignedOperationMember?._id,
-                        dueDate: new Date(response.data.dueDate),
+                        dueDate: new Date(
+                            new Date(response.data.dueDate)
+                        ).setDate(
+                            new Date(response.data.dueDate).getDate() - 1
+                        ),
                         remarks: response.data.remarks,
                         questionnaireId: response.data.questionnaireId,
                     });
@@ -261,7 +265,17 @@ function EditAssessment() {
 
     const updateAssessment = async (data) => {
         console.log("data for update assessment", data);
-        data = { ...data, questionnaireId: questionnaireId };
+        data = {
+            ...data,
+            questionnaireId: questionnaireId,
+            dueDate: new Date(
+                new Date(
+                    new Date(data?.dueDate).setDate(
+                        new Date(new Date(data?.dueDate)).getDate() + 1
+                    )
+                ).setHours(0, 0, 0, 0)
+            ),
+        };
         try {
             const response = await privateAxios.put(
                 UPDATE_ASSESSMENT_BY_ID + params.id,

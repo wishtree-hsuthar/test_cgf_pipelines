@@ -159,6 +159,7 @@ const AssignAssessmentToOperationMember = () => {
             delete object["isCGFStaff"];
             delete object["isOperationMember"];
             delete object["isMemberRepresentative"];
+            delete object["assessmentCount"];
             // object["name"] = object["name"];
             // delete object["name"];
 

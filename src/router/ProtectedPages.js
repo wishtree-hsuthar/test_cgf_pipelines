@@ -1,42 +1,81 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "../Pages/Layout";
-import SubAdminList from "../Pages/subAdminManagement/SubAdminList";
-import AddSubAdmin from "../Pages/subAdminManagement/AddSubAdmin";
-import ViewSubAdmin from "../Pages/subAdminManagement/ViewSubAdmin";
-import EditSubAdmin from "../Pages/subAdminManagement/EditSubAdmin";
-import ReplaceSubAdmin from "../Pages/subAdminManagement/ReplaceSubAdmin";
-import { Dashboard } from "../Pages/Dashboard";
 import RequireAuth from "./RequireAuth";
-import RolesList from "../Pages/roleManagement/RolesList";
-import AddRole from "../Pages/roleManagement/AddRole";
-import EditRole from "../Pages/roleManagement/EditRole";
-import ViewRole from "../Pages/roleManagement/ViewRole";
-import AddOperationMember from "../Pages/operationMember/AddOperationMember";
-import OperationMemberList from "../Pages/operationMember/OperationMemberList";
-import FallBackUI from "../Pages/FallBackUI";
-import MemberList from "../Pages/member/MemberList";
-import AddMember from "../Pages/member/AddMember";
-import EditMember from "../Pages/member/EditMember";
-import ViewMember from "../Pages/member/ViewMember";
-import ViewOperationMembers from "../Pages/operationMember/ViewOperationMembers";
-import EditOperationMember from "../Pages/operationMember/EditOperationMember";
-// import AddQuestionnaires from "../Pages/questionnaires/AddQuestionnaires";
-import QuestionnairesList from "../Pages/questionnaires/QuestionnairesList";
-import AddNewQuestionnaire from "../Pages/questionnaires/AddNewQuestionnaire";
-// import PreviewQuestionnaire from "../Pages/PreviewQuestionnaire";
-import PreviewQuestionnaire from "../Pages/questionnaires/Preview/PreviewQuestionnaire";
-// import PreviewDemo from "../Pages/PreviewDemo";
-import PreviewDemo from "../Pages/questionnaires/Preview/PreviewDemo";
-// import Preview from "../Pages/questionnaires/Preview";
-import AddAssessment from "../Pages/AssessmentModule/AddAssessment";
-import AssessmentList from "../Pages/AssessmentModule/AssessmentList";
-import EditAssessment from "../Pages/AssessmentModule/EditAssessment";
-import AssignAssessmentToOperationMember from "../Pages/AssessmentModule/AssignAssessmentToOperationMember";
-import FillAssessment from "../Pages/AssessmentModule/FillAssessment";
-import ReplaceOperationMember from "../Pages/operationMember/ReplaceOperationMember";
-import ChangePassword from "../Pages/ChangePassword";
-import VersionHistory from "../Pages/questionnaires/VersionHistory";
+
+const SubAdminList = React.lazy(() =>
+    import("../Pages/subAdminManagement/SubAdminList")
+);
+const AddSubAdmin = React.lazy(() =>
+    import("../Pages/subAdminManagement/AddSubAdmin")
+);
+const ViewSubAdmin = React.lazy(() =>
+    import("../Pages/subAdminManagement/ViewSubAdmin")
+);
+const EditSubAdmin = React.lazy(() =>
+    import("../Pages/subAdminManagement/EditSubAdmin")
+);
+const ReplaceSubAdmin = React.lazy(() =>
+    import("../Pages/subAdminManagement/ReplaceSubAdmin")
+);
+const Dashboard = React.lazy(() => import("../Pages/Dashboard"));
+const RolesList = React.lazy(() => import("../Pages/roleManagement/RolesList"));
+const AddRole = React.lazy(() => import("../Pages/roleManagement/AddRole"));
+const EditRole = React.lazy(() => import("../Pages/roleManagement/EditRole"));
+const ViewRole = React.lazy(() => import("../Pages/roleManagement/ViewRole"));
+const AddOperationMember = React.lazy(() =>
+    import("../Pages/operationMember/AddOperationMember")
+);
+const OperationMemberList = React.lazy(() =>
+    import("../Pages/operationMember/OperationMemberList")
+);
+const FallBackUI = React.lazy(() => import("../Pages/FallBackUI"));
+const MemberList = React.lazy(() => import("../Pages/member/MemberList"));
+const AddMember = React.lazy(() => import("../Pages/member/AddMember"));
+const EditMember = React.lazy(() => import("../Pages/member/EditMember"));
+const ViewMember = React.lazy(() => import("../Pages/member/ViewMember"));
+const ViewOperationMembers = React.lazy(() =>
+    import("../Pages/operationMember/ViewOperationMembers")
+);
+const EditOperationMember = React.lazy(() =>
+    import("../Pages/operationMember/EditOperationMember")
+);
+// const AddQuestionnaires = "../Pages/questionnaires/AddQuestionnaires";
+const QuestionnairesList = React.lazy(() =>
+    import("../Pages/questionnaires/QuestionnairesList")
+);
+const AddNewQuestionnaire = React.lazy(() =>
+    import("../Pages/questionnaires/AddNewQuestionnaire")
+);
+// const PreviewQuestionnaire = "../Pages/PreviewQuestionnaire";
+const PreviewQuestionnaire = React.lazy(() =>
+    import("../Pages/questionnaires/Preview/PreviewQuestionnaire")
+);
+// const PreviewDemo = "../Pages/PreviewDemo";
+const PreviewDemo = "../Pages/questionnaires/Preview/PreviewDemo";
+// const Preview = "../Pages/questionnaires/Preview";
+const AddAssessment = React.lazy(() =>
+    import("../Pages/AssessmentModule/AddAssessment")
+);
+const AssessmentList = React.lazy(() =>
+    import("../Pages/AssessmentModule/AssessmentList")
+);
+const EditAssessment = React.lazy(() =>
+    import("../Pages/AssessmentModule/EditAssessment")
+);
+const AssignAssessmentToOperationMember = React.lazy(() =>
+    import("../Pages/AssessmentModule/AssignAssessmentToOperationMember")
+);
+const FillAssessment = React.lazy(() =>
+    import("../Pages/AssessmentModule/FillAssessment")
+);
+const ReplaceOperationMember = React.lazy(() =>
+    import("../Pages/operationMember/ReplaceOperationMember")
+);
+const ChangePassword = React.lazy(() => import("../Pages/ChangePassword"));
+const VersionHistory = React.lazy(() =>
+    import("../Pages/questionnaires/VersionHistory")
+);
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -44,10 +83,12 @@ const ProtectedPages = () => {
             {/* <Route path="/" element={<Layout />}> */}
             <Route path="/" element={<Layout />}>
                 <Route path="/home" element={<Dashboard />} />
+
                 <Route
                     path="/users/cgf-admin"
                     element={
                         // <RequireAuth allowedRoles={["Super Admin", "Sub Admin"]}>
+
                         <SubAdminList />
                         // </RequireAuth>
                     }
@@ -232,7 +273,7 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
-                    path="/assessments/edit-assessment/:id"
+                    path="/assessment-list/edit-assessment/:id"
                     element={
                         <RequireAuth page={"edit"} moduleName={"Assessment"}>
                             <EditAssessment />

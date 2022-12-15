@@ -174,21 +174,37 @@ const RolesList = () => {
             setIsLoading2(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            isMounted &&
+            if (error?.response?.status === 401) {
                 setToasterDetails3(
                     {
                         titleMessage: "Error",
                         descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
+                            "Session Timeout: Please login again",
 
                         messageType: "error",
                     },
                     () => myRef3.current()
                 );
-            setIsLoading2(false);
+                setTimeout(() => {
+                    navigate3("/login");
+                }, 3000);
+            } else {
+                isMounted &&
+                    setToasterDetails3(
+                        {
+                            titleMessage: "Error",
+                            descriptionMessage:
+                                error?.response?.data?.message &&
+                                typeof error.response.data.message === "string"
+                                    ? error.response.data.message
+                                    : "Something went wrong!",
+
+                            messageType: "error",
+                        },
+                        () => myRef3.current()
+                    );
+                setIsLoading2(false);
+            }
         }
     };
 

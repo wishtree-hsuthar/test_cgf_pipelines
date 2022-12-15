@@ -85,16 +85,19 @@ const TableLayoutCellComponent = ({
                             !answer && error && error?.length !== 0
                                 ? "input-error"
                                 : answer &&
+                                  error &&
                                   transformedColumns[cell.columnId]
                                       ?.validation === "alphabets" &&
                                   !AlphaRegEx.test(answer)
                                 ? "input-error"
                                 : answer &&
+                                  error &&
                                   transformedColumns[cell.columnId]
                                       ?.validation === "alphanumeric" &&
                                   !AlphaNumRegEx.test(answer)
                                 ? "input-error"
                                 : answer &&
+                                  error &&
                                   transformedColumns[cell.columnId]
                                       ?.validation === "numeric" &&
                                   !NumericRegEx.test(answer)
@@ -188,6 +191,11 @@ const TableLayoutCellComponent = ({
                     <FormControl fullWidth>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
+                                disabled={
+                                    (editMode &&
+                                        params["*"].includes("view")) ||
+                                    !editMode
+                                }
                                 value={answer}
                                 className={`datepicker-blk`}
                                 components={{
@@ -202,11 +210,11 @@ const TableLayoutCellComponent = ({
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        disabled={
-                                            (editMode &&
-                                                params["*"].includes("view")) ||
-                                            !editMode
-                                        }
+                                        // disabled={
+                                        //     (editMode &&
+                                        //         params["*"].includes("view")) ||
+                                        //     !editMode
+                                        // }
                                         onKeyDown={handleOnKeyDownChange}
                                         className={`input-field${
                                             !answer &&

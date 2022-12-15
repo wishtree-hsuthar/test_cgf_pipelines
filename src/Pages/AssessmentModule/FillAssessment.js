@@ -648,9 +648,20 @@ function FillAssessment() {
                                 Due date <span>:</span>
                             </span>
                             <span className="accrej-desc">
-                                {new Date(
+                                {/* {new Date(
                                     assessment?.dueDate
-                                ).toLocaleDateString()}
+                                ).toLocaleDateString()} */}
+                                {new Date(
+                                    new Date(assessment?.dueDate).setDate(
+                                        new Date(
+                                            assessment?.dueDate
+                                        ).getDate() - 1
+                                    )
+                                ).toLocaleDateString("en-US", {
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    year: "numeric",
+                                })}
                             </span>
                         </span>
                         Click “Accept” if you want to fill out the assessment .

@@ -114,18 +114,34 @@ const ViewRole = () => {
             console.log("error on delete", error);
             if (error?.code === "ERR_CANCELED") return;
             // console.log(toasterDetails);
-            setToasterDetails4(
-                {
-                    titleMessage: "Error",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something went wrong!",
-                    messageType: "error",
-                },
-                () => myRef4.current()
-            );
+            if (error?.response?.status == 401) {
+                setToasterDetails4(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
+
+                        messageType: "error",
+                    },
+                    () => myRef4.current()
+                );
+                setTimeout(() => {
+                    navigate4("/login");
+                }, 3000);
+            } else {
+                setToasterDetails4(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            error?.response?.data?.message &&
+                            typeof error.response.data.message === "string"
+                                ? error.response.data.message
+                                : "Something went wrong!",
+                        messageType: "error",
+                    },
+                    () => myRef4.current()
+                );
+            }
         } finally {
             setOpenDialog(false);
         }
@@ -330,7 +346,22 @@ const ViewRole = () => {
             }));
             console.log("response:- ", response);
         } catch (error) {
-            console.log("error", error);
+            console.log("error from get users by role", error);
+            if (error?.response?.status == 401) {
+                setToasterDetails4(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
+
+                        messageType: "error",
+                    },
+                    () => myRef4.current()
+                );
+                setTimeout(() => {
+                    navigate4("/login");
+                }, 3000);
+            }
         }
     };
     useEffect(() => {

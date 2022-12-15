@@ -491,8 +491,10 @@ export default function TableComponent({
                                                         {icons.includes(
                                                             "send"
                                                         ) &&
-                                                            row?.assessmentStatus ==
-                                                                "In Progress" && (
+                                                            (row?.assessmentStatus ==
+                                                                "In Progress" ||
+                                                                row?.assessmentStatus ==
+                                                                    "Re-opened") && (
                                                                 <span className="icon">
                                                                     <Tooltip title="Assign to Operation Member">
                                                                         <GroupAddOutlinedIcon
