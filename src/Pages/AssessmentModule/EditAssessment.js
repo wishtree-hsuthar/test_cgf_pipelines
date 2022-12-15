@@ -164,6 +164,20 @@ function EditAssessment() {
                 fetchMember(responseEditMember.data.assignedMember?._id);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
+                if (error?.response?.status === 401) {
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage: "Session timeout",
+                                messageType: "error",
+                            },
+                            () => toasterRef.current()
+                        );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                }
                 setIsLoading(false);
                 console.log("Error from fetch assessment", error);
             }

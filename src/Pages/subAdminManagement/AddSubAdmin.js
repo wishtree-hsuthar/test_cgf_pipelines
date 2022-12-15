@@ -90,8 +90,13 @@ const AddSubAdmin = () => {
         let controller = new AbortController();
         let fetchRoles = async () => {
             try {
-                const response = await privateAxios.get(FETCH_ROLES);
-                console.log("Response from fetch rolesAddCGFAdmin - ", response);
+                const response = await privateAxios.get(FETCH_ROLES, {
+                    signal: controller.signal,
+                });
+                console.log(
+                    "Response from fetch rolesAddCGFAdmin - ",
+                    response
+                );
                 setRolesAddCGFAdmin(response.data);
                 response.data.filter(
                     (data) =>
@@ -99,18 +104,36 @@ const AddSubAdmin = () => {
                         reset({ subRoleId: data._id })
                 );
             } catch (error) {
+                if (error?.code === "ERR_CANCELED") return;
                 console.log("Error from fetch rolesAddCGFAdmin", error);
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
+                if (error?.response?.status === 401) {
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage: "Session timeout",
+                                messageType: "error",
+                            },
+                            () => toasterRef.current()
+                        );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                } else {
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage:
+                                    error?.response?.data?.message,
+                                messageType: "error",
+                            },
+                            () => toasterRef.current()
+                        );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                }
             }
         };
         let addCGFAdminFetchCountries = async () => {
@@ -127,16 +150,34 @@ const AddSubAdmin = () => {
                     setCountriesAddCGFAdmin([...tempCountryCodeSet]);
                 }
             } catch (error) {
+                if (error?.code === "ERR_CANCELED") return;
                 console.log("error from countries api", error);
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
+                // if (error?.response?.status === 401) {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: "Session timeout",
+                //             messageType: "error",
+                //         },
+                //         () => toasterRef.current()
+                //     );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // }
+                // else
+                //  {
+                isMounted &&
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message,
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
                 navigate("/login");
+                // }
             }
         };
         fetchRoles();
@@ -165,15 +206,30 @@ const AddSubAdmin = () => {
                 reset();
             }
         } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
             console.log("error from add sub admin page", error);
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => toasterRef.current()
-            );
+            if (error?.response?.status === 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+            }
         }
     };
     const handleOnsubmitAddCGFAdmin = async (data) => {
@@ -199,7 +255,7 @@ const AddSubAdmin = () => {
         );
         data = {
             ...data,
-            phoneNumber:data.phoneNumber ? parseInt(data.phoneNumber) : "",
+            phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
             // roleId: authUser.roleId._id,
         };
 
@@ -242,7 +298,9 @@ const AddSubAdmin = () => {
                             <div className="form-header-right-txt">
                                 <div
                                     className="tertiary-btn-blk"
-                                    onClick={handleSubmit(handleSaveAndMoreAddCGFAdmin)}
+                                    onClick={handleSubmit(
+                                        handleSaveAndMoreAddCGFAdmin
+                                    )}
                                 >
                                     <span className="addmore-icon">
                                         <i className="fa fa-plus"></i>

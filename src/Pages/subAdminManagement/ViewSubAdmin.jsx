@@ -41,10 +41,7 @@ const ViewSubAdmin = () => {
 
     const [isActive, setActive] = useState("false");
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-    const [value, setValue] = useState({
-        name: "India",
-        countryCode: "+91",
-    });
+
     const [fetchedSubAdminDetails, setFetchedSubAdminDetails] = useState({});
 
     const [open, setOpen] = React.useState(false);
@@ -74,6 +71,19 @@ const ViewSubAdmin = () => {
                 setIsLoading(false);
                 if (error?.response?.status === 500) {
                     navigate("/users/cgf-admin/");
+                }
+                if (error?.response?.status === 401) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops",
+                            descriptionMessage: "Session timeout",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
                 }
             }
         })();
@@ -105,14 +115,29 @@ const ViewSubAdmin = () => {
             }
         } catch (error) {
             console.log("error from delete API", error);
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => toasterRef.current()
-            );
+
+            if (error?.response?.status === 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+            }
         }
     };
     console.log("fetchedSubAdminDetails---", fetchedSubAdminDetails?.isActive);
@@ -136,10 +161,6 @@ const ViewSubAdmin = () => {
             setOpen(false);
             setOpenDeleteDialog(true);
         }
-    };
-
-    const handleClose = () => {
-        setOpen(false);
     };
 
     const data = [
@@ -347,7 +368,7 @@ const ViewSubAdmin = () => {
                                                                 autoComplete:
                                                                     "", // disable autocomplete and autofill
                                                             }}
-                                                            
+
                                                             // value={value}
                                                             // onChange={(e) =>
                                                             //     setValue(e.target.value)

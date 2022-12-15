@@ -239,27 +239,28 @@ function PendingCGFAdmins({
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else {
+                isMounted &&
+                    setToasterDetails(
+                        {
+                            titleMessage: "Error",
+                            descriptionMessage:
+                                error?.response?.data?.message &&
+                                typeof error.response.data.message === "string"
+                                    ? error.response.data.message
+                                    : "Something went wrong!",
+
+                            messageType: "error",
+                        },
+                        () => myRef.current()
+                    );
+                setIsLoading(false);
             }
 
             console.log(
                 "Error from getSubAdmin pending tab table-------",
                 error
             );
-            isMounted &&
-                setToasterDetails(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
-
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-            setIsLoading(false);
         }
     };
 

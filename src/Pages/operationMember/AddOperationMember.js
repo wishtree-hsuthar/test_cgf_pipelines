@@ -83,27 +83,15 @@ function AddOperationMember() {
             );
         } catch (error) {
             console.log("Error from fetch roles", error);
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => toasterRef.current()
-            );
-            if (error?.response?.status == 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: "Session Expired",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            }
+
+            // setToasterDetails(
+            //     {
+            //         titleMessage: "Oops!",
+            //         descriptionMessage: error?.response?.data?.message,
+            //         messageType: "error",
+            //     },
+            //     () => toasterRef.current()
+            // );
         }
     };
 
@@ -165,17 +153,29 @@ function AddOperationMember() {
             } catch (error) {
                 console.log("error from fetch member company", error);
                 if (error?.response?.status == 401) {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: "Session Expired",
-                            messageType: "error",
-                        },
-                        () => toasterRef.current()
-                    );
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage: "Session timeout",
+                                messageType: "error",
+                            },
+                            () => toasterRef.current()
+                        );
                     setTimeout(() => {
                         navigate("/login");
                     }, 3000);
+                } else {
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage:
+                                    error?.response?.data?.message,
+                                messageType: "error",
+                            },
+                            () => toasterRef.current()
+                        );
                 }
             }
         };
@@ -195,17 +195,6 @@ function AddOperationMember() {
                 
             } catch (error) {
                 console.log("error from countries api", error);
-                if (error?.response?.status == 401) {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message,
-                            messageType: "error",
-                        },
-                        () => toasterRef.current()
-                    );
-                    navigate("/login");
-                }
             }
         };
         fetchCountries();
@@ -234,11 +223,12 @@ function AddOperationMember() {
             }
         } catch (error) {
             console.log("error from fetching reporting managers", error);
+
             if (error?.response?.status == 401) {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session Expired",
+                        descriptionMessage: "Session timeout",
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -287,7 +277,7 @@ function AddOperationMember() {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session Expired",
+                        descriptionMessage: "Session timeout",
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -295,15 +285,16 @@ function AddOperationMember() {
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
             }
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => toasterRef.current()
-            );
         }
     };
 

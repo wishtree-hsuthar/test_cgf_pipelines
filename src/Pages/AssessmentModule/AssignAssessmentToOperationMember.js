@@ -272,7 +272,7 @@ const AssignAssessmentToOperationMember = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Success",
-                        descriptionMessage: "Assessment assigned successfully!",
+                        descriptionMessage: response?.data?.message,
 
                         messageType: "success",
                     },

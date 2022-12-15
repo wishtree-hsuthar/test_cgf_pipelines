@@ -9,6 +9,8 @@ import { ASSESSMENTS } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import Toaster from "../../components/Toaster";
 
 const tableHead = [
     // {
@@ -62,6 +64,14 @@ const AssessmentList = () => {
     //custom hook to set title of page
     useDocumentTitle("Assessments");
 
+    //Refr for Toaster
+  const myRef = React.useRef();
+  //Toaster Message setter
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
+  });
     const keysOrder = [
         "uuid",
         "_id",
@@ -161,7 +171,17 @@ const AssessmentList = () => {
             console.log("Error from assessments-------", error);
 
             if (error?.response?.status == 401) {
-                navigate("/login");
+                setToasterDetails(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
             }
             setIsLoading(false);
         }
@@ -223,7 +243,11 @@ const AssessmentList = () => {
     }, [page, rowsPerPage, orderBy, order, makeApiCall]);
 
     const addAssessment = () => {
-        navigate("/assessments/add-assessment");
+        navigate("/assessment-list/add-assessment");
+    };
+
+    const viewInstruction = () => {
+        navigate("/assessments/instructions");
     };
 
     const privilege = useSelector((state) => state?.user?.privilege);
@@ -272,6 +296,12 @@ const AssessmentList = () => {
 
     return (
         <div>
+            <Toaster
+                messageType={toasterDetails.messageType}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                myRef={myRef}
+                titleMessage={toasterDetails.titleMessage}
+            />
             <div className="page-wrapper">
                 <section>
                     <div className="container">
@@ -279,7 +309,7 @@ const AssessmentList = () => {
                             <div className="form-header-left-blk flex-start">
                                 <h2 className="heading2 mr-40">Assessments</h2>
                             </div>
-                            <div className="form-header-right-txt search-and-btn-field-right">
+                            <div className="form-header-right-txt search-and-btn-field-right view-instruct-field-right">
                                 <div className="search-and-btn-field-blk mr-0">
                                     <div className="searchbar">
                                         <input
@@ -311,6 +341,14 @@ const AssessmentList = () => {
                                         </button>
                                     </div>
                                 )}
+                                <div className="tertiary-btn-blk ml-20" onClick={viewInstruction}>
+                                    <span className="preview-icon">
+                                        <VisibilityOutlinedIcon />
+                                    </span>
+                                    <span className="addmore-txt">
+                                        View Instructions
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         {/* <div className="member-filter-sect">

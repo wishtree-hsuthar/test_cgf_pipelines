@@ -20,7 +20,8 @@ import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-
+import useCallbackState from "../../utils/useCallBackState";
+import Toaster from "../../components/Toaster";
 
 function a11yProps(index) {
   return {
@@ -47,6 +48,15 @@ function AddNewQuestionnaire() {
 
   const [globalSectionTitleError, setGlobalSectionTitleError] = useState({
     errMsg: "",
+  });
+
+  //Refr for Toaster
+  const myRef = React.useRef();
+  //Toaster Message setter
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
   });
 
   const handleChange = (event, newValue) => {
@@ -105,6 +115,22 @@ function AddNewQuestionnaire() {
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
         setIsLoading(false);
+        if (error?.response?.status == 401) {
+          setToasterDetails(
+            {
+              titleMessage: "Error",
+              descriptionMessage: "Session timeout",
+
+              messageType: "error",
+            },
+            () => myRef.current()
+          );
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
+        }
+        // setErrorToaster(error)
+        // console.log("error from fetch questionnaire", error);
       }
     };
     fetch();
@@ -149,11 +175,14 @@ function AddNewQuestionnaire() {
     setValue(questionnaire.sections.length);
   };
 
-  
-
   return (
     <div className="page-wrapper">
-     
+      <Toaster
+        myRef={myRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
       <div className="breadcrumb-wrapper">
         <div className="container">
           <ul className="breadcrumb">
@@ -273,6 +302,8 @@ function AddNewQuestionnaire() {
                       value={value}
                       onChange={handleChange}
                       aria-label="basic tabs example"
+                      variant="scrollable"
+                      scrollButtons="auto"
                     >
                       {questionnaire.sections.map((section, index, id) => (
                         <Tooltip

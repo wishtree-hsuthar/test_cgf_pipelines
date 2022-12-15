@@ -52,114 +52,121 @@ const defaultValues = {
   isCGFStaff: "",
 };
 function EditOperationMember() {
-  //custom hook to set title of page
-  useDocumentTitle("Edit Operation Member");
-  // state to manage loaders
-  const [isLoading, setIsLoading] = useState(true);
-  const {
+    //custom hook to set title of page
+    useDocumentTitle("Edit Operation Member");
+    // state to manage loaders
+    const [isLoading, setIsLoading] = useState(true);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
 
-    handleSubmit,
-    formState: { errors },
-    reset,
-    control,
-    setValue,
-    trigger,
-    watch,
-  } = useForm({
-    defaultValues: defaultValues,
-  });
-  // watch('')
-  const navigate = useNavigate();
-  const params = useParams();
-  const [memberCompanies, setMemberCompanies] = useState([]);
-  const [disableReportingManager, setDisableReportingManager] = useState(true);
-  const [countries, setCountries] = useState([]);
-  const [reportingManagers, setReportingManagers] = useState([]);
-  const [operationMember, setOperationMember] = useState({});
-  const toasterRef = useRef();
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "error",
-  });
-  const [roles, setRoles] = useState([]);
-  console.log("operationMember", operationMember);
-  console.log("watch country code", watch("countryCode"));
-  const fetchReportingManagers = async (id) => {
-    try {
-      const response = await privateAxios.get(FETCH_OPERATION_MEMBER + id);
-      if (response.status == 200) {
-        setReportingManagers(
-          response?.data.map((data) => ({
-            _id: data?._id,
-            name: data?.name,
-          }))
-        );
-        console.log(
-          "reporting managersssss",
-          response?.data.map((data) => ({
-            _id: data?._id,
-            name: data?.name,
-          }))
-        );
-      }
-    } catch (error) {
-      console.log("error from fetching reporting managers", error);
-    }
-  };
-  // fetch all countries and its objects
-  const fetchCountries = async (controller) => {
-    try {
-      const response = await privateAxios.get(COUNTRIES, {
-        signal: controller.signal,
-      });
-      console.log("response from countries", response);
-      // isMounted &&
-      setCountries(response.data.map((country) => country?.countryCode));
-    } catch (error) {
-      console.log("error from countries api", error);
-      if (error?.response?.status == 401) {
-        setToasterDetails(
-          {
-            titleMessage: "Oops!",
-            descriptionMessage: error?.response?.data?.message,
-            messageType: "error",
-          },
-          () => toasterRef.current()
-        );
-        navigate("/login");
-      }
-    }
-  };
-  // Fetch all member comapanies
-  const fetchMemberComapany = async (controller) => {
-    try {
-      const response = await privateAxios.get(MEMBER + "/list", {
-        signal: controller.signal,
-      });
-      console.log(
-        "member company---",
-        response.data.map((data) => {
-          console.log("member company=", data?.companyName);
-        })
-      );
+        control,
+        setValue,
+        trigger,
+        watch,
+        reset,
+    } = useForm({
+        defaultValues: defaultValues,
+    });
+    // watch('')
+    const navigate = useNavigate();
+    const params = useParams();
+    const [memberCompanies, setMemberCompanies] = useState([]);
+    const [disableReportingManager, setDisableReportingManager] =
+        useState(true);
+    const [countries, setCountries] = useState([]);
+    const [reportingManagers, setReportingManagers] = useState([]);
+    const [operationMember, setOperationMember] = useState({});
+    const toasterRef = useRef();
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "error",
+    });
+    const [roles, setRoles] = useState([]);
+    console.log("operationMember", operationMember);
+    console.log("watch country code", watch("countryCode"));
+    const fetchReportingManagers = async (id) => {
+        try {
+            const response = await privateAxios.get(
+                FETCH_OPERATION_MEMBER + id
+            );
+            if (response.status == 200) {
+                setReportingManagers(
+                    response?.data.map((data) => ({
+                        _id: data?._id,
+                        name: data?.name,
+                    }))
+                );
+                console.log(
+                    "reporting managersssss",
+                    response?.data.map((data) => ({
+                        _id: data?._id,
+                        name: data?.name,
+                    }))
+                );
+            }
+        } catch (error) {
+            console.log("error from fetching reporting managers", error);
+        }
+    };
+    // fetch all countries and its objects
+    const fetchCountries = async (isMounted, controller) => {
+        try {
+            const response = await privateAxios.get(COUNTRIES, {
+                signal: controller.signal,
+            });
+            console.log("response from countries", response);
+            // isMounted &&
+            setCountries(response.data.map((country) => country?.countryCode));
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
 
-      if (response.status == 200) {
-        // isMounted &&
-        setMemberCompanies(
-          response.data.map((data) => ({
-            _id: data?._id,
-            companyName: data?.companyName,
-            companyType: data?.companyType,
-          }))
-        );
-      }
+            console.log("error from countries api", error);
 
-      console.log("member company---", memberCompanies);
-    } catch (error) {
-      console.log("error from fetch member company", error);
-    }
-  };
+            // isMounted &&
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+        }
+    };
+    // Fetch all member comapanies
+    const fetchMemberComapany = async (isMounted, controller) => {
+        try {
+            const response = await privateAxios.get(MEMBER + "/list", {
+                signal: controller.signal,
+            });
+            console.log(
+                "member company---",
+                response.data.map((data) => {
+                    console.log("member company=", data?.companyName);
+                })
+            );
+
+            if (response.status == 200) {
+                isMounted &&
+                    setMemberCompanies(
+                        response.data.map((data) => ({
+                            _id: data?._id,
+                            companyName: data?.companyName,
+                            companyType: data?.companyType,
+                        }))
+                    );
+            }
+
+            console.log("member company---", memberCompanies);
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+
+            console.log("error from fetch member company", error);
+        }
+    };
 
   // Fetch reporting managers of all member companies
   const fetchRm = async (id, isCGFStaff) => {
@@ -192,96 +199,116 @@ function EditOperationMember() {
   // fetch operation member by id
   console.log("reporting managers", reportingManagers);
 
-  const fetchOperationMember = async (controller, isMounted) => {
-    try {
-      setIsLoading(true);
-      const response = await privateAxios.get(
-        GET_OPERATION_MEMBER_BY_ID + params.id,
-        {
-          signal: controller.signal,
+    const fetchOperationMember = async (controller, isMounted) => {
+        try {
+            setIsLoading(true);
+            const response = await privateAxios.get(
+                GET_OPERATION_MEMBER_BY_ID + params.id,
+                {
+                    signal: controller.signal,
+                }
+            );
+            setIsLoading(false);
+            isMounted &&
+                reset({
+                    memberId: {
+                        _id: response?.data?.memberId?._id,
+                        companyName: response?.data?.memberId?.companyName,
+                        companyType: response?.data?.memberId?.companyType,
+                    },
+                    companyType: response?.data?.memberId?.companyType,
+                    countryCode: response?.data?.countryCode,
+                    phoneNumber: response?.data?.phoneNumber,
+                    address: response?.data?.address,
+                    title: response?.data?.title ? response.data.title : "",
+                    department: response?.data?.department
+                        ? response?.data?.department
+                        : "",
+                    email: response?.data?.email,
+                    operationType: response?.data?.operationType
+                        ? response?.data?.operationType
+                        : "",
+                    reportingManager: response?.data?.reportingManager[0]?._id,
+                    salutation: response?.data?.salutation,
+                    name: response?.data?.name,
+                    isActive:
+                        response?.data?.isActive === true ? "true" : "false",
+                    roleId: response?.data?.roleId,
+                    isCGFStaff:
+                        response?.data?.isCGFStaff === true ? "true" : "false",
+                    // reportingManagerId:
+                    //     response?.data?.reportingManager?._id,
+                });
+            setOperationMember(response.data);
+            console.log("response data ----", operationMember);
+            let isCGFStaff = response?.data?.isCGFStaff ? true : false;
+            fetchRm(response?.data?.memberId?._id, isCGFStaff);
+            // fetchReportingManagers(operationMember?.memberId?._id);
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+            if (error?.response?.status === 401) {
+                isMounted &&
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: "Session timeout",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            }
+            setIsLoading(false);
+            console.log("error from edit operation members", error);
         }
-      );
-      setIsLoading(false);
-      isMounted &&
-        reset({
-          memberId: {
-            _id: response?.data?.memberId?._id,
-            companyName: response?.data?.memberId?.companyName,
-            companyType: response?.data?.memberId?.companyType,
-          },
-          companyType: response?.data?.memberId?.companyType,
-          countryCode: response?.data?.countryCode,
-          phoneNumber: response?.data?.phoneNumber,
-          address: response?.data?.address,
-          title: response?.data?.title ? response.data.title : "",
-          department: response?.data?.department
-            ? response?.data?.department
-            : "",
-          email: response?.data?.email,
-          operationType: response?.data?.operationType
-            ? response?.data?.operationType
-            : "",
-          reportingManager: response?.data?.reportingManager[0]?._id,
-          salutation: response?.data?.salutation,
-          name: response?.data?.name,
-          isActive: response?.data?.isActive === true ? "true" : "false",
-          roleId: response?.data?.roleId,
-          isCGFStaff: response?.data?.isCGFStaff === true ? "true" : "false",
-          // reportingManagerId:
-          //     response?.data?.reportingManager?._id,
-        });
-      setOperationMember(response.data);
-      console.log("response data ----", operationMember);
-      let isCGFStaff = response?.data?.isCGFStaff ? true : false;
-      fetchRm(response?.data?.memberId?._id, isCGFStaff);
-    } catch (error) {
-      if (error?.code === "ERR_CANCELED") return;
-      setIsLoading(false);
-      console.log("error from edit operation members", error);
-    }
-  };
+    };
 
-  // fetch & set Roles
-  let fetchRoles = async () => {
-    try {
-      const response = await privateAxios.get(FETCH_ROLES);
-      console.log("Response from fetch roles - ", response);
-      setRoles(response.data);
-    } catch (error) {
-      console.log("Error from fetch roles", error);
-      setToasterDetails(
-        {
-          titleMessage: "Oops!",
-          descriptionMessage: error?.response?.data?.message,
-          messageType: "error",
-        },
-        () => toasterRef.current()
-      );
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
-    }
-  };
-  const phoneNumberChangeHandler = (e, name, code) => {
-    console.log(
-      "on number change",
-      e.target.value,
-      "name: ",
-      name,
-      "code",
-      code
-    );
-    setValue(name, e.target.value);
-    trigger(name);
-    trigger(code);
-  };
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
+    // fetch & set Roles
+    let fetchRoles = async (isMounted, controller) => {
+        try {
+            const response = await privateAxios.get(FETCH_ROLES, {
+                signal: controller.signal,
+            });
+            console.log("Response from fetch roles - ", response);
+            setRoles(response.data);
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
 
-    countries.length === 0 && fetchCountries(controller);
-    memberCompanies.length === 0 && fetchMemberComapany(controller);
-    roles.length === 0 && fetchRoles();
+            console.log("Error from fetch roles", error);
+
+            // isMounted &&
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+        }
+    };
+    const phoneNumberChangeHandler = (e, name, code) => {
+        console.log(
+            "on number change",
+            e.target.value,
+            "name: ",
+            name,
+            "code",
+            code
+        );
+        setValue(name, e.target.value);
+        trigger(name);
+        trigger(code);
+    };
+    useEffect(() => {
+        let isMounted = true;
+        const controller = new AbortController();
+
+        countries.length === 0 && fetchCountries(controller);
+        memberCompanies.length === 0 && fetchMemberComapany(controller);
+        roles.length === 0 && fetchRoles(isMounted, controller);
 
     fetchOperationMember(controller, isMounted);
 

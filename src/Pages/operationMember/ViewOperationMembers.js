@@ -133,6 +133,19 @@ const ViewOperationMembers = () => {
                 console.log("member company---", memberCompanies);
             } catch (error) {
                 console.log("error from fetch member company", error);
+                // if (error?.response?.status == 401) {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: "Session timeout",
+                //             messageType: "error",
+                //         },
+                //         () => toasterRef.current()
+                //     );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // }
             }
         };
         let fetchCountries = async () => {
@@ -147,17 +160,17 @@ const ViewOperationMembers = () => {
                     );
             } catch (error) {
                 console.log("error from countries api", error);
-                if (error?.response?.status == 401) {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message,
-                            messageType: "error",
-                        },
-                        () => toasterRef.current()
-                    );
-                    navigate("/login");
-                }
+                // if (error?.response?.status == 401) {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: error?.response?.data?.message,
+                //             messageType: "error",
+                //         },
+                //         () => toasterRef.current()
+                //     );
+                //     navigate("/login");
+                // }
             }
         };
         fetchCountries();
@@ -209,6 +222,19 @@ const ViewOperationMembers = () => {
                     "error in fetch operation member method in view page",
                     error
                 );
+                if (error?.response?.status == 401) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: "Session timeout",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                }
                 if (error?.response?.status === 500) {
                     navigate("/operation_member");
                 }
@@ -244,14 +270,28 @@ const ViewOperationMembers = () => {
             }
         } catch (error) {
             console.log("error from handle delete operation member", error);
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => toasterRef.current()
-            );
+            if (error?.response?.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+            }
         }
     };
 

@@ -224,33 +224,35 @@ function PendingOperationMembers({
         error
       );
       if (error?.response?.status == 401) {
-        setToasterDetails(
-          {
-            titleMessage: "Oops!",
-            descriptionMessage: "Session Expired",
-            messageType: "error",
-          },
-          () => myRef.current()
-        );
+                isMounted &&
+            setToasterDetails(
+              {
+                titleMessage: "Oops!",
+                descriptionMessage: "Session Expired",
+                messageType: "error",
+              },
+              () => myRef.current()
+            );
         setTimeout(() => {
           navigate("/login");
         }, 3000);
-      }
-      isMounted &&
-        setToasterDetails(
-          {
-            titleMessage: "Error",
-            descriptionMessage:
-              error?.response?.data?.message &&
-              typeof error.response.data.message === "string"
-                ? error.response.data.message
-                : "Something went wrong!",
+      } else {
+          isMounted &&
+            setToasterDetails(
+              {
+                titleMessage: "Error",
+                descriptionMessage:
+                  error?.response?.data?.message &&
+                  typeof error.response.data.message === "string"
+                    ? error.response.data.message
+                    : "Something went wrong!",
 
-            messageType: "error",
-          },
-          () => myRef.current()
-        );
-    }
+                messageType: "error",
+              },
+              () => myRef.current()
+            );
+        }
+        }
   };
   useEffect(() => {
     let isMounted = true;

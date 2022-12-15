@@ -157,38 +157,61 @@ const ReplaceSubAdmin = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             console.log("Error from getSubAdmin-------", error);
-            isMounted &&
+
+            setIsLoading(false);
+            if (error?.response?.status == 401) {
                 setToasterDetails(
                     {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.error &&
-                            typeof error.response.data.error === "string"
-                                ? error.response.data.error
-                                : "Something went wrong!",
-
+                        titleMessage: "Oops",
+                        descriptionMessage: "Session timeout",
                         messageType: "error",
                     },
                     () => myRef.current()
                 );
-            setIsLoading(false);
-            if (error?.response?.status == 500) {
+                setTimeout(() => {
+                    return navigate("/login");
+                }, 3000);
+                setOpen(false);
+            } else if (error?.response?.status == 500) {
                 console.log(
                     "Error status 500 while fetchiing subadmin from replace sub-admin"
                 );
                 navigate("/users/cgf-admin/");
+            } else {
+                isMounted &&
+                    setToasterDetails(
+                        {
+                            titleMessage: "Error",
+                            descriptionMessage:
+                                error?.response?.data?.error &&
+                                typeof error.response.data.error === "string"
+                                    ? error.response.data.error
+                                    : "Something went wrong!",
+
+                            messageType: "error",
+                        },
+                        () => myRef.current()
+                    );
             }
         }
     };
 
-    const fetchSubAdmin = async () => {
+    const fetchSubAdmin = async (
+        isMounted = true,
+        controller = new AbortController()
+    ) => {
         try {
             const response = await privateAxios.get(
-                FETCH_SUB_ADMIN_BY_ADMIN + id
+                FETCH_SUB_ADMIN_BY_ADMIN + id,
+                {
+                    signal: controller.signal,
+                }
             );
             console.log("response from fetch sub admin by id", response);
             setCgfAdmin(response.data);
         } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+
             if (error?.response?.status == 500) {
                 console.log(
                     "Error status 500 while fetchiing subadmin from replace sub-admin"
@@ -204,7 +227,7 @@ const ReplaceSubAdmin = () => {
         makeApiCallReplaceCGFAdmin && getSubAdmin(isMounted, controller);
         console.log("makeApiCallReplaceCGFAdmin", makeApiCallReplaceCGFAdmin);
         console.log("inside use Effect");
-        fetchSubAdmin();
+        fetchSubAdmin(isMounted, controller);
 
         return () => {
             isMounted = false;
@@ -258,7 +281,8 @@ const ReplaceSubAdmin = () => {
             }
         } catch (error) {
             console.log("error from replace user");
-            if (error.response.status == 400) {
+            if (error?.code === "ERR_CANCELED") return;
+            if (error?.response?.status == 400) {
                 setToasterDetails(
                     {
                         titleMessage: "Error",
@@ -269,7 +293,7 @@ const ReplaceSubAdmin = () => {
                 );
                 setOpen(false);
             }
-            if (error.response.status == 401) {
+            if (error?.response?.status == 401) {
                 setToasterDetails(
                     {
                         titleMessage: "Error",
@@ -278,6 +302,9 @@ const ReplaceSubAdmin = () => {
                     },
                     () => myRef.current()
                 );
+                setTimeout(() => {
+                    return navigate("/login");
+                }, 3000);
                 setOpen(false);
             }
             if (error?.response?.status == 500) {
@@ -326,7 +353,8 @@ const ReplaceSubAdmin = () => {
                 title={<p> Replace CGF admin "{cgfAdmin?.name}" </p>}
                 info1={
                     <p>
-                        On replacing, all the existing management will be shifted to the new CGF admin. 
+                        On replacing, all the existing management will be
+                        shifted to the new CGF admin.
                     </p>
                 }
                 info2={
@@ -407,7 +435,7 @@ const ReplaceSubAdmin = () => {
                             />
                         </div>
                     </div>
-                    <div className="form-btn flex-between add-members-btn mb-20 pb-20">
+                    <div className="form-btn flex-between add-members-btn mb-20 pb-20 replace-cgf-admin-btnblk">
                         <button
                             onClick={() => navigate("/users/cgf-admin/")}
                             className="secondary-button mr-10"

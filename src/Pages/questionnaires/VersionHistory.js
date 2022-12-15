@@ -1,16 +1,18 @@
 import { TextField } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import TableComponent from "../../components/TableComponent";
+import Toaster from "../../components/Toaster";
+import useCallbackState from "../../utils/useCallBackState";
 
 const VersionHistory = () => {
     const params = useParams();
     const navigate = useNavigate();
-      // state to manage loader
-      const [isLoading, setIsLoading] = useState(false);
+    // state to manage loader
+    const [isLoading, setIsLoading] = useState(false);
     const versionHistoryTableHeadColumns = [
         // {
         //     id: "title",
@@ -58,6 +60,13 @@ const VersionHistory = () => {
         React.useState(0);
     const [makeApiCall, setMakeApiCall] = useState(true);
     const [questionnaireTitle, setQuestionnaireTitle] = useState("");
+
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
+    const versionHistoryRef = useRef();
 
     const generateUrl = () => {
         let url = `${ADD_QUESTIONNAIRE}/${params.id}/versions?page=${versionHistoryPage}&size=${versionHistoryRowsPerPage}&orderBy=${versionHistoryOrderBy}&order=${versionHistoryOrder}`;
@@ -120,7 +129,17 @@ const VersionHistory = () => {
             console.log("Error from version history-------", error);
 
             if (error?.response?.status == 401) {
-                // navigate("/login");
+                setToasterDetails(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => versionHistoryRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
             }
             setIsLoading(false);
         }
@@ -168,6 +187,12 @@ const VersionHistory = () => {
 
     return (
         <div className="page-wrapper">
+            <Toaster
+                myRef={versionHistoryRef}
+                titleMessage={toasterDetails.titleMessage}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                messageType={toasterDetails.messageType}
+            />
             <div className="breadcrumb-wrapper">
                 <div className="container">
                     <ul className="breadcrumb">
@@ -248,33 +273,36 @@ const VersionHistory = () => {
                         </div>
                     </div>
                     <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
-                        {
-                            isLoading ? <div className="loader-blk">
-                            <img src={Loader2} alt="Loading" />
-                        </div> :  <TableComponent
-                            tableHead={versionHistoryTableHeadColumns}
-                            records={versionHistoryRecords}
-                            handleChangePage1={handleTablePageChange}
-                            handleChangeRowsPerPage1={handleRowsPerPageChange}
-                            page={versionHistoryPage}
-                            rowsPerPage={versionHistoryRowsPerPage}
-                            totalRecords={versionHistoryTotalRecords}
-                            orderBy={versionHistoryOrderBy}
-                            // icons={["visibility"]}
-                            onClickVisibilityIconHandler1={
-                                onClickVisibilityIconHandler
-                            }
-                            order={versionHistoryOrder}
-                            setOrder={setVersionHistoryOrder}
-                            setOrderBy={setVersionHistoryOrderBy}
-                            setCheckBoxes={false}
-                            //   setSelected={setSelected}
-                            //   selected={selected}
-                            onRowClick={true}
-                            isQuestionnare={true}
-                        />
-                        }
-                       
+                        {isLoading ? (
+                            <div className="loader-blk">
+                                <img src={Loader2} alt="Loading" />
+                            </div>
+                        ) : (
+                            <TableComponent
+                                tableHead={versionHistoryTableHeadColumns}
+                                records={versionHistoryRecords}
+                                handleChangePage1={handleTablePageChange}
+                                handleChangeRowsPerPage1={
+                                    handleRowsPerPageChange
+                                }
+                                page={versionHistoryPage}
+                                rowsPerPage={versionHistoryRowsPerPage}
+                                totalRecords={versionHistoryTotalRecords}
+                                orderBy={versionHistoryOrderBy}
+                                // icons={["visibility"]}
+                                onClickVisibilityIconHandler1={
+                                    onClickVisibilityIconHandler
+                                }
+                                order={versionHistoryOrder}
+                                setOrder={setVersionHistoryOrder}
+                                setOrderBy={setVersionHistoryOrderBy}
+                                setCheckBoxes={false}
+                                //   setSelected={setSelected}
+                                //   selected={selected}
+                                onRowClick={true}
+                                isQuestionnare={true}
+                            />
+                        )}
                     </div>
                 </div>
             </section>

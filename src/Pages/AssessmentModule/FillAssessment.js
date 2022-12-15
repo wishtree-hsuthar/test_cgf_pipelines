@@ -1,5 +1,6 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Box, Tab, Tabs, TextField, Tooltip } from "@mui/material";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined"
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -105,6 +106,11 @@ function FillAssessment() {
     const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
         useState(false);
 
+
+    const viewInstruction = () => {
+        navigate("/assessments/instructions");
+    };
+    
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
@@ -144,7 +150,23 @@ function FillAssessment() {
                 console.log("response from fetch questionnaire", response);
                 isMounted && setQuestionnaire({ ...response.data });
             } catch (error) {
+                if (error?.code === "ERR_CANCELED") return;
+
                 console.log("error from fetch questionnaire", error);
+                if (error?.response?.status === 401) {
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage: "Session timeout",
+                                messageType: "error",
+                            },
+                            () => myRef.current()
+                        );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                }
             }
         };
 
@@ -180,6 +202,20 @@ function FillAssessment() {
                 );
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
+                if (error?.response?.status === 401) {
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage: "Session timeout",
+                                messageType: "error",
+                            },
+                            () => myRef.current()
+                        );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                }
                 setIsLoading(false);
                 console.log("error from fetch assessment", error);
             }
@@ -221,18 +257,32 @@ function FillAssessment() {
             }
         } catch (error) {
             console.log("error from save assessment as draft", error);
-            setToasterDetails(
-                {
-                    titleMessage: "Error",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something went wrong!",
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
+            if (error?.response?.status === 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            error?.response?.data?.message &&
+                            typeof error.response.data.message === "string"
+                                ? error.response.data.message
+                                : "Something went wrong!",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+            }
         }
     };
 
@@ -436,18 +486,32 @@ function FillAssessment() {
             }
         } catch (error) {
             console.log("error response from backen decline assessment");
-            setToasterDetails(
-                {
-                    titleMessage: "Success",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something went wrong!",
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
+            if (error?.response?.status === 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Success",
+                        descriptionMessage:
+                            error?.response?.data?.message &&
+                            typeof error.response.data.message === "string"
+                                ? error.response.data.message
+                                : "Something went wrong!",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+            }
         }
         setOpenDeleteDialogBox(false);
 
@@ -473,20 +537,34 @@ function FillAssessment() {
             }
         } catch (error) {
             console.log("error response from backend accept assessment");
-            setToasterDetails(
-                {
-                    titleMessage: "Success",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something went wrong!",
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
+            if (error?.response?.status === 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: "Session timeout",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "error",
+                        descriptionMessage:
+                            error?.response?.data?.message &&
+                            typeof error.response.data.message === "string"
+                                ? error.response.data.message
+                                : "Something went wrong!",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+            }
+            setOpenDeleteDialogBox(false);
         }
-        setOpenDeleteDialogBox(false);
     };
 
     useEffect(() => {
@@ -542,7 +620,9 @@ function FillAssessment() {
                             </span>
                         </span>
                         <span className="accrej-txtblk">
-                            <span className="accrej-label">Due date <span>:</span></span>
+                            <span className="accrej-label">
+                                Due date <span>:</span>
+                            </span>
                             <span className="accrej-desc">
                                 {new Date(
                                     assessment?.dueDate
@@ -651,6 +731,16 @@ function FillAssessment() {
                 <div className="container">
                     <div className="form-header flex-between">
                         <h2 className="heading2">{questionnaire.title}</h2>
+                        <div className="flex-between">
+                        <div className="tertiary-btn-blk mr-20" onClick={viewInstruction}>
+                                    <span className="preview-icon">
+                                        <VisibilityOutlinedIcon />
+                                    </span>
+                                    <span className="addmore-txt">
+                                        View Instructions
+                                    </span>
+                                </div>
+                                
                         <span
                             className="form-header-right-txt"
                             onClick={handleToggle}
@@ -679,6 +769,7 @@ function FillAssessment() {
                                 </ul>
                             </div>
                         </span>
+                        </div>
                     </div>
 
                     <div className="section-form-sect">
@@ -695,6 +786,8 @@ function FillAssessment() {
                                         value={value}
                                         onChange={handleChange}
                                         aria-label="basic tabs example"
+                                        variant="scrollable"
+                                        scrollButtons="auto"
                                     >
                                         {questionnaire?.sections?.map(
                                             (section, index, id) => (
