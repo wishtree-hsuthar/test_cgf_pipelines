@@ -35,22 +35,19 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import {defaultValues} from "../../utils/MemberModuleUtil"
+import { defaultValues } from "../../utils/MemberModuleUtil";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
 // CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
-
-const cgfActivitiesManufacturer = [
+const cgfActivites = [
   "Apparel",
   "Food manufacturer",
   "Household care",
   "None",
   "Non-food manufacturer",
   "Personal care & beauty",
-];
-const cgfActivitiesRetailer = [
   "Department store",
   "Ecommerce",
   "Food/Non food retailer",
@@ -147,7 +144,9 @@ const ViewMember = () => {
   // state to hold roles
   const privilege = useSelector((state) => state?.user?.privilege);
   const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-  let viewMemberPrivilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+  let viewMemberPrivilegeArray = privilege
+    ? Object.values(privilege?.privileges)
+    : [];
   let moduleAccesForMember = viewMemberPrivilegeArray
     .filter((data) => data?.moduleId?.name === "Members")
     .map((data) => ({
@@ -272,11 +271,12 @@ const ViewMember = () => {
   //Refr for Toaster
   const myRef = React.useRef();
   //Toaster Message setter
-  const [toasterDetailsViewMember, setToasterDetailsViewMember] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
+  const [toasterDetailsViewMember, setToasterDetailsViewMember] =
+    useCallbackState({
+      titleMessage: "",
+      descriptionMessage: "",
+      messageType: "success",
+    });
   //method to call all error toaster from this method
   const setErrorToaster = (error) => {
     setToasterDetailsViewMember(
@@ -292,7 +292,7 @@ const ViewMember = () => {
       () => myRef.current()
     );
   };
-  
+
   //code to get id from url
   const param = useParams();
   //code form View Member
@@ -317,7 +317,6 @@ const ViewMember = () => {
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setErrorToaster(error);
-      
     } finally {
       setOpenDialog(false);
     }
@@ -471,7 +470,7 @@ const ViewMember = () => {
         status: data?.memberRepresentativeId[0]?.isActive
           ? "active"
           : "inactive",
-        totalOperationMembers: data?.totalOperationMembers ?? "N/A",
+        // totalOperationMembers: data?.totalOperationMembers ?? "N/A",
         createdBy: data?.createdBy["name"] ?? "N/A",
         roleId: roleName,
         // roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
@@ -491,9 +490,11 @@ const ViewMember = () => {
 
       const response = await axios.get(url);
       setTotalRecordsInViewMember(parseInt(response.headers["x-total-count"]));
+      reset({
+        totalOperationMembers: parseInt(response.headers["x-total-count"]),
+      });
       updateRecords(response?.data);
     } catch (error) {
-      
       if (error?.code === "ERR_CANCELED") return;
       setErrorToaster(error);
     }
@@ -524,9 +525,7 @@ const ViewMember = () => {
           () => myRef.current()
         );
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
   const getRoleNameByRoleId = async (isMounted, controller, data) => {
     try {
@@ -537,7 +536,6 @@ const ViewMember = () => {
     } catch (error) {
       console.log("error in get role", error);
       if (error?.code === "ERR_CANCELED") return;
-      
     }
   };
   useEffect(() => {
@@ -780,11 +778,7 @@ const ViewMember = () => {
                         control={control}
                         name="cgfActivity"
                         placeholder="N/A"
-                        options={
-                          watch("cgfCategory") === "Manufacturer"
-                            ? cgfActivitiesManufacturer
-                            : cgfActivitiesRetailer
-                        }
+                        options={cgfActivites}
                       />
                     </div>
                     {/* </div> */}
