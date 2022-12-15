@@ -24,7 +24,7 @@ const helperTextForCGFAdmin = {
     },
     phoneNumber: {
         maxLength: "Max digits limit exceed",
-        minLength: "minimum 3 characters required",
+        minLength: "Enter valid number",
         validate: "Enter the phone number",
         pattern: "Invalid format",
     },
@@ -236,11 +236,7 @@ const AddSubAdmin = () => {
         data.countryCode = data.countryCode.slice(
             data.countryCode.indexOf("+")
         );
-        data = {
-            ...data,
-            phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
-            // roleId: authUser.roleId._id,
-        };
+        
 
         console.log("new phone number", data);
         addSubAdminData(data);
@@ -253,12 +249,7 @@ const AddSubAdmin = () => {
         data.countryCode = data.countryCode.slice(
             data.countryCode.indexOf("+")
         );
-        data = {
-            ...data,
-            phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
-            // roleId: authUser.roleId._id,
-        };
-
+        
         addSubAdminData(data);
         console.log(data);
         reset();
@@ -538,7 +529,7 @@ const AddSubAdmin = () => {
                                                 placeholder={"1234567890"}
                                                 rules={{
                                                     maxLength: 15,
-                                                    minLength: 3,
+                                                    minLength: 7,
                                                     validate: (value) => {
                                                         if (
                                                             !watch(

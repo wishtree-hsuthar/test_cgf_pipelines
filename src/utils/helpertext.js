@@ -24,7 +24,7 @@ export const memberHelper = {
     phoneNumber: {
         required: "Enter the phone number",
         maxLength: "Max char limit exceed",
-        minLength: "minimum 3 characters required",
+        minLength: "Enter valid number",
         pattern: "Invalid Input",
         validate: "Enter the phone number",
     },
@@ -89,7 +89,7 @@ export const memberHelper = {
     memberContactPhoneNuber: {
         required: "Enter country code",
         maxLength: "Max char limit exceed",
-        minLength: "minimum 3 characters required",
+        minLength: "Enter valid number",
         validate: "Enter the phone number",
     },
     roleId: {

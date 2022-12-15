@@ -95,7 +95,7 @@ const EditMember = () => {
       let backendObject = {
         parentCompany: data.parentCompany,
         countryCode: data.countryCode,
-        phoneNumber: parseInt(data.phoneNumber),
+        phoneNumber: data.phoneNumber,
         website: data.websiteUrl,
         state: data.state,
         city: data.city,
@@ -118,7 +118,7 @@ const EditMember = () => {
           name: data.memberContactFullName,
           email: data.memberContactEmail,
           countryCode: data.memberContactCountryCode,
-          phoneNumber: parseInt(data?.memberContactPhoneNuber ?? 0),
+          phoneNumber: data?.memberContactPhoneNuber, 
           isActive: data.status === "active" ? true : false,
           roleId: data.roleId,
         },
@@ -739,7 +739,7 @@ const EditMember = () => {
                             myHelper={memberHelper}
                             rules={{
                               maxLength: 15,
-                              minLength: 3,
+                              minLength: 7,
                               validate: (value) => {
                                 if (
                                   !watch("phoneNumber") &&
@@ -1212,7 +1212,7 @@ const EditMember = () => {
                             myHelper={memberHelper}
                             rules={{
                               maxLength: 15,
-                              minLength: 3,
+                              minLength: 7,
                               validate: (value) => {
                                 if (
                                   !watch("memberContactPhoneNuber") &&

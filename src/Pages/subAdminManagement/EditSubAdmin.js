@@ -33,7 +33,7 @@ const helperTextForCGFAdmin = {
     },
     phoneNumber: {
         maxLength: "Max digits limit exceed",
-        minLength: "minimum 3 characters required",
+        minLength: "Enter valid number",
         validate: "Enter the phone number",
         pattern: "Invalid format",
     },
@@ -256,9 +256,7 @@ const EditSubAdmin = () => {
                 {
                     name: data.name,
                     subRoleId: data.role,
-                    phoneNumber: data.phoneNumber
-                        ? parseInt(data.phoneNumber)
-                        : "",
+                    phoneNumber: data.phoneNumber,
                     countryCode: data.countryCode,
                     isActive: data.status === "active" ? true : false,
                 }
@@ -613,7 +611,7 @@ const EditSubAdmin = () => {
                                                     placeholder={"1234567890"}
                                                     rules={{
                                                         maxLength: 15,
-                                                        minLength: 3,
+                                                        minLength: 7,
                                                         validate: (value) => {
                                                             if (
                                                                 !watch(
