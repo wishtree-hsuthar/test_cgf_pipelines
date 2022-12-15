@@ -113,7 +113,7 @@ const AddMember = () => {
       let backendObjectAddMember = {
         parentCompany: data.parentCompany,
         countryCode: data.countryCode,
-        phoneNumber: data.phoneNumber ? parseInt(data.phoneNumber) : "",
+        phoneNumber: data.phoneNumber,
         website: data.websiteUrl ? data.websiteUrl : undefined,
         state: data.state,
         city: data.city,
@@ -135,9 +135,7 @@ const AddMember = () => {
           name: data.memberContactFullName,
           email: data.memberContactEmail,
           countryCode: data.memberContactCountryCode,
-          phoneNumber: data.memberContactPhoneNuber
-            ? parseInt(data.memberContactPhoneNuber)
-            : "",
+          phoneNumber: data.memberContactPhoneNuber,
           roleId: data.roleId,
         },
       };
@@ -707,7 +705,7 @@ const AddMember = () => {
                           }
                           rules={{
                             maxLength: 15,
-                            minLength: 3,
+                            minLength: 7,
                             validate: (value) => {
                               if (!watch("phoneNumber") && watch("countryCode"))
                                 return "invalid input";
@@ -1161,7 +1159,7 @@ const AddMember = () => {
                           myHelper={memberHelper}
                           rules={{
                             maxLength: 15,
-                            minLength: 3,
+                            minLength: 7,
                             validate: (value) => {
                               if (
                                 !watch("memberContactPhoneNuber") &&

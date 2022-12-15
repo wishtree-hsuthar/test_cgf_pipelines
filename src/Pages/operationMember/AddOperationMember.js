@@ -242,7 +242,6 @@ function AddOperationMember() {
     const addOperationMember = async (data, navigateToListPage) => {
         data = {
             ...data,
-            phoneNumber: data?.phoneNumber ? parseInt(data.phoneNumber) : "",
             isCGFStaff: data.isCGFStaff === "true" ? true : false,
             memberId:
                 data.isCGFStaff === "true" ? cgfMember[0]._id : data.memberId,
@@ -668,7 +667,7 @@ function AddOperationMember() {
                                                 placeholder={"1234567890"}
                                                 rules={{
                                                     maxLength: 15,
-                                                    minLength: 3,
+                                                    minLength: 7,
                                                     validate: (value) => {
                                                         if (
                                                             !watch(

@@ -33,7 +33,7 @@ export const helperText = {
     phoneNumber: {
         required: "Enter the phone number",
         maxLength: "Max digits limit exceed",
-        minLength: "minimum 3 characters required",
+        minLength: "Enter valid number",
         validate: "Enter phone number",
         // pattern: "Invalid format",
     },
