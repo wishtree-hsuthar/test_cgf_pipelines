@@ -1,59 +1,55 @@
 import {
-    Autocomplete,
-    FormControlLabel,
-    Paper,
-    Radio,
-    RadioGroup,
-    // FormControlLabel,
-    // MenuItem,
-    // Radio,
-    // RadioGroup,
-    // Select,
-    TextField,
+  Autocomplete,
+  FormControlLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  // FormControlLabel,
+  // MenuItem,
+  // Radio,
+  // RadioGroup,
+  // Select,
+  TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { Link, useNavigate, useParams } from "react-router-dom";
-// import { Controller } from "react-hook-form";
 import { useForm, Controller } from "react-hook-form";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { privateAxios } from "../../api/axios";
-// import { useNavigate } from "react-router-dom";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import axios from "axios";
+import { helperText } from "../../utils/OperationMemberModuleUtil";
 import {
-    ADD_OPERATION_MEMBER,
-    COUNTRIES,
-    FETCH_OPERATION_MEMBER,
-    FETCH_REPORTING_MANAGER,
-    FETCH_ROLES,
-    GET_OPERATION_MEMBER_BY_ID,
-    MEMBER,
-    UPDATE_OPERATION_MEMBER,
+  COUNTRIES,
+  FETCH_OPERATION_MEMBER,
+  FETCH_ROLES,
+  GET_OPERATION_MEMBER_BY_ID,
+  MEMBER,
+  UPDATE_OPERATION_MEMBER,
 } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 const defaultValues = {
-    memberCompany: "",
-    companyType: "Internal",
-    countryCode: "",
-    phoneNumber: "",
-    salutation: "",
-    title: "",
-    department: "",
-    email: "",
-    operationType: "",
-    memberId: {
-        _id: "",
-        companyName: "",
-        companyType: "",
-    },
-    address: "",
-    reportingManager: "",
-    isActive: "",
-    isCGFStaff: "",
+  memberCompany: "",
+  companyType: "Internal",
+  countryCode: "",
+  phoneNumber: "",
+  salutation: "",
+  title: "",
+  department: "",
+  email: "",
+  operationType: "",
+  memberId: {
+    _id: "",
+    companyName: "",
+    companyType: "",
+  },
+  address: "",
+  reportingManager: "",
+  isActive: "",
+  isCGFStaff: "",
 };
 const helperTextForAddOperationMember = {
     salutation: {
@@ -90,7 +86,7 @@ const helperTextForAddOperationMember = {
     phoneNumber: {
         required: "Enter the phone number",
         maxLength: "Max digits limit exceed",
-        minLength: "minimum 3 characters required",
+        minLength: "Enter valid number",
         validate: "Enter phone number",
         // pattern: "Invalid format",
     },
@@ -252,36 +248,36 @@ function EditOperationMember() {
         }
     };
 
-    // Fetch reporting managers of all member companies
-    const fetchRm = async (id, isCGFStaff) => {
-        console.log("operation member----", operationMember);
-        try {
-            const response = await privateAxios.get(
-                // FETCH_REPORTING_MANAGER + id
-                // + isCGFStaff
-                //     ? "/master/external"
-                //     : "/master/internal"
-                // // operationMember?.memberId?._id +
-                isCGFStaff
-                    ? FETCH_OPERATION_MEMBER + id + "/master/external"
-                    : FETCH_OPERATION_MEMBER + id + "/master/internal"
-            );
-            console.log("response from rm", response);
-            setReportingManagers(
-                response.data
-                    .filter((data) => data._id !== params.id)
-                    .map((data) => ({
-                        _id: data?._id,
-                        name: data?.name,
-                    }))
-            );
-        } catch (error) {
-            console.log("Error from fetching rm reporting manager", error);
-        }
-    };
+  // Fetch reporting managers of all member companies
+  const fetchRm = async (id, isCGFStaff) => {
+    console.log("operation member----", operationMember);
+    try {
+      const response = await privateAxios.get(
+        // FETCH_REPORTING_MANAGER + id
+        // + isCGFStaff
+        //     ? "/master/external"
+        //     : "/master/internal"
+        // // operationMember?.memberId?._id +
+        isCGFStaff
+          ? FETCH_OPERATION_MEMBER + id + "/master/external"
+          : FETCH_OPERATION_MEMBER + id + "/master/internal"
+      );
+      console.log("response from rm", response);
+      setReportingManagers(
+        response.data
+          .filter((data) => data._id !== params.id)
+          .map((data) => ({
+            _id: data?._id,
+            name: data?.name,
+          }))
+      );
+    } catch (error) {
+      console.log("Error from fetching rm reporting manager", error);
+    }
+  };
 
-    // fetch operation member by id
-    console.log("reporting managers", reportingManagers);
+  // fetch operation member by id
+  console.log("reporting managers", reportingManagers);
 
     const fetchOperationMember = async (controller, isMounted) => {
         try {
@@ -395,23 +391,19 @@ function EditOperationMember() {
         memberCompanies.length === 0 && fetchMemberComapany(controller);
         roles.length === 0 && fetchRoles(isMounted, controller);
 
-        fetchOperationMember(controller, isMounted);
+    fetchOperationMember(controller, isMounted);
 
-        // fetchReportingManagers(operationMember?.memberId?._id);
-        // fetchRm();
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        };
-    }, []);
-    console.log("countries----", countries);
-    console.log("members companies----", memberCompanies);
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+  console.log("countries----", countries);
+  console.log("members companies----", memberCompanies);
 
     const editOperationMember = async (data, navigateToListPage) => {
         data = {
             ...data,
-            phoneNumber: data?.phoneNumber ? parseInt(data.phoneNumber) : "",
             isActive: data?.isActive === "true" ? true : false,
         };
         try {
@@ -430,76 +422,63 @@ function EditOperationMember() {
                     () => toasterRef.current()
                 );
 
-                setTimeout(() => {
-                    navigate("/users/operation-members");
-                }, 3000);
-            }
-        } catch (error) {
-            console.log(
-                "error in submit data  add operation member method",
-                error
-            );
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => toasterRef.current()
-            );
-            if (error?.response?.status == 401) {
-                navigate("/login");
-            }
-        }
-    };
+        setTimeout(() => {
+          navigate("/users/operation-members");
+        }, 3000);
+      }
+    } catch (error) {
+      console.log("error in submit data  add operation member method", error);
+      setToasterDetails(
+        {
+          titleMessage: "Oops!",
+          descriptionMessage: error?.response?.data?.message,
+          messageType: "error",
+        },
+        () => toasterRef.current()
+      );
+      if (error?.response?.status == 401) {
+        navigate("/login");
+      }
+    }
+  };
 
-    const handleOnSubmit = async (data) => {
-        console.log("data from onsubmit", data);
-        // addOperationMember(data, false);
-        editOperationMember(data);
-    };
-    const handleSaveAndMore = (data) => {
-        console.log("data from handleSaveAndMore", data);
+  const handleOnSubmit = async (data) => {
+    console.log("data from onsubmit", data);
+    editOperationMember(data);
+  };
 
-        editOperationMember(data);
-
-        reset();
-    };
-
-    return (
-        <div className="page-wrapper">
-            <Toaster
-                messageType={toasterDetails.messageType}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                myRef={toasterRef}
-                titleMessage={toasterDetails.titleMessage}
-            />
-            <div className="breadcrumb-wrapper">
-                <div className="container">
-                    <ul className="breadcrumb">
-                        <li>
-                            <Link to="/users/operation-members">
-                                Operation Members
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to={`/users/operation-member/view-operation-member/${params.id}`}
-                            >
-                                View Operation Members
-                            </Link>
-                        </li>
-                        <li>Edit Operation Member</li>
-                    </ul>
-                </div>
-            </div>
-            <section>
-                <div className="container">
-                    <form onSubmit={handleSubmit(handleOnSubmit)}>
-                        <div className="form-header flex-between">
-                            <h2 className="heading2">Edit Operation Member</h2>
-                            <div className="form-header-right-txt">
-                                {/* <div
+  return (
+    <div className="page-wrapper">
+      <Toaster
+        messageType={toasterDetails.messageType}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        myRef={toasterRef}
+        titleMessage={toasterDetails.titleMessage}
+      />
+      <div className="breadcrumb-wrapper">
+        <div className="container">
+          <ul className="breadcrumb">
+            <li>
+              <Link to="/users/operation-members">Operation Members</Link>
+            </li>
+            <li>
+              <Link
+                to={`/users/operation-member/view-operation-member/${params.id}`}
+              >
+                View Operation Members
+              </Link>
+            </li>
+            <li>Edit Operation Member</li>
+          </ul>
+        </div>
+      </div>
+      <section>
+        <div className="container">
+          <form onSubmit={handleSubmit(handleOnSubmit)}>
+            <div className="form-header flex-between">
+              <h2 className="heading2">Edit Operation Member</h2>
+              <div className="form-header-right-txt">
+                {/* <div
                                     className="tertiary-btn-blk"
                                     onClick={handleSubmit(handleSaveAndMore)}
                                 >
@@ -510,25 +489,22 @@ function EditOperationMember() {
                                         Save & Add More
                                     </span>
                                 </div> */}
-                            </div>
-                        </div>
-                        {isLoading ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
-                        ) : (
-                            <div className="card-wrapper">
-                                <div className="card-blk flex-between">
-                                    <div className="card-form-field">
-                                        <div className="form-group">
-                                            <div className="salutation-wrap">
-                                                <div className="salutation-blk">
-                                                    <label htmlFor="salutation">
-                                                        Salutation{" "}
-                                                        <span className="mandatory">
-                                                            *
-                                                        </span>
-                                                    </label>
+              </div>
+            </div>
+            {isLoading ? (
+              <div className="loader-blk">
+                <img src={Loader2} alt="Loading" />
+              </div>
+            ) : (
+              <div className="card-wrapper">
+                <div className="card-blk flex-between">
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <div className="salutation-wrap">
+                        <div className="salutation-blk">
+                          <label htmlFor="salutation">
+                            Salutation <span className="mandatory">*</span>
+                          </label>
 
                                                     <Dropdown
                                                         control={control}
@@ -815,7 +791,7 @@ function EditOperationMember() {
                                                     }
                                                     rules={{
                                                         maxLength: 15,
-                                                        minLength: 3,
+                                                        minLength: 7,
                                                         validate: (value) => {
                                                             if (
                                                                 !watch(
@@ -1167,92 +1143,77 @@ function EditOperationMember() {
                                                 </span>
                                             </label>
 
-                                            <div>
-                                                <Dropdown
-                                                    name="roleId"
-                                                    control={control}
-                                                    options={roles}
-                                                    rules={{
-                                                        required: true,
-                                                    }}
-                                                    myHelper={
-                                                        helperTextForAddOperationMember
-                                                    }
-                                                    placeholder={"Select role"}
-                                                />
+                      <div>
+                        <Dropdown
+                          name="roleId"
+                          control={control}
+                          options={roles}
+                          rules={{
+                            required: true,
+                          }}
+                          myHelper={helperText}
+                          placeholder={"Select role"}
+                        />
 
-                                                <p className={`password-error`}>
-                                                    {errors.subRoleId?.message}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <p className={`password-error`}>
+                          {errors.subRoleId?.message}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-                                    <div className="card-form-field">
-                                        <div className="form-group">
-                                            <label htmlFor="status">
-                                                Status
-                                            </label>
-                                            <div className="radio-btn-field">
-                                                <Controller
-                                                    name="isActive"
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <RadioGroup
-                                                            {...field}
-                                                            // value={editDefault && editDefault.status}
-                                                            aria-labelledby="demo-radio-buttons-group-label"
-                                                            name="radio-buttons-group"
-                                                            className="radio-btn"
-                                                        >
-                                                            <FormControlLabel
-                                                                value="true"
-                                                                control={
-                                                                    <Radio />
-                                                                }
-                                                                label="Active"
-                                                            />
-                                                            <FormControlLabel
-                                                                value="false"
-                                                                control={
-                                                                    <Radio />
-                                                                }
-                                                                label="Inactive"
-                                                            />
-                                                        </RadioGroup>
-                                                    )}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="status">Status</label>
+                      <div className="radio-btn-field">
+                        <Controller
+                          name="isActive"
+                          control={control}
+                          render={({ field }) => (
+                            <RadioGroup
+                              {...field}
+                              // value={editDefault && editDefault.status}
+                              aria-labelledby="demo-radio-buttons-group-label"
+                              name="radio-buttons-group"
+                              className="radio-btn"
+                            >
+                              <FormControlLabel
+                                value="true"
+                                control={<Radio />}
+                                label="Active"
+                              />
+                              <FormControlLabel
+                                value="false"
+                                control={<Radio />}
+                                label="Inactive"
+                              />
+                            </RadioGroup>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-                                    <div className="form-btn flex-between add-members-btn">
-                                        <button
-                                            type={"reset"}
-                                            onClick={() =>
-                                                navigate(
-                                                    "/users/operation-members"
-                                                )
-                                            }
-                                            className="secondary-button mr-10"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="primary-button add-button"
-                                        >
-                                            Update
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </form>
+                  <div className="form-btn flex-between add-members-btn">
+                    <button
+                      type={"reset"}
+                      onClick={() => navigate("/users/operation-members")}
+                      className="secondary-button mr-10"
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" className="primary-button add-button">
+                      Update
+                    </button>
+                  </div>
                 </div>
-            </section>
+              </div>
+            )}
+          </form>
         </div>
-    );
+      </section>
+    </div>
+  );
 }
 
 export default EditOperationMember;

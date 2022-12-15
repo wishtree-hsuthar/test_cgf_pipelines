@@ -32,54 +32,28 @@ import {
     cgfActivitiesManufacturer,
     cgfActivitiesRetailer,
     cgfCategories,
+    defaultValues,
 } from "../../utils/MemberModuleUtil";
 
 const EditMember = () => {
     //custom hook to set title of page
     useDocumentTitle("Edit Member");
-    const defaultValues1 = {
-        memberCompany: "",
-        companyType: "Internal",
-        parentCompany: "",
-        cgfCategory: "Manufacturer",
-        cgfActivity: "",
-        corporateEmail: "",
-        countryCode: "",
-        phoneNumber: "",
-        websiteUrl: "",
-        region: "",
-        country: "",
-        state: "",
-        city: "",
-        address: "",
-        cgfOfficeRegion: "",
-        cgfOfficeCountry: "",
-        cgfOffice: "",
-        memberContactSalutation: "Mr.",
-        memberContactFullName: "",
-        title: "",
-        department: "",
-        memberContactCountryCode: "",
-        memberContactEmail: "",
-        memberContactPhoneNuber: "",
-        status: "active",
-        roleId: "",
-    };
 
     const param = useParams();
     const navigate = useNavigate();
     // Refr for Toaster
     const myRef = React.useRef();
     //Toaster Message setter
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
+    const [toasterDetailsEditMember, setToasterDetailsEditMember] =
+        useCallbackState({
+            titleMessage: "",
+            descriptionMessage: "",
+            messageType: "success",
+        });
     //method to call all error toaster from this method
     const setErrorToaster1 = (error) => {
         console.log("error", error);
-        setToasterDetails(
+        setToasterDetailsEditMember(
             {
                 titleMessage: "Error",
                 descriptionMessage:
@@ -114,7 +88,7 @@ const EditMember = () => {
     const [disableMember, setDisableMember] = useState(false);
     const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
         reValidateMode: "onChange",
-        defaultValues: defaultValues1,
+        defaultValues: defaultValues,
     });
     const onSubmitFunctionCall = async (data) => {
         console.log("data", data);
@@ -122,7 +96,7 @@ const EditMember = () => {
             let backendObject = {
                 parentCompany: data.parentCompany,
                 countryCode: data.countryCode,
-                phoneNumber: parseInt(data.phoneNumber),
+                phoneNumber: data.phoneNumber,
                 website: data.websiteUrl,
                 state: data.state,
                 city: data.city,
@@ -145,7 +119,7 @@ const EditMember = () => {
                     name: data.memberContactFullName,
                     email: data.memberContactEmail,
                     countryCode: data.memberContactCountryCode,
-                    phoneNumber: parseInt(data?.memberContactPhoneNuber ?? 0),
+                    phoneNumber: data?.memberContactPhoneNuber,
                     isActive: data.status === "active" ? true : false,
                     roleId: data.roleId,
                 },
@@ -155,9 +129,8 @@ const EditMember = () => {
             await axios.put(MEMBER + `/${param.id}`, {
                 ...backendObject,
             });
-            reset(defaultValues1);
-            // console.log("response : ", response);
-            setToasterDetails(
+            reset(defaultValues);
+            setToasterDetailsEditMember(
                 {
                     titleMessage: "Success!",
                     descriptionMessage: "Member details updated successfully!",
@@ -165,14 +138,32 @@ const EditMember = () => {
                 },
                 () => myRef.current()
             );
-            console.log("Default values: ", defaultValues1);
+            console.log("Default values: ", defaultValues);
         } catch (error) {
-            setErrorToaster1(error);
+            if (error?.response?.status == 401) {
+                setToasterDetailsEditMember(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            error?.response?.data?.message &&
+                            typeof error.response.data.message === "string"
+                                ? error.response.data.message
+                                : "Something went wrong!",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setErrorToaster1(error);
+            }
         }
     };
     // On Click cancel handler
     const onClickCancelHandler = () => {
-        reset({ defaultValues1 });
+        reset({ defaultValues });
         navigate("/users/members");
     };
     const onSubmit = (data) => {
@@ -194,7 +185,6 @@ const EditMember = () => {
 
     //method to handle country change
     const onCountryChangeHandler1 = async (e) => {
-        // console.log("Inside Country Change ", e.target.value);
         setValue("country", e.target.value);
         setValue("state", "");
         setValue("city", "");
@@ -214,14 +204,12 @@ const EditMember = () => {
 
     //method to set region and update other fields accordingly
     const onRegionChangeHandler1 = async (e) => {
-        // console.log("region: ", e.target.value);
         setValue("country", "");
         setValue("state", "");
         setValue("city", "");
         setValue("region", e.target.value);
         trigger("region");
         const countriesOnRegion = await getCountries1(watch("region"));
-        // console.log("countries", countriesOnRegion);
         const arrOfCountryRegionsTemp = formatRegionCountries1(
             countriesOnRegion?.data
         );
@@ -291,10 +279,10 @@ const EditMember = () => {
             const regions = await axios.get(REGIONS, {
                 signal: controller.signal,
             });
-            // console.log("regions ", regions.data);
+
             setArrOfRegions(regions?.data);
             const countriesOnRegion1 = await getCountries1(watch("region"));
-            // console.log("countries", countriesOnRegion1);
+
             const arrOfCountryRegionsTemp1 = formatRegionCountries1(
                 countriesOnRegion1.data
             );
@@ -344,7 +332,7 @@ const EditMember = () => {
             setRoles(response.data);
         } catch (error) {
             console.log("Error from fetch roles", error);
-            setToasterDetails(
+            setToasterDetailsEditMember(
                 {
                     titleMessage: "Oops!",
                     descriptionMessage: error?.response?.data?.message,
@@ -361,7 +349,6 @@ const EditMember = () => {
         try {
             setIsLoading(true);
             const response = await axios.get(MEMBER + `/${param.id}`);
-            // console.log("response for member: ", response);
             const data = response.data;
             setIsLoading(false);
             reset({
@@ -407,7 +394,7 @@ const EditMember = () => {
             if (error?.code === "ERR_CANCELED") return;
             console.log("error", error);
             if (error?.response?.status == 401) {
-                setToasterDetails(
+                setToasterDetailsEditMember(
                     {
                         titleMessage: "Error",
                         descriptionMessage:
@@ -467,9 +454,9 @@ const EditMember = () => {
         <div className="page-wrapper">
             <Toaster
                 myRef={myRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
+                titleMessage={toasterDetailsEditMember.titleMessage}
+                descriptionMessage={toasterDetailsEditMember.descriptionMessage}
+                messageType={toasterDetailsEditMember.messageType}
             />
             <div className="breadcrumb-wrapper">
                 <div className="container">
@@ -956,7 +943,7 @@ const EditMember = () => {
                                                         myHelper={memberHelper}
                                                         rules={{
                                                             maxLength: 15,
-                                                            minLength: 3,
+                                                            minLength: 7,
                                                             validate: (
                                                                 value
                                                             ) => {

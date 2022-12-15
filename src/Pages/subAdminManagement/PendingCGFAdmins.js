@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
-import { ADD_SUB_ADMIN, FETCH_ROLES, WITHDRAW_SUB_ADMIN } from "../../api/Url";
+import { ADD_SUB_ADMIN, WITHDRAW_SUB_ADMIN } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import DialogBox from "../../components/DialogBox";
 import TableComponent from "../../components/TableComponent";
-import useCallbackState from "../../utils/useCallBackState";
+
 const pendingTableColumnHead = [
     {
         id: "name",
@@ -103,7 +103,6 @@ function PendingCGFAdmins({
 
         let staleData = data;
         staleData.forEach((object) => {
-            // console.log("subRole-------", object["data"]["subRoleId"].name);
             delete object["updatedAt"];
             delete object["data"]["description"];
             delete object["data"]["countryCode"];
@@ -119,7 +118,6 @@ function PendingCGFAdmins({
             delete object["tokenExpiry"];
             delete object["tokenType"];
 
-            // delete object["isActive"];
             object["createdAt"] = new Date(
                 object["createdAt"]
             ).toLocaleDateString("en-US", {
@@ -128,15 +126,9 @@ function PendingCGFAdmins({
                 year: "numeric",
             });
 
-            // object["role"] = object["data"]["subRoleId"].name;
-            // object["role"] = object["data"]["subRole"][0].name;
             object["role"] = object["subRole"][0].name;
             object["name"] = object["data"]["name"];
             object["email"] = object["data"].email;
-            // object["_id"] = object["_id"];
-            // object["createdAt"] = object["createdAt"];
-            // delete object["data"]["subRoleId"];
-            // delete object["data"]["subRole"][0].name;
             delete object["createdBy"];
             delete object["subRole"];
             delete object["data"];
@@ -203,7 +195,8 @@ function PendingCGFAdmins({
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session Expired",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -237,7 +230,7 @@ function PendingCGFAdmins({
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
+
             setTotalRecordsForPendingTabCGFAdmin(
                 parseInt(response.headers["x-total-count"])
             );
@@ -250,12 +243,13 @@ function PendingCGFAdmins({
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
+
             if (error?.response?.status == 401) {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session Expired",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -312,7 +306,6 @@ function PendingCGFAdmins({
     ]);
     {
         console.log("makeApiCall outside UseEffect ", makeApiCall);
-        // console.log("order", order, "order BY", orderBy);
     }
     return (
         <>

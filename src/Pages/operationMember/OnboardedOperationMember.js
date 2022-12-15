@@ -3,59 +3,18 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import Loader2 from "../../assets/Loader/Loader2.svg";
-import DialogBox from "../../components/DialogBox";
 import { useSelector } from "react-redux";
 import { ADD_OPERATION_MEMBER } from "../../api/Url";
-const OnboardedOperationMemberColumnHeader = [
-    {
-        id: "name",
-        // width: "30%",
-        disablePadding: false,
-        label: "Operation Member",
-    },
-    {
-        id: "email",
-        // width: "30%",
-        disablePadding: false,
-        label: "Email",
-    },
-    {
-        id: "memberCompany",
-        // width: "30%",
-        disablePadding: false,
-        label: "Member Company",
-    },
-    {
-        id: "companyType",
-        // width: "30%",
-        disablePadding: false,
-        label: "Company Type",
-    },
-    {
-        id: "createdByName",
-        // width: "30%",
-        disablePadding: false,
-        label: "Created By",
-    },
-    {
-        id: "createdAt",
-        // width: "30%",
-        disablePadding: false,
-        label: "Onboarded On",
-    },
-    {
-        id: "isActive",
-        // with: "30%",
-        disablePadding: false,
-        label: "Status",
-    },
-    // {
-    //     id: "action",
+import { tableHead } from "../../utils/OperationMemberModuleUtil";
 
-    //     disablePadding: false,
-    //     label: "Action",
-    // },
-];
+let tempTableHead = JSON.parse(JSON.stringify(tableHead));
+tempTableHead.push({
+    id: "isActive",
+    // with: "30%",
+    disablePadding: false,
+    label: "Status",
+});
+
 function OnboardedOperationMember({
     makeApiCall,
     setMakeApiCall,
@@ -136,69 +95,53 @@ function OnboardedOperationMember({
         console.log("data before update----", data);
 
         let staleData = data;
-        staleData.forEach((object) => {
-            // console.log("subRole-------", object["subRoleId"].name);
-            delete object["updatedAt"];
-            delete object["description"];
-            delete object["countryCode"];
-            delete object["isDeleted"];
-            delete object["__v"];
-            delete object["password"];
-            delete object["roleId"];
-            delete object["salt"];
-            delete object["uuid"];
-            delete object["phoneNumber"];
-            delete object["token"];
-            delete object["tokenExpiry"];
-            delete object["tokenType"];
-            delete object["address"];
-            delete object["isMemberRepresentative"];
-            delete object["isCGFStaff"];
-            delete object["isOperationMember"];
-            // delete object["isActive"];
+        staleData.forEach((opMember) => {
+            delete opMember["updatedAt"];
+            delete opMember["description"];
+            delete opMember["countryCode"];
+            delete opMember["isDeleted"];
+            delete opMember["__v"];
+            delete opMember["password"];
+            delete opMember["roleId"];
+            delete opMember["salt"];
+            delete opMember["uuid"];
+            delete opMember["phoneNumber"];
+            delete opMember["token"];
+            delete opMember["tokenExpiry"];
+            delete opMember["tokenType"];
+            delete opMember["address"];
+            delete opMember["isMemberRepresentative"];
+            delete opMember["isCGFStaff"];
+            delete opMember["isOperationMember"];
 
-            // object["role"] = object["data"]["subRoleId"].name;
-            // object["role"] = object["data"]["subRole"][0].name;
-            // object["_id"] = object["_id"];
-
-            // object.name = object["name"];
-            // object["email"] = object["email"];
-            // object["createdAt"] = object["createdAt"];
-            object["memberCompany"] = object["memberData"]["companyName"];
-            object["companyType"] = object["memberData"]["companyType"];
-            object["createdByName"] = object["createdBy"]["name"];
-            object["createdAt"] = new Date(
-                object["createdAt"]
+            opMember["memberCompany"] = opMember["memberData"]["companyName"];
+            opMember["companyType"] = opMember["memberData"]["companyType"];
+            opMember["createdByName"] = opMember["createdBy"]["name"];
+            opMember["createdAt"] = new Date(
+                opMember["createdAt"]
             ).toLocaleDateString("en-US", {
                 month: "2-digit",
                 day: "2-digit",
                 year: "numeric",
             });
-            // object["isActive"] = object["isActive"];
-
-            // delete object["data"]["subRoleId"];
-            // delete object["data"]["subRole"][0].name;
-            // delete object["isActive"];
-            // delete object["name"];
-            delete object["isReplaced"];
-            delete object["department"];
-            delete object["title"];
-            delete object["salutation"];
-            delete object["createdBy"];
-            delete object["updatedBy"];
-            // delete object["createdAt"];
-            delete object["subRole"];
-            delete object["data"];
-            delete object["memberData"];
-            delete object["operationType"];
-            delete object["reportingManager"];
-            delete object["memberId"];
-            delete object["assessmentCount"];
+            delete opMember["isReplaced"];
+            delete opMember["department"];
+            delete opMember["title"];
+            delete opMember["salutation"];
+            delete opMember["createdBy"];
+            delete opMember["updatedBy"];
+            delete opMember["subRole"];
+            delete opMember["data"];
+            delete opMember["memberData"];
+            delete opMember["operationType"];
+            delete opMember["reportingManager"];
+            delete opMember["memberId"];
+            delete opMember["assessmentCount"];
 
             onboardedKeysOrder.forEach((k) => {
-                const v = object[k];
-                delete object[k];
-                object[k] = v;
+                const v = opMember[k];
+                delete opMember[k];
+                opMember[k] = v;
             });
         });
         console.log("data in updaterecords method", staleData);
@@ -223,7 +166,7 @@ function OnboardedOperationMember({
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
+
             setTotalRecordsForOnboardedOperationMemberTab(
                 parseInt(response.headers["x-total-count"])
             );
@@ -240,7 +183,8 @@ function OnboardedOperationMember({
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session Expired",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -296,7 +240,7 @@ function OnboardedOperationMember({
                 </div>
             ) : (
                 <TableComponent
-                    tableHead={OnboardedOperationMemberColumnHeader}
+                    tableHead={tempTableHead}
                     records={recordsForOnboardedOperationMemberTab}
                     handleChangePage1={handleTablePageChange}
                     handleChangeRowsPerPage1={handleRowsPerPageChange}

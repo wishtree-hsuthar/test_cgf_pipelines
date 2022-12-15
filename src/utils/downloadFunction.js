@@ -1,6 +1,4 @@
 import { privateAxios } from "../api/axios";
-import { DOWNLOAD_ASSESSMENT_BY_ID } from "../api/Url";
-
 export const downloadFunction = async (
     filename,
     setToasterDetails,

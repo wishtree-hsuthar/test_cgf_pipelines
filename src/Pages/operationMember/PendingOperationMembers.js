@@ -5,60 +5,22 @@ import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { ADD_OPERATION_MEMBER, WITHDRAW_OPERATION_MEMBER } from "../../api/Url";
-const pendingOperationMemberTableColumnHeader = [
-    {
-        id: "name",
-        // width: "30%",
-        disablePadding: false,
-        label: "Operation Member",
-    },
-    {
-        id: "email",
-        // width: "30%",
-        disablePadding: false,
-        label: "Email",
-    },
-    {
-        id: "memberCompany",
-        // width: "30%",
-        disablePadding: false,
-        label: "Member Company",
-    },
-    {
-        id: "companyType",
-        // width: "30%",
-        disablePadding: false,
-        label: "Company Type",
-    },
-    {
-        id: "createdByName",
-        // width: "30%",
-        disablePadding: false,
-        label: "Created By",
-    },
-    {
-        id: "createdAt",
-        // width: "30%",
-        disablePadding: false,
-        label: "Created At",
-    },
-    {
-        id: "action",
+import { tableHead } from "../../utils/OperationMemberModuleUtil";
 
-        disablePadding: false,
-        label: "Action",
-    },
-];
+let tempTableHead = JSON.parse(JSON.stringify(tableHead));
+tempTableHead.push({
+    id: "action",
+    disablePadding: false,
+    label: "Action",
+});
+
 function PendingOperationMembers({
     makeApiCall,
     setMakeApiCall,
     search,
     filters,
     myRef,
-    toasterDetails,
     setToasterDetails,
-    setSearch,
-    setFilters,
 }) {
     const navigate = useNavigate();
     // state to manage loaders
@@ -113,53 +75,47 @@ function PendingOperationMembers({
         console.log("data before update----", data);
 
         let staleData = data;
-        staleData.forEach((object) => {
-            delete object["updatedAt"];
-            delete object["data"]["description"];
-            delete object["data"]["countryCode"];
-            delete object["data"]["isDeleted"];
-            delete object["__v"];
-            delete object["data"]["password"];
-            delete object["data"]["roleId"];
-            delete object["data"]["salt"];
-            delete object["data"]["uuid"];
-            delete object["data"]["phoneNumber"];
-            delete object["token"];
-            delete object["tokenExpiry"];
-            delete object["tokenType"];
+        staleData.forEach((pendingOPMember) => {
+            delete pendingOPMember["updatedAt"];
+            delete pendingOPMember["data"]["description"];
+            delete pendingOPMember["data"]["countryCode"];
+            delete pendingOPMember["data"]["isDeleted"];
+            delete pendingOPMember["__v"];
+            delete pendingOPMember["data"]["password"];
+            delete pendingOPMember["data"]["roleId"];
+            delete pendingOPMember["data"]["salt"];
+            delete pendingOPMember["data"]["uuid"];
+            delete pendingOPMember["data"]["phoneNumber"];
+            delete pendingOPMember["token"];
+            delete pendingOPMember["tokenExpiry"];
+            delete pendingOPMember["tokenType"];
 
-            // delete object["isActive"];
-
-            // object["role"] = object["data"]["subRoleId"].name;
-            // object["role"] = object["data"]["subRole"][0].name;
-
-            object["name"] = object["data"].name;
-            object["email"] = object["data"].email;
-            // object["createdAt"] = object["createdAt"];
-            object["memberCompany"] = object["memberData"]["companyName"];
-            object["companyType"] = object["memberData"]["companyType"];
-            // object["createdByName"] = object["createdBy"]["name"];
-            object["createdAt"] = new Date(
-                object["createdAt"]
+            pendingOPMember["name"] = pendingOPMember["data"].name;
+            pendingOPMember["email"] = pendingOPMember["data"].email;
+            pendingOPMember["memberCompany"] =
+                pendingOPMember["memberData"]["companyName"];
+            pendingOPMember["companyType"] =
+                pendingOPMember["memberData"]["companyType"];
+            pendingOPMember["createdAt"] = new Date(
+                pendingOPMember["createdAt"]
             ).toLocaleDateString("en-US", {
                 month: "2-digit",
                 day: "2-digit",
                 year: "numeric",
             });
-            object["createdByName"] = object["createdBy"].name;
+            pendingOPMember["createdByName"] =
+                pendingOPMember["createdBy"].name;
 
-            // delete object["data"]["subRoleId"];
-            // delete object["data"]["subRole"][0].name;
-            delete object["createdBy"];
-            // delete object["createdAt"];
-            delete object["subRole"];
-            delete object["data"];
-            delete object["memberData"];
+            delete pendingOPMember["createdBy"];
+
+            delete pendingOPMember["subRole"];
+            delete pendingOPMember["data"];
+            delete pendingOPMember["memberData"];
 
             pendingKeysOrder.forEach((k) => {
-                const v = object[k];
-                delete object[k];
-                object[k] = v;
+                const v = pendingOPMember[k];
+                delete pendingOPMember[k];
+                pendingOPMember[k] = v;
             });
         });
         console.log(
@@ -215,7 +171,8 @@ function PendingOperationMembers({
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session Expired",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -251,7 +208,7 @@ function PendingOperationMembers({
                     signal: controller.signal,
                 }
             );
-            // console.log(response.headers["x-total-count"]);
+
             setTotalRecordsForPendingOperationMemberTab(
                 parseInt(response.headers["x-total-count"])
             );
@@ -265,7 +222,7 @@ function PendingOperationMembers({
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             setIsLoading(false);
-            // console.log(toasterDetails);
+
             console.log(
                 "Error from get all pending operation member  tab table-------",
                 error
@@ -275,7 +232,8 @@ function PendingOperationMembers({
                     setToasterDetails(
                         {
                             titleMessage: "Oops!",
-                            descriptionMessage: "Session Expired",
+                            descriptionMessage:
+                                "Session Timeout: Please login again",
                             messageType: "error",
                         },
                         () => myRef.current()
@@ -309,7 +267,6 @@ function PendingOperationMembers({
         console.log("inside use Effect");
         return () => {
             isMounted = false;
-            // clearTimeout(searchTimeout);
             controller.abort();
         };
     }, [
@@ -353,7 +310,7 @@ function PendingOperationMembers({
                 </div>
             ) : (
                 <TableComponent
-                    tableHead={pendingOperationMemberTableColumnHeader}
+                    tableHead={tempTableHead}
                     records={recordsForPendingOperationMemberTab}
                     handleChangePage1={
                         handlePendingOperationMemberTablePageChange

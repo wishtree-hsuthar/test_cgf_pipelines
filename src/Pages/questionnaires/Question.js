@@ -91,14 +91,6 @@ const Question = ({
     isRequired: true,
     options: ["", ""],
   };
-  const myHelper = {
-    questionTitle: {
-      required: "Enter question title",
-    },
-    validation: {
-      validate: "Select Validation",
-    },
-  };
   const inputTypeOptions = [
     {
       _id: "singleTextbox",
@@ -169,29 +161,22 @@ const Question = ({
     tempQuestionnaire.sections[sectionIdx].questions[questionIdx].isRequired =
       e.target.checked;
     setQuestionnaire(tempQuestionnaire);
-    // console.log("questionnaire:- ", questionnaire);
+    
   };
 
   //On + icon click new question will get added
   const addQuestionHandler = () => {
     let tempQuestionnaire = { ...questionnaire };
-    // console.log("default Values", defaultValues);
     tempQuestionnaire.sections[sectionIndex].questions.push({
       ...defaultValues,
     });
     setQuestionnaire(tempQuestionnaire);
-    // let tempErrArray = [...errArray];
-    // tempErrArray.push({ questionTitle: "" });
-    // setErrArray(tempErrArray);
-    // console.log("questionnaire", questionnaire);
   };
 
   //method to handle question change handler
   const onQuestionChangeHandler = (event, questionIdx) => {
-    // console.log("event", event.target.name);
     const { name, value } = event.target;
     let tempQuestionnaire = { ...questionnaire };
-    // console.log("name", name, "value", value);
     tempQuestionnaire.sections[sectionIndex].questions[questionIdx][name] =
       value;
     setQuestionnaire(tempQuestionnaire);
@@ -200,7 +185,6 @@ const Question = ({
   const onQuestionBlurHandler = (event, questionIdx) => {
     const { name, value } = event.target;
     let tempQuestionnaire = { ...questionnaire };
-    // console.log("name", name, "value", value);
     tempQuestionnaire.sections[sectionIndex].questions[questionIdx][name] =
       value?.trim();
     setQuestionnaire(tempQuestionnaire);

@@ -76,6 +76,9 @@ const ChangePassword = React.lazy(() => import("../Pages/ChangePassword"));
 const VersionHistory = React.lazy(() =>
     import("../Pages/questionnaires/VersionHistory")
 );
+const Instructions = React.lazy(() =>
+    import("../Pages/AssessmentModule/Instructions")
+);
 // import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
@@ -273,6 +276,14 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
+                    path="/assessments/instructions"
+                    element={
+                        <RequireAuth page={"list"} moduleName={"Assessment"}>
+                            <Instructions />
+                        </RequireAuth>
+                    }
+                />
+                <Route
                     path="/assessment-list/edit-assessment/:id"
                     element={
                         <RequireAuth page={"edit"} moduleName={"Assessment"}>
@@ -300,7 +311,7 @@ const ProtectedPages = () => {
                         // </RequireAuth>
                     }
                 />
-                <Route path="/preview" element={<PreviewDemo />} />
+                {/* <Route path="/preview" element={<PreviewDemo />} /> */}
                 <Route path="*" element={<FallBackUI />} />
                 <Route path="/change-password" element={<ChangePassword />} />
                 <Route

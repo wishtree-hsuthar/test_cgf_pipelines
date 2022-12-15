@@ -5,12 +5,11 @@ import {
     FormControlLabel,
     Paper,
     Radio,
-    RadioGroup,
+    RadioGroup as AddRoleRadioGroup,
     Table,
     TableBody,
     TableCell,
     TableContainer,
-    TableHead,
     TableRow,
     TextField,
 } from "@mui/material";
@@ -25,6 +24,7 @@ import "../../components/TableComponent.css";
 import useCallbackState from "../../utils/useCallBackState";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import CommonTableHead from "./CommonTableHead";
 
 const AddRole = () => {
     useDocumentTitle("Add Role");
@@ -69,7 +69,6 @@ const AddRole = () => {
     const [previleges1, setPrevileges1] = useState({ ...temp });
 
     const addRoleCreatePrivileges = () => {
-        // console.log("modules in side create prive func", modules);
         modules.forEach(
             (module) =>
                 (temp[module.moduleId] = {
@@ -101,7 +100,7 @@ const AddRole = () => {
     const { control, reset, setValue, handleSubmit } = useForm({
         defaultValues: defaultValues,
     });
-    const addRoleOnSubmit = async (data) => {
+    const submitCall = async (data) => {
         console.log("inside on Submit");
         let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
         Object.keys(previlegesForBackend).forEach((p_key) => {
@@ -127,52 +126,7 @@ const AddRole = () => {
             );
             reset({ defaultValues });
             getSystemModules();
-            setTimeout(() => navigate1("/roles"), 3000);
-        } catch (error) {
-            // console.log("error", error);
-            setToasterDetails1(
-                {
-                    titleMessage: "Error",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something went wrong!",
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
-        }
-    };
-    const onSubmitAddMoreClickHandler1 = async (data) => {
-        // console.log("on Submit", data, "previleges1 on Submit", previleges1);
-        let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
-        Object.keys(previlegesForBackend).forEach((p_key) => {
-            // console.log("key", p_key);
-            delete previlegesForBackend[p_key]["all"];
-            delete previlegesForBackend[p_key]["name"];
-        });
-
-        // console.log("pBack", previlegesForBackend, "pFront", previleges1);
-
-        //backend call
-        try {
-            await axios.post(REACT_APP_API_ENDPOINT + "roles", {
-                name: data.roleName,
-                description: data.description,
-                isActive: data.status === "active" ? true : false,
-                privileges: previlegesForBackend,
-            });
-            setToasterDetails1(
-                {
-                    titleMessage: "Hurray!",
-                    descriptionMessage: "New role added successfully",
-                    messageType: "success",
-                },
-                () => myRef.current()
-            );
-            reset({ defaultValues });
-            getSystemModules();
+            return true;
         } catch (error) {
             if (error?.response?.status == 401) {
                 setToasterDetails1(
@@ -184,9 +138,55 @@ const AddRole = () => {
                     },
                     () => myRef.current()
                 );
-                setTimeout(() => {
-                    navigate1("/login");
-                }, 3000);
+                navigate1("/login");
+            } else {
+                setToasterDetails1(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            error?.response?.data?.message &&
+                            typeof error.response.data.message === "string"
+                                ? error.response.data.message
+                                : "Something went wrong!",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                return false;
+            }
+        }
+    };
+    const addRoleOnSubmit = async (data) => {
+        const isSubmited = await submitCall(data);
+        if (!isSubmited) return;
+        setTimeout(() => navigate1("/roles"), 3000);
+    };
+    const onSubmitAddMoreClickHandler1 = async (data) => {
+        submitCall(data);
+    };
+    const onClickCancelHandler1 = () => {
+        reset({ defaultValues });
+        return navigate1("/roles");
+    };
+    const getSystemModules = async () => {
+        try {
+            const { data } = await axios.get(
+                REACT_APP_API_ENDPOINT + "system-modules"
+            );
+            createModules(data);
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+            if (error?.response?.status == 401) {
+                setToasterDetails1(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                navigate1("/login");
             } else {
                 setToasterDetails1(
                     {
@@ -203,34 +203,7 @@ const AddRole = () => {
             }
         }
     };
-    const onClickCancelHandler1 = () => {
-        // console.log("inside on click cancel");
-        reset({ defaultValues });
-        return navigate1("/roles");
-    };
-    const getSystemModules = async () => {
-        try {
-            const { data } = await axios.get(
-                REACT_APP_API_ENDPOINT + "system-modules"
-            );
-            createModules(data);
-        } catch (error) {
-            if (error?.code === "ERR_CANCELED") return;
-            setToasterDetails1(
-                {
-                    titleMessage: "Error",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something went wrong!",
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
-        }
-    };
-    const checkForAllPrivilege = (tempModule, priv) => {};
+
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
@@ -340,7 +313,7 @@ const AddRole = () => {
                                                 name="status"
                                                 control={control}
                                                 render={({ field }) => (
-                                                    <RadioGroup
+                                                    <AddRoleRadioGroup
                                                         {...field}
                                                         aria-labelledby="demo-radio-buttons-group-label"
                                                         name="radio-buttons-group"
@@ -356,7 +329,7 @@ const AddRole = () => {
                                                             control={<Radio />}
                                                             label="Inactive"
                                                         />
-                                                    </RadioGroup>
+                                                    </AddRoleRadioGroup>
                                                 )}
                                             />
                                         </div>
@@ -421,76 +394,7 @@ const AddRole = () => {
                                 <Paper sx={{ width: "100%" }}>
                                     <TableContainer>
                                         <Table sx={{ minWidth: 750 }}>
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell
-                                                        align="left"
-                                                        className="table-header"
-                                                        width="16%"
-                                                    >
-                                                        <span className="sorted-blk">
-                                                            Modules
-                                                        </span>
-                                                    </TableCell>
-                                                    <TableCell className="table-header">
-                                                        <span className="sorted-blk">
-                                                            Fill
-                                                        </span>
-                                                    </TableCell>
-                                                    <TableCell className="table-header">
-                                                        <span className="sorted-blk">
-                                                            List
-                                                        </span>
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="center"
-                                                        className="table-header"
-                                                    >
-                                                        <span className="sorted-blk">
-                                                            Add
-                                                        </span>
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="center"
-                                                        className="table-header"
-                                                    >
-                                                        <span className="sorted-blk">
-                                                            Edit
-                                                        </span>
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="center"
-                                                        className="table-header"
-                                                    >
-                                                        <span className="sorted-blk">
-                                                            View
-                                                        </span>
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="center"
-                                                        className="table-header"
-                                                    >
-                                                        <span className="sorted-blk">
-                                                            Delete
-                                                        </span>
-                                                    </TableCell>
-                                                    {/* <TableCell
-                              align="center"
-                              className="table-header"
-                              width="16%"
-                            >
-                              Assign to Member
-                            </TableCell> */}
-                                                    <TableCell
-                                                        align="center"
-                                                        className="table-header"
-                                                    >
-                                                        <span className="sorted-blk">
-                                                            All
-                                                        </span>
-                                                    </TableCell>
-                                                </TableRow>
-                                            </TableHead>
+                                            <CommonTableHead />
                                             <TableBody>
                                                 {Object.keys(previleges1).map(
                                                     (previleg, _id) => {
@@ -557,16 +461,21 @@ const AddRole = () => {
                                                                                                 ][
                                                                                                     "fill"
                                                                                                 ],
+                                                                                                list: !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "fill"
+                                                                                                ],
+                                                                                                view: !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "fill"
+                                                                                                ],
                                                                                                 all:
                                                                                                     !previous[
                                                                                                         previleg
                                                                                                     ][
                                                                                                         "fill"
-                                                                                                    ] &&
-                                                                                                    previous[
-                                                                                                        previleg
-                                                                                                    ][
-                                                                                                        "list"
                                                                                                     ] &&
                                                                                                     previous[
                                                                                                         previleg
@@ -577,11 +486,6 @@ const AddRole = () => {
                                                                                                         previleg
                                                                                                     ][
                                                                                                         "edit"
-                                                                                                    ] &&
-                                                                                                    previous[
-                                                                                                        previleg
-                                                                                                    ][
-                                                                                                        "view"
                                                                                                     ] &&
                                                                                                     previous[
                                                                                                         previleg

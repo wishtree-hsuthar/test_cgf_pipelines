@@ -21,7 +21,7 @@ import Toaster from "../../components/Toaster";
 import DialogBox from "../../components/DialogBox";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { PlayCircle } from "@mui/icons-material";
+
 
 const ViewSubAdmin = () => {
     //custom hook to set title of page
@@ -191,7 +191,18 @@ const ViewSubAdmin = () => {
             primarybtn: "Delete Anyway",
         },
     ];
-
+    const style = {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 400,
+        bgcolor: "background.paper",
+        border: "2px solid #000",
+        boxShadow: 24,
+        p: 4,
+    };
+    
     return (
         <div className="page-wrapper">
             <Toaster

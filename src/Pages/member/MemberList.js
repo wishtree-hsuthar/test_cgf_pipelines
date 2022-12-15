@@ -13,7 +13,6 @@ import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { privateAxios } from "../../api/axios";
 import { downloadFunction } from "../../utils/downloadFunction";
 
 //Ideally get those from backend
@@ -72,11 +71,12 @@ const MemberList = () => {
     //Refr for Toaster
     const memberRef = React.useRef();
     //Toaster Message setter
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
+    const [toasterDetailsMemberList, setToasterDetailsMemberList] =
+        useCallbackState({
+            titleMessage: "",
+            descriptionMessage: "",
+            messageType: "success",
+        });
 
     const privilege = useSelector((state) => state?.user?.privilege);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
@@ -101,15 +101,16 @@ const MemberList = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     //state to hold search timeout delay
-    const [searchTimeout, setSearchTimeout] = useState(null);
+    const [searchTimeoutMemberList, setSearchTimeoutMemberList] =
+        useState(null);
     //state to hold wheather to make api call or not
-    const [makeApiCall, setMakeApiCall] = useState(true);
+    const [makeApiCallMemberList, setMakeApiCallMemberList] = useState(true);
 
     //state to hold search keyword
-    const [search, setSearch] = useState("");
+    const [searchMember, setSearchMemberList] = useState("");
 
     //State to hold filter values
-    const [filters, setFilters] = useState({
+    const [memberFilters, setMemberFilters] = useState({
         companyType: "none",
         status: "none",
     });
@@ -125,15 +126,15 @@ const MemberList = () => {
         "isActive",
     ];
     //code of tablecomponent
-    const [page, setPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [order, setOrder] = useState("asc");
-    const [orderBy, setOrderBy] = useState("initialRender");
-    const [records, setRecords] = useState([]);
-    const [totalRecords, setTotalRecords] = useState(0);
-    const [selected, setSelected] = useState([]);
+    const [membeListPage, setMemberListPage] = useState(1);
+    const [memberListrowsPerPage, setMemberListRowsPerPage] = useState(10);
+    const [memberListOrder, setMemberListOrder] = useState("asc");
+    const [orderByMemberList, setOrderByMemberList] = useState("initialRender");
+    const [recordsMemberList, setRecordsMemberList] = useState([]);
+    const [totalRecordsMemberList, setTotalRecordsMemberList] = useState(0);
+    const [selectedMembers, setSelectedMember] = useState([]);
 
-    //State to hold selected Created by Member filter
+    //State to hold selectedMembers Created by Member filter
     const [selectedCreatedBy, setSelectedCreatedBy] = useState(["none"]);
     //state to hold wheather to show placeholder or not
     const [showFilterPlaceholder, setShowFilterPlaceholder] = useState("");
@@ -141,7 +142,7 @@ const MemberList = () => {
         selectedCreatedBy.length > 1 &&
         selectedCreatedBy.length - 1 === allMembers.length;
 
-    //format records as backend requires
+    //format recordsMemberList as backend requires
     const updateRecords = (data) => {
         data.forEach((object) => {
             delete object["address"];
@@ -190,7 +191,6 @@ const MemberList = () => {
             object.totalOperationMembers =
                 object["totalOperationMembers"]?.toString();
             delete object["representative"];
-            // delete object["createdBy"];
             delete object["memberRepresentativeId"];
             keysOrder.forEach((k) => {
                 const v = object[k];
@@ -198,7 +198,7 @@ const MemberList = () => {
                 object[k] = v;
             });
         });
-        setRecords([...data]);
+        setRecordsMemberList([...data]);
     };
     const onFilterFocusHandler = (filterValue) => {
         setShowFilterPlaceholder(filterValue);
@@ -207,23 +207,23 @@ const MemberList = () => {
     //method for time based searching
     const onSearchChangeHandler = (e) => {
         console.log("event", e.key);
-        if (searchTimeout) clearTimeout(searchTimeout);
-        setMakeApiCall(false);
-        console.log("search values", e.target.value);
-        setSearch(e.target.value);
-        setSearchTimeout(
+        if (searchTimeoutMemberList) clearTimeout(searchTimeoutMemberList);
+        setMakeApiCallMemberList(false);
+        console.log("searchMember values", e.target.value);
+        setSearchMemberList(e.target.value);
+        setSearchTimeoutMemberList(
             setTimeout(() => {
-                setMakeApiCall(true);
-                setPage(1);
+                setMakeApiCallMemberList(true);
+                setMemberListPage(1);
             }, 1000)
         );
     };
-    //handle sigle select filters
+    //handle sigle select memberFilters
     const onFilterChangehandler = (e) => {
         const { name, value } = e.target;
         console.log("name", name, "Value ", value);
-        setFilters({
-            ...filters,
+        setMemberFilters({
+            ...memberFilters,
             [name]: value,
         });
     };
@@ -238,18 +238,18 @@ const MemberList = () => {
         setSelectedCreatedBy([...value]);
     };
     const handleTablePageChange = (newPage) => {
-        setPage(newPage);
+        setMemberListPage(newPage);
     };
     const handleRowsPerPageChange = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(1);
+        setMemberListRowsPerPage(parseInt(event.target.value, 10));
+        setMemberListPage(1);
     };
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
         return navigate(`/users/members/view-member/${id}`);
     };
     const generateUrl = () => {
-        console.log("filters", filters);
+        console.log("memberFilters", memberFilters);
 
         const namesMappings = {
             initialRender: "",
@@ -263,13 +263,12 @@ const MemberList = () => {
             isActive: "status",
         };
 
-        // let url = `${MEMBER}?page=${page}&size=${rowsPerPage}&orderBy=&order=${order}`;
-        let url = `${MEMBER}/list?page=${page}&size=${rowsPerPage}&orderBy=${namesMappings[orderBy]}&order=${order}`;
-        if (search?.length >= 3) url = url + `&search=${search}`;
-        if (filters?.status !== "all" && filters?.status !== "none")
-            url = url + `&status=${filters.status}`;
-        if (filters?.companyType !== "none")
-            url = url + `&companyType=${filters.companyType}`;
+        let url = `${MEMBER}/list?page=${membeListPage}&size=${memberListrowsPerPage}&orderBy=${namesMappings[orderByMemberList]}&order=${memberListOrder}`;
+        if (searchMember?.length >= 3) url = url + `&search=${searchMember}`;
+        if (memberFilters?.status !== "all" && memberFilters?.status !== "none")
+            url = url + `&status=${memberFilters.status}`;
+        if (memberFilters?.companyType !== "none")
+            url = url + `&companyType=${memberFilters.companyType}`;
         return url;
     };
     // download members
@@ -286,7 +285,7 @@ const MemberList = () => {
     //         document.body.appendChild(link);
     //         link.click();
     //         if (response.status == 200) {
-    //             setToasterDetails(
+    //             setToasterDetailsMemberList(
     //                 {
     //                     titleMessage: "Success!",
     //                     descriptionMessage: "Download successfull!",
@@ -307,14 +306,16 @@ const MemberList = () => {
             const response = await axios.get(url, {
                 signal: controller.signal,
             });
-            setTotalRecords(parseInt(response.headers["x-total-count"]));
+            setTotalRecordsMemberList(
+                parseInt(response.headers["x-total-count"])
+            );
             console.log("response from backend", response);
             setIsLoading(false);
             updateRecords(response?.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             if (error?.response?.status === 401) {
-                setToasterDetails(
+                setToasterDetailsMemberList(
                     {
                         titleMessage: "Error",
 
@@ -329,7 +330,7 @@ const MemberList = () => {
             } else {
                 setIsLoading(false);
                 isMounted &&
-                    setToasterDetails(
+                    setToasterDetailsMemberList(
                         {
                             titleMessage: "Error",
                             descriptionMessage:
@@ -348,22 +349,27 @@ const MemberList = () => {
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
-        makeApiCall && getMembers(isMounted, controller);
+        makeApiCallMemberList && getMembers(isMounted, controller);
         return () => {
             isMounted = false;
-            clearTimeout(searchTimeout);
+            clearTimeout(searchTimeoutMemberList);
             controller.abort();
         };
-    }, [page, rowsPerPage, orderBy, order, filters, makeApiCall]);
-    // console.log("records: ", records);
-    // console.log("filters: ", filters);
+    }, [
+        membeListPage,
+        memberListrowsPerPage,
+        orderByMemberList,
+        memberListOrder,
+        memberFilters,
+        makeApiCallMemberList,
+    ]);
     return (
         <div className="page-wrapper">
             <Toaster
                 myRef={memberRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
+                titleMessage={toasterDetailsMemberList.titleMessage}
+                descriptionMessage={toasterDetailsMemberList.descriptionMessage}
+                messageType={toasterDetailsMemberList.messageType}
             />
             <section>
                 <div className="container">
@@ -377,7 +383,7 @@ const MemberList = () => {
                                 onClick={() =>
                                     downloadFunction(
                                         "Members",
-                                        setToasterDetails,
+                                        setToasterDetailsMemberList,
                                         false,
                                         memberRef,
                                         DOWNLOAD_MEMBERS
@@ -413,12 +419,12 @@ const MemberList = () => {
                                 <div className="searchbar">
                                     <input
                                         type="text"
-                                        value={search}
+                                        value={searchMember}
                                         name="search"
                                         placeholder="Search"
                                         onKeyDown={(e) =>
                                             e.key === "Enter" &&
-                                            setMakeApiCall(true)
+                                            setMakeApiCallMemberList(true)
                                         }
                                         onChange={onSearchChangeHandler}
                                     />
@@ -434,7 +440,9 @@ const MemberList = () => {
                                             <Select
                                                 sx={{ display: "none" }}
                                                 name="companyType"
-                                                value={filters.companyType}
+                                                value={
+                                                    memberFilters.companyType
+                                                }
                                                 onChange={onFilterChangehandler}
                                                 onFocus={(e) =>
                                                     onFilterFocusHandler(
@@ -535,7 +543,7 @@ const MemberList = () => {
                                             <Select
                                                 sx={{ display: "none" }}
                                                 name="status"
-                                                value={filters.status}
+                                                value={memberFilters.status}
                                                 onChange={onFilterChangehandler}
                                                 onFocus={(e) =>
                                                     onFilterFocusHandler(
@@ -575,24 +583,24 @@ const MemberList = () => {
                         ) : (
                             <TableComponent
                                 tableHead={tableHead}
-                                records={records}
+                                records={recordsMemberList}
                                 handleChangePage1={handleTablePageChange}
                                 handleChangeRowsPerPage1={
                                     handleRowsPerPageChange
                                 }
-                                page={page}
-                                rowsPerPage={rowsPerPage}
-                                selected={selected}
-                                setSelected={setSelected}
-                                totalRecords={totalRecords}
-                                orderBy={orderBy}
+                                page={membeListPage}
+                                rowsPerPage={memberListrowsPerPage}
+                                selected={selectedMembers}
+                                setSelected={setSelectedMember}
+                                totalRecords={totalRecordsMemberList}
+                                orderBy={orderByMemberList}
                                 // icons={["visibility"]}
                                 onClickVisibilityIconHandler1={
                                     onClickVisibilityIconHandler
                                 }
-                                order={order}
-                                setOrder={setOrder}
-                                setOrderBy={setOrderBy}
+                                order={memberListOrder}
+                                setOrder={setMemberListOrder}
+                                setOrderBy={setOrderByMemberList}
                                 setCheckBoxes={false}
                                 onRowClick={
                                     SUPER_ADMIN

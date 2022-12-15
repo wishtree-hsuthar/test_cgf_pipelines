@@ -372,9 +372,9 @@ textarea:disabled {
     pointer-events: none;
     z-index: 1;
 } */
-.section-tab-rightblk {
+/* .section-tab-rightblk {
     padding: 6px 0 0;
-}
+} */
 .preview-icon {
     width: 17px;
     height: 17px;
@@ -2022,7 +2022,7 @@ input:-webkit-autofill:active {
     padding: 0 15px 0 15px !important;
 }
 .que-tab-sect .MuiTab-root {
-    padding: 10px 0 !important;
+    padding: 9px 0 !important;
 }
 .que-card-blk:last-child .que-card-icon-sect {
     margin-bottom: 30px;
@@ -2382,7 +2382,7 @@ input:-webkit-autofill:active {
     position: relative !important;
 }
 .que-table-render td {
-    padding: 19px 16px 0;
+    padding: 19px 15px 0;
     height: 100%;
     vertical-align: top;
 }
@@ -2536,3 +2536,18 @@ input::-ms-reveal {
 }
 .preview-que-blk .que-half-sect .select-field .MuiSelect-select{-webkit-text-fill-color: rgba(30, 30, 30, 0.5) !important;}
 .radio-btn .Mui-disabled svg{color: rgba(30, 30, 30, 0.5) !important;}
+
+.replace-cgf-admin-btnblk{margin-bottom: 50px;}
+.view-instruct-field-right {flex: 0 0 58%;max-width: 58%;}
+
+.section-tab-leftblk{flex: 0 0 80%;max-width: 80%;}
+.section-tab-leftblk .MuiTabScrollButton-root svg, .section-tab-leftblk .MuiTabScrollButton-root{width: 20px !important;}
+.section-tab-leftblk .MuiTabScrollButton-root:first-child{position: relative;
+    left: -3px;}
+.section-tab-leftblk .MuiTabScrollButton-root:last-child{position: relative;
+    right: -3px;}
+.section-tab-leftblk .MuiTabScrollButton-root.Mui-disabled{opacity: 0.3 !important;}
+.preview-tab-blk .section-tab-leftblk {
+    flex: 0 0 100%;
+    max-width: 100%;
+}

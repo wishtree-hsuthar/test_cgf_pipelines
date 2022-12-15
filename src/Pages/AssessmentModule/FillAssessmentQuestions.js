@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     TextField,
     Select,
@@ -74,7 +74,7 @@ const FillAssessmentQuestion = ({
         "params in form section question",
         params["*"].includes("view")
     );
-
+    //   answer === "" && console.log("answe blank string")
     let questionComponent =
         question.inputType === "singleTextbox" ? (
             <TextField
@@ -161,6 +161,7 @@ const FillAssessmentQuestion = ({
                         }`}
                     >
                         <Select
+                            displayEmpty
                             IconComponent={(props) => (
                                 <KeyboardArrowDownRoundedIcon {...props} />
                             )}
@@ -172,6 +173,15 @@ const FillAssessmentQuestion = ({
                                     e.target.name,
                                     e.target.value
                                 )
+                            }
+                            renderValue={
+                                answer !== ""
+                                    ? undefined
+                                    : () => (
+                                          <div className="select-placeholder">
+                                              Choose dropdown value
+                                          </div>
+                                      )
                             }
                             disabled={
                                 (editMode && params["*"].includes("view")) ||
@@ -204,8 +214,9 @@ const FillAssessmentQuestion = ({
                             handleAnswersChange(e.target.name, e.target.value)
                         }
                     >
-                        {question.options.map((option) => (
+                        {question.options.map((option, idx) => (
                             <FormControlLabel
+                                key={idx}
                                 disabled={
                                     (editMode &&
                                         params["*"].includes("view")) ||
@@ -235,32 +246,30 @@ const FillAssessmentQuestion = ({
             <div className="checkbox-with-labelblk checkbox-btn-half-blk">
                 <FormControl>
                     <FormGroup>
-                        {question.options.map((option) => (
-                            <>
-                                <FormControlLabel
-                                    type={"checkbox"}
-                                    name={questionUUID}
-                                    className="checkbox-with-label"
-                                    value={option}
-                                    disabled={
-                                        (editMode &&
-                                            params["*"].includes("view")) ||
-                                        !editMode
-                                    }
-                                    control={
-                                        <Checkbox
-                                            disabled={
-                                                !editMode &&
-                                                !params["*"].includes("view")
-                                            }
-                                        />
-                                    }
-                                    checked={answer.includes(option)}
-                                    onChange={handleChecked}
-                                    label={option}
-                                />
-                                {/* <label>{option}</label> */}
-                            </>
+                        {question.options.map((option, idx) => (
+                            <FormControlLabel
+                                key={idx}
+                                type={"checkbox"}
+                                name={questionUUID}
+                                className="checkbox-with-label"
+                                value={option}
+                                disabled={
+                                    (editMode &&
+                                        params["*"].includes("view")) ||
+                                    !editMode
+                                }
+                                control={
+                                    <Checkbox
+                                        disabled={
+                                            !editMode &&
+                                            !params["*"].includes("view")
+                                        }
+                                    />
+                                }
+                                checked={answer.includes(option)}
+                                onChange={handleChecked}
+                                label={option}
+                            />
                         ))}
                     </FormGroup>
                     <FormHelperText>

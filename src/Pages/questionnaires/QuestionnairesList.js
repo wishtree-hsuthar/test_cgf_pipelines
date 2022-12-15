@@ -1,36 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
-import { MenuItem, Select, Tabs, Tab, Box } from "@mui/material";
-import TableComponent from "../../components/TableComponent";
+import {  Tabs, Tab, Box } from "@mui/material";
 import DraftedQuestionnaires from "./DraftedQuestionnaires";
-import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import PublishedQuestionnaires from "./PublishedQuestionnaires";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import useCallbackState from "../../utils/useCallBackState";
-
-// function TabPanel(props) {
-//     const { children, value, index, ...other } = props;
-
-//     return (
-//         <div
-//             role="tabpanel"
-//             hidden={value !== index}
-//             id={`simple-tabpanel-${index}`}
-//             aria-labelledby={`simple-tab-${index}`}
-//             {...other}
-//         >
-//             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-//         </div>
-//     );
-// }
-// TabPanel.propTypes = {
-//     children: PropTypes.node,
-//     index: PropTypes.number.isRequired,
-//     value: PropTypes.number.isRequired,
-// };
 
 function a11yPropsQuestionnaireList(index) {
     return {
@@ -54,15 +31,12 @@ function QuestionnairesList() {
     const [questionnaireValue, setQuestionnaireValue] = React.useState(0);
 
     const onQuestionnaireSearchChangeHandler = (e) => {
-        // console.log("event", e.key);
         if (searchTimeoutQuestionnaire) clearTimeout(searchTimeoutQuestionnaire);
         setMakeApiCallQuestionnaire(false);
-        // console.log("searchQuestionnaire values", e.target.value);
         setSearchQuestionnaire(e.target.value);
         setSearchTimeoutQuestionnaire(
             setTimeout(() => {
                 setMakeApiCallQuestionnaire(true);
-                // setPage(1);
             }, 1000)
         );
     };
@@ -70,11 +44,11 @@ function QuestionnairesList() {
     const privilege = useSelector((state) => state?.user?.privilege);
     const userAuth = useSelector((state) => state?.user?.userObj);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    let privilegeArray =
+    let QuestionnairePrivilgeArray =
         userAuth?.roleId?.name === "Super Admin"
             ? []
             : Object.values(privilege?.privileges);
-    let moduleAccesForMember = privilegeArray
+    let moduleAccesForMember = QuestionnairePrivilgeArray
         .filter((data) => data?.moduleId?.name === "Questionnaire")
         .map((data) => ({
             questionnaire: {
@@ -85,10 +59,6 @@ function QuestionnairesList() {
                 add: data?.add,
             },
         }));
-    // console.log(
-    //     "module access member in view member",
-    //     moduleAccesForMember[0]?.member
-    // );
 
 
     const handleChange = (event, newValue) => {

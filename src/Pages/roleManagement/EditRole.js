@@ -10,7 +10,6 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableHead,
     TableRow,
     TextField,
 } from "@mui/material";
@@ -26,6 +25,7 @@ import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import CommonTableHead from "./CommonTableHead";
 
 const titleMessage = "";
 const descriptionMessage = "";
@@ -110,7 +110,6 @@ const EditRole = () => {
                         titleMessage: "Error",
                         descriptionMessage:
                             "Session Timeout: Please login again",
-
                         messageType: "error",
                     },
                     () => myRef2.current()
@@ -185,13 +184,12 @@ const EditRole = () => {
         } catch (error) {
             console.log("Error", error);
             if (error?.code === "ERR_CANCELED") return;
-            if (error?.response?.status == 401) {
+            if (error?.response?.status === 401) {
                 setToasterDetails2(
                     {
                         titleMessage: "Error",
                         descriptionMessage:
                             "Session Timeout: Please login again",
-
                         messageType: "error",
                     },
                     () => myRef2.current()
@@ -199,6 +197,7 @@ const EditRole = () => {
                 navigate2("/login");
             } else {
                 setIsLoading1(false);
+
                 setToasterDetails2(
                     {
                         titleMessage: "Error",
@@ -392,77 +391,7 @@ const EditRole = () => {
                                     <Paper sx={{ width: "100%" }}>
                                         <TableContainer>
                                             <Table sx={{ minWidth: 750 }}>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell
-                                                            align="left"
-                                                            className="table-header"
-                                                            width="16%"
-                                                        >
-                                                            <span className="sorted-blk">
-                                                                Modules
-                                                            </span>
-                                                        </TableCell>
-                                                        <TableCell className="table-header">
-                                                            <span className="sorted-blk">
-                                                                Fill
-                                                            </span>
-                                                        </TableCell>
-
-                                                        <TableCell className="table-header">
-                                                            <span className="sorted-blk">
-                                                                List
-                                                            </span>
-                                                        </TableCell>
-                                                        <TableCell
-                                                            align="center"
-                                                            className="table-header"
-                                                        >
-                                                            <span className="sorted-blk">
-                                                                Add
-                                                            </span>
-                                                        </TableCell>
-                                                        <TableCell
-                                                            align="center"
-                                                            className="table-header"
-                                                        >
-                                                            <span className="sorted-blk">
-                                                                Edit
-                                                            </span>
-                                                        </TableCell>
-                                                        <TableCell
-                                                            align="center"
-                                                            className="table-header"
-                                                        >
-                                                            <span className="sorted-blk">
-                                                                View
-                                                            </span>
-                                                        </TableCell>
-                                                        <TableCell
-                                                            align="center"
-                                                            className="table-header"
-                                                        >
-                                                            <span className="sorted-blk">
-                                                                Delete
-                                                            </span>
-                                                        </TableCell>
-                                                        {/* <TableCell
-                              align="center"
-                              className="table-header"
-                              width="16%"
-                            >
-                              Assign to Member
-                            </TableCell> */}
-                                                        <TableCell
-                                                            align="center"
-                                                            className="table-header"
-                                                        >
-                                                            <span className="sorted-blk">
-                                                                All
-                                                            </span>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </TableHead>
+                                                <CommonTableHead />
                                                 <TableBody>
                                                     {Object.keys(
                                                         previleges
@@ -516,16 +445,21 @@ const EditRole = () => {
                                                                                                 ][
                                                                                                     "fill"
                                                                                                 ],
+                                                                                                list: !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "fill"
+                                                                                                ],
+                                                                                                view: !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "fill"
+                                                                                                ],
                                                                                                 all:
                                                                                                     !previous[
                                                                                                         previleg
                                                                                                     ][
                                                                                                         "fill"
-                                                                                                    ] &&
-                                                                                                    previous[
-                                                                                                        previleg
-                                                                                                    ][
-                                                                                                        "list"
                                                                                                     ] &&
                                                                                                     previous[
                                                                                                         previleg
@@ -536,11 +470,6 @@ const EditRole = () => {
                                                                                                         previleg
                                                                                                     ][
                                                                                                         "edit"
-                                                                                                    ] &&
-                                                                                                    previous[
-                                                                                                        previleg
-                                                                                                    ][
-                                                                                                        "view"
                                                                                                     ] &&
                                                                                                     previous[
                                                                                                         previleg

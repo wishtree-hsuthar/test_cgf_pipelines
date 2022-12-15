@@ -2,8 +2,6 @@ import React, { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TableAssessment from "./TableAssesment";
 import FillAssessmentQuestion from "./FillAssessmentQuestions";
-import useCallbackState from "../../utils/useCallBackState";
-import Toaster from "../../components/Toaster";
 import DialogBox from "../../components/DialogBox";
 
 const getTransformedColumns = (columns) => {
@@ -40,12 +38,6 @@ function FillAssesmentSection({
   const navigate = useNavigate();
   const params = useParams();
 
-  //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
 
   // cancel dailog box open/close state
 
@@ -94,13 +86,6 @@ function FillAssesmentSection({
         openModal={openCancelDailog}
         setOpenModal={setOpenCancelDailog}
       />
-      <Toaster
-        myRef={myRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
-      />
-
       <div className="preview-sect-ttl-wrap">
         <div className="preview-sect-card-ttl-blk">
           <h2 className="subheading">{section?.sectionTitle}</h2>

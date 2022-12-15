@@ -59,10 +59,6 @@ function OnBoardedSubAdminsTable({
     const [records, setRecords] = React.useState([]);
     const [totalRecords, setTotalRecords] = React.useState(0);
     const [selected, setSelected] = useState([]);
-    // const [search, setSearch] = useState("");
-    // const [filters, setFilters] = useState({
-    //     status: "all",
-    // });
     const [isLoading, setIsLoading] = useState(true);
 
     //state to hold search timeout delay
@@ -94,38 +90,37 @@ function OnBoardedSubAdminsTable({
         console.log("data before update----", data);
 
         let staleData = data;
-        staleData.forEach((object) => {
-            console.log("subRole-------", object["subRoleId"].name);
-            delete object["updatedAt"];
-            delete object["updatedBy"];
-            delete object["createdBy"];
-            delete object["description"];
-            delete object["countryCode"];
-            delete object["isDeleted"];
-            delete object["isReplaced"];
-            delete object["__v"];
-            delete object["password"];
-            delete object["roleId"];
-            delete object["salt"];
-            delete object["uuid"];
-            delete object["phoneNumber"];
-            delete object["isCGFAdmin"];
-            // delete object["_id"];
-            object["createdAt"] = new Date(
-                object["createdAt"]
+        staleData.forEach((onboardedCGFAdmin) => {
+            console.log("subRole-------", onboardedCGFAdmin["subRoleId"].name);
+            delete onboardedCGFAdmin["updatedAt"];
+            delete onboardedCGFAdmin["updatedBy"];
+            delete onboardedCGFAdmin["createdBy"];
+            delete onboardedCGFAdmin["description"];
+            delete onboardedCGFAdmin["countryCode"];
+            delete onboardedCGFAdmin["isDeleted"];
+            delete onboardedCGFAdmin["isReplaced"];
+            delete onboardedCGFAdmin["__v"];
+            delete onboardedCGFAdmin["password"];
+            delete onboardedCGFAdmin["roleId"];
+            delete onboardedCGFAdmin["salt"];
+            delete onboardedCGFAdmin["uuid"];
+            delete onboardedCGFAdmin["phoneNumber"];
+            delete onboardedCGFAdmin["isCGFAdmin"];
+            onboardedCGFAdmin["createdAt"] = new Date(
+                onboardedCGFAdmin["createdAt"]
             ).toLocaleDateString("en-US", {
                 month: "2-digit",
                 day: "2-digit",
                 year: "numeric",
             });
-            object["role"] = object["subRole"][0].name;
-            delete object["subRole"];
-            delete object["subRoleId"];
+            onboardedCGFAdmin["role"] = onboardedCGFAdmin["subRole"][0].name;
+            delete onboardedCGFAdmin["subRole"];
+            delete onboardedCGFAdmin["subRoleId"];
 
             onboardedKeysOrder.forEach((k) => {
-                const v = object[k];
-                delete object[k];
-                object[k] = v;
+                const v = onboardedCGFAdmin[k];
+                delete onboardedCGFAdmin[k];
+                onboardedCGFAdmin[k] = v;
             });
         });
         console.log("data in updaterecords method", staleData);
@@ -148,26 +143,26 @@ function OnBoardedSubAdminsTable({
         try {
             let url = generateUrl();
             setIsLoading(true);
-            const response = await privateAxios.get(url, {
+            const onBoardedCGFAdmin = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
-            setTotalRecords(parseInt(response.headers["x-total-count"]));
-            console.log("Response from sub admin api get", response);
+            setTotalRecords(
+                parseInt(onBoardedCGFAdmin.headers["x-total-count"])
+            );
+            console.log("Response from sub admin api get", onBoardedCGFAdmin);
 
-            updateRecords([...response.data]);
+            updateRecords([...onBoardedCGFAdmin.data]);
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
             console.log("Error from getSubAdmin-------", error);
 
-            if (error?.response?.status == 401) {
-                // navigate("/login");
+            if (error?.onBoardedCGFAdmin?.status == 401) {
                 setonBoardedCgfAdmintoasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session Expired",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => onBoardedCGFAdminRef.current()

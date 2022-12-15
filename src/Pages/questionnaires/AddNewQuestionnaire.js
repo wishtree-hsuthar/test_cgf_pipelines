@@ -6,43 +6,22 @@ import {
     Select,
     MenuItem,
     FormHelperText,
+    Tab,
+    Tabs,
+    Tooltip,
 } from "@mui/material";
-import { Tab, Tabs, Tooltip } from "@mui/material";
-import PropTypes from "prop-types";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Loader2 from "../../assets/Loader/Loader2.svg";
-import CloseIcon from "@mui/icons-material/Close";
 import SectionContent from "./SectionContent";
 import { v4 as uuidv4 } from "uuid";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
-import Toaster from "../../components/Toaster";
-import useCallbackState from "../../utils/useCallBackState";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-
-// function TabPanel(props) {
-//   const { children, value, index, ...other } = props;
-
-//   return (
-//     <div
-//       role="tabpanel"
-//       hidden={value !== index}
-//       id={`simple-tabpanel-${index}`}
-//       aria-labelledby={`simple-tab-${index}`}
-//       {...other}
-//     >
-//       {value === index && <Box>{children}</Box>}
-//     </div>
-//   );
-// }
-// TabPanel.propTypes = {
-//   children: PropTypes.node,
-//   index: PropTypes.number.isRequired,
-//   value: PropTypes.number.isRequired,
-// };
+import useCallbackState from "../../utils/useCallBackState";
+import Toaster from "../../components/Toaster";
 
 function a11yProps(index) {
     return {
@@ -63,6 +42,14 @@ function AddNewQuestionnaire() {
     useDocumentTitle("Add Questionnaire");
     // state to manage to loader
     const [isLoading, setIsLoading] = useState(false);
+    const [value, setValue] = React.useState(0);
+    // questionnaire id
+    const { id } = useParams();
+
+    const [globalSectionTitleError, setGlobalSectionTitleError] = useState({
+        errMsg: "",
+    });
+
     //Refr for Toaster
     const myRef = React.useRef();
     //Toaster Message setter
@@ -70,42 +57,6 @@ function AddNewQuestionnaire() {
         titleMessage: "",
         descriptionMessage: "",
         messageType: "success",
-    });
-    //method to call all error toaster from this method
-    const setErrorToaster = (error) => {
-        // console.log("error",error)
-        setToasterDetails(
-            {
-                titleMessage: "Error",
-                descriptionMessage:
-                    error?.response?.data?.message &&
-                    typeof error.response.data.message === "string"
-                        ? error.response.data.message
-                        : "Something went wrong!",
-                messageType: "error",
-            },
-            () => myRef.current()
-        );
-    };
-    const [value, setValue] = React.useState(0);
-    // questionnaire id
-    const { id } = useParams();
-
-    /* Popup */
-    const style = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 400,
-        bgcolor: "background.paper",
-        border: "2px solid #000",
-        boxShadow: 24,
-        p: 4,
-    };
-
-    const [globalSectionTitleError, setGlobalSectionTitleError] = useState({
-        errMsg: "",
     });
 
     const handleChange = (event, newValue) => {
@@ -227,8 +178,6 @@ function AddNewQuestionnaire() {
         });
         setValue(questionnaire.sections.length);
     };
-
-    // console.log("questionnaire---", questionnaire.sections);
 
     return (
         <div className="page-wrapper">
@@ -376,6 +325,8 @@ function AddNewQuestionnaire() {
                                             value={value}
                                             onChange={handleChange}
                                             aria-label="basic tabs example"
+                                            variant="scrollable"
+                                            scrollButtons="auto"
                                         >
                                             {questionnaire.sections.map(
                                                 (section, index, id) => (

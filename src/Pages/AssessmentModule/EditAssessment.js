@@ -1,31 +1,30 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useForm, Control, Controller } from "react-hook-form";
-import Input from "../../components/Input";
-import Dropdown from "../../components/Dropdown";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Loader2 from "../../assets/Loader/Loader2.svg";
+import { TextField } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import React, { useEffect, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
-import { useParams, useNavigate, Link } from "react-router-dom";
 import {
     ADD_OPERATION_MEMBER,
     ADD_QUESTIONNAIRE,
     FETCH_ASSESSMENT_BY_ID,
     FETCH_OPERATION_MEMBER,
-    MEMBER,
     MEMBER_DROPDOWN,
     UPDATE_ASSESSMENT_BY_ID,
 } from "../../api/Url";
-import useCallbackState from "../../utils/useCallBackState";
-import { TextField } from "@mui/material";
+import Loader2 from "../../assets/Loader/Loader2.svg";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import useCallbackState from "../../utils/useCallBackState";
 
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
-import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import DialogBox from "../../components/DialogBox";
 import axios from "axios";
+import DialogBox from "../../components/DialogBox";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 const helperTextForAssessment = {
     title: {
         required: "Enter the assessment title",
@@ -54,20 +53,19 @@ function EditAssessment() {
     // state to manage loaders
     const [isLoading, setIsLoading] = useState(false);
 
-    const { handleSubmit, control, setValue, reset, watch, getValues } =
-        useForm({
-            defaultValues: {
-                title: "",
-                assessmentType: "",
-                assignedMember: {
-                    _id: "",
-                    name: "",
-                },
-                assignedOperationMember: "",
-                dueDate: "",
-                remarks: "",
+    const { handleSubmit, control, setValue, reset, watch } = useForm({
+        defaultValues: {
+            title: "",
+            assessmentType: "",
+            assignedMember: {
+                _id: "",
+                name: "",
             },
-        });
+            assignedOperationMember: "",
+            dueDate: "",
+            remarks: "",
+        },
+    });
 
     // navigate function
     const navigate = useNavigate();
@@ -98,7 +96,7 @@ function EditAssessment() {
     const fetchOperationMembersAccordingToMemberCompanyForAddAssessment =
         async (id, isCGFStaff) => {
             try {
-                const response = await privateAxios.get(
+                const responseEditMember = await privateAxios.get(
                     FETCH_OPERATION_MEMBER + id + "/master"
                     // isCGFStaff
                     //     ? FETCH_OPERATION_MEMBER + id + "/master/internal"
@@ -106,15 +104,15 @@ function EditAssessment() {
                 );
                 console.log(
                     "Response from fetch operation member according to member company",
-                    response
+                    responseEditMember
                 );
                 setOperationMemberForAddAssessments(
-                    response.data.map((data) => ({
+                    responseEditMember.data.map((data) => ({
                         _id: data._id,
                         name: data.name,
                     }))
                 );
-                let representative = response.data.filter(
+                let representative = responseEditMember.data.filter(
                     (data) => data?.isMemberRepresentative
                 );
 
@@ -141,36 +139,41 @@ function EditAssessment() {
         const fetchAssessment = async () => {
             try {
                 setIsLoading(true);
-                const response = await privateAxios.get(
+                const responseEditMember = await privateAxios.get(
                     FETCH_ASSESSMENT_BY_ID + params.id,
                     {
                         signal: controller.signal,
                     }
                 );
                 setIsLoading(false);
-                console.log("response from fetch assessment", response.data);
+                console.log(
+                    "responseEditMember from fetch assessment",
+                    responseEditMember.data
+                );
                 isMounted &&
                     reset({
-                        title: response.data.title,
-                        assessmentType: response.data.assessmentType,
-                        assignedMember: response.data.assignedMember?._id,
-                        // name: response.data.assignedMember?.companyName,
+                        title: responseEditMember.data.title,
+                        assessmentType: responseEditMember.data.assessmentType,
+                        assignedMember:
+                            responseEditMember.data.assignedMember?._id,
+                        // name: responseEditMember.data.assignedMember?.companyName,
 
                         assignedOperationMember:
-                            response.data.assignedOperationMember?._id,
+                            responseEditMember.data.assignedOperationMember
+                                ?._id,
                         dueDate: new Date(
-                            new Date(response.data.dueDate)
+                            new Date(responseEditMember.data.dueDate)
                         ).setDate(
-                            new Date(response.data.dueDate).getDate() - 1
+                            new Date(
+                                responseEditMember.data.dueDate
+                            ).getDate() - 1
                         ),
-                        remarks: response.data.remarks,
-                        questionnaireId: response.data.questionnaireId,
+                        remarks: responseEditMember.data.remarks,
+                        questionnaireId:
+                            responseEditMember.data.questionnaireId,
                     });
-                setQuestionnaireId(response.data.questionnaireId);
-                // fetchOperationMembersAccordingToMemberCompanyForAddAssessment(
-                //     response.data?.assignedMember?._id
-                // );
-                fetchMember(response.data.assignedMember?._id);
+                setQuestionnaireId(responseEditMember.data.questionnaireId);
+                fetchMember(responseEditMember.data.assignedMember?._id);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
                 if (error?.response?.status === 401) {
@@ -195,22 +198,25 @@ function EditAssessment() {
         fetchAssessment();
         const fetchMemberCompaniesForAddAssesments = async () => {
             try {
-                const response = await privateAxios.get(MEMBER_DROPDOWN, {
-                    signal: controller.signal,
-                });
+                const responseEditMember = await privateAxios.get(
+                    MEMBER_DROPDOWN,
+                    {
+                        signal: controller.signal,
+                    }
+                );
 
                 console.log(
-                    "response from fetch member companies for add assessments",
-                    response
+                    "responseEditMember from fetch member companies for add assessments",
+                    responseEditMember
                 );
                 isMounted &&
                     setMemberCompaniesForAddAssessments(
-                        response.data.map((data) => ({
+                        responseEditMember.data.map((data) => ({
                             _id: data._id,
                             name: data.companyName,
                         }))
                     );
-                setMemberRepresentatives(response.data);
+                setMemberRepresentatives(responseEditMember.data);
             } catch (error) {
                 console.log("Error from fetch member company api", error);
             }
@@ -219,17 +225,22 @@ function EditAssessment() {
 
         const fetchQuestionnaires = async () => {
             try {
-                const response = await privateAxios.get(
+                const responseEditMember = await privateAxios.get(
                     ADD_QUESTIONNAIRE + "/master",
                     {
                         signal: controller.signal,
                     }
                 );
-                console.log("response from questionnaires api", response.data);
+                console.log(
+                    "responseEditMember from questionnaires api",
+                    responseEditMember.data
+                );
                 isMounted &&
-                    setQuestionnares(response.data.map((data) => data.title));
+                    setQuestionnares(
+                        responseEditMember.data.map((data) => data.title)
+                    );
                 setQuestionnaresObj(
-                    response.data.map((data) => ({
+                    responseEditMember.data.map((data) => ({
                         _id: data.uuid,
                         name: data.title,
                     }))
@@ -248,12 +259,12 @@ function EditAssessment() {
 
     const fetchMember = async (id) => {
         try {
-            const response = await privateAxios.get(
+            const responseEditMember = await privateAxios.get(
                 ADD_OPERATION_MEMBER + "/member/" + id + "/master"
             );
-            console.log("Member fetched", response.data);
+            console.log("Member fetched", responseEditMember.data);
             setOperationMemberForAddAssessments(
-                response.data.map((data) => ({
+                responseEditMember.data.map((data) => ({
                     _id: data._id,
                     name: data.name,
                 }))
@@ -277,16 +288,16 @@ function EditAssessment() {
             ),
         };
         try {
-            const response = await privateAxios.put(
+            const responseEditMember = await privateAxios.put(
                 UPDATE_ASSESSMENT_BY_ID + params.id,
                 data
             );
-            console.log("response from update assessment page");
-            if (response.status === 200) {
+            console.log("responseEditMember from update assessment page");
+            if (responseEditMember.status === 200) {
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage: response?.data?.message,
+                        descriptionMessage: responseEditMember?.data?.message,
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -309,32 +320,34 @@ function EditAssessment() {
             }
         } catch (error) {
             console.log("error from update assessment url", error);
-            if (error.response.status === 401) {
+            if (error.responseEditMember.status === 401) {
                 console.log("Unauthorized user access");
                 // Add error toaster here
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
+                        descriptionMessage:
+                            error?.responseEditMember?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()
                 );
                 navigate("/login");
             }
-            if (error.response.status === 400) {
+            if (error.responseEditMember.status === 400) {
                 console.log("something went wrong");
                 // Add error toaster here
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
+                        descriptionMessage:
+                            error?.responseEditMember?.data?.message,
                         messageType: "error",
                     },
                     () => toasterRef.current()
                 );
             }
-            if (error.response.status === 403) {
+            if (error.responseEditMember.status === 403) {
                 console.log("something went wrong");
                 // Add error toaster here
                 setToasterDetails(
@@ -353,10 +366,6 @@ function EditAssessment() {
         setValue("assignedMember", e.target.value);
         console.log("assignedMember", e.target.value);
         // let memberRepresentative = memberRepresentatives.filter(
-        //     (data) => data._id === e.target.value
-        // );
-
-        // console.log("member representative----", memberRepresentative[0]?.name);
 
         // setValue(
         //     "assignedOperationMember",
@@ -370,10 +379,6 @@ function EditAssessment() {
             (data) => data._id === e.target.value
         );
         console.log("cgf company-----", cgfCompany);
-
-        let memberRepresentative = memberRepresentatives.filter(
-            (data) => data._id === e.target.value
-        );
 
         if (cgfCompany[0].name === "The Consumer Goods Forum") {
             setIsCGFStaff(true);
@@ -422,9 +427,10 @@ function EditAssessment() {
                 {
                     titleMessage: "Error",
                     descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
+                        error?.responseEditMember?.data?.message &&
+                        typeof error.responseEditMember.data.message ===
+                            "string"
+                            ? error.responseEditMember.data.message
                             : "Something went wrong!",
                     messageType: "error",
                 },

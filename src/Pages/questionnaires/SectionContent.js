@@ -6,7 +6,7 @@ import {
     TextField,
     Tooltip,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { privateAxios } from "../../api/axios";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
@@ -54,7 +54,6 @@ const SectionContent = ({
     });
     //method to call all error toaster from this method
     const setErrorToaster = (error) => {
-        // console.log("error", error);
         setToasterDetails(
             {
                 titleMessage: "Error",
@@ -68,7 +67,6 @@ const SectionContent = ({
             () => myRef.current()
         );
     };
-    // console.log("global title error", globalSectionTitleError);
     const onDialogPrimaryButtonClickHandler = () => {
         deleteSection(uuid);
     };
@@ -89,9 +87,6 @@ const SectionContent = ({
             (section) => section.uuid !== uuid
         );
 
-        // console.log("filter sections", tempQuestionnare);
-        // console.log("filter sections", tempSections);
-        // console.log("filter sections id", uuid);
         setQuestionnaire({
             ...tempQuestionnare,
             sections: tempSections,
@@ -145,7 +140,6 @@ const SectionContent = ({
             await questionnaire?.sections[index]?.questions?.map(
                 (question, questionIdx) => {
                     if (question?.questionTitle === "") {
-                        // console.log("is Error");
                         tempError["questionTitle"] = "Enter question title";
                         countError++;
                     }
@@ -179,7 +173,6 @@ const SectionContent = ({
                 setGlobalSectionTitleError({
                     errMsg: "Section title required",
                 });
-                // console.log("in validate section for block");
                 setValue(i);
                 countError++;
                 return false;
@@ -200,7 +193,6 @@ const SectionContent = ({
         //check if layout is table remove form layout questions and add initial rows and colums
         if (value === "table") {
             tempQuestionnaire.sections[index].questions = [];
-            // delete tempQuestionnaire?.sections[index]?.questions;
             const initialId = uuidv4();
             tempQuestionnaire.sections[index].columnValues = [
                 {
@@ -236,8 +228,6 @@ const SectionContent = ({
         if (value === "form") {
             tempQuestionnaire.sections[index].columnValues = [];
             tempQuestionnaire.sections[index].rowValues = [];
-            // delete tempQuestionnaire?.sections[index]?.columnValues;
-            // delete tempQuestionnaire?.sections[index]?.rowValues;
             tempQuestionnaire.sections[index].questions = [
                 {
                     uuid: uuidv4(),
@@ -252,17 +242,6 @@ const SectionContent = ({
         }
         console.log("tempQuestionnaire after layout update", tempQuestionnaire);
         setQuestionnaire(tempQuestionnaire);
-    };
-    const handleStatusChange = (e) => {
-        // console.log("inside Status change handler");
-        const { name, value } = e.target;
-        let tempQuestionnare = { ...questionnaire };
-        if (value === "active") {
-            tempQuestionnare.sections[index].isActive = true;
-        }
-        if (value === "inActive")
-            tempQuestionnare.sections[index].isActive = false;
-        setQuestionnaire(tempQuestionnare);
     };
     const handleInputSection = (e) => {
         const { name, value } = e.target;
@@ -303,7 +282,6 @@ const SectionContent = ({
                         const fetchResponse = await privateAxios.get(
                             `${ADD_QUESTIONNAIRE}/${response?.data?.uuid}`
                         );
-                        // console.log("response from fetch questionnaire", response);
 
                         setQuestionnaire({ ...fetchResponse.data });
                         setTimeout(() => {
@@ -344,7 +322,6 @@ const SectionContent = ({
     };
     const onCancelClickHandler = () => {
         setOpenDialog1(true);
-        // return navigate("/questionnaires");
     };
     const onPublishButtonClickHandler = async (e) => {
         console.log("inside publist button click");
@@ -364,9 +341,7 @@ const SectionContent = ({
             }
         }
     };
-    const [sectionObj, setSectionObj] = useState({ ...section });
-    // console.log("questionnaire after submiting questionnaire", sectionObj);
-    // console.log("Questionnaire: ", questionnaire);
+
     return (
         // <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
         <div className="sect-form-card-wrapper">

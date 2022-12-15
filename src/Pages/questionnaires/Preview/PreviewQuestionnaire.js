@@ -1,12 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box } from "@mui/material";
-import Switch from "@mui/material/Switch";
-import Typography from "@mui/material/Typography";
-import { styled } from "@mui/material/styles";
 import Loader2 from "../../../assets/Loader/Loader2.svg";
 
-import PropTypes from "prop-types";
-import { Tabs, Tab, Tooltip } from "@mui/material";
+import { Tabs, Tab, Tooltip, Box } from "@mui/material";
 
 import PreviewSection from "./PreviewSection";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -14,7 +9,6 @@ import { privateAxios } from "../../../api/axios";
 import "../../../Pages/PreviewDemo.css";
 import {
     ADD_QUESTIONNAIRE,
-    DOWNLOAD_QUESTIONNAIRES,
     DOWNLOAD_QUESTIONNAIRES_BY_ID,
 } from "../../../api/Url";
 import { useDocumentTitle } from "../../../utils/useDocumentTitle";
@@ -38,25 +32,6 @@ const MenuProps = {
 // };
 // function TabPanel(props) {
 //     const { children, value, index, ...other } = props;
-
-//     return (
-//         <div
-//             role="tabpanel"
-//             hidden={value !== index}
-//             id={`simple-tabpanel-${index}`}
-//             aria-labelledby={`simple-tab-${index}`}
-//             {...other}
-//         >
-//             {value === index && <Box>{children}</Box>}
-//         </div>
-//     );
-// }
-
-// TabPanel.propTypes = {
-//     children: PropTypes.node,
-//     index: PropTypes.number.isRequired,
-//     value: PropTypes.number.isRequired,
-// };
 
 function a11yProps(index) {
     return {
@@ -158,7 +133,7 @@ function PreviewQuestionnaire(props) {
             controller.abort();
         };
     }, []);
-    const [datevalue, setDateValue] = React.useState(null);
+
     const [isActive, setActive] = useState(false);
     const handleToggle = () => {
         setActive(!isActive);
@@ -411,24 +386,22 @@ function PreviewQuestionnaire(props) {
                                                 Version history
                                             </li>
                                         )}
-                                    {!params["*"].includes("version") && (
-                                        <li
-                                            onClick={() =>
-                                                navigate(
-                                                    `/questionnaires/add-questionnaire/${params.id}`
-                                                )
-                                            }
-                                        >
-                                            {(SUPER_ADMIN === true ||
-                                                moduleAccesForMember[0]
-                                                    ?.questionnaire?.add) &&
-                                            !params["*"].includes("version") &&
-                                            !questionnaire?.isDraft &&
-                                            !questionnaire?.isPublished
-                                                ? "Add Questionnaire"
-                                                : "Edit Questionnaire"}
-                                        </li>
-                                    )}
+                                    {(SUPER_ADMIN === true ||
+                                        moduleAccesForMember[0]?.questionnaire
+                                            ?.edit) &&
+                                        !params["*"].includes("version") &&
+                                        (questionnaire?.isDraft ||
+                                            questionnaire?.isPublished) && (
+                                            <li
+                                                onClick={() =>
+                                                    navigate(
+                                                        `/questionnaires/add-questionnaire/${params.id}`
+                                                    )
+                                                }
+                                            >
+                                                Edit Questionnaire
+                                            </li>
+                                        )}
                                     {(SUPER_ADMIN === true ||
                                         moduleAccesForMember[0]?.questionnaire
                                             ?.delete) && (
@@ -474,6 +447,8 @@ function PreviewQuestionnaire(props) {
                                             value={value}
                                             onChange={handleChange}
                                             aria-label="basic tabs example"
+                                            variant="scrollable"
+                                            scrollButtons="auto"
                                         >
                                             {questionnaire?.sections?.map(
                                                 (section, index, id) => (
@@ -515,187 +490,6 @@ function PreviewQuestionnaire(props) {
                                                 section={section}
                                                 sectionIndex={index}
                                             />
-                                            {/* <div className="preview-card-wrapper">
-                                        <div className="preview-que-wrap">
-                                            <div className="preview-que-blk">
-                                                <div className="preview-sect-txt">
-                                                    Question 1 title will come
-                                                    here
-                                                </div>
-                                                <div className="form-group">
-                                                    <TextField
-                                                        className="input-field"
-                                                        id="outlined-basic"
-                                                        placeholder="Enter question title"
-                                                        variant="outlined"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="preview-que-blk">
-                                                <div className="preview-sect-txt">
-                                                    Question 2 title will come
-                                                    here
-                                                </div>
-                                                <div className="form-group">
-                                                    <div className="select-field">
-                                                        <Select
-                                                            IconComponent={(
-                                                                props
-                                                            ) => (
-                                                                <KeyboardArrowDownRoundedIcon
-                                                                    {...props}
-                                                                />
-                                                            )}
-                                                            value="Select status"
-                                                            MenuProps={
-                                                                MenuProps
-                                                            }
-                                                        >
-                                                            <MenuItem value="Select status">
-                                                                Select status
-                                                            </MenuItem>
-                                                            <MenuItem
-                                                                value="Value1"
-                                                                selected
-                                                            >
-                                                                Value1
-                                                            </MenuItem>
-                                                            <MenuItem
-                                                                value="Value2"
-                                                                selected
-                                                            >
-                                                                Value2
-                                                            </MenuItem>
-                                                        </Select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="preview-que-blk">
-                                                <div className="preview-sect-txt">
-                                                    Question 3 title will come
-                                                    here
-                                                </div>
-                                                <div className="form-group">
-                                                    <LocalizationProvider
-                                                        dateAdapter={
-                                                            AdapterDayjs
-                                                        }
-                                                    >
-                                                        <DatePicker
-                                                            className="datepicker-blk"
-                                                            components={{
-                                                                OpenPickerIcon:
-                                                                    CalendarMonthOutlinedIcon,
-                                                            }}
-                                                            datevalue={
-                                                                datevalue
-                                                            }
-                                                            onChange={(
-                                                                newValue
-                                                            ) => {
-                                                                setDateValue(
-                                                                    newValue
-                                                                );
-                                                            }}
-                                                            renderInput={(
-                                                                params
-                                                            ) => (
-                                                                <TextField
-                                                                    {...params}
-                                                                />
-                                                            )}
-                                                        />
-                                                    </LocalizationProvider>
-                                                </div>
-                                            </div>
-                                            <div className="preview-que-blk">
-                                                <div className="preview-sect-txt">
-                                                    Question 4 title will come
-                                                    here
-                                                </div>
-                                                <div className="form-group">
-                                                    <TextField
-                                                        multiline
-                                                        className="input-textarea"
-                                                        id="outlined-basic"
-                                                        placeholder="Enter text here.."
-                                                        variant="outlined"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="preview-que-blk">
-                                                <div className="preview-sect-txt preview-incl-padding-space">
-                                                    Question 5 title will come
-                                                    here
-                                                </div>
-                                                <div className="form-group">
-                                                    <div className="radio-btn-field">
-                                                        <RadioGroup
-                                                            aria-labelledby="demo-radio-buttons-group-label"
-                                                            defaultValue="Active"
-                                                            name="radio-buttons-group"
-                                                            className="radio-btn radio-btn-vertical"
-                                                        >
-                                                            <FormControlLabel
-                                                                value="Option A"
-                                                                control={
-                                                                    <Radio />
-                                                                }
-                                                                label="Option A"
-                                                            />
-                                                            <FormControlLabel
-                                                                value="Option B"
-                                                                control={
-                                                                    <Radio />
-                                                                }
-                                                                label="Option B"
-                                                            />
-                                                        </RadioGroup>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="preview-que-blk">
-                                                <div className="preview-sect-txt preview-incl-padding-space">
-                                                    Question 6 title will come
-                                                    here
-                                                </div>
-                                                <div className="form-group mb-0">
-                                                    <div className="checkbox-with-labelblk">
-                                                        <FormControlLabel
-                                                            className="checkbox-with-label"
-                                                            control={
-                                                                <Checkbox
-                                                                    defaultChecked
-                                                                />
-                                                            }
-                                                            label="Label"
-                                                        />
-                                                        <FormControlLabel
-                                                            className="checkbox-with-label"
-                                                            control={
-                                                                <Checkbox />
-                                                            }
-                                                            label="Disabled"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-btn flex-between add-members-btn">
-                                            <button
-                                                type="reset"
-                                                className="secondary-button mr-10"
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button
-                                                type="submit"
-                                                className="primary-button add-button"
-                                            >
-                                                Edit
-                                            </button>
-                                        </div>
-                                    </div> */}
                                         </TabPanel>
                                     )
                                 )}

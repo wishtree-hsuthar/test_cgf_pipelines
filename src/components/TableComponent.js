@@ -1,6 +1,9 @@
-import * as React from "react";
-import PropTypes from "prop-types";
+import { EditOutlined } from "@mui/icons-material";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,19 +11,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { EditOutlined } from "@mui/icons-material";
-import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
-import PostAddIcon from "@mui/icons-material/PostAdd";
+import PropTypes from "prop-types";
+import * as React from "react";
 // import deleteIcon from "../../public/images/delete-icon.svg";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import Radio from "@mui/material/Radio";
 
-import "./TableComponent.css";
 import { MenuItem, Pagination, Select, Stack, Tooltip } from "@mui/material";
+import "./TableComponent.css";
 
 function EnhancedTableHead(props) {
     const {

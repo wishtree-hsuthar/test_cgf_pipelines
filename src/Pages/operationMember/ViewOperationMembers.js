@@ -4,17 +4,10 @@ import Loader2 from "../../assets/Loader/Loader2.svg";
 
 import {
     TextField,
-    Backdrop,
-    Box,
-    Modal,
-    Select,
-    MenuItem,
-    Fade,
     Radio,
     RadioGroup,
     FormControlLabel,
     Autocomplete,
-    Paper,
 } from "@mui/material";
 
 import "react-phone-number-input/style.css";
@@ -25,7 +18,6 @@ import {
     DELETE_OPERATION_MEMBER,
     MEMBER,
     COUNTRIES,
-    FETCH_ROLES,
     ROLE_BY_ID,
 } from "../../api/Url";
 
@@ -61,7 +53,7 @@ const ViewOperationMembers = () => {
     useDocumentTitle("View Operation Member");
     // state to manage to loaders
     const [isLoading, setIsLoading] = useState(true);
-    const { control, reset, watch, trigger } = useForm({
+    const { control, reset, trigger } = useForm({
         defaultValues: defaultValues,
     });
     const navigate = useNavigate();
@@ -87,8 +79,8 @@ const ViewOperationMembers = () => {
     const [open, setOpen] = React.useState(false);
     const privilege = useSelector((state) => state.user?.privilege);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
-    let moduleAccessForOperationMember = privilegeArray
+    let viewOperationMemberPrivilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+    let moduleAccessForOperationMember = viewOperationMemberPrivilegeArray
         .filter((data) => data?.moduleId?.name === "Operation Members")
         .map((data) => ({
             operationMember: {
@@ -310,7 +302,6 @@ const ViewOperationMembers = () => {
     };
     const handleOpen = (index) => {
         setOpen(true);
-        // setData(data[index]);
         console.log("clicked", index);
         console.log(index);
         if (index === 0) {

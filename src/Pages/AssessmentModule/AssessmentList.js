@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Internal Imports
 import TableComponent from "../../components/TableComponent";
-// import { MEMBER } from "../api/Url";
-import Loader2 from "../../assets/Loader/Loader2.svg";
-import useCallbackState from "../../utils/useCallBackState";
-import Toaster from "../../components/Toaster";
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { ASSESSMENTS } from "../../api/Url";
+import Loader2 from "../../assets/Loader/Loader2.svg";
+import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import Toaster from "../../components/Toaster";
 
 const tableHead = [
     // {
@@ -64,6 +64,14 @@ const AssessmentList = () => {
     //custom hook to set title of page
     useDocumentTitle("Assessments");
 
+    //Refr for Toaster
+  const myRef = React.useRef();
+  //Toaster Message setter
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
+  });
     const keysOrder = [
         "uuid",
         "_id",
@@ -76,14 +84,6 @@ const AssessmentList = () => {
         "isUserAuthorizedToFillAssessment",
     ];
     const navigate = useNavigate();
-    //Refr for Toaster
-    const myRef = React.useRef();
-    //Toaster Message setter
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
 
     // state to manage loader
     const [isLoading, setIsLoading] = useState(false);
@@ -102,8 +102,6 @@ const AssessmentList = () => {
     const [orderBy, setOrderBy] = useState("");
     const [records, setRecords] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
-    const [selected, setSelected] = useState([]);
-    // const [icons, setIcons] = useState([])
     let icons = [];
 
     const onSearchChangeHandler = (e) => {
@@ -163,7 +161,6 @@ const AssessmentList = () => {
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
             setTotalRecords(parseInt(response.headers["x-total-count"]));
             console.log("Response from  get assessments api", response);
 
@@ -196,15 +193,11 @@ const AssessmentList = () => {
             delete object["updatedAt"];
 
             delete object["__v"];
-
-            // delete object["uuid"];
-            // delete object["createdAt"];
             delete object["isDraft"];
             delete object["isPublished"];
             delete object["isActive"];
             delete object["isDeleted"];
             delete object["isSubmitted"];
-            // delete object["title"];
             delete object["updatedAt"];
             delete object["updatedBy"];
             delete object["createdBy"];
@@ -220,10 +213,6 @@ const AssessmentList = () => {
                 userAuth._id === object["assignedOperationMember"]["_id"]
                     ? true
                     : false;
-            // object["title"] = object["title"];
-            // object["assessmentType"] = object["assessmentType"];
-
-            // object["assessmentType"] = object["assessmentType"];
             delete object["assignedOperationMember"];
             delete object["assignedMember"];
             delete object["memberCompany"];
@@ -263,6 +252,10 @@ const AssessmentList = () => {
         navigate("/assessment-list/add-assessment");
     };
 
+    const viewInstruction = () => {
+        navigate("/assessments/instructions");
+    };
+
     const privilege = useSelector((state) => state?.user?.privilege);
 
     const userAuth = useSelector((state) => state?.user?.userObj);
@@ -272,7 +265,6 @@ const AssessmentList = () => {
         userAuth?.roleId?.name === "Super Admin"
             ? []
             : Object.values(privilege?.privileges);
-    // let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
     let moduleAccesForAssessment = privilegeArray
         .filter((data) => data?.moduleId?.name === "Assessment")
         .map((data) => ({
@@ -323,7 +315,7 @@ const AssessmentList = () => {
                             <div className="form-header-left-blk flex-start">
                                 <h2 className="heading2 mr-40">Assessments</h2>
                             </div>
-                            <div className="form-header-right-txt search-and-btn-field-right">
+                            <div className="form-header-right-txt search-and-btn-field-right view-instruct-field-right">
                                 <div className="search-and-btn-field-blk mr-0">
                                     <div className="searchbar">
                                         <input
@@ -355,6 +347,14 @@ const AssessmentList = () => {
                                         </button>
                                     </div>
                                 )}
+                                <div className="tertiary-btn-blk ml-20" onClick={viewInstruction}>
+                                    <span className="preview-icon">
+                                        <VisibilityOutlinedIcon />
+                                    </span>
+                                    <span className="addmore-txt">
+                                        View Instructions
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         {/* <div className="member-filter-sect">

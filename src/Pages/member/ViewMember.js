@@ -35,21 +35,19 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { defaultValues } from "../../utils/MemberModuleUtil";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
 // CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
-
-const cgfActivitiesManufacturer = [
+const cgfActivites = [
     "Apparel",
     "Food manufacturer",
     "Household care",
     "None",
     "Non-food manufacturer",
     "Personal care & beauty",
-];
-const cgfActivitiesRetailer = [
     "Department store",
     "Ecommerce",
     "Food/Non food retailer",
@@ -144,12 +142,12 @@ const ViewMember = () => {
         status: "none",
     });
     // state to hold roles
-    const [roles, setRoles] = useState([]);
-
     const privilege = useSelector((state) => state?.user?.privilege);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
-    let moduleAccesForMember = privilegeArray
+    let viewMemberPrivilegeArray = privilege
+        ? Object.values(privilege?.privileges)
+        : [];
+    let moduleAccesForMember = viewMemberPrivilegeArray
         .filter((data) => data?.moduleId?.name === "Members")
         .map((data) => ({
             member: {
@@ -185,17 +183,7 @@ const ViewMember = () => {
             delete object["isCGFStaff"];
             delete object["isOperationMember"];
             delete object["memberData"];
-            // delete object["isActive"];
             object["assessmentCount"] = `${object["assessmentCount"]}`;
-            // delete object["assessmentCount"];
-            // delete object["createdBy"]
-            // object.assessment = object["assessment"]?.toString() ?? "0";
-            // console.log(
-            //     "type of created By",
-            //     typeof object["createdBy"],
-            //     "createdBy",
-            //     object["createdBy"]
-            // );
             object["createdAt"] = new Date(
                 object["createdAt"]
             )?.toLocaleDateString("en-US", {
@@ -215,7 +203,6 @@ const ViewMember = () => {
         setRecordsInViewMember([...data]);
     };
     const generateUrl = () => {
-        // console.log("filters", filters);
         let url = `${MEMBER_OPERATION_MEMBERS}/${param.id}/list?page=${pageInViewMember}&size=${rowsPerPageInViewMember}&orderBy=${orderByInViewMember}&order=${orderInViewMember}`;
         if (search?.length >= 3) url = url + `&search=${search}`;
         if (filters?.status !== "all" && filters?.status !== "none")
@@ -237,7 +224,6 @@ const ViewMember = () => {
     //handle createdBy filter change handler
     const handleCreatedByFilter = (e) => {
         const { value } = e.target;
-        // console.log("name", name, "value", value);
         if (value[value.length - 1] === "")
             return selectedCreatedBy.length - 1 === allMembers.length
                 ? setSelectedCreatedBy(["none"])
@@ -250,10 +236,8 @@ const ViewMember = () => {
 
     //method for time based searching
     const onSearchChangeHandler = (e) => {
-        // console.log("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
         setMakeApiCall(false);
-        // console.log("search values", e.target.value);
         setSearch(e.target.value);
         setSearchTimeout(
             setTimeout(() => {
@@ -265,7 +249,6 @@ const ViewMember = () => {
     //handle sigle select filters
     const onFilterChangehandler = (e) => {
         const { name, value } = e.target;
-        // console.log("name", name, "Value ", value);
         setFilters({
             ...filters,
             [name]: value,
@@ -279,7 +262,6 @@ const ViewMember = () => {
         setPageInViewMember(1);
     };
     const onClickVisibilityIconHandler = (id) => {
-        // console.log("id", id);
         return navigate(`/users/operation-member/view-operation-member/${id}`);
     };
 
@@ -288,15 +270,15 @@ const ViewMember = () => {
     //Refr for Toaster
     const myRef = React.useRef();
     //Toaster Message setter
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
+    const [toasterDetailsViewMember, setToasterDetailsViewMember] =
+        useCallbackState({
+            titleMessage: "",
+            descriptionMessage: "",
+            messageType: "success",
+        });
     //method to call all error toaster from this method
     const setErrorToaster = (error) => {
-        // console.log("error", error);
-        setToasterDetails(
+        setToasterDetailsViewMember(
             {
                 titleMessage: "Error",
                 descriptionMessage:
@@ -309,36 +291,7 @@ const ViewMember = () => {
             () => myRef.current()
         );
     };
-    const defaultValues = {
-        memberCompany: "",
-        companyType: "Internal",
-        parentCompany: "",
-        cgfCategory: "Manufacturer",
-        cgfActivity: "",
-        replacedMember: "",
-        corporateEmail: "",
-        countryCode: "",
-        phoneNumber: "",
-        websiteUrl: "",
-        region: "",
-        country: "",
-        state: "",
-        city: "",
-        address: "",
-        cgfOfficeRegion: "",
-        cgfOfficeCountry: "",
-        cgfOffice: "",
-        memberContactSalutation: "Mr.",
-        memberContactFullName: "",
-        title: "",
-        department: "",
-        memberContactCountryCode: "",
-        memberContactEmail: "",
-        memberContactPhoneNuber: "",
-        totalOperationMembers: "",
-        createdBy: "",
-        roleId: "",
-    };
+
     //code to get id from url
     const param = useParams();
     //code form View Member
@@ -351,7 +304,7 @@ const ViewMember = () => {
     const onDialogPrimaryButtonClickHandler = async () => {
         try {
             await axios.delete(MEMBER + `/${param.id}`);
-            setToasterDetails(
+            setToasterDetailsViewMember(
                 {
                     titleMessage: "Success",
                     descriptionMessage: `${
@@ -363,39 +316,8 @@ const ViewMember = () => {
             );
             return setTimeout(() => navigate("/users/members"), 3000);
         } catch (error) {
-            // console.log("error on delete", error);
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
-
-            if (error?.response?.status === 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else {
-                setErrorToaster(error);
-            }
-            // setToasterDetails(
-            //   {
-            //     titleMessage: "Error",
-            //     descriptionMessage:
-            //       error?.response?.data?.error &&
-            //       typeof error.response.data.error === "string"
-            //         ? error.response.data.error
-            //         : "Something went wrong!",
-            //     messageType: "error",
-            //   },
-            //   () => myRef.current()
-            // );
+            setErrorToaster(error);
         } finally {
             setOpenDialog(false);
         }
@@ -419,7 +341,7 @@ const ViewMember = () => {
     const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
         useState([]);
 
-    const { control, reset, watch, setValue, trigger } = useForm({
+    const { control, reset, watch, trigger } = useForm({
         defaultValues: defaultValues,
     });
     const formatRegionCountries = (regionCountries) => {
@@ -430,7 +352,6 @@ const ViewMember = () => {
                         ? country.name
                         : country)
             );
-        // console.log("arr of country ", regionCountries);
         return regionCountries;
     };
 
@@ -450,7 +371,6 @@ const ViewMember = () => {
             const countryCodeSet = new Set(arrOfCountryCodeTemp);
             setArrOfCountryCode([...countryCodeSet]);
         } catch (error) {
-            // console.log("error inside get Country code", error);
             if (error?.code === "ERR_CANCELED") return;
             isMounted && setErrorToaster(error);
         }
@@ -459,7 +379,6 @@ const ViewMember = () => {
     const getCountries = async (region) => {
         let controller = new AbortController();
         try {
-            // console.log("region: ", region);
             if (region) {
                 return await axios.get(REGIONCOUNTRIES + `/${region}`, {
                     signal: controller.signal,
@@ -467,7 +386,6 @@ const ViewMember = () => {
             }
             return [];
         } catch (error) {
-            // console.log("Error inside get Countres", error);
             if (error?.code === "ERR_CANCELED") return;
             setErrorToaster(error);
             return [];
@@ -481,10 +399,8 @@ const ViewMember = () => {
             const regions = await axios.get(REGIONS, {
                 signal: controller.signal,
             });
-            // console.log("regions ", regions);
             setArrOfRegions(regions?.data ?? []);
             const countriesOnRegion1 = await getCountries(watch("region"));
-            // console.log("countries", countriesOnRegion1);
             const arrOfCountryRegionsTemp1 = formatRegionCountries(
                 countriesOnRegion1?.data
             );
@@ -500,7 +416,6 @@ const ViewMember = () => {
             const countriesOnRegion2 = await getCountries(
                 watch("cgfOfficeRegion")
             );
-            // console.log("countriesOnRegion2", countriesOnRegion2);
             const arrOfCgfOfficeCountryRegionsTemp1 =
                 await formatRegionCountries(countriesOnRegion2.data);
             arrOfCgfOfficeCountryRegionsTemp1 &&
@@ -511,10 +426,27 @@ const ViewMember = () => {
             // getCountries()
             return arrOfRegions;
         } catch (error) {
-            // console.log("Inside get Regions catch", error);
             if (error?.code === "ERR_CANCELED") return;
-            isMounted && setErrorToaster(error);
-            return [];
+            if (error?.response?.status) {
+                setToasterDetailsViewMember(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            error?.response?.data?.message &&
+                            typeof error.response.data.message === "string"
+                                ? error.response.data.message
+                                : "Something went wrong!",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                isMounted && setErrorToaster(error);
+                return [];
+            }
         }
     };
     const getMemberByID = async (
@@ -570,7 +502,7 @@ const ViewMember = () => {
                 status: data?.memberRepresentativeId[0]?.isActive
                     ? "active"
                     : "inactive",
-                totalOperationMembers: data?.totalOperationMembers ?? "N/A",
+                // totalOperationMembers: data?.totalOperationMembers ?? "N/A",
                 createdBy: data?.createdBy["name"] ?? "N/A",
                 roleId: roleName,
                 // roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
@@ -578,42 +510,27 @@ const ViewMember = () => {
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            if (error?.response?.status === 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else {
-                setIsLoading(false);
-                isMounted && setErrorToaster(error);
-            }
+            setIsLoading(false);
+            isMounted && setErrorToaster(error);
         }
-        // console.log("response for member: ", response);
     };
 
     console.log("member", member);
     const getOperationMemberByMemberId = async (controller) => {
         try {
             let url = generateUrl();
-            // setIsLoading(true);
+
             const response = await axios.get(url);
-            // setIsLoading(false);
-            // console.log("response from operation member Id", response);
             setTotalRecordsInViewMember(
                 parseInt(response.headers["x-total-count"])
             );
+            reset({
+                totalOperationMembers: parseInt(
+                    response.headers["x-total-count"]
+                ),
+            });
             updateRecords(response?.data);
         } catch (error) {
-            // setIsLoading(false);
             if (error?.code === "ERR_CANCELED") return;
             setErrorToaster(error);
         }
@@ -627,10 +544,6 @@ const ViewMember = () => {
                     responseType: "blob",
                 }
             );
-            // console.log(
-            //     "resposne from download operation members in view member page",
-            //     response
-            // );
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
             link.href = url;
@@ -638,7 +551,7 @@ const ViewMember = () => {
             document.body.appendChild(link);
             link.click();
             if (response.status == 200) {
-                setToasterDetails(
+                setToasterDetailsViewMember(
                     {
                         titleMessage: "Success!",
                         descriptionMessage: "Download successfull!",
@@ -648,9 +561,7 @@ const ViewMember = () => {
                     () => myRef.current()
                 );
             }
-        } catch (error) {
-            // console.log("Error from download cgf admins", error);
-        }
+        } catch (error) {}
     };
     const getRoleNameByRoleId = async (isMounted, controller, data) => {
         try {
@@ -661,7 +572,6 @@ const ViewMember = () => {
         } catch (error) {
             console.log("error in get role", error);
             if (error?.code === "ERR_CANCELED") return;
-            // setErrorToaster(error);
         }
     };
     useEffect(() => {
@@ -671,7 +581,6 @@ const ViewMember = () => {
             isMounted &&
                 makeApiCall &&
                 (await getMemberByID(isMounted, controller));
-            //   isMounted && makeApiCall && (await getRoleNameByRoleId(isMounted, controller));
             isMounted && (await getCountryCode(isMounted, controller));
             isMounted && (await getRegions(isMounted, controller));
             // getRegions(controller)
@@ -679,7 +588,7 @@ const ViewMember = () => {
                 makeApiCall &&
                 (await getOperationMemberByMemberId(controller));
         })();
-        // makeApiCall && getMembers(isMounted, controller);
+
         return () => {
             isMounted = false;
             clearTimeout(searchTimeout);
@@ -703,9 +612,9 @@ const ViewMember = () => {
         >
             <Toaster
                 myRef={myRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
+                titleMessage={toasterDetailsViewMember.titleMessage}
+                descriptionMessage={toasterDetailsViewMember.descriptionMessage}
+                messageType={toasterDetailsViewMember.messageType}
             />
             <DialogBox
                 title={
@@ -955,12 +864,7 @@ const ViewMember = () => {
                                                 control={control}
                                                 name="cgfActivity"
                                                 placeholder="N/A"
-                                                options={
-                                                    watch("cgfCategory") ===
-                                                    "Manufacturer"
-                                                        ? cgfActivitiesManufacturer
-                                                        : cgfActivitiesRetailer
-                                                }
+                                                options={cgfActivites}
                                             />
                                         </div>
                                         {/* </div> */}
