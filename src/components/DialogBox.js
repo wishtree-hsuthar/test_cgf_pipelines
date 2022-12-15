@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Backdrop, Box, Modal, Fade, Tooltip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { Backdrop, Box, Fade, Modal, Tooltip } from "@mui/material";
+import PropTypes from "prop-types";
+import React from "react";
 
 const DialogBox = ({
     title,
@@ -69,7 +69,7 @@ const DialogBox = ({
                 <Box sx={style} className="popup-box">
                     <div id="transition-modal-title" className="popup-ttl-blk">
                         {/* {console.log("title", title)} */}
-                        {dialogTitle?.length <= 50 ? (
+                        {dialogTitle?.length <= 47 ? (
                             <h2 className="popup-ttl heading2">{title}</h2>
                         ) : (
                             <Tooltip title={dialogTitle}>

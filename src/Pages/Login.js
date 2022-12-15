@@ -16,7 +16,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUser, setPrivileges } from "../redux/UserSlice";
 import useCallbackState from "../utils/useCallBackState";
-import { privateAxios, publicAxios } from "../api/axios";
+import { publicAxios } from "../api/axios";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
 const loginFormSchema = yup.object().shape({
     email: yup
@@ -64,12 +64,12 @@ const Login = (prop) => {
                 if (status == 200) {
                     navigate("/home");
                 }
-                // isMounted && setUserPresent(true);
+                
             } catch (error) {
                 if (error?.response?.status == 401) {
-                    // setUserPresent(false);
+                
                     console.log("Error from app file useEffect", error);
-                    // navigate("/login");
+                
                 }
             }
         };

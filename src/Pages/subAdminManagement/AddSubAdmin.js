@@ -2,17 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
     TextField,
-    Select,
-    MenuItem,
-    Box,
     Autocomplete,
     Paper,
 } from "@mui/material";
 import "react-phone-number-input/style.css";
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-import * as yup from "yup";
 import axios from "axios";
 import { privateAxios } from "../../api/axios";
 import { ADD_SUB_ADMIN, COUNTRIES, FETCH_ROLES } from "../../api/Url";
@@ -57,7 +51,6 @@ const AddSubAdmin = () => {
     const authUser = useSelector((state) => state.user.userObj);
     const navigate = useNavigate();
     const {
-        register,
         handleSubmit,
         watch,
         formState: { errors },
@@ -76,11 +69,9 @@ const AddSubAdmin = () => {
     });
     const location = useLocation();
     console.log(location);
-    // const [value, setValue] = useState({});
     const [roleSelected, setRoleSelected] = useState("");
     const [countriesAddCGFAdmin, setCountriesAddCGFAdmin] = useState([]);
     const [rolesAddCGFAdmin, setRolesAddCGFAdmin] = useState([]);
-    const [defaultRole, setDefaultRole] = useState("");
     const toasterRef = useRef();
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
@@ -158,10 +149,6 @@ const AddSubAdmin = () => {
                     let tempCountryCodeSet = new Set(tempCountryCode);
                     setCountriesAddCGFAdmin([...tempCountryCodeSet]);
                 }
-                // isMounted &&
-                //     setCountries(
-                //         response?.data.map((country) => country.countryCode)
-                //     );
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
                 console.log("error from countries api", error);
@@ -196,10 +183,6 @@ const AddSubAdmin = () => {
         fetchRoles();
         addCGFAdminFetchCountries();
 
-        return () => {
-            isMounted = false;
-            controller.abort();
-        };
     }, []);
     console.log("countriess----", countriesAddCGFAdmin);
 
@@ -261,7 +244,6 @@ const AddSubAdmin = () => {
 
         console.log("new phone number", data);
         addSubAdminData(data);
-        // navigate("/users/cgf-admin/");
         setTimeout(() => {
             navigate("/users/cgf-admin/");
         }, 3000);

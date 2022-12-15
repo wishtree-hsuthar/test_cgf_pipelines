@@ -1,7 +1,6 @@
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import { setUser, resetUser, setPrivileges } from "../redux/UserSlice";
+import { setUser, setPrivileges } from "../redux/UserSlice";
 import { GET_USER } from "../api/Url";
 import { privateAxios } from "../api/axios";
 import { useState } from "react";
@@ -33,16 +32,6 @@ const UserLoggedIn = ({ children }) => {
             //     error
             // );
             if (error?.response?.status == 401) {
-                // dispatch(resetUser());
-                // console.log("401 from userLoggedIn component");
-
-                // return (
-                //     <Navigate
-                //         to={"/login"}
-                //         state={{ from: location }}
-                //         replace
-                //     />
-                // );
                 setRequestRetry(true);
                 return navigate("/login");
             }

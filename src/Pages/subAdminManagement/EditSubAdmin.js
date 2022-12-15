@@ -1,23 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
-    TextField,
-    Select,
-    MenuItem,
-    Autocomplete,
-    Box,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
-    Paper,
+  TextField,
+  Autocomplete,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Paper,
 } from "@mui/material";
 
 import "react-phone-number-input/style.css";
 import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
 import Loader2 from "../../assets/Loader/Loader2.svg";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import {
@@ -67,43 +62,39 @@ const EditSubAdmin = () => {
     const params = useParams();
     const toasterRef = useRef();
 
-    // const [value, setValue] = useState({
-    //     name: "India",
-    //     countryCode: "+91",
-    // });
-    const [countries, setCountries] = useState([]);
-    const [roles, setRoles] = useState([]);
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "error",
-    });
-    const [fetchSubAdminDetailsForEdit, setFetchSubAdminDetailsForEdit] =
-        useState({});
-    const {
-        register,
-        handleSubmit,
-        control,
-        formState: { errors },
-        reset,
-        watch,
-        setValue,
-        trigger,
-    } = useForm({
-        defaultValues: {
-            name: "",
-            email: "",
-            subRoleId: "",
-            phoneNumber: "",
-            countryCode: {
-                name: "India",
-                countryCode: "+91",
-            },
-            status: "",
-            role: "",
-        },
-        // resolver: yupResolver(editSubAdminSchema),
-    });
+
+  const [countries, setCountries] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "error",
+  });
+  const [fetchSubAdminDetailsForEdit, setFetchSubAdminDetailsForEdit] =
+    useState({});
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+    watch,
+    setValue,
+    trigger,
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      subRoleId: "",
+      phoneNumber: "",
+      countryCode: {
+        name: "India",
+        countryCode: "+91",
+      },
+      status: "",
+      role: "",
+    },
+    // resolver: yupResolver(editSubAdminSchema),
+  });
 
     const phoneNumberChangeHandler = (e, name, code) => {
         console.log("inside on Change");
@@ -251,8 +242,7 @@ const EditSubAdmin = () => {
         };
     }, []);
 
-    console.log("fetchdetails in edit sub admin", fetchSubAdminDetailsForEdit);
-    const [defaultPhone, setDefaultPhone] = useState("+91123456789");
+  console.log("fetchdetails in edit sub admin", fetchSubAdminDetailsForEdit);
 
     const location = useLocation();
     console.log(location);
@@ -319,40 +309,37 @@ const EditSubAdmin = () => {
         }
     };
 
-    const handleCancel = () => {
-        // navigate("/users/cgf-admin/view-sub-admin/" + params.id);
-        navigate("/users/cgf-admin/");
-    };
-    return (
-        <div className="page-wrapper">
-            <Toaster
-                myRef={toasterRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
-            />
-            <div className="breadcrumb-wrapper">
-                <div className="container">
-                    <ul className="breadcrumb">
-                        <li>
-                            <Link to="/users/cgf-admin">CGF Admins</Link>
-                        </li>
-                        <li>
-                            <Link
-                                to={`/users/cgf-admin/view-sub-admin/${params.id}`}
-                            >
-                                View CGF Admin
-                            </Link>
-                        </li>
-                        <li>Edit CGF Admin</li>
-                    </ul>
-                </div>
-            </div>
-            <section>
-                <div className="container">
-                    <div className="form-header flex-between">
-                        <h2 className="heading2">Edit CGF Admin</h2>
-                        {/* <div className="form-header-right-txt">
+  const handleCancel = () => {
+    navigate("/users/cgf-admin/");
+  };
+  return (
+    <div className="page-wrapper">
+      <Toaster
+        myRef={toasterRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
+      <div className="breadcrumb-wrapper">
+        <div className="container">
+          <ul className="breadcrumb">
+            <li>
+              <Link to="/users/cgf-admin">CGF Admins</Link>
+            </li>
+            <li>
+              <Link to={`/users/cgf-admin/view-sub-admin/${params.id}`}>
+                View CGF Admin
+              </Link>
+            </li>
+            <li>Edit CGF Admin</li>
+          </ul>
+        </div>
+      </div>
+      <section>
+        <div className="container">
+          <div className="form-header flex-between">
+            <h2 className="heading2">Edit CGF Admin</h2>
+            {/* <div className="form-header-right-txt">
                     <div className="tertiary-btn-blk">
                         <span className="addmore-icon"><i className='fa fa-plus'></i></span>
                         <span className="addmore-txt">Save & Add More</span>

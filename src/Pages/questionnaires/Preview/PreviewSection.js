@@ -11,8 +11,6 @@ function PreviewSection({
   section,
   sectionIndex,
 }) {
-  const navigate = useNavigate();
-  const params = useParams();
   useEffect(() => {
     console.log("section:- ", section);
   }, []);

@@ -3,7 +3,7 @@ import {
   FormControlLabel,
   Paper,
   Radio,
-  RadioGroup,
+  RadioGroup as MemberRadio,
   TextField,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
@@ -28,8 +28,12 @@ import Toaster from "../../components/Toaster";
 import { memberHelper } from "../../utils/helpertext";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { cgfCategories, cgfActivitiesManufacturer, cgfActivitiesRetailer } from "../../utils/MemberModuleUtil";
-
+import {
+  cgfCategories,
+  cgfActivitiesManufacturer,
+  cgfActivitiesRetailer,
+  defaultValues,
+} from "../../utils/MemberModuleUtil";
 
 //Parent company (Ideally get from backend)
 //CGF Categories (Ideally get from backend)
@@ -43,7 +47,6 @@ import { cgfCategories, cgfActivitiesManufacturer, cgfActivitiesRetailer } from 
 // Object.keys(categories)
 // categories[category] = Array of activities[]
 
-
 const AddMember = () => {
   //custom hook to set title of page
   useDocumentTitle("Add Member");
@@ -51,15 +54,17 @@ const AddMember = () => {
   // Refr for Toaster
   const myRef = React.useRef();
   //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
+  let tempDefaultValues = defaultValues;
+  const [toasterDetailsAddMember, setToasterDetailsAddMember] =
+    useCallbackState({
+      titleMessage: "",
+      descriptionMessage: "",
+      messageType: "success",
+    });
   //method to call all error toaster from this method
   const setErrorToaster = (error) => {
     console.log("error", error);
-    setToasterDetails(
+    setToasterDetailsAddMember(
       {
         titleMessage: "Error",
         descriptionMessage:
@@ -72,53 +77,35 @@ const AddMember = () => {
       () => myRef.current()
     );
   };
-  const defaultValuesAddMember = {
-    memberCompany: "",
-    companyType: "Internal",
-    parentCompany: "",
-    cgfCategory: "Manufacturer",
-    cgfActivity: "",
-    corporateEmail: "",
-    countryCode: "",
-    phoneNumber: "",
-    websiteUrl: "",
-    region: "",
-    country: "",
-    state: "",
-    city: "",
-    address: "",
-    cgfOfficeRegion: "",
-    cgfOfficeCountry: "",
-    cgfOffice: "",
-    memberContactSalutation: "Mr.",
-    memberContactFullName: "",
-    title: "",
-    department: "",
-    memberContactCountryCode: "",
-    memberContactEmail: "",
-    memberContactPhoneNuber: "",
-    roleId: "",
-  };
+
   //to hold all regions
   const [arrOfRegionsAddMember, setArrOfRegionsAddMember] = useState([]);
   //to hold array of countries for perticular region for Company Adress
-  const [arrOfCountryRegionsAddMember, setArrOfCountryRegionsAddMember] = useState([]);
+  const [arrOfCountryRegionsAddMember, setArrOfCountryRegionsAddMember] =
+    useState([]);
   //to hold array of Country states
-  const [arrOfStateCountryAddMember, setArrOfStateCountryAddMember] = useState([]);
-  const [arrOfCountryCodeAddMember, setArrOfCountryCodeAddMember] = useState([]);
-  const [arrOfParentCompanyAddMember, setArrOfParentCompanyAddMember] = useState([]);
+  const [arrOfStateCountryAddMember, setArrOfStateCountryAddMember] = useState(
+    []
+  );
+  const [arrOfCountryCodeAddMember, setArrOfCountryCodeAddMember] = useState(
+    []
+  );
+  const [arrOfParentCompanyAddMember, setArrOfParentCompanyAddMember] =
+    useState([]);
   const [arrOfCitesAddMember, setArrOfCitesAddMember] = useState([]);
 
   //to hold array of countries for perticular region for CGF Office details
-  const [arrOfCgfOfficeCountryRegionsAddMember, setArrOfCgfOfficeCountryRegionsAddMember] =
-    useState([]);
+  const [
+    arrOfCgfOfficeCountryRegionsAddMember,
+    setArrOfCgfOfficeCountryRegionsAddMember,
+  ] = useState([]);
 
-  // To fetch and set roles
-  const [roles, setRoles] = useState([]);
+  // To fetch and set addMemberRoles
+  const [addMemberRoles, addMemberSetRoles] = useState([]);
 
   const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
     reValidateMode: "onChange",
-    defaultValues: defaultValuesAddMember,
+    defaultValues: tempDefaultValues,
   });
   const onSubmitFunctionCallAddMember = async (data) => {
     console.log("data", data);
@@ -156,7 +143,7 @@ const AddMember = () => {
       };
       const response = await axios.post(MEMBER, { ...backendObjectAddMember });
       console.log("response : ", response);
-      setToasterDetails(
+      setToasterDetailsAddMember(
         {
           titleMessage: "Success!",
           descriptionMessage: "New member added successfully!",
@@ -164,8 +151,8 @@ const AddMember = () => {
         },
         () => myRef.current()
       );
-      console.log("Default values: ", defaultValuesAddMember);
-      reset({ defaultValuesAddMember });
+      console.log("Default values: ", tempDefaultValues);
+      reset({ tempDefaultValues });
       return true;
     } catch (error) {
       setErrorToaster(error);
@@ -174,7 +161,7 @@ const AddMember = () => {
   };
   // On Click cancel handler
   const onClickCancelHandlerAddMember = () => {
-    reset({ defaultValuesAddMember });
+    reset({ tempDefaultValues });
     navigate("/users/members");
   };
   const onSubmitAddMember = async (data) => {
@@ -217,7 +204,7 @@ const AddMember = () => {
       let url =
         CITES + `/?region=${watch("region")}&country=${watch("country")}`;
       if (watch("state")) {
-        url += `&state=${watch("state")}`
+        url += `&state=${watch("state")}`;
       }
       const response = await axios.get(url);
       setArrOfCitesAddMember(response.data);
@@ -237,11 +224,15 @@ const AddMember = () => {
     setValue("cgfOfficeRegion", e.target.value);
     setValue("cgfOfficeCountry", "");
     trigger("cgfOfficeRegion");
-    const countriesOnRegion = await getCountriesAddMember(watch("cgfOfficeRegion"));
+    const countriesOnRegion = await getCountriesAddMember(
+      watch("cgfOfficeRegion")
+    );
     const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountriesAddMember(
       countriesOnRegion.data
     );
-    setArrOfCgfOfficeCountryRegionsAddMember([...arrOfCgfOfficeCountryRegionsTemp]);
+    setArrOfCgfOfficeCountryRegionsAddMember([
+      ...arrOfCgfOfficeCountryRegionsTemp,
+    ]);
   };
   //method to set region and update other fields accordingly
   const onRegionChangeHandlerAddMember = async (e) => {
@@ -291,7 +282,6 @@ const AddMember = () => {
       const regions = await axios.get(REGIONS, {
         signal: controller.signal,
       });
-      // console.log("regions ", regions.data);
       setArrOfRegionsAddMember(regions.data);
       return arrOfRegionsAddMember;
     } catch (error) {
@@ -301,19 +291,21 @@ const AddMember = () => {
     }
   };
 
-  // Fetch roles
+  // Fetch addMemberRoles
   let fetchRolesAddMember = async () => {
     try {
       const response = await privateAxios.get(FETCH_ROLES);
-      console.log("Response from fetch roles - ", response);
-      setRoles(response.data);
-      response.data.filter(
-        (data) =>
-          data.name === "Member Representative" && reset({ roleId: data._id })
-      );
+      console.log("Response from fetch addMemberRoles - ", response);
+      addMemberSetRoles(response.data);
+      response.data.filter((data) => {
+        if (data.name === "Member Representative") {
+          reset({ roleId: data._id });
+          tempDefaultValues.roleId = data?._id
+        }
+      });
     } catch (error) {
-      console.log("Error from fetch roles", error);
-      setToasterDetails(
+      console.log("Error from fetch addMemberRoles", error);
+      setToasterDetailsAddMember(
         {
           titleMessage: "Oops!",
           descriptionMessage: error?.response?.data?.message,
@@ -363,27 +355,27 @@ const AddMember = () => {
     trigger(code);
   };
   useEffect(() => {
-    // let isMounted = true;
     const controller = new AbortController();
     arrOfRegionsAddMember.length === 0 && getRegionsAddMember(controller);
-    arrOfCountryCodeAddMember.length === 0 && getCountryCodeAddMember(controller);
-    arrOfParentCompanyAddMember?.length === 0 && getParentCompanyAddMember(controller);
-    roles.length === 0 && fetchRolesAddMember();
+    arrOfCountryCodeAddMember.length === 0 &&
+      getCountryCodeAddMember(controller);
+    arrOfParentCompanyAddMember?.length === 0 &&
+      getParentCompanyAddMember(controller);
+    addMemberRoles.length === 0 && fetchRolesAddMember();
 
     return () => {
-      // isMounted = false;
       controller.abort();
     };
   }, [watch]);
-  // console.log("selected Region", watch("region"));
+
   console.log("arrOfparentCompnies", arrOfParentCompanyAddMember);
   return (
     <div className="page-wrapper">
       <Toaster
         myRef={myRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
+        titleMessage={toasterDetailsAddMember.titleMessage}
+        descriptionMessage={toasterDetailsAddMember.descriptionMessage}
+        messageType={toasterDetailsAddMember.messageType}
       />
       <div className="breadcrumb-wrapper">
         <div className="container">
@@ -453,7 +445,7 @@ const AddMember = () => {
                           name="companyType"
                           control={control}
                           render={({ field }) => (
-                            <RadioGroup
+                            <MemberRadio
                               {...field}
                               aria-labelledby="demo-radio-buttons-group-label"
                               name="radio-buttons-group"
@@ -469,7 +461,7 @@ const AddMember = () => {
                                 control={<Radio />}
                                 label="External"
                               />
-                            </RadioGroup>
+                            </MemberRadio>
                           )}
                         />
                       </div>
@@ -520,13 +512,6 @@ const AddMember = () => {
                             options={arrOfParentCompanyAddMember}
                             // getOptionLabel={(option) => {
 
-                            //   // Value selected with enter, right from the input
-                            //   if (typeof option === "string") {
-                            //     // console.log("option inside type string",option)
-                            //     return option;
-                            //   }
-                            //   return option;
-                            // }}
                             renderOption={(props, option) => (
                               <li className="searchable-inputlist" {...props}>
                                 {option}
@@ -1202,7 +1187,7 @@ const AddMember = () => {
                         <Dropdown
                           name="roleId"
                           control={control}
-                          options={roles}
+                          options={addMemberRoles}
                           rules={{
                             required: true,
                           }}

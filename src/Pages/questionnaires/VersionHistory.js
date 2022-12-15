@@ -69,10 +69,8 @@ const VersionHistory = () => {
     const versionHistoryRef = useRef();
 
     const generateUrl = () => {
-        // console.log("Search", search);
         let url = `${ADD_QUESTIONNAIRE}/${params.id}/versions?page=${versionHistoryPage}&size=${versionHistoryRowsPerPage}&orderBy=${versionHistoryOrderBy}&order=${versionHistoryOrder}`;
 
-        // if (search?.length >= 3) url += `&search=${search}`;
 
         return url;
     };
@@ -119,20 +117,15 @@ const VersionHistory = () => {
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            // console.log(response.headers["x-total-count"]);
             setVersionHistoryTotalRecords(
                 parseInt(response.headers["x-total-count"])
             );
             console.log("Response from version history api get", response);
 
             updateRecordsForVersionHistory([...response.data]);
-            // let title = response.data.filter((data) => data.uuid === params.id);
-            // setQuestionnaireTitle(title[0].title);
-            // console.log("title from questionnaire = ", title);
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log(toasterDetails);
             console.log("Error from version history-------", error);
 
             if (error?.response?.status == 401) {

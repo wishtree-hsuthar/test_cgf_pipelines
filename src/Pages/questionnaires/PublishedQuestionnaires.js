@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MenuItem, Select } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import { privateAxios } from "../../api/axios";
 import Loader2 from "../../assets/Loader/Loader2.svg";
@@ -41,7 +40,7 @@ const PublishedQuestionnaires = ({
         },
     ];
 
-    const keysOrder = ["_id", "title", "uuid", "createdAt", "isActive"];
+  const questionnaireKeysOrder = ["_id", "title", "uuid", "createdAt","isActive"];
 
     //code of tablecomponent
     const [pagePublishedQuestionnaire, setPagePublishedQuestionnaire] =
@@ -63,37 +62,31 @@ const PublishedQuestionnaires = ({
     const [selectedPublishedQuestionnaire, setSelectedPublishedQuestionnaire] =
         useState([]);
 
-    const updateRecords = (data) => {
-        data.forEach((object) => {
-            delete object["updatedAt"];
+  const updateRecords = (data) => {
+    data.forEach((questionnaireObject) => {
+      delete questionnaireObject["updatedAt"];
 
-            delete object["__v"];
-
-            // delete object["uuid"];
-            // delete object["createdAt"];
-            delete object["isDraft"];
-            delete object["isPublished"];
-            // delete object["isActive"]
-            delete object["vNo"];
-            // delete object[""];
-            // delete object["title"];
-            // delete object["updatedAt"];
-            // object["uuid"] = object["uuid"];
-            object["createdAt"] = new Date(
-                object["createdAt"]
-            ).toLocaleDateString("en-US", {
-                month: "2-digit",
-                day: "2-digit",
-                year: "numeric",
-            });
-            keysOrder.forEach((k) => {
-                const v = object[k];
-                delete object[k];
-                object[k] = v;
-            });
-        });
-        setRecordsPublishedQuestionnaire([...data]);
-    };
+      delete questionnaireObject["__v"];
+      delete questionnaireObject["isDraft"];
+      delete questionnaireObject["isPublished"];
+      // delete questionnaireObject["isActive"]
+      delete questionnaireObject["vNo"];
+      questionnaireObject["createdAt"] = new Date(questionnaireObject["createdAt"]).toLocaleDateString(
+        "en-US",
+        {
+          month: "2-digit",
+          day: "2-digit",
+          year: "numeric",
+        }
+      );
+      questionnaireKeysOrder.forEach((k) => {
+        const v = questionnaireObject[k];
+        delete questionnaireObject[k];
+        questionnaireObject[k] = v;
+      });
+    });
+    setRecordsPublishedQuestionnaire([...data]);
+  };
 
     const generateUrl = () => {
         console.log("Search", search);
@@ -106,43 +99,41 @@ const PublishedQuestionnaires = ({
     const userAuth = useSelector((state) => state?.user?.userObj);
     const privilege = useSelector((state) => state?.user?.privilege);
 
-    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    let privilegeArray =
-        userAuth?.roleId?.name === "Super Admin"
-            ? []
-            : Object.values(privilege?.privileges);
-    // let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
-    let moduleAccesForMember = privilegeArray
-        .filter((data) => data?.moduleId?.name === "Questionnaire")
-        .map((data) => ({
-            questionnaire: {
-                list: data?.list,
-                view: data?.view,
-                edit: data?.edit,
-                delete: data?.delete,
-                add: data?.add,
-            },
-        }));
-    console.log(
-        "module access member in view member",
-        moduleAccesForMember[0]?.questionnaire
-    );
+  const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
+  let publishedQuestionnairePrivilgeArray =
+    userAuth?.roleId?.name === "Super Admin"
+      ? []
+      : Object.values(privilege?.privileges);
+  let moduleAccesForMember = publishedQuestionnairePrivilgeArray
+    .filter((data) => data?.moduleId?.name === "Questionnaire")
+    .map((data) => ({
+      questionnaire: {
+        list: data?.list,
+        view: data?.view,
+        edit: data?.edit,
+        delete: data?.delete,
+        add: data?.add,
+      },
+    }));
+  console.log(
+    "module access member in view member",
+    moduleAccesForMember[0]?.questionnaire
+  );
 
-    const getPublishedQuestionnaire = async (
-        isMounted = true,
-        controller = new AbortController()
-    ) => {
-        try {
-            let url = generateUrl();
-            setIsLoading(true);
-            const response = await privateAxios.get(url, {
-                signal: controller.signal,
-            });
-            // console.log(response.headers["x-total-count"]);
-            setTotalRecordsPublishedQuestionnaire(
-                parseInt(response.headers["x-total-count"])
-            );
-            console.log("Response from sub admin api get", response);
+  const getPublishedQuestionnaire = async (
+    isMounted = true,
+    controller = new AbortController()
+  ) => {
+    try {
+      let url = generateUrl();
+      setIsLoading(true);
+      const response = await privateAxios.get(url, {
+        signal: controller.signal,
+      });
+      setTotalRecordsPublishedQuestionnaire(
+        parseInt(response.headers["x-total-count"])
+      );
+      console.log("Response from sub admin api get", response);
 
             updateRecords([...response.data]);
             setIsLoading(false);

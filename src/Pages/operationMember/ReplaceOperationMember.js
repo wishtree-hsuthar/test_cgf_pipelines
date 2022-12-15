@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
-    Link,
-    Navigate,
-    useLocation,
-    useNavigate,
-    useParams,
+  Link,
+  useNavigate,
+  useParams,
 } from "react-router-dom";
-import PropTypes from "prop-types";
 
 import DialogBox from "../../components/DialogBox";
 
@@ -14,11 +11,9 @@ import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";
 import {
-    ADD_SUB_ADMIN,
-    FETCH_SUB_ADMIN_BY_ADMIN,
-    GET_OPERATION_MEMBER_BY_ID,
-    REPLACE_SUB_ADMIN,
-    ADD_OPERATION_MEMBER,
+  GET_OPERATION_MEMBER_BY_ID,
+  REPLACE_SUB_ADMIN,
+  ADD_OPERATION_MEMBER,
 } from "../../api/Url";
 import Toaster from "../../components/Toaster";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
@@ -49,30 +44,27 @@ const replaceOperationMemberTableHead = [
     },
 ];
 const ReplaceOperationMember = () => {
-    //custom hook to set title of page
-    useDocumentTitle("Replace Operation Member");
-    const setErrorToaster = (error) => {
-        console.log("error", error);
-        setToasterDetails(
-            {
-                titleMessage: "Error",
-                descriptionMessage:
-                    error?.response?.data?.message &&
-                    typeof error.response.data.message === "string"
-                        ? error.response.data.message
-                        : "Something went wrong!",
-                messageType: "error",
-            },
-            () => myRef.current()
-        );
-    };
-    const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
-    const [opListPage, setOPPage] = React.useState(1);
-    const [rowsPerPageReplaceOP, setRowsPerPageReplaceOP] = React.useState(10);
-    // const [isLoading, setIsLoading] = useState(false);
-    const [operationMemberReplaceOP, setOperationMemberReplaceOP] = useState(
-        {}
+  //custom hook to set title of page
+  useDocumentTitle("Replace Operation Member");
+  const setErrorToaster = (error) => {
+    console.log("error", error);
+    setToasterDetails(
+      {
+        titleMessage: "Error",
+        descriptionMessage:
+          error?.response?.data?.message &&
+          typeof error.response.data.message === "string"
+            ? error.response.data.message
+            : "Something went wrong!",
+        messageType: "error",
+      },
+      () => myRef.current()
     );
+  };
+  const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
+  const [opListPage, setOPPage] = React.useState(1);
+  const [rowsPerPageReplaceOP, setRowsPerPageReplaceOP] = React.useState(10);
+  const [operationMemberReplaceOP, setOperationMemberReplaceOP] = useState({});
 
     const { id } = useParams();
     //state to hold search timeout delay
@@ -122,39 +114,38 @@ const ReplaceOperationMember = () => {
     const updateRecords = (data) => {
         console.log("data before update----", data);
 
-        let staleData = data;
-        staleData.forEach((object) => {
-            delete object["updatedAt"];
-            delete object["description"];
-            delete object["countryCode"];
-            delete object["isDeleted"];
-            delete object["__v"];
-            delete object["password"];
-            delete object["roleId"];
-            delete object["salt"];
-            delete object["uuid"];
-            delete object["phoneNumber"];
-            delete object["createdAt"];
-            object["role"] = "Operation Member";
-            // object["role"] = object["subRole"][0].name;
-            delete object["subRole"];
-            delete object["subRoleId"];
-            delete object["isActive"];
-            delete object["createdBy"];
-            delete object["updatedBy"];
-            delete object["isReplaced"];
-            delete object["memberData"];
-            delete object["salutation"];
-            delete object["memberId"];
-            delete object["title"];
-            delete object["department"];
-            delete object["address"];
-            delete object["reportingManager"];
-            delete object["operationType"];
-            delete object["isMemberRepresentative"];
-            delete object["isCGFAdmin"];
-            delete object["isCGFStaff"];
-            delete object["isOperationMember"];
+    let staleData = data;
+    staleData.forEach((object) => {
+      delete object["updatedAt"];
+      delete object["description"];
+      delete object["countryCode"];
+      delete object["isDeleted"];
+      delete object["__v"];
+      delete object["password"];
+      delete object["roleId"];
+      delete object["salt"];
+      delete object["uuid"];
+      delete object["phoneNumber"];
+      delete object["createdAt"];
+      object["role"] = "Operation Member";
+      delete object["subRole"];
+      delete object["subRoleId"];
+      delete object["isActive"];
+      delete object["createdBy"];
+      delete object["updatedBy"];
+      delete object["isReplaced"];
+      delete object["memberData"];
+      delete object["salutation"];
+      delete object["memberId"];
+      delete object["title"];
+      delete object["department"];
+      delete object["address"];
+      delete object["reportingManager"];
+      delete object["operationType"];
+      delete object["isMemberRepresentative"];
+      delete object["isCGFAdmin"];
+      delete object["isCGFStaff"];
+      delete object["isOperationMember"];
 
             replaceHeaderKeyOrder.forEach((k) => {
                 const v = object[k];
@@ -166,27 +157,24 @@ const ReplaceOperationMember = () => {
         setRecordsReplaceOP([...staleData]);
     };
 
-    const getOperationMember = async (
-        isMounted = true,
-        controller = new AbortController()
-    ) => {
-        try {
-            let url = generateUrl();
-            // setIsLoading(true);
-            const response = await privateAxios.get(url, {
-                signal: controller.signal,
-            });
-            // console.log(response.headers["x-total-count"]);
-            setTotalRecordsReplaceOP(
-                parseInt(response.headers["x-total-count"])
-            );
-            console.log("Response from operation member api get", response);
+  const getOperationMember = async (
+    isMounted = true,
+    controller = new AbortController()
+  ) => {
+    try {
+      let url = generateUrl();
+      const response = await privateAxios.get(url, {
+        signal: controller.signal,
+      });
+      
+      setTotalRecordsReplaceOP(parseInt(response.headers["x-total-count"]));
+      console.log("Response from operation member api get", response);
 
-            updateRecords(response.data.filter((data) => data._id !== id));
-            // setIsLoading(false);
-        } catch (error) {
-            if (error?.code === "ERR_CANCELED") return;
-            console.log("Error from operation member-------", error);
+      updateRecords(response.data.filter((data) => data._id !== id));
+      
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      console.log("Error from operation member-------", error);
 
             // if (error?.response?.status == 401) {
             //     navigate("/login");

@@ -3,11 +3,6 @@ import {
   TextField,
   Select,
   MenuItem,
-  FormGroup,
-  Box,
-  Modal,
-  Fade,
-  Backdrop,
   Checkbox,
   Radio,
   FormControlLabel,
@@ -38,7 +33,7 @@ const MenuProps = {
 };
 
 const PreviewQuestions = ({ question }) => {
-  //   const [datevalue, setDateValue] = React.useState(null);
+  
 
   let questionLabel = question.questionTitle;
 

@@ -1,32 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Box } from "@mui/material";
-import Typography from "@mui/material/Typography";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Box, Tab, Tabs, TextField, Tooltip } from "@mui/material";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined"
 import PropTypes from "prop-types";
-import { Tabs, Tab, Tooltip, TextField } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
-import FillAssesmentSection from "./FillAssessmentSection";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import {
     ACCEPT_ASSESSMENT,
-    ADD_QUESTIONNAIRE,
-    ASSESSMENTS,
-    DECLINE_ASSESSMENT,
-    DOWNLOAD_ASSESSMENT,
-    DOWNLOAD_ASSESSMENT_BY_ID,
+    ADD_QUESTIONNAIRE, DECLINE_ASSESSMENT, DOWNLOAD_ASSESSMENT_BY_ID,
     FETCH_ASSESSMENT_BY_ID,
-    SUBMIT_ASSESSMENT_AS_DRAFT,
+    SUBMIT_ASSESSMENT_AS_DRAFT
 } from "../../api/Url";
-import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
-import Toaster from "../../components/Toaster";
 import DialogBox from "../../components/DialogBox";
-import Input from "../../components/Input";
-import { useForm, Controller } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Toaster from "../../components/Toaster";
 import { downloadFunction } from "../../utils/downloadFunction";
+import useCallbackState from "../../utils/useCallBackState";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import FillAssesmentSection from "./FillAssessmentSection";
 
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
@@ -89,7 +82,7 @@ function FillAssessment() {
     //   state to manage loaders
     const [isLoading, setIsLoading] = useState(false);
 
-    const { handleSubmit, reset, control, setValue } = useForm({
+    const { handleSubmit, control, setValue } = useForm({
         // defaultValues: {
         //     comment: "",
         // },
@@ -145,14 +138,7 @@ function FillAssessment() {
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
-        // setOpenDeleteDialogBox(
-        //     userAuth._id === assessment?.assignedOperationMember?._id
-        // );
-        // setEditMode(
-        //     userAuth._id === assessment?.assignedOperationMember?._id
-        //         ? true
-        //         : false
-        // );
+
         const fetchQuestionnaire = async (id) => {
             try {
                 const response = await privateAxios.get(
@@ -334,7 +320,6 @@ function FillAssessment() {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is required field";
                             sections.push(index);
-                            // setTabValue(index);
                         } else if (
                             transformedColValues[cell?.columnId].columnType !==
                                 "prefilled" &&
@@ -351,7 +336,6 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is alphabets only field";
-                            // setTabValue(index);
                             console.log("in table alphabets only");
                             sections.push(index);
                         } else if (
@@ -370,7 +354,6 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is numeric only field";
-                            // setTabValue(index);
                             console.log("in table numeric only");
                             sections.push(index);
                         } else if (
@@ -389,7 +372,6 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
                                 "This is alphanumeric field";
-                            // setTabValue(index);
                             console.log("in table alphanumeric only");
                             sections.push(index);
                         } else {
@@ -415,7 +397,6 @@ function FillAssessment() {
                             "This is required field";
                         sections.push(index);
 
-                        // setTabValue(index);
                     } else if (
                         question.validation === "alphabets" &&
                         currentSectionAnswers[question?.uuid] &&
@@ -428,8 +409,6 @@ function FillAssessment() {
                         sectionErrors[question?.uuid] =
                             "Please enter alphabets field";
                         sections.push(index);
-
-                        // setTabValue(index);
                     } else if (
                         question.validation === "numeric" &&
                         currentSectionAnswers[question?.uuid] &&
@@ -445,7 +424,6 @@ function FillAssessment() {
                         );
                         sectionErrors[question?.uuid] =
                             "This is nummeric field";
-                        // setTabValue(index);
                         sections.push(index);
                     } else if (
                         question.validation === "alphanumeric" &&
@@ -456,7 +434,6 @@ function FillAssessment() {
                     ) {
                         sectionErrors[question?.uuid] =
                             "This is alphanumeric field";
-                        // setTabValue(index);
                         sections.push(index);
                     } else {
                         delete sectionErrors[question?.uuid];
@@ -537,7 +514,7 @@ function FillAssessment() {
             }
         }
         setOpenDeleteDialogBox(false);
-        // reset({});
+
     };
 
     //API for accepting assessments
@@ -594,7 +571,6 @@ function FillAssessment() {
         console.log("UseEffect Errors", errors);
     }, [errors]);
 
-    const [datevalue, setDateValue] = React.useState(null);
     const [isActive, setActive] = useState("false");
     const handleToggle = () => {
         setActive(!isActive);
@@ -696,7 +672,7 @@ function FillAssessment() {
                 primaryButtonText={"Accept"}
                 secondaryButtonText={"Reject"}
                 onPrimaryModalButtonClickHandler={() => {
-                    // withdrawInviteById();
+
                     onAcceptAssessments();
                 }}
                 onSecondaryModalButtonClickHandler={handleSubmit(
