@@ -177,7 +177,7 @@ function FillAssesmentSection({
             <button
               type="reset"
               onClick={() => navigate("/assessment-list")}
-              className="secondary-button mr-10"
+              className="secondary-button"
             >
               Cancel
             </button>
