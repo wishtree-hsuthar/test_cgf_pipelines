@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-    Link,
-    useNavigate,
-    useParams,
-} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import DialogBox from "../../components/DialogBox";
 
@@ -56,7 +52,8 @@ const ReplaceSubAdmin = () => {
     useDocumentTitle("Replace CGF Admin");
     const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
     const [replaceCGFAdminPage, setReplaceCGFAdminPage] = React.useState(1);
-    const [replaceCGFAdminRowsPerPage, setReplaceCGFAdminRowsPerPage] = React.useState(10);
+    const [replaceCGFAdminRowsPerPage, setReplaceCGFAdminRowsPerPage] =
+        React.useState(10);
     const [isLoading, setIsLoading] = useState(false);
     const [cgfAdmin, setCgfAdmin] = useState({});
     const [selectedCGFAdmin, setSelectedCGFAdmin] = useState({});
@@ -65,13 +62,22 @@ const ReplaceSubAdmin = () => {
     const [searchTimeout, setSearchTimeout] = useState(null);
 
     //array to get array of selected rows ids
-    const [selectedCGFAdminsArray, setSelectedCGFAdminsArray] = React.useState([]);
-    const [replaceCGFAdminOrder, setReplaceCGFAdminOrder] = React.useState("asc");
-    const [replaceCGFAdminOrderBy, setOrderBy] = React.useState("operationalMember");
-    const [selectedReplacedCGFAdminUser, setSelectedReplacedCGFAdminUser] = useState("");
-    const [makeApiCallReplaceCGFAdmin, setMakeApiCallReplaceCGFAdmin] = useState(true);
-    const [replaceCGFAdminRecords, setReplaceCGFAdminRecords] = React.useState([]);
-    const [totalReplaceCGFAdminRecords, setTotalReplaceCGFAdminRecords] = React.useState(0);
+    const [selectedCGFAdminsArray, setSelectedCGFAdminsArray] = React.useState(
+        []
+    );
+    const [replaceCGFAdminOrder, setReplaceCGFAdminOrder] =
+        React.useState("asc");
+    const [replaceCGFAdminOrderBy, setOrderBy] =
+        React.useState("operationalMember");
+    const [selectedReplacedCGFAdminUser, setSelectedReplacedCGFAdminUser] =
+        useState("");
+    const [makeApiCallReplaceCGFAdmin, setMakeApiCallReplaceCGFAdmin] =
+        useState(true);
+    const [replaceCGFAdminRecords, setReplaceCGFAdminRecords] = React.useState(
+        []
+    );
+    const [totalReplaceCGFAdminRecords, setTotalReplaceCGFAdminRecords] =
+        React.useState(0);
     const [searchCGFAdmin, setSearchCGFAdmin] = useState("");
     const navigate = useNavigate();
     const myRef = React.useRef();
@@ -149,7 +155,9 @@ const ReplaceSubAdmin = () => {
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            setTotalReplaceCGFAdminRecords(parseInt(response.headers["x-total-count"]));
+            setTotalReplaceCGFAdminRecords(
+                parseInt(response.headers["x-total-count"])
+            );
             console.log("Response from sub admin api get", response);
 
             updateRecords(response.data);
@@ -163,7 +171,8 @@ const ReplaceSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -234,7 +243,13 @@ const ReplaceSubAdmin = () => {
             clearTimeout(searchTimeout);
             controller.abort();
         };
-    }, [replaceCGFAdminPage, replaceCGFAdminRowsPerPage, replaceCGFAdminOrderBy, replaceCGFAdminOrder, makeApiCallReplaceCGFAdmin]);
+    }, [
+        replaceCGFAdminPage,
+        replaceCGFAdminRowsPerPage,
+        replaceCGFAdminOrderBy,
+        replaceCGFAdminOrder,
+        makeApiCallReplaceCGFAdmin,
+    ]);
     //page change handler
     const handleTableTesterPageChange = (newPage) => {
         console.log("new Page", newPage);
@@ -323,7 +338,10 @@ const ReplaceSubAdmin = () => {
     console.log("Search text---", searchText);
 
     const handleYes = () => {
-        console.log("Yes replcae" + id + " replace id with", selectedReplacedCGFAdminUser);
+        console.log(
+            "Yes replcae" + id + " replace id with",
+            selectedReplacedCGFAdminUser
+        );
 
         replaceUser();
     };
@@ -338,7 +356,9 @@ const ReplaceSubAdmin = () => {
         console.log("select single user---", id);
         setSelectedReplacedCGFAdminUser(id);
         setSelectedCGFAdmin({
-            ...replaceCGFAdminRecords.filter((data) => data._id == id ?? { name: data.name }),
+            ...replaceCGFAdminRecords.filter(
+                (data) => data._id == id ?? { name: data.name }
+            ),
         });
     };
     return (

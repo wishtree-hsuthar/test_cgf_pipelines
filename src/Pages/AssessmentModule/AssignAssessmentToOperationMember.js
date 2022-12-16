@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-    Link, useNavigate,
-    useParams
-} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import {
     FETCH_ASSESSMENT_BY_ID,
-    FETCH_OPERATION_MEMBER, MEMBER_OPERATION_MEMBERS,
-    REASSIGN_ASSESSMENTS
+    FETCH_OPERATION_MEMBER,
+    MEMBER_OPERATION_MEMBERS,
+    REASSIGN_ASSESSMENTS,
 } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 import Toaster from "../../components/Toaster";
@@ -137,6 +135,7 @@ const AssignAssessmentToOperationMember = () => {
             delete object["isCGFStaff"];
             delete object["isOperationMember"];
             delete object["isMemberRepresentative"];
+            delete object["assessmentCount"];
 
             keysOrder.forEach((k) => {
                 const v = object[k];
@@ -202,7 +201,6 @@ const AssignAssessmentToOperationMember = () => {
                 console.log(
                     "Error status 500 while fetchiing operation member"
                 );
-             
             }
         }
     };

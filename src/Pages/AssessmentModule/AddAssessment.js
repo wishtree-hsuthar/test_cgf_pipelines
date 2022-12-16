@@ -13,10 +13,10 @@ import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
-  ADD_ASSESSMENTS,
-  ADD_QUESTIONNAIRE,
-  FETCH_OPERATION_MEMBER,
-  MEMBER_DROPDOWN,
+    ADD_ASSESSMENTS,
+    ADD_QUESTIONNAIRE,
+    FETCH_OPERATION_MEMBER,
+    MEMBER_DROPDOWN,
 } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
@@ -46,44 +46,44 @@ const AddAssessment = () => {
     //custom hook to set title of page
     useDocumentTitle("Add Assessment");
 
-  const [datevalue, setDateValue] = useState("");
-  const [
-    memberCompaniesForAddAssessments,
-    setMemberCompaniesForAddAssessments,
-  ] = useState([]);
-  const [
-    operationMemberForAddAssessments,
-    setOperationMemberForAddAssessments,
-  ] = useState([]);
-  const [memberRepresentatives, setMemberRepresentatives] = useState([]);
-  const [questionnares, setQuestionnares] = useState([]);
-  const [questionnaresObj, setQuestionnaresObj] = useState([]);
-  const navigate = useNavigate();
-  const toasterRef = useRef();
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
-  const {
-    handleSubmit,
-    formState: { errors },
-    control,
-    reset,
-    setValue,
-    trigger,
-  } = useForm({
-    defaultValues: {
-      title: "",
-      assessmentType: "",
-      assignedMember: "",
-      assignedOperationMember: "",
-      dueDate: "",
-      remarks: "",
-      questionnaireId: "",
-    },
-  });
-  const [isCGFStaff, setIsCGFStaff] = useState(false);
+    const [datevalue, setDateValue] = useState("");
+    const [
+        memberCompaniesForAddAssessments,
+        setMemberCompaniesForAddAssessments,
+    ] = useState([]);
+    const [
+        operationMemberForAddAssessments,
+        setOperationMemberForAddAssessments,
+    ] = useState([]);
+    const [memberRepresentatives, setMemberRepresentatives] = useState([]);
+    const [questionnares, setQuestionnares] = useState([]);
+    const [questionnaresObj, setQuestionnaresObj] = useState([]);
+    const navigate = useNavigate();
+    const toasterRef = useRef();
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
+    const {
+        handleSubmit,
+        formState: { errors },
+        control,
+        reset,
+        setValue,
+        trigger,
+    } = useForm({
+        defaultValues: {
+            title: "",
+            assessmentType: "",
+            assignedMember: "",
+            assignedOperationMember: "",
+            dueDate: "",
+            remarks: "",
+            questionnaireId: "",
+        },
+    });
+    const [isCGFStaff, setIsCGFStaff] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
@@ -138,7 +138,8 @@ const AddAssessment = () => {
                     setToasterDetails(
                         {
                             titleMessage: "Oops!",
-                            descriptionMessage: "Session timeout",
+                            descriptionMessage:
+                                "Session Timeout: Please login again",
                             messageType: "error",
                         },
                         () => toasterRef.current()
@@ -195,7 +196,7 @@ const AddAssessment = () => {
             }
         };
 
-    const handleChangeForMemberCompany = async  (e) => {
+    const handleChangeForMemberCompany = async (e) => {
         setValue("assignedMember", e.target.value);
         console.log("assignedMember", e.target.value);
         console.log("member representatives-----", memberRepresentatives);
@@ -221,13 +222,13 @@ const AddAssessment = () => {
                 e.target.value,
                 false
             );
-      trigger("assignedOperationMember");
+            trigger("assignedOperationMember");
         }
 
         console.log("member representative----", memberRepresentative);
 
-    trigger("assignedMember");
-  };
+        trigger("assignedMember");
+    };
 
     const handleChangeForAssessmentModule = (e) => {
         console.log("assessment type", e);
@@ -243,20 +244,24 @@ const AddAssessment = () => {
     const submitAssessments = async (data) => {
         console.log("data from on submit", data);
 
-    let someDate = new Date(data.dueDate).setDate(
-      new Date(data.dueDate).getDate() - 1
-    );
-    console.log(
-      "data after converting to ISOstring",
-      // new Date(ISOdate).toISOString()
-      new Date(new Date(someDate).setUTCHours(23, 59, 59, 59)).toISOString()
-    );
-    data = {
-      ...data,
-      dueDate: new Date(
-        new Date(someDate).setUTCHours(23, 59, 59, 59)
-      ).toISOString(),
-    };
+        let someDate = new Date(data.dueDate).setDate(
+            new Date(data.dueDate).getDate() + 1
+        );
+        // let setUTCHoursForDueDate = new Date(
+        //     someDate.setDate(someDate.getDate())
+        // );
+        // let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
+        console.log(
+            "data after converting to ISOstring",
+            // new Date(ISOdate).toISOString()
+            new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString()
+        );
+        data = {
+            ...data,
+            dueDate: new Date(
+                new Date(someDate).setHours(0, 0, 0, 0)
+            ).toISOString(),
+        };
 
         console.log("submitted data", data);
 
@@ -295,7 +300,8 @@ const AddAssessment = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => toasterRef.current()

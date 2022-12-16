@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Loader2 from "../../../assets/Loader/Loader2.svg"
+import Loader2 from "../../../assets/Loader/Loader2.svg";
 
 import { Tabs, Tab, Tooltip, Box } from "@mui/material";
 
@@ -114,7 +114,8 @@ function PreviewQuestionnaire(props) {
                     setToasterDetails(
                         {
                             titleMessage: "Error",
-                            descriptionMessage: "Session timeout",
+                            descriptionMessage:
+                                "Session Timeout: Please login again",
                             messageType: "error",
                         },
                         () => questionnairePreviewRef.current()
@@ -132,7 +133,7 @@ function PreviewQuestionnaire(props) {
             controller.abort();
         };
     }, []);
-    
+
     const [isActive, setActive] = useState(false);
     const handleToggle = () => {
         setActive(!isActive);
@@ -196,7 +197,8 @@ function PreviewQuestionnaire(props) {
                 setToasterDetails(
                     {
                         titleMessage: "Error",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => questionnairePreviewRef.current()
@@ -300,7 +302,7 @@ function PreviewQuestionnaire(props) {
                                 </li>
                             )}
                         {(SUPER_ADMIN === true ||
-                            moduleAccesForMember[0]?.questionnaire?.add) &&
+                            moduleAccesForMember[0]?.questionnaire?.edit) &&
                             !params["*"].includes("version") &&
                             (questionnaire?.isDraft ||
                                 questionnaire?.isPublished) && (
@@ -384,27 +386,29 @@ function PreviewQuestionnaire(props) {
                                                 Version history
                                             </li>
                                         )}
-                                    {!params["*"].includes("version") && (
-                                        <li
-                                            onClick={() =>
-                                                navigate(
-                                                    `/questionnaires/add-questionnaire/${params.id}`
-                                                )
-                                            }
-                                        >
-                                            {(SUPER_ADMIN === true ||
-                                                moduleAccesForMember[0]
-                                                    ?.questionnaire?.add) &&
-                                            !params["*"].includes("version") &&
-                                            !questionnaire?.isDraft &&
-                                            !questionnaire?.isPublished
-                                                ? "Add Questionnaire"
-                                                : "Edit Questionnaire"}
+                                    {(SUPER_ADMIN === true ||
+                                        moduleAccesForMember[0]?.questionnaire
+                                            ?.edit) &&
+                                        !params["*"].includes("version") &&
+                                        (questionnaire?.isDraft ||
+                                            questionnaire?.isPublished) && (
+                                            <li
+                                                onClick={() =>
+                                                    navigate(
+                                                        `/questionnaires/add-questionnaire/${params.id}`
+                                                    )
+                                                }
+                                            >
+                                                Edit Questionnaire
+                                            </li>
+                                        )}
+                                    {(SUPER_ADMIN === true ||
+                                        moduleAccesForMember[0]?.questionnaire
+                                            ?.delete) && (
+                                        <li onClick={() => setOpenDialog(true)}>
+                                            Delete Questionnaire
                                         </li>
                                     )}
-                                    <li onClick={() => setOpenDialog(true)}>
-                                        Delete Questionnaire
-                                    </li>
                                 </ul>
                             </div>
                         </span>
@@ -486,7 +490,7 @@ function PreviewQuestionnaire(props) {
                                                 section={section}
                                                 sectionIndex={index}
                                             />
-                                                   </TabPanel>
+                                        </TabPanel>
                                     )
                                 )}
                             </div>

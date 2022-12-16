@@ -111,7 +111,8 @@ const AddSubAdmin = () => {
                         setToasterDetails(
                             {
                                 titleMessage: "Oops!",
-                                descriptionMessage: "Session timeout",
+                                descriptionMessage:
+                                    "Session Timeout: Please login again",
                                 messageType: "error",
                             },
                             () => toasterRef.current()
@@ -156,7 +157,7 @@ const AddSubAdmin = () => {
                 //     setToasterDetails(
                 //         {
                 //             titleMessage: "Oops!",
-                //             descriptionMessage: "Session timeout",
+                //             descriptionMessage: "Session Timeout: Please login again",
                 //             messageType: "error",
                 //         },
                 //         () => toasterRef.current()
@@ -212,7 +213,8 @@ const AddSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Session timeout",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => toasterRef.current()

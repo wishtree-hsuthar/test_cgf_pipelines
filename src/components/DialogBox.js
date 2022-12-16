@@ -131,9 +131,9 @@ const DialogBox = ({
 export default DialogBox;
 
 DialogBox.propTypes = {
-    title: PropTypes.string,
-    info1: PropTypes.string,
-    info2: PropTypes.string,
+    title: PropTypes.object,
+    info1: PropTypes.object,
+    info2: PropTypes.object,
     primaryButtonText: PropTypes.string,
     secondaryButtonText: PropTypes.string,
     onPrimaryModalButtonClickHandler: PropTypes.func,

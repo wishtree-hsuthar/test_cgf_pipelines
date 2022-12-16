@@ -1,9 +1,8 @@
 import React from "react";
-import {useDocumentTitle} from "../utils/useDocumentTitle"
-export const Dashboard = (props) => {
-    
+import { useDocumentTitle } from "../utils/useDocumentTitle";
+const Dashboard = (props) => {
     //custom hook to set title of page
-    useDocumentTitle("Home")
+    useDocumentTitle("Home");
     console.log(props);
     return (
         <div className="page-wrapper">
@@ -24,3 +23,5 @@ export const Dashboard = (props) => {
         </div>
     );
 };
+
+export default Dashboard;

@@ -71,11 +71,12 @@ const MemberList = () => {
     //Refr for Toaster
     const memberRef = React.useRef();
     //Toaster Message setter
-    const [toasterDetailsMemberList, setToasterDetailsMemberList] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
+    const [toasterDetailsMemberList, setToasterDetailsMemberList] =
+        useCallbackState({
+            titleMessage: "",
+            descriptionMessage: "",
+            messageType: "success",
+        });
 
     const privilege = useSelector((state) => state?.user?.privilege);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
@@ -100,7 +101,8 @@ const MemberList = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     //state to hold search timeout delay
-    const [searchTimeoutMemberList, setSearchTimeoutMemberList] = useState(null);
+    const [searchTimeoutMemberList, setSearchTimeoutMemberList] =
+        useState(null);
     //state to hold wheather to make api call or not
     const [makeApiCallMemberList, setMakeApiCallMemberList] = useState(true);
 
@@ -304,27 +306,44 @@ const MemberList = () => {
             const response = await axios.get(url, {
                 signal: controller.signal,
             });
-            setTotalRecordsMemberList(parseInt(response.headers["x-total-count"]));
+            setTotalRecordsMemberList(
+                parseInt(response.headers["x-total-count"])
+            );
             console.log("response from backend", response);
             setIsLoading(false);
             updateRecords(response?.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setIsLoading(false);
-            isMounted &&
+            if (error?.response?.status === 401) {
                 setToasterDetailsMemberList(
                     {
                         titleMessage: "Error",
+
                         descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
+                            "Session Timeout: Please login again",
 
                         messageType: "error",
                     },
                     () => memberRef.current()
                 );
+                navigate("/login");
+            } else {
+                setIsLoading(false);
+                isMounted &&
+                    setToasterDetailsMemberList(
+                        {
+                            titleMessage: "Error",
+                            descriptionMessage:
+                                error?.response?.data?.message &&
+                                typeof error.response.data.message === "string"
+                                    ? error.response.data.message
+                                    : "Something went wrong!",
+
+                            messageType: "error",
+                        },
+                        () => memberRef.current()
+                    );
+            }
         }
     };
     useEffect(() => {
@@ -336,7 +355,14 @@ const MemberList = () => {
             clearTimeout(searchTimeoutMemberList);
             controller.abort();
         };
-    }, [membeListPage, memberListrowsPerPage, orderByMemberList, memberListOrder, memberFilters, makeApiCallMemberList]);
+    }, [
+        membeListPage,
+        memberListrowsPerPage,
+        orderByMemberList,
+        memberListOrder,
+        memberFilters,
+        makeApiCallMemberList,
+    ]);
     return (
         <div className="page-wrapper">
             <Toaster
@@ -414,7 +440,9 @@ const MemberList = () => {
                                             <Select
                                                 sx={{ display: "none" }}
                                                 name="companyType"
-                                                value={memberFilters.companyType}
+                                                value={
+                                                    memberFilters.companyType
+                                                }
                                                 onChange={onFilterChangehandler}
                                                 onFocus={(e) =>
                                                     onFilterFocusHandler(
