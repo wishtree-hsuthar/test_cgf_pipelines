@@ -244,7 +244,10 @@ const FillAssessmentQuestion = ({
         ) : question.inputType === "checkbox" ? (
             // <div className="form-group mb-0">
             <div className="checkbox-with-labelblk checkbox-btn-half-blk">
-                <FormControl>
+                <FormControl
+                    required
+                    error={!question?.options?.answer ? error : ""}
+                >
                     <FormGroup>
                         {question.options.map((option, idx) => (
                             <FormControlLabel
@@ -273,7 +276,7 @@ const FillAssessmentQuestion = ({
                         ))}
                     </FormGroup>
                     <FormHelperText>
-                        {!answer && error ? error : ""}
+                        {!question?.options?.answer ? error : ""}
                     </FormHelperText>
                 </FormControl>
 
@@ -282,11 +285,13 @@ const FillAssessmentQuestion = ({
         ) : question.inputType === "date" ? (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
+                    disabled={
+                        (editMode && params["*"].includes("view")) || !editMode
+                    }
                     className="datepicker-blk"
                     components={{
                         OpenPickerIcon: DateRangeOutlinedIcon,
                     }}
-                    disabled={!editMode && !params["*"].includes("view")}
                     value={answer ?? ""}
                     onChange={(newValue) =>
                         handleAnswersChange(
@@ -300,6 +305,11 @@ const FillAssessmentQuestion = ({
                         <TextField
                             {...params}
                             onKeyDown={handleOnKeyDownChange}
+                            className={`input-field${
+                                !answer && error && error?.length !== 0
+                                    ? "input-error"
+                                    : ""
+                            }`}
                             helperText={!answer && error ? error : ""}
                         />
                     )}

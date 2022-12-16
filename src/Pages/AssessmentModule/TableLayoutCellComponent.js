@@ -205,11 +205,6 @@ const TableLayoutCellComponent = ({
                                         params["*"].includes("view")) ||
                                     !editMode
                                 }
-                                disabled={
-                                    (editMode &&
-                                        params["*"].includes("view")) ||
-                                    !editMode
-                                }
                                 value={answer}
                                 className={`datepicker-blk`}
                                 components={{
