@@ -426,7 +426,7 @@ function FillAssessment() {
                             )
                         );
                         sectionErrors[question?.uuid] =
-                            "This is nummeric field";
+                            "This is numeric field";
                         sections.push(index);
                     } else if (
                         question.validation === "alphanumeric" &&
