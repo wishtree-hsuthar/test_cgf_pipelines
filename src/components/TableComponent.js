@@ -415,7 +415,7 @@ export default function TableComponent({
                                                             "visibility"
                                                         ) && (
                                                             <span className="icon">
-                                                                <Tooltip title="View assessment">
+                                                                <Tooltip title="View Assessment">
                                                                     <VisibilityOutlinedIcon
                                                                         onClick={() =>
                                                                             onClickVisibilityIconHandler(

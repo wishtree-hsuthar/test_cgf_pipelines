@@ -182,6 +182,7 @@ const ViewMember = () => {
             delete object["isMemberRepresentative"];
             delete object["isCGFStaff"];
             delete object["isOperationMember"];
+            delete object["replacedUsers"];
             delete object["memberData"];
             object["assessmentCount"] = `${object["assessmentCount"]}`;
             object["createdAt"] = new Date(

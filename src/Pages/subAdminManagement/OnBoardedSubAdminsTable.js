@@ -99,6 +99,7 @@ function OnBoardedSubAdminsTable({
             delete onboardedCGFAdmin["countryCode"];
             delete onboardedCGFAdmin["isDeleted"];
             delete onboardedCGFAdmin["isReplaced"];
+            delete onboardedCGFAdmin["replacedUsers"];
             delete onboardedCGFAdmin["__v"];
             delete onboardedCGFAdmin["password"];
             delete onboardedCGFAdmin["roleId"];

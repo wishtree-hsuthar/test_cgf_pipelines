@@ -124,6 +124,7 @@ function OnboardedOperationMember({
                 day: "2-digit",
                 year: "numeric",
             });
+            delete opMember["replacedUsers"]
             delete opMember["isReplaced"];
             delete opMember["department"];
             delete opMember["title"];
