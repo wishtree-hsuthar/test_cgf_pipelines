@@ -145,10 +145,7 @@ const EditMember = () => {
                     {
                         titleMessage: "Error",
                         descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -260,7 +257,7 @@ const EditMember = () => {
             setArrOfCountryCode([...countryCodeSet]);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster1(error);
+            // setErrorToaster1(error);
         }
     };
     const getCountries1 = async (region) => {
@@ -311,7 +308,7 @@ const EditMember = () => {
             return arrOfRegions;
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster1(error);
+            // setErrorToaster1(error);
             return [];
         }
     };
@@ -332,17 +329,17 @@ const EditMember = () => {
             setRoles(response.data);
         } catch (error) {
             console.log("Error from fetch roles", error);
-            setToasterDetailsEditMember(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
-            setTimeout(() => {
-                navigate("/login");
-            }, 3000);
+            // setToasterDetailsEditMember(
+            //     {
+            //         titleMessage: "Oops!",
+            //         descriptionMessage: error?.response?.data?.message,
+            //         messageType: "error",
+            //     },
+            //     () => myRef.current()
+            // );
+            // setTimeout(() => {
+            //     navigate("/login");
+            // }, 3000);
         }
     };
     const getMemberByID1 = async (isMounted) => {
@@ -398,10 +395,7 @@ const EditMember = () => {
                     {
                         titleMessage: "Error",
                         descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()

@@ -159,10 +159,7 @@ const AddMember = () => {
                     {
                         titleMessage: "Error",
                         descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -228,22 +225,23 @@ const AddMember = () => {
             setArrOfCitesAddMember(response.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            if (error?.response?.status == 401) {
-                setToasterDetailsAddMember(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else {
-                setErrorToaster(error);
-            }
+            console.log("Error in getCitiesAddmember");
+            // if (error?.response?.status == 401) {
+            //     setToasterDetailsAddMember(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else {
+            //     setErrorToaster(error);
+            // }
         }
     };
     //method to handle state change
@@ -298,7 +296,8 @@ const AddMember = () => {
             setArrOfCountryCodeAddMember([...countryCodeSet]);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
+            // setErrorToaster(error);
+            console.log("Error from getCountryCodeAddMember");
         }
     };
     const getCountriesAddMember = async (region) => {
@@ -307,11 +306,12 @@ const AddMember = () => {
             // return regionCountries;
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
+            // setErrorToaster(error);
+            console.log("Error from getCountriesAddMember ");
             return [];
         }
     };
-    const getRegionsAddMember = async (controller) => {
+    const getRegionsAddMember = async (controller, isMounted) => {
         try {
             const regions = await axios.get(REGIONS, {
                 signal: controller.signal,
@@ -321,15 +321,16 @@ const AddMember = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             if (error?.response?.status == 401) {
-                setToasterDetailsAddMember(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
+                isMounted &&
+                    setToasterDetailsAddMember(
+                        {
+                            titleMessage: "Error",
+                            descriptionMessage:
+                                "Session Timeout: Please login again",
+                            messageType: "error",
+                        },
+                        () => myRef.current()
+                    );
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
@@ -354,17 +355,17 @@ const AddMember = () => {
             });
         } catch (error) {
             console.log("Error from fetch addMemberRoles", error);
-            setToasterDetailsAddMember(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message,
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
-            setTimeout(() => {
-                navigate("/login");
-            }, 3000);
+            // setToasterDetailsAddMember(
+            //     {
+            //         titleMessage: "Oops!",
+            //         descriptionMessage: error?.response?.data?.message,
+            //         messageType: "error",
+            //     },
+            //     () => myRef.current()
+            // );
+            // setTimeout(() => {
+            //     navigate("/login");
+            // }, 3000);
         }
     };
 
@@ -376,7 +377,8 @@ const AddMember = () => {
             setArrOfParentCompanyAddMember(response?.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
+            console.log("error from getParentCompanyAddMember");
+            // setErrorToaster(error);
         }
     };
 
@@ -404,8 +406,10 @@ const AddMember = () => {
         trigger(code);
     };
     useEffect(() => {
+        let isMounted = true;
         const controller = new AbortController();
-        arrOfRegionsAddMember.length === 0 && getRegionsAddMember(controller);
+        arrOfRegionsAddMember.length === 0 &&
+            getRegionsAddMember(controller, isMounted);
         arrOfCountryCodeAddMember.length === 0 &&
             getCountryCodeAddMember(controller);
         arrOfParentCompanyAddMember?.length === 0 &&
@@ -413,6 +417,7 @@ const AddMember = () => {
         addMemberRoles.length === 0 && fetchRolesAddMember();
 
         return () => {
+            isMounted = false;
             controller.abort();
         };
     }, [watch]);

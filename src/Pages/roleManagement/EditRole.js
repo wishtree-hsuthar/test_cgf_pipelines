@@ -172,11 +172,14 @@ const EditRole = () => {
         });
         createPrevileges2(data.privileges);
     };
-    const getRoleById = async () => {
+    const getRoleById = async (isMounted, controller) => {
         try {
             setIsLoading1(true);
             const response = await axios.get(
-                REACT_APP_API_ENDPOINT + `roles/${params.id}`
+                REACT_APP_API_ENDPOINT + `roles/${params.id}`,
+                {
+                    signal: controller.signal,
+                }
             );
             console.log("response: ", response);
             updateEditFields(response.data);
@@ -194,7 +197,9 @@ const EditRole = () => {
                     },
                     () => myRef2.current()
                 );
-                navigate2("/login");
+                setTimeout(() => {
+                    navigate2("/login");
+                }, 3000);
             } else {
                 setIsLoading1(false);
 
@@ -216,7 +221,7 @@ const EditRole = () => {
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
-        isMounted && getRoleById();
+        isMounted && getRoleById(isMounted, controller);
         return () => {
             isMounted = false;
             controller.abort();

@@ -326,7 +326,9 @@ const MemberList = () => {
                     },
                     () => memberRef.current()
                 );
-                navigate("/login");
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
             } else {
                 setIsLoading(false);
                 isMounted &&
