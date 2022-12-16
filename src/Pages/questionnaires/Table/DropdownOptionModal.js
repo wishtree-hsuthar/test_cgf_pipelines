@@ -1,6 +1,9 @@
 import { Backdrop, Box, Fade, Modal, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import React, {useState} from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { setOldQuestionnaire } from "../../../redux/UserSlice";
 
 /* Popup */
 const style = {
@@ -25,10 +28,13 @@ const DropdownOptionModal = ({
   tableErr,
   setTableErr,
 }) => {
-  
+  // const [isOptionCanceld, setIsOptionCanceld] = useState(false)
+  const dispatch = useDispatch();
+  // console.log("old options:- ",oldOptions)
+
   // const questionnaireCopy = Object.assign(questionnaire,{})
   // const  questionnaireCopy= structuredClone( questionnaire)
-  const [tableOptionErr, setTableOptionErr] = useState("")
+  const [tableOptionErr, setTableOptionErr] = useState("");
   const onAddOptionClickHandler = () => {
     let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire.sections[sectionIndex].columnValues[
@@ -51,7 +57,7 @@ const DropdownOptionModal = ({
       optionIdx
     ] = value?.trim();
     setQuestionnaire(tempQuestionnaire);
-  }
+  };
   const onTableLayoutOptionDeleteHandler = (optionIdx) => {
     let tempQuestionnaire = { ...questionnaire };
     tempQuestionnaire?.sections[sectionIndex]?.columnValues[
@@ -60,27 +66,55 @@ const DropdownOptionModal = ({
     setQuestionnaire(tempQuestionnaire);
   };
   const onOptionSubmitHandler = () => {
-    let tempQuestionnaire = {...questionnaire}
-    let isError = false
+    let tempQuestionnaire = { ...questionnaire };
+    let isError = false;
     tempQuestionnaire.sections[sectionIndex].columnValues[
       columnId
-    ].options?.forEach(option => {
-        if(option)  return
-        isError = true
-        setTableOptionErr("Option required")
+    ].options?.forEach((option) => {
+      if (option) return;
+      isError = true;
+      setTableOptionErr("Option required");
     });
     !isError && setOpenModal(false);
   };
+  let oldOptions = useSelector((state) => state.user.questionnaire);
+  // console.log("old options:- ", oldQuestionnare);
+  //method to handle cancel questionnaire
   const onCancelButtonClickHandler = () => {
-    let tempQuestionnaire = {...questionnaire}
-    tempQuestionnaire.sections[sectionIndex].columnValues[columnId].options = ["", ""]
-    tempQuestionnaire.sections[sectionIndex].columnValues[columnId].columnType = "textbox"
+    console.log("old Questionnaire:- ", oldOptions);
 
-    setQuestionnaire(tempQuestionnaire)
-    setOpenModal(false)
-  }
-  
-  // console.log("questionnaire:", questionnaire);
+    let tempQuestionnaire = { ...questionnaire };
+    if (
+      oldOptions[0] === "" &&
+      oldOptions[1] === "" &&
+      oldOptions?.length === 2
+    ) {
+      tempQuestionnaire.sections[sectionIndex].columnValues[columnId].options =
+        ["", ""];
+      tempQuestionnaire.sections[sectionIndex].columnValues[
+        columnId
+      ].columnType = "textbox";
+    } else {
+      tempQuestionnaire.sections[sectionIndex].columnValues[columnId].options =
+        [...oldOptions];
+    }
+
+    setQuestionnaire(tempQuestionnaire);
+    setOpenModal(false);
+  };
+  // let oldOptions =
+  //   questionnaire.sections[sectionIndex].columnValues[columnId].options;
+  // console.log("old options:- ", oldOptions);
+  useEffect(() => {
+    // console.log("questionnaire", questionnaire);
+    dispatch(
+      setOldQuestionnaire(
+        questionnaire.sections[sectionIndex].columnValues[columnId].options
+      )
+    );
+  }, []);
+  // console.log("old Options",oldOptions)
+  // console.log("tempQuestionnaire:", tempQuestionnaire);
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -93,78 +127,99 @@ const DropdownOptionModal = ({
         timeout: 500,
       }}
       className="popup-blk"
-      style={{ overflow: 'scroll' }}
+      style={{ overflow: "scroll" }}
     >
       <Fade in={true}>
         <Box sx={style} className="popup-box">
           <div className="popup-innerblk">
-          <div id="transition-modal-title" className="popup-ttl-blk">
-            <h2 className="popup-ttl heading2">Create Custom List Dropdown</h2>
-            <span className="popup-close-icon" onClick={onCancelButtonClickHandler}><CloseIcon/></span>
-          </div>
-          <div id="transition-modal-description" className="popup-body">
-            <div className="popup-content-blk">
-              <div className="custom-list-sect">
-                {/* <div className='subheading mb-20'>Create custom list</div> */}
-                {questionnaire?.sections[sectionIndex]?.columnValues[
-                  columnId
-                ]?.options?.map((option, optionIdx) => (
-                  <div className="form-group" key={optionIdx}>
-                    <div className="que-checkbox-wrap">
-                      <div className="que-checkbox-blk que-dropdown-blk">
-                        <TextField
-                          className={`input-field que-input-type ${tableOptionErr && !option && "input-error"}`}
-                          value={option}
-                          onChange={(e) =>
-                            onTableLayoutOptionChangeHandler(e, optionIdx)
-                          }
-                          onBlur={(e) => onTableLayoutOptionBlurHandler(e, optionIdx)}
-                          id="outlined-basic"
-                          helperText={(tableOptionErr && !option) ? "Enter the option" : " "}
-                          placeholder={`Enter option value`}
-                          variant="outlined"
-                        />
-                      </div>
-                      {questionnaire?.sections[sectionIndex]?.columnValues[
-                        columnId
-                      ]?.options?.length > 2 && (
-                        <div
-                          className="que-input-type-close"
-                          onClick={() =>
-                            onTableLayoutOptionDeleteHandler(optionIdx)
-                          }
-                        >
-                          <CloseIcon />
+            <div id="transition-modal-title" className="popup-ttl-blk">
+              <h2 className="popup-ttl heading2">
+                Create Custom List Dropdown
+              </h2>
+              <span
+                className="popup-close-icon"
+                onClick={onCancelButtonClickHandler}
+              >
+                <CloseIcon />
+              </span>
+            </div>
+            <div id="transition-modal-description" className="popup-body">
+              <div className="popup-content-blk">
+                <div className="custom-list-sect">
+                  {/* <div className='subheading mb-20'>Create custom list</div> */}
+                  {questionnaire?.sections[sectionIndex]?.columnValues[
+                    columnId
+                  ]?.options?.map((option, optionIdx) => (
+                    <div className="form-group" key={optionIdx}>
+                      <div className="que-checkbox-wrap">
+                        <div className="que-checkbox-blk que-dropdown-blk">
+                          <TextField
+                            className={`input-field que-input-type ${
+                              tableOptionErr && !option && "input-error"
+                            }`}
+                            value={option}
+                            onChange={(e) =>
+                              onTableLayoutOptionChangeHandler(e, optionIdx)
+                            }
+                            onBlur={(e) =>
+                              onTableLayoutOptionBlurHandler(e, optionIdx)
+                            }
+                            id="outlined-basic"
+                            helperText={
+                              tableOptionErr && !option
+                                ? "Enter the option"
+                                : " "
+                            }
+                            placeholder={`Enter option value`}
+                            variant="outlined"
+                          />
                         </div>
-                      )}
+                        {questionnaire?.sections[sectionIndex]?.columnValues[
+                          columnId
+                        ]?.options?.length > 2 && (
+                          <div
+                            className="que-input-type-close"
+                            onClick={() =>
+                              onTableLayoutOptionDeleteHandler(optionIdx)
+                            }
+                          >
+                            <CloseIcon />
+                          </div>
+                        )}
+                      </div>
+                      {/* <TextField className='input-field' id="outlined-basic" placeholder='Dropdown value1' variant="outlined" /> */}
                     </div>
-                    {/* <TextField className='input-field' id="outlined-basic" placeholder='Dropdown value1' variant="outlined" /> */}
+                  ))}
+                  <div className="add-dropdown-btnblk mb-30">
+                    <span
+                      className="addmore-icon"
+                      // onClick={onAddOptionClickHandler}
+                    >
+                      <i
+                        onClick={onAddOptionClickHandler}
+                        className="fa fa-plus"
+                      ></i>
+                    </span>{" "}
+                    <span onClick={onAddOptionClickHandler}>Add Dropdown</span>
                   </div>
-                ))}
-                <div className="add-dropdown-btnblk mb-30">
-                  <span
-                    className="addmore-icon"
-                    // onClick={onAddOptionClickHandler}
+                </div>
+                <div className="form-btn flex-center text-center">
+                  <button
+                    className="secondary-button mr-10"
+                    onClick={onCancelButtonClickHandler}
                   >
-                    <i className="fa fa-plus"></i>
-                  </span>{" "}
-                  <span onClick={onAddOptionClickHandler}>Add Dropdown</span>
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="primary-button"
+                    onClick={onOptionSubmitHandler}
+                  >
+                    Save
+                  </button>
                 </div>
               </div>
-              <div className="form-btn flex-center text-center">
-                <button className="secondary-button mr-10" onClick={onCancelButtonClickHandler}>
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="primary-button"
-                  onClick={onOptionSubmitHandler}
-                >
-                  Save
-                </button>
-              </div>
             </div>
-          </div>
           </div>
         </Box>
       </Fade>

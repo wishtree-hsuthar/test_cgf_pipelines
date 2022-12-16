@@ -12,9 +12,12 @@ export const userSlice = createSlice({
         setPrivileges: (state, action) => {
             state.privilege = { ...state, ...action.payload };
         },
+        setOldQuestionnaire: (state, action) =>{
+            state.questionnaire = [...action.payload]
+        }
     },
 });
 // this is for dispatch action
-export const { setUser, resetUser, setPrivileges } = userSlice.actions;
+export const { setUser, resetUser, setPrivileges, setOldQuestionnaire } = userSlice.actions;
 // this for config store
 export default userSlice.reducer;

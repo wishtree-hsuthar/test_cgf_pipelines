@@ -321,7 +321,7 @@ const ViewRole = () => {
                     params?.id +
                     `/users?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`
             );
-            setTotalRecords(response?.headers?.["x-total-count"]);
+            setTotalRecords(parseInt(response?.headers?.["x-total-count"]));
             updateUsers(response?.data);
             setFieldValues((previous) => ({
                 ...previous,
