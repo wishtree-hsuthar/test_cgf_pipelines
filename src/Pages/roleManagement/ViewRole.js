@@ -122,7 +122,9 @@ const ViewRole = () => {
                     },
                     () => myRef4.current()
                 );
-                navigate4("/login");
+                setTimeout(() => {
+                    navigate4("/login");
+                }, 3000);
             } else {
                 setToasterDetails4(
                     {
@@ -277,19 +279,19 @@ const ViewRole = () => {
     const getRoleById = async (isMounted, controller) => {
         try {
             setIsLoading3(true);
-            const response = await axios.get(GET_ROLE_BY_ID + params.id);
+            const response = await axios.get(GET_ROLE_BY_ID + params.id, {
+                signal: controller.signal,
+            });
             isMounted && (await updateFileds(response?.data));
             setIsLoading3(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setIsLoading3(false);
-            if (error?.response?.status === 401) {
+            if (error?.response?.status == 401) {
                 setToasterDetails4(
                     {
                         titleMessage: "Error",
                         descriptionMessage:
                             "Session Timeout: Please login again",
-
                         messageType: "error",
                     },
                     () => myRef4.current()
@@ -298,6 +300,8 @@ const ViewRole = () => {
                     navigate4("/login");
                 }, 3000);
             } else {
+                setIsLoading3(false);
+
                 isMounted &&
                     setToasterDetails4(
                         {
@@ -329,7 +333,9 @@ const ViewRole = () => {
             }));
             console.log("response:- ", response);
         } catch (error) {
-            console.log("error", error);
+            if (error?.code === "ERR_CANCELED") return;
+
+            console.log("error from get users", error);
         }
     };
     useEffect(() => {

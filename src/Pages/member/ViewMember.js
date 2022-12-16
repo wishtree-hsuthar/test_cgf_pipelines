@@ -372,7 +372,7 @@ const ViewMember = () => {
             setArrOfCountryCode([...countryCodeSet]);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            isMounted && setErrorToaster(error);
+            // isMounted && setErrorToaster(error);
         }
     };
 
@@ -387,7 +387,7 @@ const ViewMember = () => {
             return [];
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
+            // setErrorToaster(error);
             return [];
         }
     };
@@ -427,15 +427,12 @@ const ViewMember = () => {
             return arrOfRegions;
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            if (error?.response?.status) {
+            if (error?.response?.status == 401) {
                 setToasterDetailsViewMember(
                     {
                         titleMessage: "Error",
                         descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
+                            "Session Timeout: Please login again",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -510,8 +507,24 @@ const ViewMember = () => {
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setIsLoading(false);
-            isMounted && setErrorToaster(error);
+            if (error?.response?.status == 401) {
+                isMounted &&
+                    setToasterDetailsViewMember(
+                        {
+                            titleMessage: "Error",
+                            descriptionMessage:
+                                "Session Timeout: Please login again",
+                            messageType: "error",
+                        },
+                        () => myRef.current()
+                    );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setIsLoading(false);
+                isMounted && setErrorToaster(error);
+            }
         }
     };
 
@@ -520,7 +533,9 @@ const ViewMember = () => {
         try {
             let url = generateUrl();
 
-            const response = await axios.get(url);
+            const response = await axios.get(url, {
+                signal: controller.signal,
+            });
             setTotalRecordsInViewMember(
                 parseInt(response.headers["x-total-count"])
             );
@@ -532,7 +547,8 @@ const ViewMember = () => {
             updateRecords(response?.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
+            console.log("Error from get operation member by member id", error);
+            // setErrorToaster(error);
         }
     };
 
