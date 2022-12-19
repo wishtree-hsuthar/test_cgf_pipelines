@@ -4,7 +4,7 @@ import {
     TextField,
     Box,
     Radio,
-    RadioGroup,
+    RadioGroup as ViewRoleRadioGroup,
     FormControlLabel,
     Tabs,
     Tab,
@@ -464,7 +464,7 @@ const ViewRole = () => {
                                     <div className="form-group">
                                         <label htmlFor="status">Status</label>
                                         <div className="radio-btn-field">
-                                            <RadioGroup
+                                            <ViewRoleRadioGroup
                                                 aria-labelledby="demo-radio-buttons-group-label"
                                                 value={
                                                     fieldValues &&
@@ -485,7 +485,7 @@ const ViewRole = () => {
                                                     control={<Radio />}
                                                     label="Inactive"
                                                 />
-                                            </RadioGroup>
+                                            </ViewRoleRadioGroup>
                                         </div>
                                     </div>
                                 </div>

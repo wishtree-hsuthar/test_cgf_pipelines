@@ -317,7 +317,6 @@ const SectionContent = ({
             if (error?.code === "ERR_CANCELED") return;
             setErrorToaster(error);
             return false;
-            console.log("error from section component", error);
         }
     };
     const onCancelClickHandler = () => {
