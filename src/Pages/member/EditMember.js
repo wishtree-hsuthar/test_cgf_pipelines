@@ -1,5 +1,5 @@
 import {
-    Autocomplete,
+    Autocomplete as EditMemberAutoComplete,
     FormControlLabel,
     Paper,
     Radio,
@@ -568,7 +568,7 @@ const EditMember = () => {
                                                         field,
                                                         fieldState: { error },
                                                     }) => (
-                                                        <Autocomplete
+                                                        <EditMemberAutoComplete
                                                             disabled
                                                             className="searchable-input"
                                                             PaperComponent={({
@@ -809,7 +809,7 @@ const EditMember = () => {
                                                                     error,
                                                                 },
                                                             }) => (
-                                                                <Autocomplete
+                                                                <EditMemberAutoComplete
                                                                     popupIcon={
                                                                         <KeyboardArrowDownRoundedIcon />
                                                                     }
@@ -1074,7 +1074,7 @@ const EditMember = () => {
                                                         field,
                                                         fieldState: { error },
                                                     }) => (
-                                                        <Autocomplete
+                                                        <EditMemberAutoComplete
                                                             {...field}
                                                             className="searchable-input"
                                                             PaperComponent={({
@@ -1487,7 +1487,7 @@ const EditMember = () => {
                                                                     error,
                                                                 },
                                                             }) => (
-                                                                <Autocomplete
+                                                                <EditMemberAutoComplete
                                                                     {...field}
                                                                     className={`${
                                                                         error &&

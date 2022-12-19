@@ -240,8 +240,8 @@
 .instruct-table-sect table tr{height: auto;}
 .instruct-table-listblk {margin-left: 17px;}
 .instruct-table-sect table tr td:first-child{width: 28%;}
-.instruct-red{color: red !important;font-family: 'ProximaNova-Semibold' !important;}
-.instruct-txt-bold-underline{text-decoration: underline;font-family: 'ProximaNova-Semibold';}
+.instruct-red{color: red !important;font-family: 'ProximaNova-Semibold ', serif, sans-serif !important;}
+.instruct-txt-bold-underline{text-decoration: underline;font-family: 'ProximaNova-Semibold', serif, sans-serif;}
 .instruct-table-sect {margin-bottom: 50px;}
 .instruct-table-sect .table-content-wrap .table-blk{padding-bottom: 0;}
 
