@@ -253,7 +253,7 @@ const AssessmentList = () => {
     };
 
     const viewInstruction = () => {
-        navigate("/assessments/instructions");
+        navigate("/assessment-list/instructions");
     };
 
     const privilege = useSelector((state) => state?.user?.privilege);
