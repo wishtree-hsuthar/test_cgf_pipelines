@@ -108,7 +108,7 @@ function FillAssessment() {
 
 
     const viewInstruction = () => {
-        navigate("/assessments/instructions");
+        navigate("/assessment-list/instructions");
     };
     
     //Toaster Message setter
