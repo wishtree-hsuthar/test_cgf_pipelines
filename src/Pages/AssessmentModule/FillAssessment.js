@@ -602,8 +602,26 @@ function FillAssessment() {
             // let encFile = e.target.files[0];
             let reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
-            reader.onloadend = () => {
+            reader.onloadend = async () => {
                 let result = reader.result;
+                let encryptedFile = CryptoJs.AES.encrypt(
+                    result,
+                    "my-secret-key@123"
+                ).toString();
+                try {
+                    const response = await privateAxios.post(
+                        `http://localhost:3000/api/assessments/${params.id}/upload`,
+                        {
+                            encryptedFile,
+                        }
+                    );
+                    console.log(
+                        "response for upoading encrypted file - ",
+                        response
+                    );
+                } catch (error) {
+                    console.log("Error from UPLOAD api", error);
+                }
                 setFile(
                     CryptoJs.AES.encrypt(result, "my-secret-key@123").toString()
                 );
