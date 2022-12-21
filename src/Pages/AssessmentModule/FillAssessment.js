@@ -1,6 +1,6 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Box, Tab, Tabs, TextField, Tooltip } from "@mui/material";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined"
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -9,9 +9,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import {
     ACCEPT_ASSESSMENT,
-    ADD_QUESTIONNAIRE, DECLINE_ASSESSMENT, DOWNLOAD_ASSESSMENT_BY_ID,
+    ADD_QUESTIONNAIRE,
+    DECLINE_ASSESSMENT,
+    DOWNLOAD_ASSESSMENT_BY_ID,
     FETCH_ASSESSMENT_BY_ID,
-    SUBMIT_ASSESSMENT_AS_DRAFT
+    SUBMIT_ASSESSMENT_AS_DRAFT,
 } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import DialogBox from "../../components/DialogBox";
@@ -25,6 +27,7 @@ export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
 const ITEM_HEIGHT = 42;
+const CryptoJs = require("crypto-js");
 const MenuProps = {
     PaperProps: {
         style: {
@@ -81,6 +84,7 @@ function FillAssessment() {
     useDocumentTitle("Fill Assessment");
     //   state to manage loaders
     const [isLoading, setIsLoading] = useState(false);
+    const [file, setFile] = useState("");
 
     const { handleSubmit, control, setValue } = useForm({
         // defaultValues: {
@@ -106,11 +110,10 @@ function FillAssessment() {
     const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
         useState(false);
 
-
     const viewInstruction = () => {
         navigate("/assessments/instructions");
     };
-    
+
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
@@ -399,7 +402,6 @@ function FillAssessment() {
                         sectionErrors[question?.uuid] =
                             "This is required field";
                         sections.push(index);
-
                     } else if (
                         question.validation === "alphabets" &&
                         currentSectionAnswers[question?.uuid] &&
@@ -425,8 +427,7 @@ function FillAssessment() {
                                 currentSectionAnswers[question?.uuid]
                             )
                         );
-                        sectionErrors[question?.uuid] =
-                            "This is numeric field";
+                        sectionErrors[question?.uuid] = "This is numeric field";
                         sections.push(index);
                     } else if (
                         question.validation === "alphanumeric" &&
@@ -518,7 +519,6 @@ function FillAssessment() {
             }
         }
         setOpenDeleteDialogBox(false);
-
     };
 
     //API for accepting assessments
@@ -593,6 +593,42 @@ function FillAssessment() {
     const handleCloseReopenAssessment = () => {
         setReOpenAssessmentDialogBox(false);
         navigate("/assessment-list");
+    };
+
+    const handleImportExcel = (e) => {
+        // console.log("Selected files = ", e);
+        // let d = [{ name: "madhav" }];
+        if (e.target.files) {
+            // let encFile = e.target.files[0];
+            let reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onloadend = () => {
+                let result = reader.result;
+                setFile(
+                    CryptoJs.AES.encrypt(result, "my-secret-key@123").toString()
+                );
+            };
+
+            // setFile(encFile);
+        }
+    };
+    console.log("file selected enc", file);
+
+    const decryptFile = (file1) => {
+        console.log("file selected in dec", file1);
+
+        let decryptData = CryptoJs.AES.decrypt(
+            file1,
+            "my-secret-key@123"
+        ).toString(CryptoJs.enc.Utf8);
+        console.log("Decrypt Data ", decryptData);
+        let file = decryptData.split(",");
+        let fileType = file[0];
+        let fileContent = file[1];
+        let a = document.createElement("a");
+        a.href = `${fileType},` + fileContent;
+        a.download = "QKD_download";
+        a.click();
     };
 
     return (
@@ -689,7 +725,6 @@ function FillAssessment() {
                 primaryButtonText={"Accept"}
                 secondaryButtonText={"Reject"}
                 onPrimaryModalButtonClickHandler={() => {
-
                     onAcceptAssessments();
                 }}
                 onSecondaryModalButtonClickHandler={handleSubmit(
@@ -749,43 +784,59 @@ function FillAssessment() {
                     <div className="form-header flex-between">
                         <h2 className="heading2">{questionnaire.title}</h2>
                         <div className="flex-between">
-                        <div className="tertiary-btn-blk mr-20" onClick={viewInstruction}>
-                                    <span className="preview-icon">
-                                        <VisibilityOutlinedIcon />
-                                    </span>
-                                    <span className="addmore-txt">
-                                        View Instructions
-                                    </span>
-                                </div>
-                                
-                        <span
-                            className="form-header-right-txt"
-                            onClick={handleToggle}
-                        >
-                            <span className="crud-operation">
-                                <MoreVertIcon />
-                            </span>
                             <div
-                                className="crud-toggle-wrap assessment-crud-toggle-wrap"
-                                style={{ display: isActive ? "none" : "block" }}
+                                className="tertiary-btn-blk mr-20"
+                                onClick={viewInstruction}
                             >
-                                <ul className="crud-toggle-list">
-                                    <li
-                                        onClick={() =>
-                                            downloadFunction(
-                                                "Assessment",
-                                                setToasterDetails,
-                                                params.id,
-                                                myRef,
-                                                DOWNLOAD_ASSESSMENT_BY_ID
-                                            )
-                                        }
-                                    >
-                                        Export to Excel
-                                    </li>
-                                </ul>
+                                <span className="preview-icon">
+                                    <VisibilityOutlinedIcon />
+                                </span>
+                                <span className="addmore-txt">
+                                    View Instructions
+                                </span>
                             </div>
-                        </span>
+
+                            <span
+                                className="form-header-right-txt"
+                                onClick={handleToggle}
+                            >
+                                <span className="crud-operation">
+                                    <MoreVertIcon />
+                                </span>
+                                <div
+                                    className="crud-toggle-wrap assessment-crud-toggle-wrap"
+                                    style={{
+                                        display: isActive ? "none" : "block",
+                                    }}
+                                >
+                                    <ul className="crud-toggle-list">
+                                        <li
+                                            onClick={() =>
+                                                downloadFunction(
+                                                    "Assessment",
+                                                    setToasterDetails,
+                                                    params.id,
+                                                    myRef,
+                                                    DOWNLOAD_ASSESSMENT_BY_ID
+                                                )
+                                            }
+                                        >
+                                            Export to Excel
+                                        </li>
+                                        <li>
+                                            <input
+                                                type={"file"}
+                                                // value={file}
+                                                onChange={handleImportExcel}
+                                            />
+                                            Import file
+                                        </li>
+                                        <li onClick={() => decryptFile(file)}>
+                                            decrypt file
+                                        </li>
+                                    </ul>
+                                </div>
+                            </span>
                         </div>
                     </div>
 

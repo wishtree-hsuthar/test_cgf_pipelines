@@ -64,12 +64,9 @@ const Login = (prop) => {
                 if (status == 200) {
                     navigate("/home");
                 }
-                
             } catch (error) {
                 if (error?.response?.status == 401) {
-                
                     console.log("Error from app file useEffect", error);
-                
                 }
             }
         };
@@ -114,25 +111,25 @@ const Login = (prop) => {
             }
         } catch (error) {
             console.log("error from submit login method", error);
-            if (error.response.status == 401) {
-                return setToasterDetails(
-                    {
-                        titleMessage: "Invalid Credentials",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
+            // if (error.response.status == 401) {
+            //     return setToasterDetails(
+            //         {
+            //             titleMessage: "Invalid Credentials",
+            //             descriptionMessage: error?.response?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            // }
 
             if (
                 error.response.status == 401 &&
-                error.response.message === "Unauthorized"
+                error.response.data.message === "Unauthorized"
             ) {
                 return setToasterDetails(
                     {
                         titleMessage: "Invalid Credentials",
-                        descriptionMessage: "Email or password is incorrect!",
+                        descriptionMessage: "Invalid email or password!",
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -202,7 +199,12 @@ const Login = (prop) => {
                                                 placeholder="example@domain.com"
                                                 variant="outlined"
                                                 {...register("email")}
-                                                onBlur={(e) => setValue("email",e.target.value.trim())}
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "email",
+                                                        e.target.value.trim()
+                                                    )
+                                                }
                                                 helperText={
                                                     errors.email
                                                         ? errors.email.message
@@ -271,7 +273,12 @@ const Login = (prop) => {
                                                         </InputAdornment>
                                                     }
                                                     {...register("password")}
-                                                    onBlur={(e) => setValue("password",e.target.value.trim())}
+                                                    onBlur={(e) =>
+                                                        setValue(
+                                                            "password",
+                                                            e.target.value.trim()
+                                                        )
+                                                    }
                                                 />
                                                 <p className={`password-error`}>
                                                     {errors?.password ? (
