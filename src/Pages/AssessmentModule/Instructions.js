@@ -8,13 +8,27 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { Link, useNavigate } from 'react-router-dom';
+import "../../components/TableComponent.css";
+
 function Instructions() {
+    const navigate = useNavigate();
     useDocumentTitle("Instructions");
     return (
         <div className="page-wrapper">
+            <div className="breadcrumb-wrapper">
+                <div className="container">
+                    <ul className="breadcrumb">
+                        <li>
+                            <Link to="/assessment-list">Assessments</Link>
+                        </li>
+                        <li>Instructions</li>
+                    </ul>
+                </div>
+            </div>
             <section>
                 <div className="container">
-                    <div className="form-header member-form-header mb-0">
+                    <div className="form-header member-form-header mb-0 mt-0">
                         <div className="form-header-left-blk">
                             <h2 className="heading2">Instructions: HRDD Self Assessment Tool on Forced Labour for Own Operations </h2>
                         </div>
@@ -536,6 +550,16 @@ function Instructions() {
                             </Box>
                         </div>
 
+                    </div>
+                    <div className="form-btn flex-between add-members-btn">
+                        <button
+                        type="submit"
+                        style={{ marginBottom: "50px" }}
+                        className="secondary-button"
+                        onClick={() => navigate(-1)}
+                        >
+                        Back
+                        </button>
                     </div>
                 </div>
             </section>

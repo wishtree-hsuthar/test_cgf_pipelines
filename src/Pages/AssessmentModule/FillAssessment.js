@@ -108,16 +108,17 @@ function FillAssessment() {
   const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
     useState(false);
 
-  const viewInstruction = () => {
-    navigate("/assessments/instructions");
-  };
 
-  //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
+    const viewInstruction = () => {
+        navigate("/assessment-list/instructions");
+    };
+    
+    //Toaster Message setter
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
 
   const handleSetErrors = (errors) => {
     setErrors({ ...errors });
