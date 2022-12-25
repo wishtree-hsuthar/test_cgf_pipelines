@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TableAssessment from "./TableAssesment";
 import FillAssessmentQuestion from "./FillAssessmentQuestions";
@@ -38,7 +38,6 @@ function FillAssesmentSection({
   const navigate = useNavigate();
   const params = useParams();
 
-
   // cancel dailog box open/close state
 
   const [openCancelDailog, setOpenCancelDailog] = useState(false);
@@ -56,6 +55,7 @@ function FillAssesmentSection({
   };
   const handleAnswersBlur = (name, value) => {
     console.log("inside on Blur");
+
     setAssessmentQuestionnaire({
       ...assessmentQuestionnaire,
       [section?.uuid]: {
@@ -64,6 +64,39 @@ function FillAssesmentSection({
       },
     });
   };
+  const addTableAssessmentValues = () => {
+    // console.log("section:- ", section);
+    let tempAsssessmentQuestionnaire = { ...assessmentQuestionnaire };
+    tempAsssessmentQuestionnaire[section?.uuid] = {};
+    section?.rowValues.forEach((row) => {
+      row?.cells?.forEach((cell) => {
+        console.log("cell", cell);
+        if (cell?.columnType === "dropdown") {
+          tempAsssessmentQuestionnaire[section?.uuid][
+            `${cell?.columnId}.${row?.uuid}`
+          ] = undefined;
+        } else {
+          tempAsssessmentQuestionnaire[section?.uuid][
+            `${cell?.columnId}.${row?.uuid}`
+          ] = "";
+        }
+      });
+    });
+    setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
+  };
+  useEffect(() => {
+    // console.log("assessment Questionnaire:- ", assessmentQuestionnaire);
+    console.log(
+      "assessment Section:- ",
+      assessmentQuestionnaire[section?.uuid]
+    );
+    if (
+      section?.layout === "table" &&
+      !assessmentQuestionnaire[section?.uuid]
+    ) {
+      addTableAssessmentValues();
+    }
+  }, []);
   return (
     <>
       <DialogBox
@@ -124,6 +157,7 @@ function FillAssesmentSection({
             ))
           ) : (
             <TableAssessment
+              setAssessmentQuestionnaire={setAssessmentQuestionnaire}
               assessmentQuestionnaire={assessmentQuestionnaire}
               sectionUUID={section?.uuid}
               columnValues={section?.columnValues}

@@ -688,6 +688,7 @@ function EditAssessment() {
                                                                 params
                                                             ) => (
                                                                 <TextField
+                                                                autoComplete="off"
                                                                     {...params}
                                                                     onKeyDown={
                                                                         handleOnKeyDownChange

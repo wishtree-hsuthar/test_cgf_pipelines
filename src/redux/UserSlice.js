@@ -14,10 +14,13 @@ export const userSlice = createSlice({
         },
         setOldQuestionnaire: (state, action) =>{
             state.questionnaire = [...action.payload]
+        },
+        setOldAssessment: (state, action) => {
+            state.assessment = {...action.payload}
         }
     },
 });
 // this is for dispatch action
-export const { setUser, resetUser, setPrivileges, setOldQuestionnaire } = userSlice.actions;
+export const { setUser, resetUser, setPrivileges, setOldQuestionnaire, setOldAssessment } = userSlice.actions;
 // this for config store
 export default userSlice.reducer;

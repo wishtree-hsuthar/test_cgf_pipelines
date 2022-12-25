@@ -1307,8 +1307,8 @@ const EditMember = () => {
                                                         "Bogota",
                                                         "Paris",
                                                         "Shanghai",
-                                                        "Washington",
                                                         "Tokyo",
+                                                        "Washington",
                                                     ]}
                                                 />
                                             </div>
