@@ -1260,8 +1260,8 @@ const AddMember = () => {
                                                     "Bogota",
                                                     "Paris",
                                                     "Shanghai",
-                                                    "Washington",
                                                     "Tokyo",
+                                                    "Washington",
                                                 ]}
                                             />
                                         </div>

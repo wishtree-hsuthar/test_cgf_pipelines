@@ -24,7 +24,7 @@ const Header = () => {
     const [isActive, setActive] = React.useState("false");
     const userAuth = useSelector((state) => state?.user?.userObj);
     const privilege = useSelector((state) => state?.user?.privilege);
-    console.log("user auth----", userAuth);
+    // console.log("user auth----", userAuth);
     
     let initials = userAuth?.name?.split(" ");
     const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
@@ -53,7 +53,7 @@ const Header = () => {
 
     // console.log("privilege", );
     // console.log("privilege entries", );
-    console.log("privilege from ", privilege);
+    // console.log("privilege from ", privilege);
     let privilegeArray =
         userAuth?.roleId?.name === "Super Admin"
             ? []
