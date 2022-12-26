@@ -67,6 +67,7 @@ const AddRole = () => {
     };
 
     const [previleges1, setPrevileges1] = useState({ ...temp });
+    const [disableAddRoleButton, setdisableAddRoleButton] = useState(false);
 
     const addRoleCreatePrivileges = () => {
         modules.forEach(
@@ -101,6 +102,8 @@ const AddRole = () => {
         defaultValues: defaultValues,
     });
     const submitCall = async (data) => {
+        setdisableAddRoleButton(true);
+
         console.log("inside on Submit");
         let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
         Object.keys(previlegesForBackend).forEach((p_key) => {
@@ -110,24 +113,32 @@ const AddRole = () => {
         // console.log("previleges1 : ", previlegesForBackend);
         //backend call
         try {
-            await axios.post(REACT_APP_API_ENDPOINT + "roles", {
-                name: data.roleName,
-                description: data.description,
-                isActive: data.status === "active" ? true : false,
-                privileges: previlegesForBackend,
-            });
-            setToasterDetails1(
+            const response = await axios.post(
+                REACT_APP_API_ENDPOINT + "roles",
                 {
-                    titleMessage: "Hurray!",
-                    descriptionMessage: "New role added successfully!",
-                    messageType: "success",
-                },
-                () => myRef.current()
+                    name: data.roleName,
+                    description: data.description,
+                    isActive: data.status === "active" ? true : false,
+                    privileges: previlegesForBackend,
+                }
             );
-            reset({ defaultValues });
-            getSystemModules();
-            return true;
+            if (response.status == 201) {
+                setdisableAddRoleButton(false);
+                setToasterDetails1(
+                    {
+                        titleMessage: "Hurray!",
+                        descriptionMessage: "New role added successfully!",
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+                reset({ defaultValues });
+                getSystemModules();
+                return true;
+            }
         } catch (error) {
+            setdisableAddRoleButton(false);
+
             if (error?.response?.status == 401) {
                 setToasterDetails1(
                     {
@@ -916,6 +927,7 @@ const AddRole = () => {
                                     type="submit"
                                     className="primary-button"
                                     style={{ marginTop: "20px" }}
+                                    disabled={disableAddRoleButton}
                                 >
                                     Save
                                 </button>

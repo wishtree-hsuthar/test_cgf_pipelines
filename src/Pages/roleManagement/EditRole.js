@@ -56,6 +56,8 @@ const EditRole = () => {
     //temp to hold privileges
     let temp = {};
     const [previleges, setPrevileges] = useState({ ...temp });
+    const [disableEditRoleUpdateButton, setDisableEditRoleUpdateButton] =
+        useState(false);
     const { control, reset, setValue, handleSubmit } = useForm({
         defaultValues: editDefault,
     });

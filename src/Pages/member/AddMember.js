@@ -62,6 +62,7 @@ const AddMember = () => {
             messageType: "success",
         });
     //method to call all error toaster from this method
+    const [disableAddMemberButton, setdisableAddMemberButton] = useState(false);
     const setErrorToaster = (error) => {
         console.log("error", error);
         setToasterDetailsAddMember(
@@ -107,6 +108,7 @@ const AddMember = () => {
         defaultValues: tempDefaultValues,
     });
     const onSubmitFunctionCallAddMember = async (data) => {
+        setdisableAddMemberButton(true);
         console.log("data", data);
         try {
             let backendObjectAddMember = {
@@ -142,17 +144,20 @@ const AddMember = () => {
                 ...backendObjectAddMember,
             });
             console.log("response : ", response);
-            setToasterDetailsAddMember(
-                {
-                    titleMessage: "Success!",
-                    descriptionMessage: "New member added successfully!",
-                    messageType: "success",
-                },
-                () => myRef.current()
-            );
-            console.log("Default values: ", tempDefaultValues);
-            reset({ tempDefaultValues });
-            return true;
+            if (response.status === 201) {
+                setToasterDetailsAddMember(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage: "New member added successfully!",
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+                console.log("Default values: ", tempDefaultValues);
+                reset({ tempDefaultValues });
+                setdisableAddMemberButton(false);
+                return true;
+            }
         } catch (error) {
             if (error?.response?.status === 401) {
                 setToasterDetailsAddMember(
@@ -169,6 +174,8 @@ const AddMember = () => {
                 }, 3000);
             } else {
                 setErrorToaster(error);
+                setdisableAddMemberButton(false);
+
                 return false;
             }
         }
@@ -1602,6 +1609,7 @@ const AddMember = () => {
                                 <button
                                     type="submit"
                                     //   onClick={}
+                                    disabled={disableAddMemberButton}
                                     className="primary-button add-button"
                                 >
                                     Save

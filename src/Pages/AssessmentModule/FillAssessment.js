@@ -602,30 +602,56 @@ function FillAssessment() {
             // let encFile = e.target.files[0];
             let reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
-            reader.onloadend = async () => {
-                let result = reader.result;
-                let encryptedFile = CryptoJs.AES.encrypt(
-                    result,
-                    "my-secret-key@123"
-                ).toString();
-                try {
-                    const response = await privateAxios.post(
-                        `http://localhost:3000/api/assessments/${params.id}/upload`,
-                        {
-                            encryptedFile,
-                        }
+            console.log("File selected = ", e.target.files[0]);
+            console.log("Reflect method - ", Reflect.get(e.target.files[0]));
+            if (
+                e.target.files[0].type === "application/vnd.ms-excel" ||
+                e.target.files[0].type ===
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            ) {
+                console.log("file type is valid");
+
+                reader.onloadend = async () => {
+                    let result = reader.result;
+                    let encryptedFile = CryptoJs.AES.encrypt(
+                        result,
+                        "my-secret-key@123"
+                    ).toString();
+                    try {
+                        const response = await privateAxios.post(
+                            `http://localhost:3000/api/assessments/${params.id}/upload`,
+                            {
+                                encryptedFile,
+                            }
+                        );
+                        console.log(
+                            "response for upoading encrypted file - ",
+                            response
+                        );
+                        setAssessmentQuestionnaire({
+                            ...response.data,
+                        });
+                    } catch (error) {
+                        console.log("Error from UPLOAD api", error);
+                    }
+                    setFile(
+                        CryptoJs.AES.encrypt(
+                            result,
+                            "my-secret-key@123"
+                        ).toString()
                     );
-                    console.log(
-                        "response for upoading encrypted file - ",
-                        response
-                    );
-                } catch (error) {
-                    console.log("Error from UPLOAD api", error);
-                }
-                setFile(
-                    CryptoJs.AES.encrypt(result, "my-secret-key@123").toString()
+                };
+            } else {
+                return setToasterDetails(
+                    {
+                        titleMessage: "error",
+                        descriptionMessage:
+                            "Invalid file type Please uplaod excel file!",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
                 );
-            };
+            }
 
             // setFile(encFile);
         }
@@ -844,6 +870,7 @@ function FillAssessment() {
                                         <li>
                                             <input
                                                 type={"file"}
+                                                accept={".xls, .xlsx"}
                                                 // value={file}
                                                 onChange={handleImportExcel}
                                             />

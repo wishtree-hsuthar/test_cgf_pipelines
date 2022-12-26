@@ -92,7 +92,8 @@ function EditAssessment() {
     const [questionnaireId, setQuestionnaireId] = useState("");
     const [isCGFStaff, setIsCGFStaff] = useState();
     const [openDialog, setOpenDialog] = useState(false);
-
+    const [disableEditAssessmentButton, setDisableEditAssessmentButton] =
+        useState(false);
     const fetchOperationMembersAccordingToMemberCompanyForAddAssessment =
         async (id, isCGFStaff) => {
             try {
@@ -275,6 +276,7 @@ function EditAssessment() {
     };
 
     const updateAssessment = async (data) => {
+        setDisableEditAssessmentButton(true);
         console.log("data for update assessment", data);
         data = {
             ...data,
@@ -294,6 +296,8 @@ function EditAssessment() {
             );
             console.log("responseEditMember from update assessment page");
             if (responseEditMember.status === 200) {
+                setDisableEditAssessmentButton(false);
+
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
@@ -320,6 +324,8 @@ function EditAssessment() {
             }
         } catch (error) {
             console.log("error from update assessment url", error);
+            setDisableEditAssessmentButton(false);
+
             if (error.responseEditMember.status === 401) {
                 console.log("Unauthorized user access");
                 // Add error toaster here
