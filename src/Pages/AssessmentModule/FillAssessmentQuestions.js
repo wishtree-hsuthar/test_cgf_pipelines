@@ -288,7 +288,7 @@ const FillAssessmentQuestion = ({
                     disabled={
                         (editMode && params["*"].includes("view")) || !editMode
                     }
-                    className="datepicker-blk"
+                    // className="datepicker-blk"
                     components={{
                         OpenPickerIcon: DateRangeOutlinedIcon,
                     }}
@@ -306,7 +306,7 @@ const FillAssessmentQuestion = ({
                             autoComplete="off"
                             {...params}
                             onKeyDown={handleOnKeyDownChange}
-                            className={`input-field ${
+                            className={`datepicker-blk input-field ${
                                 !answer && error && error?.length !== 0
                                     ? "input-error"
                                     : ""
