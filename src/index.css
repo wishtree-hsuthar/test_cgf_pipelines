@@ -2552,3 +2552,6 @@ input::-ms-reveal {
     max-width: 100%;
 }
 .mt-0{margin-top: 0 !important;}
+.datepicker-blk.input-error fieldset {
+    border-color: #e53850 !important;
+}

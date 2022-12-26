@@ -231,7 +231,10 @@ const AddRole = () => {
           <div className="form-header flex-between">
             <h2 className="heading2">Add Role</h2>
             <div className="form-header-right-txt">
-              <div className="tertiary-btn-blk" onClick={handleSubmit(onSubmitAddMoreClickHandler1)}>
+              <div
+                className="tertiary-btn-blk"
+                onClick={handleSubmit(onSubmitAddMoreClickHandler1)}
+              >
                 <span
                   className="addmore-icon"
                   // onClick={handleSubmit(onSubmitAddMoreClickHandler1)}
@@ -388,8 +391,12 @@ const AddRole = () => {
                                         [previleg]: {
                                           ...previous[previleg],
                                           fill: !previous[previleg]["fill"],
-                                          list: !previous[previleg]["fill"],
-                                          view: !previous[previleg]["fill"],
+                                          list:
+                                            previous[previleg]["list"] ||
+                                            !previous[previleg]["fill"],
+                                          view:
+                                            previous[previleg]["view"] ||
+                                            !previous[previleg]["fill"],
                                           all:
                                             !previous[previleg]["fill"] &&
                                             previous[previleg]["add"] &&
@@ -411,6 +418,22 @@ const AddRole = () => {
                                       [previleg]: {
                                         ...previous[previleg],
                                         list: !previous[previleg]["list"],
+                                        view:
+                                          (previous[previleg]["view"] &&
+                                            !previous[previleg]["list"]) ||
+                                          false,
+                                        edit:
+                                          (previous[previleg]["edit"] &&
+                                            !previous[previleg]["list"]) ||
+                                          false,
+                                        delete:
+                                          (previous[previleg]["delete"] &&
+                                            !previous[previleg]["list"]) ||
+                                          false,
+                                        add:
+                                          (previous[previleg]["add"] &&
+                                            !previous[previleg]["list"]) ||
+                                          false,
                                         all:
                                           !previous[previleg]["list"] &&
                                           previous[previleg]["add"] &&
@@ -432,8 +455,13 @@ const AddRole = () => {
                                       [previleg]: {
                                         ...previous[previleg],
                                         add: !previous[previleg]["add"],
-                                        list: !previous[previleg]["add"],
-                                        view: !previous[previleg]["add"],
+                                        list:
+                                          previous[previleg]["list"] ||
+                                          !previous[previleg]["add"],
+                                        view:
+                                          previous[previleg]["view"] ||
+                                          !previous[previleg]["add"],
+
                                         all:
                                           !previous[previleg]["add"] &&
                                           previous[previleg]["edit"] &&
@@ -453,8 +481,12 @@ const AddRole = () => {
                                       [previleg]: {
                                         ...previous[previleg],
                                         edit: !previous[previleg]["edit"],
-                                        list: !previous[previleg]["edit"],
-                                        view: !previous[previleg]["edit"],
+                                        list:
+                                          previous[previleg]["list"] ||
+                                          !previous[previleg]["edit"],
+                                        view:
+                                          previous[previleg]["view"] ||
+                                          !previous[previleg]["edit"],
                                         all:
                                           previous[previleg]["add"] &&
                                           !previous[previleg]["edit"] &&
@@ -474,7 +506,21 @@ const AddRole = () => {
                                       [previleg]: {
                                         ...previous[previleg],
                                         view: !previous[previleg]["view"],
-                                        list: !previous[previleg]["view"],
+                                        list:
+                                          previous[previleg]["list"] ||
+                                          !previous[previleg]["view"],
+                                        edit:
+                                          (previous[previleg]["edit"] &&
+                                            !previous[previleg]["view"]) ||
+                                          false,
+                                        delete:
+                                          (previous[previleg]["delete"] &&
+                                            !previous[previleg]["view"]) ||
+                                          false,
+                                        fill:
+                                          (previous[previleg]["fill"] &&
+                                            !previous[previleg]["view"]) ||
+                                          false,
                                         all:
                                           previous[previleg]["add"] &&
                                           previous[previleg]["edit"] &&
@@ -495,9 +541,15 @@ const AddRole = () => {
                                       [previleg]: {
                                         ...previous[previleg],
                                         delete: !previous[previleg]["delete"],
-                                        list: !previous[previleg]["delete"],
-                                        edit: !previous[previleg]["delete"],
-                                        view: !previous[previleg]["delete"],
+                                        list:
+                                          previous[previleg]["list"] ||
+                                          !previous[previleg]["delete"],
+                                        edit:
+                                          previous[previleg]["edit"] ||
+                                          !previous[previleg]["delete"],
+                                        view:
+                                          previous[previleg]["view"] ||
+                                          !previous[previleg]["delete"],
                                         all:
                                           previous[previleg]["add"] &&
                                           !previous[previleg]["delete"],
