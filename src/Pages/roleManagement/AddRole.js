@@ -231,13 +231,16 @@ const AddRole = () => {
           <div className="form-header flex-between">
             <h2 className="heading2">Add Role</h2>
             <div className="form-header-right-txt">
-              <div className="tertiary-btn-blk">
-                <span className="addmore-icon">
+              <div className="tertiary-btn-blk" onClick={handleSubmit(onSubmitAddMoreClickHandler1)}>
+                <span
+                  className="addmore-icon"
+                  // onClick={handleSubmit(onSubmitAddMoreClickHandler1)}
+                >
                   <i className="fa fa-plus"></i>
                 </span>
                 <span
                   className="addmore-txt"
-                  onClick={handleSubmit(onSubmitAddMoreClickHandler1)}
+                  // onClick={handleSubmit(onSubmitAddMoreClickHandler1)}
                 >
                   Save & Add More
                 </span>
