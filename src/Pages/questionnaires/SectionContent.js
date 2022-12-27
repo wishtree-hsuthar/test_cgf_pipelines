@@ -164,7 +164,7 @@ const SectionContent = ({
         //Madhav's save section
         // console.log("questionnaire", questionnaire);
 
-        if (questionnaire?.title === "") {
+        if (questionnaire?.title === "" || questionnaire?.sheetName === "") {
             setGlobalSectionTitleError({ errMsg: "Section title required" });
             countError++;
         }
