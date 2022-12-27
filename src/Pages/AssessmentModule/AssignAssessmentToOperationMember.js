@@ -356,7 +356,7 @@ const AssignAssessmentToOperationMember = () => {
                 <div className="container">
                     <ul className="breadcrumb">
                         <li>
-                            <Link to="/assessment-list">Assessment</Link>
+                            <Link to="/assessment-list">Assessments</Link>
                         </li>
 
                         <li>Assign Assessment</li>

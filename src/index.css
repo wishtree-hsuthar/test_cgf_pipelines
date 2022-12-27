@@ -2287,7 +2287,7 @@ input:-webkit-autofill:active {
     background: #fff;
 }
 .assessment-table tr td:first-child {
-    width: 100%;
+    /* width: 100%; */
     display: table-cell !important;
     background: #fff !important;
     position: relative !important;
@@ -2379,7 +2379,7 @@ input:-webkit-autofill:active {
     background: #fff;
 }
 .que-table-render tr td:first-child {
-    width: 100%;
+    /* width: 100%; */
     display: table-cell !important;
     background: #fff !important;
     position: relative !important;
@@ -2559,7 +2559,7 @@ input::-ms-reveal {
     max-width: 100%;
 }
 .mt-0{margin-top: 0 !important;}
-.preview-que-ttl-blk .heading2{text-align: justify;width: calc(100% - 45px);line-height: 20px;}
+.preview-que-ttl-blk .heading2{text-align: justify;width: calc(100% - 45px);line-height: 20px;word-break: break-all;}
 .preview-assessment-ttl .heading2{text-align: justify;width: calc(100% - 210px);line-height: 20px;}
 /* .search-and-btn-field-blk {
     flex: 0 0 65%;
@@ -2568,3 +2568,5 @@ input::-ms-reveal {
 .datepicker-blk.input-error fieldset {
     border-color: #e53850 !important;
 }
+.not-prefilled-table tr td:first-child{width: 75px !important;background: #e9f4fa !important;}
+.not-prefilled-table th{width: auto;}
