@@ -915,7 +915,7 @@ function FillAssessment() {
                                 <div
                                     className="crud-toggle-wrap assessment-crud-toggle-wrap"
                                     style={{
-                                        display: isActive ? "none" : "block",
+                                        display: isActive ? "block" : "none",
                                     }}
                                 >
                                     <ul className="crud-toggle-list">
