@@ -373,7 +373,7 @@ const ViewMember = () => {
             setArrOfCountryCode([...countryCodeSet]);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // isMounted && setErrorToaster(error);
+            
         }
     };
 
@@ -388,7 +388,7 @@ const ViewMember = () => {
             return [];
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // setErrorToaster(error);
+            
             return [];
         }
     };
@@ -549,7 +549,7 @@ const ViewMember = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             console.log("Error from get operation member by member id", error);
-            // setErrorToaster(error);
+            
         }
     };
 

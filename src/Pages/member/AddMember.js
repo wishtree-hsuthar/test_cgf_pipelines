@@ -233,22 +233,6 @@ const AddMember = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             console.log("Error in getCitiesAddmember");
-            // if (error?.response?.status == 401) {
-            //     setToasterDetailsAddMember(
-            //         {
-            //             titleMessage: "Error",
-            //             descriptionMessage:
-            //                 "Session Timeout: Please login again",
-            //             messageType: "error",
-            //         },
-            //         () => myRef.current()
-            //     );
-            //     setTimeout(() => {
-            //         navigate("/login");
-            //     }, 3000);
-            // } else {
-            //     setErrorToaster(error);
-            // }
         }
     };
     //method to handle state change
@@ -303,7 +287,7 @@ const AddMember = () => {
             setArrOfCountryCodeAddMember([...countryCodeSet]);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // setErrorToaster(error);
+            
             console.log("Error from getCountryCodeAddMember");
         }
     };
@@ -313,7 +297,7 @@ const AddMember = () => {
             // return regionCountries;
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // setErrorToaster(error);
+
             console.log("Error from getCountriesAddMember ");
             return [];
         }
@@ -362,17 +346,7 @@ const AddMember = () => {
             });
         } catch (error) {
             console.log("Error from fetch addMemberRoles", error);
-            // setToasterDetailsAddMember(
-            //     {
-            //         titleMessage: "Oops!",
-            //         descriptionMessage: error?.response?.data?.message,
-            //         messageType: "error",
-            //     },
-            //     () => myRef.current()
-            // );
-            // setTimeout(() => {
-            //     navigate("/login");
-            // }, 3000);
+         
         }
     };
 
@@ -385,7 +359,7 @@ const AddMember = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             console.log("error from getParentCompanyAddMember");
-            // setErrorToaster(error);
+
         }
     };
 

@@ -6,10 +6,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
+  Tooltip
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import TableLayoutCellComponent from "./TableLayoutCellComponent.js";
@@ -55,10 +54,8 @@ const TableAssessment = ({
   const tranformedColumnValues = getTransformedColumns(columnValues);
   const tranformedRowValues = getTransformedRows(rowValues);
   const [isPrefilled, setIsPrefilled] = useState(false);
-  const [isRowsModified, setIsRowsModified] = useState(false);
+  
   let rowIdsArray = [];
-  // let assessmentQuestionnaire = useSelector((state) => state.user.assessment);
-  // console.log("temp Asessement", assessmentQuestionnaire);
   const onAddRowClickHandler = () => {
     const newRowId = uuidv4();
     let temp = { ...assessmentQuestionnaire };
@@ -88,12 +85,9 @@ const TableAssessment = ({
     setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
   };
 
-  // console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
+  
 
   useEffect(() => {
-    // console.log("section", assessmentQuestionnaire[sectionUUID]);
-    // dispatch(setOldAssessment(assessmentQuestionnaire));
-    // console.log("tempSection", assessmentQuestionnaire);
   }, []);
   console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
   return (
@@ -220,8 +214,6 @@ const TableAssessment = ({
                           (tempRowId) =>
                             tempRowId === assessmentQuestionnaireRowId
                         );
-                        // console.log("index in rowId Array", isRowRenderd);
-                        // console.log("rowIds array:- ", rowIdsArray);
                         if (isRowRenderd === -1) {
                           rowIdsArray?.push(assessmentQuestionnaireRowId);
                           return (
@@ -250,7 +242,7 @@ const TableAssessment = ({
                                   </TableCell>
                                 )}
                               {columnValues?.map((column, columnIdx) => {
-                                // console.log("column:- ", column);
+                                
                                 return (
                                   <TableCell key={column?.uuid}>
                                     <TableLayoutCellComponent
