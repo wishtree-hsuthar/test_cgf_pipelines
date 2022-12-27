@@ -658,7 +658,7 @@ function FillAssessment() {
                 })}
               </span>
             </span>
-            Click “Accept” if you want to fill out the assessment . Or else,
+            Click “Accept” if you want to fill out the assessment. Or else,
             provide a reason and reject the assessment, if you don’t want to
             continue with it.
           </p>
