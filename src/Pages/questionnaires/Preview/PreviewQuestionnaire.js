@@ -343,76 +343,82 @@ function PreviewQuestionnaire(props) {
             </div>
             <section>
                 <div className="container">
-                    <div className="form-header flex-between">
-                        <h2 className="heading2">{questionnaire.title}</h2>
-                        <span
-                            className="form-header-right-txt"
-                            onClick={handleToggle}
-                        >
+                    <div className="form-header">
+                        <div className="flex-between mb-10 preview-que-ttl-blk">
+                            <h2 className="heading2">{questionnaire.title}</h2>
                             <span
-                                className={`crud-operation ${
-                                    isActive && "crud-operation-active"
-                                }`}
+                                className="form-header-right-txt"
+                                onClick={handleToggle}
                             >
-                                <MoreVertIcon />
-                            </span>
-                            <div
-                                className="crud-toggle-wrap que-crud-toggle-wrap"
-                                style={{ display: isActive ? "block" : "none" }}
-                            >
-                                <ul className="crud-toggle-list">
-                                    <li
-                                        onClick={() =>
-                                            downloadFunction(
-                                                "Questionnaire",
-                                                setToasterDetails,
-                                                params.id,
-                                                questionnairePreviewRef,
-                                                DOWNLOAD_QUESTIONNAIRES_BY_ID
-                                            )
-                                        }
-                                    >
-                                        Export to Excel
-                                    </li>
-                                    {!params["*"].includes("version") &&
-                                        !questionnaire?.isDraft && (
-                                            <li
-                                                onClick={() =>
-                                                    navigate(
-                                                        `/questionnaire-version-history/${params.id}`
-                                                    )
-                                                }
-                                            >
-                                                Version history
-                                            </li>
-                                        )}
-                                    {(SUPER_ADMIN === true ||
-                                        moduleAccesForMember[0]?.questionnaire
-                                            ?.edit) &&
-                                        !params["*"].includes("version") &&
-                                        (questionnaire?.isDraft ||
-                                            questionnaire?.isPublished) && (
-                                            <li
-                                                onClick={() =>
-                                                    navigate(
-                                                        `/questionnaires/add-questionnaire/${params.id}`
-                                                    )
-                                                }
-                                            >
-                                                Edit Questionnaire
-                                            </li>
-                                        )}
-                                    {(SUPER_ADMIN === true ||
-                                        moduleAccesForMember[0]?.questionnaire
-                                            ?.delete) && (
-                                        <li onClick={() => setOpenDialog(true)}>
-                                            Delete Questionnaire
+                                <span
+                                    className={`crud-operation ${
+                                        isActive && "crud-operation-active"
+                                    }`}
+                                >
+                                    <MoreVertIcon />
+                                </span>
+                                <div
+                                    className="crud-toggle-wrap que-crud-toggle-wrap"
+                                    style={{ display: isActive ? "block" : "none" }}
+                                >
+                                    <ul className="crud-toggle-list">
+                                        <li
+                                            onClick={() =>
+                                                downloadFunction(
+                                                    "Questionnaire",
+                                                    setToasterDetails,
+                                                    params.id,
+                                                    questionnairePreviewRef,
+                                                    DOWNLOAD_QUESTIONNAIRES_BY_ID
+                                                )
+                                            }
+                                        >
+                                            Export to Excel
                                         </li>
-                                    )}
-                                </ul>
-                            </div>
-                        </span>
+                                        {!params["*"].includes("version") &&
+                                            !questionnaire?.isDraft && (
+                                                <li
+                                                    onClick={() =>
+                                                        navigate(
+                                                            `/questionnaire-version-history/${params.id}`
+                                                        )
+                                                    }
+                                                >
+                                                    Version history
+                                                </li>
+                                            )}
+                                        {(SUPER_ADMIN === true ||
+                                            moduleAccesForMember[0]?.questionnaire
+                                                ?.edit) &&
+                                            !params["*"].includes("version") &&
+                                            (questionnaire?.isDraft ||
+                                                questionnaire?.isPublished) && (
+                                                <li
+                                                    onClick={() =>
+                                                        navigate(
+                                                            `/questionnaires/add-questionnaire/${params.id}`
+                                                        )
+                                                    }
+                                                >
+                                                    Edit Questionnaire
+                                                </li>
+                                            )}
+                                        {(SUPER_ADMIN === true ||
+                                            moduleAccesForMember[0]?.questionnaire
+                                                ?.delete) && (
+                                            <li onClick={() => setOpenDialog(true)}>
+                                                Delete Questionnaire
+                                            </li>
+                                        )}
+                                    </ul>
+                                </div>
+                            </span>
+                        </div>
+                        <div className="excel-short-name">
+                            <p>Short Name</p>
+                        </div>
                     </div>
+                    
                     {/* <div className="que-ttl-blk">
                         <div className="form-group mb-0">
                             <label for="">

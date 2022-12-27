@@ -2,25 +2,22 @@
     .assessment-tab-wrap .MuiTab-root{padding: 30px 15px;}
     .card-form-three-field {flex: 0 0 31.3%;max-width: 31.3%;}
     .view-instruct-field-right {flex: 0 0 80%;max-width: 80%;}
-    .search-and-btn-field-blk {flex: 0 0 33%;max-width: 33%;}
+    .view-instruct-field-right .search-and-btn-field-blk {flex: 0 0 33%;max-width: 33%;}
     .section-tab-leftblk {
         flex: 0 0 78%;
         max-width: 78%;
     }
+    .search-and-btn-field-blk {flex: 0 0 65%;max-width: 65%;}
 }
 @media screen and (max-width: 1023px) {
     .login-rightblk{padding: 0 30px;}
-
-    .sect-card-form-leftfield, .sect-card-form-rightfield{flex: 0 0 100%;
-        max-width: 100%;}
-        .sect-card-form-rightfield .form-group{flex: 0 0 48%;
-            max-width: 48%;}
-    .que-card-form-leftfield, .que-card-form-rightfield{flex: 0 0 100%;
-        max-width: 100%;}
-    .que-card-form-rightfield .form-group {
-    flex: 0 0 48%;
-    max-width: 48%;
-}
+    .que-ttl-left, .que-ttl-right {flex: 0 0 100%;max-width: 100%;}
+    .que-ttl-right .form-group{flex: 0 0 48%;max-width: 48%;}
+    /* .sect-card-form-leftfield, .sect-card-form-rightfield{flex: 0 0 100%;
+        max-width: 100%;} */
+    .sect-card-form-rightfield .form-group{flex: 0 0 100%;max-width: 100%;}
+    .que-card-form-leftfield, .que-card-form-rightfield{flex: 0 0 100%;max-width: 100%;}
+    .que-card-form-rightfield .form-group {flex: 0 0 48%;max-width: 48%;}
     .que-card-input-type-wrapper{display: block;}
     .que-card-input-type-wrapper .que-card-form-leftfield{margin-bottom: 20px;}
     .section-tab-leftblk {
