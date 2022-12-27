@@ -1,17 +1,17 @@
 //Third party imports
 import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  Paper,
-  Radio,
-  RadioGroup as EditRoleRadioGroup,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TextField,
+    Box,
+    Checkbox,
+    FormControlLabel,
+    Paper,
+    Radio,
+    RadioGroup as EditRoleRadioGroup,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -32,59 +32,61 @@ const descriptionMessage = "";
 const messageType = "";
 
 const EditRole = () => {
-  useDocumentTitle("Edit Role");
-  const params = useParams();
+    useDocumentTitle("Edit Role");
+    const params = useParams();
 
-  // state to manage loader
-  const [isLoading1, setIsLoading1] = useState(false);
+    // state to manage loader
+    const [isLoading1, setIsLoading1] = useState(false);
 
-  const navigate2 = useNavigate();
-  const [toasterDetails2, setToasterDetails2] = useCallbackState({
-    titleMessage,
-    descriptionMessage,
-    messageType,
-  });
-  //method to call all error toaster from this method
-  const setErrorToaster = (error) => {
-    console.log("error", error);
-    setToasterDetails2(
-      {
-        titleMessage: "Error",
-        descriptionMessage:
-          error?.response?.data?.message &&
-          typeof error.response.data.message === "string"
-            ? error.response.data.message
-            : "Something went wrong!",
-        messageType: "error",
-      },
-      () => myRef2.current()
-    );
-  };
+    const navigate2 = useNavigate();
+    const [toasterDetails2, setToasterDetails2] = useCallbackState({
+        titleMessage,
+        descriptionMessage,
+        messageType,
+    });
+    //method to call all error toaster from this method
+    const setErrorToaster = (error) => {
+        console.log("error", error);
+        setToasterDetails2(
+            {
+                titleMessage: "Error",
+                descriptionMessage:
+                    error?.response?.data?.message &&
+                    typeof error.response.data.message === "string"
+                        ? error.response.data.message
+                        : "Something went wrong!",
+                messageType: "error",
+            },
+            () => myRef2.current()
+        );
+    };
 
-  // let temp = {};
-  //Ref for Toaster
-  const myRef2 = React.useRef();
+    // let temp = {};
+    //Ref for Toaster
+    const myRef2 = React.useRef();
 
-  let editDefault = {
-    roleName: "",
-    status: "",
-    description: "",
-  };
-  //temp to hold privileges
-  let temp = {};
-  const [previleges, setPrevileges] = useState({ ...temp });
-  const { control, reset, setValue, handleSubmit } = useForm({
-    defaultValues: editDefault,
-  });
+    let editDefault = {
+        roleName: "",
+        status: "",
+        description: "",
+    };
+    //temp to hold privileges
+    let temp = {};
+    const [previleges, setPrevileges] = useState({ ...temp });
+    const [disableEditRoleUpdateButton, setDisableEditRoleUpdateButton] =
+        useState(false);
+    const { control, reset, setValue, handleSubmit } = useForm({
+        defaultValues: editDefault,
+    });
 
-  //helper message for inputs
-  const myHelper = {
-    description: {
-      required: "Enter the description",
-      maxLength: "Max char limit exceed",
-      minLength: "minimum 3 characters required",
-    },
-  };
+    //helper message for inputs
+    const myHelper = {
+        description: {
+            required: "Enter the description",
+            maxLength: "Max char limit exceed",
+            minLength: "minimum 3 characters required",
+        },
+    };
 
   const onSubmit1 = async (data) => {
     try {
@@ -566,63 +568,111 @@ const EditRole = () => {
                                     }
                                   />
                                 </TableCell> */}
-                                <TableCell align="center" padding="checkbox">
-                                  <Checkbox
-                                    className="table-checkbox"
-                                    checked={previleges[previleg]["all"]}
-                                    onChange={() =>
-                                      setPrevileges((previous) => ({
-                                        ...previous,
-                                        [previleg]: {
-                                          ...previous[previleg],
-                                          all: !previous[previleg]["all"],
-                                          list: !previous[previleg]["all"],
-                                          view: !previous[previleg]["all"],
-                                          add: !previous[previleg]["all"],
-                                          edit: !previous[previleg]["all"],
-                                          delete: !previous[previleg]["all"],
-                                          fill:
-                                            previleges[previleg]["name"] ===
-                                              "Assessment" &&
-                                            !previous[previleg]["all"],
-                                        },
-                                      }))
-                                    }
-                                  />
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Paper>
-                </Box>
-                {/* </div> */}
-                <div className="form-btn flex-between add-members-btn">
-                  <button
-                    type="reset"
-                    style={{ marginTop: "20px" }}
-                    className="secondary-button mr-10"
-                    onClick={onClickCancelHandler2}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="primary-button"
-                    style={{ marginTop: "20px" }}
-                  >
-                    Update
-                  </button>
+                                                                <TableCell
+                                                                    align="center"
+                                                                    padding="checkbox"
+                                                                >
+                                                                    <Checkbox
+                                                                        className="table-checkbox"
+                                                                        checked={
+                                                                            previleges[
+                                                                                previleg
+                                                                            ][
+                                                                                "all"
+                                                                            ]
+                                                                        }
+                                                                        onChange={() =>
+                                                                            setPrevileges(
+                                                                                (
+                                                                                    previous
+                                                                                ) => ({
+                                                                                    ...previous,
+                                                                                    [previleg]:
+                                                                                        {
+                                                                                            ...previous[
+                                                                                                previleg
+                                                                                            ],
+                                                                                            all: !previous[
+                                                                                                previleg
+                                                                                            ][
+                                                                                                "all"
+                                                                                            ],
+                                                                                            list: !previous[
+                                                                                                previleg
+                                                                                            ][
+                                                                                                "all"
+                                                                                            ],
+                                                                                            view: !previous[
+                                                                                                previleg
+                                                                                            ][
+                                                                                                "all"
+                                                                                            ],
+                                                                                            add: !previous[
+                                                                                                previleg
+                                                                                            ][
+                                                                                                "all"
+                                                                                            ],
+                                                                                            edit: !previous[
+                                                                                                previleg
+                                                                                            ][
+                                                                                                "all"
+                                                                                            ],
+                                                                                            delete: !previous[
+                                                                                                previleg
+                                                                                            ][
+                                                                                                "all"
+                                                                                            ],
+                                                                                            fill:
+                                                                                                previleges[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "name"
+                                                                                                ] ===
+                                                                                                    "Assessment" &&
+                                                                                                !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "all"
+                                                                                                ],
+                                                                                        },
+                                                                                })
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        );
+                                                    })}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Paper>
+                                </Box>
+                                {/* </div> */}
+                                <div className="form-btn flex-between add-members-btn">
+                                    <button
+                                        type="reset"
+                                        style={{ marginTop: "20px" }}
+                                        className="secondary-button mr-10"
+                                        onClick={onClickCancelHandler2}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="primary-button"
+                                        style={{ marginTop: "20px" }}
+                                    >
+                                        Update
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    )}
                 </div>
-              </div>
-            </form>
-          )}
+            </section>
         </div>
-      </section>
-    </div>
-  );
+    );
 };
 
 export default EditRole;

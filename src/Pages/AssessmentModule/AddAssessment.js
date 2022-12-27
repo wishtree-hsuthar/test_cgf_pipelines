@@ -84,6 +84,8 @@ const AddAssessment = () => {
         },
     });
     const [isCGFStaff, setIsCGFStaff] = useState(false);
+    const [disableEditAssessmentButton, setDisableEditAssessmentButton] =
+        useState(false);
 
     useEffect(() => {
         let isMounted = true;
@@ -243,7 +245,7 @@ const AddAssessment = () => {
 
     const submitAssessments = async (data) => {
         console.log("data from on submit", data);
-
+        setDisableEditAssessmentButton(true);
         let someDate = new Date(data.dueDate).setDate(
             new Date(data.dueDate).getDate() + 1
         );
@@ -268,6 +270,8 @@ const AddAssessment = () => {
         try {
             const response = await privateAxios.post(ADD_ASSESSMENTS, data);
             if (response.status === 201) {
+                setDisableEditAssessmentButton(false);
+
                 console.log("response from add assessments", response);
                 reset({
                     title: "",
@@ -294,6 +298,8 @@ const AddAssessment = () => {
                 }, 2000);
             }
         } catch (error) {
+            setDisableEditAssessmentButton(false);
+
             if (error.response.status === 401) {
                 console.log("Unauthorized user access");
                 // Add error toaster here
@@ -600,6 +606,7 @@ const AddAssessment = () => {
                                     <button
                                         type="submit"
                                         className="primary-button add-button"
+                                        disabled={disableEditAssessmentButton}
                                     >
                                         Save
                                     </button>

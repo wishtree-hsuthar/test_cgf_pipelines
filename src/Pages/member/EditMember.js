@@ -41,6 +41,8 @@ const EditMember = () => {
 
     const param = useParams();
     const navigate = useNavigate();
+    const [disableEditMemberUpdateButton, setDisableEditMemberUpdateButton] =
+        useState(false);
     // Refr for Toaster
     const myRef = React.useRef();
     //Toaster Message setter
@@ -126,18 +128,24 @@ const EditMember = () => {
             };
 
             console.log("Member Representative Id", member.createdBy);
-            await axios.put(MEMBER + `/${param.id}`, {
+            const response = await axios.put(MEMBER + `/${param.id}`, {
                 ...backendObject,
             });
-            reset(defaultValues);
-            setToasterDetailsEditMember(
-                {
-                    titleMessage: "Success!",
-                    descriptionMessage: "Member details updated successfully!",
-                    messageType: "success",
-                },
-                () => myRef.current()
-            );
+            if (response.status === 200) {
+                setDisableEditMemberUpdateButton(false);
+                reset(defaultValues);
+
+                setToasterDetailsEditMember(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage:
+                            "Member details updated successfully!",
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+            }
+
             console.log("Default values: ", defaultValues);
         } catch (error) {
             if (error?.response?.status == 401) {
@@ -165,6 +173,8 @@ const EditMember = () => {
     };
     const onSubmit = (data) => {
         console.log("data", data);
+        setDisableEditMemberUpdateButton(true);
+
         onSubmitFunctionCall(data);
         setTimeout(() => navigate("/users/members"), 3000);
     };
@@ -1716,6 +1726,7 @@ const EditMember = () => {
                                     <button
                                         type="submit"
                                         //   onClick={}
+                                        disabled={disableEditMemberUpdateButton}
                                         className="primary-button add-button"
                                     >
                                         Update
