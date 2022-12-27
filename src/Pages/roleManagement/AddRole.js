@@ -14,7 +14,7 @@ import {
     TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, set, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -38,6 +38,23 @@ const AddRole = () => {
         descriptionMessage: "",
         messageType: "success",
     });
+    //method to call all error toaster from this method
+    const setErrorToaster = (error) => {
+        console.log("error", error);
+        setToasterDetails1(
+            {
+                titleMessage: "Error",
+                descriptionMessage:
+                    error?.response?.data?.message &&
+                    typeof error.response.data.message === "string"
+                        ? error.response.data.message
+                        : "Something went wrong!",
+                messageType: "error",
+            },
+            () => myRef.current()
+        );
+    };
+
     //array to hold modules available
     let modules = [];
     // console.log("modules", modules);
@@ -151,18 +168,8 @@ const AddRole = () => {
                 );
                 navigate1("/login");
             } else {
-                setToasterDetails1(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
+                setErrorToaster(error);
+
                 return false;
             }
         }
@@ -199,18 +206,7 @@ const AddRole = () => {
                 );
                 navigate1("/login");
             } else {
-                setToasterDetails1(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
+                setErrorToaster(error);
             }
         }
     };
@@ -248,15 +244,21 @@ const AddRole = () => {
                     <div className="form-header flex-between">
                         <h2 className="heading2">Add Role</h2>
                         <div className="form-header-right-txt">
-                            <div className="tertiary-btn-blk">
-                                <span className="addmore-icon">
+                            <div
+                                className="tertiary-btn-blk"
+                                onClick={handleSubmit(
+                                    onSubmitAddMoreClickHandler1
+                                )}
+                            >
+                                <span
+                                    className="addmore-icon"
+                                    // onClick={handleSubmit(onSubmitAddMoreClickHandler1)}
+                                >
                                     <i className="fa fa-plus"></i>
                                 </span>
                                 <span
                                     className="addmore-txt"
-                                    onClick={handleSubmit(
-                                        onSubmitAddMoreClickHandler1
-                                    )}
+                                    // onClick={handleSubmit(onSubmitAddMoreClickHandler1)}
                                 >
                                     Save & Add More
                                 </span>
@@ -472,16 +474,28 @@ const AddRole = () => {
                                                                                                 ][
                                                                                                     "fill"
                                                                                                 ],
-                                                                                                list: !previous[
-                                                                                                    previleg
-                                                                                                ][
-                                                                                                    "fill"
-                                                                                                ],
-                                                                                                view: !previous[
-                                                                                                    previleg
-                                                                                                ][
-                                                                                                    "fill"
-                                                                                                ],
+                                                                                                list:
+                                                                                                    previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "list"
+                                                                                                    ] ||
+                                                                                                    !previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "fill"
+                                                                                                    ],
+                                                                                                view:
+                                                                                                    previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "view"
+                                                                                                    ] ||
+                                                                                                    !previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "fill"
+                                                                                                    ],
                                                                                                 all:
                                                                                                     !previous[
                                                                                                         previleg
@@ -539,6 +553,54 @@ const AddRole = () => {
                                                                                             ][
                                                                                                 "list"
                                                                                             ],
+                                                                                            view:
+                                                                                                (previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "view"
+                                                                                                ] &&
+                                                                                                    !previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "list"
+                                                                                                    ]) ||
+                                                                                                false,
+                                                                                            edit:
+                                                                                                (previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "edit"
+                                                                                                ] &&
+                                                                                                    !previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "list"
+                                                                                                    ]) ||
+                                                                                                false,
+                                                                                            delete:
+                                                                                                (previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "delete"
+                                                                                                ] &&
+                                                                                                    !previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "list"
+                                                                                                    ]) ||
+                                                                                                false,
+                                                                                            add:
+                                                                                                (previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "add"
+                                                                                                ] &&
+                                                                                                    !previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "list"
+                                                                                                    ]) ||
+                                                                                                false,
                                                                                             all:
                                                                                                 !previous[
                                                                                                     previleg
@@ -600,16 +662,29 @@ const AddRole = () => {
                                                                                             ][
                                                                                                 "add"
                                                                                             ],
-                                                                                            list: !previous[
-                                                                                                previleg
-                                                                                            ][
-                                                                                                "add"
-                                                                                            ],
-                                                                                            view: !previous[
-                                                                                                previleg
-                                                                                            ][
-                                                                                                "add"
-                                                                                            ],
+                                                                                            list:
+                                                                                                previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "list"
+                                                                                                ] ||
+                                                                                                !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "add"
+                                                                                                ],
+                                                                                            view:
+                                                                                                previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "view"
+                                                                                                ] ||
+                                                                                                !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "add"
+                                                                                                ],
+
                                                                                             all:
                                                                                                 !previous[
                                                                                                     previleg
@@ -661,16 +736,28 @@ const AddRole = () => {
                                                                                             ][
                                                                                                 "edit"
                                                                                             ],
-                                                                                            list: !previous[
-                                                                                                previleg
-                                                                                            ][
-                                                                                                "edit"
-                                                                                            ],
-                                                                                            view: !previous[
-                                                                                                previleg
-                                                                                            ][
-                                                                                                "edit"
-                                                                                            ],
+                                                                                            list:
+                                                                                                previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "list"
+                                                                                                ] ||
+                                                                                                !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "edit"
+                                                                                                ],
+                                                                                            view:
+                                                                                                previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "view"
+                                                                                                ] ||
+                                                                                                !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "edit"
+                                                                                                ],
                                                                                             all:
                                                                                                 previous[
                                                                                                     previleg
@@ -722,11 +809,53 @@ const AddRole = () => {
                                                                                             ][
                                                                                                 "view"
                                                                                             ],
-                                                                                            list: !previous[
-                                                                                                previleg
-                                                                                            ][
-                                                                                                "view"
-                                                                                            ],
+                                                                                            list:
+                                                                                                previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "list"
+                                                                                                ] ||
+                                                                                                !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "view"
+                                                                                                ],
+                                                                                            edit:
+                                                                                                (previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "edit"
+                                                                                                ] &&
+                                                                                                    !previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "view"
+                                                                                                    ]) ||
+                                                                                                false,
+                                                                                            delete:
+                                                                                                (previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "delete"
+                                                                                                ] &&
+                                                                                                    !previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "view"
+                                                                                                    ]) ||
+                                                                                                false,
+                                                                                            fill:
+                                                                                                (previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "fill"
+                                                                                                ] &&
+                                                                                                    !previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "view"
+                                                                                                    ]) ||
+                                                                                                false,
                                                                                             all:
                                                                                                 previous[
                                                                                                     previleg
@@ -783,21 +912,39 @@ const AddRole = () => {
                                                                                             ][
                                                                                                 "delete"
                                                                                             ],
-                                                                                            list: !previous[
-                                                                                                previleg
-                                                                                            ][
-                                                                                                "delete"
-                                                                                            ],
-                                                                                            edit: !previous[
-                                                                                                previleg
-                                                                                            ][
-                                                                                                "delete"
-                                                                                            ],
-                                                                                            view: !previous[
-                                                                                                previleg
-                                                                                            ][
-                                                                                                "delete"
-                                                                                            ],
+                                                                                            list:
+                                                                                                previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "list"
+                                                                                                ] ||
+                                                                                                !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "delete"
+                                                                                                ],
+                                                                                            edit:
+                                                                                                previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "edit"
+                                                                                                ] ||
+                                                                                                !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "delete"
+                                                                                                ],
+                                                                                            view:
+                                                                                                previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "view"
+                                                                                                ] ||
+                                                                                                !previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "delete"
+                                                                                                ],
                                                                                             all:
                                                                                                 previous[
                                                                                                     previleg

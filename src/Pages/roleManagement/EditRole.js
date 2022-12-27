@@ -5,7 +5,7 @@ import {
     FormControlLabel,
     Paper,
     Radio,
-    RadioGroup,
+    RadioGroup as EditRoleRadioGroup,
     Table,
     TableBody,
     TableCell,
@@ -44,6 +44,23 @@ const EditRole = () => {
         descriptionMessage,
         messageType,
     });
+    //method to call all error toaster from this method
+    const setErrorToaster = (error) => {
+        console.log("error", error);
+        setToasterDetails2(
+            {
+                titleMessage: "Error",
+                descriptionMessage:
+                    error?.response?.data?.message &&
+                    typeof error.response.data.message === "string"
+                        ? error.response.data.message
+                        : "Something went wrong!",
+                messageType: "error",
+            },
+            () => myRef2.current()
+        );
+    };
+
     // let temp = {};
     //Ref for Toaster
     const myRef2 = React.useRef();
@@ -118,18 +135,7 @@ const EditRole = () => {
                 );
                 navigate2("/login");
             } else {
-                setToasterDetails2(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
-                        messageType: "error",
-                    },
-                    () => myRef2.current()
-                );
+                setErrorToaster(error);
             }
         }
     };
@@ -204,19 +210,7 @@ const EditRole = () => {
                 }, 3000);
             } else {
                 setIsLoading1(false);
-
-                setToasterDetails2(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong!",
-                        messageType: "error",
-                    },
-                    () => myRef2.current()
-                );
+                setErrorToaster(error);
             }
         }
     };
@@ -308,7 +302,7 @@ const EditRole = () => {
                                                     name="status"
                                                     control={control}
                                                     render={({ field }) => (
-                                                        <RadioGroup
+                                                        <EditRoleRadioGroup
                                                             {...field}
                                                             // value={editDefault && editDefault.status}
                                                             aria-labelledby="demo-radio-buttons-group-label"
@@ -329,7 +323,7 @@ const EditRole = () => {
                                                                 }
                                                                 label="Inactive"
                                                             />
-                                                        </RadioGroup>
+                                                        </EditRoleRadioGroup>
                                                     )}
                                                 />
                                             </div>

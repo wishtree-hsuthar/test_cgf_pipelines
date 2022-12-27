@@ -517,6 +517,7 @@ const AddAssessment = () => {
                                                             params
                                                         ) => (
                                                             <TextField
+                                                            autoComplete="off"
                                                                 {...params}
                                                                 className={` input-field ${
                                                                     error &&

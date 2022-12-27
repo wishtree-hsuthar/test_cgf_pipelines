@@ -111,7 +111,7 @@ function FillAssessment() {
         useState(false);
 
     const viewInstruction = () => {
-        navigate("/assessments/instructions");
+        navigate("/assessment-list/instructions");
     };
 
     //Toaster Message setter
@@ -125,19 +125,19 @@ function FillAssessment() {
         setErrors({ ...errors });
     };
 
-    console.log(
-        "both user are same",
-        userAuth._id === assessment?.assignedOperationMember?._id
-    );
+    // console.log(
+    //     "both user are same",
+    //     userAuth._id === assessment?.assignedOperationMember?._id
+    // );
 
-    console.log(
-        "first user ",
-        userAuth._id +
-            "  second user  " +
-            assessment?.assignedOperationMember?._id
-    );
+    // console.log(
+    //     "first user ",
+    //     userAuth._id +
+    //         "  second user  " +
+    //         assessment?.assignedOperationMember?._id
+    // );
     const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
-    console.log("params", params["*"].includes("view"));
+    // console.log("params", params["*"].includes("view"));
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -302,91 +302,152 @@ function FillAssessment() {
                 assessmentQuestionnaire[section?.uuid] ?? {};
 
             if (section?.layout === "table") {
+                sectionErrors = {};
                 const transformedColValues = getTransformedColumns(
                     section?.columnValues
                 );
-
-                section?.rowValues.map((row) => {
-                    row?.cells?.map((cell) => {
-                        console.log(
-                            "table layout cell",
-                            transformedColValues[cell?.columnId]
-                        );
+                console.log(
+                    "curren assessment Questionnaire:- ",
+                    currentSectionAnswers
+                );
+                console.log(
+                    "transformed column values:- ",
+                    transformedColValues
+                );
+                // currentSectionAnswers
+                Object.keys(currentSectionAnswers).forEach((answersKeys) => {
+                    let tempRowId = answersKeys?.split(".")[1];
+                    section?.columnValues?.forEach((column) => {
                         if (
-                            transformedColValues[cell?.columnId].columnType !==
-                                "prefilled" &&
+                            column.columnType !== "prefilled" &&
                             saveAsDraft === false &&
                             (!currentSectionAnswers[
-                                `${cell?.columnId}.${row?.uuid}`
+                                `${column?.uuid}.${tempRowId}`
                             ] ||
                                 currentSectionAnswers[
-                                    `${cell?.columnId}.${row?.uuid}`
+                                    `${column?.uuid}.${tempRowId}`
                                 ].length === 0)
                         ) {
-                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                            sectionErrors[`${column?.uuid}.${tempRowId}`] =
                                 "This is required field";
                             sections.push(index);
                         } else if (
-                            transformedColValues[cell?.columnId].columnType !==
-                                "prefilled" &&
-                            transformedColValues[cell?.columnId]?.validation ==
-                                "alphabets" &&
+                            column.columnType !== "prefilled" &&
+                            column?.validation == "alphabets" &&
                             currentSectionAnswers[
-                                `${cell?.columnId}.${row?.uuid}`
+                                `${column?.uuid}.${tempRowId}`
                             ]?.length > 0 &&
                             !AlphaRegEx.test(
                                 currentSectionAnswers[
-                                    `${cell?.columnId}.${row?.uuid}`
+                                    `${column?.uuid}.${tempRowId}`
                                 ]
                             )
                         ) {
-                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                            sectionErrors[`${column?.uuid}.${tempRowId}`] =
                                 "This is alphabets only field";
                             console.log("in table alphabets only");
                             sections.push(index);
                         } else if (
-                            transformedColValues[cell?.columnId].columnType !==
-                                "prefilled" &&
-                            transformedColValues[cell?.columnId]?.validation ==
-                                "numeric" &&
+                            column?.columnType !== "prefilled" &&
+                            column?.validation == "numeric" &&
                             currentSectionAnswers[
-                                `${cell?.columnId}.${row?.uuid}`
+                                `${column?.uuid}.${tempRowId}`
                             ]?.length > 0 &&
                             !NumericRegEx.test(
                                 currentSectionAnswers[
-                                    `${cell?.columnId}.${row?.uuid}`
+                                    `${column?.uuid}.${tempRowId}`
                                 ]
                             )
                         ) {
-                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                            sectionErrors[`${column?.uuid}.${tempRowId}`] =
                                 "This is numeric only field";
                             console.log("in table numeric only");
                             sections.push(index);
                         } else if (
-                            transformedColValues[cell?.columnId].columnType !==
-                                "prefilled" &&
-                            transformedColValues[cell?.columnId]?.validation ==
-                                "alphanumeric" &&
+                            column.columnType !== "prefilled" &&
+                            column?.validation == "alphanumeric" &&
                             currentSectionAnswers[
-                                `${cell?.columnId}.${row?.uuid}`
+                                `${column?.uuid}.${tempRowId}`
                             ]?.length > 0 &&
                             !AlphaNumRegEx.test(
                                 currentSectionAnswers[
-                                    `${cell?.columnId}.${row?.uuid}`
+                                    `${column?.uuid}.${tempRowId}`
                                 ]
                             )
                         ) {
-                            sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                            sectionErrors[`${column?.uuid}.${tempRowId}`] =
                                 "This is alphanumeric field";
                             console.log("in table alphanumeric only");
                             sections.push(index);
                         } else {
                             delete sectionErrors[
-                                `${cell?.columnId}.${row?.uuid}`
+                                `${column?.uuid}.${tempRowId}`
                             ];
                         }
                     });
                 });
+
+                // section?.rowValues.map((row) => {
+                //   row?.cells?.map((cell) => {
+                //     // console.log(
+                //     //   "table layout cell",
+                //     //   transformedColValues[cell?.columnId]
+                //     // );
+                //     if (
+                //       transformedColValues[cell?.columnId].columnType !== "prefilled" &&
+                //       saveAsDraft === false &&
+                //       (!currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`] ||
+                //         currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`]
+                //           .length === 0)
+                //     ) {
+                //       sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                //         "This is required field";
+                //       sections.push(index);
+                //     } else if (
+                //       transformedColValues[cell?.columnId].columnType !== "prefilled" &&
+                //       transformedColValues[cell?.columnId]?.validation == "alphabets" &&
+                //       currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`]?.length >
+                //         0 &&
+                //       !AlphaRegEx.test(
+                //         currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`]
+                //       )
+                //     ) {
+                //       sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                //         "This is alphabets only field";
+                //       console.log("in table alphabets only");
+                //       sections.push(index);
+                //     } else if (
+                //       transformedColValues[cell?.columnId].columnType !== "prefilled" &&
+                //       transformedColValues[cell?.columnId]?.validation == "numeric" &&
+                //       currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`]?.length >
+                //         0 &&
+                //       !NumericRegEx.test(
+                //         currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`]
+                //       )
+                //     ) {
+                //       sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                //         "This is numeric only field";
+                //       console.log("in table numeric only");
+                //       sections.push(index);
+                //     } else if (
+                //       transformedColValues[cell?.columnId].columnType !== "prefilled" &&
+                //       transformedColValues[cell?.columnId]?.validation ==
+                //         "alphanumeric" &&
+                //       currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`]?.length >
+                //         0 &&
+                //       !AlphaNumRegEx.test(
+                //         currentSectionAnswers[`${cell?.columnId}.${row?.uuid}`]
+                //       )
+                //     ) {
+                //       sectionErrors[`${cell?.columnId}.${row?.uuid}`] =
+                //         "This is alphanumeric field";
+                //       console.log("in table alphanumeric only");
+                //       sections.push(index);
+                //     } else {
+                //       delete sectionErrors[`${cell?.columnId}.${row?.uuid}`];
+                //     }
+                //   });
+                // });
             } else {
                 // form validators
                 section?.questions.map((question) => {
@@ -445,14 +506,15 @@ function FillAssessment() {
                 });
             }
 
-            console.log("sections array = ", sections);
-            console.log("sections index[0] = ", sections[0]);
+            // console.log("sections array = ", sections);
+            // console.log("sections index[0] = ", sections[0]);
             setTabValue(sections.length > 0 ? sections[0] : 0);
 
             tempErrors[section?.uuid] = { ...sectionErrors };
         });
 
         handleSetErrors(tempErrors);
+        console.log("temp Errors:- ", tempErrors);
         const isValidated = Object.keys(tempErrors).every(
             (key) => Object.keys(tempErrors[key]).length === 0
         );
@@ -574,10 +636,10 @@ function FillAssessment() {
     };
 
     useEffect(() => {
-        console.log("UseEffect Errors", errors);
+        // console.log("UseEffect Errors", errors);
     }, [errors]);
 
-    const [isActive, setActive] = useState("false");
+    const [isActive, setActive] = useState(false);
     const handleToggle = () => {
         setActive(!isActive);
     };
@@ -587,7 +649,7 @@ function FillAssessment() {
     };
 
     const handleReOpenAssessment = () => {
-        saveAssessmentAsDraft(true);
+        // saveAssessmentAsDraft(true);
         setReOpenAssessmentDialogBox(false);
     };
     const handleCloseReopenAssessment = () => {
@@ -676,7 +738,10 @@ function FillAssessment() {
     };
 
     return (
-        <div className="page-wrapper">
+        <div
+            className="page-wrapper"
+            onClick={() => isActive && setActive(false)}
+        >
             <DialogBox
                 title={<p>Accept/Reject Assessment </p>}
                 info1={

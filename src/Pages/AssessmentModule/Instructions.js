@@ -8,13 +8,27 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { Link, useNavigate } from 'react-router-dom';
+import "../../components/TableComponent.css";
+
 function Instructions() {
+    const navigate = useNavigate();
     useDocumentTitle("Instructions");
     return (
         <div className="page-wrapper">
+            <div className="breadcrumb-wrapper">
+                <div className="container">
+                    <ul className="breadcrumb">
+                        <li>
+                            <Link to="/assessment-list">Assessments</Link>
+                        </li>
+                        <li>Instructions</li>
+                    </ul>
+                </div>
+            </div>
             <section>
                 <div className="container">
-                    <div className="form-header member-form-header mb-0">
+                    <div className="form-header member-form-header mb-0 mt-0">
                         <div className="form-header-left-blk">
                             <h2 className="heading2">Instructions: HRDD Self Assessment Tool on Forced Labour for Own Operations </h2>
                         </div>
@@ -386,7 +400,7 @@ function Instructions() {
                                                         Forced Labour
                                                     </TableCell>
                                                     <TableCell>
-                                                        The ILO Forced Labour Convention, 1930 (No. 29) defines, in its Article 2, forced or compulsory labour for the purposes of the Convention as “all work or service which is exacted from any person under the menace of any penalty and for which the said person has not offered himself voluntarily.” A person is classified as being in forced labour if engaged during a specified reference period in any work that is both under the threat of menace of a penalty and involuntary. Both conditions must exist for this to be statistically regarded as forced labour.
+                                                        The ILO Forced Labour Convention, 1930 (No. 29) defines, in its Article 2, forced or compulsory labour for the purposes of the Convention as “all work or service which is exacted from any person under the menace of any penalty and for which the said person has not offered himself voluntarily.” A person is classified as being in forced labour if engaged during a specified <b>reference period</b> in any work that is both under the <span className="instruct-txt-bold-underline" style={{fontStyle:'italic'}}>threat of menace of a penalty and involuntary</span>. Both conditions must exist for this to be statistically regarded as forced labour.
                                                     </TableCell>
                                                 </TableRow>
                                                 <TableRow>
@@ -415,7 +429,7 @@ function Instructions() {
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell>
-                                                        ILO's 11 Indicators of Forced Labour <br /><span style={{ wordBreak: "break-all" }}>https://www.ilo.org/wcmsp5/groups/public/---ed_norm/---declaration/documents/publication/wcms_203832.pdf </span>
+                                                        ILO's 11 Indicators of Forced Labour <br /><a style={{textDecoration:"none", color: "#1e1e1e"}} rel="noreferrer" href="https://www.ilo.org/wcmsp5/groups/public/---ed_norm/---declaration/documents/publication/wcms_203832.pdf" target="_blank"><span style={{ wordBreak: "break-all" }}>https://www.ilo.org/wcmsp5/groups/public/---ed_norm/---declaration/documents/publication/wcms_203832.pdf </span></a>
                                                     </TableCell>
                                                     <TableCell>
                                                         1. Abuse of vulnerability <br />
@@ -536,6 +550,16 @@ function Instructions() {
                             </Box>
                         </div>
 
+                    </div>
+                    <div className="form-btn flex-between add-members-btn">
+                        <button
+                        type="submit"
+                        style={{ marginBottom: "50px" }}
+                        className="secondary-button"
+                        onClick={() => navigate(-1)}
+                        >
+                        Back
+                        </button>
                     </div>
                 </div>
             </section>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
     TextField,
-    Autocomplete,
+    Autocomplete as EditCGFAdminAutoComplete,
     RadioGroup,
     FormControlLabel,
     Radio,
@@ -489,7 +489,7 @@ const EditSubAdmin = () => {
                                                                 error,
                                                             },
                                                         }) => (
-                                                            <Autocomplete
+                                                            <EditCGFAdminAutoComplete
                                                                 className={`${
                                                                     error &&
                                                                     "autocomplete-error"

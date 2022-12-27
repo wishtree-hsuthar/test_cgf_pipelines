@@ -434,7 +434,7 @@ const ReplaceOperationMember = () => {
                             />
                         </div>
                     </div>
-                    <div className="form-btn flex-between add-members-btn mb-20">
+                    <div className="form-btn flex-between add-members-btn replace-cgf-admin-btnblk">
                         <button
                             onClick={() => navigate("/users/operation-members")}
                             className="secondary-button mr-10"

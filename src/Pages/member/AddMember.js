@@ -453,15 +453,21 @@ const AddMember = () => {
                     <div className="form-header flex-between">
                         <h2 className="heading2">Add Member</h2>
                         <div className="form-header-right-txt">
-                            <div className="tertiary-btn-blk">
-                                <span className="addmore-icon">
+                            <div
+                                className="tertiary-btn-blk"
+                                onClick={handleSubmit(
+                                    onAddMoreButtonClickHandlerAddMember
+                                )}
+                            >
+                                <span
+                                    //   onClick={handleSubmit(onAddMoreButtonClickHandlerAddMember)}
+                                    className="addmore-icon"
+                                >
                                     <i className="fa fa-plus"></i>
                                 </span>
                                 <span
                                     className="addmore-txt"
-                                    onClick={handleSubmit(
-                                        onAddMoreButtonClickHandlerAddMember
-                                    )}
+                                    //   onClick={handleSubmit(onAddMoreButtonClickHandlerAddMember)}
                                 >
                                     Save & Add More
                                 </span>
@@ -1267,8 +1273,8 @@ const AddMember = () => {
                                                     "Bogota",
                                                     "Paris",
                                                     "Shanghai",
-                                                    "Washington",
                                                     "Tokyo",
+                                                    "Washington",
                                                 ]}
                                             />
                                         </div>

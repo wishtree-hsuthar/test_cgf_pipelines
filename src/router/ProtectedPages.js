@@ -276,9 +276,9 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
-                    path="/assessments/instructions"
+                    path="/assessment-list/instructions"
                     element={
-                        <RequireAuth page={"list"} moduleName={"Assessment"}>
+                        <RequireAuth page={"instructions"} moduleName={"Assessment"}>
                             <Instructions />
                         </RequireAuth>
                     }

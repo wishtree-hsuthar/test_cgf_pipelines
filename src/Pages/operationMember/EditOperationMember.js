@@ -1,5 +1,5 @@
 import {
-    Autocomplete,
+    Autocomplete as EditOPAutoComplete,
     FormControlLabel,
     Paper,
     Radio,
@@ -51,86 +51,7 @@ const defaultValues = {
     isActive: "",
     isCGFStaff: "",
 };
-const helperTextForAddOperationMember = {
-    salutation: {
-        required: "Select salutation",
-    },
-    name: {
-        required: "Enter the operation member name",
-        maxLength: "Max char limit exceed",
-        minLength: "minimum 3 characters required",
-        pattern: "Invalid format",
-    },
-    department: {
-        // required: "Enter the role name",
-        maxLength: "Max char limit exceed",
-        minLength: "minimum 3 characters required",
-        pattern: "Invalid format",
-    },
-    title: {
-        // required: "Enter the role name",
-        maxLength: "Max char limit exceed",
-        minLength: "minimum 3 characters required",
-        pattern: "Invalid format",
-    },
-    email: {
-        required: "Enter the email",
-        // maxLength: "Max char limit exceed",
-        // minLength: "Role must contain atleast 3 characters",
-        pattern: "Invalid format",
-    },
-    countryCode: {
-        required: "Enter country code",
-        validate: "Select country code",
-    },
-    phoneNumber: {
-        required: "Enter the phone number",
-        maxLength: "Max digits limit exceed",
-        minLength: "Enter valid number",
-        validate: "Enter phone number",
-        // pattern: "Invalid format",
-    },
-    memberCompany: {
-        required: "Select member company",
-    },
-    operationType: {
-        required: "Select the operation type",
-        // maxLength: "Max char limit exceed",
-        // minLength: "Role must contain atleast 3 characters",
-        // pattern: "Invalid format",
-    },
-    memberId: {
-        required: "Select the member company",
-        validate: "Select the member company",
-        // maxLength: "Max char limit exceed",
-        // minLength: "Role must contain atleast 3 characters",
-        // pattern: "Invalid format",
-    },
-    companyType: {
-        required: "Enter company type",
-        // maxLength: "Max char limit exceed",
-        // minLength: "Role must contain atleast 3 characters",
-        // pattern: "Invalid format",
-    },
-    address: {
-        required: "Enter address",
-        maxLength: "Max char limit exceed",
-        minLength: "minimum 3 characters required",
-        pattern: "Invalid format",
-    },
-    reportingManager: {
-        required: "Select the reporting manager ",
-        // maxLength: "Max char limit exceed",
-        // minLength: "Role must contain atleast 3 characters",
-        // pattern: "Invalid format",
-    },
-    roleId: {
-        required: "Select the role",
-    },
-    isCGFStaff: {
-        required: "Select the CGFSTaff",
-    },
-};
+
 function EditOperationMember() {
     //custom hook to set title of page
     useDocumentTitle("Edit Operation Member");
@@ -196,34 +117,24 @@ function EditOperationMember() {
     // fetch all countries and its objects
     const fetchCountries = async (isMounted, controller) => {
         try {
-            const response = await privateAxios.get(COUNTRIES, {
-                signal: controller.signal,
-            });
+            const response = await privateAxios.get(COUNTRIES);
             console.log("response from countries", response);
             // isMounted &&
-            setCountries(response.data.map((country) => country?.countryCode));
+            let tempCountries = response.data.map(
+                (country) => country?.countryCode
+            );
+            tempCountries = new Set(tempCountries);
+            setCountries([...tempCountries]);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
 
             console.log("error from countries api", error);
-
-            // isMounted &&
-            //     setToasterDetails(
-            //         {
-            //             titleMessage: "Oops!",
-            //             descriptionMessage: error?.response?.data?.message,
-            //             messageType: "error",
-            //         },
-            //         () => toasterRef.current()
-            //     );
         }
     };
     // Fetch all member comapanies
     const fetchMemberComapany = async (isMounted, controller) => {
         try {
-            const response = await privateAxios.get(MEMBER + "/list", {
-                signal: controller.signal,
-            });
+            const response = await privateAxios.get(MEMBER + "/list");
             console.log(
                 "member company---",
                 response.data.map((data) => {
@@ -525,9 +436,7 @@ function EditOperationMember() {
                                                         control={control}
                                                         name="salutation"
                                                         placeholder="Mr."
-                                                        myHelper={
-                                                            helperTextForAddOperationMember
-                                                        }
+                                                        myHelper={helperText}
                                                         rules={{
                                                             required: true,
                                                         }}
@@ -555,9 +464,7 @@ function EditOperationMember() {
                                                             )
                                                         }
                                                         placeholder="Enter full name"
-                                                        myHelper={
-                                                            helperTextForAddOperationMember
-                                                        }
+                                                        myHelper={helperText}
                                                         rules={{
                                                             required: true,
                                                             pattern:
@@ -585,9 +492,7 @@ function EditOperationMember() {
                                                         e.target.value?.trim()
                                                     )
                                                 }
-                                                myHelper={
-                                                    helperTextForAddOperationMember
-                                                }
+                                                myHelper={helperText}
                                                 rules={{
                                                     maxLength: 50,
                                                     minLength: 3,
@@ -610,9 +515,7 @@ function EditOperationMember() {
                                                         e.target.value?.trim()
                                                     )
                                                 }
-                                                myHelper={
-                                                    helperTextForAddOperationMember
-                                                }
+                                                myHelper={helperText}
                                                 rules={{
                                                     maxLength: 50,
                                                     minLength: 3,
@@ -639,9 +542,7 @@ function EditOperationMember() {
                                                 }
                                                 placeholder="NA"
                                                 isDisabled
-                                                myHelper={
-                                                    helperTextForAddOperationMember
-                                                }
+                                                myHelper={helperText}
                                                 rules={{ required: true }}
                                             />
                                         </div>
@@ -675,7 +576,7 @@ function EditOperationMember() {
                                                                 error,
                                                             },
                                                         }) => (
-                                                            <Autocomplete
+                                                            <EditOPAutoComplete
                                                                 PaperComponent={({
                                                                     children,
                                                                 }) => (
@@ -771,7 +672,7 @@ function EditOperationMember() {
                                                                         }
                                                                         helperText={
                                                                             error
-                                                                                ? helperTextForAddOperationMember
+                                                                                ? helperText
                                                                                       .countryCode[
                                                                                       error
                                                                                           .type
@@ -801,9 +702,7 @@ function EditOperationMember() {
                                                         )
                                                     }
                                                     placeholder="1234567890"
-                                                    myHelper={
-                                                        helperTextForAddOperationMember
-                                                    }
+                                                    myHelper={helperText}
                                                     rules={{
                                                         maxLength: 15,
                                                         minLength: 7,
@@ -842,9 +741,7 @@ function EditOperationMember() {
                                                 control={control}
                                                 name="operationType"
                                                 placeholder="Select operation type"
-                                                myHelper={
-                                                    helperTextForAddOperationMember
-                                                }
+                                                myHelper={helperText}
                                                 rules={{
                                                     required:
                                                         !operationMember?.isMemberRepresentative,
@@ -936,7 +833,7 @@ function EditOperationMember() {
                                                         field,
                                                         fieldState: { error },
                                                     }) => (
-                                                        <Autocomplete
+                                                        <EditOPAutoComplete
                                                             {...field}
                                                             PaperComponent={({
                                                                 children,
@@ -1043,7 +940,7 @@ function EditOperationMember() {
                                                                     }
                                                                     helperText={
                                                                         error
-                                                                            ? helperTextForAddOperationMember
+                                                                            ? helperText
                                                                                   .memberId[
                                                                                   error
                                                                                       ?.type
@@ -1068,9 +965,7 @@ function EditOperationMember() {
                                                 name={"companyType"}
                                                 placeholder="NA"
                                                 control={control}
-                                                myHelper={
-                                                    helperTextForAddOperationMember
-                                                }
+                                                myHelper={helperText}
                                             />
                                         </div>
                                     </div>
@@ -1108,7 +1003,7 @@ function EditOperationMember() {
                                                         placeholder="Enter address"
                                                         helperText={
                                                             error
-                                                                ? helperTextForAddOperationMember
+                                                                ? helperText
                                                                       .address[
                                                                       error.type
                                                                   ]
@@ -1138,9 +1033,7 @@ function EditOperationMember() {
                                                     "Select reporting manager "
                                                 }
                                                 // isDisabled={disableReportingManager}
-                                                myHelper={
-                                                    helperTextForAddOperationMember
-                                                }
+                                                myHelper={helperText}
                                                 rules={{
                                                     required:
                                                         !operationMember?.isMemberRepresentative,

@@ -65,15 +65,15 @@ const FillAssessmentQuestion = ({
     };
 
     const params = useParams();
-    console.log(
-        "disabled in form section question",
-        editMode && params["*"].includes("view")
-    );
-    console.log("viewmode in form section question", editMode);
-    console.log(
-        "params in form section question",
-        params["*"].includes("view")
-    );
+    // console.log(
+    //     "disabled in form section question",
+    //     editMode && params["*"].includes("view")
+    // );
+    // console.log("viewmode in form section question", editMode);
+    // console.log(
+    //     "params in form section question",
+    //     params["*"].includes("view")
+    // );
     //   answer === "" && console.log("answe blank string")
     let questionComponent =
         question.inputType === "singleTextbox" ? (
@@ -288,7 +288,7 @@ const FillAssessmentQuestion = ({
                     disabled={
                         (editMode && params["*"].includes("view")) || !editMode
                     }
-                    className="datepicker-blk"
+                    // className="datepicker-blk"
                     components={{
                         OpenPickerIcon: DateRangeOutlinedIcon,
                     }}
@@ -303,9 +303,10 @@ const FillAssessmentQuestion = ({
                     }
                     renderInput={(params) => (
                         <TextField
+                            autoComplete="off"
                             {...params}
                             onKeyDown={handleOnKeyDownChange}
-                            className={`input-field${
+                            className={`datepicker-blk input-field ${
                                 !answer && error && error?.length !== 0
                                     ? "input-error"
                                     : ""

@@ -1976,6 +1976,7 @@ input:-webkit-autofill:active {
     color: #1e1e1e;
     font-family: "ProximaNova-Regular", serif, sans-serif;
     margin: 0 0 20px;
+    text-align: justify;
 }
 .preview-sect-card-ttl-blk {
     margin-bottom: 20px;
@@ -2041,6 +2042,8 @@ input:-webkit-autofill:active {
 }
 .preview-sect-card-ttl-blk .subheading {
     font-family: "ProximaNova-semiBold", serif, sans-serif;
+    text-align: justify;
+    line-height: 18px;
 }
 .preview-que-blk .MuiTypography-root {
     font-family: "ProximaNova-Regular", serif, sans-serif !important;
@@ -2468,12 +2471,16 @@ input::-ms-reveal {
 } */
 
 .que-ttl-left {
-    flex: 0 0 82%;
-    max-width: 82%;
+    flex: 0 0 62.5%;
+    max-width: 62.5%;
 }
 .que-ttl-right {
-    flex: 0 0 15%;
-    max-width: 15%;
+    flex: 0 0 34.5%;
+    max-width: 34.5%;
+}
+.que-ttl-right .form-group {
+    flex: 0 0 46%;
+    max-width: 46%;
 }
 .que-ttl-blk .que-ttl-right .MuiInputBase-input {
     font-family: "ProximaNova-Regular", serif, sans-serif !important;
@@ -2550,4 +2557,14 @@ input::-ms-reveal {
 .preview-tab-blk .section-tab-leftblk {
     flex: 0 0 100%;
     max-width: 100%;
+}
+.mt-0{margin-top: 0 !important;}
+.preview-que-ttl-blk .heading2{text-align: justify;width: calc(100% - 45px);line-height: 20px;}
+.preview-assessment-ttl .heading2{text-align: justify;width: calc(100% - 210px);line-height: 20px;}
+/* .search-and-btn-field-blk {
+    flex: 0 0 65%;
+    max-width: 65%;
+} */
+.datepicker-blk.input-error fieldset {
+    border-color: #e53850 !important;
 }
