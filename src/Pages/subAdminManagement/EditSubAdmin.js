@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
-  TextField,
-  Autocomplete as EditCGFAdminAutoComplete,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Paper,
+    TextField,
+    Autocomplete as EditCGFAdminAutoComplete,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    Paper,
 } from "@mui/material";
 
 import "react-phone-number-input/style.css";
@@ -62,39 +62,40 @@ const EditSubAdmin = () => {
     const params = useParams();
     const toasterRef = useRef();
 
-
-  const [countries, setCountries] = useState([]);
-  const [roles, setRoles] = useState([]);
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "error",
-  });
-  const [fetchSubAdminDetailsForEdit, setFetchSubAdminDetailsForEdit] =
-    useState({});
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-    reset,
-    watch,
-    setValue,
-    trigger,
-  } = useForm({
-    defaultValues: {
-      name: "",
-      email: "",
-      subRoleId: "",
-      phoneNumber: "",
-      countryCode: {
-        name: "India",
-        countryCode: "+91",
-      },
-      status: "",
-      role: "",
-    },
-    // resolver: yupResolver(editSubAdminSchema),
-  });
+    const [countries, setCountries] = useState([]);
+    const [disableEditCgfAdminButton, setDisableEditCgfAdminButton] =
+        useState(false);
+    const [roles, setRoles] = useState([]);
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "error",
+    });
+    const [fetchSubAdminDetailsForEdit, setFetchSubAdminDetailsForEdit] =
+        useState({});
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+        reset,
+        watch,
+        setValue,
+        trigger,
+    } = useForm({
+        defaultValues: {
+            name: "",
+            email: "",
+            subRoleId: "",
+            phoneNumber: "",
+            countryCode: {
+                name: "India",
+                countryCode: "+91",
+            },
+            status: "",
+            role: "",
+        },
+        // resolver: yupResolver(editSubAdminSchema),
+    });
 
     const phoneNumberChangeHandler = (e, name, code) => {
         console.log("inside on Change");
@@ -245,14 +246,14 @@ const EditSubAdmin = () => {
         };
     }, []);
 
-  console.log("fetchdetails in edit sub admin", fetchSubAdminDetailsForEdit);
+    console.log("fetchdetails in edit sub admin", fetchSubAdminDetailsForEdit);
 
     const location = useLocation();
     console.log(location);
 
     const handleOnSubmit = async (data) => {
         console.log("data from handle submit edit", data);
-
+        setDisableEditCgfAdminButton(true);
         try {
             const response = await privateAxios.put(
                 UPDATE_SUB_ADMIN + params.id,
@@ -275,6 +276,8 @@ const EditSubAdmin = () => {
                     },
                     () => toasterRef.current()
                 );
+                setDisableEditCgfAdminButton(false);
+
                 setTimeout(() => {
                     navigate(`/users/cgf-admin/`);
                 }, 2000);
@@ -311,37 +314,39 @@ const EditSubAdmin = () => {
         }
     };
 
-  const handleCancel = () => {
-    navigate("/users/cgf-admin/");
-  };
-  return (
-    <div className="page-wrapper">
-      <Toaster
-        myRef={toasterRef}
-        titleMessage={toasterDetails.titleMessage}
-        descriptionMessage={toasterDetails.descriptionMessage}
-        messageType={toasterDetails.messageType}
-      />
-      <div className="breadcrumb-wrapper">
-        <div className="container">
-          <ul className="breadcrumb">
-            <li>
-              <Link to="/users/cgf-admin">CGF Admins</Link>
-            </li>
-            <li>
-              <Link to={`/users/cgf-admin/view-sub-admin/${params.id}`}>
-                View CGF Admin
-              </Link>
-            </li>
-            <li>Edit CGF Admin</li>
-          </ul>
-        </div>
-      </div>
-      <section>
-        <div className="container">
-          <div className="form-header flex-between">
-            <h2 className="heading2">Edit CGF Admin</h2>
-            {/* <div className="form-header-right-txt">
+    const handleCancel = () => {
+        navigate("/users/cgf-admin/");
+    };
+    return (
+        <div className="page-wrapper">
+            <Toaster
+                myRef={toasterRef}
+                titleMessage={toasterDetails.titleMessage}
+                descriptionMessage={toasterDetails.descriptionMessage}
+                messageType={toasterDetails.messageType}
+            />
+            <div className="breadcrumb-wrapper">
+                <div className="container">
+                    <ul className="breadcrumb">
+                        <li>
+                            <Link to="/users/cgf-admin">CGF Admins</Link>
+                        </li>
+                        <li>
+                            <Link
+                                to={`/users/cgf-admin/view-sub-admin/${params.id}`}
+                            >
+                                View CGF Admin
+                            </Link>
+                        </li>
+                        <li>Edit CGF Admin</li>
+                    </ul>
+                </div>
+            </div>
+            <section>
+                <div className="container">
+                    <div className="form-header flex-between">
+                        <h2 className="heading2">Edit CGF Admin</h2>
+                        {/* <div className="form-header-right-txt">
                     <div className="tertiary-btn-blk">
                         <span className="addmore-icon"><i className='fa fa-plus'></i></span>
                         <span className="addmore-txt">Save & Add More</span>
@@ -731,6 +736,7 @@ const EditSubAdmin = () => {
                                         <button
                                             type="submit"
                                             className="primary-button add-button"
+                                            disabled={disableEditCgfAdminButton}
                                         >
                                             Update
                                         </button>

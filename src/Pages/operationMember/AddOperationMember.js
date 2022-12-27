@@ -24,7 +24,7 @@ import {
 } from "../../api/Url";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import {helperText} from "../../utils/OperationMemberModuleUtil"
+import { helperText } from "../../utils/OperationMemberModuleUtil";
 function AddOperationMember() {
     //custom hook to set title of page
     useDocumentTitle("Add Operation Member");
@@ -39,11 +39,9 @@ function AddOperationMember() {
     } = useForm({
         defaultValues: {
             salutation: "Mr.",
-            // memberId: {
-            //     _id: "",
-            //     companyName: "",
-            // },
-            memberId: undefined,
+            memberId: "",
+
+            // memberId: "",
             // companyType: "",
             countryCode: "",
             address: "",
@@ -53,7 +51,20 @@ function AddOperationMember() {
     });
 
     const navigate = useNavigate();
-    const [memberCompanies, setMemberCompanies] = useState([]);
+    const [memberComapniesLabelsOnly, setMemberComapniesLabelsOnly] = useState(
+        []
+    );
+    const [memberCompanies, setMemberCompanies] = useState([
+        {
+            companyName: "",
+            _id: "",
+            companyType: "",
+        },
+    ]);
+    const [
+        disableAddOperationMemberButton,
+        setDisableAddOperationMemberButton,
+    ] = useState(false);
     const [disableReportingManager, setDisableReportingManager] =
         useState(true);
     const [countries, setCountries] = useState([]);
@@ -135,8 +146,8 @@ function AddOperationMember() {
                         setMemberCompanies(
                             response?.data
                                 .map((data) => ({
-                                    _id: data?._id,
                                     companyName: data?.companyName,
+                                    _id: data?._id,
                                     companyType: data?.companyType,
                                 }))
                                 .sort((a, b) =>
@@ -147,9 +158,16 @@ function AddOperationMember() {
                                         : 0
                                 )
                         );
+                    setMemberComapniesLabelsOnly(
+                        response?.data.map((data) => data.companyName)
+                    );
                 }
 
                 console.log("member company---", memberCompanies);
+                console.log(
+                    "member company labels only = ",
+                    memberComapniesLabelsOnly
+                );
             } catch (error) {
                 console.log("error from fetch member company", error);
                 if (error?.response?.status == 401) {
@@ -193,7 +211,6 @@ function AddOperationMember() {
                     let conutryCodeSet = new Set(tempCountryCode);
                     setCountries([...conutryCodeSet]);
                 }
-                
             } catch (error) {
                 console.log("error from countries api", error);
             }
@@ -242,12 +259,20 @@ function AddOperationMember() {
         }
     };
     const addOperationMember = async (data, navigateToListPage) => {
+        let selectedMemberCompany = memberCompanies.filter(
+            (company) => company.companyName === data.memberId
+        );
+        console.log("Selected member company = ", selectedMemberCompany);
+        setDisableAddOperationMemberButton(true);
         data = {
             ...data,
             isCGFStaff: data.isCGFStaff === "true" ? true : false,
             memberId:
-                data.isCGFStaff === "true" ? cgfMember[0]._id : data.memberId,
+                data.isCGFStaff === "true"
+                    ? cgfMember[0]._id
+                    : selectedMemberCompany[0]._id,
         };
+        console.log("Data while adding operation member - ", data);
         try {
             const response = await privateAxios.post(
                 ADD_OPERATION_MEMBER,
@@ -255,7 +280,7 @@ function AddOperationMember() {
             );
             if (response.status == 201) {
                 reset();
-
+                setDisableAddOperationMemberButton(false);
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
@@ -274,6 +299,7 @@ function AddOperationMember() {
                 "error in submit data for add operation member method",
                 error
             );
+
             if (error?.response?.status == 401) {
                 setToasterDetails(
                     {
@@ -288,6 +314,8 @@ function AddOperationMember() {
                     navigate("/login");
                 }, 3000);
             } else {
+                setDisableAddOperationMemberButton(false);
+
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
@@ -307,7 +335,7 @@ function AddOperationMember() {
     const handleSaveAndMore = async (data) => {
         console.log("data from handleSaveAndMore", data);
         await addOperationMember(data, true);
-        setShowTextField(false)
+        setShowTextField(false);
         reset();
     };
 
@@ -333,9 +361,9 @@ function AddOperationMember() {
 
             setDisableReportingManager(true);
         }
-        trigger("memberId")
+        trigger("memberId");
     };
-    console.log("member Id",memberCompanies?._id)
+    console.log("member Id", memberCompanies?._id);
     return (
         <div className="page-wrapper">
             <Toaster
@@ -392,9 +420,7 @@ function AddOperationMember() {
                                                     control={control}
                                                     name="salutation"
                                                     // placeholder="Mr."
-                                                    myHelper={
-                                                        helperText
-                                                    }
+                                                    myHelper={helperText}
                                                     rules={{
                                                         required: true,
                                                     }}
@@ -424,9 +450,7 @@ function AddOperationMember() {
                                                     placeholder={
                                                         "Enter full name"
                                                     }
-                                                    myHelper={
-                                                        helperText
-                                                    }
+                                                    myHelper={helperText}
                                                     rules={{
                                                         required: true,
                                                         maxLength: 50,
@@ -450,9 +474,7 @@ function AddOperationMember() {
                                                     e.target.value?.trim()
                                                 )
                                             }
-                                            myHelper={
-                                                helperText
-                                            }
+                                            myHelper={helperText}
                                             control={control}
                                             placeholder={"Enter title"}
                                             rules={{
@@ -476,9 +498,7 @@ function AddOperationMember() {
                                                 )
                                             }
                                             control={control}
-                                            myHelper={
-                                                helperText
-                                            }
+                                            myHelper={helperText}
                                             placeholder={"Enter department"}
                                             rules={{
                                                 maxLength: 50,
@@ -502,9 +522,7 @@ function AddOperationMember() {
                                                 )
                                             }
                                             control={control}
-                                            myHelper={
-                                                helperText
-                                            }
+                                            myHelper={helperText}
                                             placeholder={"example@domain.com"}
                                             rules={{
                                                 required: "true",
@@ -664,9 +682,7 @@ function AddOperationMember() {
                                                     )
                                                 }
                                                 control={control}
-                                                myHelper={
-                                                    helperText
-                                                }
+                                                myHelper={helperText}
                                                 placeholder={"1234567890"}
                                                 rules={{
                                                     maxLength: 15,
@@ -715,9 +731,7 @@ function AddOperationMember() {
                                         <Dropdown
                                             control={control}
                                             name="operationType"
-                                            myHelper={
-                                                helperText
-                                            }
+                                            myHelper={helperText}
                                             placeholder={
                                                 "Select operation type"
                                             }
@@ -820,25 +834,34 @@ function AddOperationMember() {
                                                             }
                                                             {...field}
                                                             // value={
-                                                            //     memberCompanies?._id
+                                                            //     memberCompanies._id
                                                             // }
                                                             // clearIcon={false}
+
                                                             disableClearable
                                                             onChange={(
                                                                 event,
                                                                 newValue
                                                             ) => {
+                                                                let selectedMemberCompany =
+                                                                    memberCompanies.filter(
+                                                                        (
+                                                                            company
+                                                                        ) =>
+                                                                            company.companyName ===
+                                                                            newValue
+                                                                    );
+                                                                console.log(
+                                                                    "Selected member company = ",
+                                                                    selectedMemberCompany
+                                                                );
                                                                 newValue &&
-                                                                typeof newValue ===
-                                                                    "object"
-                                                                    ? setValue(
-                                                                          "memberId",
-                                                                          newValue?._id
-                                                                      )
-                                                                    : setValue(
-                                                                          "memberId",
-                                                                          newValue
-                                                                      );
+                                                                    setValue(
+                                                                        "memberId",
+                                                                        // selectedMemberCompany[0]
+                                                                        //     ._id
+                                                                        newValue
+                                                                    );
                                                                 console.log(
                                                                     "inside autocomplete onchange"
                                                                 );
@@ -858,22 +881,24 @@ function AddOperationMember() {
                                                                 );
                                                                 // call fetch Reporting managers here
                                                                 fetchReportingManagers(
-                                                                    newValue._id,
+                                                                    selectedMemberCompany[0]
+                                                                        ._id,
                                                                     false
                                                                 );
                                                                 setValue(
                                                                     "companyType",
-                                                                    newValue.companyType
+                                                                    selectedMemberCompany[0]
+                                                                        .companyType
                                                                 );
                                                             }}
                                                             // sx={{ width: 200 }}
                                                             options={
-                                                                memberCompanies
-                                                                    ? memberCompanies.filter(
+                                                                memberComapniesLabelsOnly
+                                                                    ? memberComapniesLabelsOnly.filter(
                                                                           (
                                                                               data
                                                                           ) =>
-                                                                              data.companyName !==
+                                                                              data !==
                                                                               "The Consumer Goods Forum"
                                                                       )
                                                                     : []
@@ -881,17 +906,13 @@ function AddOperationMember() {
                                                             placeholder="Select country code"
                                                             getOptionLabel={(
                                                                 company
-                                                            ) =>
-                                                                company.companyName
-                                                            }
+                                                            ) => company}
                                                             renderOption={(
                                                                 props,
                                                                 option
                                                             ) => (
                                                                 <li {...props}>
-                                                                    {
-                                                                        option.companyName
-                                                                    }
+                                                                    {option}
                                                                 </li>
                                                             )}
                                                             renderInput={(
@@ -905,11 +926,11 @@ function AddOperationMember() {
                                                                     placeholder={
                                                                         "Select member company"
                                                                     }
-                                                                    onChange={() =>
-                                                                        trigger(
-                                                                            "memberId"
-                                                                        )
-                                                                    }
+                                                                    // onChange={() =>
+                                                                    //     trigger(
+                                                                    //         "memberId"
+                                                                    //     )
+                                                                    // }
                                                                     helperText={
                                                                         error
                                                                             ? helperText
@@ -943,9 +964,7 @@ function AddOperationMember() {
                                                     e.target.value?.trim()
                                                 )
                                             }
-                                            myHelper={
-                                                helperText
-                                            }
+                                            myHelper={helperText}
                                             placeholder={"Enter company type"}
                                         />
                                     </div>
@@ -1010,9 +1029,7 @@ function AddOperationMember() {
                                                 "Select reporting manager "
                                             }
                                             isDisabled={disableReportingManager}
-                                            myHelper={
-                                                helperText
-                                            }
+                                            myHelper={helperText}
                                             rules={{ required: true }}
                                             options={
                                                 reportingManagers
@@ -1037,9 +1054,7 @@ function AddOperationMember() {
                                                 rules={{
                                                     required: true,
                                                 }}
-                                                myHelper={
-                                                    helperText
-                                                }
+                                                myHelper={helperText}
                                                 placeholder={"Select role"}
                                             />
 
@@ -1063,6 +1078,9 @@ function AddOperationMember() {
                                     <button
                                         type="submit"
                                         className="primary-button add-button"
+                                        disabled={
+                                            disableAddOperationMemberButton
+                                        }
                                     >
                                         Save
                                     </button>

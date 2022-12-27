@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-    TextField,
-    Autocomplete,
-    Paper,
-} from "@mui/material";
+import { TextField, Autocomplete, Paper } from "@mui/material";
 import "react-phone-number-input/style.css";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
@@ -47,6 +43,7 @@ const helperTextForCGFAdmin = {
 const AddSubAdmin = () => {
     //custom hook to set title of page
     useDocumentTitle("Add CGF Admin");
+    const [disableSubmit, setDisableSubmit] = useState(false);
 
     const authUser = useSelector((state) => state.user.userObj);
     const navigate = useNavigate();
@@ -183,7 +180,6 @@ const AddSubAdmin = () => {
         };
         fetchRoles();
         addCGFAdminFetchCountries();
-
     }, []);
     console.log("countriess----", countriesAddCGFAdmin);
 
@@ -192,6 +188,7 @@ const AddSubAdmin = () => {
     };
 
     const addSubAdminData = async (data) => {
+        setDisableSubmit(true);
         try {
             const response = await axios.post(ADD_SUB_ADMIN, data);
             if (response.status == 201) {
@@ -203,7 +200,7 @@ const AddSubAdmin = () => {
                     },
                     () => toasterRef.current()
                 );
-
+                setDisableSubmit(false);
                 reset();
             }
         } catch (error) {
@@ -238,7 +235,6 @@ const AddSubAdmin = () => {
         data.countryCode = data.countryCode.slice(
             data.countryCode.indexOf("+")
         );
-        
 
         console.log("new phone number", data);
         addSubAdminData(data);
@@ -251,7 +247,7 @@ const AddSubAdmin = () => {
         data.countryCode = data.countryCode.slice(
             data.countryCode.indexOf("+")
         );
-        
+
         addSubAdminData(data);
         console.log(data);
         reset();
@@ -604,6 +600,7 @@ const AddSubAdmin = () => {
                                     <button
                                         type="submit"
                                         className="primary-button add-button"
+                                        disabled={disableSubmit}
                                     >
                                         Save
                                     </button>
