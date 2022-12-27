@@ -39,10 +39,7 @@ function AddOperationMember() {
     } = useForm({
         defaultValues: {
             salutation: "Mr.",
-            memberId: {
-                _id: "",
-                companyName: "",
-            },
+            memberId: "",
 
             // memberId: "",
             // companyType: "",
@@ -54,10 +51,14 @@ function AddOperationMember() {
     });
 
     const navigate = useNavigate();
+    const [memberComapniesLabelsOnly, setMemberComapniesLabelsOnly] = useState(
+        []
+    );
     const [memberCompanies, setMemberCompanies] = useState([
         {
-            _id: "",
             companyName: "",
+            _id: "",
+            companyType: "",
         },
     ]);
     const [
@@ -145,8 +146,8 @@ function AddOperationMember() {
                         setMemberCompanies(
                             response?.data
                                 .map((data) => ({
-                                    _id: data?._id,
                                     companyName: data?.companyName,
+                                    _id: data?._id,
                                     companyType: data?.companyType,
                                 }))
                                 .sort((a, b) =>
@@ -157,9 +158,16 @@ function AddOperationMember() {
                                         : 0
                                 )
                         );
+                    setMemberComapniesLabelsOnly(
+                        response?.data.map((data) => data.companyName)
+                    );
                 }
 
                 console.log("member company---", memberCompanies);
+                console.log(
+                    "member company labels only = ",
+                    memberComapniesLabelsOnly
+                );
             } catch (error) {
                 console.log("error from fetch member company", error);
                 if (error?.response?.status == 401) {
@@ -251,68 +259,73 @@ function AddOperationMember() {
         }
     };
     const addOperationMember = async (data, navigateToListPage) => {
+        let selectedMemberCompany = memberCompanies.filter(
+            (company) => company.companyName === data.memberId
+        );
+        console.log("Selected member company = ", selectedMemberCompany);
         setDisableAddOperationMemberButton(true);
         data = {
             ...data,
             isCGFStaff: data.isCGFStaff === "true" ? true : false,
             memberId:
-                data.isCGFStaff === "true" ? cgfMember[0]._id : data.memberId,
+                data.isCGFStaff === "true"
+                    ? cgfMember[0]._id
+                    : selectedMemberCompany[0]._id,
         };
-        reset();
         console.log("Data while adding operation member - ", data);
-        // try {
-        //     const response = await privateAxios.post(
-        //         ADD_OPERATION_MEMBER,
-        //         data
-        //     );
-        //     if (response.status == 201) {
-        //         reset();
-        //         setDisableAddOperationMemberButton(false);
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Hurray!",
-        //                 descriptionMessage: response?.data?.message,
-        //                 messageType: "success",
-        //             },
-        //             () => toasterRef.current()
-        //         );
-        //         navigateToListPage === false &&
-        //             setTimeout(() => {
-        //                 navigate("/users/operation-members");
-        //             }, 3000);
-        //     }
-        // } catch (error) {
-        //     console.log(
-        //         "error in submit data for add operation member method",
-        //         error
-        //     );
+        try {
+            const response = await privateAxios.post(
+                ADD_OPERATION_MEMBER,
+                data
+            );
+            if (response.status == 201) {
+                reset();
+                setDisableAddOperationMemberButton(false);
+                setToasterDetails(
+                    {
+                        titleMessage: "Hurray!",
+                        descriptionMessage: response?.data?.message,
+                        messageType: "success",
+                    },
+                    () => toasterRef.current()
+                );
+                navigateToListPage === false &&
+                    setTimeout(() => {
+                        navigate("/users/operation-members");
+                    }, 3000);
+            }
+        } catch (error) {
+            console.log(
+                "error in submit data for add operation member method",
+                error
+            );
 
-        //     if (error?.response?.status == 401) {
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage:
-        //                     "Session Timeout: Please login again",
-        //                 messageType: "error",
-        //             },
-        //             () => toasterRef.current()
-        //         );
-        //         setTimeout(() => {
-        //             navigate("/login");
-        //         }, 3000);
-        //     } else {
-        //         setDisableAddOperationMemberButton(false);
+            if (error?.response?.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setDisableAddOperationMemberButton(false);
 
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage: error?.response?.data?.message,
-        //                 messageType: "error",
-        //             },
-        //             () => toasterRef.current()
-        //         );
-        //     }
-        // }
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+            }
+        }
     };
 
     const handleOnSubmit = async (data) => {
@@ -830,17 +843,25 @@ function AddOperationMember() {
                                                                 event,
                                                                 newValue
                                                             ) => {
+                                                                let selectedMemberCompany =
+                                                                    memberCompanies.filter(
+                                                                        (
+                                                                            company
+                                                                        ) =>
+                                                                            company.companyName ===
+                                                                            newValue
+                                                                    );
+                                                                console.log(
+                                                                    "Selected member company = ",
+                                                                    selectedMemberCompany
+                                                                );
                                                                 newValue &&
-                                                                typeof newValue ===
-                                                                    "object"
-                                                                    ? setValue(
-                                                                          "memberId",
-                                                                          newValue?._id
-                                                                      )
-                                                                    : setValue(
-                                                                          "memberId",
-                                                                          newValue
-                                                                      );
+                                                                    setValue(
+                                                                        "memberId",
+                                                                        // selectedMemberCompany[0]
+                                                                        //     ._id
+                                                                        newValue
+                                                                    );
                                                                 console.log(
                                                                     "inside autocomplete onchange"
                                                                 );
@@ -860,47 +881,38 @@ function AddOperationMember() {
                                                                 );
                                                                 // call fetch Reporting managers here
                                                                 fetchReportingManagers(
-                                                                    newValue._id,
+                                                                    selectedMemberCompany[0]
+                                                                        ._id,
                                                                     false
                                                                 );
                                                                 setValue(
                                                                     "companyType",
-                                                                    newValue.companyType
+                                                                    selectedMemberCompany[0]
+                                                                        .companyType
                                                                 );
                                                             }}
                                                             // sx={{ width: 200 }}
                                                             options={
-                                                                memberCompanies
-                                                                    ? memberCompanies.filter(
+                                                                memberComapniesLabelsOnly
+                                                                    ? memberComapniesLabelsOnly.filter(
                                                                           (
                                                                               data
                                                                           ) =>
-                                                                              data.companyName !==
+                                                                              data !==
                                                                               "The Consumer Goods Forum"
                                                                       )
-                                                                    : [
-                                                                          {
-                                                                              _id: "",
-                                                                              companyName:
-                                                                                  "",
-                                                                          },
-                                                                      ]
+                                                                    : []
                                                             }
                                                             placeholder="Select country code"
                                                             getOptionLabel={(
                                                                 company
-                                                            ) =>
-                                                                company.companyName ??
-                                                                company
-                                                            }
+                                                            ) => company}
                                                             renderOption={(
                                                                 props,
                                                                 option
                                                             ) => (
                                                                 <li {...props}>
-                                                                    {
-                                                                        option.companyName
-                                                                    }
+                                                                    {option}
                                                                 </li>
                                                             )}
                                                             renderInput={(
