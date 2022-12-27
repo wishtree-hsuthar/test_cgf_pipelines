@@ -262,7 +262,32 @@ function AddNewQuestionnaire() {
                                     />
                                 </div>
                             </div>
-                            <div className="que-ttl-right">
+                            <div className="que-ttl-right flex-between">
+                                <div className="form-group">
+                                    <label htmlFor="emailid">
+                                        Short Name{" "}
+                                        <span className="mandatory">*</span>
+                                    </label>
+                                    <TextField
+                                        className="input-field"
+                                        id="outlined-basic"
+                                        value={questionnaire.title}
+                                        placeholder="Enter short name"
+                                        variant="outlined"
+                                        onChange={(e) => {
+                                            setQuestionnaire({
+                                                ...questionnaire,
+                                                title: e.target.value,
+                                            });
+                                        }}
+                                        helperText={
+                                            questionnaire.title === "" &&
+                                            globalSectionTitleError?.errMsg
+                                                ? "Enter the short name"
+                                                : " "
+                                        }
+                                    />
+                                </div>
                                 <div className="form-group">
                                     <label htmlFor="status">
                                         Status{" "}
