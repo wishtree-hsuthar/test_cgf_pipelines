@@ -65,16 +65,7 @@ const FillAssessmentQuestion = ({
     };
 
     const params = useParams();
-    // console.log(
-    //     "disabled in form section question",
-    //     editMode && params["*"].includes("view")
-    // );
-    // console.log("viewmode in form section question", editMode);
-    // console.log(
-    //     "params in form section question",
-    //     params["*"].includes("view")
-    // );
-    //   answer === "" && console.log("answe blank string")
+
     let questionComponent =
         question.inputType === "singleTextbox" ? (
             <TextField

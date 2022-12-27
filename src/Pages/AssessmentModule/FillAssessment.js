@@ -125,19 +125,7 @@ function FillAssessment() {
         setErrors({ ...errors });
     };
 
-    // console.log(
-    //     "both user are same",
-    //     userAuth._id === assessment?.assignedOperationMember?._id
-    // );
-
-    // console.log(
-    //     "first user ",
-    //     userAuth._id +
-    //         "  second user  " +
-    //         assessment?.assignedOperationMember?._id
-    // );
     const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
-    // console.log("params", params["*"].includes("view"));
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -506,8 +494,6 @@ function FillAssessment() {
                 });
             }
 
-            // console.log("sections array = ", sections);
-            // console.log("sections index[0] = ", sections[0]);
             setTabValue(sections.length > 0 ? sections[0] : 0);
 
             tempErrors[section?.uuid] = { ...sectionErrors };
@@ -636,7 +622,7 @@ function FillAssessment() {
     };
 
     useEffect(() => {
-        // console.log("UseEffect Errors", errors);
+     
     }, [errors]);
 
     const [isActive, setActive] = useState(false);
@@ -649,7 +635,7 @@ function FillAssessment() {
     };
 
     const handleReOpenAssessment = () => {
-        // saveAssessmentAsDraft(true);
+      
         setReOpenAssessmentDialogBox(false);
     };
     const handleCloseReopenAssessment = () => {
@@ -658,10 +644,8 @@ function FillAssessment() {
     };
 
     const handleImportExcel = (e) => {
-        // console.log("Selected files = ", e);
-        // let d = [{ name: "madhav" }];
         if (e.target.files) {
-            // let encFile = e.target.files[0];
+        
             let reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
             console.log("File selected = ", e.target.files[0]);
@@ -715,7 +699,7 @@ function FillAssessment() {
                 );
             }
 
-            // setFile(encFile);
+            
         }
     };
     console.log("file selected enc", file);
@@ -775,9 +759,6 @@ function FillAssessment() {
                                 Due date <span>:</span>
                             </span>
                             <span className="accrej-desc">
-                                {/* {new Date(
-                                    assessment?.dueDate
-                                ).toLocaleDateString()} */}
                                 {new Date(
                                     new Date(assessment?.dueDate).setDate(
                                         new Date(

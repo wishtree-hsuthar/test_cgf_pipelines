@@ -302,7 +302,7 @@ const SectionContent = ({
                         console.log("index after save section ", index);
                         setTimeout(() => navigate("/questionnaires"), 3000);
                         return true;
-                        // console.log("response from save section", response);
+                        
                     } catch (error) {
                         console.log("error from fetch questionnaire", error);
 
@@ -330,9 +330,6 @@ const SectionContent = ({
                 await privateAxios.put(
                     `${ADD_QUESTIONNAIRE}/publish/${response}`
                 );
-                // setValue(index);
-
-                // setTimeout(() => navigate("/questionnaires"), 3000);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
                 console.log("in onPublishButtonClickHandler ");
