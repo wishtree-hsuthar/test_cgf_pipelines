@@ -126,7 +126,20 @@ const TableAssessment = ({
                               className="que-table-col-ttl"
                               // contentEditable="true"
                             >
-                              <p>{column?.title}</p>
+                               {column?.title.length > 50 ? (
+                                    <Tooltip
+                                      title={column?.title}
+                                      placement="bottom-start"
+                                    >
+                                      <p>
+                                        {column?.title.slice(0, 50)}
+                                        ...
+                                      </p>
+                                    </Tooltip>
+                                  ) : (
+                                    <p>{column?.title}</p>
+                                  )}
+                              {/* <p>{column?.title}</p> */}
                             </div>
                           </div>
                         </div>
