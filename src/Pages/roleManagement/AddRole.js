@@ -496,7 +496,8 @@ const AddRole = () => {
                                                                                                     ][
                                                                                                         "fill"
                                                                                                     ],
-                                                                                                all:
+                                                      
+                                          all:
                                                                                                     !previous[
                                                                                                         previleg
                                                                                                     ][
@@ -601,7 +602,11 @@ const AddRole = () => {
                                                                                                         "list"
                                                                                                     ]) ||
                                                                                                 false,
-                                                                                            all:
+                                                                                            fill:
+                                          (previous[previleg]["fill"] &&
+                                            !previous[previleg]["list"]) ||
+                                          false,
+                                        all:
                                                                                                 !previous[
                                                                                                     previleg
                                                                                                 ][
