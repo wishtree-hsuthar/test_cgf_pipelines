@@ -225,43 +225,43 @@ const ViewRole = () => {
         setTemp(privileges);
     };
     const updateUsers = (data) => {
-        data.forEach((object) => {
-            delete object["countryCode"];
-            delete object["createdBy"];
-            delete object["isDeleted"];
-            delete object["isReplaced"];
-            delete object["password"];
-            delete object["phoneNumber"];
-            delete object["roleId"];
-            delete object["salt"];
-            delete object["subRoleId"];
-            delete object["updatedAt"];
-            delete object["updatedBy"];
-            delete object["uuid"];
-            delete object["memberId"];
-            delete object["title"];
-            delete object["department"];
-            delete object["salutation"];
-            delete object["reportingManager"];
-            delete object["operationType"];
-            delete object["address"];
-            delete object["isCGFStaff"];
-            // delete object["isOperationMember"];
-            // delete object["isMemberRepresentative"];
-            delete object["isCGFAdmin"];
+        data.forEach((viewRoleObject) => {
+            delete viewRoleObject["countryCode"];
+            delete viewRoleObject["createdBy"];
+            delete viewRoleObject["isDeleted"];
+            delete viewRoleObject["isReplaced"];
+            delete viewRoleObject["password"];
+            delete viewRoleObject["phoneNumber"];
+            delete viewRoleObject["roleId"];
+            delete viewRoleObject["salt"];
+            delete viewRoleObject["subRoleId"];
+            delete viewRoleObject["updatedAt"];
+            delete viewRoleObject["updatedBy"];
+            delete viewRoleObject["uuid"];
+            delete viewRoleObject["memberId"];
+            delete viewRoleObject["title"];
+            delete viewRoleObject["department"];
+            delete viewRoleObject["salutation"];
+            delete viewRoleObject["reportingManager"];
+            delete viewRoleObject["operationType"];
+            delete viewRoleObject["address"];
+            delete viewRoleObject["isCGFStaff"];
+            // delete viewRoleObject["isOperationMember"];
+            // delete viewRoleObject["isMemberRepresentative"];
+            delete viewRoleObject["isCGFAdmin"];
 
-            delete object["__v"];
-            object["createdAt"] = new Date(
-                object["createdAt"]
+            delete viewRoleObject["__v"];
+            viewRoleObject["createdAt"] = new Date(
+                viewRoleObject["createdAt"]
             ).toLocaleDateString("en-US", {
                 month: "2-digit",
                 day: "2-digit",
                 year: "numeric",
             });
             keysOrder.forEach((k) => {
-                const v = object[k];
-                delete object[k];
-                object[k] = v;
+                const v = viewRoleObject[k];
+                delete viewRoleObject[k];
+                viewRoleObject[k] = v;
             });
         });
         setRecords([...data]);

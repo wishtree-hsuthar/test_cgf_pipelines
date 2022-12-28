@@ -207,7 +207,7 @@ function PreviewQuestionnaire(props) {
                     navigate("/login");
                 }, 3000);
             }
-            // console.log(toasterDetails);
+            
             else {
                 setToasterDetails(
                     {

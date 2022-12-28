@@ -42,7 +42,7 @@ function FillAssesmentSection({
 
   const [openCancelDailog, setOpenCancelDailog] = useState(false);
 
-  const myRef = useRef();
+  
 
   const handleAnswersChange = (name, value) => {
     setAssessmentQuestionnaire({
@@ -65,7 +65,7 @@ function FillAssesmentSection({
     });
   };
   const addTableAssessmentValues = () => {
-    // console.log("section:- ", section);
+    
     let tempAsssessmentQuestionnaire = { ...assessmentQuestionnaire };
     tempAsssessmentQuestionnaire[section?.uuid] = {};
     section?.rowValues.forEach((row) => {
@@ -85,7 +85,7 @@ function FillAssesmentSection({
     setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
   };
   useEffect(() => {
-    // console.log("assessment Questionnaire:- ", assessmentQuestionnaire);
+    
     console.log(
       "assessment Section:- ",
       assessmentQuestionnaire[section?.uuid]

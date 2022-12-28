@@ -24,7 +24,7 @@ const Header = () => {
     const [isActive, setActive] = React.useState("false");
     const userAuth = useSelector((state) => state?.user?.userObj);
     const privilege = useSelector((state) => state?.user?.privilege);
-    // console.log("user auth----", userAuth);
+    
     
     let initials = userAuth?.name?.split(" ");
     const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
@@ -37,10 +37,7 @@ const Header = () => {
     const [activeStateForMembers, setActiveStateForMembers] = useState(false);
     const [activeStateForOperationMembers, setActiveStateForOperationMembers] =
         useState(false);
-    // console.log("location in header", location.pathname);
-    // console.log("suoer admin in header", SUPER_ADMIN);
-    // console.log("privilege in header", privilege);
-
+    
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
         setActive(!isActive);
@@ -51,9 +48,6 @@ const Header = () => {
         setActive(!isActive);
     };
 
-    // console.log("privilege", );
-    // console.log("privilege entries", );
-    // console.log("privilege from ", privilege);
     let privilegeArray =
         userAuth?.roleId?.name === "Super Admin"
             ? []

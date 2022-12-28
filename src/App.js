@@ -1,17 +1,17 @@
+import React, { Suspense } from "react";
 import "./index.css";
 import "./responsive.css";
-import React, { useState, useEffect, Suspense } from "react";
 
-import Login from "./Pages/Login";
-import ForgetPassword from "./Pages/ForgetPassword";
-import ResetPassword from "./Pages/ResetPassword";
-import SetPassword from "./Pages/SetPassword";
-import { Route, Routes } from "react-router-dom";
-import UserLoggedIn from "./router/UserLoggedIn";
-import ProtectedPages from "./router/ProtectedPages";
 import axios from "axios";
+import { Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import FallBackUI from "./Pages/FallBackUI";
+import ForgetPassword from "./Pages/ForgetPassword";
+import Login from "./Pages/Login";
+import ResetPassword from "./Pages/ResetPassword";
+import SetPassword from "./Pages/SetPassword";
+import ProtectedPages from "./router/ProtectedPages";
+import UserLoggedIn from "./router/UserLoggedIn";
 import Loader from "./utils/Loader";
 axios.defaults.withCredentials = true;
 function App() {
