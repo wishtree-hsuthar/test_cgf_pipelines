@@ -2570,3 +2570,24 @@ input::-ms-reveal {
 }
 .not-prefilled-table tr td:first-child{width: 75px !important;background: #e9f4fa !important;}
 .not-prefilled-table th{width: auto;}
+
+
+.upload-file-blk{text-align: center;
+    padding: 30px;
+    border: 2px dashed rgba(30, 30, 30, 0.2);
+    background-color: transparent;
+    color: rgba(30, 30, 30, 0.5);
+    cursor: pointer;
+    width: 100%;
+    border-radius: 10px;
+}
+.upload-file-wrap{margin-bottom: 30px;}
+
+.upload-file-btn{background-color: #fff !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    width: 75%;}
+.file-upload-txt{font-size: 14px;line-height: 20px;color: rgba(30, 30, 30, 0.5);text-transform: initial;display: block;}
+.upload-icon svg{color: rgba(30, 30, 30, 0.5);}
+.upload-file-blk .MuiTouchRipple-root{display: none !important;}
+.select-filename{width: 75%;margin: 10px auto 0px !important;line-height: 18px;}

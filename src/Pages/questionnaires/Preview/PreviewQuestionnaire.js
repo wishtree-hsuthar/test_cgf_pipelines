@@ -384,7 +384,7 @@ function PreviewQuestionnaire(props) {
                                                         )
                                                     }
                                                 >
-                                                    Version history
+                                                    Version History
                                                 </li>
                                             )}
                                         {(SUPER_ADMIN === true ||
