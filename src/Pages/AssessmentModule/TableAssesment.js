@@ -6,10 +6,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
+  Tooltip
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import TableLayoutCellComponent from "./TableLayoutCellComponent.js";
@@ -55,10 +54,8 @@ const TableAssessment = ({
   const tranformedColumnValues = getTransformedColumns(columnValues);
   const tranformedRowValues = getTransformedRows(rowValues);
   const [isPrefilled, setIsPrefilled] = useState(false);
-  const [isRowsModified, setIsRowsModified] = useState(false);
+  
   let rowIdsArray = [];
-  // let assessmentQuestionnaire = useSelector((state) => state.user.assessment);
-  // console.log("temp Asessement", assessmentQuestionnaire);
   const onAddRowClickHandler = () => {
     const newRowId = uuidv4();
     let temp = { ...assessmentQuestionnaire };
@@ -88,12 +85,9 @@ const TableAssessment = ({
     setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
   };
 
-  // console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
+  
 
   useEffect(() => {
-    // console.log("section", assessmentQuestionnaire[sectionUUID]);
-    // dispatch(setOldAssessment(assessmentQuestionnaire));
-    // console.log("tempSection", assessmentQuestionnaire);
   }, []);
   console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
   return (
@@ -108,7 +102,9 @@ const TableAssessment = ({
               <Table
                 stickyHeader
                 aria-label="sticky table"
-                className="que-table assessment-table"
+                // className="que-table assessment-table"
+                className={!isPrefilled &&
+                  !params["*"].includes("view") ? "que-table assessment-table not-prefilled-table" : "que-table assessment-table"}
               >
                 <TableHead>
                   <TableRow>
@@ -218,18 +214,18 @@ const TableAssessment = ({
                           (tempRowId) =>
                             tempRowId === assessmentQuestionnaireRowId
                         );
-                        // console.log("index in rowId Array", isRowRenderd);
-                        // console.log("rowIds array:- ", rowIdsArray);
                         if (isRowRenderd === -1) {
                           rowIdsArray?.push(assessmentQuestionnaireRowId);
                           return (
-                            <TableRow key={assessmentQuestionnaireKey}>
+                            <TableRow key={assessmentQuestionnaireKey} className="not-prefilled">
                               {!isPrefilled &&
                                 !params["*"].includes("view") && (
-                                  <TableCell
-                                    className="que-column-count"
-                                    style={{ cursor: "pointer", display: "" }}
-                                  >
+                                  <TableCell>
+                                    <div
+                              className="que-column-count flex-between"
+                              style={{ cursor: "pointer", display: "" }}
+                            >
+                              
                                     <Tooltip title="Delete row">
                                       <span
                                         className="minus-iconblk"
@@ -242,10 +238,11 @@ const TableAssessment = ({
                                         <i className="fa fa-minus"></i>
                                       </span>
                                     </Tooltip>
+                                    </div>
                                   </TableCell>
                                 )}
                               {columnValues?.map((column, columnIdx) => {
-                                // console.log("column:- ", column);
+                                
                                 return (
                                   <TableCell key={column?.uuid}>
                                     <TableLayoutCellComponent
@@ -301,7 +298,7 @@ const TableAssessment = ({
           </Paper>
         </div>
         {!isPrefilled && !params["*"].includes("view") && (
-          <div className="add-row-btnblk mt-20">
+          <div className="add-row-btnblk">
             <span className="addmore-icon" onClick={onAddRowClickHandler}>
               <i className="fa fa-plus"></i>
             </span>{" "}

@@ -1,5 +1,5 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Box, Tab, Tabs, TextField, Tooltip } from "@mui/material";
+import { Box, Button, Tab, Tabs, TextField, Tooltip } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ import { downloadFunction } from "../../utils/downloadFunction";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import FillAssesmentSection from "./FillAssessmentSection";
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { async } from "q";
 // import { json } from "body-parser";
 
@@ -128,19 +129,7 @@ function FillAssessment() {
         setErrors({ ...errors });
     };
 
-    // console.log(
-    //     "both user are same",
-    //     userAuth._id === assessment?.assignedOperationMember?._id
-    // );
-
-    // console.log(
-    //     "first user ",
-    //     userAuth._id +
-    //         "  second user  " +
-    //         assessment?.assignedOperationMember?._id
-    // );
     const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
-    // console.log("params", params["*"].includes("view"));
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -511,8 +500,6 @@ function FillAssessment() {
                 });
             }
 
-            // console.log("sections array = ", sections);
-            // console.log("sections index[0] = ", sections[0]);
             setTabValue(sections.length > 0 ? sections[0] : 0);
 
             tempErrors[section?.uuid] = { ...sectionErrors };
@@ -640,9 +627,7 @@ function FillAssessment() {
         }
     };
 
-    useEffect(() => {
-        // console.log("UseEffect Errors", errors);
-    }, [errors]);
+    useEffect(() => {}, [errors]);
 
     const [isActive, setActive] = useState(false);
     const handleToggle = () => {
@@ -661,12 +646,13 @@ function FillAssessment() {
         setReOpenAssessmentDialogBox(false);
         navigate("/assessment-list");
     };
-
+    const [selectedFileName, setSelectedFileName] = useState("");
     const handleImportExcel = (e) => {
         // console.log("Selected files = ", e);
         // let d = [{ name: "madhav" }];
+        setSelectedFileName(e.target.files[0].name);
+        //console.log(selectedFileName)
         if (e.target.files) {
-            // let encFile = e.target.files[0];
             let reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
             console.log("File selected = ", e.target.files[0]);
@@ -746,8 +732,6 @@ function FillAssessment() {
                     () => myRef.current()
                 );
             }
-
-            // setFile(encFile);
         }
     };
     console.log("file selected enc", file);
@@ -803,6 +787,8 @@ function FillAssessment() {
         }
     };
 
+    const [importOpenDialog, setImportOpenDialog] = useState(false);
+
     return (
         <div
             className="page-wrapper"
@@ -841,9 +827,6 @@ function FillAssessment() {
                                 Due date <span>:</span>
                             </span>
                             <span className="accrej-desc">
-                                {/* {new Date(
-                                    assessment?.dueDate
-                                ).toLocaleDateString()} */}
                                 {new Date(
                                     new Date(assessment?.dueDate).setDate(
                                         new Date(
@@ -932,6 +915,49 @@ function FillAssessment() {
                 isModalForm={true}
                 handleCloseRedirect={handleCloseRedirect}
             />
+            <DialogBox
+                title={<p>Data Upload</p>}
+                info1={" "}
+                info2={
+                    <div className="upload-file-wrap">
+                        <Button
+                            variant="contained"
+                            component="label"
+                            className="upload-file-btn"
+                        >
+                            <div className="upload-file-blk">
+                                {/* <input hidden accept="image/*" multiple type="file" /> */}
+                                <input
+                                    type={"file"}
+                                    hidden
+                                    accept={".xls, .xlsx"}
+                                    // value={file}
+                                    onChange={handleImportExcel}
+                                />
+                                <span className="upload-icon">
+                                    <CloudUploadOutlinedIcon />
+                                </span>
+                                <span className="file-upload-txt">
+                                    Click here to choose file (.xlsx)
+                                </span>
+                            </div>
+                        </Button>
+                        <p className="select-filename">{selectedFileName}</p>
+                    </div>
+                }
+                primaryButtonText={"Upload"}
+                secondaryButtonText={"Cancel"}
+                onPrimaryModalButtonClickHandler={() =>
+                    handleReOpenAssessment()
+                }
+                onSecondaryModalButtonClickHandler={() =>
+                    handleCloseReopenAssessment()
+                }
+                openModal={importOpenDialog}
+                setOpenModal={setImportOpenDialog}
+                isModalForm={true}
+                handleCloseRedirect={handleCloseRedirect}
+            />
             <Toaster
                 myRef={myRef}
                 titleMessage={toasterDetails.titleMessage}
@@ -946,7 +972,7 @@ function FillAssessment() {
                                 onClick={() => navigate(`/assessment-list`)}
                                 style={{ cursor: "pointer" }}
                             >
-                                Assessment
+                                Assessments
                             </a>
                         </li>
 
@@ -981,7 +1007,7 @@ function FillAssessment() {
                                 <div
                                     className="crud-toggle-wrap assessment-crud-toggle-wrap"
                                     style={{
-                                        display: isActive ? "none" : "block",
+                                        display: isActive ? "block" : "none",
                                     }}
                                 >
                                     <ul className="crud-toggle-list">
@@ -992,17 +1018,21 @@ function FillAssessment() {
                                         >
                                             Export to Excel
                                         </li>
-                                        <li>
-                                            <input
+                                        <li
+                                            onClick={() =>
+                                                setImportOpenDialog(true)
+                                            }
+                                        >
+                                            {/* <input
                                                 type={"file"}
                                                 accept={".xls, .xlsx"}
                                                 // value={file}
                                                 onChange={handleImportExcel}
-                                            />
-                                            Import file
+                                            /> */}
+                                            Import File
                                         </li>
                                         <li onClick={() => decryptFile(file)}>
-                                            decrypt file
+                                            Decrypt File
                                         </li>
                                     </ul>
                                 </div>

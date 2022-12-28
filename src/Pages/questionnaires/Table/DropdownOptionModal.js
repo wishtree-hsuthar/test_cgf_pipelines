@@ -1,8 +1,7 @@
-import { Backdrop, Box, Fade, Modal, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import React, { useState } from "react";
+import { Backdrop, Box, Fade, Modal, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { setOldQuestionnaire } from "../../../redux/UserSlice";
 
 /* Popup */
@@ -28,7 +27,7 @@ const DropdownOptionModal = ({
   tableErr,
   setTableErr,
 }) => {
-  // const [isOptionCanceld, setIsOptionCanceld] = useState(false)
+  
   const dispatch = useDispatch();
   // console.log("old options:- ",oldOptions)
 
@@ -102,19 +101,14 @@ const DropdownOptionModal = ({
     setQuestionnaire(tempQuestionnaire);
     setOpenModal(false);
   };
-  // let oldOptions =
-  //   questionnaire.sections[sectionIndex].columnValues[columnId].options;
-  // console.log("old options:- ", oldOptions);
   useEffect(() => {
-    // console.log("questionnaire", questionnaire);
+    
     dispatch(
       setOldQuestionnaire(
         questionnaire.sections[sectionIndex].columnValues[columnId].options
       )
     );
   }, []);
-  // console.log("old Options",oldOptions)
-  // console.log("tempQuestionnaire:", tempQuestionnaire);
   return (
     <Modal
       aria-labelledby="transition-modal-title"

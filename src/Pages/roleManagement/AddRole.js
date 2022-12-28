@@ -498,6 +498,7 @@ const AddRole = () => {
                                                                                                     ][
                                                                                                         "fill"
                                                                                                     ],
+
                                                                                                 all:
                                                                                                     !previous[
                                                                                                         previleg
@@ -596,6 +597,18 @@ const AddRole = () => {
                                                                                                     previleg
                                                                                                 ][
                                                                                                     "add"
+                                                                                                ] &&
+                                                                                                    !previous[
+                                                                                                        previleg
+                                                                                                    ][
+                                                                                                        "list"
+                                                                                                    ]) ||
+                                                                                                false,
+                                                                                            fill:
+                                                                                                (previous[
+                                                                                                    previleg
+                                                                                                ][
+                                                                                                    "fill"
                                                                                                 ] &&
                                                                                                     !previous[
                                                                                                         previleg

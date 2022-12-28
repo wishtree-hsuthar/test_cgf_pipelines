@@ -19,26 +19,6 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import { downloadFunction } from "../../utils/downloadFunction";
 
-// function TabPanel(props) {
-//     const { children, value, index, ...other } = props;
-
-//     return (
-//         <div
-//             role="tabpanel"
-//             hidden={value !== index}
-//             id={`simple-tabpanel-${index}`}
-//             aria-labelledby={`simple-tab-${index}`}
-//             {...other}
-//         >
-//             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-//         </div>
-//     );
-// }
-// TabPanel.propTypes = {
-//     children: PropTypes.node,
-//     index: PropTypes.number.isRequired,
-//     value: PropTypes.number.isRequired,
-// };
 
 function a11yProps(index) {
     return {
@@ -50,7 +30,7 @@ function a11yProps(index) {
 const SubAdminList = () => {
     //custom hook to set title of page
     useDocumentTitle("CGF Admins");
-    // const dispatch = useDispatch();
+    
     const [value, setValue] = React.useState(0);
 
     //Refr for Toaster
@@ -294,8 +274,6 @@ const SubAdminList = () => {
         () => {
             let isMounted = true;
             const controller = new AbortController();
-            // makeApiCall && getSubAdminPending(isMounted, controller);
-            // fetchRolesForCGFAdmin();
             console.log("makeApiCall", makeApiCall);
             console.log("inside use Effect");
             return () => {

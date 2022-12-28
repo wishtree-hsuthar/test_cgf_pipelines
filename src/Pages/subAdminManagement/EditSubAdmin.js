@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
     TextField,
     Autocomplete as EditCGFAdminAutoComplete,
-    RadioGroup,
+    RadioGroup as EditCGFAdminRadioGroup,
     FormControlLabel,
     Radio,
     Paper,
@@ -697,7 +697,7 @@ const EditSubAdmin = () => {
                                                     name="status"
                                                     control={control}
                                                     render={({ field }) => (
-                                                        <RadioGroup
+                                                        <EditCGFAdminRadioGroup
                                                             {...field}
                                                             // value={editDefault && editDefault.status}
                                                             aria-labelledby="demo-radio-buttons-group-label"
@@ -718,7 +718,7 @@ const EditSubAdmin = () => {
                                                                 }
                                                                 label="Inactive"
                                                             />
-                                                        </RadioGroup>
+                                                        </EditCGFAdminRadioGroup>
                                                     )}
                                                 />
                                             </div>

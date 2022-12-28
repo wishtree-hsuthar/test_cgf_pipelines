@@ -12,13 +12,13 @@
     color: #1e1e1e;
     font-family: "ProximaNova-Regular", serif, sans-serif;
     margin: 0 0 20px;
-    text-align: justify;
+    text-align: justify;word-break: break-all;
 }
 .preview-sect-card-ttl-blk {
     /* padding: 20px 0 0; */
     margin-bottom: 0;
 }
-.preview-sect-card-ttl-blk .subheading{margin: 0 0 10px;font-size: 16px;text-align: justify;line-height: 20px;}
+.preview-sect-card-ttl-blk .subheading{margin: 0 0 10px;font-size: 16px;text-align: justify;line-height: 20px;word-break: break-all;}
 .preview-que-blk {
     margin: 0 0 20px;
 }
