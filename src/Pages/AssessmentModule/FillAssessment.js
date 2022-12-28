@@ -1,5 +1,5 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Box, Tab, Tabs, TextField, Tooltip } from "@mui/material";
+import { Box, Button, Tab, Tabs, TextField, Tooltip } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
@@ -22,6 +22,7 @@ import { downloadFunction } from "../../utils/downloadFunction";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import FillAssesmentSection from "./FillAssessmentSection";
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
@@ -642,8 +643,12 @@ function FillAssessment() {
         setReOpenAssessmentDialogBox(false);
         navigate("/assessment-list");
     };
-
+    const [selectedFileName, setSelectedFileName] = useState("")
     const handleImportExcel = (e) => {
+        // console.log("Selected files = ", e);
+        // let d = [{ name: "madhav" }];
+        setSelectedFileName(e.target.files[0].name)
+        //console.log(selectedFileName)
         if (e.target.files) {
         
             let reader = new FileReader();
@@ -720,6 +725,8 @@ function FillAssessment() {
         a.download = "QKD_download";
         a.click();
     };
+
+    const [importOpenDialog, setImportOpenDialog] = useState(false);
 
     return (
         <div
@@ -847,6 +854,46 @@ function FillAssessment() {
                 isModalForm={true}
                 handleCloseRedirect={handleCloseRedirect}
             />
+            <DialogBox
+                title={<p>Data Upload</p>}
+                info1={" "}
+                info2={
+                    <div className="upload-file-wrap">
+                        <Button variant="contained" component="label" className="upload-file-btn">
+                            
+                            <div className="upload-file-blk">
+                                {/* <input hidden accept="image/*" multiple type="file" /> */}
+                                <input
+                                    type={"file"}
+                                    hidden
+                                    accept={".xls, .xlsx"}
+                                    // value={file}
+                                    onChange={handleImportExcel}
+                                />
+                                <span className="upload-icon">
+                                    <CloudUploadOutlinedIcon />
+                                </span>
+                                <span className="file-upload-txt">
+                                    Click here to choose file (.xlsx)
+                                </span>
+                            </div>
+                        </Button>
+                        <p className="select-filename">{selectedFileName}</p>
+                    </div>
+                }
+                primaryButtonText={"Upload"}
+                secondaryButtonText={"Cancel"}
+                onPrimaryModalButtonClickHandler={() =>
+                    handleReOpenAssessment()
+                }
+                onSecondaryModalButtonClickHandler={() =>
+                    handleCloseReopenAssessment()
+                }
+                openModal={importOpenDialog}
+                setOpenModal={setImportOpenDialog}
+                isModalForm={true}
+                handleCloseRedirect={handleCloseRedirect}
+            />
             <Toaster
                 myRef={myRef}
                 titleMessage={toasterDetails.titleMessage}
@@ -861,7 +908,7 @@ function FillAssessment() {
                                 onClick={() => navigate(`/assessment-list`)}
                                 style={{ cursor: "pointer" }}
                             >
-                                Assessment
+                                Assessments
                             </a>
                         </li>
 
@@ -913,17 +960,17 @@ function FillAssessment() {
                                         >
                                             Export to Excel
                                         </li>
-                                        <li>
-                                            <input
+                                        <li onClick={() => setImportOpenDialog(true)}>
+                                            {/* <input
                                                 type={"file"}
                                                 accept={".xls, .xlsx"}
                                                 // value={file}
                                                 onChange={handleImportExcel}
-                                            />
-                                            Import file
+                                            /> */}
+                                            Import File
                                         </li>
                                         <li onClick={() => decryptFile(file)}>
-                                            decrypt file
+                                            Decrypt File
                                         </li>
                                     </ul>
                                 </div>
