@@ -204,7 +204,9 @@ const AddRole = () => {
                     },
                     () => myRef.current()
                 );
-                navigate1("/login");
+                setTimeout(() => {
+                    navigate1("/login");
+                }, 3000);
             } else {
                 setErrorToaster(error);
             }
