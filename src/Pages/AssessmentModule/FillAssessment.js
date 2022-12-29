@@ -1068,7 +1068,7 @@ function FillAssessment() {
         openModal={importOpenDialog}
         setOpenModal={setImportOpenDialog}
         isModalForm={true}
-        handleCloseRedirect={handleCloseRedirect}
+        handleCloseRedirect={() => setImportOpenDialog(false)}
       />
       <Toaster
         myRef={myRef}
@@ -1087,10 +1087,11 @@ function FillAssessment() {
                 Assessments
               </a>
             </li>
-{
-    params["*"].includes("view") ? <li>View Assessment</li>: <li>Fill Assessment</li> 
-}
-            
+            {params["*"].includes("view") ? (
+              <li>View Assessment</li>
+            ) : (
+              <li>Fill Assessment</li>
+            )}
           </ul>
         </div>
       </div>
