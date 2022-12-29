@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Tabs, Tab} from "@mui/material";
+import { Box, Tabs, Tab } from "@mui/material";
 
 import DownloadIcon from "@mui/icons-material/Download";
 import useCallbackState from "../../utils/useCallBackState";
@@ -234,7 +234,7 @@ const SubAdminList = () => {
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            
+
             setTotalRecordsForPendingTab(
                 parseInt(response.headers["x-total-count"])
             );
@@ -247,7 +247,7 @@ const SubAdminList = () => {
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            
+
             console.log(
                 "Error from getSubAdmin pending tab table-------",
                 error
@@ -297,7 +297,6 @@ const SubAdminList = () => {
         // console.log("order", order, "order BY", orderBy);
     }
 
-    
     const [selectedRoles, setSelectedRoles] = useState([]);
     const [selectedStatusFilter, setSelectedStatusFilter] = useState("");
 
@@ -387,7 +386,8 @@ const SubAdminList = () => {
                                             setToasterDetails,
                                             false,
                                             cgfAdminRef,
-                                            DOWNLOAD_CGF_ADMIN
+                                            DOWNLOAD_CGF_ADMIN,
+                                            navigate
                                         )
                                     }
                                 >

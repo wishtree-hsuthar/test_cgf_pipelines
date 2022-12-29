@@ -7,6 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
+// import {} from "form-data"
 import {
     ACCEPT_ASSESSMENT,
     ADD_QUESTIONNAIRE,
@@ -22,7 +23,9 @@ import { downloadFunction } from "../../utils/downloadFunction";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import FillAssesmentSection from "./FillAssessmentSection";
-import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+import { async } from "q";
+// import { json } from "body-parser";
 
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
@@ -223,7 +226,7 @@ function FillAssessment() {
 
     const myRef = useRef();
 
-    const saveAssessmentAsDraft = async (saveAsDraft) => {
+    const saveAssessmentAsDraft = async (saveAsDraft, reOpen) => {
         console.log("Save function called");
         try {
             const response = await privateAxios.post(
@@ -236,18 +239,20 @@ function FillAssessment() {
             );
             console.log("Assessment is saved as draft", response);
             if (response.status == 201) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Success",
-                        descriptionMessage: response?.data?.message,
-                        messageType: "success",
-                    },
-                    () => myRef.current()
-                );
+                !reOpen &&
+                    setToasterDetails(
+                        {
+                            titleMessage: "Success",
+                            descriptionMessage: response?.data?.message,
+                            messageType: "success",
+                        },
+                        () => myRef.current()
+                    );
 
-                setTimeout(() => {
-                    navigate("/assessment-list");
-                }, 3000);
+                !reOpen &&
+                    setTimeout(() => {
+                        navigate("/assessment-list");
+                    }, 3000);
             }
         } catch (error) {
             console.log("error from save assessment as draft", error);
@@ -622,9 +627,7 @@ function FillAssessment() {
         }
     };
 
-    useEffect(() => {
-     
-    }, [errors]);
+    useEffect(() => {}, [errors]);
 
     const [isActive, setActive] = useState(false);
     const handleToggle = () => {
@@ -636,76 +639,101 @@ function FillAssessment() {
     };
 
     const handleReOpenAssessment = () => {
-      
+        saveAssessmentAsDraft(true, true);
         setReOpenAssessmentDialogBox(false);
     };
     const handleCloseReopenAssessment = () => {
         setReOpenAssessmentDialogBox(false);
         navigate("/assessment-list");
     };
-    const [selectedFileName, setSelectedFileName] = useState("")
+    const [selectedFileName, setSelectedFileName] = useState("");
     const handleImportExcel = (e) => {
         // console.log("Selected files = ", e);
         // let d = [{ name: "madhav" }];
-        setSelectedFileName(e.target.files[0].name)
+        setSelectedFileName(e.target.files[0].name);
+        setFile(e.target.files[0]);
         //console.log(selectedFileName)
-        if (e.target.files) {
-        
-            let reader = new FileReader();
-            reader.readAsDataURL(e.target.files[0]);
-            console.log("File selected = ", e.target.files[0]);
-            console.log("Reflect method - ", Reflect.get(e.target.files[0]));
-            if (
-                e.target.files[0].type === "application/vnd.ms-excel" ||
-                e.target.files[0].type ===
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            ) {
-                console.log("file type is valid");
+        // if (e.target.files) {
+        //     let reader = new FileReader();
+        //     reader.readAsDataURL(e.target.files[0]);
+        //     console.log("File selected = ", e.target.files[0]);
+        //     console.log("Reflect method - ", Reflect.get(e.target.files[0]));
+        //     if (
+        //         e.target.files[0].type === "application/vnd.ms-excel" ||
+        //         e.target.files[0].type ===
+        //             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        //     ) {
+        //         console.log("file type is valid");
 
-                reader.onloadend = async () => {
-                    let result = reader.result;
-                    let encryptedFile = CryptoJs.AES.encrypt(
-                        result,
-                        "my-secret-key@123"
-                    ).toString();
-                    try {
-                        const response = await privateAxios.post(
-                            `http://localhost:3000/api/assessments/${params.id}/upload`,
-                            {
-                                encryptedFile,
-                            }
-                        );
-                        console.log(
-                            "response for upoading encrypted file - ",
-                            response
-                        );
-                        setAssessmentQuestionnaire({
-                            ...response.data,
-                        });
-                    } catch (error) {
-                        console.log("Error from UPLOAD api", error);
-                    }
-                    setFile(
-                        CryptoJs.AES.encrypt(
-                            result,
-                            "my-secret-key@123"
-                        ).toString()
-                    );
-                };
-            } else {
-                return setToasterDetails(
-                    {
-                        titleMessage: "error",
-                        descriptionMessage:
-                            "Invalid file type Please uplaod excel file!",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-            }
+        //         reader.onloadend = async () => {
+        //             let result = reader.result;
+        //             let encryptedFile = CryptoJs.AES.encrypt(
+        //                 result,
+        //                 "my-secret-key@123"
+        //             ).toString();
+        //             try {
+        //                 const response = await privateAxios.post(
+        //                     `http://localhost:3000/api/assessments/${params.id}/upload`,
+        //                     {
+        //                         encryptedFile,
+        //                     }
+        //                 );
 
-            
-        }
+        //                 if (response.status == 201) {
+        //                     setAssessmentQuestionnaire(response.data.answers);
+        //                     if (response.data.containsErrors) {
+        //                         try {
+        //                             const correctionDocResponse =
+        //                                 await privateAxios.get(
+        //                                     `http://localhost:3000/api/assessments/${response.data.correctionId}/corrections`,
+        //                                     {
+        //                                         responseType: "blob",
+        //                                     }
+        //                                 );
+
+        //                             const url = window.URL.createObjectURL(
+        //                                 new Blob([correctionDocResponse.data])
+        //                             );
+        //                             const link = document.createElement(`a`);
+        //                             link.href = url;
+        //                             link.setAttribute(
+        //                                 `download`,
+        //                                 `Corrections - ${new Date().toLocaleString(
+        //                                     "en"
+        //                                 )}.xlsx`
+        //                             );
+        //                             document.body.appendChild(link);
+        //                             link.click();
+        //                         } catch (error) {
+        //                             console.log(
+        //                                 "Error from corections doc download",
+        //                                 error
+        //                             );
+        //                         }
+        //                     }
+        //                 }
+        //             } catch (error) {
+        //                 console.log("Error from UPLOAD api", error);
+        //             }
+        //             setFile(
+        //                 CryptoJs.AES.encrypt(
+        //                     result,
+        //                     "my-secret-key@123"
+        //                 ).toString()
+        //             );
+        //         };
+        //     } else {
+        //         return setToasterDetails(
+        //             {
+        //                 titleMessage: "error",
+        //                 descriptionMessage:
+        //                     "Invalid file type Please uplaod excel file!",
+        //                 messageType: "error",
+        //             },
+        //             () => myRef.current()
+        //         );
+        //     }
+        // }
     };
     console.log("file selected enc", file);
 
@@ -726,7 +754,180 @@ function FillAssessment() {
         a.click();
     };
 
+    const handleDownloadAssessment = async () => {
+        try {
+            const response = await downloadFunction(
+                "Assessment",
+                setToasterDetails,
+                params.id,
+                myRef,
+                DOWNLOAD_ASSESSMENT_BY_ID,
+                navigate
+            );
+            console.log("response from handledownloadassessment", response);
+            console.log(
+                "response from handledownloadassessment",
+                response?.response?.status
+            );
+            // if (response?.response?.status === 401) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // }
+        } catch (error) {
+            console.log("error from handleDownloadAssessment", error);
+        }
+    };
+
     const [importOpenDialog, setImportOpenDialog] = useState(false);
+
+    const reUploadAssessment = () => {
+        try {
+            if (file) {
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                console.log("File selected = ", file);
+                console.log("Reflect method - ", Reflect.get(file));
+                if (
+                    file.type === "application/vnd.ms-excel" ||
+                    file.type ===
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                ) {
+                    console.log("file type is valid");
+
+                    reader.onloadend = async () => {
+                        let result = reader.result;
+                        let encryptedFile = CryptoJs.AES.encrypt(
+                            result,
+                            "my-secret-key@123"
+                        ).toString();
+                        try {
+                            const response = await privateAxios.post(
+                                `http://localhost:3000/api/assessments/${params.id}/upload`,
+                                {
+                                    encryptedFile,
+                                }
+                            );
+
+                            if (response.status == 201) {
+                                setFile("");
+                                setSelectedFileName("");
+
+                                setImportOpenDialog(false);
+                                setToasterDetails(
+                                    {
+                                        titleMessage: "Success",
+                                        descriptionMessage:
+                                            "Successfully imported excel file!",
+                                        messageType: "success",
+                                    },
+                                    () => myRef.current()
+                                );
+
+                                setAssessmentQuestionnaire(
+                                    response.data.answers
+                                );
+                                if (response.data.containsErrors) {
+                                    try {
+                                        const correctionDocResponse =
+                                            await privateAxios.get(
+                                                `http://localhost:3000/api/assessments/${response.data.correctionId}/corrections`,
+                                                {
+                                                    responseType: "blob",
+                                                }
+                                            );
+
+                                        const url = window.URL.createObjectURL(
+                                            new Blob([
+                                                correctionDocResponse.data,
+                                            ])
+                                        );
+                                        const link =
+                                            document.createElement(`a`);
+                                        link.href = url;
+                                        link.setAttribute(
+                                            `download`,
+                                            `Corrections - ${new Date().toLocaleString(
+                                                "en"
+                                            )}.xlsx`
+                                        );
+                                        document.body.appendChild(link);
+                                        link.click();
+                                        setToasterDetails(
+                                            {
+                                                titleMessage: "error",
+                                                descriptionMessage: (
+                                                    <p>
+                                                        Excel file has
+                                                        missing/invalid
+                                                        fields.Please check{" "}
+                                                        <b>Corrections sheet</b>{" "}
+                                                        attached with it!".
+                                                    </p>
+                                                ),
+                                                messageType: "error",
+                                            },
+                                            () => myRef.current()
+                                        );
+                                    } catch (error) {
+                                        console.log(
+                                            "Error from corections doc download",
+                                            error
+                                        );
+                                    }
+                                }
+                            }
+                        } catch (error) {
+                            console.log("Error from UPLOAD api", error);
+                        }
+                        // setFile(
+                        //     CryptoJs.AES.encrypt(
+                        //         result,
+                        //         "my-secret-key@123"
+                        //     ).toString()
+                        // );
+                    };
+                } else {
+                    return setToasterDetails(
+                        {
+                            titleMessage: "error",
+                            descriptionMessage:
+                                "Invalid file type Please uplaod excel file!",
+                            messageType: "error",
+                        },
+                        () => myRef.current()
+                    );
+                }
+            } else {
+                return setToasterDetails(
+                    {
+                        titleMessage: "error",
+                        descriptionMessage: "Please select excel file!",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+            }
+        } catch (error) {
+            console.log("error in reupload assessment", error);
+        }
+    };
+
+    const cancelImport = () => {
+        setFile("");
+        setSelectedFileName("");
+
+        setImportOpenDialog(false);
+    };
 
     return (
         <div
@@ -859,8 +1060,11 @@ function FillAssessment() {
                 info1={" "}
                 info2={
                     <div className="upload-file-wrap">
-                        <Button variant="contained" component="label" className="upload-file-btn">
-                            
+                        <Button
+                            variant="contained"
+                            component="label"
+                            className="upload-file-btn"
+                        >
                             <div className="upload-file-blk">
                                 {/* <input hidden accept="image/*" multiple type="file" /> */}
                                 <input
@@ -884,10 +1088,12 @@ function FillAssessment() {
                 primaryButtonText={"Upload"}
                 secondaryButtonText={"Cancel"}
                 onPrimaryModalButtonClickHandler={() =>
-                    handleReOpenAssessment()
+                    // handleReOpenAssessment()
+                    reUploadAssessment()
                 }
                 onSecondaryModalButtonClickHandler={() =>
-                    handleCloseReopenAssessment()
+                    // handleCloseReopenAssessment()
+                    cancelImport()
                 }
                 openModal={importOpenDialog}
                 setOpenModal={setImportOpenDialog}
@@ -949,18 +1155,16 @@ function FillAssessment() {
                                     <ul className="crud-toggle-list">
                                         <li
                                             onClick={() =>
-                                                downloadFunction(
-                                                    "Assessment",
-                                                    setToasterDetails,
-                                                    params.id,
-                                                    myRef,
-                                                    DOWNLOAD_ASSESSMENT_BY_ID
-                                                )
+                                                handleDownloadAssessment()
                                             }
                                         >
                                             Export to Excel
                                         </li>
-                                        <li onClick={() => setImportOpenDialog(true)}>
+                                        <li
+                                            onClick={() =>
+                                                setImportOpenDialog(true)
+                                            }
+                                        >
                                             {/* <input
                                                 type={"file"}
                                                 accept={".xls, .xlsx"}

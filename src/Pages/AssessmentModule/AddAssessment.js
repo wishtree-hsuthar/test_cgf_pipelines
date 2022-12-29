@@ -134,7 +134,7 @@ const AddAssessment = () => {
                 );
             } catch (error) {
                 console.log("Error from fetch questionnaires", error);
-                if (error.response.status === 401) {
+                if (error?.response?.status === 401) {
                     console.log("Unauthorized user access");
                     // Add error toaster here
                     setToasterDetails(
@@ -517,7 +517,7 @@ const AddAssessment = () => {
                                                             params
                                                         ) => (
                                                             <TextField
-                                                            autoComplete="off"
+                                                                autoComplete="off"
                                                                 {...params}
                                                                 className={` input-field ${
                                                                     error &&
