@@ -426,7 +426,7 @@ const Header = () => {
                                             <div>
                                                 <Tooltip
                                                     title={userAuth?.name}
-                                                    interactive
+                                                    // interactive
                                                     disableHoverListener={
                                                         !hoverNameStatus
                                                     }
@@ -441,7 +441,7 @@ const Header = () => {
                                                 </Tooltip>
                                                 <Tooltip
                                                     title={userAuth?.role?.name}
-                                                    interactive
+                                                    // interactive
                                                     disableHoverListener={
                                                         !hoverStatus
                                                     }

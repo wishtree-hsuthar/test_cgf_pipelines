@@ -6,7 +6,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip
+  Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -50,11 +50,12 @@ const TableAssessment = ({
   errors,
   editMode,
 }) => {
+  console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
   const params = useParams();
   const tranformedColumnValues = getTransformedColumns(columnValues);
   const tranformedRowValues = getTransformedRows(rowValues);
   const [isPrefilled, setIsPrefilled] = useState(false);
-  
+
   let rowIdsArray = [];
   const onAddRowClickHandler = () => {
     const newRowId = uuidv4();
@@ -62,6 +63,7 @@ const TableAssessment = ({
     console.log("temp before row add", temp);
     columnValues.forEach((column) => {
       if (column?.columnType === "dropdown") {
+        console.log("inside dropdown");
         temp[sectionUUID][`${[column?.uuid]}.${newRowId}`] = undefined;
       } else {
         temp[sectionUUID][`${[column?.uuid]}.${newRowId}`] = "";
@@ -85,10 +87,7 @@ const TableAssessment = ({
     setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
   };
 
-  
-
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
   console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
   return (
     <div className="que-table-sect">
@@ -103,8 +102,11 @@ const TableAssessment = ({
                 stickyHeader
                 aria-label="sticky table"
                 // className="que-table assessment-table"
-                className={!isPrefilled &&
-                  !params["*"].includes("view") ? "que-table assessment-table not-prefilled-table" : "que-table assessment-table"}
+                className={
+                  !isPrefilled && !params["*"].includes("view")
+                    ? "que-table assessment-table not-prefilled-table"
+                    : "que-table assessment-table"
+                }
               >
                 <TableHead>
                   <TableRow>
@@ -122,19 +124,19 @@ const TableAssessment = ({
                               className="que-table-col-ttl"
                               // contentEditable="true"
                             >
-                               {column?.title.length > 50 ? (
-                                    <Tooltip
-                                      title={column?.title}
-                                      placement="bottom-start"
-                                    >
-                                      <p>
-                                        {column?.title.slice(0, 50)}
-                                        ...
-                                      </p>
-                                    </Tooltip>
-                                  ) : (
-                                    <p>{column?.title}</p>
-                                  )}
+                              {column?.title.length > 50 ? (
+                                <Tooltip
+                                  title={column?.title}
+                                  placement="bottom-start"
+                                >
+                                  <p>
+                                    {column?.title.slice(0, 50)}
+                                    ...
+                                  </p>
+                                </Tooltip>
+                              ) : (
+                                <p>{column?.title}</p>
+                              )}
                               {/* <p>{column?.title}</p> */}
                             </div>
                           </div>
@@ -152,7 +154,7 @@ const TableAssessment = ({
                             className="que-column-count"
                             style={{ cursor: "pointer", display: "" }}
                           >
-                            <Tooltip title="Delete row">
+                            <Tooltip title="Delete Row">
                               <span
                                 className="minus-iconblk"
                                 onClick={() => onRowDeleteClickHandler()}
@@ -217,32 +219,33 @@ const TableAssessment = ({
                         if (isRowRenderd === -1) {
                           rowIdsArray?.push(assessmentQuestionnaireRowId);
                           return (
-                            <TableRow key={assessmentQuestionnaireKey} className="not-prefilled">
+                            <TableRow
+                              key={assessmentQuestionnaireKey}
+                              className="not-prefilled"
+                            >
                               {!isPrefilled &&
                                 !params["*"].includes("view") && (
                                   <TableCell>
                                     <div
-                              className="que-column-count flex-between"
-                              style={{ cursor: "pointer", display: "" }}
-                            >
-                              
-                                    <Tooltip title="Delete row">
-                                      <span
-                                        className="minus-iconblk"
-                                        onClick={() =>
-                                          onRowDeleteClickHandler(
-                                            assessmentQuestionnaireRowId
-                                          )
-                                        }
-                                      >
-                                        <i className="fa fa-minus"></i>
-                                      </span>
-                                    </Tooltip>
+                                      className="que-column-count flex-between"
+                                      style={{ cursor: "pointer", display: "" }}
+                                    >
+                                      <Tooltip title="Delete Row">
+                                        <span
+                                          className="minus-iconblk"
+                                          onClick={() =>
+                                            onRowDeleteClickHandler(
+                                              assessmentQuestionnaireRowId
+                                            )
+                                          }
+                                        >
+                                          <i className="fa fa-minus"></i>
+                                        </span>
+                                      </Tooltip>
                                     </div>
                                   </TableCell>
                                 )}
                               {columnValues?.map((column, columnIdx) => {
-                                
                                 return (
                                   <TableCell key={column?.uuid}>
                                     <TableLayoutCellComponent
@@ -298,11 +301,11 @@ const TableAssessment = ({
           </Paper>
         </div>
         {!isPrefilled && !params["*"].includes("view") && (
-          <div className="add-row-btnblk">
-            <span className="addmore-icon" onClick={onAddRowClickHandler}>
+          <div className="add-row-btnblk" onClick={onAddRowClickHandler}>
+            <span className="addmore-icon">
               <i className="fa fa-plus"></i>
             </span>{" "}
-            <span onClick={onAddRowClickHandler}>Add Row</span>
+            <span>Add Row</span>
           </div>
         )}
       </div>

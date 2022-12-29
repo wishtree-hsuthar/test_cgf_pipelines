@@ -1382,7 +1382,7 @@ const EditMember = () => {
                                         <div className="card-form-field">
                                             <div className="form-group">
                                                 <label htmlFor="title">
-                                                    Title
+                                                   Job Title
                                                 </label>
                                                 <Input
                                                     control={control}
@@ -1399,7 +1399,7 @@ const EditMember = () => {
                                                             e.target.value?.trim()
                                                         )
                                                     }
-                                                    placeholder="N/A"
+                                                    placeholder="Enter job title"
                                                 />
                                             </div>
                                         </div>

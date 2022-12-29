@@ -463,7 +463,7 @@ function AddOperationMember() {
                                 </div>
                                 <div className="card-form-field">
                                     <div className="form-group">
-                                        <label htmlFor="title">Title </label>
+                                        <label htmlFor="title">Job Title </label>
                                         <Input
                                             name={"title"}
                                             onBlur={(e) =>
@@ -474,7 +474,7 @@ function AddOperationMember() {
                                             }
                                             myHelper={helperText}
                                             control={control}
-                                            placeholder={"Enter title"}
+                                            placeholder={"Enter job title"}
                                             rules={{
                                                 maxLength: 50,
                                                 minLength: 3,

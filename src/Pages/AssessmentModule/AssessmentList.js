@@ -126,25 +126,25 @@ const AssessmentList = () => {
         setPage(1);
     };
     const onClickVisibilityIconHandler = (id) => {
-        console.log("id", id);
+        // console.log("id", id);
         return navigate(`/assessment-list/view-assessment/${id}`);
     };
 
     const onClickEditIconHandler = (uuid) => {
-        console.log("uuid", uuid);
+        // console.log("uuid", uuid);
         return navigate(`/assessment-list/edit-assessment/${uuid}`);
     };
     const onClickAssignAssessmentHandler = (uuid) => {
-        console.log("uuid", uuid);
+        // console.log("uuid", uuid);
         return navigate(`/assessment-list/assign-assessment/${uuid}`);
     };
     const onClickFillAssessmentHandler = (uuid) => {
-        console.log("uuid", uuid);
+        // console.log("uuid", uuid);
         return navigate(`/assessment-list/fill-assessment/${uuid}`);
     };
 
     const generateUrl = () => {
-        console.log("Search", search);
+        // console.log("Search", search);
         let url = `${ASSESSMENTS}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
@@ -162,13 +162,13 @@ const AssessmentList = () => {
                 signal: controller.signal,
             });
             setTotalRecords(parseInt(response.headers["x-total-count"]));
-            console.log("Response from  get assessments api", response);
+            // console.log("Response from  get assessments api", response);
 
             updateRecords([...response.data]);
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            console.log("Error from assessments-------", error);
+            // console.log("Error from assessments-------", error);
 
             if (error?.response?.status == 401) {
                 setToasterDetails(
@@ -279,26 +279,26 @@ const AssessmentList = () => {
         }));
 
     let assessmentAccessObj = { ...moduleAccesForAssessment[0]?.assessment };
-    console.log("assessment access object", assessmentAccessObj);
+    // console.log("assessment access object", assessmentAccessObj);
     let handleActionIcons = () => {
         let icon = Object.entries(assessmentAccessObj).filter(
             (key) => key[1] === true && icons.push(key[0])
         );
-        console.log("icon----", icon);
+        // console.log("icon----", icon);
         if (SUPER_ADMIN) {
             icons = ["edit", "visibility"];
             return icons;
         } else if (icons.includes("fill")) {
             icons.push("send");
-            console.log("in else if icons---", icons);
+            // console.log("in else if icons---", icons);
 
             return icons;
         }
-        console.log(" in else  icons---");
+        // console.log(" in else  icons---");
 
         return icons;
     };
-    console.log("icons---", icons);
+    // console.log("icons---", icons);
 
     return (
         <div>
