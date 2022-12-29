@@ -109,8 +109,6 @@ function FillAssessment() {
   const [errorQuestion, setErrorQuestion] = useState("");
   const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [selectedFileName, setSelectedFileName] = useState("");
-  const [importOpenDialog, setImportOpenDialog] = useState(false);
 
   const [errors, setErrors] = useState({});
   const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
@@ -132,100 +130,93 @@ function FillAssessment() {
   };
 
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
-  const fetchQuestionnaire = async (id, controller, isMounted) => {
-    try {
-      const response = await privateAxios.get(`${ADD_QUESTIONNAIRE}/${id}`, {
-        signal: controller.signal,
-      });
-      // console.log("response from fetch questionnaire", response);
-      isMounted && setQuestionnaire({ ...response.data });
-    } catch (error) {
-      if (error?.code === "ERR_CANCELED") return;
-
-      // console.log("error from fetch questionnaire", error);
-      if (error?.response?.status === 401) {
-        isMounted &&
-          setToasterDetails(
-            {
-              titleMessage: "Oops!",
-              descriptionMessage: "Session Timeout: Please login again",
-              messageType: "error",
-            },
-            () => myRef.current()
-          );
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
-      }
-    }
-  };
-  const fetchAssessments = async (controller, isMounted) => {
-    try {
-      setIsLoading(true);
-      const response = await privateAxios.get(
-        `${FETCH_ASSESSMENT_BY_ID}${params.id}`,
-        {
-          signal: controller.signal,
-        }
-      );
-      setIsLoading(false);
-      console.log("response from fetch assessment", response);
-      setEditMode(
-        userAuth?._id === response?.data?.assignedOperationMember?._id
-      );
-      isMounted && setAssessments({ ...response.data });
-      isMounted &&
-        setAssessmentQuestionnaire({
-          ...response.data.answers,
-        });
-      await fetchQuestionnaire(
-        response?.data?.questionnaireId,
-        controller,
-        isMounted
-      );
-      setReOpenAssessmentDialogBox(
-        response?.data?.isSubmitted && !params["*"].includes("view")
-      );
-      setOpenDeleteDialogBox(
-        userAuth._id === response?.data?.assignedOperationMember?._id &&
-          !params["*"].includes("view") &&
-          response?.data?.assessmentStatus == "Pending"
-      );
-    } catch (error) {
-      if (error?.code === "ERR_CANCELED") return;
-      if (error?.response?.status === 401) {
-        isMounted &&
-          setToasterDetails(
-            {
-              titleMessage: "Oops!",
-              descriptionMessage: "Session Timeout: Please login again",
-              messageType: "error",
-            },
-            () => myRef.current()
-          );
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
-      }
-      setIsLoading(false);
-      // console.log("error from fetch assessment", error);
-    }
-  };
-
   useEffect(() => {
     let isMounted = true;
     let controller = new AbortController();
-    (async () => {
-      await fetchAssessments(controller, isMounted);
-    })();
 
+    const fetchQuestionnaire = async (id) => {
+      try {
+        const response = await privateAxios.get(`${ADD_QUESTIONNAIRE}/${id}`, {
+          signal: controller.signal,
+        });
+        console.log("response from fetch questionnaire", response);
+        isMounted && setQuestionnaire({ ...response.data });
+      } catch (error) {
+        if (error?.code === "ERR_CANCELED") return;
+
+        console.log("error from fetch questionnaire", error);
+        if (error?.response?.status === 401) {
+          isMounted &&
+            setToasterDetails(
+              {
+                titleMessage: "Oops!",
+                descriptionMessage: "Session Timeout: Please login again",
+                messageType: "error",
+              },
+              () => myRef.current()
+            );
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
+        }
+      }
+    };
+
+    const fetchAssessments = async () => {
+      try {
+        setIsLoading(true);
+        const response = await privateAxios.get(
+          `${FETCH_ASSESSMENT_BY_ID}${params.id}`,
+          {
+            signal: controller.signal,
+          }
+        );
+        setIsLoading(false);
+        console.log("response from fetch assessment", response);
+        setEditMode(
+          userAuth?._id === response?.data?.assignedOperationMember?._id
+        );
+        isMounted && setAssessments({ ...response.data });
+        isMounted &&
+          setAssessmentQuestionnaire({
+            ...response.data.answers,
+          });
+        fetchQuestionnaire(response?.data?.questionnaireId);
+        setReOpenAssessmentDialogBox(
+          response?.data?.isSubmitted && !params["*"].includes("view")
+        );
+        setOpenDeleteDialogBox(
+          userAuth._id === response?.data?.assignedOperationMember?._id &&
+            !params["*"].includes("view") &&
+            response?.data?.assessmentStatus == "Pending"
+        );
+      } catch (error) {
+        if (error?.code === "ERR_CANCELED") return;
+        if (error?.response?.status === 401) {
+          isMounted &&
+            setToasterDetails(
+              {
+                titleMessage: "Oops!",
+                descriptionMessage: "Session Timeout: Please login again",
+                messageType: "error",
+              },
+              () => myRef.current()
+            );
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
+        }
+        setIsLoading(false);
+        console.log("error from fetch assessment", error);
+      }
+    };
+    fetchAssessments();
     return () => {
       isMounted = false;
       controller.abort();
     };
   }, []);
 
-  //   console.log("Questionnaire:- ", questionnaire);
   const myRef = useRef();
 
   const saveAssessmentAsDraft = async (saveAsDraft, reOpen) => {
@@ -239,7 +230,7 @@ function FillAssessment() {
           ...assessmentQuestionnaire,
         }
       );
-      // console.log("Assessment is saved as draft", response);
+      console.log("Assessment is saved as draft", response);
       if (response.status == 201) {
         !reOpen &&
           setToasterDetails(
@@ -300,14 +291,11 @@ function FillAssessment() {
         const transformedColValues = getTransformedColumns(
           section?.columnValues
         );
-        // console.log(
-        //     "curren assessment Questionnaire:- ",
-        //     currentSectionAnswers
-        // );
-        // console.log(
-        //     "transformed column values:- ",
-        //     transformedColValues
-        // );
+        console.log(
+          "curren assessment Questionnaire:- ",
+          currentSectionAnswers
+        );
+        console.log("transformed column values:- ", transformedColValues);
         // currentSectionAnswers
         Object.keys(currentSectionAnswers).forEach((answersKeys) => {
           let tempRowId = answersKeys?.split(".")[1];
@@ -596,9 +584,7 @@ function FillAssessment() {
     }
   };
 
-  // useEffect(() => {
-
-  // }, [errors]);
+  // useEffect(() => {}, [errors]);
 
   const [isActive, setActive] = useState(false);
   const handleToggle = () => {
@@ -610,61 +596,104 @@ function FillAssessment() {
   };
 
   const handleReOpenAssessment = () => {
+    saveAssessmentAsDraft(true, true);
     setReOpenAssessmentDialogBox(false);
   };
   const handleCloseReopenAssessment = () => {
     setReOpenAssessmentDialogBox(false);
     navigate("/assessment-list");
   };
-
+  const [selectedFileName, setSelectedFileName] = useState("");
   const handleImportExcel = (e) => {
-    if (e.target.files) {
-      let reader = new FileReader();
-      reader.readAsDataURL(e.target.files[0]);
-      console.log("File selected = ", e.target.files[0]);
-      console.log("Reflect method - ", Reflect.get(e.target.files[0]));
-      if (
-        e.target.files[0].type === "application/vnd.ms-excel" ||
-        e.target.files[0].type ===
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      ) {
-        console.log("file type is valid");
+    // console.log("Selected files = ", e);
+    // let d = [{ name: "madhav" }];
+    setSelectedFileName(e.target.files[0].name);
+    setFile(e.target.files[0]);
+    //console.log(selectedFileName)
+    // if (e.target.files) {
+    //     let reader = new FileReader();
+    //     reader.readAsDataURL(e.target.files[0]);
+    //     console.log("File selected = ", e.target.files[0]);
+    //     console.log("Reflect method - ", Reflect.get(e.target.files[0]));
+    //     if (
+    //         e.target.files[0].type === "application/vnd.ms-excel" ||
+    //         e.target.files[0].type ===
+    //             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    //     ) {
+    //         console.log("file type is valid");
 
-        reader.onloadend = async () => {
-          let result = reader.result;
-          let encryptedFile = CryptoJs.AES.encrypt(
-            result,
-            "my-secret-key@123"
-          ).toString();
-          try {
-            const response = await privateAxios.post(
-              `http://localhost:3000/api/assessments/${params.id}/upload`,
-              {
-                encryptedFile,
-              }
-            );
-            console.log("response for upoading encrypted file - ", response);
-            setAssessmentQuestionnaire({
-              ...response.data,
-            });
-          } catch (error) {
-            console.log("Error from UPLOAD api", error);
-          }
-          setFile(CryptoJs.AES.encrypt(result, "my-secret-key@123").toString());
-        };
-      } else {
-        return setToasterDetails(
-          {
-            titleMessage: "error",
-            descriptionMessage: "Invalid file type Please uplaod excel file!",
-            messageType: "error",
-          },
-          () => myRef.current()
-        );
-      }
-    }
+    //         reader.onloadend = async () => {
+    //             let result = reader.result;
+    //             let encryptedFile = CryptoJs.AES.encrypt(
+    //                 result,
+    //                 "my-secret-key@123"
+    //             ).toString();
+    //             try {
+    //                 const response = await privateAxios.post(
+    //                     `http://localhost:3000/api/assessments/${params.id}/upload`,
+    //                     {
+    //                         encryptedFile,
+    //                     }
+    //                 );
+
+    //                 if (response.status == 201) {
+    //                     setAssessmentQuestionnaire(response.data.answers);
+    //                     if (response.data.containsErrors) {
+    //                         try {
+    //                             const correctionDocResponse =
+    //                                 await privateAxios.get(
+    //                                     `http://localhost:3000/api/assessments/${response.data.correctionId}/corrections`,
+    //                                     {
+    //                                         responseType: "blob",
+    //                                     }
+    //                                 );
+
+    //                             const url = window.URL.createObjectURL(
+    //                                 new Blob([correctionDocResponse.data])
+    //                             );
+    //                             const link = document.createElement(`a`);
+    //                             link.href = url;
+    //                             link.setAttribute(
+    //                                 `download`,
+    //                                 `Corrections - ${new Date().toLocaleString(
+    //                                     "en"
+    //                                 )}.xlsx`
+    //                             );
+    //                             document.body.appendChild(link);
+    //                             link.click();
+    //                         } catch (error) {
+    //                             console.log(
+    //                                 "Error from corections doc download",
+    //                                 error
+    //                             );
+    //                         }
+    //                     }
+    //                 }
+    //             } catch (error) {
+    //                 console.log("Error from UPLOAD api", error);
+    //             }
+    //             setFile(
+    //                 CryptoJs.AES.encrypt(
+    //                     result,
+    //                     "my-secret-key@123"
+    //                 ).toString()
+    //             );
+    //         };
+    //     } else {
+    //         return setToasterDetails(
+    //             {
+    //                 titleMessage: "error",
+    //                 descriptionMessage:
+    //                     "Invalid file type Please uplaod excel file!",
+    //                 messageType: "error",
+    //             },
+    //             () => myRef.current()
+    //         );
+    //     }
+    // }
   };
   console.log("file selected enc", file);
+
   const decryptFile = (file1) => {
     console.log("file selected in dec", file1);
 
@@ -680,6 +709,7 @@ function FillAssessment() {
     a.download = "QKD_download";
     a.click();
   };
+
   const handleDownloadAssessment = async () => {
     try {
       const response = await downloadFunction(
@@ -713,6 +743,9 @@ function FillAssessment() {
       console.log("error from handleDownloadAssessment", error);
     }
   };
+
+  const [importOpenDialog, setImportOpenDialog] = useState(false);
+
   const reUploadAssessment = () => {
     try {
       if (file) {
@@ -796,13 +829,33 @@ function FillAssessment() {
               }
             } catch (error) {
               console.log("Error from UPLOAD api", error);
+              if (error?.response?.status === 401) {
+                setToasterDetails(
+                  {
+                    titleMessage: "Oops!",
+                    descriptionMessage: "Session Timeout: Please login again",
+                    messageType: "error",
+                  },
+                  () => myRef.current()
+                );
+                setTimeout(() => {
+                  navigate("/login");
+                }, 3000);
+              } else {
+                setToasterDetails(
+                  {
+                    titleMessage: "error",
+                    descriptionMessage:
+                      error?.response?.data?.message &&
+                      typeof error.response.data.message === "string"
+                        ? error.response.data.message
+                        : "Something went wrong!",
+                    messageType: "error",
+                  },
+                  () => myRef.current()
+                );
+              }
             }
-            // setFile(
-            //     CryptoJs.AES.encrypt(
-            //         result,
-            //         "my-secret-key@123"
-            //     ).toString()
-            // );
           };
         } else {
           return setToasterDetails(
@@ -835,7 +888,41 @@ function FillAssessment() {
 
     setImportOpenDialog(false);
   };
-
+  const addTableAssessmentValues = () => {
+    if (questionnaire && Object.keys(questionnaire)?.length > 0) {
+      console.log("Questionnaire:- ", questionnaire);
+      questionnaire?.sections?.forEach((section) => {
+        if (
+          section?.layout === "table" &&
+          !assessmentQuestionnaire[section?.uuid]
+        ) {
+          let tempAsssessmentQuestionnaire = { ...assessmentQuestionnaire };
+          tempAsssessmentQuestionnaire[section?.uuid] = {};
+          section?.rowValues.forEach((row) => {
+            section?.columnValues?.forEach((column) => {
+              // console.log("column:- ", column);
+              if (column?.columnType === "dropdown") {
+                console.log("Inside fill Assessment drop down condition");
+                tempAsssessmentQuestionnaire[section?.uuid][
+                  `${column?.uuid}.${row?.uuid}`
+                ] = undefined;
+              } else {
+                tempAsssessmentQuestionnaire[section?.uuid][
+                  `${column?.uuid}.${row?.uuid}`
+                ] = "";
+              }
+            });
+          });
+          console.log(
+            "Assessment in Fill Assessment Section:- ",
+            tempAsssessmentQuestionnaire
+          );
+          setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
+        }
+      });
+    }
+  };
+  addTableAssessmentValues();
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
       <DialogBox
@@ -1000,8 +1087,10 @@ function FillAssessment() {
                 Assessments
               </a>
             </li>
-
-            <li>Fill Assessment</li>
+{
+    params["*"].includes("view") ? <li>View Assessment</li>: <li>Fill Assessment</li> 
+}
+            
           </ul>
         </div>
       </div>
@@ -1031,16 +1120,17 @@ function FillAssessment() {
                     <li onClick={() => handleDownloadAssessment()}>
                       Export to Excel
                     </li>
-                    <li onClick={() => setImportOpenDialog(true)}>
-                      {/* <input
+                    {params["*"].includes("view") || (
+                      <li onClick={() => setImportOpenDialog(true)}>
+                        {/* <input
                                                 type={"file"}
                                                 accept={".xls, .xlsx"}
                                                 // value={file}
                                                 onChange={handleImportExcel}
                                             /> */}
-                      Import File
-                    </li>
-                    <li onClick={() => decryptFile(file)}>Decrypt File</li>
+                        Import File
+                      </li>
+                    )}
                   </ul>
                 </div>
               </span>
