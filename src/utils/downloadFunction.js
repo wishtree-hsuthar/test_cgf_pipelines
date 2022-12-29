@@ -1,11 +1,16 @@
+import { useNavigate } from "react-router";
 import { privateAxios } from "../api/axios";
+
 export const downloadFunction = async (
     filename,
     setToasterDetails,
     id,
     myRef,
-    downloadUrl
+    downloadUrl,
+
+    navigate
 ) => {
+    console.log("navigate = ", navigate);
     try {
         const response = await privateAxios.get(
             id ? downloadUrl + id + `/download` : downloadUrl,
@@ -19,7 +24,7 @@ export const downloadFunction = async (
         link.href = url;
         link.setAttribute(
             `download`,
-            `${filename} - ${new Date().toLocaleString()}.xls`
+            `${filename} - ${new Date().toLocaleString("en")}.xls`
         );
         document.body.appendChild(link);
         link.click();
@@ -36,5 +41,20 @@ export const downloadFunction = async (
         }
     } catch (error) {
         console.log(`Error from ${filename}  Assessment`, error);
+        if (error.response.status == 401) {
+            setToasterDetails(
+                {
+                    titleMessage: `Oops!`,
+                    descriptionMessage: `Session Timeout: Please login again!`,
+
+                    messageType: `error`,
+                },
+                () => myRef.current()
+            );
+            setTimeout(() => {
+                navigate("/login");
+            }, 3000);
+        }
+        return error;
     }
 };

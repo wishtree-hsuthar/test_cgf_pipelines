@@ -359,7 +359,9 @@ function PreviewQuestionnaire(props) {
                                 </span>
                                 <div
                                     className="crud-toggle-wrap que-crud-toggle-wrap"
-                                    style={{ display: isActive ? "block" : "none" }}
+                                    style={{
+                                        display: isActive ? "block" : "none",
+                                    }}
                                 >
                                     <ul className="crud-toggle-list">
                                         <li
@@ -369,7 +371,8 @@ function PreviewQuestionnaire(props) {
                                                     setToasterDetails,
                                                     params.id,
                                                     questionnairePreviewRef,
-                                                    DOWNLOAD_QUESTIONNAIRES_BY_ID
+                                                    DOWNLOAD_QUESTIONNAIRES_BY_ID,
+                                                    navigate
                                                 )
                                             }
                                         >
@@ -384,12 +387,12 @@ function PreviewQuestionnaire(props) {
                                                         )
                                                     }
                                                 >
-                                                    Version history
+                                                    Version History
                                                 </li>
                                             )}
                                         {(SUPER_ADMIN === true ||
-                                            moduleAccesForMember[0]?.questionnaire
-                                                ?.edit) &&
+                                            moduleAccesForMember[0]
+                                                ?.questionnaire?.edit) &&
                                             !params["*"].includes("version") &&
                                             (questionnaire?.isDraft ||
                                                 questionnaire?.isPublished) && (
@@ -404,9 +407,13 @@ function PreviewQuestionnaire(props) {
                                                 </li>
                                             )}
                                         {(SUPER_ADMIN === true ||
-                                            moduleAccesForMember[0]?.questionnaire
-                                                ?.delete) && (
-                                            <li onClick={() => setOpenDialog(true)}>
+                                            moduleAccesForMember[0]
+                                                ?.questionnaire?.delete) && (
+                                            <li
+                                                onClick={() =>
+                                                    setOpenDialog(true)
+                                                }
+                                            >
                                                 Delete Questionnaire
                                             </li>
                                         )}
@@ -418,7 +425,7 @@ function PreviewQuestionnaire(props) {
                             <p>Short Name</p>
                         </div>
                     </div>
-                    
+
                     {/* <div className="que-ttl-blk">
                         <div className="form-group mb-0">
                             <label for="">

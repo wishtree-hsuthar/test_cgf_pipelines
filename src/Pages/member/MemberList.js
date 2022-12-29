@@ -388,7 +388,8 @@ const MemberList = () => {
                                         setToasterDetailsMemberList,
                                         false,
                                         memberRef,
-                                        DOWNLOAD_MEMBERS
+                                        DOWNLOAD_MEMBERS,
+                                        navigate
                                     )
                                 }
                             >
