@@ -1227,7 +1227,7 @@ const ViewMember = () => {
                                     </div>
                                     <div className="card-form-field">
                                         <div className="form-group">
-                                            <label htmlFor="title">Title</label>
+                                            <label htmlFor="title">Job Title</label>
                                             <Input
                                                 isDisabled
                                                 control={control}

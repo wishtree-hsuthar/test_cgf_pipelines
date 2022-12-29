@@ -194,7 +194,7 @@ const TableLayoutCellComponent = ({
                   (editMode && params["*"].includes("view")) || !editMode
                 }
                 value={answer}
-                //className={`datepicker-blk`}
+                className={`datepicker-blk`}
                 components={{
                   OpenPickerIcon: DateRangeOutlinedIcon,
                 }}
@@ -209,7 +209,7 @@ const TableLayoutCellComponent = ({
                     {...params}
                     autoComplete="off"
                     onKeyDown={handleOnKeyDownChange}
-                    className={`datepicker-blk input-field${
+                    className={`input-field${
                       !answer && error && error?.length !== 0
                         ? "input-error"
                         : ""

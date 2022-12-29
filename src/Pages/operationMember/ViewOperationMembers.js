@@ -487,7 +487,7 @@ const ViewOperationMembers = () => {
                                     <div className="card-form-field">
                                         <div className="form-group">
                                             <label htmlFor="email">
-                                                Title{" "}
+                                                Job Title{" "}
                                             </label>
                                             <Input
                                                 isDisabled

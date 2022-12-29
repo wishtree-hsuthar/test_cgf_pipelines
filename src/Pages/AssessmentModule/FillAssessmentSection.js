@@ -42,8 +42,6 @@ function FillAssesmentSection({
 
   const [openCancelDailog, setOpenCancelDailog] = useState(false);
 
-  
-
   const handleAnswersChange = (name, value) => {
     setAssessmentQuestionnaire({
       ...assessmentQuestionnaire,
@@ -65,27 +63,43 @@ function FillAssesmentSection({
     });
   };
   const addTableAssessmentValues = () => {
-    
     let tempAsssessmentQuestionnaire = { ...assessmentQuestionnaire };
     tempAsssessmentQuestionnaire[section?.uuid] = {};
     section?.rowValues.forEach((row) => {
-      row?.cells?.forEach((cell) => {
-        console.log("cell", cell);
-        if (cell?.columnType === "dropdown") {
+      section?.columnValues?.forEach((column) => {
+        // console.log("column:- ", column);
+        if (column?.columnType === "dropdown") {
+          console.log("Inside fill Assessment drop down condition");
           tempAsssessmentQuestionnaire[section?.uuid][
-            `${cell?.columnId}.${row?.uuid}`
+            `${column?.uuid}.${row?.uuid}`
           ] = undefined;
         } else {
           tempAsssessmentQuestionnaire[section?.uuid][
-            `${cell?.columnId}.${row?.uuid}`
+            `${column?.uuid}.${row?.uuid}`
           ] = "";
         }
       });
+      // row?.cells?.forEach((cell) => {
+      //   console.log("cell", cell);
+      //   if (cell?.columnType === "dropdown") {
+      //     console.log("Inside fill Assessment drop down condition");
+      //     tempAsssessmentQuestionnaire[section?.uuid][
+      //       `${cell?.columnId}.${row?.uuid}`
+      //     ] = undefined;
+      //   } else {
+      //     tempAsssessmentQuestionnaire[section?.uuid][
+      //       `${cell?.columnId}.${row?.uuid}`
+      //     ] = "";
+      //   }
+      // });
     });
+    console.log(
+      "Assessment in Fill Assessment Section:- ",
+      tempAsssessmentQuestionnaire
+    );
     setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
   };
   useEffect(() => {
-    
     console.log(
       "assessment Section:- ",
       assessmentQuestionnaire[section?.uuid]
@@ -94,13 +108,13 @@ function FillAssesmentSection({
       section?.layout === "table" &&
       !assessmentQuestionnaire[section?.uuid]
     ) {
-      addTableAssessmentValues();
+      // addTableAssessmentValues();
     }
   }, []);
   return (
     <>
       <DialogBox
-        title={<p>Cancel assessment</p>}
+        title={<p>Cancel Assessment</p>}
         info1={
           <p>
             On canceling, all the entered details of the section will be

@@ -450,10 +450,10 @@ function EditOperationMember() {
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
-                      <label htmlFor="email">Title </label>
+                      <label htmlFor="email">Job Title </label>
                       <Input
                         name={"title"}
-                        placeholder="Enter title"
+                        placeholder="Enter job title"
                         control={control}
                         onBlur={(e) =>
                           setValue("title", e.target.value?.trim())
