@@ -345,7 +345,7 @@ function PreviewQuestionnaire(props) {
                 <div className="container">
                     <div className="form-header">
                         <div className="flex-between mb-10 preview-que-ttl-blk">
-                            <h2 className="heading2">{questionnaire.title}</h2>
+                            <h2 className="heading2">{questionnaire?.title}</h2>
                             <span
                                 className="form-header-right-txt"
                                 onClick={handleToggle}
@@ -422,7 +422,7 @@ function PreviewQuestionnaire(props) {
                             </span>
                         </div>
                         <div className="excel-short-name">
-                            <p>Short Name</p>
+                            <p>{questionnaire?.sheetName}</p>
                         </div>
                     </div>
 
