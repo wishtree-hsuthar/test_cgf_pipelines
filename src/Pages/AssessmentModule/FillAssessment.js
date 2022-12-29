@@ -888,13 +888,35 @@ function FillAssessment() {
                             }
                         } catch (error) {
                             console.log("Error from UPLOAD api", error);
+                            if (error?.response?.status === 401) {
+                                setToasterDetails(
+                                    {
+                                        titleMessage: "Oops!",
+                                        descriptionMessage:
+                                            "Session Timeout: Please login again",
+                                        messageType: "error",
+                                    },
+                                    () => myRef.current()
+                                );
+                                setTimeout(() => {
+                                    navigate("/login");
+                                }, 3000);
+                            } else {
+                                setToasterDetails(
+                                    {
+                                        titleMessage: "error",
+                                        descriptionMessage:
+                                            error?.response?.data?.message &&
+                                            typeof error.response.data
+                                                .message === "string"
+                                                ? error.response.data.message
+                                                : "Something went wrong!",
+                                        messageType: "error",
+                                    },
+                                    () => myRef.current()
+                                );
+                            }
                         }
-                        // setFile(
-                        //     CryptoJs.AES.encrypt(
-                        //         result,
-                        //         "my-secret-key@123"
-                        //     ).toString()
-                        // );
                     };
                 } else {
                     return setToasterDetails(
