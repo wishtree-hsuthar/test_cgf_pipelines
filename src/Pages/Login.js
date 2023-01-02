@@ -135,6 +135,20 @@ const Login = (prop) => {
                     () => toasterRef.current()
                 );
             }
+            if (
+                error.response.status == 401 &&
+                error.response.data.message ===
+                    "You no longer have access to the system. Kindly contact system admin."
+            ) {
+                return setToasterDetails(
+                    {
+                        titleMessage: "Invalid Credentials",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+            }
             if (error.response.status == 400) {
                 return setToasterDetails(
                     {
