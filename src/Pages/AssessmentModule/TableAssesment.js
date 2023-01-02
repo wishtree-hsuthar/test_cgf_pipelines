@@ -132,10 +132,18 @@ const TableAssessment = ({
                                   <p>
                                     {column?.title.slice(0, 50)}
                                     ...
+                                    {column?.isRequired && (
+                                      <span className="mandatory">*</span>
+                                    )}
                                   </p>
                                 </Tooltip>
                               ) : (
-                                <p>{column?.title}</p>
+                                <p>
+                                  {column?.title}{" "}
+                                  {column?.isRequired && (
+                                    <span className="mandatory">*</span>
+                                  )}
+                                </p>
                               )}
                               {/* <p>{column?.title}</p> */}
                             </div>

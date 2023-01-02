@@ -303,6 +303,7 @@ function FillAssessment() {
             if (
               column.columnType !== "prefilled" &&
               saveAsDraft === false &&
+              column?.isRequired &&
               (!currentSectionAnswers[`${column?.uuid}.${tempRowId}`] ||
                 currentSectionAnswers[`${column?.uuid}.${tempRowId}`].length ===
                   0)
