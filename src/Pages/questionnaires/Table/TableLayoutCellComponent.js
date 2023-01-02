@@ -96,6 +96,7 @@ const TableLayoutCellComponent = ({
           )}
         </p>
       )}
+      {columnFieldType && columnFieldType === "attachment" && <input disabled type="file"></input>}
       {columnFieldType && columnFieldType === "prefilled" && !isPreview && (
         <TextField
           multiline

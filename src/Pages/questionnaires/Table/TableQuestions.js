@@ -30,6 +30,10 @@ const MenuProps = {
 
 const inputTypeOptions = [
   {
+    _id: "attachment",
+    name: "Attachment"
+  },
+  {
     _id: "date",
     name: "Date",
   },
