@@ -344,7 +344,7 @@ function PreviewQuestionnaire(props) {
             <section>
                 <div className="container">
                     <div className="form-header">
-                        <div className="flex-between mb-10 preview-que-ttl-blk">
+                        <div className="flex-between preview-que-ttl-blk">
                             <h2 className="heading2">{questionnaire?.title}</h2>
                             <span
                                 className="form-header-right-txt"
