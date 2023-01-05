@@ -125,6 +125,8 @@ const EditSubAdmin = () => {
                     "error from countries api of edit sub-admin",
                     error
                 );
+                if (error?.code === "ERR_CANCELED") return;
+
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
@@ -165,7 +167,7 @@ const EditSubAdmin = () => {
                     response
                 );
                 isMounted && setFetchSubAdminDetailsForEdit(response.data);
-                console.log("role from edit", response.data.subRoleId.name);
+                // console.log("role from edit", response.data.subRoleId.name);
                 reset({
                     name: response.data.name,
                     email: response.data.email,
@@ -181,7 +183,7 @@ const EditSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
+                        descriptionMessage: "Something went wrong",
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -201,7 +203,9 @@ const EditSubAdmin = () => {
                         navigate("/login");
                     }, 3000);
                 }
-                navigate("/users/cgf-admin/");
+                setTimeout(() => {
+                    navigate("/users/cgf-admin/");
+                }, 3000);
             }
         };
         fetchSubAdmin();
@@ -241,8 +245,8 @@ const EditSubAdmin = () => {
         };
         fetchRoles();
         return () => {
-            // isMounted = false;
-            // controller.abort();
+            isMounted = false;
+            controller.abort();
         };
     }, []);
 

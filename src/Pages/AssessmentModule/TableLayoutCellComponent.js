@@ -1,9 +1,9 @@
 import {
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  FormHelperText,
+    TextField,
+    FormControl,
+    Select,
+    MenuItem,
+    FormHelperText,
 } from "@mui/material";
 import React, { useState } from "react";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
@@ -16,215 +16,245 @@ export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
 
 const TableLayoutCellComponent = ({
-  isPrefilled,
-  assessmentQuestionnaire,
-  rowId,
-  columnId = "",
-  transformedColumns,
-  cell,
-  columnIdx,
-  answer = "",
-  handleAnswersChange,
-  handleAnswersBlur,
-  error,
-  editMode,
+    isPrefilled,
+    assessmentQuestionnaire,
+    rowId,
+    columnId = "",
+    transformedColumns,
+    cell,
+    columnIdx,
+    answer = "",
+    handleAnswersChange,
+    handleAnswersBlur,
+    error,
+    editMode,
 }) => {
-  const [showMore, setShowMore] = useState(false);
-  const params = useParams();
-  const handleOnKeyDownChange = (e) => {
-    e.preventDefault();
-  };
-  
-  let columnUUID =
-    isPrefilled ||
-    (!isPrefilled &&
-      assessmentQuestionnaire &&
-      !Object.keys(assessmentQuestionnaire).length > 0)
-      ? cell?.columnId
-      : columnId;
-//  console.log("column Id:- ",columnId)
-  return (
-    <>
-      {isPrefilled &&
-        transformedColumns[columnUUID] &&
-        transformedColumns[columnUUID].columnType === "prefilled" && (
-          <p className="text-justify">
-            {showMore ? (
-              <span>
-                <span>{cell?.value}</span>
-                <br />
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowMore(false);
-                  }}
-                  className="show-more-less-txt"
-                >
-                  Show Less
-                </a>
-              </span>
-            ) : (
-              <span>
-                {cell?.value.length > 100 ? (
-                  <span>
-                    <span>{cell?.value.slice(0, 100)}...</span>
-                    <br />
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setShowMore(true);
-                      }}
-                      className="show-more-less-txt"
-                    >
-                      Show More
-                    </a>
-                  </span>
-                ) : (
-                  cell?.value
+    const [showMore, setShowMore] = useState(false);
+    const params = useParams();
+    const handleOnKeyDownChange = (e) => {
+        e.preventDefault();
+    };
+
+    let columnUUID =
+        isPrefilled ||
+        (!isPrefilled &&
+            assessmentQuestionnaire &&
+            !Object.keys(assessmentQuestionnaire).length > 0)
+            ? cell?.columnId
+            : columnId;
+    //  console.log("column Id:- ",columnId)
+    return (
+        <>
+            {isPrefilled &&
+                transformedColumns[columnUUID] &&
+                transformedColumns[columnUUID].columnType === "prefilled" && (
+                    <p className="text-justify">
+                        {showMore ? (
+                            <span>
+                                <span>{cell?.value}</span>
+                                <br />
+                                <a
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setShowMore(false);
+                                    }}
+                                    className="show-more-less-txt"
+                                >
+                                    Show Less
+                                </a>
+                            </span>
+                        ) : (
+                            <span>
+                                {cell?.value.length > 100 ? (
+                                    <span>
+                                        <span>
+                                            {cell?.value.slice(0, 100)}...
+                                        </span>
+                                        <br />
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setShowMore(true);
+                                            }}
+                                            className="show-more-less-txt"
+                                        >
+                                            Show More
+                                        </a>
+                                    </span>
+                                ) : (
+                                    cell?.value
+                                )}
+                            </span>
+                        )}
+                    </p>
                 )}
-              </span>
-            )}
-          </p>
-        )}
-      {transformedColumns[columnUUID] &&
-        transformedColumns[columnUUID].columnType === "textbox" && (
-          <TextField
-            className={`input-field ${
-              !answer && error && error?.length !== 0
-                ? "input-error"
-                : answer &&
-                  error &&
-                  transformedColumns[columnUUID]?.validation === "alphabets" &&
-                  !AlphaRegEx.test(answer)
-                ? "input-error"
-                : answer &&
-                  error &&
-                  transformedColumns[columnUUID]?.validation ===
-                    "alphanumeric" &&
-                  !AlphaNumRegEx.test(answer)
-                ? "input-error"
-                : answer &&
-                  error &&
-                  transformedColumns[columnUUID]?.validation === "numeric" &&
-                  !NumericRegEx.test(answer)
-                ? "input-error"
-                : ""
-            }`}
-            disabled={(editMode && params["*"].includes("view")) || !editMode}
-            placeholder="Enter text here"
-            value={answer}
-            name={`${columnUUID}.${rowId}`}
-            onChange={(e) => handleAnswersChange(e.target.name, e.target.value)}
-            onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
-            helperText={
-              !answer && error && error?.length !== 0
-                ? error
-                : answer &&
-                  transformedColumns[columnUUID]?.validation === "alphabets" &&
-                  !AlphaRegEx.test(answer)
-                ? error
-                : answer &&
-                  transformedColumns[columnUUID]?.validation === "numeric" &&
-                  !NumericRegEx.test(answer)
-                ? error
-                : answer &&
-                  transformedColumns[columnUUID]?.validation ===
-                    "alphanumeric" &&
-                  !AlphaNumRegEx.test(answer)
-                ? error
-                : " "
-            }
-          />
-        )}
-      {transformedColumns[columnUUID] &&
-        transformedColumns[columnUUID].columnType === "dropdown" && (
-          <div className="select-field">
-            <FormControl className="fullwidth-field">
-              <Select
-                IconComponent={(props) => (
-                  <KeyboardArrowDownRoundedIcon {...props} />
+            {transformedColumns[columnUUID] &&
+                transformedColumns[columnUUID].columnType === "textbox" && (
+                    <TextField
+                        className={`input-field ${
+                            !answer && error && error?.length !== 0
+                                ? "input-error"
+                                : answer &&
+                                  error &&
+                                  transformedColumns[columnUUID]?.validation ===
+                                      "alphabets" &&
+                                  !AlphaRegEx.test(answer)
+                                ? "input-error"
+                                : answer &&
+                                  error &&
+                                  transformedColumns[columnUUID]?.validation ===
+                                      "alphanumeric" &&
+                                  !AlphaNumRegEx.test(answer)
+                                ? "input-error"
+                                : answer &&
+                                  error &&
+                                  transformedColumns[columnUUID]?.validation ===
+                                      "numeric" &&
+                                  !NumericRegEx.test(answer)
+                                ? "input-error"
+                                : ""
+                        }`}
+                        disabled={
+                            (editMode && params["*"].includes("view")) ||
+                            !editMode
+                        }
+                        placeholder="Enter text here"
+                        value={answer}
+                        name={`${columnUUID}.${rowId}`}
+                        onChange={(e) =>
+                            handleAnswersChange(e.target.name, e.target.value)
+                        }
+                        onBlur={(e) =>
+                            handleAnswersBlur(e.target.name, e.target.value)
+                        }
+                        helperText={
+                            !answer && error && error?.length !== 0
+                                ? error
+                                : answer &&
+                                  transformedColumns[columnUUID]?.validation ===
+                                      "alphabets" &&
+                                  !AlphaRegEx.test(answer)
+                                ? error
+                                : answer &&
+                                  transformedColumns[columnUUID]?.validation ===
+                                      "numeric" &&
+                                  !NumericRegEx.test(answer)
+                                ? error
+                                : answer &&
+                                  transformedColumns[columnUUID]?.validation ===
+                                      "alphanumeric" &&
+                                  !AlphaNumRegEx.test(answer)
+                                ? error
+                                : " "
+                        }
+                    />
                 )}
-                name={`${columnUUID}.${rowId}`}
-                displayEmpty
-                disabled={
-                  (editMode && params["*"].includes("view")) || !editMode
-                }
-                value={answer}
-                className={`${
-                  !answer && error && error?.length !== 0
-                    ? "select-field-error"
-                    : ""
-                }`}
-                onChange={(e) => {
-                  handleAnswersChange(e.target.name, e.target.value);
-                }}
-                renderValue={
-                  answer !== ""
-                    ? undefined
-                    : () => (
-                        <div className="select-placeholder">
-                          Choose dropdown value
-                        </div>
-                      )
-                }
-              >
-                {/* <MenuItem value="" disabled>
+            {transformedColumns[columnUUID] &&
+                transformedColumns[columnUUID].columnType === "dropdown" && (
+                    <div className="select-field">
+                        <FormControl className="fullwidth-field">
+                            <Select
+                                IconComponent={(props) => (
+                                    <KeyboardArrowDownRoundedIcon {...props} />
+                                )}
+                                name={`${columnUUID}.${rowId}`}
+                                displayEmpty
+                                disabled={
+                                    (editMode &&
+                                        params["*"].includes("view")) ||
+                                    !editMode
+                                }
+                                value={answer}
+                                className={`${
+                                    !answer && error && error?.length !== 0
+                                        ? "select-field-error"
+                                        : ""
+                                }`}
+                                onChange={(e) => {
+                                    handleAnswersChange(
+                                        e.target.name,
+                                        e.target.value
+                                    );
+                                }}
+                                renderValue={
+                                    answer !== ""
+                                        ? undefined
+                                        : () => (
+                                              <div className="select-placeholder">
+                                                  Choose dropdown value
+                                              </div>
+                                          )
+                                }
+                            >
+                                {/* <MenuItem value="" disabled>
                                     Select option
                                 </MenuItem> */}
-                {transformedColumns[columnUUID].options.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-              <FormHelperText>
-                {!answer && error && error?.length !== 0 ? error : " "}
-              </FormHelperText>
-            </FormControl>
-          </div>
-        )}
-      {transformedColumns[columnUUID] &&
-        transformedColumns[columnUUID].columnType === "date" && (
-          <FormControl fullWidth>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                disabled={
-                  (editMode && params["*"].includes("view")) || !editMode
-                }
-                value={answer}
-                className={`datepicker-blk`}
-                components={{
-                  OpenPickerIcon: DateRangeOutlinedIcon,
-                }}
-                onChange={(dateValue) => {
-                  handleAnswersChange(
-                    `${columnUUID}.${rowId}`,
-                    new Date(dateValue).toISOString()
-                  );
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    autoComplete="off"
-                    onKeyDown={handleOnKeyDownChange}
-                    className={`input-field${
-                      !answer && error && error?.length !== 0
-                        ? "input-error"
-                        : ""
-                    }`}
-                  />
+                                {transformedColumns[columnUUID].options.map(
+                                    (option) => (
+                                        <MenuItem key={option} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    )
+                                )}
+                            </Select>
+                            <FormHelperText>
+                                {!answer && error && error?.length !== 0
+                                    ? error
+                                    : " "}
+                            </FormHelperText>
+                        </FormControl>
+                    </div>
                 )}
-              />
-              <FormHelperText>
-                {!answer && error && error?.length !== 0 ? error : " "}
-              </FormHelperText>
-            </LocalizationProvider>
-          </FormControl>
-        )}
-    </>
-  );
+            {transformedColumns[columnUUID] &&
+                transformedColumns[columnUUID].columnType === "date" && (
+                    <FormControl fullWidth>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                disabled={
+                                    (editMode &&
+                                        params["*"].includes("view")) ||
+                                    !editMode
+                                }
+                                value={answer}
+                                className={`datepicker-blk`}
+                                components={{
+                                    OpenPickerIcon: DateRangeOutlinedIcon,
+                                }}
+                                onChange={(dateValue) => {
+                                    handleAnswersChange(
+                                        `${columnUUID}.${rowId}`,
+                                        new Date(
+                                            new Date(dateValue)
+                                        ).toLocaleDateString("en")
+                                    );
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        autoComplete="off"
+                                        onKeyDown={handleOnKeyDownChange}
+                                        className={`input-field${
+                                            !answer &&
+                                            error &&
+                                            error?.length !== 0
+                                                ? "input-error"
+                                                : ""
+                                        }`}
+                                    />
+                                )}
+                            />
+                            <FormHelperText>
+                                {!answer && error && error?.length !== 0
+                                    ? error
+                                    : " "}
+                            </FormHelperText>
+                        </LocalizationProvider>
+                    </FormControl>
+                )}
+        </>
+    );
 };
 
 export default TableLayoutCellComponent;
