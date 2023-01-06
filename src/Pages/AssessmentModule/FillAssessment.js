@@ -1180,7 +1180,7 @@ function FillAssessment() {
                 openModal={importOpenDialog}
                 setOpenModal={setImportOpenDialog}
                 isModalForm={true}
-                handleCloseRedirect={() => setImportOpenDialog(false)}
+                handleCloseRedirect={cancelImport}
             />
             <Toaster
                 myRef={myRef}
