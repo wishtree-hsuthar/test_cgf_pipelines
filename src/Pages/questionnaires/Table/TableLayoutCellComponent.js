@@ -5,8 +5,8 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import React , {useState} from "react";
-import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
+import React, { useState } from "react";
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -31,7 +31,7 @@ const TableLayoutCellComponent = ({
   cellId,
   cell,
 }) => {
-  const [showMore, setShowMore] = useState(false)
+  const [showMore, setShowMore] = useState(false);
   const onCellValueChangeHandler = (e, rowId, cellId) => {
     const { name, value } = e.target;
     const tempQuestionnaire = { ...questionnaire };
@@ -47,8 +47,7 @@ const TableLayoutCellComponent = ({
       name
     ] = value?.trim();
     setQuestionnaire(tempQuestionnaire);
-    
-  }
+  };
   const columnFieldType =
     questionnaire?.sections[sectionIndex]?.columnValues[cellId]?.columnType;
   const column = questionnaire?.sections[sectionIndex]?.columnValues[cellId];
@@ -96,11 +95,15 @@ const TableLayoutCellComponent = ({
           )}
         </p>
       )}
-      {columnFieldType && columnFieldType === "attachment" && <input disabled type="file"></input>}
+      {columnFieldType && columnFieldType === "attachments" && (
+        <span>Attachments</span>
+      )}
       {columnFieldType && columnFieldType === "prefilled" && !isPreview && (
         <TextField
           multiline
-          className={`input-textarea ${!cell?.value && tableErr && "input-textarea-error"}`}
+          className={`input-textarea ${
+            !cell?.value && tableErr && "input-textarea-error"
+          }`}
           name="value"
           value={cell?.value}
           helperText={!cell?.value && tableErr ? "Enter the row value" : " "}
@@ -124,7 +127,9 @@ const TableLayoutCellComponent = ({
             // onChange={(e) => onColumnChangeHandler(e, columnId)}
             // onChange={(e) => onInputTypeChangeHandler(e, columnId)}
             className="select-dropdown"
-            renderValue={() => <div className="select-placeholder">Select option</div>}
+            renderValue={() => (
+              <div className="select-placeholder">Select option</div>
+            )}
             MenuProps={MenuProps}
           >
             {/* <MenuItem value="dropdown" disabled>

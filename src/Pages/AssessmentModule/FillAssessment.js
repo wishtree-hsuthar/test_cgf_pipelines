@@ -14,6 +14,7 @@ import {
   DECLINE_ASSESSMENT,
   DOWNLOAD_ASSESSMENT_BY_ID,
   FETCH_ASSESSMENT_BY_ID,
+  REACT_APP_FILE_ENCRYPT_SECRET,
   SUBMIT_ASSESSMENT_AS_DRAFT,
 } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
@@ -139,7 +140,7 @@ function FillAssessment() {
         const response = await privateAxios.get(`${ADD_QUESTIONNAIRE}/${id}`, {
           signal: controller.signal,
         });
-        console.log("response from fetch questionnaire", response);
+        // console.log("response from fetch questionnaire", response);
         isMounted && setQuestionnaire({ ...response.data });
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
@@ -220,7 +221,7 @@ function FillAssessment() {
   const myRef = useRef();
 
   const saveAssessmentAsDraft = async (saveAsDraft, reOpen) => {
-    console.log("Save function called");
+    // console.log("Save function called");
     try {
       const response = await privateAxios.post(
         saveAsDraft
@@ -230,7 +231,7 @@ function FillAssessment() {
           ...assessmentQuestionnaire,
         }
       );
-      console.log("Assessment is saved as draft", response);
+      // console.log("Assessment is saved as draft", response);
       if (response.status == 201) {
         !reOpen &&
           setToasterDetails(
@@ -248,7 +249,7 @@ function FillAssessment() {
           }, 3000);
       }
     } catch (error) {
-      console.log("error from save assessment as draft", error);
+      // console.log("error from save assessment as draft", error);
       if (error?.response?.status === 401) {
         setToasterDetails(
           {
@@ -291,11 +292,11 @@ function FillAssessment() {
         const transformedColValues = getTransformedColumns(
           section?.columnValues
         );
-        console.log(
-          "curren assessment Questionnaire:- ",
-          currentSectionAnswers
-        );
-        console.log("transformed column values:- ", transformedColValues);
+        // console.log(
+        //   "curren assessment Questionnaire:- ",
+        //   currentSectionAnswers
+        // );
+        // console.log("transformed column values:- ", transformedColValues);
         // currentSectionAnswers
         Object.keys(currentSectionAnswers).forEach((answersKeys) => {
           let tempRowId = answersKeys?.split(".")[1];
@@ -322,7 +323,7 @@ function FillAssessment() {
             ) {
               sectionErrors[`${column?.uuid}.${tempRowId}`] =
                 "This is alphabets only field";
-              console.log("in table alphabets only");
+              // console.log("in table alphabets only");
               sections.push(index);
             } else if (
               column?.columnType !== "prefilled" &&
@@ -335,7 +336,7 @@ function FillAssessment() {
             ) {
               sectionErrors[`${column?.uuid}.${tempRowId}`] =
                 "This is numeric only field";
-              console.log("in table numeric only");
+              // console.log("in table numeric only");
               sections.push(index);
             } else if (
               column.columnType !== "prefilled" &&
@@ -348,7 +349,7 @@ function FillAssessment() {
             ) {
               sectionErrors[`${column?.uuid}.${tempRowId}`] =
                 "This is alphanumeric field";
-              console.log("in table alphanumeric only");
+              // console.log("in table alphanumeric only");
               sections.push(index);
             } else {
               delete sectionErrors[`${column?.uuid}.${tempRowId}`];
@@ -426,8 +427,8 @@ function FillAssessment() {
               currentSectionAnswers[question?.uuid].length === 0) &&
             saveAsDraft === false
           ) {
-            console.log("error from required");
-            console.log("section no", index);
+            // console.log("error from required");
+            // console.log("section no", index);
             sectionErrors[question?.uuid] = "This is required field";
             sections.push(index);
           } else if (
@@ -435,7 +436,7 @@ function FillAssessment() {
             currentSectionAnswers[question?.uuid] &&
             AlphaRegEx.test(currentSectionAnswers[question?.uuid]) === false
           ) {
-            console.log("error from numric if elese");
+            // console.log("error from numric if elese");
 
             sectionErrors[question?.uuid] = "Please enter alphabets field";
             sections.push(index);
@@ -444,10 +445,10 @@ function FillAssessment() {
             currentSectionAnswers[question?.uuid] &&
             NumericRegEx.test(currentSectionAnswers[question?.uuid]) === false
           ) {
-            console.log("error from numric if elese");
-            console.log(
-              NumericRegEx.test(currentSectionAnswers[question?.uuid])
-            );
+            // console.log("error from numric if elese");
+            // console.log(
+            //   NumericRegEx.test(currentSectionAnswers[question?.uuid])
+            // );
             sectionErrors[question?.uuid] = "This is numeric field";
             sections.push(index);
           } else if (
@@ -469,7 +470,7 @@ function FillAssessment() {
     });
 
     handleSetErrors(tempErrors);
-    console.log("temp Errors:- ", tempErrors);
+    // console.log("temp Errors:- ", tempErrors);
     const isValidated = Object.keys(tempErrors).every(
       (key) => Object.keys(tempErrors[key]).length === 0
     );
@@ -480,7 +481,7 @@ function FillAssessment() {
 
   // API for declining assessments
   const onSubmitReason = async (data) => {
-    console.log("comment", data);
+    // console.log("comment", data);
     try {
       const response = await privateAxios.post(
         DECLINE_ASSESSMENT + params.id + "/decline",
@@ -488,7 +489,7 @@ function FillAssessment() {
           comment: data.comment,
         }
       );
-      console.log("Response from backend for decline assessment", response);
+      // console.log("Response from backend for decline assessment", response);
       if (response.status == 201) {
         setToasterDetails(
           {
@@ -503,7 +504,7 @@ function FillAssessment() {
         }, 3000);
       }
     } catch (error) {
-      console.log("error response from backen decline assessment");
+      // console.log("error response from backen decline assessment");
       if (error?.response?.status === 401) {
         setToasterDetails(
           {
@@ -540,7 +541,7 @@ function FillAssessment() {
       const response = await privateAxios.post(
         ACCEPT_ASSESSMENT + params.id + "/accept"
       );
-      console.log(" response from backen accept assessment");
+      // console.log(" response from backen accept assessment");
       if (response.status == 201) {
         setToasterDetails(
           {
@@ -554,7 +555,7 @@ function FillAssessment() {
         setOpenDeleteDialogBox(false);
       }
     } catch (error) {
-      console.log("error response from backend accept assessment");
+      // console.log("error response from backend accept assessment");
       if (error?.response?.status === 401) {
         setToasterDetails(
           {
@@ -693,7 +694,7 @@ function FillAssessment() {
     //     }
     // }
   };
-  console.log("file selected enc", file);
+  // console.log("file selected enc", file);
 
   const decryptFile = (file1) => {
     console.log("file selected in dec", file1);
@@ -721,11 +722,11 @@ function FillAssessment() {
         DOWNLOAD_ASSESSMENT_BY_ID,
         navigate
       );
-      console.log("response from handledownloadassessment", response);
-      console.log(
-        "response from handledownloadassessment",
-        response?.response?.status
-      );
+      // console.log("response from handledownloadassessment", response);
+      // console.log(
+      //   "response from handledownloadassessment",
+      //   response?.response?.status
+      // );
       // if (response?.response?.status === 401) {
       //     setToasterDetails(
       //         {
@@ -741,7 +742,7 @@ function FillAssessment() {
       //     }, 3000);
       // }
     } catch (error) {
-      console.log("error from handleDownloadAssessment", error);
+      // console.log("error from handleDownloadAssessment", error);
     }
   };
 
@@ -752,20 +753,20 @@ function FillAssessment() {
       if (file) {
         let reader = new FileReader();
         reader.readAsDataURL(file);
-        console.log("File selected = ", file);
-        console.log("Reflect method - ", Reflect.get(file));
+        // console.log("File selected = ", file);
+        // console.log("Reflect method - ", Reflect.get(file));
         if (
           file.type === "application/vnd.ms-excel" ||
           file.type ===
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         ) {
-          console.log("file type is valid");
+          // console.log("file type is valid");
 
           reader.onloadend = async () => {
             let result = reader.result;
             let encryptedFile = CryptoJs.AES.encrypt(
               result,
-              "my-secret-key@123"
+              REACT_APP_FILE_ENCRYPT_SECRET
             ).toString();
             try {
               const response = await privateAxios.post(
@@ -891,7 +892,7 @@ function FillAssessment() {
   };
   const addTableAssessmentValues = () => {
     if (questionnaire && Object.keys(questionnaire)?.length > 0) {
-      console.log("Questionnaire:- ", questionnaire);
+      // console.log("Questionnaire:- ", questionnaire);
       questionnaire?.sections?.forEach((section) => {
         if (
           section?.layout === "table" &&
@@ -902,22 +903,15 @@ function FillAssessment() {
           section?.rowValues.forEach((row) => {
             section?.columnValues?.forEach((column) => {
               // console.log("column:- ", column);
-              if (column?.columnType === "dropdown") {
-                console.log("Inside fill Assessment drop down condition");
-                tempAsssessmentQuestionnaire[section?.uuid][
-                  `${column?.uuid}.${row?.uuid}`
-                ] = undefined;
-              } else {
-                tempAsssessmentQuestionnaire[section?.uuid][
-                  `${column?.uuid}.${row?.uuid}`
-                ] = "";
-              }
+              tempAsssessmentQuestionnaire[section?.uuid][
+                `${column?.uuid}.${row?.uuid}`
+              ] = "";
             });
           });
-          console.log(
-            "Assessment in Fill Assessment Section:- ",
-            tempAsssessmentQuestionnaire
-          );
+          // console.log(
+          //   "Assessment in Fill Assessment Section:- ",
+          //   tempAsssessmentQuestionnaire
+          // );
           setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
         }
       });
@@ -966,7 +960,7 @@ function FillAssessment() {
                 })}
               </span>
             </span>
-            Click “Accept” if you want to fill out the assessment . Or else,
+            Click “Accept” if you want to fill out the assessment. Or else,
             provide a reason and reject the assessment, if you don’t want to
             continue with it.
           </p>

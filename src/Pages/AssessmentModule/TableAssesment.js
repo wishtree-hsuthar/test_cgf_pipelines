@@ -50,8 +50,11 @@ const TableAssessment = ({
   errors,
   editMode,
 }) => {
-  console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
+  // console.log("section uuid in Table assessment:- ", sectionUUID);
+  // console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
   const params = useParams();
+  const uuidSection = sectionUUID;
+  // console.log("uuid Section:- ",uuidSection)
   const tranformedColumnValues = getTransformedColumns(columnValues);
   const tranformedRowValues = getTransformedRows(rowValues);
   const [isPrefilled, setIsPrefilled] = useState(false);
@@ -60,10 +63,10 @@ const TableAssessment = ({
   const onAddRowClickHandler = () => {
     const newRowId = uuidv4();
     let temp = { ...assessmentQuestionnaire };
-    console.log("temp before row add", temp);
+    // console.log("temp before row add", temp);
     columnValues.forEach((column) => {
       if (column?.columnType === "dropdown") {
-        console.log("inside dropdown");
+        // console.log("inside dropdown");
         temp[sectionUUID][`${[column?.uuid]}.${newRowId}`] = undefined;
       } else {
         temp[sectionUUID][`${[column?.uuid]}.${newRowId}`] = "";
@@ -88,7 +91,7 @@ const TableAssessment = ({
   };
 
   useEffect(() => {}, []);
-  console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
+  // console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
   return (
     <div className="que-table-sect">
       <div className="que-table-wrap assessment-table-wrap">
@@ -176,10 +179,14 @@ const TableAssessment = ({
                           row?.cells?.map((cell, cellId) => (
                             <TableCell key={cell?.columnId}>
                               <TableLayoutCellComponent
+                                sectionUUID={sectionUUID}
+                                isPrefilled={isPrefilled}
                                 assessmentQuestionnaire={
                                   assessmentQuestionnaire
                                 }
-                                isPrefilled={isPrefilled}
+                                setAssessmentQuestionnaire={
+                                  setAssessmentQuestionnaire
+                                }
                                 transformedColumns={tranformedColumnValues}
                                 tranformedRows={tranformedRowValues}
                                 cellId={cellId}
@@ -258,9 +265,11 @@ const TableAssessment = ({
                                   <TableCell key={column?.uuid}>
                                     <TableLayoutCellComponent
                                       isPrefilled={isPrefilled}
+                                      sectionUUID={sectionUUID}
                                       assessmentQuestionnaire={
                                         assessmentQuestionnaire
                                       }
+                                      setAssessmentQuestionnaire={setAssessmentQuestionnaire}
                                       transformedColumns={
                                         tranformedColumnValues
                                       }

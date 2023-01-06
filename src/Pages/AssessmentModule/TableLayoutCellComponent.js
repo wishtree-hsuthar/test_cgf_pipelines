@@ -4,37 +4,48 @@ import {
   Select,
   MenuItem,
   FormHelperText,
+  Button,
 } from "@mui/material";
 import React, { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+
 import { useParams } from "react-router-dom";
+import CryptoJS from "crypto-js";
+import { REACT_APP_FILE_ENCRYPT_SECRET } from "../../api/Url";
+import DialogBox from "../../components/DialogBox";
+import { useRef } from "react";
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
 
-const TableLayoutCellComponent = ({
-  isPrefilled,
-  assessmentQuestionnaire,
-  rowId,
-  columnId = "",
-  transformedColumns,
-  cell,
-  columnIdx,
-  answer = "",
-  handleAnswersChange,
-  handleAnswersBlur,
-  error,
-  editMode,
-}) => {
+const TableLayoutCellComponent = (props) => {
+  const {
+    isPrefilled,
+    assessmentQuestionnaire,
+    setAssessmentQuestionnaire,
+    rowId,
+    columnId = "",
+    transformedColumns,
+    cell,
+    answer = "",
+    handleAnswersChange,
+    handleAnswersBlur,
+    error,
+    editMode,
+    sectionUUID,
+  } = props;
   const [showMore, setShowMore] = useState(false);
   const params = useParams();
+  const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
   const handleOnKeyDownChange = (e) => {
     e.preventDefault();
   };
-  
+  const [currentSelectedFiles, setCurrentSelectedFiles] = useState({});
   let columnUUID =
     isPrefilled ||
     (!isPrefilled &&
@@ -42,9 +53,100 @@ const TableLayoutCellComponent = ({
       !Object.keys(assessmentQuestionnaire).length > 0)
       ? cell?.columnId
       : columnId;
-//  console.log("column Id:- ",columnId)
+  // console.log("props:- ",props)
+  // console.log("section UUID",sectionUUID)
+  const getFileValuesArray = async (e) => {
+    let files = e?.target?.files;
+    console.log("fiels");
+    setCurrentSelectedFiles({ ...files });
+    let tempAssessment = { ...assessmentQuestionnaire };
+    // console.log("section UUid", sectionUUID);
+    tempAssessment[sectionUUID][`${columnId}.${rowId}`] = [];
+
+    Object.keys(files).forEach(async (fileIdx) => {
+      let reader = new FileReader();
+      reader.readAsDataURL(files[fileIdx]);
+      reader.onloadend = async () => {
+        let result = reader.result;
+        let encryptedFile = CryptoJS.AES.encrypt(
+          result,
+          REACT_APP_FILE_ENCRYPT_SECRET
+        ).toString();
+        tempAssessment[sectionUUID][`${columnId}.${rowId}`][fileIdx] = {
+          file: encryptedFile,
+          type: files[fileIdx]?.type,
+          name: files[fileIdx]?.name,
+        };
+      };
+    });
+    // setAssessmentQuestionnaire(tempAssessment);
+  };
+  const onAttachmetChangeHandler = async (e) => {
+    console.log("calling on Change");
+    console.log("files:- ", e.target.files);
+    await getFileValuesArray(e);
+    console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
+    // console.log("filesArray:- ", filesArray);
+  };
+  //  console.log("current section:- ",currentSelectedFiles)
   return (
     <>
+      <DialogBox
+        title={<p>Add Attachments</p>}
+        info1={" "}
+        info2={
+          <div className="upload-file-wrap">
+            <Button
+              variant="contained"
+              component="label"
+              className="upload-file-btn"
+            >
+              <div className="upload-file-blk">
+                {/* <input hidden accept="image/*" multiple type="file" /> */}
+                <input
+                  type={"file"}
+                  hidden
+                  // accept={".xls, .xlsx"}
+                  // value={file}
+                  onChange={onAttachmetChangeHandler}
+                  multiple
+                />
+                <span className="upload-icon">
+                  <CloudUploadOutlinedIcon />
+                </span>
+                <span className="file-upload-txt">
+                  Click here to choose files
+                </span>
+              </div>
+            </Button>
+
+            {/* <p className="select-filename"> */}
+            {answer && answer?.length > 0
+              ? console.log("answer is present:- ", answer)
+              : Object.keys(currentSelectedFiles)?.length > 0 && (
+                  <RenderCurrentFiles
+                    currentSelectedFiles={currentSelectedFiles}
+                    setCurrentSelectedFiles={setCurrentSelectedFiles}
+                  />
+                )}
+            {/* </p> */}
+          </div>
+        }
+        primaryButtonText={"Upload"}
+        secondaryButtonText={"Cancel"}
+        // onPrimaryModalButtonClickHandler={() =>
+        //   // handleReOpenAssessment()
+        //   reUploadAssessment()
+        // }
+        // onSecondaryModalButtonClickHandler={() =>
+        //   // handleCloseReopenAssessment()
+        //   cancelImport()
+        // }
+        openModal={openFileAttachmenDialog}
+        setOpenModal={setOpenFileAttachmntDialog}
+        isModalForm={true}
+        handleCloseRedirect={() => setOpenFileAttachmntDialog(false)}
+      />
       {isPrefilled &&
         transformedColumns[columnUUID] &&
         transformedColumns[columnUUID].columnType === "prefilled" && (
@@ -88,6 +190,22 @@ const TableLayoutCellComponent = ({
             )}
           </p>
         )}
+      {transformedColumns[columnUUID] &&
+        transformedColumns[columnUUID]?.columnType === "attachments" && (
+          <a
+            href="#"
+            onClick={() => setOpenFileAttachmntDialog(true)}
+            style={{ color: "#4596D1" }}
+          >
+            Add Attachments
+          </a>
+          // <input type="file" onChange={onAttachmetChangeHandler} multiple />
+        )}
+      {transformedColumns[columnUUID] &&
+        transformedColumns[columnUUID]?.columnType === "attachments" &&
+        answer &&
+        answer?.length > 0 &&
+        answer.map((file, fileIdx) => <p key={fileIdx}>{`${file.name}`}</p>)}
       {transformedColumns[columnUUID] &&
         transformedColumns[columnUUID].columnType === "textbox" && (
           <TextField
@@ -228,3 +346,33 @@ const TableLayoutCellComponent = ({
 };
 
 export default TableLayoutCellComponent;
+
+const RenderCurrentFiles = ({
+  currentSelectedFiles,
+  setCurrentSelectedFiles,
+}) => {
+  const onCurrentFileRemoveHandler = (file) => {
+    let tempCurrentSelectedFiles = { ...currentSelectedFiles };
+    delete tempCurrentSelectedFiles[file];
+    setCurrentSelectedFiles(tempCurrentSelectedFiles)
+  };
+  return (
+    <>
+      {Object.keys(currentSelectedFiles).map((file) => (
+        <p key={currentSelectedFiles[file]?.name} className="select-filename">
+          {currentSelectedFiles[file]?.name}
+          {console.log("inside condition")}
+          {/* <div
+            // className="que-input-type-close"
+            // onClick={(e) => onOptionDeleteHandler(e, questionIdx, optionIdx)}
+          > */}
+          <span style={{cursor:"pointer"}} onClick={() => onCurrentFileRemoveHandler(file)}>
+            {" "}
+            <CloseIcon />
+          </span>
+          {/* </div> */}
+        </p>
+      ))}
+    </>
+  );
+};
