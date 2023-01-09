@@ -1,4 +1,5 @@
-export const { REACT_APP_API_ENDPOINT, REACT_APP_FILE_ENCRYPT_SECRET } = process.env;
+export const { REACT_APP_API_ENDPOINT, REACT_APP_FILE_ENCRYPT_SECRET } =
+  process.env;
 //login
 export const LOGIN_URL = `${REACT_APP_API_ENDPOINT}auth/login`;
 export const LOGOUT_URL = `${REACT_APP_API_ENDPOINT}auth/logout`;
@@ -59,6 +60,7 @@ export const ADD_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const REASSIGN_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const ACCEPT_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const DECLINE_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
+export const UPLOAD_ATTACHMENTS = `${REACT_APP_API_ENDPOINT}assessments/upload/files`;
 
 // download
 export const DOWNLOAD_CGF_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/list/download`;

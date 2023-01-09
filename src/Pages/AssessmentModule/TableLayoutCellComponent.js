@@ -16,7 +16,8 @@ import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 
 import { useParams } from "react-router-dom";
 import CryptoJS from "crypto-js";
-import { REACT_APP_FILE_ENCRYPT_SECRET } from "../../api/Url";
+import { REACT_APP_FILE_ENCRYPT_SECRET, UPLOAD_ATTACHMENTS } from "../../api/Url";
+import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
 import { useRef } from "react";
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
@@ -45,7 +46,7 @@ const TableLayoutCellComponent = (props) => {
   const handleOnKeyDownChange = (e) => {
     e.preventDefault();
   };
-  const [currentSelectedFiles, setCurrentSelectedFiles] = useState({});
+  const [currentSelectedFiles, setCurrentSelectedFiles] = useState([]);
   let columnUUID =
     isPrefilled ||
     (!isPrefilled &&
@@ -58,11 +59,11 @@ const TableLayoutCellComponent = (props) => {
   const getFileValuesArray = async (e) => {
     let files = e?.target?.files;
     console.log("fiels");
-    setCurrentSelectedFiles({ ...files });
-    let tempAssessment = { ...assessmentQuestionnaire };
-    // console.log("section UUid", sectionUUID);
-    tempAssessment[sectionUUID][`${columnId}.${rowId}`] = [];
 
+    let tempAssessment = { ...assessmentQuestionnaire };
+
+    tempAssessment[sectionUUID][`${columnId}.${rowId}`] = [];
+    let tempCurrentSelectedFiles = [...currentSelectedFiles];
     Object.keys(files).forEach(async (fileIdx) => {
       let reader = new FileReader();
       reader.readAsDataURL(files[fileIdx]);
@@ -72,14 +73,15 @@ const TableLayoutCellComponent = (props) => {
           result,
           REACT_APP_FILE_ENCRYPT_SECRET
         ).toString();
-        tempAssessment[sectionUUID][`${columnId}.${rowId}`][fileIdx] = {
+        tempCurrentSelectedFiles.push({
           file: encryptedFile,
           type: files[fileIdx]?.type,
           name: files[fileIdx]?.name,
-        };
+        });
+        setCurrentSelectedFiles(tempCurrentSelectedFiles);
       };
     });
-    // setAssessmentQuestionnaire(tempAssessment);
+    console.log("temp Current selected files", tempCurrentSelectedFiles);
   };
   const onAttachmetChangeHandler = async (e) => {
     console.log("calling on Change");
@@ -88,7 +90,17 @@ const TableLayoutCellComponent = (props) => {
     console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
     // console.log("filesArray:- ", filesArray);
   };
-  //  console.log("current section:- ",currentSelectedFiles)
+  const uploadAttachmentButtonClickHandler =async () => {
+    console.log("Attachments:- ",currentSelectedFiles)
+    const attachmentResponse = await privateAxios.post(UPLOAD_ATTACHMENTS,{files : [...currentSelectedFiles]})
+    console.log("Attachment Response",attachmentResponse)
+  };
+  const cancelAttachmentButtonClickHandler = () => {
+    setCurrentSelectedFiles([]);
+    setOpenFileAttachmntDialog(false);
+  };
+  console.log("current selected files:- ", currentSelectedFiles);
+
   return (
     <>
       <DialogBox
@@ -134,18 +146,12 @@ const TableLayoutCellComponent = (props) => {
         }
         primaryButtonText={"Upload"}
         secondaryButtonText={"Cancel"}
-        // onPrimaryModalButtonClickHandler={() =>
-        //   // handleReOpenAssessment()
-        //   reUploadAssessment()
-        // }
-        // onSecondaryModalButtonClickHandler={() =>
-        //   // handleCloseReopenAssessment()
-        //   cancelImport()
-        // }
+        onPrimaryModalButtonClickHandler={uploadAttachmentButtonClickHandler}
+        onSecondaryModalButtonClickHandler={cancelAttachmentButtonClickHandler}
         openModal={openFileAttachmenDialog}
         setOpenModal={setOpenFileAttachmntDialog}
         isModalForm={true}
-        handleCloseRedirect={() => setOpenFileAttachmntDialog(false)}
+        handleCloseRedirect={cancelAttachmentButtonClickHandler}
       />
       {isPrefilled &&
         transformedColumns[columnUUID] &&
@@ -351,22 +357,25 @@ const RenderCurrentFiles = ({
   currentSelectedFiles,
   setCurrentSelectedFiles,
 }) => {
-  const onCurrentFileRemoveHandler = (file) => {
-    let tempCurrentSelectedFiles = { ...currentSelectedFiles };
-    delete tempCurrentSelectedFiles[file];
-    setCurrentSelectedFiles(tempCurrentSelectedFiles)
+  const onCurrentFileRemoveHandler = (fileIdx) => {
+    let tempCurrentSelectedFiles = [...currentSelectedFiles];
+    tempCurrentSelectedFiles.splice(fileIdx, 1);
+    setCurrentSelectedFiles(tempCurrentSelectedFiles);
   };
   return (
     <>
-      {Object.keys(currentSelectedFiles).map((file) => (
-        <p key={currentSelectedFiles[file]?.name} className="select-filename">
-          {currentSelectedFiles[file]?.name}
+      {currentSelectedFiles.map((file, fileIdx) => (
+        <p key={file?.name} className="select-filename">
+          {file?.name}
           {console.log("inside condition")}
           {/* <div
             // className="que-input-type-close"
             // onClick={(e) => onOptionDeleteHandler(e, questionIdx, optionIdx)}
           > */}
-          <span style={{cursor:"pointer"}} onClick={() => onCurrentFileRemoveHandler(file)}>
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => onCurrentFileRemoveHandler(fileIdx)}
+          >
             {" "}
             <CloseIcon />
           </span>
