@@ -345,13 +345,16 @@ function FillAssessment() {
                             console.log(
                                 "Fetched value not present in column dropdown options"
                             );
-                            // sectionErrors[
-                            //     `${column?.uuid}.${tempRowId}`
-                            // ] = `Inappropriate value - ${
-                            //     currentSectionAnswers[
-                            //         `${column?.uuid}.${tempRowId}`
-                            //     ]
-                            // }`;
+                            sectionErrors[
+                                `${column?.uuid}.${tempRowId}`
+                            ] = `Entered value "${
+                                currentSectionAnswers[
+                                    `${column?.uuid}.${tempRowId}`
+                                ]
+                            }" is not part of above list. Please select valid option among listed values from list.
+
+
+                            `;
                             sections.push(index);
                             console.log("sections = ", sections);
                             tempAsssessmentQuestionnaire = {
@@ -451,11 +454,13 @@ function FillAssessment() {
                         console.log("section no", index);
                         console.log("section no", sections);
 
-                        // sectionErrors[
-                        //     question?.uuid
-                        // ] = `Inappropriate value - ${
-                        //     currentSectionAnswers[question?.uuid]
-                        // }`;
+                        sectionErrors[question?.uuid] = `
+                        
+                        Entered value
+                        "${
+                            currentSectionAnswers[question?.uuid]
+                        }" is not part of above list. Please select valid option among listed values from list.
+                        `;
                         tempAsssessmentQuestionnaire = {
                             ...tempAsssessmentQuestionnaire,
                             [section?.uuid]: {
@@ -813,6 +818,7 @@ function FillAssessment() {
     const [importOpenDialog, setImportOpenDialog] = useState(false);
 
     const reUploadAssessment = () => {
+        setIsLoading(true);
         try {
             if (file) {
                 let reader = new FileReader();
@@ -841,6 +847,8 @@ function FillAssessment() {
                             );
 
                             if (response.status == 201) {
+                                setIsLoading(false);
+
                                 setFile("");
                                 setSelectedFileName("");
 
@@ -858,6 +866,7 @@ function FillAssessment() {
                                 setAssessmentQuestionnaire(
                                     response.data.answers
                                 );
+
                                 if (response.data.containsErrors) {
                                     try {
                                         const correctionDocResponse =
@@ -901,6 +910,8 @@ function FillAssessment() {
                                             () => myRef.current()
                                         );
                                     } catch (error) {
+                                        setIsLoading(false);
+
                                         console.log(
                                             "Error from corections doc download",
                                             error
@@ -910,6 +921,8 @@ function FillAssessment() {
                             }
                         } catch (error) {
                             console.log("Error from UPLOAD api", error);
+                            setIsLoading(false);
+
                             if (error?.response?.status === 401) {
                                 setToasterDetails(
                                     {

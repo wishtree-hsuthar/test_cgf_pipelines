@@ -452,7 +452,7 @@ export default function TableComponent({
                                                             );
                                                             return (
                                                                 <TableCell
-                                                                    className={`button-style ${
+                                                                    className={`due-date-style ${
                                                                         new Date(
                                                                             new Date(
                                                                                 row[
@@ -467,7 +467,7 @@ export default function TableComponent({
                                                                                     "en"
                                                                                 )
                                                                             ).getTime() &&
-                                                                        "button-style-success"
+                                                                        "due-date-style-success"
                                                                     }`}
                                                                     key={cell}
                                                                 >
