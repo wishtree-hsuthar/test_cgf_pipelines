@@ -134,7 +134,7 @@ const TableLayoutCellComponent = (props) => {
 
             {/* <p className="select-filename"> */}
             {answer && answer?.length > 0
-              ? console.log("answer is present:- ", answer)
+              ? <span>Show Answer from Backend</span>
               : Object.keys(currentSelectedFiles)?.length > 0 && (
                   <RenderCurrentFiles
                     currentSelectedFiles={currentSelectedFiles}
