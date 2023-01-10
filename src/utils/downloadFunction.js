@@ -22,10 +22,20 @@ export const downloadFunction = async (
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement(`a`);
         link.href = url;
-        link.setAttribute(
-            `download`,
-            `${filename} - ${new Date().toLocaleString("en")}.xls`
-        );
+        let date =
+            new Date().getDate() < 10
+                ? "0" + new Date().getDate().toString()
+                : new Date().getDate().toString();
+        let month =
+            new Date().getMonth() < 10
+                ? "0" + (new Date().getMonth() + 1).toString()
+                : new Date().getMonth().toString();
+        let year = new Date().getFullYear().toString();
+        let hours = new Date().getHours();
+        let minutes = new Date().getMinutes();
+        let seconds = new Date().getMinutes();
+        let timeStamp = month + date + year + "_" + hours + minutes + seconds;
+        link.setAttribute(`download`, `${filename} - ${timeStamp}.xls`);
         document.body.appendChild(link);
         link.click();
         if (response.status == 200) {

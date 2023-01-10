@@ -125,6 +125,8 @@ const EditSubAdmin = () => {
                     "error from countries api of edit sub-admin",
                     error
                 );
+                if (error?.code === "ERR_CANCELED") return;
+
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
@@ -165,7 +167,7 @@ const EditSubAdmin = () => {
                     response
                 );
                 isMounted && setFetchSubAdminDetailsForEdit(response.data);
-                console.log("role from edit", response.data.subRoleId.name);
+                // console.log("role from edit", response.data.subRoleId.name);
                 reset({
                     name: response.data.name,
                     email: response.data.email,
@@ -181,7 +183,7 @@ const EditSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
+                        descriptionMessage: "Something went wrong",
                         messageType: "error",
                     },
                     () => toasterRef.current()
@@ -201,7 +203,9 @@ const EditSubAdmin = () => {
                         navigate("/login");
                     }, 3000);
                 }
-                navigate("/users/cgf-admin/");
+                setTimeout(() => {
+                    navigate("/users/cgf-admin/");
+                }, 3000);
             }
         };
         fetchSubAdmin();
@@ -241,8 +245,8 @@ const EditSubAdmin = () => {
         };
         fetchRoles();
         return () => {
-            // isMounted = false;
-            // controller.abort();
+            isMounted = false;
+            controller.abort();
         };
     }, []);
 
@@ -254,12 +258,13 @@ const EditSubAdmin = () => {
     const handleOnSubmit = async (data) => {
         console.log("data from handle submit edit", data);
         setDisableEditCgfAdminButton(true);
+        setIsLoading(true);
         try {
             const response = await privateAxios.put(
                 UPDATE_SUB_ADMIN + params.id,
                 {
                     name: data.name,
-                    subRoleId: data.role,
+                    subRoleId: data.subRoleId,
                     phoneNumber: data.phoneNumber,
                     countryCode: data.countryCode,
                     isActive: data.status === "active" ? true : false,
@@ -267,6 +272,8 @@ const EditSubAdmin = () => {
             );
             console.log("response from edit sub admin method", response);
             if (response.status == 200) {
+                setIsLoading(false);
+
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
@@ -284,6 +291,8 @@ const EditSubAdmin = () => {
             }
         } catch (error) {
             console.log("error from edit sub admin submit method");
+            setIsLoading(false);
+
             if (error?.response?.status == 400) {
                 setToasterDetails(
                     {
@@ -675,7 +684,7 @@ const EditSubAdmin = () => {
                                                     rules={{
                                                         required: true,
                                                     }}
-                                                    isDisabled
+                                                    // isDisabled
                                                     myHelper={
                                                         helperTextForCGFAdmin
                                                     }
