@@ -94,6 +94,7 @@ const EditMember = () => {
     });
     const onSubmitFunctionCall = async (data) => {
         console.log("data", data);
+        setIsLoading(true);
         try {
             let backendObject = {
                 parentCompany: data.parentCompany,
@@ -132,6 +133,8 @@ const EditMember = () => {
                 ...backendObject,
             });
             if (response.status === 200) {
+                setIsLoading(false);
+
                 setDisableEditMemberUpdateButton(false);
                 reset(defaultValues);
 
@@ -148,6 +151,8 @@ const EditMember = () => {
 
             console.log("Default values: ", defaultValues);
         } catch (error) {
+            setIsLoading(false);
+
             if (error?.response?.status == 401) {
                 setToasterDetailsEditMember(
                     {
@@ -267,7 +272,6 @@ const EditMember = () => {
             setArrOfCountryCode([...countryCodeSet]);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            
         }
     };
     const getCountries1 = async (region) => {
@@ -318,7 +322,7 @@ const EditMember = () => {
             return arrOfRegions;
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            
+
             return [];
         }
     };
@@ -339,7 +343,6 @@ const EditMember = () => {
             setRoles(response.data);
         } catch (error) {
             console.log("Error from fetch roles", error);
-          
         }
     };
     const getMemberByID1 = async (isMounted) => {
@@ -1382,7 +1385,7 @@ const EditMember = () => {
                                         <div className="card-form-field">
                                             <div className="form-group">
                                                 <label htmlFor="title">
-                                                   Job Title
+                                                    Job Title
                                                 </label>
                                                 <Input
                                                     control={control}

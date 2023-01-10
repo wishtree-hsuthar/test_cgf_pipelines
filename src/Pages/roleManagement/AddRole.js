@@ -17,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, set, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loader2 from "../../assets/Loader/Loader2.svg";
 
 //internal packages
 import Toaster from "../../components/Toaster";
@@ -85,6 +86,7 @@ const AddRole = () => {
 
     const [previleges1, setPrevileges1] = useState({ ...temp });
     const [disableAddRoleButton, setdisableAddRoleButton] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const addRoleCreatePrivileges = () => {
         modules.forEach(
@@ -120,6 +122,7 @@ const AddRole = () => {
     });
     const submitCall = async (data) => {
         setdisableAddRoleButton(true);
+        setIsLoading(true);
 
         console.log("inside on Submit");
         let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
@@ -140,6 +143,8 @@ const AddRole = () => {
                 }
             );
             if (response.status == 201) {
+                setIsLoading(false);
+
                 setdisableAddRoleButton(false);
                 setToasterDetails1(
                     {
@@ -154,6 +159,8 @@ const AddRole = () => {
                 return true;
             }
         } catch (error) {
+            setIsLoading(false);
+
             setdisableAddRoleButton(false);
 
             if (error?.response?.status == 401) {
@@ -268,151 +275,168 @@ const AddRole = () => {
                         </div>
                     </div>
                     <form onSubmit={handleSubmit(addRoleOnSubmit)}>
-                        <div className="card-wrapper">
-                            <div className="card-blk flex-between">
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label htmlFor="roleName">
-                                            Role Name{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Controller
-                                            name="roleName"
-                                            rules={{
-                                                required: true,
-                                                maxLength: 50,
-                                                minLength: 3,
-                                                pattern:
-                                                    /^[A-Za-z]+[A-Za-z ]*$/,
-                                            }}
-                                            control={control}
-                                            render={({
-                                                field,
-                                                fieldState: { error },
-                                            }) => (
-                                                <TextField
-                                                    {...field}
-                                                    onBlur={(e) =>
-                                                        setValue(
-                                                            "roleName",
-                                                            e.target.value.trim()
-                                                        )
-                                                    }
-                                                    inputProps={{
-                                                        maxLength: 50,
-                                                    }}
-                                                    className={`input-field ${
-                                                        error && "input-error"
-                                                    }`}
-                                                    id="outlined-basic"
-                                                    placeholder="Enter role name"
-                                                    helperText={
-                                                        error
-                                                            ? addRoleMyHelper
-                                                                  .roleName[
-                                                                  error.type
-                                                              ]
-                                                            : " "
-                                                    }
-                                                    variant="outlined"
-                                                />
-                                            )}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label htmlFor="status">Status</label>
-                                        <div className="radio-btn-field">
+                        {isLoading ? (
+                            <div className="loader-blk">
+                                <img src={Loader2} alt="Loading" />
+                            </div>
+                        ) : (
+                            <div className="card-wrapper">
+                                <div className="card-blk flex-between">
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="roleName">
+                                                Role Name{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
                                             <Controller
-                                                name="status"
+                                                name="roleName"
+                                                rules={{
+                                                    required: true,
+                                                    maxLength: 50,
+                                                    minLength: 3,
+                                                    pattern:
+                                                        /^[A-Za-z]+[A-Za-z ]*$/,
+                                                }}
                                                 control={control}
-                                                render={({ field }) => (
-                                                    <AddRoleRadioGroup
+                                                render={({
+                                                    field,
+                                                    fieldState: { error },
+                                                }) => (
+                                                    <TextField
                                                         {...field}
-                                                        aria-labelledby="demo-radio-buttons-group-label"
-                                                        name="radio-buttons-group"
-                                                        className="radio-btn"
-                                                    >
-                                                        <FormControlLabel
-                                                            value="active"
-                                                            control={<Radio />}
-                                                            label="Active"
-                                                        />
-                                                        <FormControlLabel
-                                                            value="inactive"
-                                                            control={<Radio />}
-                                                            label="Inactive"
-                                                        />
-                                                    </AddRoleRadioGroup>
+                                                        onBlur={(e) =>
+                                                            setValue(
+                                                                "roleName",
+                                                                e.target.value.trim()
+                                                            )
+                                                        }
+                                                        inputProps={{
+                                                            maxLength: 50,
+                                                        }}
+                                                        className={`input-field ${
+                                                            error &&
+                                                            "input-error"
+                                                        }`}
+                                                        id="outlined-basic"
+                                                        placeholder="Enter role name"
+                                                        helperText={
+                                                            error
+                                                                ? addRoleMyHelper
+                                                                      .roleName[
+                                                                      error.type
+                                                                  ]
+                                                                : " "
+                                                        }
+                                                        variant="outlined"
+                                                    />
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="status">
+                                                Status
+                                            </label>
+                                            <div className="radio-btn-field">
+                                                <Controller
+                                                    name="status"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <AddRoleRadioGroup
+                                                            {...field}
+                                                            aria-labelledby="demo-radio-buttons-group-label"
+                                                            name="radio-buttons-group"
+                                                            className="radio-btn"
+                                                        >
+                                                            <FormControlLabel
+                                                                value="active"
+                                                                control={
+                                                                    <Radio />
+                                                                }
+                                                                label="Active"
+                                                            />
+                                                            <FormControlLabel
+                                                                value="inactive"
+                                                                control={
+                                                                    <Radio />
+                                                                }
+                                                                label="Inactive"
+                                                            />
+                                                        </AddRoleRadioGroup>
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field fullwidth">
+                                        <div className="form-group">
+                                            <label htmlFor="description">
+                                                Description{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Controller
+                                                name="description"
+                                                rules={{
+                                                    required: true,
+                                                    maxLength: 500,
+                                                    minLength: 3,
+                                                }}
+                                                control={control}
+                                                render={({
+                                                    field,
+                                                    fieldState: { error },
+                                                }) => (
+                                                    <TextField
+                                                        multiline
+                                                        {...field}
+                                                        onBlur={(e) =>
+                                                            setValue(
+                                                                "description",
+                                                                e.target.value.trim()
+                                                            )
+                                                        }
+                                                        inputProps={{
+                                                            maxLength: 500,
+                                                        }}
+                                                        className={`input-textarea ${
+                                                            error &&
+                                                            "input-textarea-error"
+                                                        }`}
+                                                        id="outlined-basic"
+                                                        placeholder="Enter description"
+                                                        helperText={
+                                                            error
+                                                                ? addRoleMyHelper
+                                                                      .description[
+                                                                      error.type
+                                                                  ]
+                                                                : " "
+                                                        }
+                                                        variant="outlined"
+                                                    />
                                                 )}
                                             />
                                         </div>
                                     </div>
                                 </div>
-                                <div className="card-form-field fullwidth">
-                                    <div className="form-group">
-                                        <label htmlFor="description">
-                                            Description{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Controller
-                                            name="description"
-                                            rules={{
-                                                required: true,
-                                                maxLength: 500,
-                                                minLength: 3,
-                                            }}
-                                            control={control}
-                                            render={({
-                                                field,
-                                                fieldState: { error },
-                                            }) => (
-                                                <TextField
-                                                    multiline
-                                                    {...field}
-                                                    onBlur={(e) =>
-                                                        setValue(
-                                                            "description",
-                                                            e.target.value.trim()
-                                                        )
-                                                    }
-                                                    inputProps={{
-                                                        maxLength: 500,
-                                                    }}
-                                                    className={`input-textarea ${
-                                                        error &&
-                                                        "input-textarea-error"
-                                                    }`}
-                                                    id="outlined-basic"
-                                                    placeholder="Enter description"
-                                                    helperText={
-                                                        error
-                                                            ? addRoleMyHelper
-                                                                  .description[
-                                                                  error.type
-                                                              ]
-                                                            : " "
-                                                    }
-                                                    variant="outlined"
-                                                />
-                                            )}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            {/* <div className="table-blk"> */}
-                            <Box
-                                sx={{ width: "100%" }}
-                                className="table-blk table-blk-role"
-                            >
-                                <Paper sx={{ width: "100%" }}>
-                                    <TableContainer>
-                                        <Table sx={{ minWidth: 750 }}>
-                                            <CommonTableHead />
-                                            <TableBody>
-                                                {Object.keys(previleges1).map(
-                                                    (previleg, _id) => {
+                                {/* <div className="table-blk"> */}
+                                <Box
+                                    sx={{ width: "100%" }}
+                                    className="table-blk table-blk-role"
+                                >
+                                    <Paper sx={{ width: "100%" }}>
+                                        <TableContainer>
+                                            <Table sx={{ minWidth: 750 }}>
+                                                <CommonTableHead />
+                                                <TableBody>
+                                                    {Object.keys(
+                                                        previleges1
+                                                    ).map((previleg, _id) => {
                                                         console.log(
                                                             "previleg",
                                                             previleges1[
@@ -1068,33 +1092,33 @@ const AddRole = () => {
                                                                 </TableCell>
                                                             </TableRow>
                                                         );
-                                                    }
-                                                )}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Paper>
-                            </Box>
-                            {/* </div> */}
-                            <div className="form-btn flex-between add-members-btn">
-                                <button
-                                    type="reset"
-                                    style={{ marginTop: "20px" }}
-                                    className="secondary-button mr-10"
-                                    onClick={onClickCancelHandler1}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="primary-button"
-                                    style={{ marginTop: "20px" }}
-                                    disabled={disableAddRoleButton}
-                                >
-                                    Save
-                                </button>
+                                                    })}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Paper>
+                                </Box>
+                                {/* </div> */}
+                                <div className="form-btn flex-between add-members-btn">
+                                    <button
+                                        type="reset"
+                                        style={{ marginTop: "20px" }}
+                                        className="secondary-button mr-10"
+                                        onClick={onClickCancelHandler1}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="primary-button"
+                                        style={{ marginTop: "20px" }}
+                                        disabled={disableAddRoleButton}
+                                    >
+                                        Save
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </form>
                 </div>
             </section>

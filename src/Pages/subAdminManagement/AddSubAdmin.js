@@ -13,6 +13,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import Loader2 from "../../assets/Loader/Loader2.svg";
 
 const helperTextForCGFAdmin = {
     countryCode: {
@@ -69,6 +70,7 @@ const AddSubAdmin = () => {
     const [roleSelected, setRoleSelected] = useState("");
     const [countriesAddCGFAdmin, setCountriesAddCGFAdmin] = useState([]);
     const [rolesAddCGFAdmin, setRolesAddCGFAdmin] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const toasterRef = useRef();
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
@@ -188,10 +190,13 @@ const AddSubAdmin = () => {
     };
 
     const addSubAdminData = async (data) => {
+        setIsLoading(true);
         setDisableSubmit(true);
         try {
             const response = await axios.post(ADD_SUB_ADMIN, data);
             if (response.status == 201) {
+                setIsLoading(false);
+
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
@@ -206,6 +211,8 @@ const AddSubAdmin = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             console.log("error from add sub admin page", error);
+            setIsLoading(false);
+
             if (error?.response?.status === 401) {
                 setToasterDetails(
                     {
@@ -300,35 +307,44 @@ const AddSubAdmin = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="card-wrapper">
-                            <div className="card-blk flex-between">
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label htmlFor="name">
-                                            CGF Admin Name{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Input
-                                            name={"name"}
-                                            onBlur={(e) =>
-                                                setValue(
-                                                    "name",
-                                                    e.target.value?.trim()
-                                                )
-                                            }
-                                            control={control}
-                                            placeholder={"Enter CGF admin name"}
-                                            myHelper={helperTextForCGFAdmin}
-                                            rules={{
-                                                required: true,
-                                                maxLength: 50,
-                                                minLength: 3,
-                                                pattern:
-                                                    /^[A-Za-z]+[A-Za-z ]*$/,
-                                            }}
-                                        />
+                        {isLoading ? (
+                            <div className="loader-blk">
+                                <img src={Loader2} alt="Loading" />
+                            </div>
+                        ) : (
+                            <div className="card-wrapper">
+                                <div className="card-blk flex-between">
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="name">
+                                                CGF Admin Name{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Input
+                                                name={"name"}
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "name",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
+                                                control={control}
+                                                placeholder={
+                                                    "Enter CGF admin name"
+                                                }
+                                                myHelper={helperTextForCGFAdmin}
+                                                rules={{
+                                                    required: true,
+                                                    maxLength: 50,
+                                                    minLength: 3,
+                                                    pattern:
+                                                        /^[A-Za-z]+[A-Za-z ]*$/,
+                                                }}
+                                            />
 
-                                        {/* <TextField
+                                            {/* <TextField
                                             id="outlined-basic"
                                             placeholder="Enter sub admin name"
                                             variant="outlined"
@@ -345,268 +361,287 @@ const AddSubAdmin = () => {
                                                     : " "
                                             }
                                         /> */}
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label htmlFor="email">
-                                            Email{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Input
-                                            name={"email"}
-                                            onBlur={(e) =>
-                                                setValue(
-                                                    "email",
-                                                    e.target.value?.trim()
-                                                )
-                                            }
-                                            control={control}
-                                            placeholder={"example@domain.com"}
-                                            myHelper={helperTextForCGFAdmin}
-                                            rules={{
-                                                required: true,
-                                                maxLength: 50,
-                                                minLength: 3,
-                                                pattern:
-                                                    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label htmlFor="phoneNumber">
-                                            Phone Number
-                                        </label>
-                                        <div className="phone-number-field">
-                                            <div className="select-field country-code">
-                                                <Controller
-                                                    control={control}
-                                                    name="countryCode"
-                                                    rules={{
-                                                        validate: () => {
-                                                            if (
-                                                                !watch(
-                                                                    "countryCode"
-                                                                ) &&
-                                                                watch(
-                                                                    "phoneNumber"
-                                                                )
-                                                            )
-                                                                return "Invalid input";
-                                                        },
-                                                    }}
-                                                    render={({
-                                                        field,
-                                                        fieldState: { error },
-                                                    }) => (
-                                                        <Autocomplete
-                                                            className={`${
-                                                                error &&
-                                                                "autocomplete-error"
-                                                            }`}
-                                                            PaperComponent={({
-                                                                children,
-                                                            }) => (
-                                                                <Paper
-                                                                    className={
-                                                                        countriesAddCGFAdmin?.length >
-                                                                        5
-                                                                            ? "autocomplete-option-txt autocomplete-option-limit"
-                                                                            : "autocomplete-option-txt"
-                                                                    }
-                                                                >
-                                                                    {children}
-                                                                </Paper>
-                                                            )}
-                                                            popupIcon={
-                                                                <KeyboardArrowDownRoundedIcon />
-                                                            }
-                                                            {...field}
-                                                            onChange={(
-                                                                event,
-                                                                newValue
-                                                            ) => {
-                                                                console.log(
-                                                                    "inside autocomplete onchange"
-                                                                );
-                                                                console.log(
-                                                                    "new Value ",
-                                                                    newValue
-                                                                );
-                                                                newValue &&
-                                                                typeof newValue ===
-                                                                    "object"
-                                                                    ? setValue(
-                                                                          "countryCode",
-                                                                          newValue.name
-                                                                      )
-                                                                    : setValue(
-                                                                          "countryCode",
-                                                                          newValue
-                                                                      );
-                                                                trigger(
-                                                                    "countryCode"
-                                                                );
-                                                                trigger(
-                                                                    "phoneNumber"
-                                                                );
-                                                            }}
-                                                            options={
-                                                                countriesAddCGFAdmin
-                                                                    ? countriesAddCGFAdmin
-                                                                    : []
-                                                            }
-                                                            autoHighlight
-                                                            // placeholder="Select country code"
-                                                            getOptionLabel={(
-                                                                country
-                                                            ) => country}
-                                                            renderOption={(
-                                                                props,
-                                                                option
-                                                            ) => (
-                                                                <li {...props}>
-                                                                    {option}
-                                                                </li>
-                                                            )}
-                                                            renderInput={(
-                                                                params
-                                                            ) => (
-                                                                <TextField
-                                                                    // className={`input-field ${
-                                                                    //   error && "input-error"
-                                                                    // }`}
-                                                                    {...params}
-                                                                    inputProps={{
-                                                                        ...params.inputProps,
-                                                                    }}
-                                                                    onChange={() =>
-                                                                        trigger(
-                                                                            "countryCode"
-                                                                        )
-                                                                    }
-                                                                    // onSubmit={() => setValue("countryCode", "")}
-                                                                    placeholder={
-                                                                        "+91"
-                                                                    }
-                                                                    helperText={
-                                                                        error
-                                                                            ? helperTextForCGFAdmin
-                                                                                  .countryCode[
-                                                                                  error
-                                                                                      ?.type
-                                                                              ]
-                                                                            : " "
-                                                                    }
-                                                                />
-                                                            )}
-                                                        />
-                                                    )}
-                                                />
-                                            </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="email">
+                                                Email{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
                                             <Input
-                                                name={"phoneNumber"}
-                                                myOnChange={(e) =>
-                                                    phoneNumberChangeHandlerAddCGFAdmin(
-                                                        e,
-                                                        "phoneNumber",
-                                                        "countryCode"
-                                                    )
-                                                }
+                                                name={"email"}
                                                 onBlur={(e) =>
                                                     setValue(
-                                                        "phoneNumber",
+                                                        "email",
                                                         e.target.value?.trim()
                                                     )
                                                 }
                                                 control={control}
+                                                placeholder={
+                                                    "example@domain.com"
+                                                }
                                                 myHelper={helperTextForCGFAdmin}
-                                                placeholder={"1234567890"}
-                                                rules={{
-                                                    maxLength: 15,
-                                                    minLength: 7,
-                                                    validate: (value) => {
-                                                        if (
-                                                            !watch(
-                                                                "phoneNumber"
-                                                            ) &&
-                                                            watch("countryCode")
-                                                        )
-                                                            return "invalid input";
-                                                        if (
-                                                            value &&
-                                                            !Number(value)
-                                                        )
-                                                            return "Invalid input";
-                                                    },
-                                                    // validate: (value) => {
-                                                    //     if (
-                                                    //         watch(
-                                                    //             "phoneNumber"
-                                                    //         ) &&
-                                                    //         !watch(
-                                                    //             "countryCode"
-                                                    //         )
-                                                    //     )
-                                                    //         return "Enter Country code";
-                                                    // else if (
-                                                    //     value &&
-                                                    //     !Number(value)
-                                                    // )
-                                                    //     return "Please enter valid phone number";
-                                                    // },
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label htmlFor="role">
-                                            Role{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-
-                                        <div>
-                                            <Dropdown
-                                                name="subRoleId"
-                                                control={control}
-                                                options={rolesAddCGFAdmin}
                                                 rules={{
                                                     required: true,
+                                                    maxLength: 50,
+                                                    minLength: 3,
+                                                    pattern:
+                                                        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                                                 }}
-                                                myHelper={helperTextForCGFAdmin}
-                                                placeholder={"Select role"}
                                             />
-
-                                            <p className={`password-error`}>
-                                                {errors.subRoleId?.message}
-                                            </p>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className="form-btn flex-between add-members-btn">
-                                    <button
-                                        type="reset"
-                                        onClick={handleCancel}
-                                        className="secondary-button mr-10"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="primary-button add-button"
-                                        disabled={disableSubmit}
-                                    >
-                                        Save
-                                    </button>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="phoneNumber">
+                                                Phone Number
+                                            </label>
+                                            <div className="phone-number-field">
+                                                <div className="select-field country-code">
+                                                    <Controller
+                                                        control={control}
+                                                        name="countryCode"
+                                                        rules={{
+                                                            validate: () => {
+                                                                if (
+                                                                    !watch(
+                                                                        "countryCode"
+                                                                    ) &&
+                                                                    watch(
+                                                                        "phoneNumber"
+                                                                    )
+                                                                )
+                                                                    return "Invalid input";
+                                                            },
+                                                        }}
+                                                        render={({
+                                                            field,
+                                                            fieldState: {
+                                                                error,
+                                                            },
+                                                        }) => (
+                                                            <Autocomplete
+                                                                className={`${
+                                                                    error &&
+                                                                    "autocomplete-error"
+                                                                }`}
+                                                                PaperComponent={({
+                                                                    children,
+                                                                }) => (
+                                                                    <Paper
+                                                                        className={
+                                                                            countriesAddCGFAdmin?.length >
+                                                                            5
+                                                                                ? "autocomplete-option-txt autocomplete-option-limit"
+                                                                                : "autocomplete-option-txt"
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            children
+                                                                        }
+                                                                    </Paper>
+                                                                )}
+                                                                popupIcon={
+                                                                    <KeyboardArrowDownRoundedIcon />
+                                                                }
+                                                                {...field}
+                                                                onChange={(
+                                                                    event,
+                                                                    newValue
+                                                                ) => {
+                                                                    console.log(
+                                                                        "inside autocomplete onchange"
+                                                                    );
+                                                                    console.log(
+                                                                        "new Value ",
+                                                                        newValue
+                                                                    );
+                                                                    newValue &&
+                                                                    typeof newValue ===
+                                                                        "object"
+                                                                        ? setValue(
+                                                                              "countryCode",
+                                                                              newValue.name
+                                                                          )
+                                                                        : setValue(
+                                                                              "countryCode",
+                                                                              newValue
+                                                                          );
+                                                                    trigger(
+                                                                        "countryCode"
+                                                                    );
+                                                                    trigger(
+                                                                        "phoneNumber"
+                                                                    );
+                                                                }}
+                                                                options={
+                                                                    countriesAddCGFAdmin
+                                                                        ? countriesAddCGFAdmin
+                                                                        : []
+                                                                }
+                                                                autoHighlight
+                                                                // placeholder="Select country code"
+                                                                getOptionLabel={(
+                                                                    country
+                                                                ) => country}
+                                                                renderOption={(
+                                                                    props,
+                                                                    option
+                                                                ) => (
+                                                                    <li
+                                                                        {...props}
+                                                                    >
+                                                                        {option}
+                                                                    </li>
+                                                                )}
+                                                                renderInput={(
+                                                                    params
+                                                                ) => (
+                                                                    <TextField
+                                                                        // className={`input-field ${
+                                                                        //   error && "input-error"
+                                                                        // }`}
+                                                                        {...params}
+                                                                        inputProps={{
+                                                                            ...params.inputProps,
+                                                                        }}
+                                                                        onChange={() =>
+                                                                            trigger(
+                                                                                "countryCode"
+                                                                            )
+                                                                        }
+                                                                        // onSubmit={() => setValue("countryCode", "")}
+                                                                        placeholder={
+                                                                            "+91"
+                                                                        }
+                                                                        helperText={
+                                                                            error
+                                                                                ? helperTextForCGFAdmin
+                                                                                      .countryCode[
+                                                                                      error
+                                                                                          ?.type
+                                                                                  ]
+                                                                                : " "
+                                                                        }
+                                                                    />
+                                                                )}
+                                                            />
+                                                        )}
+                                                    />
+                                                </div>
+                                                <Input
+                                                    name={"phoneNumber"}
+                                                    myOnChange={(e) =>
+                                                        phoneNumberChangeHandlerAddCGFAdmin(
+                                                            e,
+                                                            "phoneNumber",
+                                                            "countryCode"
+                                                        )
+                                                    }
+                                                    onBlur={(e) =>
+                                                        setValue(
+                                                            "phoneNumber",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
+                                                    control={control}
+                                                    myHelper={
+                                                        helperTextForCGFAdmin
+                                                    }
+                                                    placeholder={"1234567890"}
+                                                    rules={{
+                                                        maxLength: 15,
+                                                        minLength: 7,
+                                                        validate: (value) => {
+                                                            if (
+                                                                !watch(
+                                                                    "phoneNumber"
+                                                                ) &&
+                                                                watch(
+                                                                    "countryCode"
+                                                                )
+                                                            )
+                                                                return "invalid input";
+                                                            if (
+                                                                value &&
+                                                                !Number(value)
+                                                            )
+                                                                return "Invalid input";
+                                                        },
+                                                        // validate: (value) => {
+                                                        //     if (
+                                                        //         watch(
+                                                        //             "phoneNumber"
+                                                        //         ) &&
+                                                        //         !watch(
+                                                        //             "countryCode"
+                                                        //         )
+                                                        //     )
+                                                        //         return "Enter Country code";
+                                                        // else if (
+                                                        //     value &&
+                                                        //     !Number(value)
+                                                        // )
+                                                        //     return "Please enter valid phone number";
+                                                        // },
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="role">
+                                                Role{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+
+                                            <div>
+                                                <Dropdown
+                                                    name="subRoleId"
+                                                    control={control}
+                                                    options={rolesAddCGFAdmin}
+                                                    rules={{
+                                                        required: true,
+                                                    }}
+                                                    myHelper={
+                                                        helperTextForCGFAdmin
+                                                    }
+                                                    placeholder={"Select role"}
+                                                />
+
+                                                <p className={`password-error`}>
+                                                    {errors.subRoleId?.message}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-btn flex-between add-members-btn">
+                                        <button
+                                            type="reset"
+                                            onClick={handleCancel}
+                                            className="secondary-button mr-10"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="primary-button add-button"
+                                            disabled={disableSubmit}
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
                     </form>
                 </div>
             </section>
