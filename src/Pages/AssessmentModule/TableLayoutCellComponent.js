@@ -304,6 +304,7 @@ const TableLayoutCellComponent = ({
         transformedColumns[columnUUID]?.columnType === "attachments" &&
         answer &&
         answer?.length > 0 &&
+        Array.isArray(answer) &&
         answer.map((file, fileIdx) =>
           file?.name?.length <= 30 ? (
             <a
