@@ -78,8 +78,11 @@ const ViewOperationMembers = () => {
         useState({});
     const [open, setOpen] = React.useState(false);
     const privilege = useSelector((state) => state.user?.privilege);
+    const user = useSelector((state) => state.user);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    let viewOperationMemberPrivilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+    let viewOperationMemberPrivilegeArray = privilege
+        ? Object.values(privilege?.privileges)
+        : [];
     let moduleAccessForOperationMember = viewOperationMemberPrivilegeArray
         .filter((data) => data?.moduleId?.name === "Operation Members")
         .map((data) => ({
@@ -363,10 +366,25 @@ const ViewOperationMembers = () => {
                     </p>
                 }
                 info1={
-                    <p>
-                        Deleting all the details will be an irreversible action,
-                        we recommend you replace them instead.
-                    </p>
+                    fetchOperationMemberDetaills.isMemberRepresentative ? (
+                        <p>
+                            Deleting <b>Member Representative</b> will be an
+                            irreversible action, you will not be able to add new
+                            assessment for{" "}
+                            <b>
+                                {
+                                    fetchOperationMemberDetaills.memberId
+                                        .companyName
+                                }
+                            </b>
+                            . we recommend you replace them instead.
+                        </p>
+                    ) : (
+                        <p>
+                            Deleting all the details will be an irreversible
+                            action, we recommend you replace them instead.
+                        </p>
+                    )
                 }
                 info2={
                     <p>

@@ -21,7 +21,7 @@ import { useParams } from "react-router-dom";
 
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
-export const AlphaNumRegEx = /^[a-z0-9]+$/i;
+export const AlphaNumRegEx = /^[a-z0-9 ]+$/i;
 
 const ITEM_HEIGHT = 42;
 const MenuProps = {
@@ -131,13 +131,43 @@ const FillAssessmentQuestion = ({
                 }
                 onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
                 // className="input-textarea"
-                className={`input-textarea ${
-                    !answer &&
-                    error &&
-                    error?.length !== 0 &&
-                    "input-textarea input-textarea-error"
+                className={` ${
+                    !answer && error && error?.length !== 0
+                        ? "input-error"
+                        : question.validation === "numeric" &&
+                          !NumericRegEx.test(answer) &&
+                          answer &&
+                          error
+                        ? "input-error"
+                        : question.validation === "alphabets" &&
+                          !AlphaRegEx.test(answer) &&
+                          answer &&
+                          error
+                        ? "input-error"
+                        : question.validation === "alphanumeric" &&
+                          !AlphaNumRegEx.test(answer) &&
+                          answer &&
+                          error
+                        ? "input-textarea input-textarea-error"
+                        : ""
                 }`}
-                helperText={!answer && error ? error : ""}
+                helperText={
+                    question.validation === "alphanumeric" &&
+                    !AlphaNumRegEx.test(answer) &&
+                    answer
+                        ? error
+                        : question.validation === "alphabets" &&
+                          !AlphaRegEx.test(answer) &&
+                          answer
+                        ? error
+                        : question.validation === "numeric" &&
+                          !NumericRegEx.test(answer) &&
+                          answer
+                        ? error
+                        : !answer && error
+                        ? error
+                        : ""
+                }
                 variant="outlined"
             />
         ) : question.inputType === "dropdown" ? (

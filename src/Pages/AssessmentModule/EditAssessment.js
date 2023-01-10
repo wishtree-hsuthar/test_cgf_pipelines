@@ -277,6 +277,7 @@ function EditAssessment() {
 
     const updateAssessment = async (data) => {
         setDisableEditAssessmentButton(true);
+        setIsLoading(true);
         console.log("data for update assessment", data);
         data = {
             ...data,
@@ -297,7 +298,7 @@ function EditAssessment() {
             console.log("responseEditMember from update assessment page");
             if (responseEditMember.status === 200) {
                 setDisableEditAssessmentButton(false);
-
+                setIsLoading(true);
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
@@ -325,6 +326,7 @@ function EditAssessment() {
         } catch (error) {
             console.log("error from update assessment url", error);
             setDisableEditAssessmentButton(false);
+            setIsLoading(false);
 
             if (error.responseEditMember.status === 401) {
                 console.log("Unauthorized user access");
@@ -412,6 +414,7 @@ function EditAssessment() {
         setValue("assessmentType", e.target.value);
     };
     const [isActive, setActive] = useState(false);
+    const [isLoadingEditAssement, setIsLoadingEditAssement] = useState(false);
     const handleToggle = () => {
         setActive(!isActive);
     };
@@ -429,6 +432,7 @@ function EditAssessment() {
             return setTimeout(() => navigate("/assessment-list"), 3000);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
+
             setToasterDetails(
                 {
                     titleMessage: "Error",
@@ -694,7 +698,7 @@ function EditAssessment() {
                                                                 params
                                                             ) => (
                                                                 <TextField
-                                                                autoComplete="off"
+                                                                    autoComplete="off"
                                                                     {...params}
                                                                     onKeyDown={
                                                                         handleOnKeyDownChange
