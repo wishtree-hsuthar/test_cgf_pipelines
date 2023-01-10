@@ -342,7 +342,7 @@ const EditSubAdmin = () => {
                         </li>
                         <li>
                             <Link
-                                to={`/users/cgf-admin/view-sub-admin/${params.id}`}
+                                to={`/users/cgf-admin/view-cgf-admin/${params.id}`}
                             >
                                 View CGF Admin
                             </Link>

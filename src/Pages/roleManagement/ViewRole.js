@@ -194,7 +194,7 @@ const ViewRole = () => {
         );
         isMemberRepresentative
             ? navigate4(`/users/operation-member/view-operation-member/${id}`)
-            : navigate4(`/users/cgf-admin/view-sub-admin/${id}`);
+            : navigate4(`/users/cgf-admin/view-cgf-admin/${id}`);
     };
     const createPrevileges3 = (tempPrivileges) => {
         console.log("temp data", tempPrivileges);

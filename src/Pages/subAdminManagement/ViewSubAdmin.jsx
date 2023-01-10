@@ -22,7 +22,6 @@ import DialogBox from "../../components/DialogBox";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
-
 const ViewSubAdmin = () => {
     //custom hook to set title of page
     useDocumentTitle("View CGF Admin");
@@ -153,11 +152,11 @@ const ViewSubAdmin = () => {
         console.log(index);
         if (index === 0) {
             setOpen(false);
-            history(`/users/cgf-admin/edit-sub-admin/${params.id}`);
+            history(`/users/cgf-admin/edit-cgf-admin/${params.id}`);
         }
         if (index === 1) {
             setOpen(false);
-            history(`/users/cgf-admin/replace-sub-admin/${params.id}`);
+            history(`/users/cgf-admin/replace-cgf-admin/${params.id}`);
         }
         if (index === 2) {
             setOpen(false);
@@ -202,7 +201,7 @@ const ViewSubAdmin = () => {
         boxShadow: 24,
         p: 4,
     };
-    
+
     return (
         <div className="page-wrapper">
             <Toaster

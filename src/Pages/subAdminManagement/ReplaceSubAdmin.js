@@ -400,7 +400,7 @@ const ReplaceSubAdmin = () => {
                             <Link to="/users/cgf-admin/">CGF Admin</Link>
                         </li>
                         <li>
-                            <Link to={`/users/cgf-admin/view-sub-admin/${id}`}>
+                            <Link to={`/users/cgf-admin/view-cgf-admin/${id}`}>
                                 View CGF Admin
                             </Link>
                         </li>
