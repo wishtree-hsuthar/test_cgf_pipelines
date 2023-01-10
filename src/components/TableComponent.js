@@ -165,29 +165,29 @@ export default function TableComponent({
     handleSingleUserSelect(id);
   };
 
-    const handleChangeRowsPerPage = (event) => {
-        handleChangeRowsPerPage1(event);
-    };
-    const onClickVisibilityIconHandler = (id, isOperationMember) => {
-        console.log("Inside on click handler", isOperationMember);
-        onClickVisibilityIconHandler1(
-            id,
-            isOperationMember ? isOperationMember : false
-        );
-    };
-    const onClickDeleteIconHandler = (id) => {
-        onClickDeleteIconHandler1(id);
-    };
-    const onClickEditAssessmentHandler = (uuid) => {
-        onClickEditAssesmentFunction(uuid);
-    };
-    const onClickAssignAssessmentHandler = (uuid) => {
-        onClickAssignAssesmentFunction(uuid);
-    };
-    const onClickFillAssessmentHandler = (uuid) => {
-        onClickFillAssessmentFunction(uuid);
-    };
-    const isSelected = (id) => selected.indexOf(id) !== -1;
+  const handleChangeRowsPerPage = (event) => {
+    handleChangeRowsPerPage1(event);
+  };
+  const onClickVisibilityIconHandler = (id, isOperationMember) => {
+    console.log("Inside on click handler", isOperationMember);
+    onClickVisibilityIconHandler1(
+      id,
+      isOperationMember ? isOperationMember : false
+    );
+  };
+  const onClickDeleteIconHandler = (id) => {
+    onClickDeleteIconHandler1(id);
+  };
+  const onClickEditAssessmentHandler = (uuid) => {
+    onClickEditAssesmentFunction(uuid);
+  };
+  const onClickAssignAssessmentHandler = (uuid) => {
+    onClickAssignAssesmentFunction(uuid);
+  };
+  const onClickFillAssessmentHandler = (uuid) => {
+    onClickFillAssessmentFunction(uuid);
+  };
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty records.
   // const emptyRows =
@@ -223,217 +223,126 @@ export default function TableComponent({
                     const isItemSelected = isSelected(row._id);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
-                                        return (
-                                            <TableRow
-                                                hover
-                                                onClick={() =>
-                                                    onRowClick &&
-                                                    onClickVisibilityIconHandler(
-                                                        isQuestionnare
-                                                            ? row.uuid
-                                                            : row._id,
-                                                        row?.isOperationMember ||
-                                                            row?.isMemberRepresentative
-                                                    )
-                                                }
-                                                style={{
-                                                    cursor:
-                                                        onRowClick && "pointer",
-                                                }}
-                                                role="checkbox"
-                                                aria-checked={isItemSelected}
-                                                tabIndex={-1}
-                                                key={row?._id}
-                                                selected={isItemSelected}
-                                            >
-                                                {setCheckBoxes && (
-                                                    <TableCell padding="checkbox">
-                                                        <Checkbox
-                                                            className="table-checkbox"
-                                                            color="primary"
-                                                            onClick={(e) =>
-                                                                handleClick(
-                                                                    e,
-                                                                    row._id
-                                                                )
-                                                            }
-                                                            checked={
-                                                                isItemSelected
-                                                            }
-                                                            inputProps={{
-                                                                "aria-labelledby":
-                                                                    labelId,
-                                                            }}
-                                                        />
-                                                    </TableCell>
-                                                )}
-                                                {setSingleSelect && (
-                                                    <TableCell>
-                                                        <div className="radio-btn-field">
-                                                            <Radio
-                                                                className="radio-btn"
-                                                                color="primary"
-                                                                value={row._id}
-                                                                onChange={() =>
-                                                                    handleSingleSelect(
-                                                                        row._id
-                                                                    )
-                                                                }
-                                                                checked={
-                                                                    selectedUser ==
-                                                                    row._id
-                                                                }
-                                                                inputProps={{
-                                                                    "aria-labelledby":
-                                                                        labelId,
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    </TableCell>
-                                                )}
-                                                {Object.keys(row).map(
-                                                    (cell, _id) => {
-                                                        // console.log("Row cell", row[cell],"cell: ",cell);
-                                                        if (
-                                                            cell !== "_id" &&
-                                                            cell !== "uuid" &&
-                                                            cell !==
-                                                                "isActive" &&
-                                                            cell !==
-                                                                "isUserAuthorizedToFillAssessment" &&
-                                                            cell !==
-                                                                "isOperationMember" &&
-                                                            cell !==
-                                                                "isMemberRepresentative"
-                                                        ) {
-                                                            return row[cell]
-                                                                ?.length <=
-                                                                30 ||
-                                                                typeof row[
-                                                                    cell
-                                                                ] ===
-                                                                    "undefined" ? (
-                                                                <TableCell
-                                                                    key={cell}
-                                                                >
-                                                                    {" "}
-                                                                    {typeof row[
-                                                                        cell
-                                                                    ] ===
-                                                                        "undefined" &&
-                                                                        "N/A"}
-                                                                    {typeof row[
-                                                                        cell
-                                                                    ] ===
-                                                                        "string" &&
-                                                                    cell !==
-                                                                        "email"
-                                                                        ? row[
-                                                                              cell
-                                                                          ][0].toUpperCase() +
-                                                                          row[
-                                                                              cell
-                                                                          ]?.slice(
-                                                                              1
-                                                                          )
-                                                                        : row[
-                                                                              cell
-                                                                          ]}
-                                                                </TableCell>
-                                                            ) : (
-                                                                <Tooltip
-                                                                    key={cell}
-                                                                    placement="bottom-start"
-                                                                    enterDelay={
-                                                                        1000
-                                                                    }
-                                                                    title={
-                                                                        row[
-                                                                            cell
-                                                                        ]
-                                                                    }
-                                                                >
-                                                                    <TableCell
-                                                                        key={
-                                                                            cell
-                                                                        }
-                                                                    >
-                                                                        {typeof row[
-                                                                            cell
-                                                                        ] ===
-                                                                            "string" &&
-                                                                        cell !==
-                                                                            "email"
-                                                                            ? row[
-                                                                                  cell
-                                                                              ][0].toUpperCase() +
-                                                                              `${row[
-                                                                                  cell
-                                                                              ]?.slice(
-                                                                                  1,
-                                                                                  30
-                                                                              )}...`
-                                                                            : `${row[
-                                                                                  cell
-                                                                              ]?.slice(
-                                                                                  0,
-                                                                                  30
-                                                                              )}...`}
-                                                                    </TableCell>
-                                                                </Tooltip>
-                                                            );
-                                                        } else if (
-                                                            cell === "isActive"
-                                                        ) {
-                                                            return (
-                                                                <TableCell
-                                                                    className={`button-style ${
-                                                                        row[
-                                                                            cell
-                                                                        ] &&
-                                                                        "button-style-success"
-                                                                    }`}
-                                                                    key={cell}
-                                                                >
-                                                                    <span>
-                                                                        {row[
-                                                                            cell
-                                                                        ]
-                                                                            ? "Active"
-                                                                            : "Inactive"}
-                                                                    </span>
-                                                                </TableCell>
-                                                            );
-                                                        }
-                                                    }
-                                                )}
-                                                {icons?.length > 0 && (
-                                                    <TableCell
-                                                    // width={`${100 / (tableHead ? tableHead.length : 1)}%`}
-                                                    >
-                                                        {icons.includes(
-                                                            "visibility"
-                                                        ) && (
-                                                            <span className="icon">
-                                                                <Tooltip title="View Assessment">
-                                                                    <VisibilityOutlinedIcon
-                                                                        onClick={() =>
-                                                                            onClickVisibilityIconHandler(
-                                                                                viewAssessment
-                                                                                    ? row.uuid
-                                                                                    : row._id
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                </Tooltip>
-                                                            </span>
-                                                        )}
-                                                        {icons.includes(
-                                                            "delete"
-                                                        ) && (
-                                                            <span className="icon">
-                                                                <Tooltip title="Delete">
-                                                                    {/* <DeleteIcon
+                    return (
+                      <TableRow
+                        hover
+                        onClick={() =>
+                          onRowClick &&
+                          onClickVisibilityIconHandler(
+                            isQuestionnare ? row.uuid : row._id,
+                            row?.isOperationMember ||
+                              row?.isMemberRepresentative
+                          )
+                        }
+                        style={{
+                          cursor: onRowClick && "pointer",
+                        }}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row?._id}
+                        selected={isItemSelected}
+                      >
+                        {setCheckBoxes && (
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              className="table-checkbox"
+                              color="primary"
+                              onClick={(e) => handleClick(e, row._id)}
+                              checked={isItemSelected}
+                              inputProps={{
+                                "aria-labelledby": labelId,
+                              }}
+                            />
+                          </TableCell>
+                        )}
+                        {setSingleSelect && (
+                          <TableCell>
+                            <div className="radio-btn-field">
+                              <Radio
+                                className="radio-btn"
+                                color="primary"
+                                value={row._id}
+                                onChange={() => handleSingleSelect(row._id)}
+                                checked={selectedUser == row._id}
+                                inputProps={{
+                                  "aria-labelledby": labelId,
+                                }}
+                              />
+                            </div>
+                          </TableCell>
+                        )}
+                        {Object.keys(row).map((cell, _id) => {
+                          // console.log("Row cell", row[cell],"cell: ",cell);
+                          if (
+                            cell !== "_id" &&
+                            cell !== "uuid" &&
+                            cell !== "isActive" &&
+                            cell !== "isUserAuthorizedToFillAssessment" &&
+                            cell !== "isOperationMember" &&
+                            cell !== "isMemberRepresentative"
+                          ) {
+                            return row[cell]?.length <= 30 ||
+                              typeof row[cell] === "undefined" ? (
+                              <TableCell key={cell}>
+                                {" "}
+                                {typeof row[cell] === "undefined" && "N/A"}
+                                {typeof row[cell] === "string" &&
+                                cell !== "email"
+                                  ? row[cell][0].toUpperCase() +
+                                    row[cell]?.slice(1)
+                                  : row[cell]}
+                              </TableCell>
+                            ) : (
+                              <Tooltip
+                                key={cell}
+                                placement="bottom-start"
+                                enterDelay={1000}
+                                title={row[cell]}
+                              >
+                                <TableCell key={cell}>
+                                  {typeof row[cell] === "string" &&
+                                  cell !== "email"
+                                    ? row[cell][0].toUpperCase() +
+                                      `${row[cell]?.slice(1, 30)}...`
+                                    : `${row[cell]?.slice(0, 30)}...`}
+                                </TableCell>
+                              </Tooltip>
+                            );
+                          } else if (cell === "isActive") {
+                            return (
+                              <TableCell
+                                className={`button-style ${
+                                  row[cell] && "button-style-success"
+                                }`}
+                                key={cell}
+                              >
+                                <span>{row[cell] ? "Active" : "Inactive"}</span>
+                              </TableCell>
+                            );
+                          }
+                        })}
+                        {icons?.length > 0 && (
+                          <TableCell
+                          // width={`${100 / (tableHead ? tableHead.length : 1)}%`}
+                          >
+                            {icons.includes("visibility") && (
+                              <span className="icon">
+                                <Tooltip title="View Assessment">
+                                  <VisibilityOutlinedIcon
+                                    onClick={() =>
+                                      onClickVisibilityIconHandler(
+                                        viewAssessment ? row.uuid : row._id
+                                      )
+                                    }
+                                  />
+                                </Tooltip>
+                              </span>
+                            )}
+                            {icons.includes("delete") && (
+                              <span className="icon">
+                                <Tooltip title="Delete">
+                                  {/* <DeleteIcon
                                                                         onClick={() =>
                                                                             onClickDeleteIconHandler(
                                                                                 row._id
@@ -464,26 +373,20 @@ export default function TableComponent({
                                                                         
                                                                         }
                                                                     /> */}
-                                                                </Tooltip>
-                                                            </span>
-                                                        )}
-                                                        {icons.includes(
-                                                            "send"
-                                                        ) &&
-                                                            (row?.assessmentStatus ==
-                                                                "In Progress" ||
-                                                                row?.assessmentStatus ==
-                                                                    "Re-opened") && (
-                                                                <span className="icon">
-                                                                    <Tooltip title="Assign to Operation Member">
-                                                                        <GroupAddOutlinedIcon
-                                                                            onClick={() =>
-                                                                                onClickAssignAssesmentFunction(
-                                                                                    row.uuid
-                                                                                )
-                                                                            }
-                                                                        />
-                                                                        {/* <img
+                                </Tooltip>
+                              </span>
+                            )}
+                            {icons.includes("send") &&
+                              (row?.assessmentStatus == "In Progress" ||
+                                row?.assessmentStatus == "Re-opened") && (
+                                <span className="icon">
+                                  <Tooltip title="Assign to Operation Member">
+                                    <GroupAddOutlinedIcon
+                                      onClick={() =>
+                                        onClickAssignAssesmentFunction(row.uuid)
+                                      }
+                                    />
+                                    {/* <img
                                                                         src={
                                                                             "/images/delete-icon.svg"
                                                                         }

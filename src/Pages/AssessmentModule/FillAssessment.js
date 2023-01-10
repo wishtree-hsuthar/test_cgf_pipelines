@@ -292,12 +292,6 @@ function FillAssessment() {
         const transformedColValues = getTransformedColumns(
           section?.columnValues
         );
-        // console.log(
-        //   "curren assessment Questionnaire:- ",
-        //   currentSectionAnswers
-        // );
-        // console.log("transformed column values:- ", transformedColValues);
-        // currentSectionAnswers
         Object.keys(currentSectionAnswers).forEach((answersKeys) => {
           let tempRowId = answersKeys?.split(".")[1];
           section?.columnValues?.forEach((column) => {

@@ -5,8 +5,9 @@ import {
   MenuItem,
   FormHelperText,
   Button,
+  Tooltip,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -16,10 +17,15 @@ import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 
 import { useParams } from "react-router-dom";
 import CryptoJS from "crypto-js";
-import { REACT_APP_FILE_ENCRYPT_SECRET, UPLOAD_ATTACHMENTS } from "../../api/Url";
+import {
+  REACT_APP_FILE_ENCRYPT_SECRET,
+  UPLOAD_ATTACHMENTS,
+} from "../../api/Url";
 import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
 import { useRef } from "react";
+import useCallbackState from "../../utils/useCallBackState";
+import Toaster from "../../components/Toaster";
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
@@ -41,11 +47,20 @@ const TableLayoutCellComponent = (props) => {
     sectionUUID,
   } = props;
   const [showMore, setShowMore] = useState(false);
+  const myRef = React.useRef();
+
   const params = useParams();
   const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
+  const [isFileRemoved, setIsFileRemoved] = useState(false);
   const handleOnKeyDownChange = (e) => {
     e.preventDefault();
   };
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
+  });
+
   const [currentSelectedFiles, setCurrentSelectedFiles] = useState([]);
   let columnUUID =
     isPrefilled ||
@@ -58,7 +73,7 @@ const TableLayoutCellComponent = (props) => {
   // console.log("section UUID",sectionUUID)
   const getFileValuesArray = async (e) => {
     let files = e?.target?.files;
-    console.log("fiels");
+    // console.log("fiels");
 
     let tempAssessment = { ...assessmentQuestionnaire };
 
@@ -84,25 +99,82 @@ const TableLayoutCellComponent = (props) => {
     console.log("temp Current selected files", tempCurrentSelectedFiles);
   };
   const onAttachmetChangeHandler = async (e) => {
-    console.log("calling on Change");
+    // console.log("calling on Change");
     console.log("files:- ", e.target.files);
     await getFileValuesArray(e);
-    console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
+    // console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
     // console.log("filesArray:- ", filesArray);
   };
-  const uploadAttachmentButtonClickHandler =async () => {
-    console.log("Attachments:- ",currentSelectedFiles)
-    const attachmentResponse = await privateAxios.post(UPLOAD_ATTACHMENTS,{files : [...currentSelectedFiles]})
-    console.log("Attachment Response",attachmentResponse)
+  const getFilesForBackend = () => {
+    const filterdFiles = currentSelectedFiles.filter((file) => !file?.location);
+    return filterdFiles;
+  };
+  const getFilesNotRemoved = () => {
+    const filterdFiles = currentSelectedFiles.filter((file) => file?.location);
+    return filterdFiles;
+  };
+  const uploadAttachmentButtonClickHandler = async () => {
+    console.log("Attachments:- ", currentSelectedFiles);
+    try {
+      const newlyAddedFiles = getFilesForBackend();
+      const oldFiles = getFilesNotRemoved();
+      const attachmentResponse = await privateAxios.post(UPLOAD_ATTACHMENTS, {
+        files: [...newlyAddedFiles],
+      });
+      console.log("Attachment Response", attachmentResponse);
+      let tempAssessment = { ...assessmentQuestionnaire };
+      tempAssessment[sectionUUID][`${columnUUID}.${rowId}`] = [
+        ...oldFiles,
+        ...attachmentResponse?.data,
+      ];
+      console.log("Temp Assessment:- ", tempAssessment);
+      setAssessmentQuestionnaire(tempAssessment);
+      setCurrentSelectedFiles([]);
+      setOpenFileAttachmntDialog(false);
+      setIsFileRemoved(false);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something went wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+    }
   };
   const cancelAttachmentButtonClickHandler = () => {
     setCurrentSelectedFiles([]);
+    setIsFileRemoved(false);
     setOpenFileAttachmntDialog(false);
   };
-  console.log("current selected files:- ", currentSelectedFiles);
+  // console.log("current selected files:- ", currentSelectedFiles);
+  // console.log("Answer in first Render :- ", answer);
+  useEffect(() => {
+    if (
+      answer &&
+      answer?.length > 0 &&
+      currentSelectedFiles?.length === 0 &&
+      !isFileRemoved
+    ) {
+      // console.log("answer inside Use Effect:-", answer);
+      setCurrentSelectedFiles([...answer]);
+    }
+  }, [currentSelectedFiles]);
 
   return (
     <>
+      <Toaster
+        myRef={myRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
       <DialogBox
         title={<p>Add Attachments</p>}
         info1={" "}
@@ -118,7 +190,9 @@ const TableLayoutCellComponent = (props) => {
                 <input
                   type={"file"}
                   hidden
-                  // accept={".xls, .xlsx"}
+                  accept={
+                    ".xls, .xlsx, .jpg, .png,.jpeg, .doc, .txt,.pdf,.docx,.ppt,.pptx,.mp4,.mp3, .zip,.rar"
+                  }
                   // value={file}
                   onChange={onAttachmetChangeHandler}
                   multiple
@@ -131,16 +205,14 @@ const TableLayoutCellComponent = (props) => {
                 </span>
               </div>
             </Button>
+            {currentSelectedFiles?.length > 0 && (
+              <RenderCurrentFiles
+                currentSelectedFiles={currentSelectedFiles}
+                setCurrentSelectedFiles={setCurrentSelectedFiles}
+                setIsFileRemoved={setIsFileRemoved}
+              />
+            )}
 
-            {/* <p className="select-filename"> */}
-            {answer && answer?.length > 0
-              ? <span>Show Answer from Backend</span>
-              : Object.keys(currentSelectedFiles)?.length > 0 && (
-                  <RenderCurrentFiles
-                    currentSelectedFiles={currentSelectedFiles}
-                    setCurrentSelectedFiles={setCurrentSelectedFiles}
-                  />
-                )}
             {/* </p> */}
           </div>
         }
@@ -198,20 +270,35 @@ const TableLayoutCellComponent = (props) => {
         )}
       {transformedColumns[columnUUID] &&
         transformedColumns[columnUUID]?.columnType === "attachments" && (
-          <a
-            href="#"
-            onClick={() => setOpenFileAttachmntDialog(true)}
-            style={{ color: "#4596D1" }}
-          >
-            Add Attachments
-          </a>
-          // <input type="file" onChange={onAttachmetChangeHandler} multiple />
+          <FormControl>
+            <a
+              href="#"
+              onClick={() => setOpenFileAttachmntDialog(true)}
+              style={{ color: "#4596D1" }}
+            >
+              Add Attachments
+            </a>
+            {/* // <input type="file" onChange={onAttachmetChangeHandler} multiple /> */}
+            <FormHelperText>
+              {(!answer || answer?.length === 0) && error && error?.length !== 0
+                ? error
+                : " "}
+            </FormHelperText>
+          </FormControl>
         )}
       {transformedColumns[columnUUID] &&
         transformedColumns[columnUUID]?.columnType === "attachments" &&
         answer &&
         answer?.length > 0 &&
-        answer.map((file, fileIdx) => <p key={fileIdx}>{`${file.name}`}</p>)}
+        answer.map((file, fileIdx) =>
+          file?.name?.length <= 30 ? (
+            <p key={fileIdx}>{`${file?.name}`}</p>
+          ) : (
+            <Tooltip key={fileIdx} title={file?.name}>
+              <p>{`${file?.name?.slice(0, 30)}...`}</p>
+            </Tooltip>
+          )
+        )}
       {transformedColumns[columnUUID] &&
         transformedColumns[columnUUID].columnType === "textbox" && (
           <TextField
@@ -356,32 +443,45 @@ export default TableLayoutCellComponent;
 const RenderCurrentFiles = ({
   currentSelectedFiles,
   setCurrentSelectedFiles,
+  setIsFileRemoved,
 }) => {
   const onCurrentFileRemoveHandler = (fileIdx) => {
     let tempCurrentSelectedFiles = [...currentSelectedFiles];
     tempCurrentSelectedFiles.splice(fileIdx, 1);
     setCurrentSelectedFiles(tempCurrentSelectedFiles);
+    setIsFileRemoved(true);
   };
   return (
     <>
-      {currentSelectedFiles.map((file, fileIdx) => (
-        <p key={file?.name} className="select-filename">
-          {file?.name}
-          {console.log("inside condition")}
-          {/* <div
-            // className="que-input-type-close"
-            // onClick={(e) => onOptionDeleteHandler(e, questionIdx, optionIdx)}
-          > */}
-          <span
-            style={{ cursor: "pointer" }}
-            onClick={() => onCurrentFileRemoveHandler(fileIdx)}
-          >
-            {" "}
-            <CloseIcon />
-          </span>
-          {/* </div> */}
-        </p>
-      ))}
+      {currentSelectedFiles.map((file, fileIdx) =>
+        file?.name?.length <= 40 ? (
+          <p key={file?.name} className="select-filename">
+            {file?.name}
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => onCurrentFileRemoveHandler(fileIdx)}
+            >
+              {" "}
+              <CloseIcon />
+            </span>
+            {/* </div> */}
+          </p>
+        ) : (
+          <Tooltip key={file?.name} title={file?.name}>
+            <p className="select-filename">
+              {file?.name?.slice(0, 30) + "..."}
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => onCurrentFileRemoveHandler(fileIdx)}
+              >
+                {" "}
+                <CloseIcon />
+              </span>
+              {/* </div> */}
+            </p>
+          </Tooltip>
+        )
+      )}
     </>
   );
 };
