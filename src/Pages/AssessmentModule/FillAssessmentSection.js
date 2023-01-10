@@ -68,16 +68,10 @@ function FillAssesmentSection({
     section?.rowValues.forEach((row) => {
       section?.columnValues?.forEach((column) => {
         // console.log("column:- ", column);
-        if (column?.columnType === "dropdown") {
-          console.log("Inside fill Assessment drop down condition");
-          tempAsssessmentQuestionnaire[section?.uuid][
-            `${column?.uuid}.${row?.uuid}`
-          ] = undefined;
-        } else {
           tempAsssessmentQuestionnaire[section?.uuid][
             `${column?.uuid}.${row?.uuid}`
           ] = "";
-        }
+        
       });
       // row?.cells?.forEach((cell) => {
       //   console.log("cell", cell);
@@ -93,17 +87,17 @@ function FillAssesmentSection({
       //   }
       // });
     });
-    console.log(
-      "Assessment in Fill Assessment Section:- ",
-      tempAsssessmentQuestionnaire
-    );
+    // console.log(
+    //   "Assessment in Fill Assessment Section:- ",
+    //   tempAsssessmentQuestionnaire
+    // );
     setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
   };
   useEffect(() => {
-    console.log(
-      "assessment Section:- ",
-      assessmentQuestionnaire[section?.uuid]
-    );
+    // console.log(
+    //   "assessment Section:- ",
+    //   assessmentQuestionnaire[section?.uuid]
+    // );
     if (
       section?.layout === "table" &&
       !assessmentQuestionnaire[section?.uuid]
