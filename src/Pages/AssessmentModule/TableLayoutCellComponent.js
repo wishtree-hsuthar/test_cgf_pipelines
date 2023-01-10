@@ -30,25 +30,35 @@ export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
 
-const TableLayoutCellComponent = (props) => {
-  const {
-    isPrefilled,
-    assessmentQuestionnaire,
-    setAssessmentQuestionnaire,
-    rowId,
-    columnId = "",
-    transformedColumns,
-    cell,
-    answer = "",
-    handleAnswersChange,
-    handleAnswersBlur,
-    error,
-    editMode,
-    sectionUUID,
-  } = props;
+const TableLayoutCellComponent = ({
+  isPrefilled,
+  assessmentQuestionnaire,
+  cell,
+  columnId,
+  sectionUUID,
+  rowId,
+  setAssessmentQuestionnaire,
+  answer,
+  transformedColumns,
+  error,
+  editMode,
+  handleAnswersChange,
+  handleAnswersBlur,
+}) => {
   const [showMore, setShowMore] = useState(false);
   const myRef = React.useRef();
 
+  // const params = useParams();
+  // const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
+  // const [isFileRemoved, setIsFileRemoved] = useState(false);
+  // const handleOnKeyDownChange = (e) => {
+  //   e.preventDefault();
+  // };
+  // const [toasterDetails, setToasterDetails] = useCallbackState({
+  //   titleMessage: "",
+  //   descriptionMessage: "",
+  //   messageType: "success",
+  // });
   const params = useParams();
   const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
   const [isFileRemoved, setIsFileRemoved] = useState(false);
@@ -100,12 +110,12 @@ const TableLayoutCellComponent = (props) => {
   };
   const onAttachmetChangeHandler = async (e) => {
     let files = e?.target?.files;
-    let validatedFiles = [];
-    let inValidFiles = [];
-    for (const file of files) {
-      console.log("file",file)
-    }
-    await getFileValuesArray(e);
+    // let validatedFiles = [];
+    // let inValidFiles = [];
+    // for (const file of files) {
+    //   console.log("file", file);
+    // }
+    await getFileValuesArray(files);
   };
   const getFilesForBackend = () => {
     const filterdFiles = currentSelectedFiles.filter((file) => !file?.location);
@@ -276,9 +286,9 @@ const TableLayoutCellComponent = (props) => {
             <a
               href="#"
               onClick={() => setOpenFileAttachmntDialog(true)}
-              style={{ color: "#4596D1" }}
+              style={{ color: "#4596D1", textDecoration: "none" }}
             >
-              Add Attachments
+              Add/Edit Attachments
             </a>
             {/* // <input type="file" onChange={onAttachmetChangeHandler} multiple /> */}
             <FormHelperText>
@@ -294,10 +304,23 @@ const TableLayoutCellComponent = (props) => {
         answer?.length > 0 &&
         answer.map((file, fileIdx) =>
           file?.name?.length <= 30 ? (
-            <p key={fileIdx}>{`${file?.name}`}</p>
+            <a
+              key={fileIdx}
+              href={file?.location ?? "#"}
+              style={{ textDecoration: "none" }}
+              target="_blank"
+            >
+              <p>{`${file?.name}`}</p>
+            </a>
           ) : (
-            <Tooltip key={fileIdx} title={file?.name}>
-              <p>{`${file?.name?.slice(0, 30)}...`}</p>
+            <Tooltip
+              key={fileIdx}
+              title={file?.name}
+              style={{ textDecoration: "none" }}
+            >
+              <a href={file?.location ?? "#"} target="_blank">
+                <p>{`${file?.name?.slice(0, 30)}...`}</p>
+              </a>
             </Tooltip>
           )
         )}
@@ -414,7 +437,7 @@ const TableLayoutCellComponent = (props) => {
                 onChange={(dateValue) => {
                   handleAnswersChange(
                     `${columnUUID}.${rowId}`,
-                    new Date(dateValue).toISOString()
+                    new Date(new Date(dateValue)).toLocaleDateString("en")
                   );
                 }}
                 renderInput={(params) => (
@@ -458,7 +481,17 @@ const RenderCurrentFiles = ({
       {currentSelectedFiles.map((file, fileIdx) =>
         file?.name?.length <= 40 ? (
           <p key={file?.name} className="select-filename">
-            {file?.name}
+            <a
+              href={file?.location ?? "#"}
+              target="_blank"
+              style={{
+                textDecoration: "none",
+                color: `${!file?.location && "#1e1e1e"}`,
+                pointerEvents: `${!file?.location && "none"}`,
+              }}
+            >
+              {file?.name}
+            </a>
             <span
               style={{ cursor: "pointer" }}
               onClick={() => onCurrentFileRemoveHandler(fileIdx)}
@@ -471,7 +504,17 @@ const RenderCurrentFiles = ({
         ) : (
           <Tooltip key={file?.name} title={file?.name}>
             <p className="select-filename">
-              {file?.name?.slice(0, 30) + "..."}
+              <a
+                target={"_blank"}
+                href={file?.location ?? "#"}
+                style={{
+                  textDecoration: "none",
+                  color: `${!file?.location && "#1e1e1e"}`,
+                  pointerEvents: `${!file?.location && "none"}`,
+                }}
+              >
+                {file?.name?.slice(0, 30) + "..."}
+              </a>
               <span
                 style={{ cursor: "pointer" }}
                 onClick={() => onCurrentFileRemoveHandler(fileIdx)}
