@@ -96,7 +96,7 @@ const TableLayoutCellComponent = ({
         </p>
       )}
       {columnFieldType && columnFieldType === "attachments" && (
-        <span>Attachments</span>
+        <span>No Attachments</span>
       )}
       {columnFieldType && columnFieldType === "prefilled" && !isPreview && (
         <TextField
