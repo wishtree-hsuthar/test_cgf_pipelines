@@ -71,8 +71,8 @@ const TableLayoutCellComponent = (props) => {
       : columnId;
   // console.log("props:- ",props)
   // console.log("section UUID",sectionUUID)
-  const getFileValuesArray = async (e) => {
-    let files = e?.target?.files;
+  const getFileValuesArray = async (files) => {
+    // let files = e?.target?.files;
     // console.log("fiels");
 
     let tempAssessment = { ...assessmentQuestionnaire };
@@ -99,11 +99,13 @@ const TableLayoutCellComponent = (props) => {
     console.log("temp Current selected files", tempCurrentSelectedFiles);
   };
   const onAttachmetChangeHandler = async (e) => {
-    // console.log("calling on Change");
-    console.log("files:- ", e.target.files);
+    let files = e?.target?.files;
+    let validatedFiles = [];
+    let inValidFiles = [];
+    for (const file of files) {
+      console.log("file",file)
+    }
     await getFileValuesArray(e);
-    // console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
-    // console.log("filesArray:- ", filesArray);
   };
   const getFilesForBackend = () => {
     const filterdFiles = currentSelectedFiles.filter((file) => !file?.location);
