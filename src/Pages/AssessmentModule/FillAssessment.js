@@ -1086,7 +1086,7 @@ function FillAssessment() {
       </div>
       <section>
         <div className="container">
-          <div className="form-header flex-between">
+          <div className="form-header flex-between preview-assessment-ttl">
             <h2 className="heading2">{questionnaire.title}</h2>
             <div className="flex-between">
               <div className="tertiary-btn-blk mr-20" onClick={viewInstruction}>
