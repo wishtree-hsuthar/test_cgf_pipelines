@@ -50,8 +50,11 @@ const TableAssessment = ({
     errors,
     editMode,
 }) => {
-    console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
+    // console.log("section uuid in Table assessment:- ", sectionUUID);
+    // console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
     const params = useParams();
+    const uuidSection = sectionUUID;
+    // console.log("uuid Section:- ",uuidSection)
     const tranformedColumnValues = getTransformedColumns(columnValues);
     const tranformedRowValues = getTransformedRows(rowValues);
     const [isPrefilled, setIsPrefilled] = useState(false);
@@ -60,14 +63,9 @@ const TableAssessment = ({
     const onAddRowClickHandler = () => {
         const newRowId = uuidv4();
         let temp = { ...assessmentQuestionnaire };
-        console.log("temp before row add", temp);
+        // console.log("temp before row add", temp);
         columnValues.forEach((column) => {
-            if (column?.columnType === "dropdown") {
-                console.log("inside dropdown");
-                temp[sectionUUID][`${[column?.uuid]}.${newRowId}`] = "";
-            } else {
-                temp[sectionUUID][`${[column?.uuid]}.${newRowId}`] = "";
-            }
+            temp[sectionUUID][`${[column?.uuid]}.${newRowId}`] = "";
         });
         console.log("temp after row Add", temp);
         setAssessmentQuestionnaire({ ...temp });
@@ -90,7 +88,7 @@ const TableAssessment = ({
     };
 
     useEffect(() => {}, []);
-    console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
+    // console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
     return (
         <div className="que-table-sect">
             <div className="que-table-wrap assessment-table-wrap">
@@ -152,13 +150,23 @@ const TableAssessment = ({
                                                                                 50
                                                                             )}
                                                                             ...
+                                                                            {column?.isRequired && (
+                                                                                <span className="mandatory">
+                                                                                    *
+                                                                                </span>
+                                                                            )}
                                                                         </p>
                                                                     </Tooltip>
                                                                 ) : (
                                                                     <p>
                                                                         {
                                                                             column?.title
-                                                                        }
+                                                                        }{" "}
+                                                                        {column?.isRequired && (
+                                                                            <span className="mandatory">
+                                                                                *
+                                                                            </span>
+                                                                        )}
                                                                     </p>
                                                                 )}
                                                                 {/* <p>{column?.title}</p> */}
@@ -206,11 +214,17 @@ const TableAssessment = ({
                                                                 }
                                                             >
                                                                 <TableLayoutCellComponent
-                                                                    assessmentQuestionnaire={
-                                                                        assessmentQuestionnaire
+                                                                    sectionUUID={
+                                                                        sectionUUID
                                                                     }
                                                                     isPrefilled={
                                                                         isPrefilled
+                                                                    }
+                                                                    assessmentQuestionnaire={
+                                                                        assessmentQuestionnaire
+                                                                    }
+                                                                    setAssessmentQuestionnaire={
+                                                                        setAssessmentQuestionnaire
                                                                     }
                                                                     transformedColumns={
                                                                         tranformedColumnValues
@@ -341,8 +355,14 @@ const TableAssessment = ({
                                                                             isPrefilled={
                                                                                 isPrefilled
                                                                             }
+                                                                            sectionUUID={
+                                                                                sectionUUID
+                                                                            }
                                                                             assessmentQuestionnaire={
                                                                                 assessmentQuestionnaire
+                                                                            }
+                                                                            setAssessmentQuestionnaire={
+                                                                                setAssessmentQuestionnaire
                                                                             }
                                                                             transformedColumns={
                                                                                 tranformedColumnValues

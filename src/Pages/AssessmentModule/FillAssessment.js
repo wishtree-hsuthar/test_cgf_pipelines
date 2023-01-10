@@ -14,6 +14,8 @@ import {
     DECLINE_ASSESSMENT,
     DOWNLOAD_ASSESSMENT_BY_ID,
     FETCH_ASSESSMENT_BY_ID,
+    IMPORT_ASSESSMENT,
+    REACT_APP_FILE_ENCRYPT_SECRET,
     SUBMIT_ASSESSMENT_AS_DRAFT,
 } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
@@ -142,7 +144,7 @@ function FillAssessment() {
                         signal: controller.signal,
                     }
                 );
-                console.log("response from fetch questionnaire", response);
+                // console.log("response from fetch questionnaire", response);
                 isMounted && setQuestionnaire({ ...response.data });
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
@@ -231,7 +233,7 @@ function FillAssessment() {
         reOpen,
         assessmentquestionAnswers
     ) => {
-        console.log("Save function called");
+        // console.log("Save function called");
         try {
             const response = await privateAxios.post(
                 saveAsDraft
@@ -241,7 +243,7 @@ function FillAssessment() {
                     ...assessmentquestionAnswers,
                 }
             );
-            console.log("Assessment is saved as draft", response);
+            // console.log("Assessment is saved as draft", response);
             if (response.status == 201) {
                 !reOpen &&
                     setToasterDetails(
@@ -259,7 +261,7 @@ function FillAssessment() {
                     }, 3000);
             }
         } catch (error) {
-            console.log("error from save assessment as draft", error);
+            // console.log("error from save assessment as draft", error);
             if (error?.response?.status === 401) {
                 setToasterDetails(
                     {
@@ -321,6 +323,7 @@ function FillAssessment() {
                         if (
                             column.columnType !== "prefilled" &&
                             saveAsDraft === false &&
+                            column?.isRequired &&
                             (!currentSectionAnswers[
                                 `${column?.uuid}.${tempRowId}`
                             ] ||
@@ -496,12 +499,12 @@ function FillAssessment() {
                             currentSectionAnswers[question?.uuid]
                         ) === false
                     ) {
-                        console.log("error from numric if elese");
-                        console.log(
-                            NumericRegEx.test(
-                                currentSectionAnswers[question?.uuid]
-                            )
-                        );
+                        // console.log("error from numric if elese");
+                        // console.log(
+                        //   NumericRegEx.test(
+                        // currentSectionAnswers[question?.uuid]
+                        // )
+                        // );
                         sectionErrors[question?.uuid] = "This is numeric field";
                         sections.push(index);
                     } else if (
@@ -529,7 +532,7 @@ function FillAssessment() {
         setAssessmentQuestionnaire({ ...tempAsssessmentQuestionnaire });
 
         handleSetErrors(tempErrors);
-        console.log("temp Errors:- ", tempErrors);
+        // console.log("temp Errors:- ", tempErrors);
         const isValidated = Object.keys(tempErrors).every(
             (key) => Object.keys(tempErrors[key]).length === 0
         );
@@ -544,7 +547,7 @@ function FillAssessment() {
 
     // API for declining assessments
     const onSubmitReason = async (data) => {
-        console.log("comment", data);
+        // console.log("comment", data);
         try {
             const response = await privateAxios.post(
                 DECLINE_ASSESSMENT + params.id + "/decline",
@@ -570,7 +573,7 @@ function FillAssessment() {
                 }, 3000);
             }
         } catch (error) {
-            console.log("error response from backen decline assessment");
+            // console.log("error response from backen decline assessment");
             if (error?.response?.status === 401) {
                 setToasterDetails(
                     {
@@ -608,7 +611,7 @@ function FillAssessment() {
             const response = await privateAxios.post(
                 ACCEPT_ASSESSMENT + params.id + "/accept"
             );
-            console.log(" response from backen accept assessment");
+            // console.log(" response from backen accept assessment");
             if (response.status == 201) {
                 setToasterDetails(
                     {
@@ -622,7 +625,7 @@ function FillAssessment() {
                 setOpenDeleteDialogBox(false);
             }
         } catch (error) {
-            console.log("error response from backend accept assessment");
+            // console.log("error response from backend accept assessment");
             if (error?.response?.status === 401) {
                 setToasterDetails(
                     {
@@ -762,7 +765,7 @@ function FillAssessment() {
         //     }
         // }
     };
-    console.log("file selected enc", file);
+    // console.log("file selected enc", file);
 
     const decryptFile = (file1) => {
         console.log("file selected in dec", file1);
@@ -791,11 +794,11 @@ function FillAssessment() {
                 DOWNLOAD_ASSESSMENT_BY_ID,
                 navigate
             );
-            console.log("response from handledownloadassessment", response);
-            console.log(
-                "response from handledownloadassessment",
-                response?.response?.status
-            );
+            // console.log("response from handledownloadassessment", response);
+            // console.log(
+            //   "response from handledownloadassessment",
+            //   response?.response?.status
+            // );
             // if (response?.response?.status === 401) {
             //     setToasterDetails(
             //         {
@@ -811,7 +814,7 @@ function FillAssessment() {
             //     }, 3000);
             // }
         } catch (error) {
-            console.log("error from handleDownloadAssessment", error);
+            // console.log("error from handleDownloadAssessment", error);
         }
     };
 
@@ -823,24 +826,24 @@ function FillAssessment() {
             if (file) {
                 let reader = new FileReader();
                 reader.readAsDataURL(file);
-                console.log("File selected = ", file);
-                console.log("Reflect method - ", Reflect.get(file));
+                // console.log("File selected = ", file);
+                // console.log("Reflect method - ", Reflect.get(file));
                 if (
                     file.type === "application/vnd.ms-excel" ||
                     file.type ===
                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 ) {
-                    console.log("file type is valid");
+                    // console.log("file type is valid");
 
                     reader.onloadend = async () => {
                         let result = reader.result;
                         let encryptedFile = CryptoJs.AES.encrypt(
                             result,
-                            "LKJlkajsdlkajs89071lkjhaskdhkj1297891235723"
+                            REACT_APP_FILE_ENCRYPT_SECRET
                         ).toString();
                         try {
                             const response = await privateAxios.post(
-                                `http://localhost:3000/api/assessments/${params.id}/upload`,
+                                IMPORT_ASSESSMENT + `${params.id}/upload`,
                                 {
                                     encryptedFile,
                                 }
@@ -871,7 +874,8 @@ function FillAssessment() {
                                     try {
                                         const correctionDocResponse =
                                             await privateAxios.get(
-                                                `http://localhost:3000/api/assessments/${response.data.correctionId}/corrections`,
+                                                IMPORT_ASSESSMENT +
+                                                    `${response.data.correctionId}/corrections`,
                                                 {
                                                     responseType: "blob",
                                                 }
@@ -987,7 +991,7 @@ function FillAssessment() {
     };
     const addTableAssessmentValues = () => {
         if (questionnaire && Object.keys(questionnaire)?.length > 0) {
-            console.log("Questionnaire:- ", questionnaire);
+            // console.log("Questionnaire:- ", questionnaire);
             questionnaire?.sections?.forEach((section) => {
                 if (
                     section?.layout === "table" &&
@@ -1000,24 +1004,15 @@ function FillAssessment() {
                     section?.rowValues.forEach((row) => {
                         section?.columnValues?.forEach((column) => {
                             // console.log("column:- ", column);
-                            if (column?.columnType === "dropdown") {
-                                console.log(
-                                    "Inside fill Assessment drop down condition"
-                                );
-                                tempAsssessmentQuestionnaire[section?.uuid][
-                                    `${column?.uuid}.${row?.uuid}`
-                                ] = "";
-                            } else {
-                                tempAsssessmentQuestionnaire[section?.uuid][
-                                    `${column?.uuid}.${row?.uuid}`
-                                ] = "";
-                            }
+                            tempAsssessmentQuestionnaire[section?.uuid][
+                                `${column?.uuid}.${row?.uuid}`
+                            ] = "";
                         });
                     });
-                    console.log(
-                        "Assessment in Fill Assessment Section:- ",
-                        tempAsssessmentQuestionnaire
-                    );
+                    // console.log(
+                    //   "Assessment in Fill Assessment Section:- ",
+                    //   tempAsssessmentQuestionnaire
+                    // );
                     setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
                 }
             });
@@ -1075,7 +1070,7 @@ function FillAssessment() {
                                 })}
                             </span>
                         </span>
-                        Click “Accept” if you want to fill out the assessment .
+                        Click “Accept” if you want to fill out the assessment.
                         Or else, provide a reason and reject the assessment, if
                         you don’t want to continue with it.
                     </p>
@@ -1193,7 +1188,7 @@ function FillAssessment() {
                 openModal={importOpenDialog}
                 setOpenModal={setImportOpenDialog}
                 isModalForm={true}
-                handleCloseRedirect={cancelImport}
+                handleCloseRedirect={() => setImportOpenDialog(false)}
             />
             <Toaster
                 myRef={myRef}
@@ -1222,7 +1217,7 @@ function FillAssessment() {
             </div>
             <section>
                 <div className="container">
-                    <div className="form-header flex-between">
+                    <div className="form-header flex-between preview-assessment-ttl">
                         <h2 className="heading2">{questionnaire.title}</h2>
                         <div className="flex-between">
                             <div

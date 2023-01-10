@@ -248,6 +248,7 @@
 .instruct-table-sect table tr td:first-child {
     width: 28%;
     font-family: "ProximaNova-Semibold", serif, sans-serif !important;
+    text-align: left;
 }
 .instruct-red {
     color: red !important;
