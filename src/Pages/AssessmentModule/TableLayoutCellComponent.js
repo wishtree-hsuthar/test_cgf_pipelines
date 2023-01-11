@@ -279,9 +279,10 @@ const TableLayoutCellComponent = ({
         transformedColumns[columnUUID]?.columnType === "attachments" && (
           <FormControl>
             <a
+            
               href="#"
               onClick={() => setOpenFileAttachmntDialog(true)}
-              style={{ color: "#4596D1", textDecoration: "none" }}
+              style={{ color: "#4596D1", textDecoration: "none",pointerEvents: `${params["*"].includes("view")  && 'none'}` }}
             >
               Add/Edit Attachments
             </a>
