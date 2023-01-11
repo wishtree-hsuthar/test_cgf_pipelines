@@ -1,11 +1,11 @@
 import {
-    TextField,
-    FormControl,
-    Select,
-    MenuItem,
-    FormHelperText,
-    Button,
-    Tooltip,
+  TextField,
+  FormControl,
+  Select,
+  MenuItem,
+  FormHelperText,
+  Button,
+  Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
@@ -18,8 +18,8 @@ import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useParams } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import {
-    REACT_APP_FILE_ENCRYPT_SECRET,
-    UPLOAD_ATTACHMENTS,
+  REACT_APP_FILE_ENCRYPT_SECRET,
+  UPLOAD_ATTACHMENTS,
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
@@ -84,41 +84,33 @@ const TableLayoutCellComponent = ({
   const getFileValuesArray = async (files) => {
     // let files = e?.target?.files;
     // console.log("fiels");
-
-        let tempAssessment = { ...assessmentQuestionnaire };
-
-    tempAssessment[sectionUUID][`${columnId}.${rowId}`] = [];
+  };
+  const onAttachmetChangeHandler = async (e) => {
+    let files = await e?.target?.files;
+    console.log("files:-", files);
     let tempCurrentSelectedFiles = [...currentSelectedFiles];
     Object.keys(files).forEach(async (fileIdx) => {
+      console.log("files at momemnt:-",files)
       let reader = new FileReader();
       reader.readAsDataURL(files[fileIdx]);
       reader.onloadend = async () => {
         let result = reader.result;
-        console.log("before file encrypt",fileIdx)
-        let encryptedFile =  CryptoJS.AES.encrypt(
+        console.log("before file encrypt", fileIdx);
+        let encryptedFile = CryptoJS.AES.encrypt(
           result,
           REACT_APP_FILE_ENCRYPT_SECRET
         ).toString();
-        console.log("After file encrypt",fileIdx)
+        console.log("After file encrypt", fileIdx);
         tempCurrentSelectedFiles.push({
           file: encryptedFile,
           type: files[fileIdx]?.type,
           name: files[fileIdx]?.name,
         });
-        console.log("before setting selected files",fileIdx)
+        console.log("before setting selected files", fileIdx);
         setCurrentSelectedFiles(tempCurrentSelectedFiles);
       };
     });
     console.log("temp Current selected files", tempCurrentSelectedFiles);
-  };
-  const onAttachmetChangeHandler = async (e) => {
-    let files = e?.target?.files;
-    // let validatedFiles = [];
-    // let inValidFiles = [];
-    // for (const file of files) {
-    //   console.log("file", file);
-    // }
-    await getFileValuesArray(files);
   };
   const getFilesForBackend = () => {
     const filterdFiles = currentSelectedFiles.filter((file) => !file?.location);
@@ -182,53 +174,51 @@ const TableLayoutCellComponent = ({
     }
   }, [currentSelectedFiles]);
 
-    return (
-        <>
-            <Toaster
-                myRef={myRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
-            />
-            <DialogBox
-                title={<p>Add Attachments</p>}
-                info1={" "}
-                info2={
-                    <div className="upload-file-wrap">
-                        <Button
-                            variant="contained"
-                            component="label"
-                            className="upload-file-btn"
-                        >
-                            <div className="upload-file-blk">
-                                {/* <input hidden accept="image/*" multiple type="file" /> */}
-                                <input
-                                    type={"file"}
-                                    hidden
-                                    accept={
-                                        ".xls, .xlsx, .jpg, .png,.jpeg, .doc, .txt,.pdf,.docx,.ppt,.pptx,.mp4,.mp3, .zip,.rar"
-                                    }
-                                    // value={file}
-                                    onChange={onAttachmetChangeHandler}
-                                    multiple
-                                />
-                                <span className="upload-icon">
-                                    <CloudUploadOutlinedIcon />
-                                </span>
-                                <span className="file-upload-txt">
-                                    Click here to choose files
-                                </span>
-                            </div>
-                        </Button>
-                        {currentSelectedFiles?.length > 0 && (
-                            <RenderCurrentFiles
-                                currentSelectedFiles={currentSelectedFiles}
-                                setCurrentSelectedFiles={
-                                    setCurrentSelectedFiles
-                                }
-                                setIsFileRemoved={setIsFileRemoved}
-                            />
-                        )}
+  return (
+    <>
+      <Toaster
+        myRef={myRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
+      <DialogBox
+        title={<p>Add Attachments</p>}
+        info1={" "}
+        info2={
+          <div className="upload-file-wrap">
+            <Button
+              variant="contained"
+              component="label"
+              className="upload-file-btn"
+            >
+              <div className="upload-file-blk">
+                {/* <input hidden accept="image/*" multiple type="file" /> */}
+                <input
+                  type={"file"}
+                  hidden
+                  accept={
+                    ".xls, .xlsx, .jpg, .png,.jpeg, .doc, .txt,.pdf,.docx,.ppt,.pptx,.mp4,.mp3, .zip,.rar"
+                  }
+                  // value={file}
+                  onChange={onAttachmetChangeHandler}
+                  multiple
+                />
+                <span className="upload-icon">
+                  <CloudUploadOutlinedIcon />
+                </span>
+                <span className="file-upload-txt">
+                  Click here to choose files
+                </span>
+              </div>
+            </Button>
+            {currentSelectedFiles?.length > 0 && (
+              <RenderCurrentFiles
+                currentSelectedFiles={currentSelectedFiles}
+                setCurrentSelectedFiles={setCurrentSelectedFiles}
+                setIsFileRemoved={setIsFileRemoved}
+              />
+            )}
 
             {/* </p> */}
           </div>
@@ -417,7 +407,13 @@ const TableLayoutCellComponent = ({
                                 </MenuItem> */}
                 {transformedColumns[columnUUID].options.map((option) => (
                   <MenuItem key={option} value={option}>
-                    {option?.length <= 40 ? option : <Tooltip title={option}><span>{option?.slice(0,40)+"..."}</span></Tooltip>}
+                    {option?.length <= 40 ? (
+                      option
+                    ) : (
+                      <Tooltip title={option}>
+                        <span>{option?.slice(0, 40) + "..."}</span>
+                      </Tooltip>
+                    )}
                   </MenuItem>
                 ))}
               </Select>
@@ -472,9 +468,9 @@ const TableLayoutCellComponent = ({
 export default TableLayoutCellComponent;
 
 const RenderCurrentFiles = ({
-    currentSelectedFiles,
-    setCurrentSelectedFiles,
-    setIsFileRemoved,
+  currentSelectedFiles,
+  setCurrentSelectedFiles,
+  setIsFileRemoved,
 }) => {
   const onCurrentFileRemoveHandler = (fileIdx) => {
     let tempCurrentSelectedFiles = [...currentSelectedFiles];
