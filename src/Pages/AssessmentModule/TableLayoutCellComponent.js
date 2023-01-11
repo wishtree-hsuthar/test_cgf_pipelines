@@ -303,7 +303,7 @@ const TableLayoutCellComponent = ({
                         <a
                             href="#"
                             onClick={() => setOpenFileAttachmntDialog(true)}
-                            style={{ color: "#4596D1", textDecoration: "none" }}
+                            style={{ color: "#f7a823", textDecoration: "none" }}
                         >
                             Add/Edit Attachments
                         </a>
@@ -317,32 +317,36 @@ const TableLayoutCellComponent = ({
                         </FormHelperText>
                     </FormControl>
                 )}
-            {transformedColumns[columnUUID] &&
-                transformedColumns[columnUUID]?.columnType === "attachments" &&
-                answer &&
-                answer?.length > 0 &&
-                answer.map((file, fileIdx) =>
-                    file?.name?.length <= 30 ? (
-                        <a
-                            key={fileIdx}
-                            href={file?.location ?? "#"}
-                            style={{ textDecoration: "none" }}
-                            target="_blank"
-                        >
-                            <p>{`${file?.name}`}</p>
-                        </a>
-                    ) : (
-                        <Tooltip
-                            key={fileIdx}
-                            title={file?.name}
-                            style={{ textDecoration: "none" }}
-                        >
-                            <a href={file?.location ?? "#"} target="_blank">
-                                <p>{`${file?.name?.slice(0, 30)}...`}</p>
+            <span className="list-uploaded-file">
+                {transformedColumns[columnUUID] &&
+                    transformedColumns[columnUUID]?.columnType ===
+                        "attachments" &&
+                    answer &&
+                    answer?.length > 0 &&
+                    Array.isArray(answer) &&
+                    answer.map((file, fileIdx) =>
+                        file?.name?.length <= 30 ? (
+                            <a
+                                key={fileIdx}
+                                href={file?.location ?? "#"}
+                                style={{ textDecoration: "none" }}
+                                target="_blank"
+                            >
+                                <p>{`${file?.name}`}</p>
                             </a>
-                        </Tooltip>
-                    )
-                )}
+                        ) : (
+                            <Tooltip
+                                key={fileIdx}
+                                title={file?.name}
+                                style={{ textDecoration: "none" }}
+                            >
+                                <a href={file?.location ?? "#"} target="_blank">
+                                    <p>{`${file?.name?.slice(0, 30)}...`}</p>
+                                </a>
+                            </Tooltip>
+                        )
+                    )}
+            </span>
             {transformedColumns[columnUUID] &&
                 transformedColumns[columnUUID].columnType === "textbox" && (
                     <TextField
@@ -540,6 +544,7 @@ const RenderCurrentFiles = ({
                             {file?.name}
                         </a>
                         <span
+                            className="file-close-icon"
                             style={{ cursor: "pointer" }}
                             onClick={() => onCurrentFileRemoveHandler(fileIdx)}
                         >
@@ -565,6 +570,7 @@ const RenderCurrentFiles = ({
                                 {file?.name?.slice(0, 30) + "..."}
                             </a>
                             <span
+                                className="file-close-icon"
                                 style={{ cursor: "pointer" }}
                                 onClick={() =>
                                     onCurrentFileRemoveHandler(fileIdx)

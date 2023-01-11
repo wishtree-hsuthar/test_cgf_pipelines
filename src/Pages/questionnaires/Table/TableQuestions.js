@@ -360,6 +360,7 @@ const TableQuestions = ({
                       </div>
                     )}
                   </div>
+                  <div class="que-card-icon-sect">
                   <div className="required-toggle-btnblk">
                     <FormGroup>
                       <Stack direction="row" spacing={1} alignItems="center">
@@ -380,6 +381,7 @@ const TableQuestions = ({
                         />
                       </Stack>
                     </FormGroup>
+                  </div>
                   </div>
                 </div>
               </div>
