@@ -2269,7 +2269,7 @@ input:-webkit-autofill:active {
     font-size: 12px;
 }
 .popup-innerblk {
-    height: 350px;
+    max-height: 350px;
     overflow: auto;
 }
 
@@ -2386,7 +2386,7 @@ input:-webkit-autofill:active {
     position: relative !important;
 }
 .que-table-render td {
-    padding: 19px 15px 0;
+    padding: 20px 15px 0;
     height: 100%;
     vertical-align: top;
 }
@@ -2593,3 +2593,19 @@ input::-ms-reveal {
 .upload-file-blk .MuiTouchRipple-root{display: none !important;}
 .select-filename{width: 75%;margin: 10px auto 0px !important;line-height: 18px;}
 .upload-file-blk.selected-file-blk{border-color: #f7a823;}
+.no-attachment-txt {
+    margin: 0 0 20px;
+    display: block;
+}
+.file-close-icon svg{width: 15px;
+    height: 15px;
+    position: relative;
+    top: 4px;
+    margin-left: 10px;}
+.select-filename a {
+    width: 280px;
+    display: inline-block;
+}
+.list-uploaded-file{display: block;}
+.list-uploaded-file a{color: #4596d1;}
+.select-filename a{color: #4596d1;}

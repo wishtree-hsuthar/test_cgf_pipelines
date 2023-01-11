@@ -198,6 +198,7 @@ const SectionContent = ({
                 {
                     uuid: initialId,
                     title: "",
+                    isRequired: true,
                     columnType: "textbox",
                     options: ["", ""],
                     validation: "",

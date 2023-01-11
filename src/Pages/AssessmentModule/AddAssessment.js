@@ -8,6 +8,7 @@ import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
+import Loader2 from "../../assets/Loader/Loader2.svg";
 
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -86,6 +87,7 @@ const AddAssessment = () => {
     const [isCGFStaff, setIsCGFStaff] = useState(false);
     const [disableEditAssessmentButton, setDisableEditAssessmentButton] =
         useState(false);
+    const [isAssessmentLoading, setIsAssessmentLoading] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
@@ -266,12 +268,13 @@ const AddAssessment = () => {
         };
 
         console.log("submitted data", data);
-
+        setIsAssessmentLoading(true);
         try {
             const response = await privateAxios.post(ADD_ASSESSMENTS, data);
             if (response.status === 201) {
-                setDisableEditAssessmentButton(false);
+                setIsAssessmentLoading(false);
 
+                setDisableEditAssessmentButton(false);
                 console.log("response from add assessments", response);
                 reset({
                     title: "",
@@ -300,7 +303,7 @@ const AddAssessment = () => {
         } catch (error) {
             setDisableEditAssessmentButton(false);
 
-            if (error.response.status === 401) {
+            if (error?.response?.status === 401) {
                 console.log("Unauthorized user access");
                 // Add error toaster here
                 setToasterDetails(
@@ -316,7 +319,7 @@ const AddAssessment = () => {
                     navigate("/login");
                 }, 3000);
             }
-            if (error.response.status === 400) {
+            if (error?.response?.status === 400) {
                 console.log("something went wrong");
                 // Add error toaster here
                 setToasterDetails(
@@ -328,7 +331,7 @@ const AddAssessment = () => {
                     () => toasterRef.current()
                 );
             }
-            if (error.response.status === 403) {
+            if (error?.response?.status === 403) {
                 console.log("something went wrong");
                 // Add error toaster here
                 setToasterDetails(
@@ -341,6 +344,7 @@ const AddAssessment = () => {
                 );
             }
         }
+        setIsAssessmentLoading(false);
     };
 
     //method to prevent typing on date field
@@ -366,255 +370,287 @@ const AddAssessment = () => {
                 </div>
             </div>
             <section>
-                <div className="container">
-                    <form onSubmit={handleSubmit(submitAssessments)}>
-                        <div className="form-header flex-between">
-                            <h2 className="heading2">Add Assessment</h2>
-                        </div>
-                        <div className="card-wrapper">
-                            <div className="card-blk flex-between">
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>
-                                            Assessment Title{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Input
-                                            name={"title"}
-                                            control={control}
-                                            onBlur={(e) =>
-                                                setValue(
-                                                    "title",
-                                                    e.target.value?.trim()
-                                                )
-                                            }
-                                            myHelper={helperTextForAssessment}
-                                            placeholder={
-                                                "Enter assessment title"
-                                            }
-                                            rules={{
-                                                required: "true",
-                                                minLength: 3,
-                                                maxLength: 50,
-                                            }}
-                                        />
+                {isAssessmentLoading ? (
+                    <div className="loader-blk">
+                        <img src={Loader2} alt="Loading" />
+                    </div>
+                ) : (
+                    <div className="container">
+                        <form onSubmit={handleSubmit(submitAssessments)}>
+                            <div className="form-header flex-between">
+                                <h2 className="heading2">Add Assessment</h2>
+                            </div>
+                            <div className="card-wrapper">
+                                <div className="card-blk flex-between">
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label>
+                                                Assessment Title{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Input
+                                                name={"title"}
+                                                control={control}
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "title",
+                                                        e.target.value?.trim()
+                                                    )
+                                                }
+                                                myHelper={
+                                                    helperTextForAssessment
+                                                }
+                                                placeholder={
+                                                    "Enter assessment title"
+                                                }
+                                                rules={{
+                                                    required: "true",
+                                                    minLength: 3,
+                                                    maxLength: 50,
+                                                }}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>
-                                            Assessment Type{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Dropdown
-                                            control={control}
-                                            name="assessmentType"
-                                            placeholder={
-                                                "Select assessment type"
-                                            }
-                                            myHelper={helperTextForAssessment}
-                                            rules={{ required: true }}
-                                            options={questionnares}
-                                            myOnChange={
-                                                handleChangeForAssessmentModule
-                                            }
-                                        />
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label>
+                                                Assessment Type{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Dropdown
+                                                control={control}
+                                                name="assessmentType"
+                                                placeholder={
+                                                    "Select assessment type"
+                                                }
+                                                myHelper={
+                                                    helperTextForAssessment
+                                                }
+                                                rules={{ required: true }}
+                                                options={questionnares}
+                                                myOnChange={
+                                                    handleChangeForAssessmentModule
+                                                }
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>
-                                            Member Company{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Dropdown
-                                            control={control}
-                                            name={"assignedMember"}
-                                            myOnChange={
-                                                handleChangeForMemberCompany
-                                            }
-                                            placeholder={
-                                                "Select member company"
-                                            }
-                                            myHelper={helperTextForAssessment}
-                                            rules={{ required: true }}
-                                            options={
-                                                memberCompaniesForAddAssessments
-                                            }
-                                        />
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label>
+                                                Member Company{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Dropdown
+                                                control={control}
+                                                name={"assignedMember"}
+                                                myOnChange={
+                                                    handleChangeForMemberCompany
+                                                }
+                                                placeholder={
+                                                    "Select member company"
+                                                }
+                                                myHelper={
+                                                    helperTextForAssessment
+                                                }
+                                                rules={{ required: true }}
+                                                options={
+                                                    memberCompaniesForAddAssessments
+                                                }
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>
-                                            Operation Member{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Dropdown
-                                            control={control}
-                                            // isDisabled={
-                                            //     !watch("assignedMember")
-                                            // }
-                                            isDisabled={!isCGFStaff}
-                                            name={"assignedOperationMember"}
-                                            placeholder={
-                                                "Select operation member "
-                                            }
-                                            myHelper={helperTextForAssessment}
-                                            rules={{ required: true }}
-                                            options={
-                                                operationMemberForAddAssessments
-                                            }
-                                        />
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label>
+                                                Operation Member{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Dropdown
+                                                control={control}
+                                                // isDisabled={
+                                                //     !watch("assignedMember")
+                                                // }
+                                                isDisabled={!isCGFStaff}
+                                                name={"assignedOperationMember"}
+                                                placeholder={
+                                                    "Select operation member "
+                                                }
+                                                myHelper={
+                                                    helperTextForAssessment
+                                                }
+                                                rules={{ required: true }}
+                                                options={
+                                                    operationMemberForAddAssessments
+                                                }
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>
-                                            Due Date{" "}
-                                            <span className="mandatory">*</span>
-                                        </label>
-                                        <Controller
-                                            name="dueDate"
-                                            control={control}
-                                            rules={{ required: true }}
-                                            render={({
-                                                field,
-                                                fieldState: { error },
-                                            }) => (
-                                                <LocalizationProvider
-                                                    dateAdapter={AdapterDayjs}
-                                                >
-                                                    <DatePicker
-                                                        disablePast
-                                                        className="datepicker-blk"
-                                                        // value={datevalue}
-                                                        components={{
-                                                            OpenPickerIcon:
-                                                                DateRangeOutlinedIcon,
-                                                        }}
-                                                        // inputFormat={
-                                                        //     "MM/DD/YYYY"
-                                                        // }
-                                                        value={datevalue}
-                                                        onChange={(
-                                                            event = ""
-                                                        ) => {
-                                                            setDateValue(event);
-                                                            console.log(
-                                                                "date" +
-                                                                    "  " +
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label>
+                                                Due Date{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Controller
+                                                name="dueDate"
+                                                control={control}
+                                                rules={{ required: true }}
+                                                render={({
+                                                    field,
+                                                    fieldState: { error },
+                                                }) => (
+                                                    <LocalizationProvider
+                                                        dateAdapter={
+                                                            AdapterDayjs
+                                                        }
+                                                    >
+                                                        <DatePicker
+                                                            disablePast
+                                                            className="datepicker-blk"
+                                                            // value={datevalue}
+                                                            components={{
+                                                                OpenPickerIcon:
+                                                                    DateRangeOutlinedIcon,
+                                                            }}
+                                                            // inputFormat={
+                                                            //     "MM/DD/YYYY"
+                                                            // }
+                                                            value={datevalue}
+                                                            onChange={(
+                                                                event = ""
+                                                            ) => {
+                                                                setDateValue(
                                                                     event
-                                                            );
-                                                            setValue(
-                                                                "dueDate",
+                                                                );
+                                                                console.log(
+                                                                    "date" +
+                                                                        "  " +
+                                                                        event
+                                                                );
+                                                                setValue(
+                                                                    "dueDate",
 
-                                                                event?.toISOString()
-                                                            );
-                                                            trigger("dueDate");
-                                                        }}
-                                                        renderInput={(
-                                                            params
-                                                        ) => (
-                                                            <TextField
-                                                                autoComplete="off"
-                                                                {...params}
-                                                                className={` input-field ${
-                                                                    error &&
-                                                                    "input-error"
-                                                                }`}
-                                                                onKeyDown={
-                                                                    handleOnKeyDownChange
-                                                                }
-                                                                placeholder="MM/DD/YYYY"
-                                                                error
-                                                                helperText={
+                                                                    event?.toISOString()
+                                                                );
+                                                                trigger(
+                                                                    "dueDate"
+                                                                );
+                                                            }}
+                                                            renderInput={(
+                                                                params
+                                                            ) => (
+                                                                <TextField
+                                                                    autoComplete="off"
+                                                                    {...params}
+                                                                    className={` input-field ${
+                                                                        error &&
+                                                                        "input-error"
+                                                                    }`}
+                                                                    onKeyDown={
+                                                                        handleOnKeyDownChange
+                                                                    }
+                                                                    placeholder="MM/DD/YYYY"
                                                                     error
-                                                                        ? helperTextForAssessment
-                                                                              .dueDate[
-                                                                              error
-                                                                                  .type
-                                                                          ]
-                                                                        : " "
-                                                                }
-                                                            />
-                                                        )}
-                                                        // {...field}
+                                                                    helperText={
+                                                                        error
+                                                                            ? helperTextForAssessment
+                                                                                  .dueDate[
+                                                                                  error
+                                                                                      .type
+                                                                              ]
+                                                                            : " "
+                                                                    }
+                                                                />
+                                                            )}
+                                                            // {...field}
+                                                        />
+                                                    </LocalizationProvider>
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label>Remarks/Comments</label>
+                                            <Controller
+                                                name="remarks"
+                                                control={control}
+                                                rules={{
+                                                    // required: true,
+                                                    minLength: 3,
+                                                    maxLength: 250,
+                                                }}
+                                                render={({
+                                                    field,
+                                                    fieldState: { error },
+                                                }) => (
+                                                    <TextField
+                                                        multiline
+                                                        {...field}
+                                                        onBlur={(e) =>
+                                                            setValue(
+                                                                "remarks",
+                                                                e.target.value?.trim()
+                                                            )
+                                                        }
+                                                        inputProps={{
+                                                            maxLength: 250,
+                                                        }}
+                                                        className={`input-textarea ${
+                                                            error &&
+                                                            "input-textarea-error"
+                                                        }`}
+                                                        id="outlined-basic"
+                                                        placeholder="Enter remarks/comments"
+                                                        helperText={
+                                                            error
+                                                                ? helperTextForAssessment
+                                                                      .remarks[
+                                                                      error.type
+                                                                  ]
+                                                                : " "
+                                                        }
+                                                        variant="outlined"
                                                     />
-                                                </LocalizationProvider>
-                                            )}
-                                        />
+                                                )}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="card-form-field">
-                                    <div className="form-group">
-                                        <label>Remarks/Comments</label>
-                                        <Controller
-                                            name="remarks"
-                                            control={control}
-                                            rules={{
-                                                // required: true,
-                                                minLength: 3,
-                                                maxLength: 250,
-                                            }}
-                                            render={({
-                                                field,
-                                                fieldState: { error },
-                                            }) => (
-                                                <TextField
-                                                    multiline
-                                                    {...field}
-                                                    onBlur={(e) =>
-                                                        setValue(
-                                                            "remarks",
-                                                            e.target.value?.trim()
-                                                        )
-                                                    }
-                                                    inputProps={{
-                                                        maxLength: 250,
-                                                    }}
-                                                    className={`input-textarea ${
-                                                        error &&
-                                                        "input-textarea-error"
-                                                    }`}
-                                                    id="outlined-basic"
-                                                    placeholder="Enter remarks/comments"
-                                                    helperText={
-                                                        error
-                                                            ? helperTextForAssessment
-                                                                  .remarks[
-                                                                  error.type
-                                                              ]
-                                                            : " "
-                                                    }
-                                                    variant="outlined"
-                                                />
-                                            )}
-                                        />
+                                    <div className="form-btn flex-between add-members-btn">
+                                        <button
+                                            type={"reset"}
+                                            onClick={() =>
+                                                navigate("/assessment-list")
+                                            }
+                                            className="secondary-button mr-10"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="primary-button add-button"
+                                            disabled={
+                                                disableEditAssessmentButton
+                                            }
+                                        >
+                                            Save
+                                        </button>
                                     </div>
-                                </div>
-                                <div className="form-btn flex-between add-members-btn">
-                                    <button
-                                        type={"reset"}
-                                        onClick={() =>
-                                            navigate("/assessment-list")
-                                        }
-                                        className="secondary-button mr-10"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="primary-button add-button"
-                                        disabled={disableEditAssessmentButton}
-                                    >
-                                        Save
-                                    </button>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                )}
             </section>
         </div>
     );

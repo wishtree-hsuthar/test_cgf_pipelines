@@ -67,6 +67,7 @@ const DialogBox = ({
         >
             <Fade in={openModal}>
                 <Box sx={style} className="popup-box">
+                <div className="popup-innerblk">
                     <div id="transition-modal-title" className="popup-ttl-blk">
                         {/* {console.log("title", title)} */}
                         {dialogTitle?.length <= 47 ? (
@@ -121,6 +122,7 @@ const DialogBox = ({
                                 </button>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </Box>
             </Fade>

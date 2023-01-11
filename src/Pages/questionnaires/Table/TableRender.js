@@ -80,10 +80,11 @@ const TableRender = ({
                                       <p>
                                         {column?.title.slice(0, 50)}
                                         ...
+                                        {column?.isRequired && column?.title &&  <span className="mandatory">*</span>}
                                       </p>
                                     </Tooltip>
                                   ) : (
-                                    <p>{column?.title}</p>
+                                    <p>{column?.title}{column?.isRequired && column?.title && <span className="mandatory">*</span>}</p>
                                   )}
                                   {/* <TextField
                                     className="input-field column-input-field"
@@ -123,7 +124,7 @@ const TableRender = ({
                               {questionnaire?.sections[sectionIndex]?.rowValues
                                 ?.length > 1 &&
                                 (isPreview || (
-                                  <Tooltip title="Delete row">
+                                  <Tooltip title="Delete Row">
                                     <span
                                       className="minus-iconblk"
                                       onClick={() =>
@@ -135,6 +136,7 @@ const TableRender = ({
                                   </Tooltip>
                                 ))}
                             </div>
+                            
                           </TableCell>
                         )}
                         {row &&
