@@ -1,11 +1,11 @@
 import {
-    TextField,
-    FormControl,
-    Select,
-    MenuItem,
-    FormHelperText,
-    Button,
-    Tooltip,
+  TextField,
+  FormControl,
+  Select,
+  MenuItem,
+  FormHelperText,
+  Button,
+  Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
@@ -18,8 +18,8 @@ import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useParams } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import {
-    REACT_APP_FILE_ENCRYPT_SECRET,
-    UPLOAD_ATTACHMENTS,
+  REACT_APP_FILE_ENCRYPT_SECRET,
+  UPLOAD_ATTACHMENTS,
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
@@ -72,168 +72,154 @@ const TableLayoutCellComponent = ({
         messageType: "success",
     });
 
-    const [currentSelectedFiles, setCurrentSelectedFiles] = useState([]);
-    let columnUUID =
-        isPrefilled ||
-        (!isPrefilled &&
-            assessmentQuestionnaire &&
-            !Object.keys(assessmentQuestionnaire).length > 0)
-            ? cell?.columnId
-            : columnId;
-    // console.log("props:- ",props)
-    // console.log("section UUID",sectionUUID)
-    const getFileValuesArray = async (files) => {
-        // let files = e?.target?.files;
-        // console.log("fiels");
-
-        let tempAssessment = { ...assessmentQuestionnaire };
-
-        tempAssessment[sectionUUID][`${columnId}.${rowId}`] = [];
-        let tempCurrentSelectedFiles = [...currentSelectedFiles];
-        Object.keys(files).forEach(async (fileIdx) => {
-            let reader = new FileReader();
-            reader.readAsDataURL(files[fileIdx]);
-            reader.onloadend = async () => {
-                let result = reader.result;
-                let encryptedFile = CryptoJS.AES.encrypt(
-                    result,
-                    REACT_APP_FILE_ENCRYPT_SECRET
-                ).toString();
-                tempCurrentSelectedFiles.push({
-                    file: encryptedFile,
-                    type: files[fileIdx]?.type,
-                    name: files[fileIdx]?.name,
-                });
-                setCurrentSelectedFiles(tempCurrentSelectedFiles);
-            };
+  const [currentSelectedFiles, setCurrentSelectedFiles] = useState([]);
+  let columnUUID =
+    isPrefilled ||
+    (!isPrefilled &&
+      assessmentQuestionnaire &&
+      !Object.keys(assessmentQuestionnaire).length > 0)
+      ? cell?.columnId
+      : columnId;
+  // console.log("props:- ",props)
+  // console.log("section UUID",sectionUUID)
+  const getFileValuesArray = async (files) => {
+    // let files = e?.target?.files;
+    // console.log("fiels");
+  };
+  const onAttachmetChangeHandler = async (e) => {
+    let files = await e?.target?.files;
+    console.log("files:-", files);
+    let tempCurrentSelectedFiles = [...currentSelectedFiles];
+    Object.keys(files).forEach(async (fileIdx) => {
+      console.log("files at momemnt:-",files)
+      let reader = new FileReader();
+      reader.readAsDataURL(files[fileIdx]);
+      reader.onloadend = async () => {
+        let result = reader.result;
+        console.log("before file encrypt", fileIdx);
+        let encryptedFile = CryptoJS.AES.encrypt(
+          result,
+          REACT_APP_FILE_ENCRYPT_SECRET
+        ).toString();
+        console.log("After file encrypt", fileIdx);
+        tempCurrentSelectedFiles.push({
+          file: encryptedFile,
+          type: files[fileIdx]?.type,
+          name: files[fileIdx]?.name,
         });
-        console.log("temp Current selected files", tempCurrentSelectedFiles);
-    };
-    const onAttachmetChangeHandler = async (e) => {
-        let files = e?.target?.files;
-        // let validatedFiles = [];
-        // let inValidFiles = [];
-        // for (const file of files) {
-        //   console.log("file", file);
-        // }
-        await getFileValuesArray(files);
-    };
-    const getFilesForBackend = () => {
-        const filterdFiles = currentSelectedFiles.filter(
-            (file) => !file?.location
-        );
-        return filterdFiles;
-    };
-    const getFilesNotRemoved = () => {
-        const filterdFiles = currentSelectedFiles.filter(
-            (file) => file?.location
-        );
-        return filterdFiles;
-    };
-    const uploadAttachmentButtonClickHandler = async () => {
-        console.log("Attachments:- ", currentSelectedFiles);
-        try {
-            const newlyAddedFiles = getFilesForBackend();
-            const oldFiles = getFilesNotRemoved();
-            const attachmentResponse = await privateAxios.post(
-                UPLOAD_ATTACHMENTS,
-                {
-                    files: [...newlyAddedFiles],
-                }
-            );
-            console.log("Attachment Response", attachmentResponse);
-            let tempAssessment = { ...assessmentQuestionnaire };
-            tempAssessment[sectionUUID][`${columnUUID}.${rowId}`] = [
-                ...oldFiles,
-                ...attachmentResponse?.data,
-            ];
-            console.log("Temp Assessment:- ", tempAssessment);
-            setAssessmentQuestionnaire(tempAssessment);
-            setCurrentSelectedFiles([]);
-            setOpenFileAttachmntDialog(false);
-            setIsFileRemoved(false);
-        } catch (error) {
-            if (error?.code === "ERR_CANCELED") return;
-            setToasterDetails(
-                {
-                    titleMessage: "Error",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something went wrong.",
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
-        }
-    };
-    const cancelAttachmentButtonClickHandler = () => {
-        setCurrentSelectedFiles([]);
-        setIsFileRemoved(false);
-        setOpenFileAttachmntDialog(false);
-    };
-    // console.log("current selected files:- ", currentSelectedFiles);
-    // console.log("Answer in first Render :- ", answer);
-    useEffect(() => {
-        if (
-            answer &&
-            answer?.length > 0 &&
-            currentSelectedFiles?.length === 0 &&
-            !isFileRemoved
-        ) {
-            // console.log("answer inside Use Effect:-", answer);
-            setCurrentSelectedFiles([...answer]);
-        }
-    }, [currentSelectedFiles]);
+        console.log("before setting selected files", fileIdx);
+        setCurrentSelectedFiles(tempCurrentSelectedFiles);
+      };
+    });
+    console.log("temp Current selected files", tempCurrentSelectedFiles);
+  };
+  const getFilesForBackend = () => {
+    const filterdFiles = currentSelectedFiles.filter((file) => !file?.location);
+    return filterdFiles;
+  };
+  const getFilesNotRemoved = () => {
+    const filterdFiles = currentSelectedFiles.filter((file) => file?.location);
+    return filterdFiles;
+  };
+  const uploadAttachmentButtonClickHandler = async () => {
+    console.log("Attachments:- ", currentSelectedFiles);
+    try {
+      const newlyAddedFiles = getFilesForBackend();
+      const oldFiles = getFilesNotRemoved();
+      const attachmentResponse = await privateAxios.post(UPLOAD_ATTACHMENTS, {
+        files: [...newlyAddedFiles],
+      });
+      console.log("Attachment Response", attachmentResponse);
+      let tempAssessment = { ...assessmentQuestionnaire };
+      tempAssessment[sectionUUID][`${columnUUID}.${rowId}`] = [
+        ...oldFiles,
+        ...attachmentResponse?.data,
+      ];
+      console.log("Temp Assessment:- ", tempAssessment);
+      setAssessmentQuestionnaire(tempAssessment);
+      setCurrentSelectedFiles([]);
+      setOpenFileAttachmntDialog(false);
+      setIsFileRemoved(false);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setToasterDetails(
+        {
+          titleMessage: "Error",
+          descriptionMessage:
+            error?.response?.data?.message &&
+            typeof error.response.data.message === "string"
+              ? error.response.data.message
+              : "Something went wrong!",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+    }
+  };
+  const cancelAttachmentButtonClickHandler = () => {
+    setCurrentSelectedFiles([]);
+    setIsFileRemoved(false);
+    setOpenFileAttachmntDialog(false);
+  };
+  // console.log("current selected files:- ", currentSelectedFiles);
+  // console.log("Answer in first Render :- ", answer);
+  useEffect(() => {
+    if (
+      answer &&
+      answer?.length > 0 &&
+      currentSelectedFiles?.length === 0 &&
+      !isFileRemoved
+    ) {
+      // console.log("answer inside Use Effect:-", answer);
+      setCurrentSelectedFiles([...answer]);
+    }
+  }, [currentSelectedFiles]);
 
-    return (
-        <>
-            <Toaster
-                myRef={myRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
-            />
-            <DialogBox
-                title={<p>Add Attachments</p>}
-                info1={" "}
-                info2={
-                    <div className="upload-file-wrap">
-                        <Button
-                            variant="contained"
-                            component="label"
-                            className="upload-file-btn"
-                        >
-                            <div className="upload-file-blk">
-                                {/* <input hidden accept="image/*" multiple type="file" /> */}
-                                <input
-                                    type={"file"}
-                                    hidden
-                                    accept={
-                                        ".xls, .xlsx, .jpg, .png,.jpeg, .doc, .txt,.pdf,.docx,.ppt,.pptx,.mp4,.mp3, .zip,.rar"
-                                    }
-                                    // value={file}
-                                    onChange={onAttachmetChangeHandler}
-                                    multiple
-                                />
-                                <span className="upload-icon">
-                                    <CloudUploadOutlinedIcon />
-                                </span>
-                                <span className="file-upload-txt">
-                                    Click here to choose files
-                                </span>
-                            </div>
-                        </Button>
-                        {currentSelectedFiles?.length > 0 && (
-                            <RenderCurrentFiles
-                                currentSelectedFiles={currentSelectedFiles}
-                                setCurrentSelectedFiles={
-                                    setCurrentSelectedFiles
-                                }
-                                setIsFileRemoved={setIsFileRemoved}
-                            />
-                        )}
+  return (
+    <>
+      <Toaster
+        myRef={myRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
+      <DialogBox
+        title={<p>Add Attachments</p>}
+        info1={" "}
+        info2={
+          <div className="upload-file-wrap">
+            <Button
+              variant="contained"
+              component="label"
+              className="upload-file-btn"
+            >
+              <div className="upload-file-blk">
+                {/* <input hidden accept="image/*" multiple type="file" /> */}
+                <input
+                  type={"file"}
+                  hidden
+                  accept={
+                    ".xls, .xlsx, .jpg, .png,.jpeg, .doc, .txt,.pdf,.docx,.ppt,.pptx,.mp4,.mp3, .zip,.rar"
+                  }
+                  // value={file}
+                  onChange={onAttachmetChangeHandler}
+                  multiple
+                />
+                <span className="upload-icon">
+                  <CloudUploadOutlinedIcon />
+                </span>
+                <span className="file-upload-txt">
+                  Click here to choose files
+                </span>
+              </div>
+            </Button>
+            {currentSelectedFiles?.length > 0 && (
+              <RenderCurrentFiles
+                currentSelectedFiles={currentSelectedFiles}
+                setCurrentSelectedFiles={setCurrentSelectedFiles}
+                setIsFileRemoved={setIsFileRemoved}
+              />
+            )}
 
                         {/* </p> */}
                     </div>
@@ -301,9 +287,10 @@ const TableLayoutCellComponent = ({
                     "attachments" && (
                     <FormControl>
                         <a
-                            href="#"
+                          
+              href="#"
                             onClick={() => setOpenFileAttachmntDialog(true)}
-                            style={{ color: "#f7a823", textDecoration: "none" }}
+                            style={{ color: "#f7a823", textDecoration: "none",pointerEvents: `${params["*"].includes("view")  && 'none'}` }}
                         >
                             Add/Edit Attachments
                         </a>
@@ -451,7 +438,13 @@ const TableLayoutCellComponent = ({
                                 {transformedColumns[columnUUID].options.map(
                                     (option) => (
                                         <MenuItem key={option} value={option}>
-                                            {option}
+                                            {option?.length <= 40 ? (
+                      option
+                    ) : (
+                      <Tooltip title={option}>
+                        <span>{option?.slice(0, 40) + "..."}</span>
+                      </Tooltip>
+                    )}
                                         </MenuItem>
                                     )
                                 )}
@@ -517,9 +510,9 @@ const TableLayoutCellComponent = ({
 export default TableLayoutCellComponent;
 
 const RenderCurrentFiles = ({
-    currentSelectedFiles,
-    setCurrentSelectedFiles,
-    setIsFileRemoved,
+  currentSelectedFiles,
+  setCurrentSelectedFiles,
+  setIsFileRemoved,
 }) => {
     const onCurrentFileRemoveHandler = (fileIdx) => {
         let tempCurrentSelectedFiles = [...currentSelectedFiles];
