@@ -133,7 +133,7 @@ const ViewRole = () => {
                             error?.response?.data?.message &&
                             typeof error.response.data.message === "string"
                                 ? error.response.data.message
-                                : "Something went wrong!",
+                                : "Something went wrong.",
                         messageType: "error",
                     },
                     () => myRef4.current()
@@ -310,7 +310,7 @@ const ViewRole = () => {
                                 error?.response?.data?.message &&
                                 typeof error.response.data.message === "string"
                                     ? error.response.data.message
-                                    : "Something went wrong!",
+                                    : "Something went wrong.",
                             messageType: "error",
                         },
                         () => myRef4.current()

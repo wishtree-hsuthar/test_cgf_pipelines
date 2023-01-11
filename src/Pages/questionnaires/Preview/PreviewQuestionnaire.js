@@ -206,9 +206,7 @@ function PreviewQuestionnaire(props) {
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
-            }
-            
-            else {
+            } else {
                 setToasterDetails(
                     {
                         titleMessage: "Error",
@@ -216,7 +214,7 @@ function PreviewQuestionnaire(props) {
                             error?.response?.data?.message &&
                             typeof error.response.data.message === "string"
                                 ? error.response.data.message
-                                : "Something went wrong!",
+                                : "Something went wrong.",
                         messageType: "error",
                     },
                     () => questionnairePreviewRef.current()

@@ -286,7 +286,7 @@ const ViewMember = () => {
                     error?.response?.data?.message &&
                     typeof error.response.data.message === "string"
                         ? error.response.data.message
-                        : "Something went wrong!",
+                        : "Something went wrong.",
                 messageType: "error",
             },
             () => myRef.current()
@@ -373,7 +373,6 @@ const ViewMember = () => {
             setArrOfCountryCode([...countryCodeSet]);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            
         }
     };
 
@@ -388,7 +387,7 @@ const ViewMember = () => {
             return [];
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            
+
             return [];
         }
     };
@@ -549,7 +548,6 @@ const ViewMember = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             console.log("Error from get operation member by member id", error);
-            
         }
     };
 
@@ -1227,7 +1225,9 @@ const ViewMember = () => {
                                     </div>
                                     <div className="card-form-field">
                                         <div className="form-group">
-                                            <label htmlFor="title">Job Title</label>
+                                            <label htmlFor="title">
+                                                Job Title
+                                            </label>
                                             <Input
                                                 isDisabled
                                                 control={control}
