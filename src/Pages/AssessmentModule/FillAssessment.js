@@ -1155,7 +1155,7 @@ function FillAssessment() {
                             component="label"
                             className="upload-file-btn"
                         >
-                            <div className="upload-file-blk">
+                            <div className={file ? "upload-file-blk selected-file-blk" : "upload-file-blk"}>
                                 {/* <input hidden accept="image/*" multiple type="file" /> */}
                                 <input
                                     type={"file"}

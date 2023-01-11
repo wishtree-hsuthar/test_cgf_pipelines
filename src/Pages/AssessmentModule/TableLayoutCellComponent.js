@@ -288,7 +288,7 @@ const TableLayoutCellComponent = ({
             <a
               href="#"
               onClick={() => setOpenFileAttachmntDialog(true)}
-              style={{ color: "#4596D1", textDecoration: "none" }}
+              style={{ color: "#f7a823", textDecoration: "none" }}
             >
               Add/Edit Attachments
             </a>
@@ -300,6 +300,7 @@ const TableLayoutCellComponent = ({
             </FormHelperText>
           </FormControl>
         )}
+        <span className="list-uploaded-file">
       {transformedColumns[columnUUID] &&
         transformedColumns[columnUUID]?.columnType === "attachments" &&
         answer &&
@@ -327,6 +328,7 @@ const TableLayoutCellComponent = ({
             </Tooltip>
           )
         )}
+        </span>
       {transformedColumns[columnUUID] &&
         transformedColumns[columnUUID].columnType === "textbox" && (
           <TextField
@@ -496,6 +498,7 @@ const RenderCurrentFiles = ({
               {file?.name}
             </a>
             <span
+              className="file-close-icon"
               style={{ cursor: "pointer" }}
               onClick={() => onCurrentFileRemoveHandler(fileIdx)}
             >
@@ -519,6 +522,7 @@ const RenderCurrentFiles = ({
                 {file?.name?.slice(0, 30) + "..."}
               </a>
               <span
+              className="file-close-icon"
                 style={{ cursor: "pointer" }}
                 onClick={() => onCurrentFileRemoveHandler(fileIdx)}
               >
