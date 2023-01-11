@@ -174,7 +174,7 @@ const EditSubAdmin = () => {
                     countryCode: response.data.countryCode,
                     phoneNumber: response.data.phoneNumber,
                     status: response.data.isActive ? "active" : "inactive",
-                    subRoleId: response?.data?.subRoleId._id,
+                    subRoleId: response?.data?.subRoleId?._id ?? "",
                 });
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
@@ -342,7 +342,7 @@ const EditSubAdmin = () => {
                         </li>
                         <li>
                             <Link
-                                to={`/users/cgf-admin/view-sub-admin/${params.id}`}
+                                to={`/users/cgf-admin/view-cgf-admin/${params.id}`}
                             >
                                 View CGF Admin
                             </Link>

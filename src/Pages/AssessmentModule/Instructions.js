@@ -429,7 +429,7 @@ function Instructions() {
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell>
-                                                        ILO's 11 Indicators of Forced Labour <br /><a style={{textDecoration:"none", color: "#f7a823"}} rel="noreferrer" href="https://www.ilo.org/wcmsp5/groups/public/---ed_norm/---declaration/documents/publication/wcms_203832.pdf" target="_blank"><span style={{ wordBreak: "break-all" }}>https://www.ilo.org/wcmsp5/groups/public/---ed_norm/---declaration/documents/publication/wcms_203832.pdf </span></a>
+                                                        ILO's 11 Indicators of Forced Labour <br /><a style={{textDecoration:"none", color: "#4596d1"}} rel="noreferrer" href="https://www.ilo.org/wcmsp5/groups/public/---ed_norm/---declaration/documents/publication/wcms_203832.pdf" target="_blank"><span style={{ wordBreak: "break-all" }}>https://www.ilo.org/wcmsp5/groups/public/---ed_norm/---declaration/documents/publication/wcms_203832.pdf </span></a>
                                                     </TableCell>
                                                     <TableCell>
                                                         1. Abuse of vulnerability <br />

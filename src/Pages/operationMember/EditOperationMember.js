@@ -225,7 +225,7 @@ function EditOperationMember() {
                     name: response?.data?.name,
                     isActive:
                         response?.data?.isActive === true ? "true" : "false",
-                    roleId: response?.data?.roleId,
+                    roleId: response?.data?.role?._id ?? "",
                     isCGFStaff:
                         response?.data?.isCGFStaff === true ? "true" : "false",
                     // reportingManagerId:

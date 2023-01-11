@@ -283,7 +283,7 @@ function FillAssessment() {
                             error?.response?.data?.message &&
                             typeof error.response.data.message === "string"
                                 ? error.response.data.message
-                                : "Something went wrong!",
+                                : "Something went wrong.",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -595,7 +595,7 @@ function FillAssessment() {
                             error?.response?.data?.message &&
                             typeof error.response.data.message === "string"
                                 ? error.response.data.message
-                                : "Something went wrong!",
+                                : "Something went wrong.",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -647,7 +647,7 @@ function FillAssessment() {
                             error?.response?.data?.message &&
                             typeof error.response.data.message === "string"
                                 ? error.response.data.message
-                                : "Something went wrong!",
+                                : "Something went wrong.",
                         messageType: "error",
                     },
                     () => myRef.current()
@@ -949,7 +949,7 @@ function FillAssessment() {
                                             typeof error.response.data
                                                 .message === "string"
                                                 ? error.response.data.message
-                                                : "Something went wrong!",
+                                                : "Something went wrong.",
                                         messageType: "error",
                                     },
                                     () => myRef.current()
@@ -1155,7 +1155,13 @@ function FillAssessment() {
                             component="label"
                             className="upload-file-btn"
                         >
-                            <div className="upload-file-blk">
+                            <div
+                                className={
+                                    file
+                                        ? "upload-file-blk selected-file-blk"
+                                        : "upload-file-blk"
+                                }
+                            >
                                 {/* <input hidden accept="image/*" multiple type="file" /> */}
                                 <input
                                     type={"file"}
@@ -1188,7 +1194,7 @@ function FillAssessment() {
                 openModal={importOpenDialog}
                 setOpenModal={setImportOpenDialog}
                 isModalForm={true}
-                handleCloseRedirect={() => setImportOpenDialog(false)}
+                handleCloseRedirect={cancelImport}
             />
             <Toaster
                 myRef={myRef}

@@ -441,7 +441,7 @@ function EditAssessment() {
                         typeof error.responseEditMember.data.message ===
                             "string"
                             ? error.responseEditMember.data.message
-                            : "Something went wrong!",
+                            : "Something went wrong.",
                     messageType: "error",
                 },
                 () => toasterRef.current()

@@ -133,7 +133,7 @@ const ViewRole = () => {
                             error?.response?.data?.message &&
                             typeof error.response.data.message === "string"
                                 ? error.response.data.message
-                                : "Something went wrong!",
+                                : "Something went wrong.",
                         messageType: "error",
                     },
                     () => myRef4.current()
@@ -194,7 +194,7 @@ const ViewRole = () => {
         );
         isMemberRepresentative
             ? navigate4(`/users/operation-member/view-operation-member/${id}`)
-            : navigate4(`/users/cgf-admin/view-sub-admin/${id}`);
+            : navigate4(`/users/cgf-admin/view-cgf-admin/${id}`);
     };
     const createPrevileges3 = (tempPrivileges) => {
         console.log("temp data", tempPrivileges);
@@ -310,7 +310,7 @@ const ViewRole = () => {
                                 error?.response?.data?.message &&
                                 typeof error.response.data.message === "string"
                                     ? error.response.data.message
-                                    : "Something went wrong!",
+                                    : "Something went wrong.",
                             messageType: "error",
                         },
                         () => myRef4.current()
