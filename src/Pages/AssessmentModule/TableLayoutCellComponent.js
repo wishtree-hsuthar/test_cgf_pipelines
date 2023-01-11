@@ -94,15 +94,18 @@ const TableLayoutCellComponent = ({
       reader.readAsDataURL(files[fileIdx]);
       reader.onloadend = async () => {
         let result = reader.result;
-        let encryptedFile = CryptoJS.AES.encrypt(
+        console.log("before file encrypt",fileIdx)
+        let encryptedFile =  CryptoJS.AES.encrypt(
           result,
           REACT_APP_FILE_ENCRYPT_SECRET
         ).toString();
+        console.log("After file encrypt",fileIdx)
         tempCurrentSelectedFiles.push({
           file: encryptedFile,
           type: files[fileIdx]?.type,
           name: files[fileIdx]?.name,
         });
+        console.log("before setting selected files",fileIdx)
         setCurrentSelectedFiles(tempCurrentSelectedFiles);
       };
     });
@@ -414,7 +417,7 @@ const TableLayoutCellComponent = ({
                                 </MenuItem> */}
                 {transformedColumns[columnUUID].options.map((option) => (
                   <MenuItem key={option} value={option}>
-                    {option}
+                    {option?.length <= 40 ? option : <Tooltip title={option}><span>{option?.slice(0,40)+"..."}</span></Tooltip>}
                   </MenuItem>
                 ))}
               </Select>
