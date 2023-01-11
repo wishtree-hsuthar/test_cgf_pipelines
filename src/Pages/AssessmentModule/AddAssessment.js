@@ -169,7 +169,7 @@ const AddAssessment = () => {
                     // FETCH_OPERATION_MEMBER + id
                     isCGFStaff
                         ? FETCH_OPERATION_MEMBER + id + "/master/internal"
-                        : FETCH_OPERATION_MEMBER + id + "/list"
+                        : FETCH_OPERATION_MEMBER + id + "/master"
                 );
                 console.log(
                     "Response from fetch operation member according to member company",

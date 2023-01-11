@@ -61,7 +61,7 @@ const SectionContent = ({
                     error?.response?.data?.message &&
                     typeof error.response.data.message === "string"
                         ? error.response.data.message
-                        : "Something went wrong!",
+                        : "Something went wrong.",
                 messageType: "error",
             },
             () => myRef.current()
@@ -303,7 +303,6 @@ const SectionContent = ({
                         console.log("index after save section ", index);
                         setTimeout(() => navigate("/questionnaires"), 3000);
                         return true;
-                        
                     } catch (error) {
                         console.log("error from fetch questionnaire", error);
 

@@ -212,7 +212,7 @@ const ViewOperationMembers = () => {
                     isActive: response?.data?.isActive,
                     isCGFStaff:
                         response?.data?.isCGFStaff === true ? "true" : "false",
-                    role: response?.data?.roleId,
+                    role: response?.data?.role?.name,
                     replacedOperationMember:
                         response?.data?.replacedUsers[0]?.name ?? "N/A",
                 });

@@ -19,7 +19,6 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import { downloadFunction } from "../../utils/downloadFunction";
 
-
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
@@ -30,7 +29,7 @@ function a11yProps(index) {
 const SubAdminList = () => {
     //custom hook to set title of page
     useDocumentTitle("CGF Admins");
-    
+
     const [value, setValue] = React.useState(0);
 
     //Refr for Toaster
@@ -260,7 +259,7 @@ const SubAdminList = () => {
                             error?.response?.data?.error &&
                             typeof error.response.data.error === "string"
                                 ? error.response.data.error
-                                : "Something went wrong!",
+                                : "Something went wrong.",
 
                         messageType: "error",
                     },
@@ -402,7 +401,7 @@ const SubAdminList = () => {
                                     <button
                                         onClick={() =>
                                             navigate(
-                                                "/users/cgf-admin/add-sub-admin"
+                                                "/users/cgf-admin/add-cgf-admin"
                                             )
                                         }
                                         className="primary-button add-button"

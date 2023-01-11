@@ -97,7 +97,7 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
-                    path="/users/cgf-admin/add-sub-admin"
+                    path="/users/cgf-admin/add-cgf-admin"
                     element={
                         <RequireAuth moduleName={""} page={""}>
                             <AddSubAdmin />
@@ -105,7 +105,7 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
-                    path="/users/cgf-admin/view-sub-admin/:id"
+                    path="/users/cgf-admin/view-cgf-admin/:id"
                     element={
                         <RequireAuth moduleName={""} page={""}>
                             <ViewSubAdmin />
@@ -114,7 +114,7 @@ const ProtectedPages = () => {
                 />
 
                 <Route
-                    path="/users/cgf-admin/edit-sub-admin/:id"
+                    path="/users/cgf-admin/edit-cgf-admin/:id"
                     element={
                         <RequireAuth>
                             <EditSubAdmin />
@@ -122,7 +122,7 @@ const ProtectedPages = () => {
                     }
                 />
                 <Route
-                    path="/users/cgf-admin/replace-sub-admin/:id"
+                    path="/users/cgf-admin/replace-cgf-admin/:id"
                     element={
                         <RequireAuth page={""} moduleName={""}>
                             <ReplaceSubAdmin />

@@ -187,7 +187,7 @@ function OnBoardedSubAdminsTable({
     // on click eye icon to  navigate view page
     const onClickVisibilityIconHandler = (id) => {
         console.log("id", id);
-        return navigate(`view-sub-admin/${id}`);
+        return navigate(`view-cgf-admin/${id}`);
     };
 
     useEffect(() => {
