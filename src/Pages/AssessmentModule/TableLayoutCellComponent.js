@@ -338,7 +338,7 @@ const TableLayoutCellComponent = ({
                   }}
                   className="show-more-less-txt"
                 >
-                  Show Less
+                 {answer?.length > 2 && "Show Less"} 
                 </a>
               ) : (
                 <a
@@ -349,7 +349,7 @@ const TableLayoutCellComponent = ({
                   }}
                   className="show-more-less-txt"
                 >
-                  Show More
+                 {answer?.length > 2 && "Show More"} 
                 </a>
               )}
             </>
