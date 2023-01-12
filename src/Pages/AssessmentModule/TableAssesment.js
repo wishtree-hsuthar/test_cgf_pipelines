@@ -11,7 +11,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import TableLayoutCellComponent from "./TableLayoutCellComponent.js";
+// import TableLayoutCellComponent from "./TableLayoutCellComponent.js";
+const TableLayoutCellComponent = React.lazy(() =>
+    import("./TableLayoutCellComponent.js")
+);
 
 const ITEM_HEIGHT = 42;
 const MenuProps = {

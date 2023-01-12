@@ -24,14 +24,16 @@ import Toaster from "../../components/Toaster";
 import { downloadFunction } from "../../utils/downloadFunction";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import FillAssesmentSection from "./FillAssessmentSection";
+// import FillAssesmentSection from "./FillAssessmentSection";
+
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
-import { async } from "q";
-// import { json } from "body-parser";
+const FillAssesmentSection = React.lazy(() =>
+    import("./FillAssessmentSection")
+);
 
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
-export const AlphaNumRegEx = /^[a-z0-9]+$/i;
+export const AlphaNumRegEx = /^[a-z0-9 ]+$/i;
 const ITEM_HEIGHT = 42;
 const CryptoJs = require("crypto-js");
 const MenuProps = {
