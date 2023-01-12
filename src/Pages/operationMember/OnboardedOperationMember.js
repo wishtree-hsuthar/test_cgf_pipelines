@@ -103,6 +103,7 @@ function OnboardedOperationMember({
             delete opMember["__v"];
             delete opMember["password"];
             delete opMember["roleId"];
+            delete opMember["role"];
             delete opMember["salt"];
             delete opMember["uuid"];
             delete opMember["phoneNumber"];
@@ -124,7 +125,7 @@ function OnboardedOperationMember({
                 day: "2-digit",
                 year: "numeric",
             });
-            delete opMember["replacedUsers"]
+            delete opMember["replacedUsers"];
             delete opMember["isReplaced"];
             delete opMember["department"];
             delete opMember["title"];
