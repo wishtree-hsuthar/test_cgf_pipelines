@@ -83,6 +83,7 @@ function PendingOperationMembers({
             delete pendingOPMember["__v"];
             delete pendingOPMember["data"]["password"];
             delete pendingOPMember["data"]["roleId"];
+            delete pendingOPMember["data"]["role"];
             delete pendingOPMember["data"]["salt"];
             delete pendingOPMember["data"]["uuid"];
             delete pendingOPMember["data"]["phoneNumber"];
