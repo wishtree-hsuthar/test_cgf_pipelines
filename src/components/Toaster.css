@@ -33,7 +33,7 @@
 .toaster-icon svg{font-size: 18px;}
 .toaster-blk {border: 1px solid #E53850;
     border-radius: 10px;
-    box-shadow: -3px 0px 15px rgb(0 0 0 / 1%);
+    /* box-shadow: -3px 0px 15px rgb(0 0 0 / 1%); */
     background: #fff;
     padding: 0;
     /* width: 312px; */
