@@ -31,46 +31,46 @@ export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
 
 const TableLayoutCellComponent = ({
-    isPrefilled,
-    assessmentQuestionnaire,
-    cell,
-    columnId,
-    sectionUUID,
-    rowId,
-    setAssessmentQuestionnaire,
-    answer,
-    transformedColumns,
-    error,
-    editMode,
-    handleAnswersChange,
-    handleAnswersBlur,
+  isPrefilled,
+  assessmentQuestionnaire,
+  cell,
+  columnId,
+  sectionUUID,
+  rowId,
+  setAssessmentQuestionnaire,
+  answer,
+  transformedColumns,
+  error,
+  editMode,
+  handleAnswersChange,
+  handleAnswersBlur,
 }) => {
-    const [showMore, setShowMore] = useState(false);
-    const myRef = React.useRef();
+  const [showMore, setShowMore] = useState(false);
+  const [showMoreAttachment, setShowMoreAttachment] = useState(false);
+  const myRef = React.useRef();
 
-    // const params = useParams();
-    // const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
-    // const [isFileRemoved, setIsFileRemoved] = useState(false);
-    // const handleOnKeyDownChange = (e) => {
-    //   e.preventDefault();
-    // };
-    // const [toasterDetails, setToasterDetails] = useCallbackState({
-    //   titleMessage: "",
-    //   descriptionMessage: "",
-    //   messageType: "success",
-    // });
-    const params = useParams();
-    const [openFileAttachmenDialog, setOpenFileAttachmntDialog] =
-        useState(false);
-    const [isFileRemoved, setIsFileRemoved] = useState(false);
-    const handleOnKeyDownChange = (e) => {
-        e.preventDefault();
-    };
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
-    });
+  // const params = useParams();
+  // const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
+  // const [isFileRemoved, setIsFileRemoved] = useState(false);
+  // const handleOnKeyDownChange = (e) => {
+  //   e.preventDefault();
+  // };
+  // const [toasterDetails, setToasterDetails] = useCallbackState({
+  //   titleMessage: "",
+  //   descriptionMessage: "",
+  //   messageType: "success",
+  // });
+  const params = useParams();
+  const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
+  const [isFileRemoved, setIsFileRemoved] = useState(false);
+  const handleOnKeyDownChange = (e) => {
+    e.preventDefault();
+  };
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
+  });
 
   const [currentSelectedFiles, setCurrentSelectedFiles] = useState([]);
   let columnUUID =
@@ -91,7 +91,7 @@ const TableLayoutCellComponent = ({
     console.log("files:-", files);
     let tempCurrentSelectedFiles = [...currentSelectedFiles];
     Object.keys(files).forEach(async (fileIdx) => {
-      console.log("files at momemnt:-",files)
+      console.log("files at momemnt:-", files);
       let reader = new FileReader();
       reader.readAsDataURL(files[fileIdx]);
       reader.onloadend = async () => {
@@ -221,290 +221,283 @@ const TableLayoutCellComponent = ({
               />
             )}
 
-                        {/* </p> */}
-                    </div>
-                }
-                primaryButtonText={"Upload"}
-                secondaryButtonText={"Cancel"}
-                onPrimaryModalButtonClickHandler={
-                    uploadAttachmentButtonClickHandler
-                }
-                onSecondaryModalButtonClickHandler={
-                    cancelAttachmentButtonClickHandler
-                }
-                openModal={openFileAttachmenDialog}
-                setOpenModal={setOpenFileAttachmntDialog}
-                isModalForm={true}
-                handleCloseRedirect={cancelAttachmentButtonClickHandler}
-            />
-            {isPrefilled &&
-                transformedColumns[columnUUID] &&
-                transformedColumns[columnUUID].columnType === "prefilled" && (
-                    <p className="text-justify">
-                        {showMore ? (
-                            <span>
-                                <span>{cell?.value}</span>
-                                <br />
-                                <a
-                                    href="#"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setShowMore(false);
-                                    }}
-                                    className="show-more-less-txt"
-                                >
-                                    Show Less
-                                </a>
-                            </span>
-                        ) : (
-                            <span>
-                                {cell?.value.length > 100 ? (
-                                    <span>
-                                        <span>
-                                            {cell?.value.slice(0, 100)}...
-                                        </span>
-                                        <br />
-                                        <a
-                                            href="#"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                setShowMore(true);
-                                            }}
-                                            className="show-more-less-txt"
-                                        >
-                                            Show More
-                                        </a>
-                                    </span>
-                                ) : (
-                                    cell?.value
-                                )}
-                            </span>
-                        )}
-                    </p>
+            {/* </p> */}
+          </div>
+        }
+        primaryButtonText={"Upload"}
+        secondaryButtonText={"Cancel"}
+        onPrimaryModalButtonClickHandler={uploadAttachmentButtonClickHandler}
+        onSecondaryModalButtonClickHandler={cancelAttachmentButtonClickHandler}
+        openModal={openFileAttachmenDialog}
+        setOpenModal={setOpenFileAttachmntDialog}
+        isModalForm={true}
+        handleCloseRedirect={cancelAttachmentButtonClickHandler}
+      />
+      {isPrefilled &&
+        transformedColumns[columnUUID] &&
+        transformedColumns[columnUUID].columnType === "prefilled" && (
+          <p className="text-justify">
+            {showMore ? (
+              <span>
+                <span>{cell?.value}</span>
+                <br />
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowMore(false);
+                  }}
+                  className="show-more-less-txt"
+                >
+                  Show Less
+                </a>
+              </span>
+            ) : (
+              <span>
+                {cell?.value.length > 100 ? (
+                  <span>
+                    <span>{cell?.value.slice(0, 100)}...</span>
+                    <br />
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShowMore(true);
+                      }}
+                      className="show-more-less-txt"
+                    >
+                      Show More
+                    </a>
+                  </span>
+                ) : (
+                  cell?.value
                 )}
-            {transformedColumns[columnUUID] &&
-                transformedColumns[columnUUID]?.columnType ===
-                    "attachments" && (
-                    <FormControl>
-                        <a
-                          
+              </span>
+            )}
+          </p>
+        )}
+      {transformedColumns[columnUUID] &&
+        transformedColumns[columnUUID]?.columnType === "attachments" && (
+          <FormControl>
+            <a
               href="#"
-                            onClick={() => setOpenFileAttachmntDialog(true)}
-                            style={{ color: "#f7a823", textDecoration: "none",pointerEvents: `${params["*"].includes("view")  && 'none'}` }}
-                        >
-                            Add/Edit Attachments
+              onClick={() => setOpenFileAttachmntDialog(true)}
+              style={{
+                color: "#f7a823",
+                textDecoration: "none",
+                pointerEvents: `${params["*"].includes("view") && "none"}`,
+              }}
+            >
+              Add/Edit Attachments
+            </a>
+            {/* // <input type="file" onChange={onAttachmetChangeHandler} multiple /> */}
+            <FormHelperText>
+              {(!answer || answer?.length === 0) && error && error?.length !== 0
+                ? error
+                : " "}
+            </FormHelperText>
+          </FormControl>
+        )}
+      <span className="list-uploaded-file">
+        {transformedColumns[columnUUID] &&
+          transformedColumns[columnUUID]?.columnType === "attachments" &&
+          answer &&
+          answer?.length > 0 &&
+          Array.isArray(answer) && (
+            <>
+              {answer.map((file, fileIdx) =>
+                file?.name?.length <= 30
+                  ? (fileIdx <= 1 || showMoreAttachment) && (
+                      <a
+                        key={fileIdx}
+                        href={file?.location ?? "#"}
+                        style={{ textDecoration: "none" }}
+                        target="_blank"
+                      >
+                        <p>{`${file?.name + " idx "+ fileIdx}`}</p>
+                      </a>
+                    )
+                  : (fileIdx <= 1 || showMoreAttachment) && (
+                      <Tooltip
+                        key={fileIdx}
+                        title={file?.name}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <a href={file?.location ?? "#"} target="_blank">
+                          <p>{`${file?.name?.slice(0, 30) + " idx " + fileIdx}...`}</p>
                         </a>
-                        {/* // <input type="file" onChange={onAttachmetChangeHandler} multiple /> */}
-                        <FormHelperText>
-                            {(!answer || answer?.length === 0) &&
-                            error &&
-                            error?.length !== 0
-                                ? error
-                                : " "}
-                        </FormHelperText>
-                    </FormControl>
+                      </Tooltip>
+                    )
+              )}
+              {showMoreAttachment ? (
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    //   e.preventDefault();
+                    setShowMoreAttachment(false);
+                  }}
+                  className="show-more-less-txt"
+                >
+                  Show Less
+                </a>
+              ) : (
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    // e.preventDefault();
+                    setShowMoreAttachment(true);
+                  }}
+                  className="show-more-less-txt"
+                >
+                  Show More
+                </a>
+              )}
+            </>
+          )}
+      </span>
+      {transformedColumns[columnUUID] &&
+        transformedColumns[columnUUID].columnType === "textbox" && (
+          <TextField
+            className={`input-field ${
+              !answer && error && error?.length !== 0
+                ? "input-error"
+                : answer &&
+                  error &&
+                  transformedColumns[columnUUID]?.validation === "alphabets" &&
+                  !AlphaRegEx.test(answer)
+                ? "input-error"
+                : answer &&
+                  error &&
+                  transformedColumns[columnUUID]?.validation ===
+                    "alphanumeric" &&
+                  !AlphaNumRegEx.test(answer)
+                ? "input-error"
+                : answer &&
+                  error &&
+                  transformedColumns[columnUUID]?.validation === "numeric" &&
+                  !NumericRegEx.test(answer)
+                ? "input-error"
+                : ""
+            }`}
+            disabled={(editMode && params["*"].includes("view")) || !editMode}
+            placeholder="Enter text here"
+            value={answer}
+            name={`${columnUUID}.${rowId}`}
+            onChange={(e) => handleAnswersChange(e.target.name, e.target.value)}
+            onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
+            helperText={
+              !answer && error && error?.length !== 0
+                ? error
+                : answer &&
+                  transformedColumns[columnUUID]?.validation === "alphabets" &&
+                  !AlphaRegEx.test(answer)
+                ? error
+                : answer &&
+                  transformedColumns[columnUUID]?.validation === "numeric" &&
+                  !NumericRegEx.test(answer)
+                ? error
+                : answer &&
+                  transformedColumns[columnUUID]?.validation ===
+                    "alphanumeric" &&
+                  !AlphaNumRegEx.test(answer)
+                ? error
+                : " "
+            }
+          />
+        )}
+      {transformedColumns[columnUUID] &&
+        transformedColumns[columnUUID].columnType === "dropdown" && (
+          <div className="select-field">
+            <FormControl className="fullwidth-field">
+              <Select
+                IconComponent={(props) => (
+                  <KeyboardArrowDownRoundedIcon {...props} />
                 )}
-            <span className="list-uploaded-file">
-                {transformedColumns[columnUUID] &&
-                    transformedColumns[columnUUID]?.columnType ===
-                        "attachments" &&
-                    answer &&
-                    answer?.length > 0 &&
-                    Array.isArray(answer) &&
-                    answer.map((file, fileIdx) =>
-                        file?.name?.length <= 30 ? (
-                            <a
-                                key={fileIdx}
-                                href={file?.location ?? "#"}
-                                style={{ textDecoration: "none" }}
-                                target="_blank"
-                            >
-                                <p>{`${file?.name}`}</p>
-                            </a>
-                        ) : (
-                            <Tooltip
-                                key={fileIdx}
-                                title={file?.name}
-                                style={{ textDecoration: "none" }}
-                            >
-                                <a href={file?.location ?? "#"} target="_blank">
-                                    <p>{`${file?.name?.slice(0, 30)}...`}</p>
-                                </a>
-                            </Tooltip>
-                        )
-                    )}
-            </span>
-            {transformedColumns[columnUUID] &&
-                transformedColumns[columnUUID].columnType === "textbox" && (
-                    <TextField
-                        className={`input-field ${
-                            !answer && error && error?.length !== 0
-                                ? "input-error"
-                                : answer &&
-                                  error &&
-                                  transformedColumns[columnUUID]?.validation ===
-                                      "alphabets" &&
-                                  !AlphaRegEx.test(answer)
-                                ? "input-error"
-                                : answer &&
-                                  error &&
-                                  transformedColumns[columnUUID]?.validation ===
-                                      "alphanumeric" &&
-                                  !AlphaNumRegEx.test(answer)
-                                ? "input-error"
-                                : answer &&
-                                  error &&
-                                  transformedColumns[columnUUID]?.validation ===
-                                      "numeric" &&
-                                  !NumericRegEx.test(answer)
-                                ? "input-error"
-                                : ""
-                        }`}
-                        disabled={
-                            (editMode && params["*"].includes("view")) ||
-                            !editMode
-                        }
-                        placeholder="Enter text here"
-                        value={answer}
-                        name={`${columnUUID}.${rowId}`}
-                        onChange={(e) =>
-                            handleAnswersChange(e.target.name, e.target.value)
-                        }
-                        onBlur={(e) =>
-                            handleAnswersBlur(e.target.name, e.target.value)
-                        }
-                        helperText={
-                            !answer && error && error?.length !== 0
-                                ? error
-                                : answer &&
-                                  transformedColumns[columnUUID]?.validation ===
-                                      "alphabets" &&
-                                  !AlphaRegEx.test(answer)
-                                ? error
-                                : answer &&
-                                  transformedColumns[columnUUID]?.validation ===
-                                      "numeric" &&
-                                  !NumericRegEx.test(answer)
-                                ? error
-                                : answer &&
-                                  transformedColumns[columnUUID]?.validation ===
-                                      "alphanumeric" &&
-                                  !AlphaNumRegEx.test(answer)
-                                ? error
-                                : " "
-                        }
-                    />
-                )}
-            {transformedColumns[columnUUID] &&
-                transformedColumns[columnUUID].columnType === "dropdown" && (
-                    <div className="select-field">
-                        <FormControl className="fullwidth-field">
-                            <Select
-                                IconComponent={(props) => (
-                                    <KeyboardArrowDownRoundedIcon {...props} />
-                                )}
-                                name={`${columnUUID}.${rowId}`}
-                                displayEmpty
-                                disabled={
-                                    (editMode &&
-                                        params["*"].includes("view")) ||
-                                    !editMode
-                                }
-                                value={answer}
-                                className={`${
-                                    !answer && error && error?.length !== 0
-                                        ? "select-field-error"
-                                        : ""
-                                }`}
-                                onChange={(e) => {
-                                    handleAnswersChange(
-                                        e.target.name,
-                                        e.target.value
-                                    );
-                                }}
-                                renderValue={
-                                    answer !== ""
-                                        ? undefined
-                                        : () => (
-                                              <div className="select-placeholder">
-                                                  Choose dropdown value
-                                              </div>
-                                          )
-                                }
-                            >
-                                {/* <MenuItem value="" disabled>
+                name={`${columnUUID}.${rowId}`}
+                displayEmpty
+                disabled={
+                  (editMode && params["*"].includes("view")) || !editMode
+                }
+                value={answer}
+                className={`${
+                  !answer && error && error?.length !== 0
+                    ? "select-field-error"
+                    : ""
+                }`}
+                onChange={(e) => {
+                  handleAnswersChange(e.target.name, e.target.value);
+                }}
+                renderValue={
+                  answer !== ""
+                    ? undefined
+                    : () => (
+                        <div className="select-placeholder">
+                          Choose dropdown value
+                        </div>
+                      )
+                }
+              >
+                {/* <MenuItem value="" disabled>
                                     Select option
                                 </MenuItem> */}
-                                {transformedColumns[columnUUID].options.map(
-                                    (option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option?.length <= 40 ? (
+                {transformedColumns[columnUUID].options.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option?.length <= 40 ? (
                       option
                     ) : (
                       <Tooltip title={option}>
                         <span>{option?.slice(0, 40) + "..."}</span>
                       </Tooltip>
                     )}
-                                        </MenuItem>
-                                    )
-                                )}
-                            </Select>
-                            <FormHelperText>
-                                {!answer && error && error?.length !== 0
-                                    ? error
-                                    : " "}
-                            </FormHelperText>
-                        </FormControl>
-                    </div>
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>
+                {!answer && error && error?.length !== 0 ? error : " "}
+              </FormHelperText>
+            </FormControl>
+          </div>
+        )}
+      {transformedColumns[columnUUID] &&
+        transformedColumns[columnUUID].columnType === "date" && (
+          <FormControl fullWidth>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                disabled={
+                  (editMode && params["*"].includes("view")) || !editMode
+                }
+                value={answer}
+                className={`datepicker-blk`}
+                components={{
+                  OpenPickerIcon: DateRangeOutlinedIcon,
+                }}
+                onChange={(dateValue) => {
+                  handleAnswersChange(
+                    `${columnUUID}.${rowId}`,
+                    new Date(new Date(dateValue)).toLocaleDateString("en")
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    autoComplete="off"
+                    onKeyDown={handleOnKeyDownChange}
+                    className={`input-field${
+                      !answer && error && error?.length !== 0
+                        ? "input-error"
+                        : ""
+                    }`}
+                  />
                 )}
-            {transformedColumns[columnUUID] &&
-                transformedColumns[columnUUID].columnType === "date" && (
-                    <FormControl fullWidth>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                                disabled={
-                                    (editMode &&
-                                        params["*"].includes("view")) ||
-                                    !editMode
-                                }
-                                value={answer}
-                                className={`datepicker-blk`}
-                                components={{
-                                    OpenPickerIcon: DateRangeOutlinedIcon,
-                                }}
-                                onChange={(dateValue) => {
-                                    handleAnswersChange(
-                                        `${columnUUID}.${rowId}`,
-                                        new Date(
-                                            new Date(dateValue)
-                                        ).toLocaleDateString("en")
-                                    );
-                                }}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        autoComplete="off"
-                                        onKeyDown={handleOnKeyDownChange}
-                                        className={`input-field${
-                                            !answer &&
-                                            error &&
-                                            error?.length !== 0
-                                                ? "input-error"
-                                                : ""
-                                        }`}
-                                    />
-                                )}
-                            />
-                            <FormHelperText>
-                                {!answer && error && error?.length !== 0
-                                    ? error
-                                    : " "}
-                            </FormHelperText>
-                        </LocalizationProvider>
-                    </FormControl>
-                )}
-        </>
-    );
+              />
+              <FormHelperText>
+                {!answer && error && error?.length !== 0 ? error : " "}
+              </FormHelperText>
+            </LocalizationProvider>
+          </FormControl>
+        )}
+    </>
+  );
 };
 
 export default TableLayoutCellComponent;
@@ -514,69 +507,65 @@ const RenderCurrentFiles = ({
   setCurrentSelectedFiles,
   setIsFileRemoved,
 }) => {
-    const onCurrentFileRemoveHandler = (fileIdx) => {
-        let tempCurrentSelectedFiles = [...currentSelectedFiles];
-        tempCurrentSelectedFiles.splice(fileIdx, 1);
-        setCurrentSelectedFiles(tempCurrentSelectedFiles);
-        setIsFileRemoved(true);
-    };
-    return (
-        <>
-            {currentSelectedFiles.map((file, fileIdx) =>
-                file?.name?.length <= 40 ? (
-                    <p key={file?.name} className="select-filename">
-                        <a
-                            href={file?.location ?? "#"}
-                            target="_blank"
-                            style={{
-                                textDecoration: "none",
-                                color: `${!file?.location && "#1e1e1e"}`,
-                                pointerEvents: `${!file?.location && "none"}`,
-                            }}
-                        >
-                            {file?.name}
-                        </a>
-                        <span
-                            className="file-close-icon"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => onCurrentFileRemoveHandler(fileIdx)}
-                        >
-                            {" "}
-                            <CloseIcon />
-                        </span>
-                        {/* </div> */}
-                    </p>
-                ) : (
-                    <Tooltip key={file?.name} title={file?.name}>
-                        <p className="select-filename">
-                            <a
-                                target={"_blank"}
-                                href={file?.location ?? "#"}
-                                style={{
-                                    textDecoration: "none",
-                                    color: `${!file?.location && "#1e1e1e"}`,
-                                    pointerEvents: `${
-                                        !file?.location && "none"
-                                    }`,
-                                }}
-                            >
-                                {file?.name?.slice(0, 30) + "..."}
-                            </a>
-                            <span
-                                className="file-close-icon"
-                                style={{ cursor: "pointer" }}
-                                onClick={() =>
-                                    onCurrentFileRemoveHandler(fileIdx)
-                                }
-                            >
-                                {" "}
-                                <CloseIcon />
-                            </span>
-                            {/* </div> */}
-                        </p>
-                    </Tooltip>
-                )
-            )}
-        </>
-    );
+  const onCurrentFileRemoveHandler = (fileIdx) => {
+    let tempCurrentSelectedFiles = [...currentSelectedFiles];
+    tempCurrentSelectedFiles.splice(fileIdx, 1);
+    setCurrentSelectedFiles(tempCurrentSelectedFiles);
+    setIsFileRemoved(true);
+  };
+  return (
+    <>
+      {currentSelectedFiles.map((file, fileIdx) =>
+        file?.name?.length <= 40 ? (
+          <p key={file?.name} className="select-filename">
+            <a
+              href={file?.location ?? "#"}
+              target="_blank"
+              style={{
+                textDecoration: "none",
+                color: `${!file?.location && "#1e1e1e"}`,
+                pointerEvents: `${!file?.location && "none"}`,
+              }}
+            >
+              {file?.name}
+            </a>
+            <span
+              className="file-close-icon"
+              style={{ cursor: "pointer" }}
+              onClick={() => onCurrentFileRemoveHandler(fileIdx)}
+            >
+              {" "}
+              <CloseIcon />
+            </span>
+            {/* </div> */}
+          </p>
+        ) : (
+          <Tooltip key={file?.name} title={file?.name}>
+            <p className="select-filename">
+              <a
+                target={"_blank"}
+                href={file?.location ?? "#"}
+                style={{
+                  textDecoration: "none",
+                  color: `${!file?.location && "#1e1e1e"}`,
+                  pointerEvents: `${!file?.location && "none"}`,
+                }}
+              >
+                {file?.name?.slice(0, 30) + "..."}
+              </a>
+              <span
+                className="file-close-icon"
+                style={{ cursor: "pointer" }}
+                onClick={() => onCurrentFileRemoveHandler(fileIdx)}
+              >
+                {" "}
+                <CloseIcon />
+              </span>
+              {/* </div> */}
+            </p>
+          </Tooltip>
+        )
+      )}
+    </>
+  );
 };
