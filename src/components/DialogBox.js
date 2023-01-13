@@ -10,6 +10,7 @@ const DialogBox = ({
     primaryButtonText,
     secondaryButtonText,
     onPrimaryModalButtonClickHandler,
+    isDisabledPrimaryButton = false,
     onSecondaryModalButtonClickHandler,
     openModal,
     setOpenModal,
@@ -116,6 +117,7 @@ const DialogBox = ({
                                 <button
                                     type="submit"
                                     onClick={onPrimaryButtonClickHandler}
+                                    disabled={isDisabledPrimaryButton}
                                     className="primary-button"
                                 >
                                     {primaryButtonText}

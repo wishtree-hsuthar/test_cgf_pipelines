@@ -63,6 +63,7 @@ const TableLayoutCellComponent = ({
   const params = useParams();
   const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
   const [isFileRemoved, setIsFileRemoved] = useState(false);
+  const [isDisabledPrimaryButton, setIsDisabledPrimaryButton] = useState(false);
   const handleOnKeyDownChange = (e) => {
     e.preventDefault();
   };
@@ -86,32 +87,54 @@ const TableLayoutCellComponent = ({
     // let files = e?.target?.files;
     // console.log("fiels");
   };
-  const onAttachmetChangeHandler = async (e) => {
-    let files = await e?.target?.files;
-    console.log("files:-", files);
+  const getEncryptedFiles = (files) => {
     let tempCurrentSelectedFiles = [...currentSelectedFiles];
-    Object.keys(files).forEach(async (fileIdx) => {
-      console.log("files at momemnt:-", files);
+    for (const file of files) {
       let reader = new FileReader();
-      reader.readAsDataURL(files[fileIdx]);
-      reader.onloadend = async () => {
-        let result = reader.result;
-        console.log("before file encrypt", fileIdx);
-        let encryptedFile = CryptoJS.AES.encrypt(
+      reader.readAsDataURL(file);
+      reader.onload = async (e) => {
+        const result = e.target.result;
+        const encryptedFile = CryptoJS.AES.encrypt(
           result,
           REACT_APP_FILE_ENCRYPT_SECRET
         ).toString();
-        console.log("After file encrypt", fileIdx);
         tempCurrentSelectedFiles.push({
           file: encryptedFile,
-          type: files[fileIdx]?.type,
-          name: files[fileIdx]?.name,
+          type: file?.type,
+          name: file?.name,
         });
-        console.log("before setting selected files", fileIdx);
-        setCurrentSelectedFiles(tempCurrentSelectedFiles);
       };
+      setTimeout(() => {
+        setCurrentSelectedFiles(tempCurrentSelectedFiles);
+      }, 500);
+    }
+    Object.keys(files).forEach(async (fileIdx) => {
+      console.log("files at momemnt:-", files);
+
+      // reader.onloadend = async () => {
+      //   let result = reader.result;
+      //   console.log("before file encrypt", fileIdx);
+      //   let encryptedFile = CryptoJS.AES.encrypt(
+      //     result,
+      //     REACT_APP_FILE_ENCRYPT_SECRET
+      //   ).toString();
+      //   console.log("After file encrypt", fileIdx);
+      //   tempCurrentSelectedFiles.push({
+      //     file: encryptedFile,
+      //     type: files[fileIdx]?.type,
+      //     name: files[fileIdx]?.name,
+      //   });
+      //   console.log("before setting selected files", fileIdx);
+      //   setCurrentSelectedFiles(tempCurrentSelectedFiles);
+      // };
     });
-    console.log("temp Current selected files", tempCurrentSelectedFiles);
+    // return tempCurrentSelectedFiles
+  };
+  const onAttachmetChangeHandler = async (e) => {
+    let files = await e?.target?.files;
+    console.log("files:-", files);
+    getEncryptedFiles(files);
+    // setCurrentSelectedFiles(encryptedFiles)
   };
   const getFilesForBackend = () => {
     const filterdFiles = currentSelectedFiles.filter((file) => !file?.location);
@@ -123,12 +146,14 @@ const TableLayoutCellComponent = ({
   };
   const uploadAttachmentButtonClickHandler = async () => {
     console.log("Attachments:- ", currentSelectedFiles);
+    setIsDisabledPrimaryButton(true);
     try {
       const newlyAddedFiles = getFilesForBackend();
       const oldFiles = getFilesNotRemoved();
       const attachmentResponse = await privateAxios.post(UPLOAD_ATTACHMENTS, {
         files: [...newlyAddedFiles],
       });
+      setIsDisabledPrimaryButton(false);
       console.log("Attachment Response", attachmentResponse);
       let tempAssessment = { ...assessmentQuestionnaire };
       tempAssessment[sectionUUID][`${columnUUID}.${rowId}`] = [
@@ -141,6 +166,7 @@ const TableLayoutCellComponent = ({
       setOpenFileAttachmntDialog(false);
       setIsFileRemoved(false);
     } catch (error) {
+      setIsDisabledPrimaryButton(false);
       if (error?.code === "ERR_CANCELED") return;
       setToasterDetails(
         {
@@ -227,6 +253,7 @@ const TableLayoutCellComponent = ({
         primaryButtonText={"Upload"}
         secondaryButtonText={"Cancel"}
         onPrimaryModalButtonClickHandler={uploadAttachmentButtonClickHandler}
+        isDisabledPrimaryButton={isDisabledPrimaryButton}
         onSecondaryModalButtonClickHandler={cancelAttachmentButtonClickHandler}
         openModal={openFileAttachmenDialog}
         setOpenModal={setOpenFileAttachmntDialog}
@@ -314,7 +341,7 @@ const TableLayoutCellComponent = ({
                         style={{ textDecoration: "none" }}
                         target="_blank"
                       >
-                        <p>{`${file?.name + " idx "+ fileIdx}`}</p>
+                        <p>{`${file?.name + " idx " + fileIdx}`}</p>
                       </a>
                     )
                   : (fileIdx <= 1 || showMoreAttachment) && (
@@ -324,7 +351,9 @@ const TableLayoutCellComponent = ({
                         style={{ textDecoration: "none" }}
                       >
                         <a href={file?.location ?? "#"} target="_blank">
-                          <p>{`${file?.name?.slice(0, 30) + " idx " + fileIdx}...`}</p>
+                          <p>{`${
+                            file?.name?.slice(0, 30) + " idx " + fileIdx
+                          }...`}</p>
                         </a>
                       </Tooltip>
                     )
@@ -338,7 +367,7 @@ const TableLayoutCellComponent = ({
                   }}
                   className="show-more-less-txt"
                 >
-                 {answer?.length > 2 && "Show Less"} 
+                  {answer?.length > 2 && "Show Less"}
                 </a>
               ) : (
                 <a
@@ -349,7 +378,7 @@ const TableLayoutCellComponent = ({
                   }}
                   className="show-more-less-txt"
                 >
-                 {answer?.length > 2 && "Show More"} 
+                  {answer?.length > 2 && "Show More"}
                 </a>
               )}
             </>
