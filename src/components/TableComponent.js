@@ -474,13 +474,10 @@ export default function TableComponent({
                                                                     <span>
                                                                         {row[
                                                                             cell
-                                                                        ]
-                                                                            ? row[
-                                                                                  cell
-                                                                              ]
-                                                                            : row[
-                                                                                  cell
-                                                                              ]}
+                                                                        ] ??
+                                                                            row[
+                                                                                cell
+                                                                            ]}
                                                                     </span>
                                                                 </TableCell>
                                                             );

@@ -20,6 +20,7 @@ import { TabPanel } from "../../../utils/tabUtils/TabPanel";
 import DialogBox from "../../../components/DialogBox";
 import axios from "axios";
 import { downloadFunction } from "../../../utils/downloadFunction";
+import Loader from "../../../utils/Loader";
 
 const ITEM_HEIGHT = 42;
 const MenuProps = {
@@ -56,7 +57,8 @@ function PreviewQuestionnaire(props) {
     const [value, setValue] = useState(0);
     //custom hook to set title of page
     useDocumentTitle("Preview Questionnaire");
-    const [isLoading, setIsLoading] = useState(false);
+    const [isPreviewQuestionnaireLoading, setIsPreviewQuestionnaireLoading] =
+        useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     //Toaster Message setter
     const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -97,7 +99,7 @@ function PreviewQuestionnaire(props) {
         let controller = new AbortController();
         const fetch = async () => {
             try {
-                setIsLoading(true);
+                setIsPreviewQuestionnaireLoading(true);
                 const response = await privateAxios.get(
                     `${ADD_QUESTIONNAIRE}/${params.id}`,
                     {
@@ -106,10 +108,10 @@ function PreviewQuestionnaire(props) {
                 );
                 console.log("response from fetch questionnaire", response);
                 isMounted && setQuestionnaire({ ...response.data });
-                setIsLoading(false);
+                setIsPreviewQuestionnaireLoading(false);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
-                setIsLoading(false);
+                setIsPreviewQuestionnaireLoading(false);
                 if (error?.response?.status == 401) {
                     setToasterDetails(
                         {
@@ -439,10 +441,8 @@ function PreviewQuestionnaire(props) {
                             />
                         </div>
                     </div> */}
-                    {isLoading ? (
-                        <div className="loader-blk">
-                            <img src={Loader2} alt="Loading" />
-                        </div>
+                    {isPreviewQuestionnaireLoading ? (
+                        <Loader />
                     ) : (
                         <div className="section-form-sect">
                             <div className="section-tab-blk flex-between preview-tab-blk">

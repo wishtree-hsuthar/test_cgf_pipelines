@@ -36,6 +36,7 @@ import {
     cgfActivitiesRetailer,
     defaultValues,
 } from "../../utils/MemberModuleUtil";
+import Loader from "../../utils/Loader";
 
 //Parent company (Ideally get from backend)
 //CGF Categories (Ideally get from backend)
@@ -105,14 +106,14 @@ const AddMember = () => {
     // To fetch and set addMemberRoles
     const [addMemberRoles, addMemberSetRoles] = useState([]);
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isMemberLoading, setIsMemberLoading] = useState(false);
 
     const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
         reValidateMode: "onChange",
         defaultValues: tempDefaultValues,
     });
     const onSubmitFunctionCallAddMember = async (data) => {
-        setIsLoading(true);
+        setIsMemberLoading(true);
         setdisableAddMemberButton(true);
         console.log("data", data);
         try {
@@ -150,7 +151,7 @@ const AddMember = () => {
             });
             console.log("response : ", response);
             if (response.status === 201) {
-                setIsLoading(false);
+                setIsMemberLoading(false);
 
                 setToasterDetailsAddMember(
                     {
@@ -166,7 +167,7 @@ const AddMember = () => {
                 return true;
             }
         } catch (error) {
-            setIsLoading(false);
+            setIsMemberLoading(false);
 
             if (error?.response?.status === 401) {
                 setToasterDetailsAddMember(
@@ -459,10 +460,8 @@ const AddMember = () => {
                         onSubmit={handleSubmit(onSubmitAddMember)}
                         onKeyDown={(e) => checkKeyDown(e)}
                     >
-                        {isLoading ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
+                        {isMemberLoading ? (
+                            <Loader />
                         ) : (
                             <div className="card-wrapper">
                                 <div className="card-inner-wrap">

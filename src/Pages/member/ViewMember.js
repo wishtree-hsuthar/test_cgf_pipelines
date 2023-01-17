@@ -36,6 +36,7 @@ import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { defaultValues } from "../../utils/MemberModuleUtil";
+import Loader from "../../utils/Loader";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -135,7 +136,7 @@ const ViewMember = () => {
     //state to hold search keyword
     const [search, setSearch] = useState("");
     // state to manage loader
-    const [isLoading, setIsLoading] = useState(false);
+    const [isViewMemberLoading, setIsViewMemberLoading] = useState(false);
 
     //State to hold filter values
     const [filters, setFilters] = useState({
@@ -451,7 +452,7 @@ const ViewMember = () => {
         controller = new AbortController()
     ) => {
         try {
-            setIsLoading(true);
+            setIsViewMemberLoading(true);
             const response = await axios.get(MEMBER + `/${param.id}`, {
                 signal: controller.signal,
             });
@@ -504,7 +505,7 @@ const ViewMember = () => {
                 roleId: roleName,
                 // roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
             });
-            setIsLoading(false);
+            setIsViewMemberLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             if (error?.response?.status == 401) {
@@ -522,7 +523,7 @@ const ViewMember = () => {
                     navigate("/login");
                 }, 3000);
             } else {
-                setIsLoading(false);
+                setIsViewMemberLoading(false);
                 isMounted && setErrorToaster(error);
             }
         }
@@ -730,10 +731,8 @@ const ViewMember = () => {
                             {/* <CustomModal /> */}
                         </span>
                     </div>
-                    {isLoading ? (
-                        <div className="loader-blk">
-                            <img src={Loader2} alt="Loading" />
-                        </div>
+                    {isViewMemberLoading ? (
+                        <Loader />
                     ) : (
                         <div className="card-wrapper">
                             <div className="card-inner-wrap">

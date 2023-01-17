@@ -18,7 +18,7 @@ import PendingCGFAdmins from "./PendingCGFAdmins";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import { downloadFunction } from "../../utils/downloadFunction";
-
+import TabHeader from "../../utils/tabUtils/TabHeader";
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
@@ -414,7 +414,11 @@ const SubAdminList = () => {
                     </div>
                     <div className="member-filter-wrap flex-between">
                         <div className="member-tab-left">
-                            <div className="member-tab-wrapper">
+                            <TabHeader
+                                value={value}
+                                handleChange={handleChange}
+                            />
+                            {/* <div className="member-tab-wrapper">
                                 <Box
                                     sx={{
                                         borderBottom: 1,
@@ -437,7 +441,7 @@ const SubAdminList = () => {
                                         />
                                     </Tabs>
                                 </Box>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="member-filter-left">
                             <div className="searchbar">
@@ -525,8 +529,8 @@ const SubAdminList = () => {
                                 filters={filters}
                                 myRef={cgfAdminRef}
                                 selectedRoles={selectedRoles}
-                                toasterDetails={toasterDetails}
-                                setToasterDetails={setToasterDetails}
+                                pendingCgftoasterDetails={toasterDetails}
+                                setPendingCgfToasterDetails={setToasterDetails}
                             />
                         </TabPanel>
                     </div>
