@@ -6,6 +6,7 @@ import Loader2 from "../../assets/Loader/Loader2.svg";
 import { useSelector } from "react-redux";
 import { ADD_OPERATION_MEMBER } from "../../api/Url";
 import { tableHead } from "../../utils/OperationMemberModuleUtil";
+import Loader from "../../utils/Loader";
 
 let tempTableHead = JSON.parse(JSON.stringify(tableHead));
 tempTableHead.push({
@@ -31,7 +32,10 @@ function OnboardedOperationMember({
     //     setOpenDeleteDialogBoxOnboardedOperationMember,
     // ] = useState(false);
     // state to manage loaders
-    const [isLoading, setIsLoading] = useState(true);
+    const [
+        isOnboardedOperationMemberLoading,
+        setIsOnboardedOperationMemberLoading,
+    ] = useState(true);
     const privilege = useSelector((state) => state?.user?.privilege);
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
     let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
@@ -164,7 +168,7 @@ function OnboardedOperationMember({
     ) => {
         try {
             let url = generateUrl();
-            setIsLoading(true);
+            setIsOnboardedOperationMemberLoading(true);
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
@@ -175,10 +179,10 @@ function OnboardedOperationMember({
             console.log("Response from sub admin api get", response);
 
             updateRecords([...response.data]);
-            setIsLoading(false);
+            setIsOnboardedOperationMemberLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setIsLoading(false);
+            setIsOnboardedOperationMemberLoading(false);
             console.log("Error from getSubAdmin-------", error);
 
             if (error?.response?.status == 401) {
@@ -236,10 +240,8 @@ function OnboardedOperationMember({
     ]);
     return (
         <>
-            {isLoading ? (
-                <div className="loader-blk">
-                    <img src={Loader2} alt="Loading" />
-                </div>
+            {isOnboardedOperationMemberLoading ? (
+                <Loader />
             ) : (
                 <TableComponent
                     tableHead={tempTableHead}

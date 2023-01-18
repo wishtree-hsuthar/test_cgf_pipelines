@@ -1,6 +1,6 @@
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import {
-    Autocomplete,
+    Autocomplete as AddOperationMemberAutocomplete,
     FormControlLabel,
     Paper,
     Radio,
@@ -8,7 +8,10 @@ import {
     TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import {
+    Controller as AddOperationMemberController,
+    useForm,
+} from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import {
@@ -25,6 +28,7 @@ import { helperText } from "../../utils/OperationMemberModuleUtil";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader2 from "../../assets/Loader/Loader2.svg";
+import Loader from "../../utils/Loader";
 
 function AddOperationMember() {
     //custom hook to set title of page
@@ -69,7 +73,8 @@ function AddOperationMember() {
     const [disableReportingManager, setDisableReportingManager] =
         useState(true);
     const [countries, setCountries] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isAddOperationMemberLoading, setIsAddOperationMemberLoading] =
+        useState(false);
     const [reportingManagers, setReportingManagers] = useState();
     const toasterRef = useRef();
     const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -275,14 +280,14 @@ function AddOperationMember() {
                     : selectedMemberCompany[0]._id,
         };
         console.log("Data while adding operation member - ", data);
-        setIsLoading(true);
+        setIsAddOperationMemberLoading(true);
         try {
             const response = await privateAxios.post(
                 ADD_OPERATION_MEMBER,
                 data
             );
             if (response.status == 201) {
-                setIsLoading(false);
+                setIsAddOperationMemberLoading(false);
                 reset();
                 setDisableAddOperationMemberButton(false);
                 setToasterDetails(
@@ -407,10 +412,8 @@ function AddOperationMember() {
                                 </div>
                             </div>
                         </div>
-                        {isLoading ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
+                        {isAddOperationMemberLoading ? (
+                            <Loader />
                         ) : (
                             <div className="card-wrapper">
                                 <div className="card-blk flex-between">
@@ -556,7 +559,7 @@ function AddOperationMember() {
                                             </label>
                                             <div className="phone-number-field">
                                                 <div className="select-field country-code">
-                                                    <Controller
+                                                    <AddOperationMemberController
                                                         control={control}
                                                         name="countryCode"
                                                         rules={{
@@ -578,7 +581,8 @@ function AddOperationMember() {
                                                                 error,
                                                             },
                                                         }) => (
-                                                            <Autocomplete
+                                                            <AddOperationMemberAutocomplete
+                                                                {...field}
                                                                 className={`${
                                                                     error &&
                                                                     "autocomplete-error"
@@ -602,16 +606,15 @@ function AddOperationMember() {
                                                                 popupIcon={
                                                                     <KeyboardArrowDownRoundedIcon />
                                                                 }
-                                                                {...field}
                                                                 onChange={(
                                                                     event,
                                                                     newValue
                                                                 ) => {
                                                                     console.log(
-                                                                        "inside autocomplete onchange"
+                                                                        "inside autocomplete onchange of addoperation member"
                                                                     );
                                                                     console.log(
-                                                                        "new Value ",
+                                                                        "new Value operation member",
                                                                         newValue
                                                                     );
                                                                     newValue &&
@@ -632,16 +635,14 @@ function AddOperationMember() {
                                                                         "phoneNumber"
                                                                     );
                                                                 }}
+                                                                autoHighlight
                                                                 options={
                                                                     countries
                                                                         ? countries
                                                                         : []
                                                                 }
-                                                                autoHighlight
                                                                 // placeholder="Select country code"
-                                                                getOptionLabel={(
-                                                                    country
-                                                                ) => country}
+
                                                                 renderOption={(
                                                                     props,
                                                                     option
@@ -652,13 +653,16 @@ function AddOperationMember() {
                                                                         {option}
                                                                     </li>
                                                                 )}
+                                                                getOptionLabel={(
+                                                                    country
+                                                                ) => country}
                                                                 renderInput={(
                                                                     params
                                                                 ) => (
                                                                     <TextField
-                                                                        // className={`input-field ${
-                                                                        //   error && "input-error"
-                                                                        // }`}
+                                                                        placeholder={
+                                                                            "+91"
+                                                                        }
                                                                         {...params}
                                                                         inputProps={{
                                                                             ...params.inputProps,
@@ -667,10 +671,6 @@ function AddOperationMember() {
                                                                             trigger(
                                                                                 "countryCode"
                                                                             )
-                                                                        }
-                                                                        // onSubmit={() => setValue("countryCode", "")}
-                                                                        placeholder={
-                                                                            "+91"
                                                                         }
                                                                         helperText={
                                                                             error
@@ -780,7 +780,7 @@ function AddOperationMember() {
                                                 </span>
                                             </label>
                                             <div className="radio-btn-field">
-                                                <Controller
+                                                <AddOperationMemberController
                                                     name="isCGFStaff"
                                                     control={control}
                                                     render={({ field }) => (
@@ -837,7 +837,7 @@ function AddOperationMember() {
                                                 />
                                             ) : (
                                                 <div className="select-field auto-search-blk">
-                                                    <Controller
+                                                    <AddOperationMemberController
                                                         control={control}
                                                         name="memberId"
                                                         rules={{
@@ -849,7 +849,12 @@ function AddOperationMember() {
                                                                 error,
                                                             },
                                                         }) => (
-                                                            <Autocomplete
+                                                            <AddOperationMemberAutocomplete
+                                                                {...field}
+                                                                className={`${
+                                                                    error &&
+                                                                    "autocomplete-error"
+                                                                }`}
                                                                 PaperComponent={({
                                                                     children,
                                                                 }) => (
@@ -866,14 +871,9 @@ function AddOperationMember() {
                                                                         }
                                                                     </Paper>
                                                                 )}
-                                                                className={`${
-                                                                    error &&
-                                                                    "autocomplete-error"
-                                                                }`}
                                                                 popupIcon={
                                                                     <KeyboardArrowDownRoundedIcon />
                                                                 }
-                                                                {...field}
                                                                 // value={
                                                                 //     memberCompanies._id
                                                                 // }
@@ -1017,7 +1017,7 @@ function AddOperationMember() {
                                     <div className="card-form-field">
                                         <div className="form-group">
                                             <label htmlFor="">Address</label>
-                                            <Controller
+                                            <AddOperationMemberController
                                                 name="address"
                                                 control={control}
                                                 rules={{

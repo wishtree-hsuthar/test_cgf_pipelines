@@ -13,7 +13,10 @@ import {
     TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import {
+    Controller as EditOperationMemberController,
+    useForm,
+} from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import {
@@ -24,10 +27,10 @@ import {
     MEMBER,
     UPDATE_OPERATION_MEMBER,
 } from "../../api/Url";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
+import Loader from "../../utils/Loader";
 import { helperText } from "../../utils/OperationMemberModuleUtil";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
@@ -56,7 +59,8 @@ function EditOperationMember() {
     //custom hook to set title of page
     useDocumentTitle("Edit Operation Member");
     // state to manage loaders
-    const [isLoading, setIsLoading] = useState(true);
+    const [isEditOperationMemberLoading, setIsEditOperationMemberLoading] =
+        useState(true);
     const {
         handleSubmit,
         formState: { errors },
@@ -193,14 +197,14 @@ function EditOperationMember() {
 
     const fetchOperationMember = async (controller, isMounted) => {
         try {
-            setIsLoading(true);
+            setIsEditOperationMemberLoading(true);
             const response = await privateAxios.get(
                 GET_OPERATION_MEMBER_BY_ID + params.id,
                 {
                     signal: controller.signal,
                 }
             );
-            setIsLoading(false);
+            setIsEditOperationMemberLoading(false);
             isMounted &&
                 reset({
                     memberId: {
@@ -252,7 +256,7 @@ function EditOperationMember() {
                     navigate("/login");
                 }, 3000);
             }
-            setIsLoading(false);
+            setIsEditOperationMemberLoading(false);
             console.log("error from edit operation members", error);
         }
     };
@@ -314,7 +318,7 @@ function EditOperationMember() {
 
     const editOperationMember = async (data, navigateToListPage) => {
         setDisableEditMemberUpdateButton(true);
-        setIsLoading(true);
+        setIsEditOperationMemberLoading(true);
         data = {
             ...data,
             isActive: data?.isActive === "true" ? true : false,
@@ -325,7 +329,7 @@ function EditOperationMember() {
                 data
             );
             if (response.status == 200) {
-                setIsLoading(false);
+                setIsEditOperationMemberLoading(false);
 
                 setDisableEditMemberUpdateButton(false);
                 setToasterDetails(
@@ -348,7 +352,7 @@ function EditOperationMember() {
                 error
             );
             setDisableEditMemberUpdateButton(false);
-            setIsLoading(false);
+            setIsEditOperationMemberLoading(false);
 
             setToasterDetails(
                 {
@@ -415,10 +419,8 @@ function EditOperationMember() {
                                 </div> */}
                             </div>
                         </div>
-                        {isLoading ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
+                        {isEditOperationMemberLoading ? (
+                            <Loader />
                         ) : (
                             <div className="card-wrapper">
                                 <div className="card-blk flex-between">
@@ -555,7 +557,7 @@ function EditOperationMember() {
                                             </label>
                                             <div className="phone-number-field">
                                                 <div className="select-field country-code">
-                                                    <Controller
+                                                    <EditOperationMemberController
                                                         control={control}
                                                         name="countryCode"
                                                         rules={{
@@ -578,6 +580,9 @@ function EditOperationMember() {
                                                             },
                                                         }) => (
                                                             <EditOPAutoComplete
+                                                                popupIcon={
+                                                                    <KeyboardArrowDownRoundedIcon />
+                                                                }
                                                                 PaperComponent={({
                                                                     children,
                                                                 }) => (
@@ -594,16 +599,13 @@ function EditOperationMember() {
                                                                         }
                                                                     </Paper>
                                                                 )}
-                                                                popupIcon={
-                                                                    <KeyboardArrowDownRoundedIcon />
-                                                                }
                                                                 {...field}
                                                                 onChange={(
                                                                     event,
                                                                     newValue
                                                                 ) => {
                                                                     console.log(
-                                                                        "inside autocomplete onchange"
+                                                                        "inside autocomplete onchange .of edit operation member"
                                                                     );
                                                                     console.log(
                                                                         "new Value ",
@@ -636,10 +638,6 @@ function EditOperationMember() {
                                                                           ]
                                                                 }
                                                                 autoHighlight
-                                                                // placeholder="Select country code"
-                                                                // getOptionLabel={(
-                                                                //     country
-                                                                // ) => country}
                                                                 renderOption={(
                                                                     props,
                                                                     option
@@ -654,11 +652,7 @@ function EditOperationMember() {
                                                                     params
                                                                 ) => (
                                                                     <TextField
-                                                                        // className={`input-field ${
-                                                                        //   error && "input-error"
-                                                                        // }`}
                                                                         {...params}
-                                                                        // name="countryCode"
                                                                         inputProps={{
                                                                             ...params.inputProps,
                                                                         }}
@@ -667,7 +661,6 @@ function EditOperationMember() {
                                                                                 "countryCode"
                                                                             )
                                                                         }
-                                                                        // onSubmit={() => setValue("countryCode", "")}
                                                                         placeholder={
                                                                             "+91"
                                                                         }
@@ -687,8 +680,9 @@ function EditOperationMember() {
                                                     />
                                                 </div>
                                                 <Input
-                                                    name={"phoneNumber"}
                                                     control={control}
+                                                    placeholder="1234567890"
+                                                    name={"phoneNumber"}
                                                     myOnChange={(e) =>
                                                         phoneNumberChangeHandler(
                                                             e,
@@ -702,7 +696,6 @@ function EditOperationMember() {
                                                             e.target.value?.trim()
                                                         )
                                                     }
-                                                    placeholder="1234567890"
                                                     myHelper={helperText}
                                                     rules={{
                                                         maxLength: 15,
@@ -765,7 +758,7 @@ function EditOperationMember() {
                                                 </span>
                                             </label>
                                             <div className="radio-btn-field">
-                                                <Controller
+                                                <EditOperationMemberController
                                                     name="isCGFStaff"
                                                     control={control}
                                                     render={({ field }) => (
@@ -826,7 +819,7 @@ function EditOperationMember() {
                                                 </span>
                                             </label>
                                             <div className="country-code-auto-search">
-                                                <Controller
+                                                <EditOperationMemberController
                                                     control={control}
                                                     name="memberId"
                                                     rules={{ required: true }}
@@ -973,9 +966,9 @@ function EditOperationMember() {
                                     <div className="card-form-field">
                                         <div className="form-group">
                                             <label htmlFor="">Address</label>
-                                            <Controller
-                                                name="address"
+                                            <EditOperationMemberController
                                                 control={control}
+                                                name="address"
                                                 rules={{
                                                     minLength: 3,
                                                     maxLength: 250,
@@ -985,8 +978,11 @@ function EditOperationMember() {
                                                     fieldState: { error },
                                                 }) => (
                                                     <TextField
-                                                        multiline
                                                         {...field}
+                                                        id="outlined-basic"
+                                                        placeholder="Enter address"
+                                                        variant="outlined"
+                                                        multiline
                                                         onBlur={(e) =>
                                                             setValue(
                                                                 "address",
@@ -1000,8 +996,6 @@ function EditOperationMember() {
                                                             error &&
                                                             "input-textarea-error"
                                                         }`}
-                                                        id="outlined-basic"
-                                                        placeholder="Enter address"
                                                         helperText={
                                                             error
                                                                 ? helperText
@@ -1010,7 +1004,6 @@ function EditOperationMember() {
                                                                   ]
                                                                 : " "
                                                         }
-                                                        variant="outlined"
                                                     />
                                                 )}
                                             />
@@ -1045,7 +1038,7 @@ function EditOperationMember() {
                                     </div>
                                     <div className="card-form-field">
                                         <div className="form-group">
-                                            <label htmlFor="role">
+                                            <label htmlFor="opmember-role">
                                                 Role{" "}
                                                 <span className="mandatory">
                                                     *
@@ -1054,8 +1047,8 @@ function EditOperationMember() {
 
                                             <div>
                                                 <Dropdown
-                                                    name="roleId"
                                                     control={control}
+                                                    name="roleId"
                                                     options={roles}
                                                     rules={{
                                                         required: true,
@@ -1077,7 +1070,7 @@ function EditOperationMember() {
                                                 Status
                                             </label>
                                             <div className="radio-btn-field">
-                                                <Controller
+                                                <EditOperationMemberController
                                                     name="isActive"
                                                     control={control}
                                                     render={({ field }) => (

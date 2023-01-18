@@ -5,7 +5,7 @@ import { ADD_SUB_ADMIN, WITHDRAW_SUB_ADMIN } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import DialogBox from "../../components/DialogBox";
 import TableComponent from "../../components/TableComponent";
-
+import Loader from "../../utils/Loader";
 const pendingTableColumnHead = [
     {
         id: "name",
@@ -47,8 +47,8 @@ function PendingCGFAdmins({
     filters,
 
     myRef,
-    toasterDetails,
-    setToasterDetails,
+    pendingCgftoasterDetails,
+    setPendingCgfToasterDetails,
 }) {
     const [
         openDeleteDialogBoxPendingCGFAdmin,
@@ -64,7 +64,7 @@ function PendingCGFAdmins({
     ] = useState([]);
 
     // state to manage loader
-    const [isLoading, setIsLoading] = useState(true);
+    const [isPendingCgfAdmin, setIsPendingCgfAdmin] = useState(true);
 
     //state to hold search timeout delay
     const [searchTimeoutPendingCGFAdmin, setSearchTimeoutPendingCGFAdmin] =
@@ -179,7 +179,7 @@ function PendingCGFAdmins({
             );
             if (response.status == 200) {
                 console.log("user invite withdrawn successfully");
-                setToasterDetails(
+                setPendingCgfToasterDetails(
                     {
                         titleMessage: "Success",
                         descriptionMessage: response?.data?.message,
@@ -192,7 +192,7 @@ function PendingCGFAdmins({
             }
         } catch (error) {
             if (error?.response?.status == 401) {
-                setToasterDetails(
+                setPendingCgfToasterDetails(
                     {
                         titleMessage: "Oops!",
                         descriptionMessage:
@@ -226,7 +226,7 @@ function PendingCGFAdmins({
     ) => {
         try {
             let url = generateUrlForPendingTabCGFAdmin();
-            setIsLoading(true);
+            setIsPendingCgfAdmin(true);
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
@@ -240,12 +240,12 @@ function PendingCGFAdmins({
             );
 
             updatePendingRecordsCGFAdmin(response.data);
-            setIsLoading(false);
+            setIsPendingCgfAdmin(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
 
             if (error?.response?.status == 401) {
-                setToasterDetails(
+                setPendingCgfToasterDetails(
                     {
                         titleMessage: "Oops!",
                         descriptionMessage:
@@ -259,7 +259,7 @@ function PendingCGFAdmins({
                 }, 3000);
             } else {
                 isMounted &&
-                    setToasterDetails(
+                    setPendingCgfToasterDetails(
                         {
                             titleMessage: "Error",
                             descriptionMessage:
@@ -272,7 +272,7 @@ function PendingCGFAdmins({
                         },
                         () => myRef.current()
                     );
-                setIsLoading(false);
+                setIsPendingCgfAdmin(false);
             }
 
             console.log(
@@ -336,10 +336,8 @@ function PendingCGFAdmins({
                 openModal={openDeleteDialogBoxPendingCGFAdmin}
                 setOpenModal={setOpenDeleteDialogBoxPendingCGFAdmin}
             />
-            {isLoading ? (
-                <div className="loader-blk">
-                    <img src={Loader2} alt="Loading" />
-                </div>
+            {isPendingCgfAdmin ? (
+                <Loader />
             ) : (
                 <TableComponent
                     tableHead={pendingTableColumnHead}

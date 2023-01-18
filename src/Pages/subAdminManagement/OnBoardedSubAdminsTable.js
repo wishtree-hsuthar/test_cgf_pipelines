@@ -6,6 +6,7 @@ import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import Toaster from "../../components/Toaster";
+import Loader from "../../utils/Loader";
 const onBoardedTableColumnHead = [
     {
         id: "name",
@@ -59,7 +60,8 @@ function OnBoardedSubAdminsTable({
     const [records, setRecords] = React.useState([]);
     const [totalRecords, setTotalRecords] = React.useState(0);
     const [selected, setSelected] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isOnboardedCgfAdminLoading, setIsOnboardedCgfAdminLoading] =
+        useState(true);
 
     //state to hold search timeout delay
     const [searchTimeout, setSearchTimeout] = useState(null);
@@ -143,7 +145,7 @@ function OnBoardedSubAdminsTable({
     ) => {
         try {
             let url = generateUrl();
-            setIsLoading(true);
+            setIsOnboardedCgfAdminLoading(true);
             const onBoardedCGFAdmin = await privateAxios.get(url, {
                 signal: controller.signal,
             });
@@ -153,7 +155,7 @@ function OnBoardedSubAdminsTable({
             console.log("Response from sub admin api get", onBoardedCGFAdmin);
 
             updateRecords([...onBoardedCGFAdmin.data]);
-            setIsLoading(false);
+            setIsOnboardedCgfAdminLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             console.log("Error from getSubAdmin-------", error);
@@ -172,7 +174,7 @@ function OnBoardedSubAdminsTable({
                     navigate("/login");
                 }, 3000);
             }
-            setIsLoading(false);
+            setIsOnboardedCgfAdminLoading(false);
         }
     };
     const handleTablePageChange = (newPage) => {
@@ -221,10 +223,8 @@ function OnBoardedSubAdminsTable({
                 }
                 messageType={onBoardedCgfAdmintoasterDetails.messageType}
             />
-            {isLoading ? (
-                <div className="loader-blk">
-                    <img src={Loader2} alt="Loading" />
-                </div>
+            {isOnboardedCgfAdminLoading ? (
+                <Loader />
             ) : (
                 <TableComponent
                     tableHead={onBoardedTableColumnHead}

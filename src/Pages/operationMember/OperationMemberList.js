@@ -13,6 +13,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { DOWNLOAD_OPERATION_MEMBER } from "../../api/Url";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import { downloadFunction } from "../../utils/downloadFunction";
+import TabHeader from "../../utils/tabUtils/TabHeader";
 
 function a11yProps(index) {
     return {
@@ -153,7 +154,11 @@ function OperationMemberList() {
                         </div>
                         <div className="member-filter-wrap flex-between">
                             <div className="member-tab-left">
-                                <div className="member-tab-wrapper">
+                                <TabHeader
+                                    value={value}
+                                    handleChange={handleChange}
+                                />
+                                {/* <div className="member-tab-wrapper">
                                     <Box
                                         sx={{
                                             borderBottom: 1,
@@ -176,7 +181,7 @@ function OperationMemberList() {
                                             />
                                         </Tabs>
                                     </Box>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="member-filter-left">
                                 <div className="searchbar">

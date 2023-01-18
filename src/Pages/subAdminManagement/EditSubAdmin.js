@@ -11,8 +11,7 @@ import {
 
 import "react-phone-number-input/style.css";
 import axios from "axios";
-import { Controller, useForm } from "react-hook-form";
-import Loader2 from "../../assets/Loader/Loader2.svg";
+import { Controller as EditSubAdminController, useForm } from "react-hook-form";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import {
@@ -26,6 +25,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import Loader from "../../utils/Loader";
 
 const helperTextForCGFAdmin = {
     countryCode: {
@@ -56,7 +56,7 @@ const EditSubAdmin = () => {
     //custom hook to set title of page
     useDocumentTitle("Edit CGF Admin");
     // state to manage loaders
-    const [isLoading, setIsLoading] = useState(false);
+    const [isEditCgfAdminLoading, setIsEditCgfAdminLoading] = useState(false);
 
     const navigate = useNavigate();
     const params = useParams();
@@ -154,14 +154,14 @@ const EditSubAdmin = () => {
         fetchCountries();
         const fetchSubAdmin = async () => {
             try {
-                setIsLoading(true);
+                setIsEditCgfAdminLoading(true);
                 const response = await privateAxios.get(
                     FETCH_SUB_ADMIN_BY_ADMIN + params.id,
                     {
                         signal: controller.signal,
                     }
                 );
-                setIsLoading(false);
+                setIsEditCgfAdminLoading(false);
                 console.log(
                     "response from sub admin view page fetch api",
                     response
@@ -178,7 +178,7 @@ const EditSubAdmin = () => {
                 });
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
-                setIsLoading(false);
+                setIsEditCgfAdminLoading(false);
                 console.log("error from sub admin view page fetch api", error);
                 setToasterDetails(
                     {
@@ -258,7 +258,7 @@ const EditSubAdmin = () => {
     const handleOnSubmit = async (data) => {
         console.log("data from handle submit edit", data);
         setDisableEditCgfAdminButton(true);
-        setIsLoading(true);
+        setIsEditCgfAdminLoading(true);
         try {
             const response = await privateAxios.put(
                 UPDATE_SUB_ADMIN + params.id,
@@ -272,7 +272,7 @@ const EditSubAdmin = () => {
             );
             console.log("response from edit sub admin method", response);
             if (response.status == 200) {
-                setIsLoading(false);
+                setIsEditCgfAdminLoading(false);
 
                 setToasterDetails(
                     {
@@ -291,7 +291,7 @@ const EditSubAdmin = () => {
             }
         } catch (error) {
             console.log("error from edit sub admin submit method");
-            setIsLoading(false);
+            setIsEditCgfAdminLoading(false);
 
             if (error?.response?.status == 400) {
                 setToasterDetails(
@@ -362,10 +362,8 @@ const EditSubAdmin = () => {
                     </div>
                 </div> */}
                     </div>
-                    {isLoading ? (
-                        <div className="loader-blk">
-                            <img src={Loader2} alt="Loading" />
-                        </div>
+                    {isEditCgfAdminLoading ? (
+                        <Loader />
                     ) : (
                         <div className="card-wrapper">
                             <form onSubmit={handleSubmit(handleOnSubmit)}>
@@ -476,7 +474,7 @@ const EditSubAdmin = () => {
                                             </label>
                                             <div className="phone-number-field">
                                                 <div className="select-field country-code">
-                                                    <Controller
+                                                    <EditSubAdminController
                                                         control={control}
                                                         name="countryCode"
                                                         rules={{
@@ -698,11 +696,11 @@ const EditSubAdmin = () => {
                                     </div>
                                     <div className="card-form-field">
                                         <div className="form-group">
-                                            <label htmlFor="status">
+                                            <label htmlFor="cgfAdmin-status">
                                                 Status
                                             </label>
                                             <div className="radio-btn-field">
-                                                <Controller
+                                                <EditSubAdminController
                                                     name="status"
                                                     control={control}
                                                     render={({ field }) => (

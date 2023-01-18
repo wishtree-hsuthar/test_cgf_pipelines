@@ -14,6 +14,7 @@ import Toaster from "../../components/Toaster";
 import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { downloadFunction } from "../../utils/downloadFunction";
+import Loader from "../../utils/Loader";
 
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
@@ -98,7 +99,7 @@ const MemberList = () => {
     );
 
     // state to manage loader
-    const [isLoading, setIsLoading] = useState(false);
+    const [isMemberListLoading, setIsMemberListLoading] = useState(false);
 
     //state to hold search timeout delay
     const [searchTimeoutMemberList, setSearchTimeoutMemberList] =
@@ -302,7 +303,7 @@ const MemberList = () => {
     const getMembers = async (isMounted, controller) => {
         try {
             let url = generateUrl();
-            setIsLoading(true);
+            setIsMemberListLoading(true);
             const response = await axios.get(url, {
                 signal: controller.signal,
             });
@@ -310,7 +311,7 @@ const MemberList = () => {
                 parseInt(response.headers["x-total-count"])
             );
             console.log("response from backend", response);
-            setIsLoading(false);
+            setIsMemberListLoading(false);
             updateRecords(response?.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
@@ -330,7 +331,7 @@ const MemberList = () => {
                     navigate("/login");
                 }, 3000);
             } else {
-                setIsLoading(false);
+                setIsMemberListLoading(false);
                 isMounted &&
                     setToasterDetailsMemberList(
                         {
@@ -579,10 +580,8 @@ const MemberList = () => {
                         </div>
                     </div>
                     <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
-                        {isLoading ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
+                        {isMemberListLoading ? (
+                            <Loader />
                         ) : (
                             <TableComponent
                                 tableHead={tableHead}
