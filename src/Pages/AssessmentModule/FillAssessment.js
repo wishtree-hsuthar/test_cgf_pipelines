@@ -1042,9 +1042,18 @@ function FillAssessment() {
                             <span className="accrej-label">
                                 Assessment type <span>:</span>
                             </span>
-                            <span className="accrej-desc">
-                                {assessment?.assessmentType}
-                            </span>
+                            
+                            {/* {assessment?.assessmentType} */}
+                            {assessment?.assessmentType?.length <= 41 ? (
+                                <span className="accrej-desc">{assessment?.assessmentType}</span>
+                            ) : (
+                                <Tooltip title={assessment?.assessmentType}>
+                                    <span className="accrej-desc">
+                                        {" "}
+                                        {assessment?.assessmentType?.slice(0, 44)}...
+                                    </span>
+                                </Tooltip>
+                            )}
                         </span>
                         <span className="accrej-txtblk">
                             <span className="accrej-label">
