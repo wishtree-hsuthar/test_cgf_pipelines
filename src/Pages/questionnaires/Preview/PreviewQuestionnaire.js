@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import Loader2 from "../../../assets/Loader/Loader2.svg";
 
 import { Tabs, Tab, Tooltip, Box } from "@mui/material";
 

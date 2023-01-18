@@ -8,7 +8,6 @@ import axios from "axios";
 //Internal Imports
 import TableComponent from "../../components/TableComponent";
 import { DOWNLOAD_MEMBERS, MEMBER } from "../../api/Url";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import { useSelector } from "react-redux";
@@ -166,6 +165,7 @@ const MemberList = () => {
             delete object["isDeleted"];
             delete object["isReplaced"];
             delete object["isMemberRepresentative"];
+            delete object["memberRepresentativeRole"];
             delete object["__v"];
             object["createdAt"] = new Date(
                 object["createdAt"]
@@ -179,10 +179,10 @@ const MemberList = () => {
             } else {
                 object.createdBy = "N/A";
             }
-            if (object["representative"].length > 0) {
-                object["isActive"] = object["representative"][0]["isActive"];
-                object.email = object["representative"][0]?.email ?? "N/A";
-                object.name = object["representative"][0]?.name ?? "N/A";
+            if (object["representative"]) {
+                object["isActive"] = object["representative"]?.isActive;
+                object.email = object["representative"]?.email ?? "N/A";
+                object.name = object["representative"]?.name ?? "N/A";
             } else {
                 object["isActive"] = false;
                 object.email = "N/A";
@@ -314,6 +314,7 @@ const MemberList = () => {
             setIsMemberListLoading(false);
             updateRecords(response?.data);
         } catch (error) {
+            console.log("error from get members api - ", error);
             if (error?.code === "ERR_CANCELED") return;
             if (error?.response?.status === 401) {
                 setToasterDetailsMemberList(

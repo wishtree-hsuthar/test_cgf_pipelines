@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import TableComponent from "../../components/TableComponent";
 import { privateAxios } from "../../api/axios";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import { useSelector } from "react-redux";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";

@@ -27,7 +27,6 @@ import Toaster from "../../components/Toaster";
 import { helperText } from "../../utils/OperationMemberModuleUtil";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import Loader from "../../utils/Loader";
 
 function AddOperationMember() {

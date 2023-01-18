@@ -18,7 +18,6 @@ import {
     REACT_APP_FILE_ENCRYPT_SECRET,
     SUBMIT_ASSESSMENT_AS_DRAFT,
 } from "../../api/Url";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import DialogBox from "../../components/DialogBox";
 import Toaster from "../../components/Toaster";
 import { downloadFunction } from "../../utils/downloadFunction";

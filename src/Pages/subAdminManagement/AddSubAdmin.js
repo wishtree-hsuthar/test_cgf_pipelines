@@ -13,7 +13,6 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import Loader from "../../utils/Loader";
 
 const helperTextForCGFAdmin = {

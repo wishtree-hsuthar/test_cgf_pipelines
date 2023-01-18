@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import { ADD_SUB_ADMIN, WITHDRAW_SUB_ADMIN } from "../../api/Url";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import DialogBox from "../../components/DialogBox";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../utils/Loader";

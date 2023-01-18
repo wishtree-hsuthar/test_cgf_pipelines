@@ -7,7 +7,6 @@ import {
     TextField,
 } from "@mui/material";
 import axios from "axios";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
