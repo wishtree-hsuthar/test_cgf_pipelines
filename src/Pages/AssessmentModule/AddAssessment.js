@@ -1,6 +1,9 @@
 import { TextField } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import {
+    Controller as AddAssessmentController,
+    useForm,
+} from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { privateAxios } from "../../api/axios";
@@ -449,19 +452,19 @@ const AddAssessment = () => {
                                             <Dropdown
                                                 control={control}
                                                 name={"assignedMember"}
-                                                myOnChange={
-                                                    handleChangeForMemberCompany
-                                                }
                                                 placeholder={
                                                     "Select member company"
+                                                }
+                                                options={
+                                                    memberCompaniesForAddAssessments
                                                 }
                                                 myHelper={
                                                     helperTextForAssessment
                                                 }
-                                                rules={{ required: true }}
-                                                options={
-                                                    memberCompaniesForAddAssessments
+                                                myOnChange={
+                                                    handleChangeForMemberCompany
                                                 }
+                                                rules={{ required: true }}
                                             />
                                         </div>
                                     </div>
@@ -475,11 +478,11 @@ const AddAssessment = () => {
                                             </label>
                                             <Dropdown
                                                 control={control}
-                                                // isDisabled={
-                                                //     !watch("assignedMember")
-                                                // }
                                                 isDisabled={!isCGFStaff}
                                                 name={"assignedOperationMember"}
+                                                options={
+                                                    operationMemberForAddAssessments
+                                                }
                                                 placeholder={
                                                     "Select operation member "
                                                 }
@@ -487,9 +490,6 @@ const AddAssessment = () => {
                                                     helperTextForAssessment
                                                 }
                                                 rules={{ required: true }}
-                                                options={
-                                                    operationMemberForAddAssessments
-                                                }
                                             />
                                         </div>
                                     </div>
@@ -501,7 +501,7 @@ const AddAssessment = () => {
                                                     *
                                                 </span>
                                             </label>
-                                            <Controller
+                                            <AddAssessmentController
                                                 name="dueDate"
                                                 control={control}
                                                 rules={{ required: true }}
@@ -582,7 +582,7 @@ const AddAssessment = () => {
                                     <div className="card-form-field">
                                         <div className="form-group">
                                             <label>Remarks/Comments</label>
-                                            <Controller
+                                            <AddAssessmentController
                                                 name="remarks"
                                                 control={control}
                                                 rules={{

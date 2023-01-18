@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
+import Loader from "../../utils/Loader";
 
 function DraftedQuestionnaires({
     makeApiCall,
@@ -15,7 +16,8 @@ function DraftedQuestionnaires({
     searchTimeout,
     setSearch,
 }) {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isDraftedQuestionnaireLoading, setIsDraftedQuestionnaireLoading] =
+        useState(false);
 
     const navigate = useNavigate();
     //state to hold search timeout delay
@@ -104,7 +106,7 @@ function DraftedQuestionnaires({
         userAuth?.roleId?.name === "Super Admin"
             ? []
             : Object.values(privilege?.privileges);
-    
+
     let moduleAccesForMember = draftedQuestionnairePrivilgeArray
         .filter((data) => data?.moduleId?.name === "Questionnaire")
         .map((data) => ({
@@ -123,21 +125,19 @@ function DraftedQuestionnaires({
     ) => {
         try {
             let url = generateUrl();
-            setIsLoading(true);
+            setIsDraftedQuestionnaireLoading(true);
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
-            
+
             setTotalRecordsDraftedQuestionnaire(
                 parseInt(response.headers["x-total-count"])
             );
-            
 
             updateRecords([...response.data]);
-            setIsLoading(false);
+            setIsDraftedQuestionnaireLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            
 
             if (error.response.status === 401) {
                 console.log("Unauthorized user access");
@@ -155,7 +155,7 @@ function DraftedQuestionnaires({
                     navigate("/login");
                 }, 3000);
             }
-            setIsLoading(false);
+            setIsDraftedQuestionnaireLoading(false);
         }
     };
 
@@ -170,7 +170,6 @@ function DraftedQuestionnaires({
     };
 
     const onClickVisibilityIconHandler = (uuid) => {
-        
         return navigate(`/questionnaires/preview-questionnaire/${uuid}`);
     };
     useEffect(() => {
@@ -201,10 +200,8 @@ function DraftedQuestionnaires({
                 titleMessage={toasterDetails.titleMessage}
             />
             <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
-                {isLoading ? (
-                    <div className="loader-blk">
-                        <img src={Loader2} alt="Loading" />
-                    </div>
+                {isDraftedQuestionnaireLoading ? (
+                    <Loader />
                 ) : (
                     <TableComponent
                         tableHead={tableHead}

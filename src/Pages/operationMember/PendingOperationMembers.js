@@ -6,6 +6,7 @@ import DialogBox from "../../components/DialogBox";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { ADD_OPERATION_MEMBER, WITHDRAW_OPERATION_MEMBER } from "../../api/Url";
 import { tableHead } from "../../utils/OperationMemberModuleUtil";
+import Loader from "../../utils/Loader";
 
 let tempTableHead = JSON.parse(JSON.stringify(tableHead));
 tempTableHead.push({
@@ -24,7 +25,10 @@ function PendingOperationMembers({
 }) {
     const navigate = useNavigate();
     // state to manage loaders
-    const [isLoading, setIsLoading] = useState(true);
+    const [
+        isPendingOperationMemberLoading,
+        setIsPendingOperationMemberLoading,
+    ] = useState(true);
     const [
         openDeleteDialogBoxPendingOperationMember,
         setOpenDeleteDialogBoxPendingOperationMember,
@@ -201,7 +205,7 @@ function PendingOperationMembers({
     ) => {
         try {
             let url = generateUrlForPendingTab();
-            setIsLoading(true);
+            setIsPendingOperationMemberLoading(true);
             const response = await privateAxios.get(
                 url,
 
@@ -219,10 +223,10 @@ function PendingOperationMembers({
             );
 
             updatePendingRecords(response.data);
-            setIsLoading(false);
+            setIsPendingOperationMemberLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setIsLoading(false);
+            setIsPendingOperationMemberLoading(false);
 
             console.log(
                 "Error from get all pending operation member  tab table-------",
@@ -305,10 +309,8 @@ function PendingOperationMembers({
                 setOpenModal={setOpenDeleteDialogBoxPendingOperationMember}
                 isModalForm={false}
             />
-            {isLoading ? (
-                <div className="loader-blk">
-                    <img src={Loader2} alt="Loading" />
-                </div>
+            {isPendingOperationMemberLoading ? (
+                <Loader />
             ) : (
                 <TableComponent
                     tableHead={tempTableHead}

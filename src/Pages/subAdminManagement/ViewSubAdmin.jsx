@@ -10,7 +10,7 @@ import {
     FormControlLabel,
     Autocomplete,
 } from "@mui/material";
-
+import Loader from "../../utils/Loader";
 import "react-phone-number-input/style.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { privateAxios } from "../../api/axios";
@@ -26,7 +26,7 @@ const ViewSubAdmin = () => {
     //custom hook to set title of page
     useDocumentTitle("View CGF Admin");
     // state to manage loader
-    const [isLoading, setIsLoading] = useState(true);
+    const [isCgfLoading, setIsCgfLoading] = useState(true);
     const history = useNavigate();
     const params = useParams();
     const toasterRef = useRef();
@@ -51,7 +51,7 @@ const ViewSubAdmin = () => {
 
         (async () => {
             try {
-                setIsLoading(true);
+                setIsCgfLoading(true);
                 const response = await privateAxios.get(
                     FETCH_SUB_ADMIN_BY_ADMIN + params.id,
                     {
@@ -63,11 +63,11 @@ const ViewSubAdmin = () => {
                     response
                 );
                 isMounted && setFetchedSubAdminDetails(response.data);
-                setIsLoading(false);
+                setIsCgfLoading(false);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
                 console.log("error from sub admin view page fetch api", error);
-                setIsLoading(false);
+                setIsCgfLoading(false);
                 if (error?.response?.status === 500) {
                     navigate("/users/cgf-admin/");
                 }
@@ -277,10 +277,8 @@ const ViewSubAdmin = () => {
                             {/* <ReplaceSubAdminModal /> */}
                         </span>
                     </div>
-                    {isLoading ? (
-                        <div className="loader-blk">
-                            <img src={Loader2} alt="Loading" />
-                        </div>
+                    {isCgfLoading ? (
+                        <Loader />
                     ) : (
                         <div className="card-wrapper">
                             <div className="card-blk flex-between">

@@ -73,12 +73,6 @@ const FillAssessmentQuestion = ({
                     (editMode && params["*"].includes("view")) || !editMode
                 }
                 placeholder={`Enter text here`}
-                value={answer ?? ""}
-                name={questionUUID}
-                onChange={(e) =>
-                    handleAnswersChange(e.target.name, e.target.value)
-                }
-                onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
                 className={`${
                     !answer && error && error?.length !== 0
                         ? "input-error"
@@ -99,6 +93,12 @@ const FillAssessmentQuestion = ({
                         ? "input-error"
                         : "input-field"
                 }`}
+                name={questionUUID}
+                value={answer ?? ""}
+                onChange={(e) =>
+                    handleAnswersChange(e.target.name, e.target.value)
+                }
+                onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
                 helperText={
                     question.validation === "alphanumeric" &&
                     !AlphaNumRegEx.test(answer) &&

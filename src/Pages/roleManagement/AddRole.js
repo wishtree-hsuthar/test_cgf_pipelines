@@ -14,10 +14,10 @@ import {
     TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Controller, set, useForm } from "react-hook-form";
+import { Controller as AddRoleController, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Loader2 from "../../assets/Loader/Loader2.svg";
+import Loader from "../../utils/Loader";
 
 //internal packages
 import Toaster from "../../components/Toaster";
@@ -86,7 +86,7 @@ const AddRole = () => {
 
     const [previleges1, setPrevileges1] = useState({ ...temp });
     const [disableAddRoleButton, setdisableAddRoleButton] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isRoleLoading, setIsRoleLoading] = useState(false);
 
     const addRoleCreatePrivileges = () => {
         modules.forEach(
@@ -122,7 +122,7 @@ const AddRole = () => {
     });
     const submitCall = async (data) => {
         setdisableAddRoleButton(true);
-        setIsLoading(true);
+        setIsRoleLoading(true);
 
         console.log("inside on Submit");
         let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
@@ -143,7 +143,7 @@ const AddRole = () => {
                 }
             );
             if (response.status == 201) {
-                setIsLoading(false);
+                setIsRoleLoading(false);
 
                 setdisableAddRoleButton(false);
                 setToasterDetails1(
@@ -159,7 +159,7 @@ const AddRole = () => {
                 return true;
             }
         } catch (error) {
-            setIsLoading(false);
+            setIsRoleLoading(false);
 
             setdisableAddRoleButton(false);
 
@@ -275,10 +275,8 @@ const AddRole = () => {
                         </div>
                     </div>
                     <form onSubmit={handleSubmit(addRoleOnSubmit)}>
-                        {isLoading ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
+                        {isRoleLoading ? (
+                            <Loader />
                         ) : (
                             <div className="card-wrapper">
                                 <div className="card-blk flex-between">
@@ -290,7 +288,7 @@ const AddRole = () => {
                                                     *
                                                 </span>
                                             </label>
-                                            <Controller
+                                            <AddRoleController
                                                 name="roleName"
                                                 rules={{
                                                     required: true,
@@ -341,7 +339,7 @@ const AddRole = () => {
                                                 Status
                                             </label>
                                             <div className="radio-btn-field">
-                                                <Controller
+                                                <AddRoleController
                                                     name="status"
                                                     control={control}
                                                     render={({ field }) => (
@@ -373,20 +371,20 @@ const AddRole = () => {
                                     </div>
                                     <div className="card-form-field fullwidth">
                                         <div className="form-group">
-                                            <label htmlFor="description">
+                                            <label htmlFor="addrole-description">
                                                 Description{" "}
                                                 <span className="mandatory">
                                                     *
                                                 </span>
                                             </label>
-                                            <Controller
+                                            <AddRoleController
                                                 name="description"
+                                                control={control}
                                                 rules={{
                                                     required: true,
                                                     maxLength: 500,
                                                     minLength: 3,
                                                 }}
-                                                control={control}
                                                 render={({
                                                     field,
                                                     fieldState: { error },

@@ -34,6 +34,7 @@ import {
     cgfCategories,
     defaultValues,
 } from "../../utils/MemberModuleUtil";
+import Loader from "../../utils/Loader";
 
 const EditMember = () => {
     //custom hook to set title of page
@@ -80,7 +81,7 @@ const EditMember = () => {
     const [arrOfCites, setArrOfCites] = useState([]);
 
     // state to manage loader
-    const [isLoading, setIsLoading] = useState(true);
+    const [isEditMemberLoading, setIsEditMemberLoading] = useState(true);
     const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
     const [member, setMember] = useState({});
 
@@ -94,7 +95,7 @@ const EditMember = () => {
     });
     const onSubmitFunctionCall = async (data) => {
         console.log("data", data);
-        setIsLoading(true);
+        setIsEditMemberLoading(true);
         try {
             let backendObject = {
                 parentCompany: data.parentCompany,
@@ -133,7 +134,7 @@ const EditMember = () => {
                 ...backendObject,
             });
             if (response.status === 200) {
-                setIsLoading(false);
+                setIsEditMemberLoading(false);
 
                 setDisableEditMemberUpdateButton(false);
                 reset(defaultValues);
@@ -151,7 +152,7 @@ const EditMember = () => {
 
             console.log("Default values: ", defaultValues);
         } catch (error) {
-            setIsLoading(false);
+            setIsEditMemberLoading(false);
 
             if (error?.response?.status == 401) {
                 setToasterDetailsEditMember(
@@ -347,10 +348,10 @@ const EditMember = () => {
     };
     const getMemberByID1 = async (isMounted) => {
         try {
-            setIsLoading(true);
+            setIsEditMemberLoading(true);
             const response = await axios.get(MEMBER + `/${param.id}`);
             const data = response.data;
-            setIsLoading(false);
+            setIsEditMemberLoading(false);
             reset({
                 memberCompany: data?.companyName,
                 companyType: data?.companyType,
@@ -407,7 +408,7 @@ const EditMember = () => {
                     navigate("/login");
                 }, 3000);
             } else {
-                setIsLoading(false);
+                setIsEditMemberLoading(false);
                 isMounted && setErrorToaster1(error);
             }
         }
@@ -479,10 +480,8 @@ const EditMember = () => {
                         onSubmit={handleSubmit(onSubmit)}
                         onKeyDown={(e) => checkKeyDown(e)}
                     >
-                        {isLoading ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
+                        {isEditMemberLoading ? (
+                            <Loader />
                         ) : (
                             <div className="card-wrapper">
                                 <div className="card-inner-wrap">

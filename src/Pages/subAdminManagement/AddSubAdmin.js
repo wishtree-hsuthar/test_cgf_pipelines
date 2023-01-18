@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TextField, Autocomplete, Paper } from "@mui/material";
 import "react-phone-number-input/style.css";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller as AddSubAdminController } from "react-hook-form";
 import axios from "axios";
 import { privateAxios } from "../../api/axios";
 import { ADD_SUB_ADMIN, COUNTRIES, FETCH_ROLES } from "../../api/Url";
@@ -14,6 +14,7 @@ import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader2 from "../../assets/Loader/Loader2.svg";
+import Loader from "../../utils/Loader";
 
 const helperTextForCGFAdmin = {
     countryCode: {
@@ -70,7 +71,7 @@ const AddSubAdmin = () => {
     const [roleSelected, setRoleSelected] = useState("");
     const [countriesAddCGFAdmin, setCountriesAddCGFAdmin] = useState([]);
     const [rolesAddCGFAdmin, setRolesAddCGFAdmin] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isCgfAdminLoading, setIsCgfAdminLoading] = useState(false);
     const toasterRef = useRef();
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
@@ -190,12 +191,12 @@ const AddSubAdmin = () => {
     };
 
     const addSubAdminData = async (data) => {
-        setIsLoading(true);
+        setIsCgfAdminLoading(true);
         setDisableSubmit(true);
         try {
             const response = await axios.post(ADD_SUB_ADMIN, data);
             if (response.status == 201) {
-                setIsLoading(false);
+                setIsCgfAdminLoading(false);
 
                 setToasterDetails(
                     {
@@ -211,7 +212,7 @@ const AddSubAdmin = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             console.log("error from add sub admin page", error);
-            setIsLoading(false);
+            setIsCgfAdminLoading(false);
 
             if (error?.response?.status === 401) {
                 setToasterDetails(
@@ -307,10 +308,8 @@ const AddSubAdmin = () => {
                                 </div>
                             </div>
                         </div>
-                        {isLoading ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
+                        {isCgfAdminLoading ? (
+                            <Loader />
                         ) : (
                             <div className="card-wrapper">
                                 <div className="card-blk flex-between">
@@ -402,7 +401,7 @@ const AddSubAdmin = () => {
                                             </label>
                                             <div className="phone-number-field">
                                                 <div className="select-field country-code">
-                                                    <Controller
+                                                    <AddSubAdminController
                                                         control={control}
                                                         name="countryCode"
                                                         rules={{
@@ -425,6 +424,7 @@ const AddSubAdmin = () => {
                                                             },
                                                         }) => (
                                                             <Autocomplete
+                                                                {...field}
                                                                 className={`${
                                                                     error &&
                                                                     "autocomplete-error"
@@ -448,7 +448,6 @@ const AddSubAdmin = () => {
                                                                 popupIcon={
                                                                     <KeyboardArrowDownRoundedIcon />
                                                                 }
-                                                                {...field}
                                                                 onChange={(
                                                                     event,
                                                                     newValue
@@ -478,12 +477,12 @@ const AddSubAdmin = () => {
                                                                         "phoneNumber"
                                                                     );
                                                                 }}
+                                                                autoHighlight
                                                                 options={
                                                                     countriesAddCGFAdmin
                                                                         ? countriesAddCGFAdmin
                                                                         : []
                                                                 }
-                                                                autoHighlight
                                                                 // placeholder="Select country code"
                                                                 getOptionLabel={(
                                                                     country
@@ -509,15 +508,16 @@ const AddSubAdmin = () => {
                                                                         inputProps={{
                                                                             ...params.inputProps,
                                                                         }}
+                                                                        placeholder={
+                                                                            "+91"
+                                                                        }
                                                                         onChange={() =>
                                                                             trigger(
                                                                                 "countryCode"
                                                                             )
                                                                         }
                                                                         // onSubmit={() => setValue("countryCode", "")}
-                                                                        placeholder={
-                                                                            "+91"
-                                                                        }
+
                                                                         helperText={
                                                                             error
                                                                                 ? helperTextForCGFAdmin
@@ -535,6 +535,8 @@ const AddSubAdmin = () => {
                                                 </div>
                                                 <Input
                                                     name={"phoneNumber"}
+                                                    control={control}
+                                                    placeholder={"1234567890"}
                                                     myOnChange={(e) =>
                                                         phoneNumberChangeHandlerAddCGFAdmin(
                                                             e,
@@ -548,11 +550,9 @@ const AddSubAdmin = () => {
                                                             e.target.value?.trim()
                                                         )
                                                     }
-                                                    control={control}
                                                     myHelper={
                                                         helperTextForCGFAdmin
                                                     }
-                                                    placeholder={"1234567890"}
                                                     rules={{
                                                         maxLength: 15,
                                                         minLength: 7,
@@ -572,22 +572,6 @@ const AddSubAdmin = () => {
                                                             )
                                                                 return "Invalid input";
                                                         },
-                                                        // validate: (value) => {
-                                                        //     if (
-                                                        //         watch(
-                                                        //             "phoneNumber"
-                                                        //         ) &&
-                                                        //         !watch(
-                                                        //             "countryCode"
-                                                        //         )
-                                                        //     )
-                                                        //         return "Enter Country code";
-                                                        // else if (
-                                                        //     value &&
-                                                        //     !Number(value)
-                                                        // )
-                                                        //     return "Please enter valid phone number";
-                                                        // },
                                                     }}
                                                 />
                                             </div>

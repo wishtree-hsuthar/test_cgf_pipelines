@@ -11,52 +11,50 @@ import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Toaster from "../../components/Toaster";
+import Loader from "../../utils/Loader";
 
-const tableHead = [
-    // {
-    //     id: "isUserAuthorizedToFillAssessment",
-    // },
-
+const assessmentListTableHead = [
     {
-        id: "title",
-        width: "30%",
         disablePadding: false,
+        width: "30%",
+        id: "title",
         label: "Title",
     },
     {
-        id: "assessmentType",
-        width: "30%",
         disablePadding: false,
+        width: "30%",
+        id: "assessmentType",
         label: "Assessment Type",
     },
     {
-        id: "assignedMember.name",
-        width: "30%",
         disablePadding: false,
+
+        width: "30%",
+        id: "assignedMember.name",
         label: "Assigned Member",
     },
     {
-        id: "assignedOperationMember.name",
-        width: "30%",
         disablePadding: false,
+        width: "30%",
+        id: "assignedOperationMember.name",
         label: "Assigned To",
     },
     {
-        id: "assessmentStatus",
-        width: "30%",
         disablePadding: false,
+        width: "30%",
+        id: "assessmentStatus",
         label: "Status",
     },
     {
-        id: "dueDate",
-        width: "30%",
         disablePadding: false,
+        width: "30%",
+        id: "dueDate",
         label: "Due Date",
     },
     {
-        id: "action",
-        width: "30%",
         disablePadding: false,
+        width: "30%",
+        id: "action",
         label: "Actions",
     },
 ];
@@ -65,13 +63,13 @@ const AssessmentList = () => {
     useDocumentTitle("Assessments");
 
     //Refr for Toaster
-  const myRef = React.useRef();
-  //Toaster Message setter
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
+    const myRef = React.useRef();
+    //Toaster Message setter
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "success",
+    });
     const keysOrder = [
         "uuid",
         "_id",
@@ -86,7 +84,8 @@ const AssessmentList = () => {
     const navigate = useNavigate();
 
     // state to manage loader
-    const [isLoading, setIsLoading] = useState(false);
+    const [isAssessmentListLoading, setIsAssessmentListLoading] =
+        useState(false);
 
     //state to hold search timeout delay
     const [searchTimeout, setSearchTimeout] = useState(null);
@@ -157,7 +156,7 @@ const AssessmentList = () => {
     ) => {
         try {
             let url = generateUrl();
-            setIsLoading(true);
+            setIsAssessmentListLoading(true);
             const response = await privateAxios.get(url, {
                 signal: controller.signal,
             });
@@ -165,7 +164,7 @@ const AssessmentList = () => {
             // console.log("Response from  get assessments api", response);
 
             updateRecords([...response.data]);
-            setIsLoading(false);
+            setIsAssessmentListLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             // console.log("Error from assessments-------", error);
@@ -184,7 +183,7 @@ const AssessmentList = () => {
                     navigate("/login");
                 }, 3000);
             }
-            setIsLoading(false);
+            setIsAssessmentListLoading(false);
         }
     };
 
@@ -347,7 +346,10 @@ const AssessmentList = () => {
                                         </button>
                                     </div>
                                 )}
-                                <div className="tertiary-btn-blk ml-20" onClick={viewInstruction}>
+                                <div
+                                    className="tertiary-btn-blk ml-20"
+                                    onClick={viewInstruction}
+                                >
                                     <span className="preview-icon">
                                         <VisibilityOutlinedIcon />
                                     </span>
@@ -366,13 +368,11 @@ const AssessmentList = () => {
                         </div> */}
                         <div className="member-info-wrapper table-content-wrap">
                             <div className="member-info-wrapper table-content-wrap table-footer-btm-space assessment-list-table">
-                                {isLoading ? (
-                                    <div className="loader-blk">
-                                        <img src={Loader2} alt="Loading" />
-                                    </div>
+                                {isAssessmentListLoading ? (
+                                    <Loader />
                                 ) : (
                                     <TableComponent
-                                        tableHead={tableHead}
+                                        tableHead={assessmentListTableHead}
                                         records={records}
                                         handleChangePage1={
                                             handleTablePageChange
