@@ -219,7 +219,7 @@ const TableLayoutCellComponent = ({
               component="label"
               className="upload-file-btn"
             >
-              <div className="upload-file-blk">
+              <div className={currentSelectedFiles?.length > 0 ? "upload-file-blk selected-file-blk" : "upload-file-blk"}>
                 {/* <input hidden accept="image/*" multiple type="file" /> */}
                 <input
                   type={"file"}
@@ -349,6 +349,7 @@ const TableLayoutCellComponent = ({
                         key={fileIdx}
                         title={file?.name}
                         style={{ textDecoration: "none" }}
+                      
                       >
                         <a href={file?.location ?? "#"} target="_blank">
                           <p>{`${
@@ -364,8 +365,10 @@ const TableLayoutCellComponent = ({
                   onClick={(e) => {
                     //   e.preventDefault();
                     setShowMoreAttachment(false);
+                    
                   }}
                   className="show-more-less-txt"
+                  style={{marginTop:'5px', display:'inline-block'}}
                 >
                   {answer?.length > 2 && "Show Less"}
                 </a>
@@ -377,6 +380,7 @@ const TableLayoutCellComponent = ({
                     setShowMoreAttachment(true);
                   }}
                   className="show-more-less-txt"
+                  style={{marginTop:'5px', display:'inline-block'}}
                 >
                   {answer?.length > 2 && "Show More"}
                 </a>
@@ -511,7 +515,7 @@ const TableLayoutCellComponent = ({
                     {...params}
                     autoComplete="off"
                     onKeyDown={handleOnKeyDownChange}
-                    className={`input-field${
+                    className={`datepicker-blk input-field${
                       !answer && error && error?.length !== 0
                         ? "input-error"
                         : ""
