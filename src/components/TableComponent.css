@@ -215,18 +215,18 @@
 }
 
 .table-blk-role .MuiTableCell-head {
-    padding: 0 15px !important;
+    padding: 0 10px !important;
     text-align: center;
 }
 .table-blk-role td {
     padding: 0px !important;
 }
 .table-blk-role td:first-child {
-    padding: 0 15px !important;
+    padding: 0 10px !important;
 }
-.table-blk-role .MuiTableCell-head:nth-child(2) {
+/* .table-blk-role .MuiTableCell-head:nth-child(2) {
     padding: 15px !important;
-}
+} */
 .table-blk-role .MuiTableCell-head:first-child {
     text-align: left;
 }

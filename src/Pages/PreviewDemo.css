@@ -59,3 +59,5 @@
     max-width: 50%;
 } */
 /* .que-half-sect{flex: 0 0 50%;max-width: 50%;} */
+
+.checkbox-flex{display: flex !important;}

@@ -149,7 +149,7 @@ const FillAssessmentQuestion = ({
                           answer &&
                           error
                         ? "input-textarea input-textarea-error"
-                        : ""
+                        : "input-textarea"
                 }`}
                 helperText={
                     question.validation === "alphanumeric" &&
@@ -275,7 +275,7 @@ const FillAssessmentQuestion = ({
                                 key={idx}
                                 type={"checkbox"}
                                 name={questionUUID}
-                                className="checkbox-with-label"
+                                className="checkbox-with-label checkbox-flex"
                                 value={option}
                                 disabled={
                                     (editMode &&

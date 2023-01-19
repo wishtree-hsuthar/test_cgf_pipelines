@@ -1573,7 +1573,7 @@ input:-webkit-autofill:active {
     color: rgba(30, 30, 30, 1);
     font-family: "ProximaNova-Regular", serif, sans-serif;
     outline: none;
-    width: 195px;
+    /* width: 195px; */
 }
 .que-table-validator-iconblk {
     position: relative;
@@ -2023,6 +2023,15 @@ input:-webkit-autofill:active {
 .que-dropdown-blk .que-input-type input {
     padding: 0 15px 0 15px !important;
 }
+.que-dropdown-blk .que-input-type.adddropdown input {
+    padding: 0 50px 0 15px !important;
+}
+.que-checkbox-option .que-input-type.adddropdown input {
+    padding: 0 50px 0 45px !important;
+}
+.que-radio-option .que-input-type.adddropdown input {
+    padding: 0 50px 0 45px !important;
+}
 .que-tab-sect .MuiTab-root {
     padding: 9px 0 !important;
 }
@@ -2173,7 +2182,7 @@ input:-webkit-autofill:active {
 }
 .que-column-ttlblk .form-group {
     margin-bottom: 0;
-    width: 200px;
+    /* width: 200px; */
 }
 .outlined-button {
     background: transparent;
@@ -2610,3 +2619,4 @@ input::-ms-reveal {
 .list-uploaded-file{display: block;}
 .list-uploaded-file a{color: #75b9eb}
 .select-filename a{color: #4596d1;}
+.checkbox-flex{display: flex !important;}

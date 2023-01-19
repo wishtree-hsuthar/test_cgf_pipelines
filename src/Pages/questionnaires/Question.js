@@ -392,9 +392,9 @@ const Question = ({
                                         <div className="que-checkbox-wrap">
                                             <div
                                                 className={`que-checkbox-blk ${
-                                                    question?.inputType ===
-                                                        "dropdown" &&
-                                                    "que-dropdown-blk"
+                                                    question?.inputType === "dropdown" && "que-dropdown-blk" 
+                                                    || question?.inputType === "checkbox" && "que-checkbox-option" 
+                                                    || question?.inputType === "radioGroup" && "que-radio-option"
                                                 }`}
                                             >
                                                 <TextField
@@ -414,11 +414,11 @@ const Question = ({
                                                             optionIdx
                                                         )
                                                     }
-                                                    className={`input-field que-input-type ${
+                                                    className={question?.options.length !== 2 ? `input-field que-input-type adddropdown ${
                                                         err?.option &&
                                                         !option &&
                                                         "input-error"
-                                                    }`}
+                                                    }` : 'input-field que-input-type'}
                                                     helperText={
                                                         err?.option && !option
                                                             ? "Enter the option value"
