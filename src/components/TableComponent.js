@@ -13,7 +13,6 @@ import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import PropTypes from "prop-types";
 import * as React from "react";
-// import deleteIcon from "../../public/images/delete-icon.svg";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import Radio from "@mui/material/Radio";
 
@@ -32,8 +31,6 @@ function EnhancedTableHead(props) {
         setCheckBoxes,
     } = props;
     const createSortHandler = (property) => (event) => {
-        // console.log("property", property, "event", event.target);
-
         onRequestSort(event, property);
     };
 
@@ -157,15 +154,12 @@ export default function TableComponent({
         }
         setSelected(newSelected);
     };
-    // console.log("selected from multi select", selected);
 
     const handleChangePage = (_event, newPage) => {
-        // console.log("page",event.target.value)
         handleChangePage1(newPage);
     };
 
     const handleSingleSelect = (id) => {
-        // console.log("id in table component for radio click", id);
         handleSingleUserSelect(id);
     };
 
@@ -185,9 +179,7 @@ export default function TableComponent({
     const onClickEditAssessmentHandler = (uuid) => {
         onClickEditAssesmentFunction(uuid);
     };
-    const onClickAssignAssessmentHandler = (uuid) => {
-        onClickAssignAssesmentFunction(uuid);
-    };
+
     const onClickFillAssessmentHandler = (uuid) => {
         onClickFillAssessmentFunction(uuid);
     };
@@ -228,7 +220,7 @@ export default function TableComponent({
                                     {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                    records.slice().sort(getComparator(order, orderBy)) */}
                                     {records.map((row, index) => {
-                                        // console.log("row", row);
+                                        console.log("row", row);
                                         const isItemSelected = isSelected(
                                             row._id
                                         );
@@ -304,7 +296,6 @@ export default function TableComponent({
                                                 )}
                                                 {Object.keys(row).map(
                                                     (cell, _id) => {
-                                                        // console.log("Row cell", row[cell],"cell: ",cell);
                                                         if (
                                                             cell !== "_id" &&
                                                             cell !== "uuid" &&

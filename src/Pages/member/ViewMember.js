@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DownloadIcon from "@mui/icons-material/Download";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 
 import DialogBox from "../../components/DialogBox";
 import Toaster from "../../components/Toaster";
@@ -181,6 +180,8 @@ const ViewMember = () => {
             delete object["uuid"];
             delete object["__v"];
             delete object["isMemberRepresentative"];
+            delete object["memberRepresentative"];
+            delete object["role"];
             delete object["isCGFStaff"];
             delete object["isOperationMember"];
             delete object["replacedUsers"];
@@ -1062,7 +1063,6 @@ const ViewMember = () => {
                                                         // console.log("option inside type string",option)
                                                         return option;
                                                     }
-                                                    return option;
                                                 }}
                                                 renderOption={(
                                                     props,

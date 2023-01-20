@@ -3,12 +3,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import {
     FETCH_ASSESSMENT_BY_ID,
-    FETCH_OPERATION_MEMBER,
     MEMBER_OPERATION_MEMBERS,
     REASSIGN_ASSESSMENTS,
 } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 import Toaster from "../../components/Toaster";
+import Loader from "../../utils/Loader";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
@@ -17,19 +17,16 @@ const tableHead = [
         id: "",
         disablePadding: true,
         label: "",
-        // width: "30%",
     },
     {
         id: "name",
         disablePadding: true,
         label: "Operation Member",
-        // width: "30%",
     },
     {
         id: "email",
         disablePadding: false,
         label: "Email",
-        // width: "40%",
     },
 ];
 
@@ -57,7 +54,6 @@ const AssignAssessmentToOperationMember = () => {
     const [assessment, setAssessment] = useState({});
     const [search, setSearch] = useState("");
     const [newOperationMember, setNewOperationMember] = useState("");
-    const [disableAssignButton, setDisableAssignButton] = useState(false);
     const navigate = useNavigate();
     const myRef = React.useRef();
 
@@ -147,18 +143,6 @@ const AssignAssessmentToOperationMember = () => {
         setRecords([...staleData]);
     };
 
-    const fetchReportingManagers = async (id) => {
-        try {
-            const response = await privateAxios.get(
-                FETCH_OPERATION_MEMBER + id
-            );
-            if (response.status == 200) {
-            }
-        } catch (error) {
-            console.log("error from fetching reporting managers", error);
-        }
-    };
-
     const getOperationMembers = async (
         isMounted = true,
         controller = new AbortController()
@@ -216,12 +200,11 @@ const AssignAssessmentToOperationMember = () => {
         setPage(1);
     };
     // selects single operation member
-    const selectSingleUser = (id) => {
-        console.log("select single user---", id);
-        setDisableAssignButton(true);
+    const selectSingleUser = (opId) => {
+        console.log("select single user---", opId);
 
-        setSelectedUser(id);
-        setNewOperationMember(id);
+        setSelectedUser(opId);
+        setNewOperationMember(opId);
     };
 
     // fetch assessment method
@@ -254,7 +237,6 @@ const AssignAssessmentToOperationMember = () => {
 
     // assign assessment to operation member
     const handleReassignAssessment = async () => {
-        setDisableAssignButton(false);
         console.log(
             `data from re-assign assessment-${id} and operation-member-${newOperationMember}`
         );
@@ -329,29 +311,7 @@ const AssignAssessmentToOperationMember = () => {
                 descriptionMessage={toasterDetails.descriptionMessage}
                 titleMessage={toasterDetails.titleMessage}
             />
-            {/* <DialogBox
-                title={<p> Assign Assessment {cgfAdmin.name} </p>}
-                info1={
-                    <p>
-                        {" "}
-                        On assigning this assessment, it will
-                         get transfer to the new operation member.
-                    </p>
-                }
-                info2={
-                    <p>
-                        {" "}
-                        Are you sure you want to Assign it to {" "}
-                        <b> {cgfAdmin.name} </b>?{" "}
-                    </p>
-                }
-                primaryButtonText="Yes"
-                secondaryButtonText="No"
-                onPrimaryModalButtonClickHandler={handleYes}
-                onSecondaryModalButtonClickHandler={handleNo}
-                openModal={open}
-                setOpenModal={setOpen}
-            /> */}
+
             <div className="breadcrumb-wrapper">
                 <div className="container">
                     <ul className="breadcrumb">
@@ -363,72 +323,80 @@ const AssignAssessmentToOperationMember = () => {
                     </ul>
                 </div>
             </div>
-            <section>
-                <div className="container">
-                    <div className="form-header flex-between ">
-                        <h2 className="heading2">Assign Assessment</h2>
-                        <div className="member-filter-left">
-                            {/* <div className="tertiary-btn-blk"> */}
-                            <div className="searchbar">
-                                <input
-                                    type="text"
-                                    placeholder="Search"
-                                    onChange={(e) => onSearchChangeHandler(e)}
-                                    name="search"
-                                />
-                                <button type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <section>
+                    <div className="container">
+                        <div className="form-header flex-between ">
+                            <h2 className="heading2">Assign Assessment</h2>
+                            <div className="member-filter-left">
+                                {/* <div className="tertiary-btn-blk"> */}
+                                <div className="searchbar">
+                                    <input
+                                        type="text"
+                                        placeholder="Search"
+                                        onChange={(e) =>
+                                            onSearchChangeHandler(e)
+                                        }
+                                        name="search"
+                                    />
+                                    <button type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                                {/* </div> */}
                             </div>
-                            {/* </div> */}
+                        </div>
+
+                        <div className="member-info-wrapper table-content-wrap replace-admin-table">
+                            <div className="member-data-sect">
+                                <TableComponent
+                                    tableHead={tableHead}
+                                    records={records}
+                                    handleChangePage1={
+                                        handleTableTesterPageChange
+                                    }
+                                    handleChangeRowsPerPage1={
+                                        handleTableTesterRowsPerPageChange
+                                    }
+                                    page={page}
+                                    rowsPerPage={rowsPerPage}
+                                    totalRecords={totalRecords}
+                                    orderBy={orderBy}
+                                    order={order}
+                                    setOrder={setOrder}
+                                    setOrderBy={setOrderBy}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                    setCheckBoxes={false}
+                                    setSingleSelect={true}
+                                    handleSingleUserSelect={selectSingleUser}
+                                    selectedUser={selectedUser}
+                                />
+                            </div>
+                        </div>
+                        <div className="form-btn flex-between add-members-btn mb-20 replace-cgf-admin-btnblk">
+                            <button
+                                onClick={() => navigate("/assessment-list")}
+                                className="secondary-button mr-10"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                // onClick={openReplaceDailogBox}
+                                onClick={handleReassignAssessment}
+                                disabled={selectedUser == ""}
+                                // disabled
+                                className="primary-button add-button replace-assign-btn"
+                            >
+                                Assign
+                            </button>
                         </div>
                     </div>
-
-                    <div className="member-info-wrapper table-content-wrap replace-admin-table">
-                        <div className="member-data-sect">
-                            <TableComponent
-                                tableHead={tableHead}
-                                records={records}
-                                handleChangePage1={handleTableTesterPageChange}
-                                handleChangeRowsPerPage1={
-                                    handleTableTesterRowsPerPageChange
-                                }
-                                page={page}
-                                rowsPerPage={rowsPerPage}
-                                totalRecords={totalRecords}
-                                orderBy={orderBy}
-                                order={order}
-                                setOrder={setOrder}
-                                setOrderBy={setOrderBy}
-                                selected={selected}
-                                setSelected={setSelected}
-                                setCheckBoxes={false}
-                                setSingleSelect={true}
-                                handleSingleUserSelect={selectSingleUser}
-                                selectedUser={selectedUser}
-                            />
-                        </div>
-                    </div>
-                    <div className="form-btn flex-between add-members-btn mb-20 replace-cgf-admin-btnblk">
-                        <button
-                            onClick={() => navigate("/assessment-list")}
-                            className="secondary-button mr-10"
-                        >
-                            Cancel
-                        </button>
-
-                        <button
-                            // onClick={openReplaceDailogBox}
-                            onClick={handleReassignAssessment}
-                            disabled={selectedUser == ""}
-                            // disabled
-                            className="primary-button add-button replace-assign-btn"
-                        >
-                            Assign
-                        </button>
-                    </div>
-                </div>
-            </section>
+                </section>
+            )}
         </div>
     );
 };

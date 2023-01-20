@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import Loader2 from "../../../assets/Loader/Loader2.svg";
 
 import { Tabs, Tab, Tooltip, Box } from "@mui/material";
 
@@ -84,14 +83,14 @@ function PreviewQuestionnaire(props) {
             ? []
             : Object.values(privilege?.privileges);
     let moduleAccesForMember = privilegeArray
-        .filter((data) => data?.moduleId?.name === "Questionnaire")
-        .map((data) => ({
+        .filter((module) => module?.moduleId?.name === "Questionnaire")
+        .map((privilege) => ({
             questionnaire: {
-                list: data?.list,
-                view: data?.view,
-                edit: data?.edit,
-                delete: data?.delete,
-                add: data?.add,
+                list: privilege?.list,
+                view: privilege?.view,
+                edit: privilege?.edit,
+                delete: privilege?.delete,
+                add: privilege?.add,
             },
         }));
     useEffect(() => {

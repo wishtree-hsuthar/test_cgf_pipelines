@@ -11,7 +11,6 @@ import {
     Tooltip,
 } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import SectionContent from "./SectionContent";
 import { v4 as uuidv4 } from "uuid";
 import { Link, useNavigate, useParams } from "react-router-dom";

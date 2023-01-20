@@ -130,7 +130,6 @@ const FillAssessmentQuestion = ({
                     handleAnswersChange(e.target.name, e.target.value)
                 }
                 onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
-                // className="input-textarea"
                 className={` ${
                     !answer && error && error?.length !== 0
                         ? "input-error"
@@ -263,7 +262,6 @@ const FillAssessmentQuestion = ({
                 </FormControl>
             </div>
         ) : question.inputType === "checkbox" ? (
-            // <div className="form-group mb-0">
             <div className="checkbox-with-labelblk checkbox-btn-half-blk">
                 <FormControl
                     required
@@ -300,8 +298,6 @@ const FillAssessmentQuestion = ({
                         {!question?.options?.answer ? error : ""}
                     </FormHelperText>
                 </FormControl>
-
-                {/* </div> */}
             </div>
         ) : question.inputType === "date" ? (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -309,7 +305,6 @@ const FillAssessmentQuestion = ({
                     disabled={
                         (editMode && params["*"].includes("view")) || !editMode
                     }
-                    // className="datepicker-blk"
                     components={{
                         OpenPickerIcon: DateRangeOutlinedIcon,
                     }}

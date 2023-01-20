@@ -51,7 +51,6 @@ const DialogBox = ({
     typeof title?.props?.children === "object"
         ? title?.props?.children?.map((value) => (dialogTitle += value))
         : (dialogTitle = title?.props?.children);
-    // console.log("dialogTitle", dialogTitle);
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -68,63 +67,68 @@ const DialogBox = ({
         >
             <Fade in={openModal}>
                 <Box sx={style} className="popup-box">
-                <div className="popup-innerblk">
-                    <div id="transition-modal-title" className="popup-ttl-blk">
-                        {/* {console.log("title", title)} */}
-                        {dialogTitle?.length <= 47 ? (
-                            <h2 className="popup-ttl heading2">{title}</h2>
-                        ) : (
-                            <Tooltip title={dialogTitle}>
-                                <h2 className="popup-ttl heading2">
-                                    {" "}
-                                    {dialogTitle?.slice(0, 50)}..."
-                                </h2>
-                            </Tooltip>
-                        )}
-
-                        <span
-                            // hidden={isModalForm}
-                            className="popup-close-icon"
-                            onClick={
-                                isModalForm ? handleCloseRedirect : handleClose
-                            }
+                    <div className="popup-innerblk">
+                        <div
+                            id="transition-modal-title"
+                            className="popup-ttl-blk"
                         >
-                            <CloseIcon />
-                        </span>
-                    </div>
-                    <div
-                        id="transition-modal-description"
-                        className="popup-body"
-                    >
-                        <div className="popup-content-blk text-center">
-                            {info1}
-                            {isModalForm ? (
-                                <form onSubmit={onSecondaryButtonClickHandler}>
-                                    {info2}
-                                </form>
+                            {dialogTitle?.length <= 47 ? (
+                                <h2 className="popup-ttl heading2">{title}</h2>
                             ) : (
-                                info2
+                                <Tooltip title={dialogTitle}>
+                                    <h2 className="popup-ttl heading2">
+                                        {" "}
+                                        {dialogTitle?.slice(0, 50)}..."
+                                    </h2>
+                                </Tooltip>
                             )}
-                            {/* {info2 && <p>{info2}</p>} */}
-                            <div className="form-btn flex-center">
-                                <button
-                                    type="submit"
-                                    onClick={onSecondaryButtonClickHandler}
-                                    className="secondary-button mr-10"
-                                >
-                                    {secondaryButtonText}
-                                </button>
-                                <button
-                                    type="submit"
-                                    onClick={onPrimaryButtonClickHandler}
-                                    disabled={isDisabledPrimaryButton}
-                                    className="primary-button"
-                                >
-                                    {primaryButtonText}
-                                </button>
+
+                            <span
+                                // hidden={isModalForm}
+                                className="popup-close-icon"
+                                onClick={
+                                    isModalForm
+                                        ? handleCloseRedirect
+                                        : handleClose
+                                }
+                            >
+                                <CloseIcon />
+                            </span>
+                        </div>
+                        <div
+                            id="transition-modal-description"
+                            className="popup-body"
+                        >
+                            <div className="popup-content-blk text-center">
+                                {info1}
+                                {isModalForm ? (
+                                    <form
+                                        onSubmit={onSecondaryButtonClickHandler}
+                                    >
+                                        {info2}
+                                    </form>
+                                ) : (
+                                    info2
+                                )}
+                                <div className="form-btn flex-center">
+                                    <button
+                                        type="submit"
+                                        onClick={onSecondaryButtonClickHandler}
+                                        className="secondary-button mr-10"
+                                    >
+                                        {secondaryButtonText}
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        onClick={onPrimaryButtonClickHandler}
+                                        disabled={isDisabledPrimaryButton}
+                                        className="primary-button"
+                                    >
+                                        {primaryButtonText}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </Box>
             </Fade>

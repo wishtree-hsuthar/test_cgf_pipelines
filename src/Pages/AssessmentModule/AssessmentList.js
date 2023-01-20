@@ -6,7 +6,6 @@ import TableComponent from "../../components/TableComponent";
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { ASSESSMENTS } from "../../api/Url";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -125,25 +124,20 @@ const AssessmentList = () => {
         setPage(1);
     };
     const onClickVisibilityIconHandler = (id) => {
-        // console.log("id", id);
         return navigate(`/assessment-list/view-assessment/${id}`);
     };
 
     const onClickEditIconHandler = (uuid) => {
-        // console.log("uuid", uuid);
         return navigate(`/assessment-list/edit-assessment/${uuid}`);
     };
     const onClickAssignAssessmentHandler = (uuid) => {
-        // console.log("uuid", uuid);
         return navigate(`/assessment-list/assign-assessment/${uuid}`);
     };
     const onClickFillAssessmentHandler = (uuid) => {
-        // console.log("uuid", uuid);
         return navigate(`/assessment-list/fill-assessment/${uuid}`);
     };
 
     const generateUrl = () => {
-        // console.log("Search", search);
         let url = `${ASSESSMENTS}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
@@ -161,13 +155,11 @@ const AssessmentList = () => {
                 signal: controller.signal,
             });
             setTotalRecords(parseInt(response.headers["x-total-count"]));
-            // console.log("Response from  get assessments api", response);
 
             updateRecords([...response.data]);
             setIsAssessmentListLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            // console.log("Error from assessments-------", error);
 
             if (error?.response?.status == 401) {
                 setToasterDetails(
@@ -203,8 +195,6 @@ const AssessmentList = () => {
             delete object["createdAt"];
             delete object["remarks"];
 
-            // object["uuid"] = object[x"uuid"];
-            // object["creted"]
             object["assignedMember.name"] = object["assignedMember"]["name"];
             object["assignedOperationMember.name"] =
                 object["assignedOperationMember"]["name"];
@@ -278,26 +268,21 @@ const AssessmentList = () => {
         }));
 
     let assessmentAccessObj = { ...moduleAccesForAssessment[0]?.assessment };
-    // console.log("assessment access object", assessmentAccessObj);
     let handleActionIcons = () => {
         let icon = Object.entries(assessmentAccessObj).filter(
             (key) => key[1] === true && icons.push(key[0])
         );
-        // console.log("icon----", icon);
         if (SUPER_ADMIN) {
             icons = ["edit", "visibility"];
             return icons;
         } else if (icons.includes("fill")) {
             icons.push("send");
-            // console.log("in else if icons---", icons);
 
             return icons;
         }
-        // console.log(" in else  icons---");
 
         return icons;
     };
-    // console.log("icons---", icons);
 
     return (
         <div>
@@ -359,13 +344,7 @@ const AssessmentList = () => {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="member-filter-sect">
-                            <div className="member-filter-wrap flex-between">
-                                <div className="member-filter-left">
-                                    
-                                </div>
-                            </div>
-                        </div> */}
+
                         <div className="member-info-wrapper table-content-wrap">
                             <div className="member-info-wrapper table-content-wrap table-footer-btm-space assessment-list-table">
                                 {isAssessmentListLoading ? (
@@ -382,18 +361,9 @@ const AssessmentList = () => {
                                         }
                                         page={page}
                                         rowsPerPage={rowsPerPage}
-                                        // selected={selected}
                                         totalRecords={totalRecords}
                                         orderBy={orderBy}
-                                        icons={
-                                            // SUPER_ADMIN
-                                            //     ? ["visibility", "edit"]
-                                            //     : moduleAccesForAssessment[0]
-                                            //           ?.assessment?.delete
-                                            //     ? ["visibility", "edit"]
-                                            //     : ["fill", "send"]
-                                            handleActionIcons()
-                                        }
+                                        icons={handleActionIcons()}
                                         onClickVisibilityIconHandler1={
                                             onClickVisibilityIconHandler
                                         }
@@ -411,13 +381,6 @@ const AssessmentList = () => {
                                             onClickFillAssessmentHandler
                                         }
                                         viewAssessment={true}
-                                        // onRowClick={
-                                        //     SUPER_ADMIN
-                                        //         ? true
-                                        //         : moduleAccesForAssessment[0]
-                                        //               ?.assessment?.view
-                                        // }
-                                        // isQuestionnare={true}
                                     />
                                 )}
                             </div>

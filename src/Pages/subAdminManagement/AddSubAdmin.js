@@ -13,7 +13,6 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import Loader from "../../utils/Loader";
 
 const helperTextForCGFAdmin = {
@@ -153,21 +152,7 @@ const AddSubAdmin = () => {
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
                 console.log("error from countries api", error);
-                // if (error?.response?.status === 401) {
-                //     setToasterDetails(
-                //         {
-                //             titleMessage: "Oops!",
-                //             descriptionMessage: "Session Timeout: Please login again",
-                //             messageType: "error",
-                //         },
-                //         () => toasterRef.current()
-                //     );
-                //     setTimeout(() => {
-                //         navigate("/login");
-                //     }, 3000);
-                // }
-                // else
-                //  {
+
                 isMounted &&
                     setToasterDetails(
                         {

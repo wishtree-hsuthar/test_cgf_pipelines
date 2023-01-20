@@ -119,7 +119,6 @@ const EditSubAdmin = () => {
                     let tempCountryCodeSet = new Set(tempCountryCode);
                     setCountries([...tempCountryCodeSet]);
                 }
-                // isMounted && setCountries(response.data);
             } catch (error) {
                 console.log(
                     "error from countries api of edit sub-admin",
@@ -167,7 +166,6 @@ const EditSubAdmin = () => {
                     response
                 );
                 isMounted && setFetchSubAdminDetailsForEdit(response.data);
-                // console.log("role from edit", response.data.subRoleId.name);
                 reset({
                     name: response.data.name,
                     email: response.data.email,
@@ -238,9 +236,6 @@ const EditSubAdmin = () => {
                         navigate("/login");
                     }, 3000);
                 }
-                // setTimeout(() => {
-                //     navigate("/login");
-                // }, 2000);
             }
         };
         fetchRoles();
@@ -302,9 +297,6 @@ const EditSubAdmin = () => {
                     },
                     () => toasterRef.current()
                 );
-                // setTimeout(() => {
-                //     navigate("/login");
-                // }, 3000);
             }
             if (error?.response?.status === 401) {
                 setToasterDetails(

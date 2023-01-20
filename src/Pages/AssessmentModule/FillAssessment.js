@@ -7,7 +7,6 @@ import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
-// import {} from "form-data"
 import {
     ACCEPT_ASSESSMENT,
     ADD_QUESTIONNAIRE,
@@ -18,13 +17,11 @@ import {
     REACT_APP_FILE_ENCRYPT_SECRET,
     SUBMIT_ASSESSMENT_AS_DRAFT,
 } from "../../api/Url";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import DialogBox from "../../components/DialogBox";
 import Toaster from "../../components/Toaster";
 import { downloadFunction } from "../../utils/downloadFunction";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-// import FillAssesmentSection from "./FillAssessmentSection";
 
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import Loader from "../../utils/Loader";
@@ -96,11 +93,7 @@ function FillAssessment() {
         useState(false);
     const [file, setFile] = useState("");
 
-    const { handleSubmit, control, setValue } = useForm({
-        // defaultValues: {
-        //     comment: "",
-        // },
-    });
+    const { handleSubmit, control, setValue } = useForm({});
     const [value, setTabValue] = useState(0);
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
@@ -178,7 +171,6 @@ function FillAssessment() {
                         signal: controller.signal,
                     }
                 );
-                // console.log("response from fetch questionnaire", response);
                 isMounted && setQuestionnaire({ ...response.data });
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
@@ -267,7 +259,6 @@ function FillAssessment() {
         reOpen,
         assessmentquestionAnswers
     ) => {
-        // console.log("Save function called");
         try {
             const response = await privateAxios.post(
                 saveAsDraft
@@ -277,7 +268,6 @@ function FillAssessment() {
                     ...assessmentquestionAnswers,
                 }
             );
-            // console.log("Assessment is saved as draft", response);
             if (response.status == 201) {
                 !reOpen &&
                     setToasterDetails(
@@ -296,34 +286,6 @@ function FillAssessment() {
             }
         } catch (error) {
             handleCatchError(error, "saveAssessmentAsDraft");
-            // console.log("error from save assessment as draft", error);
-            // if (error?.response?.status === 401) {
-            //     setToasterDetails(
-            //         {
-            //             titleMessage: "Oops!",
-            //             descriptionMessage:
-            //                 "Session Timeout: Please login again",
-            //             messageType: "error",
-            //         },
-            //         () => myRef.current()
-            //     );
-            //     setTimeout(() => {
-            //         navigate("/login");
-            //     }, 3000);
-            // } else {
-            //     setToasterDetails(
-            //         {
-            //             titleMessage: "Error",
-            //             descriptionMessage:
-            //                 error?.response?.data?.message &&
-            //                 typeof error.response.data.message === "string"
-            //                     ? error.response.data.message
-            //                     : "Something went wrong.",
-            //             messageType: "error",
-            //         },
-            //         () => myRef.current()
-            //     );
-            // }
         }
     };
 
@@ -339,7 +301,6 @@ function FillAssessment() {
                 assessmentQuestionnaire[section?.uuid] ?? {};
 
             if (section?.layout === "table") {
-                // sectionErrors = {};
                 const transformedColValues = getTransformedColumns(
                     section?.columnValues
                 );
@@ -507,14 +468,6 @@ function FillAssessment() {
                             },
                         };
                         sections.push(index);
-
-                        // setAssessmentQuestionnaire({
-                        //     ...assessmentQuestionnaire,
-                        //     [section?.uuid]: {
-                        //         ...assessmentQuestionnaire[section?.uuid],
-                        //         [question?.uuid]: "",
-                        //     },
-                        // });
                     } else if (
                         question.validation === "alphabets" &&
                         currentSectionAnswers[question?.uuid] &&
@@ -534,12 +487,6 @@ function FillAssessment() {
                             currentSectionAnswers[question?.uuid]
                         ) === false
                     ) {
-                        // console.log("error from numric if elese");
-                        // console.log(
-                        //   NumericRegEx.test(
-                        // currentSectionAnswers[question?.uuid]
-                        // )
-                        // );
                         sectionErrors[question?.uuid] = "This is numeric field";
                         sections.push(index);
                     } else if (
@@ -567,7 +514,6 @@ function FillAssessment() {
         setAssessmentQuestionnaire({ ...tempAsssessmentQuestionnaire });
 
         handleSetErrors(tempErrors);
-        // console.log("temp Errors:- ", tempErrors);
         const isValidated = Object.keys(tempErrors).every(
             (key) => Object.keys(tempErrors[key]).length === 0
         );
@@ -582,7 +528,6 @@ function FillAssessment() {
 
     // API for declining assessments
     const onSubmitReason = async (data) => {
-        // console.log("comment", data);
         try {
             const response = await privateAxios.post(
                 DECLINE_ASSESSMENT + params.id + "/decline",
@@ -608,36 +553,7 @@ function FillAssessment() {
                 }, 3000);
             }
         } catch (error) {
-            // console.log("error response from backen decline assessment");
             handleCatchError(error, "onSubmitReason");
-
-            //     if (error?.response?.status === 401) {
-            //         setToasterDetails(
-            //             {
-            //                 titleMessage: "Oops!",
-            //                 descriptionMessage:
-            //                     "Session Timeout: Please login again",
-            //                 messageType: "error",
-            //             },
-            //             () => myRef.current()
-            //         );
-            //         setTimeout(() => {
-            //             navigate("/login");
-            //         }, 3000);
-            //     } else {
-            //         setToasterDetails(
-            //             {
-            //                 titleMessage: "Success",
-            //                 descriptionMessage:
-            //                     error?.response?.data?.message &&
-            //                     typeof error.response.data.message === "string"
-            //                         ? error.response.data.message
-            //                         : "Something went wrong.",
-            //                 messageType: "error",
-            //             },
-            //             () => myRef.current()
-            //         );
-            //     }
         }
         setOpenDeleteDialogBox(false);
     };
@@ -648,7 +564,6 @@ function FillAssessment() {
             const response = await privateAxios.post(
                 ACCEPT_ASSESSMENT + params.id + "/accept"
             );
-            // console.log(" response from backen accept assessment");
             if (response.status == 201) {
                 setToasterDetails(
                     {
@@ -664,39 +579,9 @@ function FillAssessment() {
         } catch (error) {
             handleCatchError(error, "onAcceptAssessments");
 
-            // console.log("error response from backend accept assessment");
-            // if (error?.response?.status === 401) {
-            //     setToasterDetails(
-            //         {
-            //             titleMessage: "Oops!",
-            //             descriptionMessage:
-            //                 "Session Timeout: Please login again",
-            //             messageType: "error",
-            //         },
-            //         () => myRef.current()
-            //     );
-            //     setTimeout(() => {
-            //         navigate("/login");
-            //     }, 3000);
-            // } else {
-            //     setToasterDetails(
-            //         {
-            //             titleMessage: "error",
-            //             descriptionMessage:
-            //                 error?.response?.data?.message &&
-            //                 typeof error.response.data.message === "string"
-            //                     ? error.response.data.message
-            //                     : "Something went wrong.",
-            //             messageType: "error",
-            //         },
-            //         () => myRef.current()
-            //     );
-            // }
             setOpenDeleteDialogBox(false);
         }
     };
-
-    // useEffect(() => {}, [errors]);
 
     const [isActive, setActive] = useState(false);
     const handleToggle = () => {
@@ -717,115 +602,13 @@ function FillAssessment() {
     };
     const [selectedFileName, setSelectedFileName] = useState("");
     const handleImportExcel = (e) => {
-        // console.log("Selected files = ", e);
-        // let d = [{ name: "madhav" }];
         setSelectedFileName(e.target.files[0].name);
         setFile(e.target.files[0]);
-        //console.log(selectedFileName)
-        // if (e.target.files) {
-        //     let reader = new FileReader();
-        //     reader.readAsDataURL(e.target.files[0]);
-        //     console.log("File selected = ", e.target.files[0]);
-        //     console.log("Reflect method - ", Reflect.get(e.target.files[0]));
-        //     if (
-        //         e.target.files[0].type === "application/vnd.ms-excel" ||
-        //         e.target.files[0].type ===
-        //             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        //     ) {
-        //         console.log("file type is valid");
-
-        //         reader.onloadend = async () => {
-        //             let result = reader.result;
-        //             let encryptedFile = CryptoJs.AES.encrypt(
-        //                 result,
-        //                 "my-secret-key@123"
-        //             ).toString();
-        //             try {
-        //                 const response = await privateAxios.post(
-        //                     `http://localhost:3000/api/assessments/${params.id}/upload`,
-        //                     {
-        //                         encryptedFile,
-        //                     }
-        //                 );
-
-        //                 if (response.status == 201) {
-        //                     setAssessmentQuestionnaire(response.data.answers);
-        //                     if (response.data.containsErrors) {
-        //                         try {
-        //                             const correctionDocResponse =
-        //                                 await privateAxios.get(
-        //                                     `http://localhost:3000/api/assessments/${response.data.correctionId}/corrections`,
-        //                                     {
-        //                                         responseType: "blob",
-        //                                     }
-        //                                 );
-
-        //                             const url = window.URL.createObjectURL(
-        //                                 new Blob([correctionDocResponse.data])
-        //                             );
-        //                             const link = document.createElement(`a`);
-        //                             link.href = url;
-        //                             link.setAttribute(
-        //                                 `download`,
-        //                                 `Corrections - ${new Date().toLocaleString(
-        //                                     "en"
-        //                                 )}.xlsx`
-        //                             );
-        //                             document.body.appendChild(link);
-        //                             link.click();
-        //                         } catch (error) {
-        //                             console.log(
-        //                                 "Error from corections doc download",
-        //                                 error
-        //                             );
-        //                         }
-        //                     }
-        //                 }
-        //             } catch (error) {
-        //                 console.log("Error from UPLOAD api", error);
-        //             }
-        //             setFile(
-        //                 CryptoJs.AES.encrypt(
-        //                     result,
-        //                     "my-secret-key@123"
-        //                 ).toString()
-        //             );
-        //         };
-        //     } else {
-        //         return setToasterDetails(
-        //             {
-        //                 titleMessage: "error",
-        //                 descriptionMessage:
-        //                     "Invalid file type Please uplaod excel file!",
-        //                 messageType: "error",
-        //             },
-        //             () => myRef.current()
-        //         );
-        //     }
-        // }
-    };
-    // console.log("file selected enc", file);
-
-    const decryptFile = (file1) => {
-        console.log("file selected in dec", file1);
-
-        let decryptData = CryptoJs.AES.decrypt(
-            file1,
-            "my-secret-key@123"
-        ).toString(CryptoJs.enc.Utf8);
-        console.log("Decrypt Data ", decryptData);
-        let file = decryptData.split(",");
-        let fileType = file[0];
-        let fileContent = file[1];
-        let a = document.createElement("a");
-        a.href = `${fileType},` + fileContent;
-        a.download = "QKD_download";
-        a.click();
     };
 
     const handleDownloadAssessment = async () => {
         try {
-            const response = await downloadFunction(
+            await downloadFunction(
                 "Assessment",
                 setToasterDetails,
                 params.id,
@@ -833,28 +616,7 @@ function FillAssessment() {
                 DOWNLOAD_ASSESSMENT_BY_ID,
                 navigate
             );
-            // console.log("response from handledownloadassessment", response);
-            // console.log(
-            //   "response from handledownloadassessment",
-            //   response?.response?.status
-            // );
-            // if (response?.response?.status === 401) {
-            //     setToasterDetails(
-            //         {
-            //             titleMessage: "Oops!",
-            //             descriptionMessage:
-            //                 "Session Timeout: Please login again",
-            //             messageType: "error",
-            //         },
-            //         () => myRef.current()
-            //     );
-            //     setTimeout(() => {
-            //         navigate("/login");
-            //     }, 3000);
-            // }
-        } catch (error) {
-            // console.log("error from handleDownloadAssessment", error);
-        }
+        } catch (error) {}
     };
 
     const [importOpenDialog, setImportOpenDialog] = useState(false);
@@ -865,15 +627,12 @@ function FillAssessment() {
             if (file) {
                 let reader = new FileReader();
                 reader.readAsDataURL(file);
-                // console.log("File selected = ", file);
-                // console.log("Reflect method - ", Reflect.get(file));
+
                 if (
                     file.type === "application/vnd.ms-excel" ||
                     file.type ===
                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 ) {
-                    // console.log("file type is valid");
-
                     reader.onloadend = async () => {
                         let result = reader.result;
                         let encryptedFile = CryptoJs.AES.encrypt(
@@ -967,35 +726,6 @@ function FillAssessment() {
                             setIsFillAssessmentLoading(false);
                             handleCatchError(error, "reuploadAssessment");
                             setImportOpenDialog(false);
-
-                            // if (error?.response?.status === 401) {
-                            //     setToasterDetails(
-                            //         {
-                            //             titleMessage: "Oops!",
-                            //             descriptionMessage:
-                            //                 "Session Timeout: Please login again",
-                            //             messageType: "error",
-                            //         },
-                            //         () => myRef.current()
-                            //     );
-                            //     setTimeout(() => {
-                            //         navigate("/login");
-                            //     }, 3000);
-                            // } else {
-                            //     setToasterDetails(
-                            //         {
-                            //             titleMessage: "error",
-                            //             descriptionMessage:
-                            //                 error?.response?.data?.message &&
-                            //                 typeof error.response.data
-                            //                     .message === "string"
-                            //                     ? error.response.data.message
-                            //                     : "Something went wrong.",
-                            //             messageType: "error",
-                            //         },
-                            //         () => myRef.current()
-                            //     );
-                            // }
                         }
                     };
                 } else {
@@ -1032,7 +762,6 @@ function FillAssessment() {
     };
     const addTableAssessmentValues = () => {
         if (questionnaire && Object.keys(questionnaire)?.length > 0) {
-            // console.log("Questionnaire:- ", questionnaire);
             questionnaire?.sections?.forEach((section) => {
                 if (
                     section?.layout === "table" &&
@@ -1044,16 +773,12 @@ function FillAssessment() {
                     tempAsssessmentQuestionnaire[section?.uuid] = {};
                     section?.rowValues.forEach((row) => {
                         section?.columnValues?.forEach((column) => {
-                            // console.log("column:- ", column);
                             tempAsssessmentQuestionnaire[section?.uuid][
                                 `${column?.uuid}.${row?.uuid}`
                             ] = "";
                         });
                     });
-                    // console.log(
-                    //   "Assessment in Fill Assessment Section:- ",
-                    //   tempAsssessmentQuestionnaire
-                    // );
+
                     setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
                 }
             });
@@ -1212,12 +937,10 @@ function FillAssessment() {
                                         : "upload-file-blk"
                                 }
                             >
-                                {/* <input hidden accept="image/*" multiple type="file" /> */}
                                 <input
                                     type={"file"}
                                     hidden
                                     accept={".xls, .xlsx"}
-                                    // value={file}
                                     onChange={handleImportExcel}
                                 />
                                 <span className="upload-icon">
@@ -1233,14 +956,8 @@ function FillAssessment() {
                 }
                 primaryButtonText={"Upload"}
                 secondaryButtonText={"Cancel"}
-                onPrimaryModalButtonClickHandler={() =>
-                    // handleReOpenAssessment()
-                    reUploadAssessment()
-                }
-                onSecondaryModalButtonClickHandler={() =>
-                    // handleCloseReopenAssessment()
-                    cancelImport()
-                }
+                onPrimaryModalButtonClickHandler={() => reUploadAssessment()}
+                onSecondaryModalButtonClickHandler={() => cancelImport()}
                 openModal={importOpenDialog}
                 setOpenModal={setImportOpenDialog}
                 isModalForm={true}
@@ -1315,12 +1032,6 @@ function FillAssessment() {
                                                     setImportOpenDialog(true)
                                                 }
                                             >
-                                                {/* <input
-                                                type={"file"}
-                                                accept={".xls, .xlsx"}
-                                                // value={file}
-                                                onChange={handleImportExcel}
-                                            /> */}
                                                 Import File
                                             </li>
                                         )}
@@ -1400,7 +1111,6 @@ function FillAssessment() {
                                                 errors={
                                                     errors[section?.uuid] ?? {}
                                                 }
-                                                // handleSetErrors={handleSetErrors}
                                                 handleFormSubmit={
                                                     handleFormSubmit
                                                 }

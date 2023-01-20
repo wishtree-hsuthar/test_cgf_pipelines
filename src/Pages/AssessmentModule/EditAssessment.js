@@ -90,7 +90,6 @@ function EditAssessment() {
         operationMemberForAddAssessments,
         setOperationMemberForAddAssessments,
     ] = useState([]);
-    const [memberRepresentatives, setMemberRepresentatives] = useState([]);
     const [questionnares, setQuestionnares] = useState([]);
     const [questionnaresObj, setQuestionnaresObj] = useState([]);
     const [questionnaireId, setQuestionnaireId] = useState("");
@@ -99,11 +98,11 @@ function EditAssessment() {
     const [disableEditAssessmentButton, setDisableEditAssessmentButton] =
         useState(false);
     const fetchOperationMembersAccordingToMemberCompanyForAddAssessment =
-        async (id, isCGFStaff) => {
+        async (id, checkIfItIsCgfStaff) => {
             try {
                 const responseEditMember = await privateAxios.get(
                     FETCH_OPERATION_MEMBER + id + "/master"
-                    // isCGFStaff
+                    // checkIfItIsCgfStaff
                     //     ? FETCH_OPERATION_MEMBER + id + "/master/internal"
                     //     : FETCH_OPERATION_MEMBER + id
                 );
@@ -122,8 +121,8 @@ function EditAssessment() {
                 );
 
                 console.log("Representative---", representative);
-                console.log("is Cgf staff---", isCGFStaff);
-                isCGFStaff
+                console.log("is Cgf staff---", checkIfItIsCgfStaff);
+                checkIfItIsCgfStaff
                     ? setValue("assignedOperationMember", "")
                     : setValue(
                           "assignedOperationMember",
@@ -221,7 +220,6 @@ function EditAssessment() {
                             name: data.companyName,
                         }))
                     );
-                setMemberRepresentatives(responseEditMember.data);
             } catch (error) {
                 console.log("Error from fetch member company api", error);
             }
@@ -418,7 +416,6 @@ function EditAssessment() {
         setValue("assessmentType", e.target.value);
     };
     const [isActive, setActive] = useState(false);
-    const [isLoadingEditAssement, setIsLoadingEditAssement] = useState(false);
     const handleToggle = () => {
         setActive(!isActive);
     };
@@ -772,6 +769,9 @@ function EditAssessment() {
                                         <button
                                             type="submit"
                                             className="primary-button add-button"
+                                            disabled={
+                                                disableEditAssessmentButton
+                                            }
                                         >
                                             Update
                                         </button>

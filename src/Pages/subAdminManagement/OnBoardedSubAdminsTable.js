@@ -4,7 +4,6 @@ import { privateAxios } from "../../api/axios";
 import { ADD_SUB_ADMIN } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
 const onBoardedTableColumnHead = [

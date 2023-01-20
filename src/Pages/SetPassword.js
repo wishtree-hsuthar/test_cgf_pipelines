@@ -28,7 +28,7 @@ const schema = yup.object().shape({
 });
 const SetPassword = () => {
     //custom hook to set title of page
-useDocumentTitle("Set Password")
+    useDocumentTitle("Set Password");
     const {
         register,
         handleSubmit,
@@ -54,13 +54,13 @@ useDocumentTitle("Set Password")
                 console.log("error from verify token", error);
                 if (error?.response?.status == 400) {
                     console.log("Invalid Token");
-                    setToasterDetails(
+                    setPasswordToasterDetails(
                         {
                             titleMessage: "Oops!",
                             descriptionMessage: error?.response?.data?.message,
                             messageType: "error",
                         },
-                        () => toasterRef.current()
+                        () => setPasswordToasterRef.current()
                     );
                     setTimeout(() => {
                         navigate("/login");
@@ -74,11 +74,12 @@ useDocumentTitle("Set Password")
             controller.abort();
         };
     }, []);
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "",
-    });
+    const [passwordToasterDetails, setPasswordToasterDetails] =
+        useCallbackState({
+            titleMessage: "",
+            descriptionMessage: "",
+            messageType: "",
+        });
     const [values, setValues] = React.useState({
         password: "",
         showNewPassword: false,
@@ -86,7 +87,7 @@ useDocumentTitle("Set Password")
         showConfirmPassword: false,
     });
     const navigate = useNavigate();
-    const toasterRef = useRef();
+    const setPasswordToasterRef = useRef();
     const params = useParams();
     const handleClickShowNewPassword = () => {
         setValues({
@@ -102,13 +103,14 @@ useDocumentTitle("Set Password")
             );
             console.log("response from confirm passowrd", response);
             if (response.status == 201) {
-                setToasterDetails(
+                setPasswordToasterDetails(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage: "Your password has been set successfully!",
+                        descriptionMessage:
+                            "Your password has been set successfully!",
                         messageType: "success",
                     },
-                    () => toasterRef.current()
+                    () => setPasswordToasterRef.current()
                 );
                 setTimeout(() => {
                     navigate("/login");
@@ -116,13 +118,13 @@ useDocumentTitle("Set Password")
             }
         } catch (error) {
             console.log("error from confirm password", error);
-            setToasterDetails(
+            setPasswordToasterDetails(
                 {
                     titleMessage: "Oops!",
                     descriptionMessage: error?.response?.data?.message,
                     messageType: "error",
                 },
-                () => toasterRef.current()
+                () => setPasswordToasterRef.current()
             );
             setTimeout(() => {
                 navigate("/login");
@@ -142,10 +144,10 @@ useDocumentTitle("Set Password")
     return (
         <div className="page-wrapper login-page-wrap">
             <Toaster
-                myRef={toasterRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
+                myRef={setPasswordToasterRef}
+                titleMessage={passwordToasterDetails.titleMessage}
+                descriptionMessage={passwordToasterDetails.descriptionMessage}
+                messageType={passwordToasterDetails.messageType}
             />
             <div className="login-section">
                 <div className="container">
@@ -175,7 +177,9 @@ useDocumentTitle("Set Password")
                                         <div className="form-group">
                                             <label for="password">
                                                 New Password{" "}
-                                                <span className="mandatory">*</span>
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
                                             </label>
                                             <div className="password-field">
                                                 <OutlinedInput
@@ -254,7 +258,9 @@ useDocumentTitle("Set Password")
                                         <div className="form-group">
                                             <label for="password">
                                                 Confirm Password{" "}
-                                                <span className="mandatory">*</span>
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
                                             </label>
                                             <div className="password-field">
                                                 <OutlinedInput

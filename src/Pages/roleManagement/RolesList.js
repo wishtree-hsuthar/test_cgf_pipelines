@@ -149,12 +149,6 @@ const RolesList = () => {
         if (search?.length >= 3) url = url + `&search=${search}`;
         if (filters?.status !== "none" && filters?.status !== "all")
             url = url + `&status=${filters.status}`;
-        // if (
-        //   search?.length >= 3 &&
-        //   filters?.status !== "none" &&
-        //   filters?.status !== "all"
-        // )
-        //   url = `${backendBase}roles?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}&status=${filters.status}`;
         return url;
     };
     const getRoles = async (
