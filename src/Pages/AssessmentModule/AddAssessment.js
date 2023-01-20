@@ -71,7 +71,7 @@ const AddAssessment = () => {
     });
     const {
         handleSubmit,
-        formState: { errors },
+        // formState: { errors },
         control,
         reset,
         setValue,
@@ -166,11 +166,11 @@ const AddAssessment = () => {
     }, []);
 
     const fetchOperationMembersAccordingToMemberCompanyForAddAssessment =
-        async (id, isCGFStaff) => {
+        async (id, checkCgfStaff) => {
             try {
                 const response = await privateAxios.get(
                     // FETCH_OPERATION_MEMBER + id
-                    isCGFStaff
+                    checkCgfStaff
                         ? FETCH_OPERATION_MEMBER + id + "/master/internal"
                         : FETCH_OPERATION_MEMBER + id + "/master"
                 );
@@ -188,8 +188,8 @@ const AddAssessment = () => {
                     (data) => data?.isMemberRepresentative
                 );
                 console.log("Representative---", representative);
-                console.log("is Cgf staff---", isCGFStaff);
-                isCGFStaff
+                console.log("is Cgf staff---", checkCgfStaff);
+                checkCgfStaff
                     ? setValue("assignedOperationMember", "")
                     : setValue(
                           "assignedOperationMember",
@@ -254,13 +254,10 @@ const AddAssessment = () => {
         let someDate = new Date(data.dueDate).setDate(
             new Date(data.dueDate).getDate() + 1
         );
-        // let setUTCHoursForDueDate = new Date(
-        //     someDate.setDate(someDate.getDate())
-        // );
-        // let ISOdate = setUTCHoursForDueDate.setUTCHours(23, 59, 59, 59);
+
         console.log(
             "data after converting to ISOstring",
-            // new Date(ISOdate).toISOString()
+
             new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString()
         );
         data = {

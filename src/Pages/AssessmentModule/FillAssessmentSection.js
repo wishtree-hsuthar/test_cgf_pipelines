@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// import TableAssessment from "./TableAssesment";
-// import FillAssessmentQuestion from "./FillAssessmentQuestions";
+
 import DialogBox from "../../components/DialogBox";
 
 const FillAssessmentQuestion = React.lazy(() =>
@@ -66,48 +65,7 @@ function FillAssesmentSection({
             },
         });
     };
-    const addTableAssessmentValues = () => {
-        let tempAsssessmentQuestionnaire = { ...assessmentQuestionnaire };
-        tempAsssessmentQuestionnaire[section?.uuid] = {};
-        section?.rowValues.forEach((row) => {
-            section?.columnValues?.forEach((column) => {
-                // console.log("column:- ", column);
-                tempAsssessmentQuestionnaire[section?.uuid][
-                    `${column?.uuid}.${row?.uuid}`
-                ] = "";
-            });
-            // row?.cells?.forEach((cell) => {
-            //   console.log("cell", cell);
-            //   if (cell?.columnType === "dropdown") {
-            //     console.log("Inside fill Assessment drop down condition");
-            //     tempAsssessmentQuestionnaire[section?.uuid][
-            //       `${cell?.columnId}.${row?.uuid}`
-            //     ] = undefined;
-            //   } else {
-            //     tempAsssessmentQuestionnaire[section?.uuid][
-            //       `${cell?.columnId}.${row?.uuid}`
-            //     ] = "";
-            //   }
-            // });
-        });
-        // console.log(
-        //   "Assessment in Fill Assessment Section:- ",
-        //   tempAsssessmentQuestionnaire
-        // );
-        setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
-    };
-    useEffect(() => {
-        // console.log(
-        //   "assessment Section:- ",
-        //   assessmentQuestionnaire[section?.uuid]
-        // );
-        if (
-            section?.layout === "table" &&
-            !assessmentQuestionnaire[section?.uuid]
-        ) {
-            // addTableAssessmentValues();
-        }
-    }, []);
+
     return (
         <>
             <DialogBox
@@ -154,7 +112,6 @@ function FillAssesmentSection({
                                 setErrorQuestion={setErrorQuestion}
                                 errorQuestionUUID={errorQuestionUUID}
                                 setErrorQuestionUUID={setErrorQuestionUUID}
-                                // errors={errors ?? {}}
                                 answer={
                                     assessmentQuestionnaire[section?.uuid] &&
                                     assessmentQuestionnaire[section?.uuid][
@@ -202,26 +159,14 @@ function FillAssesmentSection({
 
                         <button
                             type="submit"
-                            onClick={
-                                // () =>
-                                // navigate(
-                                //     `/questionnaires/add-questionnaire/${params.id}`
-                                // )
-                                (e) => handleFormSubmit(e, true)
-                            }
+                            onClick={(e) => handleFormSubmit(e, true)}
                             className="outlined-button add-button mr-10"
                         >
                             Save as draft
                         </button>
                         <button
                             type="submit"
-                            onClick={
-                                // () =>
-                                // navigate(
-                                //     `/questionnaires/add-questionnaire/${params.id}`
-                                // )
-                                (e) => handleFormSubmit(e, false)
-                            }
+                            onClick={(e) => handleFormSubmit(e, false)}
                             className="primary-button add-button"
                         >
                             Submit assessment

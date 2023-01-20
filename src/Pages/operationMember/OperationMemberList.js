@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Tabs, Tab } from "@mui/material";
 
 import DownloadIcon from "@mui/icons-material/Download";
 import useCallbackState from "../../utils/useCallBackState";
@@ -15,12 +14,6 @@ import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import { downloadFunction } from "../../utils/downloadFunction";
 import TabHeader from "../../utils/tabUtils/TabHeader";
 
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        "aria-controls": `simple-tabpanel-${index}`,
-    };
-}
 function OperationMemberList() {
     //custom hook to set title of page
     useDocumentTitle("Operation Members");

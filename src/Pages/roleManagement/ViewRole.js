@@ -246,8 +246,7 @@ const ViewRole = () => {
             delete viewRoleObject["operationType"];
             delete viewRoleObject["address"];
             delete viewRoleObject["isCGFStaff"];
-            // delete viewRoleObject["isOperationMember"];
-            // delete viewRoleObject["isMemberRepresentative"];
+
             delete viewRoleObject["isCGFAdmin"];
 
             delete viewRoleObject["__v"];

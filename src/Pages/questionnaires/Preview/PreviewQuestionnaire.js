@@ -83,14 +83,14 @@ function PreviewQuestionnaire(props) {
             ? []
             : Object.values(privilege?.privileges);
     let moduleAccesForMember = privilegeArray
-        .filter((data) => data?.moduleId?.name === "Questionnaire")
-        .map((data) => ({
+        .filter((module) => module?.moduleId?.name === "Questionnaire")
+        .map((privilege) => ({
             questionnaire: {
-                list: data?.list,
-                view: data?.view,
-                edit: data?.edit,
-                delete: data?.delete,
-                add: data?.add,
+                list: privilege?.list,
+                view: privilege?.view,
+                edit: privilege?.edit,
+                delete: privilege?.delete,
+                add: privilege?.add,
             },
         }));
     useEffect(() => {

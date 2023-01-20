@@ -100,15 +100,6 @@ function AddOperationMember() {
             );
         } catch (error) {
             console.log("Error from fetch roles", error);
-
-            // setToasterDetails(
-            //     {
-            //         titleMessage: "Oops!",
-            //         descriptionMessage: error?.response?.data?.message,
-            //         messageType: "error",
-            //     },
-            //     () => toasterRef.current()
-            // );
         }
     };
 

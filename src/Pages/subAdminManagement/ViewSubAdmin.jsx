@@ -35,14 +35,14 @@ const ViewSubAdmin = () => {
         descriptionMessage: "",
         messageType: "",
     });
-    const [modalData, setData] = useState();
+    // const [modalData, setData] = useState();
 
     const [isActive, setActive] = useState("false");
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
     const [fetchedSubAdminDetails, setFetchedSubAdminDetails] = useState({});
 
-    const [open, setOpen] = React.useState(false);
+    // const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
         let isMounted = true;
@@ -86,7 +86,6 @@ const ViewSubAdmin = () => {
                 }
             }
         })();
-        // fetchSubAdmin();
         return () => {
             isMounted = false;
             controller.abort();
@@ -145,20 +144,20 @@ const ViewSubAdmin = () => {
         setActive(!isActive);
     };
     const handleOpen = (index) => {
-        setOpen(true);
-        setData(data[index]);
+        // setOpen(true);
+        // setData(data[index]);
         console.log("clicked", index);
         console.log(index);
         if (index === 0) {
-            setOpen(false);
+            // setOpen(false);
             history(`/users/cgf-admin/edit-cgf-admin/${params.id}`);
         }
         if (index === 1) {
-            setOpen(false);
+            // setOpen(false);
             history(`/users/cgf-admin/replace-cgf-admin/${params.id}`);
         }
         if (index === 2) {
-            setOpen(false);
+            // setOpen(false);
             setOpenDeleteDialog(true);
         }
     };

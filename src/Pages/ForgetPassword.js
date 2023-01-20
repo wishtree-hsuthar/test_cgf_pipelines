@@ -19,8 +19,8 @@ const forgetPasswordSchema = yup.object().shape({
 });
 const ForgetPassword = () => {
     //custom hook to set title of page
-useDocumentTitle("Forgot Password")
-    const navigate = useNavigate()
+    useDocumentTitle("Forgot Password");
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -39,17 +39,11 @@ useDocumentTitle("Forgot Password")
             document.body.classList.remove("login-page");
         };
     }, []);
-    const toasterRef = useRef();
+    const forgetPasswordToasterRef = useRef();
     const [messageType, setMessageType] = useState("");
     const [messageDescription, setMessageDescription] = useState("");
     const [messageTitle, setMessageTitle] = useState("");
 
-    const [values, setValues] = React.useState({
-        email: "",
-    });
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
     const submitEmail = async (data) => {
         try {
             const response = await privateAxios.get(
@@ -64,7 +58,7 @@ useDocumentTitle("Forgot Password")
                     "Reset password link has been successfully sent on the entered email address! Kindly check your email to reset your password!"
                 );
                 setTimeout(() => {
-                    toasterRef.current();
+                    forgetPasswordToasterRef.current();
                 }, 3000);
                 reset();
             }
@@ -78,7 +72,7 @@ useDocumentTitle("Forgot Password")
 
                 setMessageDescription(errorMsg);
                 setTimeout(() => {
-                    toasterRef.current();
+                    forgetPasswordToasterRef.current();
                 }, 1000);
                 reset();
             }
@@ -91,7 +85,7 @@ useDocumentTitle("Forgot Password")
             <Toaster
                 messageType={messageType}
                 titleMessage={messageTitle}
-                myRef={toasterRef}
+                myRef={forgetPasswordToasterRef}
                 descriptionMessage={messageDescription}
             />
             <div className="login-section">
@@ -127,7 +121,9 @@ useDocumentTitle("Forgot Password")
                                         <div className="form-group">
                                             <label for="emailid">
                                                 Email{" "}
-                                                <span className="mandatory">*</span>
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
                                             </label>
                                             <TextField
                                                 className={`input-field ${
@@ -138,7 +134,12 @@ useDocumentTitle("Forgot Password")
                                                 placeholder="example@domain.com"
                                                 variant="outlined"
                                                 {...register("email")}
-                                                onBlur={(e) => setValue("email",e.target.value.trim())}
+                                                onBlur={(e) =>
+                                                    setValue(
+                                                        "email",
+                                                        e.target.value.trim()
+                                                    )
+                                                }
                                                 error={
                                                     errors.email ? true : false
                                                 }

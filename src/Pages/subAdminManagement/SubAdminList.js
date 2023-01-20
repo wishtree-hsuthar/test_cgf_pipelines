@@ -105,7 +105,6 @@ const SubAdminList = () => {
     const [recordsForPendingTab, setRecordsForPendingTab] = React.useState([]);
     const [totalRecordsForPendingTab, setTotalRecordsForPendingTab] =
         React.useState(0);
-    // const [roles, setRoles] = useState([]);
 
     //implemention of pagination on front-end
     // let records = [];
@@ -198,20 +197,7 @@ const SubAdminList = () => {
             console.log("error from withdrawInvite id", error);
         }
     };
-    const fetchRolesForCGFAdmin = async () => {
-        try {
-            const response = await privateAxios.get(FETCH_ROLES);
-            console.log("response from fetch roles", response.data);
-            // setRoles(response?.data);
-        } catch (error) {
-            console.log("error from fetchroles in pending page", error);
-            if (error?.response?.status == 401) {
-                console.log("401 from fetch roles of subadminlist");
-                // dispatch(resetUser());
-                navigate("/login");
-            }
-        }
-    };
+
     // url for pending tab
     const generateUrlForPendingTab = () => {
         console.log("filters", filters);
@@ -293,7 +279,6 @@ const SubAdminList = () => {
     );
     {
         console.log("makeApiCall outside UseEffect ", makeApiCall);
-        // console.log("order", order, "order BY", orderBy);
     }
 
     const [selectedRoles, setSelectedRoles] = useState([]);

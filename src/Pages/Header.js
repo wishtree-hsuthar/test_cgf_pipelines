@@ -1,17 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-    AppBar,
-    Box,
-    Toolbar,
-    Menu,
-    Tooltip,
-    MenuItem,
-} from "@mui/material";
+import { AppBar, Box, Toolbar, Menu, Tooltip, MenuItem } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUser } from "../redux/UserSlice";
-import {  LOGOUT_URL } from "../api/Url";
+import { LOGOUT_URL } from "../api/Url";
 import { privateAxios } from "../api/axios";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
@@ -19,25 +12,19 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 import "./Header.css";
 const Header = () => {
-    
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [isActive, setActive] = React.useState("false");
     const userAuth = useSelector((state) => state?.user?.userObj);
     const privilege = useSelector((state) => state?.user?.privilege);
-    
-    
+
     let initials = userAuth?.name?.split(" ");
     const CGF_ADMIN_ACCESS = userAuth?.roleId?.name == "Sub Admin";
-    const MEMBER_ACCESS = userAuth?.roleId?.name == "Member";
     const OPERATION_MEMBER = userAuth?.roleId?.name == "Operation Member";
     const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
-    const [activeStateForMembers, setActiveStateForMembers] = useState(false);
-    const [activeStateForOperationMembers, setActiveStateForOperationMembers] =
-        useState(false);
-    
+
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
         setActive(!isActive);
@@ -53,9 +40,6 @@ const Header = () => {
             ? []
             : Object.values(privilege?.privileges);
 
-    let modifiedPrivilegeArrayKeys = privilegeArray.map(
-        (privilege, index) => privilege?.moduleId?.name
-    );
     let moduleAccesForMember = privilegeArray
         .filter((data) => data?.moduleId?.name === "Members")
         .map((data) => ({
@@ -96,7 +80,7 @@ const Header = () => {
                 delete: data.delete,
             },
         }));
-  
+
     const userNameInitials = () => {
         let letter = "";
         if (initials.length > 1) {
@@ -110,7 +94,6 @@ const Header = () => {
     const handleLogOut = async () => {
         try {
             const response = await privateAxios.post(LOGOUT_URL);
-            
 
             if (response.status == 201) {
                 setAnchorElUser(null);
@@ -119,7 +102,6 @@ const Header = () => {
                 navigate("/login");
             }
         } catch (error) {
-            
             if (error?.response?.status === 401) {
                 navigate("/login");
             }
@@ -307,13 +289,12 @@ const Header = () => {
                                                         >
                                                             <a
                                                                 onClick={() => {
-                                                                    
-                                                                    setActiveStateForMembers(
-                                                                        false
-                                                                    );
-                                                                    setActiveStateForOperationMembers(
-                                                                        false
-                                                                    );
+                                                                    // setActiveStateForMembers(
+                                                                    //     false
+                                                                    // );
+                                                                    // setActiveStateForOperationMembers(
+                                                                    //     false
+                                                                    // );
                                                                     navigate(
                                                                         "/users/cgf-admin"
                                                                     );
@@ -415,7 +396,6 @@ const Header = () => {
                                     <div className="user-blk flex-between">
                                         <div className="user-img">
                                             <span className="user-name-txt">
-                                                
                                                 {userNameInitials()}
                                             </span>
                                         </div>

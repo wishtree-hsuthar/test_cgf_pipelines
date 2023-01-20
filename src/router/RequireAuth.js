@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import {  useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 
 const RequireAuth = ({ children, moduleName, page }) => {
     const location = useLocation();
@@ -8,18 +8,6 @@ const RequireAuth = ({ children, moduleName, page }) => {
     const privilegeArray = privilege
         ? Object.values(privilege?.privileges)
         : [];
-    // console.log("authUsr from requireAuth", authUser);
-    // console.log("roles from requireAuth", authUser?.roleId?.name);
-    //static role based access
-    // let sameRole = authUser?.roleId?.name;
-    // let grantAccess = allowedRoles.find((role) => {
-    //     return role === sameRole;
-    // });
-    // console.log("grant access to---------", grantAccess);
-
-    // dynamic role based access
-    // console.log("privilege array in require auth", privilegeArray);
-    // console.log("privilege  in require auth", privilege);
     let moduleAccessByModuleName = privilegeArray
         .filter((data) => data?.moduleId?.name === moduleName)
         .map((data) => ({
@@ -32,12 +20,10 @@ const RequireAuth = ({ children, moduleName, page }) => {
             },
         }));
 
-    // console.log("moduleAccess in require auth", moduleAccessByModuleName);
     let grantAccess =
         authUser.role.name === "Super Admin"
             ? true
             : moduleAccessByModuleName[0]?.[moduleName][page];
-    // console.log(`grant access for ${page} and ${moduleName} `, grantAccess);
 
     return grantAccess ? (
         children

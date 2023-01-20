@@ -273,16 +273,6 @@ function EditOperationMember() {
             if (error?.code === "ERR_CANCELED") return;
 
             console.log("Error from fetch roles", error);
-
-            // isMounted &&
-            //     setToasterDetails(
-            //         {
-            //             titleMessage: "Oops!",
-            //             descriptionMessage: error?.response?.data?.message,
-            //             messageType: "error",
-            //         },
-            //         () => toasterRef.current()
-            //     );
         }
     };
     const phoneNumberChangeHandler = (e, name, code) => {

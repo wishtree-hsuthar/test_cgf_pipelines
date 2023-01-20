@@ -40,20 +40,16 @@ const ViewOperationMembers = React.lazy(() =>
 const EditOperationMember = React.lazy(() =>
     import("../Pages/operationMember/EditOperationMember")
 );
-// const AddQuestionnaires = "../Pages/questionnaires/AddQuestionnaires";
 const QuestionnairesList = React.lazy(() =>
     import("../Pages/questionnaires/QuestionnairesList")
 );
 const AddNewQuestionnaire = React.lazy(() =>
     import("../Pages/questionnaires/AddNewQuestionnaire")
 );
-// const PreviewQuestionnaire = "../Pages/PreviewQuestionnaire";
 const PreviewQuestionnaire = React.lazy(() =>
     import("../Pages/questionnaires/Preview/PreviewQuestionnaire")
 );
-// const PreviewDemo = "../Pages/PreviewDemo";
 const PreviewDemo = "../Pages/questionnaires/Preview/PreviewDemo";
-// const Preview = "../Pages/questionnaires/Preview";
 const AddAssessment = React.lazy(() =>
     import("../Pages/AssessmentModule/AddAssessment")
 );
@@ -79,21 +75,18 @@ const VersionHistory = React.lazy(() =>
 const Instructions = React.lazy(() =>
     import("../Pages/AssessmentModule/Instructions")
 );
-// import Layout from "../Pages/Layout";
 const ProtectedPages = () => {
     return (
         <Routes>
-            {/* <Route path="/" element={<Layout />}> */}
             <Route path="/" element={<Layout />}>
                 <Route path="/home" element={<Dashboard />} />
 
                 <Route
                     path="/users/cgf-admin"
                     element={
-                        // <RequireAuth allowedRoles={["Super Admin", "Sub Admin"]}>
-
-                        <SubAdminList />
-                        // </RequireAuth>
+                        <RequireAuth moduleName={""} page={""}>
+                            <SubAdminList />
+                        </RequireAuth>
                     }
                 />
                 <Route
@@ -129,12 +122,6 @@ const ProtectedPages = () => {
                         </RequireAuth>
                     }
                 />
-
-                {/* <Route
-                    path="/questionnaires/add-questionnaires"
-                    element={<AddQuestionnaires />}
-                /> */}
-                {/* <Route path="/questionnaires/preview" element={<Preview />} /> */}
 
                 {/* Role Management Routes */}
                 <Route path="/roles" element={<RolesList />} />
@@ -249,7 +236,6 @@ const ProtectedPages = () => {
                             <AddNewQuestionnaire />
                         </RequireAuth>
                     }
-                    // element={<AddQuestionnaires />}
                 />
                 <Route
                     path="/questionnaires/preview-questionnaire/:id"
@@ -311,7 +297,6 @@ const ProtectedPages = () => {
                         // </RequireAuth>
                     }
                 />
-                {/* <Route path="/preview" element={<PreviewDemo />} /> */}
                 <Route path="*" element={<FallBackUI />} />
                 <Route path="/change-password" element={<ChangePassword />} />
                 <Route

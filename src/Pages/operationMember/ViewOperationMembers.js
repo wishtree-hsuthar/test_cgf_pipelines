@@ -137,19 +137,6 @@ const ViewOperationMembers = () => {
                 console.log("member company---", memberCompanies);
             } catch (error) {
                 console.log("error from fetch member company", error);
-                // if (error?.response?.status == 401) {
-                //     setToasterDetails(
-                //         {
-                //             titleMessage: "Oops!",
-                //             descriptionMessage: "Session Timeout: Please login again",
-                //             messageType: "error",
-                //         },
-                //         () => toasterRef.current()
-                //     );
-                //     setTimeout(() => {
-                //         navigate("/login");
-                //     }, 3000);
-                // }
             }
         };
         let fetchCountries = async () => {
@@ -164,17 +151,6 @@ const ViewOperationMembers = () => {
                     );
             } catch (error) {
                 console.log("error from countries api", error);
-                // if (error?.response?.status == 401) {
-                //     setToasterDetails(
-                //         {
-                //             titleMessage: "Oops!",
-                //             descriptionMessage: error?.response?.data?.message,
-                //             messageType: "error",
-                //         },
-                //         () => toasterRef.current()
-                //     );
-                //     navigate("/login");
-                // }
             }
         };
         fetchCountries();

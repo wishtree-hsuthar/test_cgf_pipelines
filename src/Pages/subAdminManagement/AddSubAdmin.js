@@ -152,21 +152,7 @@ const AddSubAdmin = () => {
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
                 console.log("error from countries api", error);
-                // if (error?.response?.status === 401) {
-                //     setToasterDetails(
-                //         {
-                //             titleMessage: "Oops!",
-                //             descriptionMessage: "Session Timeout: Please login again",
-                //             messageType: "error",
-                //         },
-                //         () => toasterRef.current()
-                //     );
-                //     setTimeout(() => {
-                //         navigate("/login");
-                //     }, 3000);
-                // }
-                // else
-                //  {
+
                 isMounted &&
                     setToasterDetails(
                         {

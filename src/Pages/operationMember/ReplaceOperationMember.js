@@ -174,11 +174,6 @@ const ReplaceOperationMember = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             console.log("Error from operation member-------", error);
-
-            // if (error?.response?.status == 401) {
-            //     navigate("/login");
-            // }
-            // setIsLoading(false);
         }
     };
 
@@ -304,9 +299,7 @@ const ReplaceOperationMember = () => {
     };
     const [searchTextReplaceOP, setSearchTextReplaceOP] = useState("");
     const [open, setOpen] = useState(false);
-    const handleSearchText = (e) => {
-        setSearchTextReplaceOP(e.target.value);
-    };
+
     console.log("Search text---", searchTextReplaceOP);
 
     const handleYes = () => {
@@ -323,12 +316,12 @@ const ReplaceOperationMember = () => {
     const openReplaceDailogBox = () => {
         setOpen(true);
     };
-    const selectSingleUser = (id) => {
-        console.log("select single user---", id);
-        setSelectedUserReplaceOP(id);
+    const selectSingleUser = (opId) => {
+        console.log("select single user---", opId);
+        setSelectedUserReplaceOP(opId);
         setSelectedOperationMember({
             ...recordsReplaceOP.filter(
-                (data) => data._id === id ?? { name: data.name }
+                (data) => data._id === opId ?? { name: data.name }
             ),
         });
     };

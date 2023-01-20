@@ -28,12 +28,12 @@ const loginFormSchema = yup.object().shape({
 const Login = (prop) => {
     //custom hook to set title of page
     useDocumentTitle("Login");
-    const [toasterDetails, setToasterDetails] = useCallbackState({
+    const [loginToasterDetails, setLoginToasterDetails] = useCallbackState({
         titleMessage: "",
         descriptionMessage: "",
         messageType: "error",
     });
-    const toasterRef = useRef();
+    const loginToasterRef = useRef();
     const dispatch = useDispatch();
     Logger.info(prop);
     const location = useLocation();
@@ -52,7 +52,6 @@ const Login = (prop) => {
     useEffect(() => {
         document.body.classList.add("login-page");
 
-        let isMounted = true;
         const controller = new AbortController();
         const fetchUser = async () => {
             try {
@@ -74,7 +73,6 @@ const Login = (prop) => {
 
         return () => {
             document.body.classList.remove("login-page");
-            isMounted = false;
             controller.abort();
         };
     }, []);
@@ -111,28 +109,18 @@ const Login = (prop) => {
             }
         } catch (error) {
             console.log("error from submit login method", error);
-            // if (error.response.status == 401) {
-            //     return setToasterDetails(
-            //         {
-            //             titleMessage: "Invalid Credentials",
-            //             descriptionMessage: error?.response?.data?.message,
-            //             messageType: "error",
-            //         },
-            //         () => toasterRef.current()
-            //     );
-            // }
 
             if (
                 error.response.status == 401 &&
                 error.response.data.message === "Unauthorized"
             ) {
-                return setToasterDetails(
+                return setLoginToasterDetails(
                     {
                         titleMessage: "Invalid Credentials",
                         descriptionMessage: "Invalid email or password!",
                         messageType: "error",
                     },
-                    () => toasterRef.current()
+                    () => loginToasterRef.current()
                 );
             }
             if (
@@ -140,23 +128,23 @@ const Login = (prop) => {
                 error.response.data.message ===
                     "You no longer have access to the system. Kindly contact system admin."
             ) {
-                return setToasterDetails(
+                return setLoginToasterDetails(
                     {
                         titleMessage: "Invalid Credentials",
                         descriptionMessage: error?.response?.data?.message,
                         messageType: "error",
                     },
-                    () => toasterRef.current()
+                    () => loginToasterRef.current()
                 );
             }
             if (error.response.status == 400) {
-                return setToasterDetails(
+                return setLoginToasterDetails(
                     {
                         titleMessage: "Session Active",
                         descriptionMessage: error?.response?.data?.message,
                         messageType: "error",
                     },
-                    () => toasterRef.current()
+                    () => loginToasterRef.current()
                 );
             }
         }
@@ -165,10 +153,10 @@ const Login = (prop) => {
     return (
         <div className="page-wrapper login-page-wrap">
             <Toaster
-                myRef={toasterRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
+                myRef={loginToasterRef}
+                titleMessage={loginToasterDetails.titleMessage}
+                descriptionMessage={loginToasterDetails.descriptionMessage}
+                messageType={loginToasterDetails.messageType}
             />
             <div className="login-section">
                 <div className="container">
