@@ -311,7 +311,7 @@ export default function TableComponent({
                                                         ) {
                                                             return row[cell]
                                                                 ?.length <=
-                                                                30 ||
+                                                                28 ||
                                                                 typeof row[
                                                                     cell
                                                                 ] ===
@@ -374,13 +374,13 @@ export default function TableComponent({
                                                                                   cell
                                                                               ]?.slice(
                                                                                   1,
-                                                                                  30
+                                                                                  28
                                                                               )}...`
                                                                             : `${row[
                                                                                   cell
                                                                               ]?.slice(
                                                                                   0,
-                                                                                  30
+                                                                                  28
                                                                               )}...`}
                                                                     </TableCell>
                                                                 </Tooltip>

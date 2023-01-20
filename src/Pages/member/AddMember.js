@@ -1311,7 +1311,7 @@ const AddMember = () => {
                                 </div>
                                 <div className="card-inner-wrap">
                                     <h2 className="sub-heading1">
-                                        Member Contact Detail
+                                        Representative Contact Detail
                                     </h2>
                                     <div className="flex-between card-blk">
                                         <div className="card-form-field">
