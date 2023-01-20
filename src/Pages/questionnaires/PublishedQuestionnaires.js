@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
+import Loader from "../../utils/Loader";
 const PublishedQuestionnaires = ({
     makeApiCall,
     setMakeApiCall,
@@ -14,7 +15,10 @@ const PublishedQuestionnaires = ({
     searchTimeout,
     setSearch,
 }) => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [
+        isPublishedQuestionnaireLoading,
+        setIsPublishedQuestionnaireLoading,
+    ] = useState(false);
 
     const navigate = useNavigate();
     //state to hold search timeout delay
@@ -40,7 +44,13 @@ const PublishedQuestionnaires = ({
         },
     ];
 
-  const questionnaireKeysOrder = ["_id", "title", "uuid", "createdAt","isActive"];
+    const questionnaireKeysOrder = [
+        "_id",
+        "title",
+        "uuid",
+        "createdAt",
+        "isActive",
+    ];
 
     //code of tablecomponent
     const [pagePublishedQuestionnaire, setPagePublishedQuestionnaire] =
@@ -62,31 +72,30 @@ const PublishedQuestionnaires = ({
     const [selectedPublishedQuestionnaire, setSelectedPublishedQuestionnaire] =
         useState([]);
 
-  const updateRecords = (data) => {
-    data.forEach((questionnaireObject) => {
-      delete questionnaireObject["updatedAt"];
+    const updateRecords = (data) => {
+        data.forEach((questionnaireObject) => {
+            delete questionnaireObject["updatedAt"];
 
-      delete questionnaireObject["__v"];
-      delete questionnaireObject["isDraft"];
-      delete questionnaireObject["isPublished"];
-      // delete questionnaireObject["isActive"]
-      delete questionnaireObject["vNo"];
-      questionnaireObject["createdAt"] = new Date(questionnaireObject["createdAt"]).toLocaleDateString(
-        "en-US",
-        {
-          month: "2-digit",
-          day: "2-digit",
-          year: "numeric",
-        }
-      );
-      questionnaireKeysOrder.forEach((k) => {
-        const v = questionnaireObject[k];
-        delete questionnaireObject[k];
-        questionnaireObject[k] = v;
-      });
-    });
-    setRecordsPublishedQuestionnaire([...data]);
-  };
+            delete questionnaireObject["__v"];
+            delete questionnaireObject["isDraft"];
+            delete questionnaireObject["isPublished"];
+            // delete questionnaireObject["isActive"]
+            delete questionnaireObject["vNo"];
+            questionnaireObject["createdAt"] = new Date(
+                questionnaireObject["createdAt"]
+            ).toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
+            questionnaireKeysOrder.forEach((k) => {
+                const v = questionnaireObject[k];
+                delete questionnaireObject[k];
+                questionnaireObject[k] = v;
+            });
+        });
+        setRecordsPublishedQuestionnaire([...data]);
+    };
 
     const generateUrl = () => {
         console.log("Search", search);
@@ -99,44 +108,44 @@ const PublishedQuestionnaires = ({
     const userAuth = useSelector((state) => state?.user?.userObj);
     const privilege = useSelector((state) => state?.user?.privilege);
 
-  const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-  let publishedQuestionnairePrivilgeArray =
-    userAuth?.roleId?.name === "Super Admin"
-      ? []
-      : Object.values(privilege?.privileges);
-  let moduleAccesForMember = publishedQuestionnairePrivilgeArray
-    .filter((data) => data?.moduleId?.name === "Questionnaire")
-    .map((data) => ({
-      questionnaire: {
-        list: data?.list,
-        view: data?.view,
-        edit: data?.edit,
-        delete: data?.delete,
-        add: data?.add,
-      },
-    }));
-  console.log(
-    "module access member in view member",
-    moduleAccesForMember[0]?.questionnaire
-  );
+    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
+    let publishedQuestionnairePrivilgeArray =
+        userAuth?.roleId?.name === "Super Admin"
+            ? []
+            : Object.values(privilege?.privileges);
+    let moduleAccesForMember = publishedQuestionnairePrivilgeArray
+        .filter((data) => data?.moduleId?.name === "Questionnaire")
+        .map((data) => ({
+            questionnaire: {
+                list: data?.list,
+                view: data?.view,
+                edit: data?.edit,
+                delete: data?.delete,
+                add: data?.add,
+            },
+        }));
+    console.log(
+        "module access member in view member",
+        moduleAccesForMember[0]?.questionnaire
+    );
 
-  const getPublishedQuestionnaire = async (
-    isMounted = true,
-    controller = new AbortController()
-  ) => {
-    try {
-      let url = generateUrl();
-      setIsLoading(true);
-      const response = await privateAxios.get(url, {
-        signal: controller.signal,
-      });
-      setTotalRecordsPublishedQuestionnaire(
-        parseInt(response.headers["x-total-count"])
-      );
-      console.log("Response from sub admin api get", response);
+    const getPublishedQuestionnaire = async (
+        isMounted = true,
+        controller = new AbortController()
+    ) => {
+        try {
+            let url = generateUrl();
+            setIsPublishedQuestionnaireLoading(true);
+            const response = await privateAxios.get(url, {
+                signal: controller.signal,
+            });
+            setTotalRecordsPublishedQuestionnaire(
+                parseInt(response.headers["x-total-count"])
+            );
+            console.log("Response from sub admin api get", response);
 
             updateRecords([...response.data]);
-            setIsLoading(false);
+            setIsPublishedQuestionnaireLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             console.log("Error from questionnaire-------", error);
@@ -157,7 +166,7 @@ const PublishedQuestionnaires = ({
                     navigate("/login");
                 }, 3000);
             }
-            setIsLoading(false);
+            setIsPublishedQuestionnaireLoading(false);
         }
     };
 
@@ -212,10 +221,8 @@ const PublishedQuestionnaires = ({
                 titleMessage={toasterDetails.titleMessage}
             />
             <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
-                {isLoading ? (
-                    <div className="loader-blk">
-                        <img src={Loader2} alt="Loading" />
-                    </div>
+                {isPublishedQuestionnaireLoading ? (
+                    <Loader />
                 ) : (
                     <TableComponent
                         tableHead={tableHead}

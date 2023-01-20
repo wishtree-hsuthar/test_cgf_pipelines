@@ -2,7 +2,10 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import React, { useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import {
+    Controller as EditAssessmentController,
+    useForm,
+} from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import {
@@ -13,7 +16,6 @@ import {
     MEMBER_DROPDOWN,
     UPDATE_ASSESSMENT_BY_ID,
 } from "../../api/Url";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
@@ -25,6 +27,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import axios from "axios";
 import DialogBox from "../../components/DialogBox";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import Loader from "../../utils/Loader";
 const helperTextForAssessment = {
     title: {
         required: "Enter the assessment title",
@@ -51,7 +54,8 @@ function EditAssessment() {
     //custom hook to set title of page
     useDocumentTitle("Edit Assessment");
     // state to manage loaders
-    const [isLoading, setIsLoading] = useState(false);
+    const [isEditAssessmentLoading, setIsEditAssessmentLoading] =
+        useState(false);
 
     const { handleSubmit, control, setValue, reset, watch } = useForm({
         defaultValues: {
@@ -139,14 +143,14 @@ function EditAssessment() {
 
         const fetchAssessment = async () => {
             try {
-                setIsLoading(true);
+                setIsEditAssessmentLoading(true);
                 const responseEditMember = await privateAxios.get(
                     FETCH_ASSESSMENT_BY_ID + params.id,
                     {
                         signal: controller.signal,
                     }
                 );
-                setIsLoading(false);
+                setIsEditAssessmentLoading(false);
                 console.log(
                     "responseEditMember from fetch assessment",
                     responseEditMember.data
@@ -192,7 +196,7 @@ function EditAssessment() {
                         navigate("/login");
                     }, 3000);
                 }
-                setIsLoading(false);
+                setIsEditAssessmentLoading(false);
                 console.log("Error from fetch assessment", error);
             }
         };
@@ -277,7 +281,7 @@ function EditAssessment() {
 
     const updateAssessment = async (data) => {
         setDisableEditAssessmentButton(true);
-        setIsLoading(true);
+        setIsEditAssessmentLoading(true);
         console.log("data for update assessment", data);
         data = {
             ...data,
@@ -298,7 +302,7 @@ function EditAssessment() {
             console.log("responseEditMember from update assessment page");
             if (responseEditMember.status === 200) {
                 setDisableEditAssessmentButton(false);
-                setIsLoading(true);
+                setIsEditAssessmentLoading(true);
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
@@ -326,7 +330,7 @@ function EditAssessment() {
         } catch (error) {
             console.log("error from update assessment url", error);
             setDisableEditAssessmentButton(false);
-            setIsLoading(false);
+            setIsEditAssessmentLoading(false);
 
             if (error.responseEditMember.status === 401) {
                 console.log("Unauthorized user access");
@@ -533,10 +537,8 @@ function EditAssessment() {
                             </span>
                         </div>
 
-                        {isLoading ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
+                        {isEditAssessmentLoading ? (
+                            <Loader />
                         ) : (
                             <div className="card-wrapper">
                                 <div className="card-blk flex-between">
@@ -654,7 +656,7 @@ function EditAssessment() {
                                                     *
                                                 </span>
                                             </label>
-                                            <Controller
+                                            <EditAssessmentController
                                                 name="dueDate"
                                                 control={control}
                                                 render={({
@@ -714,7 +716,7 @@ function EditAssessment() {
                                     <div className="card-form-field">
                                         <div className="form-group">
                                             <label>Remarks/Comments</label>
-                                            <Controller
+                                            <EditAssessmentController
                                                 name="remarks"
                                                 control={control}
                                                 rules={{
@@ -728,6 +730,8 @@ function EditAssessment() {
                                                     <TextField
                                                         multiline
                                                         {...field}
+                                                        id="outlined-basic"
+                                                        placeholder="Enter remarks/comments"
                                                         onBlur={(e) =>
                                                             setValue(
                                                                 "remarks",
@@ -741,8 +745,6 @@ function EditAssessment() {
                                                             error &&
                                                             "input-textarea-error"
                                                         }`}
-                                                        id="outlined-basic"
-                                                        placeholder="Enter remarks/comments"
                                                         helperText={
                                                             error
                                                                 ? helperTextForAssessment

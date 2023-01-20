@@ -27,6 +27,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 // import FillAssesmentSection from "./FillAssessmentSection";
 
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+import Loader from "../../utils/Loader";
 const FillAssesmentSection = React.lazy(() =>
     import("./FillAssessmentSection")
 );
@@ -91,7 +92,8 @@ function FillAssessment() {
     //custom hook to set title of page
     useDocumentTitle("Fill Assessment");
     //   state to manage loaders
-    const [isLoading, setIsLoading] = useState(false);
+    const [isFillAssessmentLoading, setIsFillAssessmentLoading] =
+        useState(false);
     const [file, setFile] = useState("");
 
     const { handleSubmit, control, setValue } = useForm({
@@ -133,6 +135,36 @@ function FillAssessment() {
         setErrors({ ...errors });
     };
 
+    const handleCatchError = (error, functionName) => {
+        console.log("error occured in ", functionName);
+        if (error?.response?.status === 401) {
+            setToasterDetails(
+                {
+                    titleMessage: "Oops!",
+                    descriptionMessage: "Session Timeout: Please login again",
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
+            setTimeout(() => {
+                navigate("/login");
+            }, 3000);
+        } else {
+            setToasterDetails(
+                {
+                    titleMessage: "Error",
+                    descriptionMessage:
+                        error?.response?.data?.message &&
+                        typeof error.response.data.message === "string"
+                            ? error.response.data.message
+                            : "Something went wrong.",
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
+        }
+    };
+
     const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
     useEffect(() => {
         let isMounted = true;
@@ -172,14 +204,14 @@ function FillAssessment() {
 
         const fetchAssessments = async () => {
             try {
-                setIsLoading(true);
+                setIsFillAssessmentLoading(true);
                 const response = await privateAxios.get(
                     `${FETCH_ASSESSMENT_BY_ID}${params.id}`,
                     {
                         signal: controller.signal,
                     }
                 );
-                setIsLoading(false);
+                setIsFillAssessmentLoading(false);
                 console.log("response from fetch assessment", response);
                 setEditMode(
                     userAuth?._id ===
@@ -217,7 +249,7 @@ function FillAssessment() {
                         navigate("/login");
                     }, 3000);
                 }
-                setIsLoading(false);
+                setIsFillAssessmentLoading(false);
                 console.log("error from fetch assessment", error);
             }
         };
@@ -263,34 +295,35 @@ function FillAssessment() {
                     }, 3000);
             }
         } catch (error) {
+            handleCatchError(error, "saveAssessmentAsDraft");
             // console.log("error from save assessment as draft", error);
-            if (error?.response?.status === 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else {
-                setToasterDetails(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong.",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-            }
+            // if (error?.response?.status === 401) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 error?.response?.data?.message &&
+            //                 typeof error.response.data.message === "string"
+            //                     ? error.response.data.message
+            //                     : "Something went wrong.",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            // }
         }
     };
 
@@ -576,33 +609,35 @@ function FillAssessment() {
             }
         } catch (error) {
             // console.log("error response from backen decline assessment");
-            if (error?.response?.status === 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else {
-                setToasterDetails(
-                    {
-                        titleMessage: "Success",
-                        descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong.",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-            }
+            handleCatchError(error, "onSubmitReason");
+
+            //     if (error?.response?.status === 401) {
+            //         setToasterDetails(
+            //             {
+            //                 titleMessage: "Oops!",
+            //                 descriptionMessage:
+            //                     "Session Timeout: Please login again",
+            //                 messageType: "error",
+            //             },
+            //             () => myRef.current()
+            //         );
+            //         setTimeout(() => {
+            //             navigate("/login");
+            //         }, 3000);
+            //     } else {
+            //         setToasterDetails(
+            //             {
+            //                 titleMessage: "Success",
+            //                 descriptionMessage:
+            //                     error?.response?.data?.message &&
+            //                     typeof error.response.data.message === "string"
+            //                         ? error.response.data.message
+            //                         : "Something went wrong.",
+            //                 messageType: "error",
+            //             },
+            //             () => myRef.current()
+            //         );
+            //     }
         }
         setOpenDeleteDialogBox(false);
     };
@@ -627,34 +662,36 @@ function FillAssessment() {
                 setOpenDeleteDialogBox(false);
             }
         } catch (error) {
+            handleCatchError(error, "onAcceptAssessments");
+
             // console.log("error response from backend accept assessment");
-            if (error?.response?.status === 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else {
-                setToasterDetails(
-                    {
-                        titleMessage: "error",
-                        descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong.",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-            }
+            // if (error?.response?.status === 401) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "error",
+            //             descriptionMessage:
+            //                 error?.response?.data?.message &&
+            //                 typeof error.response.data.message === "string"
+            //                     ? error.response.data.message
+            //                     : "Something went wrong.",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            // }
             setOpenDeleteDialogBox(false);
         }
     };
@@ -823,7 +860,7 @@ function FillAssessment() {
     const [importOpenDialog, setImportOpenDialog] = useState(false);
 
     const reUploadAssessment = () => {
-        setIsLoading(true);
+        setIsFillAssessmentLoading(true);
         try {
             if (file) {
                 let reader = new FileReader();
@@ -852,7 +889,7 @@ function FillAssessment() {
                             );
 
                             if (response.status == 201) {
-                                setIsLoading(false);
+                                setIsFillAssessmentLoading(false);
 
                                 setFile("");
                                 setSelectedFileName("");
@@ -916,7 +953,7 @@ function FillAssessment() {
                                             () => myRef.current()
                                         );
                                     } catch (error) {
-                                        setIsLoading(false);
+                                        setIsFillAssessmentLoading(false);
 
                                         console.log(
                                             "Error from corections doc download",
@@ -927,36 +964,38 @@ function FillAssessment() {
                             }
                         } catch (error) {
                             console.log("Error from UPLOAD api", error);
-                            setIsLoading(false);
+                            setIsFillAssessmentLoading(false);
+                            handleCatchError(error, "reuploadAssessment");
+                            setImportOpenDialog(false);
 
-                            if (error?.response?.status === 401) {
-                                setToasterDetails(
-                                    {
-                                        titleMessage: "Oops!",
-                                        descriptionMessage:
-                                            "Session Timeout: Please login again",
-                                        messageType: "error",
-                                    },
-                                    () => myRef.current()
-                                );
-                                setTimeout(() => {
-                                    navigate("/login");
-                                }, 3000);
-                            } else {
-                                setToasterDetails(
-                                    {
-                                        titleMessage: "error",
-                                        descriptionMessage:
-                                            error?.response?.data?.message &&
-                                            typeof error.response.data
-                                                .message === "string"
-                                                ? error.response.data.message
-                                                : "Something went wrong.",
-                                        messageType: "error",
-                                    },
-                                    () => myRef.current()
-                                );
-                            }
+                            // if (error?.response?.status === 401) {
+                            //     setToasterDetails(
+                            //         {
+                            //             titleMessage: "Oops!",
+                            //             descriptionMessage:
+                            //                 "Session Timeout: Please login again",
+                            //             messageType: "error",
+                            //         },
+                            //         () => myRef.current()
+                            //     );
+                            //     setTimeout(() => {
+                            //         navigate("/login");
+                            //     }, 3000);
+                            // } else {
+                            //     setToasterDetails(
+                            //         {
+                            //             titleMessage: "error",
+                            //             descriptionMessage:
+                            //                 error?.response?.data?.message &&
+                            //                 typeof error.response.data
+                            //                     .message === "string"
+                            //                     ? error.response.data.message
+                            //                     : "Something went wrong.",
+                            //             messageType: "error",
+                            //         },
+                            //         () => myRef.current()
+                            //     );
+                            // }
                         }
                     };
                 } else {
@@ -1042,9 +1081,18 @@ function FillAssessment() {
                             <span className="accrej-label">
                                 Assessment type <span>:</span>
                             </span>
-                            <span className="accrej-desc">
-                                {assessment?.assessmentType}
-                            </span>
+                            
+                            {/* {assessment?.assessmentType} */}
+                            {assessment?.assessmentType?.length <= 41 ? (
+                                <span className="accrej-desc">{assessment?.assessmentType}</span>
+                            ) : (
+                                <Tooltip title={assessment?.assessmentType}>
+                                    <span className="accrej-desc">
+                                        {" "}
+                                        {assessment?.assessmentType?.slice(0, 44)}...
+                                    </span>
+                                </Tooltip>
+                            )}
                         </span>
                         <span className="accrej-txtblk">
                             <span className="accrej-label">
@@ -1320,10 +1368,8 @@ function FillAssessment() {
                                 </Box>
                             </div>
                         </div>
-                        {isLoading ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
+                        {isFillAssessmentLoading ? (
+                            <Loader />
                         ) : (
                             <div className="preview-tab-data">
                                 {questionnaire?.sections?.map(

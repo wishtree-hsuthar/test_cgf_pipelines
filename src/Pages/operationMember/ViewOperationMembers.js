@@ -30,6 +30,7 @@ import Dropdown from "../../components/Dropdown";
 import { useSelector } from "react-redux";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import Loader from "../../utils/Loader";
 
 const defaultValues = {
     memberCompany: "",
@@ -52,7 +53,8 @@ const ViewOperationMembers = () => {
     //custom hook to set title of page
     useDocumentTitle("View Operation Member");
     // state to manage to loaders
-    const [isLoading, setIsLoading] = useState(true);
+    const [isViewOperationMemberLoading, setIsViewOperationMemberLoading] =
+        useState(true);
     const { control, reset, trigger } = useForm({
         defaultValues: defaultValues,
     });
@@ -181,7 +183,7 @@ const ViewOperationMembers = () => {
 
         const fetchOperationMember = async () => {
             try {
-                setIsLoading(true);
+                setIsViewOperationMemberLoading(true);
                 const response = await privateAxios.get(
                     GET_OPERATION_MEMBER_BY_ID + params.id,
                     {
@@ -217,10 +219,10 @@ const ViewOperationMembers = () => {
                         response?.data?.replacedUsers[0]?.name ?? "N/A",
                 });
                 fetchRole(response?.data?.roleId);
-                setIsLoading(false);
+                setIsViewOperationMemberLoading(false);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
-                setIsLoading(false);
+                setIsViewOperationMemberLoading(false);
                 console.log(
                     "error in fetch operation member method in view page",
                     error
@@ -455,10 +457,8 @@ const ViewOperationMembers = () => {
                             {/* <ReplaceSubAdminModal /> */}
                         </span>
                     </div>
-                    {isLoading ? (
-                        <div className="loader-blk">
-                            <img src={Loader2} alt="Loading" />
-                        </div>
+                    {isViewOperationMemberLoading ? (
+                        <Loader />
                     ) : (
                         <div className="card-wrapper">
                             <div className="card-blk flex-between">

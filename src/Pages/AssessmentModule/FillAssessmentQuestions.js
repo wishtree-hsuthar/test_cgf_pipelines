@@ -73,12 +73,6 @@ const FillAssessmentQuestion = ({
                     (editMode && params["*"].includes("view")) || !editMode
                 }
                 placeholder={`Enter text here`}
-                value={answer ?? ""}
-                name={questionUUID}
-                onChange={(e) =>
-                    handleAnswersChange(e.target.name, e.target.value)
-                }
-                onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
                 className={`${
                     !answer && error && error?.length !== 0
                         ? "input-error"
@@ -99,6 +93,12 @@ const FillAssessmentQuestion = ({
                         ? "input-error"
                         : "input-field"
                 }`}
+                name={questionUUID}
+                value={answer ?? ""}
+                onChange={(e) =>
+                    handleAnswersChange(e.target.name, e.target.value)
+                }
+                onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
                 helperText={
                     question.validation === "alphanumeric" &&
                     !AlphaNumRegEx.test(answer) &&
@@ -149,7 +149,7 @@ const FillAssessmentQuestion = ({
                           answer &&
                           error
                         ? "input-textarea input-textarea-error"
-                        : ""
+                        : "input-textarea"
                 }`}
                 helperText={
                     question.validation === "alphanumeric" &&
@@ -275,7 +275,7 @@ const FillAssessmentQuestion = ({
                                 key={idx}
                                 type={"checkbox"}
                                 name={questionUUID}
-                                className="checkbox-with-label"
+                                className="checkbox-with-label checkbox-flex"
                                 value={option}
                                 disabled={
                                     (editMode &&
