@@ -469,7 +469,7 @@ function EditAssessment() {
                 titleMessage={toasterDetails.titleMessage}
             />
             <DialogBox
-                title={<p>Delete assessment "{watch("title")}"</p>}
+                title={<p>Delete Assessment "{watch("title")}"</p>}
                 info1={
                     <p>
                         Once the assignment is deleted, all the related

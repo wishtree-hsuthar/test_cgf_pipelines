@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 // import TableLayoutCellComponent from "./TableLayoutCellComponent.js";
 const TableLayoutCellComponent = React.lazy(() =>
-    import("./TableLayoutCellComponent.js")
+  import("./TableLayoutCellComponent.js")
 );
 
 const ITEM_HEIGHT = 42;
@@ -70,7 +70,7 @@ const TableAssessment = ({
     columnValues.forEach((column) => {
       temp[sectionUUID][`${[column?.uuid]}.${newRowId}`] = "";
     });
-    console.log("temp after row Add", temp);
+    // console.log("temp after row Add", temp);
     setAssessmentQuestionnaire({ ...temp });
   };
   const onRowDeleteClickHandler = (toBeDeletedRowId) => {
@@ -140,7 +140,7 @@ const TableAssessment = ({
                                 </Tooltip>
                               ) : (
                                 <p>
-                                  {column?.title}{" "}
+                                  {column?.title}
                                   {column?.isRequired && (
                                     <span className="mandatory">*</span>
                                   )}
@@ -232,12 +232,11 @@ const TableAssessment = ({
                           (tempRowId) =>
                             tempRowId === assessmentQuestionnaireRowId
                         );
-                        console.log("rowIds Array", rowIdsArray);
-
+                        // console.log("rowIds Array", rowIdsArray);
 
                         if (isRowRenderd === -1) {
                           rowIdsArray?.push(assessmentQuestionnaireRowId);
-                          console.log("idx",idx)
+                          // console.log("idx",idx)
                           return (
                             <TableRow
                               key={assessmentQuestionnaireKey}
