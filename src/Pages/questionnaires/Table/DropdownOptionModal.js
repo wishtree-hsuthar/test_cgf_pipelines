@@ -159,11 +159,21 @@ const DropdownOptionModal = ({
                                                 <div className="que-checkbox-wrap">
                                                     <div className="que-checkbox-blk que-dropdown-blk">
                                                         <TextField
-                                                            className={`input-field que-input-type ${
-                                                                tableOptionErr &&
-                                                                !option &&
-                                                                "input-error"
-                                                            }`}
+                                                            className={
+                                                                questionnaire
+                                                                    ?.sections[
+                                                                    sectionIndex
+                                                                ]?.columnValues[
+                                                                    columnId
+                                                                ]?.options
+                                                                    ?.length > 2
+                                                                    ? `input-field que-input-type adddropdown ${
+                                                                          tableOptionErr &&
+                                                                          !option &&
+                                                                          "input-error"
+                                                                      }`
+                                                                    : "input-field que-input-type"
+                                                            }
                                                             value={option}
                                                             onChange={(e) =>
                                                                 onTableLayoutOptionChangeHandler(

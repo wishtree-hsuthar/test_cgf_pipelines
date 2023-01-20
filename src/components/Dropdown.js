@@ -36,9 +36,14 @@ function Dropdown({
             },
         },
     };
+    const width = window.innerWidth;
+    const charLimit = width > 1000 ? 65 : 50;
+
+    console.log("Device width:- ", width);
     const Placeholder = ({ children }) => {
         return <div className="select-placeholder">{children}</div>;
     };
+
     console.log("options", options);
     return (
         <FormControl className="select-reusable" disabled={isDisabled}>
@@ -87,23 +92,26 @@ function Dropdown({
                                 }
                             >
                                 {option.hasOwnProperty("_id") ? (
-                                    option?.name?.length <= 50 ? (
+                                    option?.name?.length <= charLimit ? (
                                         option?.name
                                     ) : (
                                         <Tooltip title={option?.name}>
                                             <span>
                                                 {" "}
-                                                {option?.name?.slice(0, 50) +
-                                                    "..."}
+                                                {option?.name?.slice(
+                                                    0,
+                                                    charLimit
+                                                ) + "..."}
                                             </span>
                                         </Tooltip>
                                     )
-                                ) : option?.length <= 50 ? (
+                                ) : option?.length <= charLimit ? (
                                     option
                                 ) : (
                                     <Tooltip title={option}>
                                         <span>
-                                            {option?.slice(0, 50) + "..."}
+                                            {option?.slice(0, charLimit) +
+                                                "..."}
                                         </span>
                                     </Tooltip>
                                 )}

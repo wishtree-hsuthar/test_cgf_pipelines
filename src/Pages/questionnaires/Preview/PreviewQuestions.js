@@ -111,7 +111,7 @@ const PreviewQuestions = ({ question }) => {
       <div className="checkbox-with-labelblk checkbox-btn-half-blk">
         {question.options.map((option) => (
           <FormControlLabel
-            className="checkbox-with-label"
+            className="checkbox-with-label checkbox-flex"
             control={<Checkbox disabled />}
             label={option}
           />

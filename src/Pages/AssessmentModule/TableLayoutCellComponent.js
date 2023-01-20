@@ -21,6 +21,7 @@ import {
     REACT_APP_FILE_ENCRYPT_SECRET,
     UPLOAD_ATTACHMENTS,
 } from "../../api/Url";
+import Loader2 from "../../assets/Loader/Loader2.svg";
 import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
 import useCallbackState from "../../utils/useCallBackState";
@@ -52,9 +53,12 @@ const TableLayoutCellComponent = ({
     const [openFileAttachmenDialog, setOpenFileAttachmntDialog] =
         useState(false);
     const [isFileRemoved, setIsFileRemoved] = useState(false);
+    const [isDisabledPrimaryButton, setIsDisabledPrimaryButton] =
+        useState(false);
     const handleOnKeyDownChange = (e) => {
         e.preventDefault();
     };
+    const [isLoading, setIsLoading] = useState(false);
     const [toasterDetails, setToasterDetails] = useCallbackState({
         titleMessage: "",
         descriptionMessage: "",
@@ -69,33 +73,51 @@ const TableLayoutCellComponent = ({
             !Object.keys(assessmentQuestionnaire).length > 0)
             ? cell?.columnId
             : columnId;
-
-    const onAttachmetChangeHandler = async (e) => {
-        let files = await e?.target?.files;
-        console.log("files:-", files);
+    const getEncryptedFiles = (files) => {
         let tempCurrentSelectedFiles = [...currentSelectedFiles];
-        Object.keys(files).forEach(async (fileIdx) => {
-            console.log("files at momemnt:-", files);
+        let isFileSizeExceed = 0;
+        setIsLoading(true);
+        for (const file of files) {
+            const maxFileSize =
+                process.env.REACT_APP_MAX_FILE_SIZE_MB * 1024 * 1024;
+            if (file?.size > maxFileSize) {
+                isFileSizeExceed += 1;
+                continue;
+            }
             let reader = new FileReader();
-            reader.readAsDataURL(files[fileIdx]);
-            reader.onloadend = async () => {
-                let result = reader.result;
-                console.log("before file encrypt", fileIdx);
-                let encryptedFile = CryptoJS.AES.encrypt(
+            reader.readAsDataURL(file);
+            reader.onload = async (e) => {
+                const result = e.target.result;
+                const encryptedFile = CryptoJS.AES.encrypt(
                     result,
                     REACT_APP_FILE_ENCRYPT_SECRET
                 ).toString();
-                console.log("After file encrypt", fileIdx);
                 tempCurrentSelectedFiles.push({
                     file: encryptedFile,
-                    type: files[fileIdx]?.type,
-                    name: files[fileIdx]?.name,
+                    type: file?.type,
+                    name: file?.name,
                 });
-                console.log("before setting selected files", fileIdx);
-                setCurrentSelectedFiles(tempCurrentSelectedFiles);
             };
-        });
-        console.log("temp Current selected files", tempCurrentSelectedFiles);
+        }
+        // setIsLoading(false)
+        if (isFileSizeExceed) {
+            setToasterDetails(
+                {
+                    titleMessage: "Error",
+                    descriptionMessage: `${isFileSizeExceed} files couldn't be uploaded`,
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
+        }
+        setTimeout(() => {
+            setCurrentSelectedFiles(tempCurrentSelectedFiles);
+            setIsLoading(false);
+        }, 500);
+    };
+    const onAttachmetChangeHandler = async (e) => {
+        let files = await e?.target?.files;
+        getEncryptedFiles(files);
     };
     const getFilesForBackend = () => {
         const filterdFiles = currentSelectedFiles.filter(
@@ -110,7 +132,8 @@ const TableLayoutCellComponent = ({
         return filterdFiles;
     };
     const uploadAttachmentButtonClickHandler = async () => {
-        console.log("Attachments:- ", currentSelectedFiles);
+        console.log("Current Selected files:- ", currentSelectedFiles);
+        setIsDisabledPrimaryButton(true);
         try {
             const newlyAddedFiles = getFilesForBackend();
             const oldFiles = getFilesNotRemoved();
@@ -120,6 +143,7 @@ const TableLayoutCellComponent = ({
                     files: [...newlyAddedFiles],
                 }
             );
+            setIsDisabledPrimaryButton(false);
             console.log("Attachment Response", attachmentResponse);
             let tempAssessment = { ...assessmentQuestionnaire };
             tempAssessment[sectionUUID][`${columnUUID}.${rowId}`] = [
@@ -132,6 +156,7 @@ const TableLayoutCellComponent = ({
             setOpenFileAttachmntDialog(false);
             setIsFileRemoved(false);
         } catch (error) {
+            setIsDisabledPrimaryButton(false);
             if (error?.code === "ERR_CANCELED") return;
             setToasterDetails(
                 {
@@ -152,14 +177,17 @@ const TableLayoutCellComponent = ({
         setIsFileRemoved(false);
         setOpenFileAttachmntDialog(false);
     };
-
+    // console.log("current selected files:- ", currentSelectedFiles);
+    // console.log("Answer in first Render :- ", answer);
     useEffect(() => {
         if (
             answer &&
             answer?.length > 0 &&
+            Array.isArray(answer) &&
             currentSelectedFiles?.length === 0 &&
             !isFileRemoved
         ) {
+            // console.log("answer inside Use Effect:-", answer);
             setCurrentSelectedFiles([...answer]);
         }
     }, [currentSelectedFiles]);
@@ -176,50 +204,66 @@ const TableLayoutCellComponent = ({
                 title={<p>Add Attachments</p>}
                 info1={" "}
                 info2={
-                    <div className="upload-file-wrap">
-                        <Button
-                            variant="contained"
-                            component="label"
-                            className="upload-file-btn"
-                        >
-                            <div className="upload-file-blk">
-                                {/* <input hidden accept="image/*" multiple type="file" /> */}
-                                <input
-                                    type={"file"}
-                                    hidden
-                                    accept={
-                                        ".xls, .xlsx, .jpg, .png,.jpeg, .doc, .txt,.pdf,.docx,.ppt,.pptx,.mp4,.mp3, .zip,.rar"
+                    isLoading ? (
+                        <div className="loader-blk">
+                            <img src={Loader2} alt="Loading" />
+                        </div>
+                    ) : (
+                        <div className="upload-file-wrap">
+                            <Button
+                                variant="contained"
+                                component="label"
+                                className="upload-file-btn"
+                            >
+                                <div
+                                    className={
+                                        currentSelectedFiles?.length > 0
+                                            ? "upload-file-blk selected-file-blk"
+                                            : "upload-file-blk"
                                     }
-                                    // value={file}
-                                    onChange={onAttachmetChangeHandler}
-                                    multiple
+                                >
+                                    {/* <input hidden accept="image/*" multiple type="file" /> */}
+                                    <input
+                                        type={"file"}
+                                        hidden
+                                        accept={
+                                            ".jpg, .jpeg, .png, .doc, .txt, .pdf, .docx, .xlsx, .xls, .ppt, .pptx, .mp4, .mp3, .zip, .rar"
+                                        }
+                                        // value={file}
+                                        onChange={onAttachmetChangeHandler}
+                                        multiple
+                                    />
+                                    <span className="upload-icon">
+                                        <CloudUploadOutlinedIcon />
+                                    </span>
+                                    <span className="file-upload-txt">
+                                        Click here to choose files (max file
+                                        size{" "}
+                                        {`${process.env.REACT_APP_MAX_FILE_SIZE_MB} MB`}
+                                        )
+                                    </span>
+                                </div>
+                            </Button>
+                            {currentSelectedFiles?.length > 0 && (
+                                <RenderCurrentFiles
+                                    currentSelectedFiles={currentSelectedFiles}
+                                    setCurrentSelectedFiles={
+                                        setCurrentSelectedFiles
+                                    }
+                                    setIsFileRemoved={setIsFileRemoved}
                                 />
-                                <span className="upload-icon">
-                                    <CloudUploadOutlinedIcon />
-                                </span>
-                                <span className="file-upload-txt">
-                                    Click here to choose files
-                                </span>
-                            </div>
-                        </Button>
-                        {currentSelectedFiles?.length > 0 && (
-                            <RenderCurrentFiles
-                                currentSelectedFiles={currentSelectedFiles}
-                                setCurrentSelectedFiles={
-                                    setCurrentSelectedFiles
-                                }
-                                setIsFileRemoved={setIsFileRemoved}
-                            />
-                        )}
+                            )}
 
-                        {/* </p> */}
-                    </div>
+                            {/* </p> */}
+                        </div>
+                    )
                 }
-                primaryButtonText={"Upload"}
+                primaryButtonText={"Save"}
                 secondaryButtonText={"Cancel"}
                 onPrimaryModalButtonClickHandler={
                     uploadAttachmentButtonClickHandler
                 }
+                isDisabledPrimaryButton={isDisabledPrimaryButton}
                 onSecondaryModalButtonClickHandler={
                     cancelAttachmentButtonClickHandler
                 }
@@ -296,7 +340,7 @@ const TableLayoutCellComponent = ({
                             error &&
                             error?.length !== 0
                                 ? error
-                                : " "}
+                                : ""}
                         </FormHelperText>
                     </FormControl>
                 )}
@@ -317,9 +361,7 @@ const TableLayoutCellComponent = ({
                                               style={{ textDecoration: "none" }}
                                               target="_blank"
                                           >
-                                              <p>{`${
-                                                  file?.name + " idx " + fileIdx
-                                              }`}</p>
+                                              <p>{`${file?.name}`}</p>
                                           </a>
                                       )
                                     : (fileIdx <= 1 || showMoreAttachment) && (
@@ -332,11 +374,10 @@ const TableLayoutCellComponent = ({
                                                   href={file?.location ?? "#"}
                                                   target="_blank"
                                               >
-                                                  <p>{`${
-                                                      file?.name?.slice(0, 30) +
-                                                      " idx " +
-                                                      fileIdx
-                                                  }...`}</p>
+                                                  <p>{`${file?.name?.slice(
+                                                      0,
+                                                      30
+                                                  )}...`}</p>
                                               </a>
                                           </Tooltip>
                                       )
@@ -345,9 +386,14 @@ const TableLayoutCellComponent = ({
                                 <a
                                     href="#"
                                     onClick={(e) => {
+                                        //   e.preventDefault();
                                         setShowMoreAttachment(false);
                                     }}
                                     className="show-more-less-txt"
+                                    style={{
+                                        marginTop: "5px",
+                                        display: "inline-block",
+                                    }}
                                 >
                                     {answer?.length > 2 && "Show Less"}
                                 </a>
@@ -355,9 +401,14 @@ const TableLayoutCellComponent = ({
                                 <a
                                     href="#"
                                     onClick={(e) => {
+                                        // e.preventDefault();
                                         setShowMoreAttachment(true);
                                     }}
                                     className="show-more-less-txt"
+                                    style={{
+                                        marginTop: "5px",
+                                        display: "inline-block",
+                                    }}
                                 >
                                     {answer?.length > 2 && "Show More"}
                                 </a>
@@ -519,7 +570,7 @@ const TableLayoutCellComponent = ({
                                         {...params}
                                         autoComplete="off"
                                         onKeyDown={handleOnKeyDownChange}
-                                        className={`input-field${
+                                        className={`datepicker-blk input-field${
                                             !answer &&
                                             error &&
                                             error?.length !== 0
@@ -554,11 +605,12 @@ const RenderCurrentFiles = ({
         setCurrentSelectedFiles(tempCurrentSelectedFiles);
         setIsFileRemoved(true);
     };
+    // console.log("current Selected Files:- ", currentSelectedFiles);
     return (
         <>
             {currentSelectedFiles.map((file, fileIdx) =>
                 file?.name?.length <= 40 ? (
-                    <p key={file?.name} className="select-filename">
+                    <p key={fileIdx} className="select-filename">
                         <a
                             href={file?.location ?? "#"}
                             target="_blank"
@@ -581,7 +633,7 @@ const RenderCurrentFiles = ({
                         {/* </div> */}
                     </p>
                 ) : (
-                    <Tooltip key={file?.name} title={file?.name}>
+                    <Tooltip key={fileIdx} title={file?.name}>
                         <p className="select-filename">
                             <a
                                 target={"_blank"}

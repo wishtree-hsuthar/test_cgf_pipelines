@@ -903,7 +903,7 @@ input[type=checkbox]:checked:before {
 .popup-close-icon {
     position: absolute;
     top: 27px;
-    right: 30px;
+    right: 25px;
     cursor: pointer;
 }
 .popup-blk .MuiBackdrop-root {
@@ -1573,7 +1573,7 @@ input:-webkit-autofill:active {
     color: rgba(30, 30, 30, 1);
     font-family: "ProximaNova-Regular", serif, sans-serif;
     outline: none;
-    width: 195px;
+    /* width: 195px; */
 }
 .que-table-validator-iconblk {
     position: relative;
@@ -2023,6 +2023,15 @@ input:-webkit-autofill:active {
 .que-dropdown-blk .que-input-type input {
     padding: 0 15px 0 15px !important;
 }
+.que-dropdown-blk .que-input-type.adddropdown input {
+    padding: 0 50px 0 15px !important;
+}
+.que-checkbox-option .que-input-type.adddropdown input {
+    padding: 0 50px 0 45px !important;
+}
+.que-radio-option .que-input-type.adddropdown input {
+    padding: 0 50px 0 45px !important;
+}
 .que-tab-sect .MuiTab-root {
     padding: 9px 0 !important;
 }
@@ -2173,7 +2182,7 @@ input:-webkit-autofill:active {
 }
 .que-column-ttlblk .form-group {
     margin-bottom: 0;
-    width: 200px;
+    /* width: 200px; */
 }
 .outlined-button {
     background: transparent;
@@ -2269,7 +2278,7 @@ input:-webkit-autofill:active {
     font-size: 12px;
 }
 .popup-innerblk {
-    max-height: 350px;
+    max-height: 450px;
     overflow: auto;
 }
 
@@ -2509,8 +2518,8 @@ input::-ms-reveal {
     align-items: flex-start;
 }
 .accrej-label {
-    max-width: 24%;
-    flex: 0 0 24%;
+    max-width: 25%;
+    flex: 0 0 25%;
     font-family: "Proxima Nova Semibold", serif, sans-serif;
     text-align: left;
     margin-right: 10px;
@@ -2522,6 +2531,7 @@ input::-ms-reveal {
     max-width: 75%;
     flex: 0 0 75%;
     text-align: left;
+    word-break: break-all;
 }
 .input-textarea .MuiInputBase-root:hover fieldset {
     border-color: rgba(30, 30, 30, 0.8) !important;
@@ -2607,5 +2617,6 @@ input::-ms-reveal {
     display: inline-block;
 }
 .list-uploaded-file{display: block;}
-.list-uploaded-file a{color: #4596d1;}
+.list-uploaded-file a{color: #75b9eb}
 .select-filename a{color: #4596d1;}
+.checkbox-flex{display: flex !important;}
