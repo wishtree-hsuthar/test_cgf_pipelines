@@ -71,21 +71,21 @@ const TableLayoutCellComponent = ({
       !Object.keys(assessmentQuestionnaire).length > 0)
       ? cell?.columnId
       : columnId;
-  const getSingleEncryptedFile = (file) => {
+  const getSingleFile = (file) => {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise((resolve, reject) => {
       reader.onload = async (e) => {
         const result = e.target.result;
-        const encryptedFile = CryptoJS.AES.encrypt(
-          result,
-          REACT_APP_FILE_ENCRYPT_SECRET
-        ).toString();
-        resolve(encryptedFile);
+        // const encryptedFile = CryptoJS.AES.encrypt(
+        //   result,
+        //   REACT_APP_FILE_ENCRYPT_SECRET
+        // ).toString();
+        resolve(result);
       };
     });
   };
-  const getEncryptedFiles = async (files) => {
+  const getFilesAsUrl = async (files) => {
     let tempCurrentSelectedFiles = [...currentSelectedFiles];
     let isFileSizeExceed = 0;
     setIsLoading(true);
@@ -95,9 +95,10 @@ const TableLayoutCellComponent = ({
         isFileSizeExceed += 1;
         continue;
       }
-      const encryptedFile = await getSingleEncryptedFile(file);
+      const fileUrl = await getSingleFile(file);
+      console.log("file as a string:- ",fileUrl)
       tempCurrentSelectedFiles.push({
-        file: encryptedFile,
+        file: fileUrl,
         type: file?.type,
         name: file?.name,
       });
@@ -117,7 +118,7 @@ const TableLayoutCellComponent = ({
   };
   const onAttachmetChangeHandler = async (e) => {
     let files = await e?.target?.files;
-    getEncryptedFiles(files);
+    getFilesAsUrl(files);
   };
   const getFilesForBackend = () => {
     const filterdFiles = currentSelectedFiles.filter((file) => !file?.location);
