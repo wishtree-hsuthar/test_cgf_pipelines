@@ -565,6 +565,7 @@ function EditAssessment() {
                                                 rules={{
                                                     required: "true",
                                                     minLength: 3,
+                                                    maxLength: 50,
                                                 }}
                                             />
                                         </div>

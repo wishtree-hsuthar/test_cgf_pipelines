@@ -358,7 +358,10 @@ const TableLayoutCellComponent = ({
                                           <a
                                               key={fileIdx}
                                               href={file?.location ?? "#"}
-                                              style={{ textDecoration: "none" }}
+                                              style={{
+                                                  textDecoration: "none",
+                                                  display: "inline-block",
+                                              }}
                                               target="_blank"
                                           >
                                               <p>{`${file?.name}`}</p>
@@ -369,10 +372,15 @@ const TableLayoutCellComponent = ({
                                               key={fileIdx}
                                               title={file?.name}
                                               style={{ textDecoration: "none" }}
+                                              placement="bottom-start"
                                           >
                                               <a
                                                   href={file?.location ?? "#"}
                                                   target="_blank"
+                                                  style={{
+                                                      display: "inline-block",
+                                                      textDecoration: "none",
+                                                  }}
                                               >
                                                   <p>{`${file?.name?.slice(
                                                       0,
