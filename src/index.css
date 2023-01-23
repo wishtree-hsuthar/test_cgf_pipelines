@@ -2620,3 +2620,4 @@ input::-ms-reveal {
 .list-uploaded-file a{color: #75b9eb}
 .select-filename a{color: #4596d1;}
 .checkbox-flex{display: flex !important;}
+.select-field .MuiSelect-select span, .select-field .MuiSelect-select .select-placeholder{overflow: hidden;margin-right: 17px;}
