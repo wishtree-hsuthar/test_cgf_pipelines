@@ -798,9 +798,19 @@ function FillAssessment() {
                             <span className="accrej-label">
                                 Assessment title <span>:</span>
                             </span>
-                            <span className="accrej-desc">
+                            {assessment?.title?.length <= 41 ? (
+                                <span className="accrej-desc">{assessment?.title}</span>
+                            ) : (
+                                <Tooltip title={assessment?.title}>
+                                    <span className="accrej-desc">
+                                        {" "}
+                                        {assessment?.title?.slice(0, 44)}...
+                                    </span>
+                                </Tooltip>
+                            )}
+                            {/* <span className="accrej-desc">
                                 {assessment?.title}
-                            </span>
+                            </span> */}
                         </span>
                         <span className="accrej-txtblk">
                             <span className="accrej-label">
@@ -823,9 +833,19 @@ function FillAssessment() {
                             <span className="accrej-label">
                                 Member company <span>:</span>
                             </span>
-                            <span className="accrej-desc">
+                            {assessment?.assignedMember?.companyName?.length <= 41 ? (
+                                <span className="accrej-desc">{assessment?.assignedMember?.companyName}</span>
+                            ) : (
+                                <Tooltip title={assessment?.assignedMember?.companyName}>
+                                    <span className="accrej-desc">
+                                        {" "}
+                                        {assessment?.assignedMember?.companyName?.slice(0, 44)}...
+                                    </span>
+                                </Tooltip>
+                            )}
+                            {/* <span className="accrej-desc">
                                 {assessment?.assignedMember?.companyName}
-                            </span>
+                            </span> */}
                         </span>
                         <span className="accrej-txtblk">
                             <span className="accrej-label">
