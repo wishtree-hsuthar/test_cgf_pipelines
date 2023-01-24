@@ -75,3 +75,6 @@ export const VIEW_ROLE = `${REACT_APP_API_ENDPOINT}roles/`;
 export const ROLE_BY_ID = `${REACT_APP_API_ENDPOINT}roles/`;
 export const GET_ROLE_BY_ID = `${REACT_APP_API_ENDPOINT}roles/`;
 export const GET_USER_BY_ROLE = `${REACT_APP_API_ENDPOINT}roles/`;
+
+// show Downloaded Files
+export const DOWNlOAD_FILE = `${REACT_APP_API_ENDPOINT}assessments/`;

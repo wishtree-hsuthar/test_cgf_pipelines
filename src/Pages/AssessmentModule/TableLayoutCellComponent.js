@@ -18,6 +18,7 @@ import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useParams } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import {
+    DOWNlOAD_FILE,
     REACT_APP_FILE_ENCRYPT_SECRET,
     UPLOAD_ATTACHMENTS,
 } from "../../api/Url";
@@ -53,6 +54,7 @@ const TableLayoutCellComponent = ({
     const [openFileAttachmenDialog, setOpenFileAttachmntDialog] =
         useState(false);
     const [isFileRemoved, setIsFileRemoved] = useState(false);
+    const [oldfilesSelected, setOldfilesSelected] = useState([]);
     const [isDisabledPrimaryButton, setIsDisabledPrimaryButton] =
         useState(false);
     const handleOnKeyDownChange = (e) => {
@@ -73,7 +75,21 @@ const TableLayoutCellComponent = ({
             !Object.keys(assessmentQuestionnaire).length > 0)
             ? cell?.columnId
             : columnId;
-    const getEncryptedFiles = (files) => {
+    const getSingleEncryptedFile = (file) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        return new Promise((resolve, reject) => {
+            reader.onload = async (e) => {
+                const result = e.target.result;
+                const encryptedFile = CryptoJS.AES.encrypt(
+                    result,
+                    REACT_APP_FILE_ENCRYPT_SECRET
+                ).toString();
+                resolve(encryptedFile);
+            };
+        });
+    };
+    const getEncryptedFiles = async (files) => {
         let tempCurrentSelectedFiles = [...currentSelectedFiles];
         let isFileSizeExceed = 0;
         setIsLoading(true);
@@ -84,22 +100,14 @@ const TableLayoutCellComponent = ({
                 isFileSizeExceed += 1;
                 continue;
             }
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async (e) => {
-                const result = e.target.result;
-                const encryptedFile = CryptoJS.AES.encrypt(
-                    result,
-                    REACT_APP_FILE_ENCRYPT_SECRET
-                ).toString();
-                tempCurrentSelectedFiles.push({
-                    file: encryptedFile,
-                    type: file?.type,
-                    name: file?.name,
-                });
-            };
+            const encryptedFile = await getSingleEncryptedFile(file);
+            tempCurrentSelectedFiles.push({
+                file: encryptedFile,
+                type: file?.type,
+                name: file?.name,
+            });
+            setCurrentSelectedFiles(tempCurrentSelectedFiles);
         }
-        // setIsLoading(false)
         if (isFileSizeExceed) {
             setToasterDetails(
                 {
@@ -110,10 +118,7 @@ const TableLayoutCellComponent = ({
                 () => myRef.current()
             );
         }
-        setTimeout(() => {
-            setCurrentSelectedFiles(tempCurrentSelectedFiles);
-            setIsLoading(false);
-        }, 500);
+        setIsLoading(false);
     };
     const onAttachmetChangeHandler = async (e) => {
         let files = await e?.target?.files;
@@ -177,6 +182,13 @@ const TableLayoutCellComponent = ({
         setIsFileRemoved(false);
         setOpenFileAttachmntDialog(false);
     };
+
+    const oldSelectedContainsCurrentSelectedFile = (file) => {
+        let files = oldfilesSelected.filter(
+            (dataFile) => file.location === dataFile.location
+        );
+        return files.length > 0 ? false : true;
+    };
     // console.log("current selected files:- ", currentSelectedFiles);
     // console.log("Answer in first Render :- ", answer);
     useEffect(() => {
@@ -191,6 +203,19 @@ const TableLayoutCellComponent = ({
             setCurrentSelectedFiles([...answer]);
         }
     }, [currentSelectedFiles]);
+
+    useEffect(() => {
+        if (
+            answer &&
+            answer?.length > 0 &&
+            Array.isArray(answer) &&
+            currentSelectedFiles?.length === 0 &&
+            !isFileRemoved
+        ) {
+            // console.log("answer inside Use Effect:-", answer);
+            setOldfilesSelected([...answer]);
+        }
+    }, []);
 
     return (
         <>
@@ -357,17 +382,36 @@ const TableLayoutCellComponent = ({
                                     ? (fileIdx <= 1 || showMoreAttachment) && (
                                           <a
                                               key={fileIdx}
-                                              href={file?.location ?? "#"}
+                                              href={
+                                                  DOWNlOAD_FILE +
+                                                      params.id +
+                                                      "/attachments?id=" +
+                                                      file?.location ?? "#"
+                                              }
                                               style={{
                                                   textDecoration: "none",
-                                                  display: "inline-block",
+                                                  display: "table",
+                                                  color: `${
+                                                      oldSelectedContainsCurrentSelectedFile(
+                                                          file
+                                                      )
+                                                          ? "#1e1e1e"
+                                                          : ""
+                                                  }`,
+
+                                                  pointerEvents: `${
+                                                      oldSelectedContainsCurrentSelectedFile(
+                                                          file
+                                                      )
+                                                          ? "none"
+                                                          : ""
+                                                  }`,
                                               }}
-                                              target="_blank"
                                           >
-                                              <p>{`${file?.name}`}</p>
+                                              <>{`${file?.name}`}</>
                                           </a>
                                       )
-                                    : (fileIdx <= 1 || showMoreAttachment) && (
+                                    : fileIdx <= 1 && (
                                           <Tooltip
                                               key={fileIdx}
                                               title={file?.name}
@@ -375,17 +419,47 @@ const TableLayoutCellComponent = ({
                                               placement="bottom-start"
                                           >
                                               <a
-                                                  href={file?.location ?? "#"}
-                                                  target="_blank"
+                                                  href={
+                                                      oldSelectedContainsCurrentSelectedFile(
+                                                          file
+                                                      )
+                                                          ? "javascript:void(0);"
+                                                          : DOWNlOAD_FILE +
+                                                                params.id +
+                                                                "/attachments?id=" +
+                                                                file?.location ??
+                                                            "#"
+                                                  }
                                                   style={{
-                                                      display: "inline-block",
+                                                      display: "table",
                                                       textDecoration: "none",
+                                                      color: `${
+                                                          oldSelectedContainsCurrentSelectedFile(
+                                                              file
+                                                          )
+                                                              ? "#1e1e1e"
+                                                              : ""
+                                                      }`,
+                                                      cursor: `${
+                                                          oldSelectedContainsCurrentSelectedFile(
+                                                              file
+                                                          )
+                                                              ? "default"
+                                                              : ""
+                                                      }`,
+                                                      //   pointerEvents: `${
+                                                      //       oldSelectedContainsCurrentSelectedFile(
+                                                      //           file
+                                                      //       )
+                                                      //           ? "none"
+                                                      //           : ""
+                                                      //   }`,
                                                   }}
                                               >
-                                                  <p>{`${file?.name?.slice(
+                                                  {`${file?.name?.slice(
                                                       0,
                                                       30
-                                                  )}...`}</p>
+                                                  )}...`}
                                               </a>
                                           </Tooltip>
                                       )
@@ -644,7 +718,7 @@ const RenderCurrentFiles = ({
                     <Tooltip key={fileIdx} title={file?.name}>
                         <p className="select-filename">
                             <a
-                                target={"_blank"}
+                                // target={"_blank"}
                                 href={file?.location ?? "#"}
                                 style={{
                                     textDecoration: "none",
