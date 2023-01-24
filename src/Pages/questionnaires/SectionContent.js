@@ -315,8 +315,21 @@ const SectionContent = ({
             return response.data.uuid;
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
-            return false;
+            if (error?.response?.status == 401) {
+                console.log("Session timeout in save questionnaire");
+                setToasterDetails(
+                    {
+                        titleMessage: "Error!",
+                        descriptionMessage: `Session Timeout: Please login again`,
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => navigate("/login"), 3000);
+            } else {
+                setErrorToaster(error);
+                return false;
+            }
         }
     };
     const onCancelClickHandler = () => {

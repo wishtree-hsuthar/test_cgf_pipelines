@@ -723,12 +723,17 @@ function FillAssessment() {
                             }
                         } catch (error) {
                             console.log("Error from UPLOAD api", error);
+
                             setIsFillAssessmentLoading(false);
                             handleCatchError(error, "reuploadAssessment");
                             setImportOpenDialog(false);
                         }
                     };
                 } else {
+                    setFile("");
+                    setSelectedFileName("");
+                    setIsFillAssessmentLoading(false);
+
                     return setToasterDetails(
                         {
                             titleMessage: "error",
@@ -750,6 +755,8 @@ function FillAssessment() {
                 );
             }
         } catch (error) {
+            setFile("");
+            setSelectedFileName("");
             console.log("error in reupload assessment", error);
         }
     };
@@ -816,15 +823,21 @@ function FillAssessment() {
                             <span className="accrej-label">
                                 Assessment type <span>:</span>
                             </span>
-                            
+
                             {/* {assessment?.assessmentType} */}
                             {assessment?.assessmentType?.length <= 41 ? (
-                                <span className="accrej-desc">{assessment?.assessmentType}</span>
+                                <span className="accrej-desc">
+                                    {assessment?.assessmentType}
+                                </span>
                             ) : (
                                 <Tooltip title={assessment?.assessmentType}>
                                     <span className="accrej-desc">
                                         {" "}
-                                        {assessment?.assessmentType?.slice(0, 44)}...
+                                        {assessment?.assessmentType?.slice(
+                                            0,
+                                            44
+                                        )}
+                                        ...
                                     </span>
                                 </Tooltip>
                             )}

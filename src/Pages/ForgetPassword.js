@@ -11,6 +11,7 @@ import Toaster from "../components/Toaster";
 import { FORGET_PASSWORD } from "../api/Url";
 import { useNavigate } from "react-router-dom";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
+import useCallbackState from "../utils/useCallBackState";
 const forgetPasswordSchema = yup.object().shape({
     email: yup
         .string()
@@ -43,6 +44,11 @@ const ForgetPassword = () => {
     const [messageType, setMessageType] = useState("");
     const [messageDescription, setMessageDescription] = useState("");
     const [messageTitle, setMessageTitle] = useState("");
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+        titleMessage: "",
+        descriptionMessage: "",
+        messageType: "error",
+    });
 
     const submitEmail = async (data) => {
         try {
@@ -52,14 +58,23 @@ const ForgetPassword = () => {
             console.log("response from forgot password", response);
 
             if (response.status === 200) {
-                setMessageType("success");
-                setMessageTitle("Success");
-                setMessageDescription(
-                    "Reset password link has been successfully sent on the entered email address! Kindly check your email to reset your password!"
+                setToasterDetails(
+                    {
+                        titleMessage: "Hurray!",
+                        descriptionMessage:
+                            "Reset password link has been successfully sent on the entered email address! Kindly check your email to reset your password!",
+                        messageType: "success",
+                    },
+                    () => forgetPasswordToasterRef.current()
                 );
-                setTimeout(() => {
-                    forgetPasswordToasterRef.current();
-                }, 3000);
+                // setMessageType("success");
+                // setMessageTitle("Success");
+                // setMessageDescription(
+                //     "Reset password link has been successfully sent on the entered email address! Kindly check your email to reset your password!"
+                // );
+                // setTimeout(() => {
+                // forgetPasswordToasterRef.current();
+                // }, 3000);
                 reset();
             }
         } catch (error) {
@@ -67,13 +82,21 @@ const ForgetPassword = () => {
                 let errorMsg = error?.response?.data?.message;
                 console.log("error message", errorMsg);
                 console.log("error body", error.response);
-                setMessageType("error");
-                setMessageTitle("Error");
+                // setMessageType("error");
+                // setMessageTitle("Error");
 
-                setMessageDescription(errorMsg);
-                setTimeout(() => {
-                    forgetPasswordToasterRef.current();
-                }, 1000);
+                // setMessageDescription(errorMsg);
+                // setTimeout(() => {
+                setToasterDetails(
+                    {
+                        titleMessage: "Error!",
+                        descriptionMessage: errorMsg,
+                        messageType: "error",
+                    },
+                    () => forgetPasswordToasterRef.current()
+                );
+
+                // }, 1000);
                 reset();
             }
         }
@@ -83,10 +106,10 @@ const ForgetPassword = () => {
     return (
         <div className="page-wrapper login-page-wrap">
             <Toaster
-                messageType={messageType}
-                titleMessage={messageTitle}
+                messageType={toasterDetails.messageType}
+                titleMessage={toasterDetails.titleMessage}
                 myRef={forgetPasswordToasterRef}
-                descriptionMessage={messageDescription}
+                descriptionMessage={toasterDetails.descriptionMessage}
             />
             <div className="login-section">
                 <div className="container">
