@@ -384,7 +384,7 @@ function FillAssessment() {
                             )
                         ) {
                             sectionErrors[`${column?.uuid}.${tempRowId}`] =
-                                "This is alphabets only field";
+                                "This is an alphabetic field.";
                             console.log("in table alphabets only");
                             sections.push(index);
                         } else if (
@@ -400,7 +400,7 @@ function FillAssessment() {
                             )
                         ) {
                             sectionErrors[`${column?.uuid}.${tempRowId}`] =
-                                "This is numeric only field";
+                                "This is a numeric field.";
                             console.log("in table numeric only");
                             sections.push(index);
                         } else if (
@@ -416,7 +416,7 @@ function FillAssessment() {
                             )
                         ) {
                             sectionErrors[`${column?.uuid}.${tempRowId}`] =
-                                "This is alphanumeric field";
+                                " This is an alphanumeric field.";
                             console.log("in table alphanumeric only");
                             sections.push(index);
                         } else {
@@ -478,7 +478,7 @@ function FillAssessment() {
                         console.log("error from numric if elese");
 
                         sectionErrors[question?.uuid] =
-                            "Please enter alphabets field";
+                            "This is an alphabetic field.";
                         sections.push(index);
                     } else if (
                         question.validation === "numeric" &&
@@ -487,7 +487,8 @@ function FillAssessment() {
                             currentSectionAnswers[question?.uuid]
                         ) === false
                     ) {
-                        sectionErrors[question?.uuid] = "This is numeric field";
+                        sectionErrors[question?.uuid] =
+                            "This is a numeric field.";
                         sections.push(index);
                     } else if (
                         question.validation === "alphanumeric" &&
@@ -497,7 +498,7 @@ function FillAssessment() {
                         ) === false
                     ) {
                         sectionErrors[question?.uuid] =
-                            "This is alphanumeric field";
+                            " This is an alphanumeric field.";
                         sections.push(index);
                     } else {
                         delete sectionErrors[question?.uuid];
@@ -806,7 +807,9 @@ function FillAssessment() {
                                 Assessment title <span>:</span>
                             </span>
                             {assessment?.title?.length <= 41 ? (
-                                <span className="accrej-desc">{assessment?.title}</span>
+                                <span className="accrej-desc">
+                                    {assessment?.title}
+                                </span>
                             ) : (
                                 <Tooltip title={assessment?.title}>
                                     <span className="accrej-desc">
@@ -846,13 +849,24 @@ function FillAssessment() {
                             <span className="accrej-label">
                                 Member company <span>:</span>
                             </span>
-                            {assessment?.assignedMember?.companyName?.length <= 41 ? (
-                                <span className="accrej-desc">{assessment?.assignedMember?.companyName}</span>
+                            {assessment?.assignedMember?.companyName?.length <=
+                            41 ? (
+                                <span className="accrej-desc">
+                                    {assessment?.assignedMember?.companyName}
+                                </span>
                             ) : (
-                                <Tooltip title={assessment?.assignedMember?.companyName}>
+                                <Tooltip
+                                    title={
+                                        assessment?.assignedMember?.companyName
+                                    }
+                                >
                                     <span className="accrej-desc">
                                         {" "}
-                                        {assessment?.assignedMember?.companyName?.slice(0, 44)}...
+                                        {assessment?.assignedMember?.companyName?.slice(
+                                            0,
+                                            44
+                                        )}
+                                        ...
                                     </span>
                                 </Tooltip>
                             )}
