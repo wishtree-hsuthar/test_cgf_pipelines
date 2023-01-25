@@ -137,7 +137,7 @@ const TableLayoutCellComponent = ({
       const attachmentResponse = await privateAxios.post(UPLOAD_ATTACHMENTS, {
         assessmentId: params?.id,
         sectionId: sectionUUID,
-        cellId : `${columnId}.${rowId}`,
+        cellId : `${columnId}_${rowId}`,
         files: [...newlyAddedFiles],
       });
       setIsDisabledPrimaryButton(false);
