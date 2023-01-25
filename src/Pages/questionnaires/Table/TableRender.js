@@ -5,7 +5,8 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow, Tooltip
+  TableRow,
+  Tooltip,
 } from "@mui/material";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -80,11 +81,22 @@ const TableRender = ({
                                       <p>
                                         {column?.title.slice(0, 50)}
                                         ...
-                                        {column?.isRequired && column?.title &&  <span className="mandatory">*</span>}
+                                        {column?.isRequired &&
+                                          column?.title && (
+                                            <span className="mandatory">
+                                              
+                                                *
+                                            </span>
+                                          )}
                                       </p>
                                     </Tooltip>
                                   ) : (
-                                    <p>{column?.title}{column?.isRequired && column?.title && <span className="mandatory">*</span>}</p>
+                                    <p>
+                                      {column?.title}
+                                      {column?.isRequired && column?.title && (
+                                        <span className="mandatory"> *</span>
+                                      )}
+                                    </p>
                                   )}
                                   {/* <TextField
                                     className="input-field column-input-field"
@@ -136,7 +148,6 @@ const TableRender = ({
                                   </Tooltip>
                                 ))}
                             </div>
-                            
                           </TableCell>
                         )}
                         {row &&
