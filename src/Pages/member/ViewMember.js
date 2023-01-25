@@ -551,7 +551,7 @@ const ViewMember = () => {
         setToasterDetailsViewMember(
           {
             titleMessage: "Success!",
-            descriptionMessage: "Download successfull!",
+            descriptionMessage: "Downloaded successfully!",
 
             messageType: "success",
           },

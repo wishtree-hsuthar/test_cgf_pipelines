@@ -71,8 +71,9 @@ const SectionContent = ({
         deleteSection(uuid);
     };
     const onDialogPrimaryButtonClickHandler1 = () => {
-        handleSubmitSection();
+        // handleSubmitSection();
         setOpenDialog1(false);
+        navigate("/questionnaires");
     };
     const onDialogSecondaryButtonClickHandler = () => {
         setOpenDialog(false);
@@ -315,8 +316,21 @@ const SectionContent = ({
             return response.data.uuid;
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            setErrorToaster(error);
-            return false;
+            if (error?.response?.status == 401) {
+                console.log("Session timeout in save questionnaire");
+                setToasterDetails(
+                    {
+                        titleMessage: "Error!",
+                        descriptionMessage: `Session Timeout: Please login again`,
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => navigate("/login"), 3000);
+            } else {
+                setErrorToaster(error);
+                return false;
+            }
         }
     };
     const onCancelClickHandler = () => {
@@ -386,7 +400,13 @@ const SectionContent = ({
             {/* Dialog box for cancel */}
             <DialogBox
                 title={<p>Cancel Questionnaire</p>}
-                info1={<p>All the saved sections will save a draft</p>}
+                info1={
+                    <p>
+                        {" "}
+                        This is an irreversible action. All the data/changes
+                        will be lost.
+                    </p>
+                }
                 info2={<p>Are you sure want to cancel the form?</p>}
                 primaryButtonText="Yes"
                 secondaryButtonText="No"

@@ -33,7 +33,7 @@ export const downloadFunction = async (
         let year = new Date().getFullYear().toString();
         let hours = new Date().getHours();
         let minutes = new Date().getMinutes();
-        let seconds = new Date().getMinutes();
+        let seconds = new Date().getSeconds();
         let timeStamp = month + date + year + "_" + hours + minutes + seconds;
         link.setAttribute(`download`, `${filename} - ${timeStamp}.xls`);
         document.body.appendChild(link);
@@ -42,7 +42,7 @@ export const downloadFunction = async (
             setToasterDetails(
                 {
                     titleMessage: `Success!`,
-                    descriptionMessage: `Download successfull!`,
+                    descriptionMessage: `Downloaded successfully!`,
 
                     messageType: `success`,
                 },

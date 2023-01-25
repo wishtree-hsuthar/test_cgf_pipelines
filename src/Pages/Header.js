@@ -528,14 +528,14 @@ const Header = () => {
                                                                         }
                                                                     </span>
                                                                 </div>
-                                                                <div className="profile-info mb-0">
+                                                                {/* <div className="profile-info mb-0">
                                                                     <span className="profile-info-icon">
                                                                         <PlaceOutlinedIcon />
                                                                     </span>
                                                                     <span className="profile-info-txt">
                                                                         Pune
                                                                     </span>
-                                                                </div>
+                                                                </div> */}
                                                                 <div
                                                                     className="tertiary-btn-blk mt-20"
                                                                     onClick={
@@ -555,7 +555,7 @@ const Header = () => {
                                                                             handleLogOut
                                                                         }
                                                                     >
-                                                                        Logout
+                                                                        Log out
                                                                     </button>
                                                                 </div>
                                                             </div>
