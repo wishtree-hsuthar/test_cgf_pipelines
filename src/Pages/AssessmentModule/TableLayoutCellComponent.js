@@ -50,6 +50,7 @@ const TableLayoutCellComponent = ({
   const myRef = React.useRef();
 
   const params = useParams();
+  console.log("params:- ",params)
   const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
   const [isFileRemoved, setIsFileRemoved] = useState(false);
   const [isDisabledPrimaryButton, setIsDisabledPrimaryButton] = useState(false);
@@ -134,6 +135,9 @@ const TableLayoutCellComponent = ({
       const newlyAddedFiles = getFilesForBackend();
       const oldFiles = getFilesNotRemoved();
       const attachmentResponse = await privateAxios.post(UPLOAD_ATTACHMENTS, {
+        assessmentId: params?.id,
+        sectionId: sectionUUID,
+        cellId : `${columnId}.${rowId}`,
         files: [...newlyAddedFiles],
       });
       setIsDisabledPrimaryButton(false);
@@ -184,7 +188,7 @@ const TableLayoutCellComponent = ({
       setCurrentSelectedFiles([...answer]);
     }
   }, [currentSelectedFiles]);
-
+// console.log("assessment Questionnaire",assessmentQuestionnaire)
   return (
     <>
       <Toaster
