@@ -428,7 +428,7 @@ useEffect(() => {
                                               <>{`${file?.name}`}</>
                                           </a>
                                       )
-                                    : fileIdx <= 1 && (
+                                    : (fileIdx <= 1 || showMoreAttachment) && (
                                           <Tooltip
                                               key={fileIdx}
                                               title={file?.name}

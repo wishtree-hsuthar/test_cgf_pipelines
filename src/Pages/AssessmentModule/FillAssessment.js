@@ -314,7 +314,7 @@ function FillAssessment() {
                 );
                 // currentSectionAnswers
                 Object.keys(currentSectionAnswers).forEach((answersKeys) => {
-                    let tempRowId = answersKeys?.split(".")[1];
+                    let tempRowId = answersKeys?.split("_")[1];
                     section?.columnValues?.forEach((column) => {
                         if (
                             column.columnType !== "prefilled" &&
