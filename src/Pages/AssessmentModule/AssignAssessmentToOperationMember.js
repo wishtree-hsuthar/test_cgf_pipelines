@@ -11,6 +11,7 @@ import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import Loader2 from "../../assets/Loader/Loader2.svg";
 
 const tableHead = [
     {
@@ -68,6 +69,7 @@ const AssignAssessmentToOperationMember = () => {
     let operationMemberId;
     // search function
     const onSearchChangeHandler = (e) => {
+        e.preventDefault();
         console.log("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
         setMakeApiCall(false);
@@ -94,8 +96,11 @@ const AssignAssessmentToOperationMember = () => {
                 -1
             )}/reassignto/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search?.length >= 3)
-            url = `${MEMBER_OPERATION_MEMBERS}/${memberId}/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
-
+            url = `${FETCH_ASSESSMENT_BY_ID}${window.location.pathname
+                .split("/")
+                .at(
+                    -1
+                )}/reassignto/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}&search=${search}`;
         return memberId && url;
     };
 
@@ -323,32 +328,30 @@ const AssignAssessmentToOperationMember = () => {
                     </ul>
                 </div>
             </div>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <section>
-                    <div className="container">
-                        <div className="form-header flex-between ">
-                            <h2 className="heading2">Assign Assessment</h2>
-                            <div className="member-filter-left">
-                                {/* <div className="tertiary-btn-blk"> */}
-                                <div className="searchbar">
-                                    <input
-                                        type="text"
-                                        placeholder="Search"
-                                        onChange={(e) =>
-                                            onSearchChangeHandler(e)
-                                        }
-                                        name="search"
-                                    />
-                                    <button type="submit">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
-                                {/* </div> */}
-                            </div>
-                        </div>
 
+            <section>
+                <div className="container">
+                    <div className="form-header flex-between ">
+                        <h2 className="heading2">Assign Assessment</h2>
+                        <div className="member-filter-left">
+                            {/* <div className="tertiary-btn-blk"> */}
+                            <div className="searchbar">
+                                <input
+                                    type="text"
+                                    placeholder="Search"
+                                    onChange={(e) => onSearchChangeHandler(e)}
+                                    name="search"
+                                />
+                                <button type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                            {/* </div> */}
+                        </div>
+                    </div>
+                    {isLoading ? (
+                        <Loader />
+                    ) : (
                         <div className="member-info-wrapper table-content-wrap replace-admin-table">
                             <div className="member-data-sect">
                                 <TableComponent
@@ -376,27 +379,27 @@ const AssignAssessmentToOperationMember = () => {
                                 />
                             </div>
                         </div>
-                        <div className="form-btn flex-between add-members-btn mb-20 replace-cgf-admin-btnblk">
-                            <button
-                                onClick={() => navigate("/assessment-list")}
-                                className="secondary-button mr-10"
-                            >
-                                Cancel
-                            </button>
+                    )}
+                    <div className="form-btn flex-between add-members-btn mb-20 replace-cgf-admin-btnblk">
+                        <button
+                            onClick={() => navigate("/assessment-list")}
+                            className="secondary-button mr-10"
+                        >
+                            Cancel
+                        </button>
 
-                            <button
-                                // onClick={openReplaceDailogBox}
-                                onClick={handleReassignAssessment}
-                                disabled={selectedUser == ""}
-                                // disabled
-                                className="primary-button add-button replace-assign-btn"
-                            >
-                                Assign
-                            </button>
-                        </div>
+                        <button
+                            // onClick={openReplaceDailogBox}
+                            onClick={handleReassignAssessment}
+                            disabled={selectedUser == ""}
+                            // disabled
+                            className="primary-button add-button replace-assign-btn"
+                        >
+                            Assign
+                        </button>
                     </div>
-                </section>
-            )}
+                </div>
+            </section>
         </div>
     );
 };

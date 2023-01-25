@@ -71,8 +71,9 @@ const SectionContent = ({
         deleteSection(uuid);
     };
     const onDialogPrimaryButtonClickHandler1 = () => {
-        handleSubmitSection();
+        // handleSubmitSection();
         setOpenDialog1(false);
+        navigate("/questionnaires");
     };
     const onDialogSecondaryButtonClickHandler = () => {
         setOpenDialog(false);
@@ -399,7 +400,13 @@ const SectionContent = ({
             {/* Dialog box for cancel */}
             <DialogBox
                 title={<p>Cancel Questionnaire</p>}
-                info1={<p>All the saved sections will save a draft</p>}
+                info1={
+                    <p>
+                        {" "}
+                        This is an irreversible action. All the data/changes
+                        will be lost.
+                    </p>
+                }
                 info2={<p>Are you sure want to cancel the form?</p>}
                 primaryButtonText="Yes"
                 secondaryButtonText="No"
