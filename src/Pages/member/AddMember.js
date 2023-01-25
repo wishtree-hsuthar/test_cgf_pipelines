@@ -126,7 +126,7 @@ const AddMember = () => {
                 companyName: data.memberCompany,
                 companyType: data.companyType,
                 cgfCategory: data.cgfCategory,
-                cgfActivity: data.cgfActivity ? data.cgfActivity : "NA",
+                cgfActivity: data.cgfActivity ? data.cgfActivity : "N/A",
                 corporateEmail: data.corporateEmail,
                 region: data.region,
                 country: data.country,

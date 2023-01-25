@@ -134,7 +134,7 @@ function OnBoardedSubAdminsTable({
         console.log("Search", search);
         let url = `${ADD_SUB_ADMIN}/list/?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
 
-        if (search?.length >= 3) url += `&search=${search}`;
+        if (search) url += `&search=${search}`;
 
         return url;
     };

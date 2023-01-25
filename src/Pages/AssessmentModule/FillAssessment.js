@@ -321,23 +321,23 @@ function FillAssessment() {
                             saveAsDraft === false &&
                             column?.isRequired &&
                             (!currentSectionAnswers[
-                                `${column?.uuid}.${tempRowId}`
+                                `${column?.uuid}_${tempRowId}`
                             ] ||
                                 currentSectionAnswers[
-                                    `${column?.uuid}.${tempRowId}`
+                                    `${column?.uuid}_${tempRowId}`
                                 ].length === 0)
                         ) {
-                            sectionErrors[`${column?.uuid}.${tempRowId}`] =
+                            sectionErrors[`${column?.uuid}_${tempRowId}`] =
                                 "This is required field";
                             sections.push(index);
                         } else if (
                             column.columnType === "dropdown" &&
                             currentSectionAnswers[
-                                `${column?.uuid}.${tempRowId}`
+                                `${column?.uuid}_${tempRowId}`
                             ] &&
                             !column.options.includes(
                                 currentSectionAnswers[
-                                    `${column?.uuid}.${tempRowId}`
+                                    `${column?.uuid}_${tempRowId}`
                                 ]
                             )
                         ) {
@@ -345,10 +345,10 @@ function FillAssessment() {
                                 "Fetched value not present in column dropdown options"
                             );
                             sectionErrors[
-                                `${column?.uuid}.${tempRowId}`
+                                `${column?.uuid}_${tempRowId}`
                             ] = `Entered value "${
                                 currentSectionAnswers[
-                                    `${column?.uuid}.${tempRowId}`
+                                    `${column?.uuid}_${tempRowId}`
                                 ]
                             }" is not part of above list. Please select valid option among listed values from list.
 
@@ -362,12 +362,12 @@ function FillAssessment() {
                                     ...tempAsssessmentQuestionnaire[
                                         section?.uuid
                                     ],
-                                    [`${column?.uuid}.${tempRowId}`]: "",
+                                    [`${column?.uuid}_${tempRowId}`]: "",
                                 },
                             };
 
                             if (!saveAsDraft) {
-                                sectionErrors[`${column?.uuid}.${tempRowId}`] =
+                                sectionErrors[`${column?.uuid}_${tempRowId}`] =
                                     "This is required field";
                                 sections.push(index);
                             }
@@ -375,15 +375,15 @@ function FillAssessment() {
                             column.columnType !== "prefilled" &&
                             column?.validation == "alphabets" &&
                             currentSectionAnswers[
-                                `${column?.uuid}.${tempRowId}`
+                                `${column?.uuid}_${tempRowId}`
                             ]?.length > 0 &&
                             !AlphaRegEx.test(
                                 currentSectionAnswers[
-                                    `${column?.uuid}.${tempRowId}`
+                                    `${column?.uuid}_${tempRowId}`
                                 ]
                             )
                         ) {
-                            sectionErrors[`${column?.uuid}.${tempRowId}`] =
+                            sectionErrors[`${column?.uuid}_${tempRowId}`] =
                                 "This is alphabets only field";
                             console.log("in table alphabets only");
                             sections.push(index);
@@ -391,15 +391,15 @@ function FillAssessment() {
                             column?.columnType !== "prefilled" &&
                             column?.validation == "numeric" &&
                             currentSectionAnswers[
-                                `${column?.uuid}.${tempRowId}`
+                                `${column?.uuid}_${tempRowId}`
                             ]?.length > 0 &&
                             !NumericRegEx.test(
                                 currentSectionAnswers[
-                                    `${column?.uuid}.${tempRowId}`
+                                    `${column?.uuid}_${tempRowId}`
                                 ]
                             )
                         ) {
-                            sectionErrors[`${column?.uuid}.${tempRowId}`] =
+                            sectionErrors[`${column?.uuid}_${tempRowId}`] =
                                 "This is numeric only field";
                             console.log("in table numeric only");
                             sections.push(index);
@@ -407,21 +407,21 @@ function FillAssessment() {
                             column.columnType !== "prefilled" &&
                             column?.validation == "alphanumeric" &&
                             currentSectionAnswers[
-                                `${column?.uuid}.${tempRowId}`
+                                `${column?.uuid}_${tempRowId}`
                             ]?.length > 0 &&
                             !AlphaNumRegEx.test(
                                 currentSectionAnswers[
-                                    `${column?.uuid}.${tempRowId}`
+                                    `${column?.uuid}_${tempRowId}`
                                 ]
                             )
                         ) {
-                            sectionErrors[`${column?.uuid}.${tempRowId}`] =
+                            sectionErrors[`${column?.uuid}_${tempRowId}`] =
                                 "This is alphanumeric field";
                             console.log("in table alphanumeric only");
                             sections.push(index);
                         } else {
                             delete sectionErrors[
-                                `${column?.uuid}.${tempRowId}`
+                                `${column?.uuid}_${tempRowId}`
                             ];
                         }
                     });
@@ -774,7 +774,7 @@ function FillAssessment() {
                     section?.rowValues.forEach((row) => {
                         section?.columnValues?.forEach((column) => {
                             tempAsssessmentQuestionnaire[section?.uuid][
-                                `${column?.uuid}.${row?.uuid}`
+                                `${column?.uuid}_${row?.uuid}`
                             ] = "";
                         });
                     });

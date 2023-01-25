@@ -214,7 +214,7 @@ function PendingCGFAdmins({
         console.log("Search", search);
         let url = `${ADD_SUB_ADMIN}/pending/list?page=${pageForPendingTabCGFAdmin}&size=${rowsPerPageForPendingTabCGFAdmin}&orderBy=${orderByForPending}&order=${orderForPendingTabCGFAdmin}`;
 
-        if (search?.length >= 3) url += `&search=${search}`;
+        if (search) url += `&search=${search}`;
 
         return url;
     };

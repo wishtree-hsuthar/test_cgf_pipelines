@@ -265,7 +265,7 @@ const MemberList = () => {
         };
 
         let url = `${MEMBER}/list?page=${membeListPage}&size=${memberListrowsPerPage}&orderBy=${namesMappings[orderByMemberList]}&order=${memberListOrder}`;
-        if (searchMember?.length >= 3) url = url + `&search=${searchMember}`;
+        if (searchMember) url = url + `&search=${searchMember}`;
         if (memberFilters?.status !== "all" && memberFilters?.status !== "none")
             url = url + `&status=${memberFilters.status}`;
         if (memberFilters?.companyType !== "none")

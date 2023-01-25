@@ -146,7 +146,7 @@ const RolesList = () => {
     const generateUrl = () => {
         console.log("filters", filters);
         let url = `${REACT_APP_API_ENDPOINT}roles/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
-        if (search?.length >= 3) url = url + `&search=${search}`;
+        if (search) url = url + `&search=${search}`;
         if (filters?.status !== "none" && filters?.status !== "all")
             url = url + `&status=${filters.status}`;
         return url;

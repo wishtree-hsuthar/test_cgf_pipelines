@@ -157,7 +157,7 @@ function OnboardedOperationMember({
         console.log("filters in onboarded table----", filters);
         console.log("Search", search);
         let url = `${ADD_OPERATION_MEMBER}/list?page=${pageForOnboardedOperationMemberTab}&size=${rowsPerPageForOnboardedOperationMemberTab}&orderBy=${orderByForOnboardedOperationMember}&order=${orderForOnboardedOperationMemberTab}`;
-        if (search?.length >= 3) url += `&search=${search}`;
+        if (search) url += `&search=${search}`;
 
         return url;
     };

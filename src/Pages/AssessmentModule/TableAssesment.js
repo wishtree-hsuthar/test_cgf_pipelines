@@ -64,7 +64,7 @@ const TableAssessment = ({
         let temp = { ...assessmentQuestionnaire };
 
         columnValues.forEach((column) => {
-            temp[sectionUUID][`${[column?.uuid]}.${newRowId}`] = "";
+            temp[sectionUUID][`${[column?.uuid]}_${newRowId}`] = "";
         });
         console.log("temp after row Add", temp);
         setAssessmentQuestionnaire({ ...temp });
@@ -250,7 +250,7 @@ const TableAssessment = ({
                                                                             ? assessmentQuestionnaire[
                                                                                   sectionUUID
                                                                               ][
-                                                                                  `${cell.columnId}.${row?.uuid}`
+                                                                                  `${cell.columnId}_${row?.uuid}`
                                                                               ] ??
                                                                               ""
                                                                             : ""
@@ -263,7 +263,7 @@ const TableAssessment = ({
                                                                     }
                                                                     error={
                                                                         errors[
-                                                                            `${cell?.columnId}.${row?.uuid}`
+                                                                            `${cell?.columnId}_${row?.uuid}`
                                                                         ] ?? ""
                                                                     }
                                                                     editMode={
@@ -292,7 +292,7 @@ const TableAssessment = ({
                                             ) => {
                                                 let assessmentQuestionnaireRowId =
                                                     assessmentQuestionnaireKey.split(
-                                                        "."
+                                                        "_"
                                                     )[1];
                                                 const isRowRenderd =
                                                     rowIdsArray?.findIndex(
@@ -422,7 +422,7 @@ const TableAssessment = ({
                                                                                         ? assessmentQuestionnaire[
                                                                                               sectionUUID
                                                                                           ][
-                                                                                              `${column?.uuid}.${assessmentQuestionnaireRowId}`
+                                                                                              `${column?.uuid}_${assessmentQuestionnaireRowId}`
                                                                                           ] ??
                                                                                           ""
                                                                                         : ""
@@ -435,7 +435,7 @@ const TableAssessment = ({
                                                                                 }
                                                                                 error={
                                                                                     errors[
-                                                                                        `${column?.uuid}.${assessmentQuestionnaireRowId}`
+                                                                                        `${column?.uuid}_${assessmentQuestionnaireRowId}`
                                                                                     ] ??
                                                                                     ""
                                                                                 }

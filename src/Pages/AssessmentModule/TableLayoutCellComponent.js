@@ -139,7 +139,7 @@ const TableLayoutCellComponent = ({
       setIsDisabledPrimaryButton(false);
       console.log("Attachment Response", attachmentResponse);
       let tempAssessment = { ...assessmentQuestionnaire };
-      tempAssessment[sectionUUID][`${columnUUID}.${rowId}`] = [
+      tempAssessment[sectionUUID][`${columnUUID}_${rowId}`] = [
         ...oldFiles,
         ...attachmentResponse?.data,
       ];
@@ -414,7 +414,7 @@ const TableLayoutCellComponent = ({
             disabled={(editMode && params["*"].includes("view")) || !editMode}
             placeholder="Enter text here"
             value={answer}
-            name={`${columnUUID}.${rowId}`}
+            name={`${columnUUID}_${rowId}`}
             onChange={(e) => handleAnswersChange(e.target.name, e.target.value)}
             onBlur={(e) => handleAnswersBlur(e.target.name, e.target.value)}
             helperText={
@@ -445,7 +445,7 @@ const TableLayoutCellComponent = ({
                 IconComponent={(props) => (
                   <KeyboardArrowDownRoundedIcon {...props} />
                 )}
-                name={`${columnUUID}.${rowId}`}
+                name={`${columnUUID}_${rowId}`}
                 displayEmpty
                 disabled={
                   (editMode && params["*"].includes("view")) || !editMode
@@ -505,7 +505,7 @@ const TableLayoutCellComponent = ({
                 }}
                 onChange={(dateValue) => {
                   handleAnswersChange(
-                    `${columnUUID}.${rowId}`,
+                    `${columnUUID}_${rowId}`,
                     new Date(new Date(dateValue)).toLocaleDateString("en")
                   );
                 }}
