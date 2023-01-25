@@ -30,6 +30,23 @@ export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
 
+const allowdedFiles = [
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".doc",
+  ".txt",
+  ".pdf",
+  ".docx",
+  ".xlsx",
+  ".xls",
+  ".ppt",
+  ".pptx",
+  ".mp4",
+  ".mp3",
+  ".zip",
+  ".rar",
+];
 const TableLayoutCellComponent = ({
   isPrefilled,
   assessmentQuestionnaire,
@@ -50,7 +67,6 @@ const TableLayoutCellComponent = ({
   const myRef = React.useRef();
 
   const params = useParams();
-  console.log("params:- ",params)
   const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
   const [isFileRemoved, setIsFileRemoved] = useState(false);
   const [isDisabledPrimaryButton, setIsDisabledPrimaryButton] = useState(false);
@@ -72,21 +88,21 @@ const TableLayoutCellComponent = ({
       !Object.keys(assessmentQuestionnaire).length > 0)
       ? cell?.columnId
       : columnId;
-  const getSingleEncryptedFile = (file) => {
+  const getSingleFileAsUrl = (file) => {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise((resolve, reject) => {
       reader.onload = async (e) => {
         const result = e.target.result;
-        const encryptedFile = CryptoJS.AES.encrypt(
-          result,
-          REACT_APP_FILE_ENCRYPT_SECRET
-        ).toString();
-        resolve(encryptedFile);
+        // const encryptedFile = CryptoJS.AES.encrypt(
+        //   result,
+        //   REACT_APP_FILE_ENCRYPT_SECRET
+        // ).toString();
+        resolve(result);
       };
     });
   };
-  const getEncryptedFiles = async (files) => {
+  const getFiles = async (files) => {
     let tempCurrentSelectedFiles = [...currentSelectedFiles];
     let isFileSizeExceed = 0;
     setIsLoading(true);
@@ -96,9 +112,17 @@ const TableLayoutCellComponent = ({
         isFileSizeExceed += 1;
         continue;
       }
-      const encryptedFile = await getSingleEncryptedFile(file);
+      const fileName = file?.name.split(".");
+      const fileExtension = "." + fileName[fileName?.length - 1];
+      console.log("fileExtension", fileExtension);
+      if (!allowdedFiles.includes(fileExtension)) {
+        isFileSizeExceed += 1;
+        continue;
+      }
+      console.log("file:- ", file);
+      const fileAsUrl = await getSingleFileAsUrl(file);
       tempCurrentSelectedFiles.push({
-        file: encryptedFile,
+        file: fileAsUrl,
         type: file?.type,
         name: file?.name,
       });
@@ -108,17 +132,17 @@ const TableLayoutCellComponent = ({
       setToasterDetails(
         {
           titleMessage: "Error",
-          descriptionMessage: `${isFileSizeExceed} files couldn't be uploaded`,
+          descriptionMessage: `${isFileSizeExceed} ${isFileSizeExceed > 1 ? "files" : "file"} couldn't be uploaded`,
           messageType: "error",
         },
         () => myRef.current()
-        );
-      }
-      setIsLoading(false);  
+      );
+    }
+    setIsLoading(false);
   };
   const onAttachmetChangeHandler = async (e) => {
     let files = await e?.target?.files;
-    getEncryptedFiles(files);
+    getFiles(files);
   };
   const getFilesForBackend = () => {
     const filterdFiles = currentSelectedFiles.filter((file) => !file?.location);
@@ -137,7 +161,7 @@ const TableLayoutCellComponent = ({
       const attachmentResponse = await privateAxios.post(UPLOAD_ATTACHMENTS, {
         assessmentId: params?.id,
         sectionId: sectionUUID,
-        cellId : `${columnUUID}_${rowId}`,
+        cellId: `${columnUUID}_${rowId}`,
         files: [...newlyAddedFiles],
       });
       setIsDisabledPrimaryButton(false);
@@ -148,6 +172,14 @@ const TableLayoutCellComponent = ({
         ...attachmentResponse?.data,
       ];
       console.log("Temp Assessment:- ", tempAssessment);
+      setToasterDetails(
+        {
+          titleMessage: "",
+          descriptionMessage: "Attachments saved!",
+          messageType: "success",
+        },
+        () => myRef.current()
+      );
       setAssessmentQuestionnaire(tempAssessment);
       setCurrentSelectedFiles([]);
       setOpenFileAttachmntDialog(false);
@@ -188,7 +220,7 @@ const TableLayoutCellComponent = ({
       setCurrentSelectedFiles([...answer]);
     }
   }, [currentSelectedFiles]);
-// console.log("assessment Questionnaire",assessmentQuestionnaire)
+  // console.log("assessment Questionnaire",assessmentQuestionnaire)
   return (
     <>
       <Toaster
