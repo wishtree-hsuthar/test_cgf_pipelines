@@ -188,7 +188,7 @@ const TableLayoutCellComponent = ({
       const newlyAddedFiles = getFilesForBackend();
 
       const formData = getFormData(newlyAddedFiles);
-    //   printFormData(formData);
+      //   printFormData(formData);
       console.log("newly Added files:- ", newlyAddedFiles);
 
       const oldFiles = getFilesNotRemoved();
@@ -332,6 +332,7 @@ const TableLayoutCellComponent = ({
               )}
 
               {/* </p> */}
+             {currentSelectedFiles?.length === 0 && <p>uploading large files may take some time</p> } 
             </div>
           )
         }
@@ -635,10 +636,8 @@ const TableLayoutCellComponent = ({
                     {...params}
                     autoComplete="off"
                     onKeyDown={handleOnKeyDownChange}
-                    className={`datepicker-blk input-field${
-                      !answer && error && error?.length !== 0
-                        ? "input-error"
-                        : ""
+                    className={`input-field${
+                      !answer && error && error?.length !== 0 && "input-error"
                     }`}
                   />
                 )}

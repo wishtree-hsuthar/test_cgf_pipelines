@@ -478,7 +478,7 @@ function FillAssessment() {
                         console.log("error from numric if elese");
 
                         sectionErrors[question?.uuid] =
-                            "This is an alphabetic field.";
+                            "This is an alphabetic field";
                         sections.push(index);
                     } else if (
                         question.validation === "numeric" &&
@@ -488,7 +488,7 @@ function FillAssessment() {
                         ) === false
                     ) {
                         sectionErrors[question?.uuid] =
-                            "This is a numeric field.";
+                            "This is a numeric field";
                         sections.push(index);
                     } else if (
                         question.validation === "alphanumeric" &&
@@ -498,7 +498,7 @@ function FillAssessment() {
                         ) === false
                     ) {
                         sectionErrors[question?.uuid] =
-                            " This is an alphanumeric field.";
+                            " This is an alphanumeric field";
                         sections.push(index);
                     } else {
                         delete sectionErrors[question?.uuid];
@@ -726,8 +726,9 @@ function FillAssessment() {
                             console.log("Error from UPLOAD api", error);
 
                             setIsFillAssessmentLoading(false);
+                            setSelectedFileName("");
                             handleCatchError(error, "reuploadAssessment");
-                            setImportOpenDialog(false);
+                            // setImportOpenDialog(false);
                         }
                     };
                 } else {

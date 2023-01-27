@@ -4,6 +4,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import React, { useState } from "react";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
@@ -137,8 +138,8 @@ const TableLayoutCellComponent = ({
             </MenuItem> */}
             {column &&
               column?.options?.map((option, optionIdx) => (
-                <MenuItem key={optionIdx} value={option} disabled>
-                  {option}
+                <MenuItem key={optionIdx} value={option} >
+                  {option?.length <= 40 ? option : <Tooltip title={option}><span>{option?.slice(0, 40) + "..."}</span></Tooltip>}
                 </MenuItem>
               ))}
           </Select>
