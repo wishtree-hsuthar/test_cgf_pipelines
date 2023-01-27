@@ -167,49 +167,44 @@ const TableLayoutCellComponent = ({
   };
   const getFormData = (newlyAddedFiles) => {
     const formData = new FormData();
-    for (let i = 0; i < newlyAddedFiles.length; i++) {
-      console.log("file", newlyAddedFiles[i]);
-      formData.append(`file-${i}`, newlyAddedFiles[i]);
+    for (const file of newlyAddedFiles) {
+      formData.append("files[]", file);
     }
     return formData;
   };
   const printFormData = (formData) => {
-    const tempFormData = {...formData}
-    console.log("temp Form Data",tempFormData)
+    const tempFormData = { ...formData };
+    console.log("temp Form Data", tempFormData);
     console.log("inside print Data");
     for (const pair of formData) {
       console.log("key:- ", pair[0], "value:- ", pair[1]);
-    }
-    for (let i = 0; i < 10; i++) {
-      console.log("file of Form Data:- ", formData.get(`file-${i}`));
     }
   };
   const uploadAttachmentButtonClickHandler = async () => {
     console.log("Current Selected files:- ", currentSelectedFiles);
     setIsDisabledPrimaryButton(true);
+
     try {
       const newlyAddedFiles = getFilesForBackend();
+
       const formData = getFormData(newlyAddedFiles);
-      printFormData(formData);
+    //   printFormData(formData);
       console.log("newly Added files:- ", newlyAddedFiles);
+
       const oldFiles = getFilesNotRemoved();
-      const attachmentResponse = await privateAxios.post(
-        UPLOAD_ATTACHMENTS_MULTER,
-        {
-          assessmentId: params?.id,
-          sectionId: sectionUUID,
-          cellId: `${columnUUID}_${rowId}`,
-          files: formData,
-        }
-      );
+
+      let url =
+        UPLOAD_ATTACHMENTS_MULTER +
+        `/${params?.id}/attachments/${sectionUUID}/${columnUUID + "_" + rowId}`;
+      const attachmentResponse = await privateAxios.post(url, formData);
       setIsDisabledPrimaryButton(false);
-      //   console.log("Attachment Response", attachmentResponse);
+
       let tempAssessment = { ...assessmentQuestionnaire };
       tempAssessment[sectionUUID][`${columnUUID}_${rowId}`] = [
         ...oldFiles,
         ...attachmentResponse?.data,
       ];
-      console.log("Temp Assessment:- ", tempAssessment);
+
       setToasterDetails(
         {
           titleMessage: "",
