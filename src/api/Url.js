@@ -59,6 +59,7 @@ export const REASSIGN_ASSESSMENTS = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const ACCEPT_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const DECLINE_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
 export const UPLOAD_ATTACHMENTS = `${REACT_APP_API_ENDPOINT}assessments/upload/files`;
+export const UPLOAD_ATTACHMENTS_MULTER = `${REACT_APP_API_ENDPOINT}assessments/upload/files/multer`;
 export const IMPORT_ASSESSMENT = `${REACT_APP_API_ENDPOINT}assessments/`;
 
 // download

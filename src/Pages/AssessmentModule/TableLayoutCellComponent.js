@@ -22,6 +22,7 @@ import {
   DOWNlOAD_FILE,
   REACT_APP_FILE_ENCRYPT_SECRET,
   UPLOAD_ATTACHMENTS,
+  UPLOAD_ATTACHMENTS_MULTER,
 } from "../../api/Url";
 import Loader2 from "../../assets/Loader/Loader2.svg";
 import { privateAxios } from "../../api/axios";
@@ -168,12 +169,17 @@ const TableLayoutCellComponent = ({
     const formData = new FormData();
     for (let i = 0; i < newlyAddedFiles.length; i++) {
       console.log("file", newlyAddedFiles[i]);
-      formData.append(`file-${i}`, newlyAddedFiles[i].file);
+      formData.append(`file-${i}`, newlyAddedFiles[i]);
     }
     return formData;
   };
   const printFormData = (formData) => {
+    const tempFormData = {...formData}
+    console.log("temp Form Data",tempFormData)
     console.log("inside print Data");
+    for (const pair of formData) {
+      console.log("key:- ", pair[0], "value:- ", pair[1]);
+    }
     for (let i = 0; i < 10; i++) {
       console.log("file of Form Data:- ", formData.get(`file-${i}`));
     }
@@ -184,15 +190,18 @@ const TableLayoutCellComponent = ({
     try {
       const newlyAddedFiles = getFilesForBackend();
       const formData = getFormData(newlyAddedFiles);
-    //   printFormData(formData);
+      printFormData(formData);
       console.log("newly Added files:- ", newlyAddedFiles);
       const oldFiles = getFilesNotRemoved();
-      const attachmentResponse = await privateAxios.post(UPLOAD_ATTACHMENTS, {
-        assessmentId: params?.id,
-        sectionId: sectionUUID,
-        cellId: `${columnUUID}_${rowId}`,
-        files: formData,
-      });
+      const attachmentResponse = await privateAxios.post(
+        UPLOAD_ATTACHMENTS_MULTER,
+        {
+          assessmentId: params?.id,
+          sectionId: sectionUUID,
+          cellId: `${columnUUID}_${rowId}`,
+          files: formData,
+        }
+      );
       setIsDisabledPrimaryButton(false);
       //   console.log("Attachment Response", attachmentResponse);
       let tempAssessment = { ...assessmentQuestionnaire };
