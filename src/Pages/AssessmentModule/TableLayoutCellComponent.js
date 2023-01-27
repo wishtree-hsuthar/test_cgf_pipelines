@@ -102,6 +102,11 @@ const TableLayoutCellComponent = ({
         //   REACT_APP_FILE_ENCRYPT_SECRET
         // ).toString();
         resolve(result);
+        // const encryptedFile = CryptoJS.AES.encrypt(
+        //   result,
+        //   REACT_APP_FILE_ENCRYPT_SECRET
+        // ).toString();
+        resolve(result);
       };
     });
   };
@@ -179,7 +184,7 @@ const TableLayoutCellComponent = ({
     try {
       const newlyAddedFiles = getFilesForBackend();
       const formData = getFormData(newlyAddedFiles);
-      printFormData(formData);
+    //   printFormData(formData);
       console.log("newly Added files:- ", newlyAddedFiles);
       const oldFiles = getFilesNotRemoved();
       const attachmentResponse = await privateAxios.post(UPLOAD_ATTACHMENTS, {
