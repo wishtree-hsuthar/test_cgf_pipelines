@@ -28,7 +28,7 @@ const RequireAuth = ({ children, moduleName, page }) => {
     return grantAccess ? (
         children
     ) : (
-        <Navigate to={"/*"} state={{ from: location }} replace />
+        <Navigate to={"/page-not-found"} state={{ from: location }} replace />
     );
 };
 export default RequireAuth;

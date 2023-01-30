@@ -3,15 +3,28 @@ import { privateAxios } from "../api/axios";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
 import { useNavigate } from "react-router-dom";
 import { GET_USER } from "../api/Url";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useCallbackState from "../utils/useCallBackState";
 import Toaster from "../components/Toaster";
 const Dashboard = (props) => {
     //custom hook to set title of page
     useDocumentTitle("Home");
-    console.log(props);
+    const checkPrivilege = useSelector(
+        (state) => state?.user?.privilege?.privileges
+    );
+    const checkUser = useSelector((state) => state?.user?.userObj);
+    let userRoleDeleted =
+        Object.keys(checkPrivilege).length === 0 &&
+        checkUser?.role?.name !== "Super Admin";
+    console.log("user role is deleted  =  ", userRoleDeleted);
+    console.log(
+        "user is  super Admin = ",
+        Object.keys(checkPrivilege).length === 0 &&
+            checkUser?.role?.name === "Super Admin"
+    );
     const navigate = useNavigate();
     const homeRef = useRef();
+
     // const dispatch = useDispatch();
     useEffect(() => {
         let isMounted = true;
@@ -74,7 +87,11 @@ const Dashboard = (props) => {
                             }
                             className="mb-30"
                         />
-                        <h1 className="coming-soon-txt">Coming Soon...</h1>
+                        <h1 className="coming-soon-txt">
+                            {userRoleDeleted
+                                ? "You are not authorized, Please contact System Administrator"
+                                : "Coming Soon..."}
+                        </h1>
                     </div>
                 </div>
             </section>

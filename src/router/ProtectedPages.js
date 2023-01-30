@@ -124,10 +124,39 @@ const ProtectedPages = () => {
                 />
 
                 {/* Role Management Routes */}
-                <Route path="/roles" element={<RolesList />} />
-                <Route path="/roles/add-role" element={<AddRole />} />
-                <Route path="/roles/view-role/:id" element={<ViewRole />} />
-                <Route path="roles/edit-role/:id" element={<EditRole />} />
+                <Route
+                    path="/roles"
+                    element={
+                        <RequireAuth page={""} moduleName={""}>
+                            <RolesList />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="/roles/add-role"
+                    element={
+                        <RequireAuth page={""} moduleName={""}>
+                            <AddRole />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="/roles/view-role/:id"
+                    element={
+                        <RequireAuth page={""} moduleName={""}>
+                            {" "}
+                            <ViewRole />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="roles/edit-role/:id"
+                    element={
+                        <RequireAuth page={""} moduleName={""}>
+                            <EditRole />
+                        </RequireAuth>
+                    }
+                />
 
                 {/* Member Pages */}
                 <Route
