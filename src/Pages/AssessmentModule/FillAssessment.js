@@ -705,7 +705,7 @@ function FillAssessment() {
                                                         missing/invalid
                                                         fields.Please check{" "}
                                                         <b>Corrections sheet</b>{" "}
-                                                        attached with it!".
+                                                        attached with it".
                                                     </p>
                                                 ),
                                                 messageType: "error",
@@ -740,7 +740,7 @@ function FillAssessment() {
                         {
                             titleMessage: "error",
                             descriptionMessage:
-                                "Invalid file type Please uplaod excel file!",
+                                "Invalid file type Please uplaod excel file",
                             messageType: "error",
                         },
                         () => myRef.current()
@@ -750,7 +750,7 @@ function FillAssessment() {
                 return setToasterDetails(
                     {
                         titleMessage: "error",
-                        descriptionMessage: "Please select excel file!",
+                        descriptionMessage: "Please select excel file",
                         messageType: "error",
                     },
                     () => myRef.current()

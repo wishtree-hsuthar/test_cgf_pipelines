@@ -256,8 +256,8 @@ const Header = () => {
 
                                         {(SUPER_ADMIN ||
                                             moduleAccessForOperationMember[0]
-                                                .operationMember.list ||
-                                            moduleAccesForMember[0].member
+                                                ?.operationMember?.list ||
+                                            moduleAccesForMember[0]?.member
                                                 .list) && (
                                             <li
                                                 className={
