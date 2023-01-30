@@ -338,7 +338,7 @@ const ViewOperationMembers = () => {
             <DialogBox
                 title={
                     <p>
-                        Delete operation member "
+                        Delete Operation Member "
                         {fetchOperationMemberDetaills?.name}"
                     </p>
                 }

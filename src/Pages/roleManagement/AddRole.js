@@ -154,7 +154,7 @@ const AddRole = () => {
                     },
                     () => myRef.current()
                 );
-                reset({ defaultValues });
+                reset({ ...defaultValues });
                 getSystemModules();
                 return true;
             }

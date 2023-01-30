@@ -323,6 +323,7 @@ const TableLayoutCellComponent = ({
                   </span>
                 </div>
               </Button>
+              <p style={{color:"#f7a823",fontFamily:"ProximaNova-Semibold, serif, sans-serif",margin:"10px 0px"}}>Uploading large files may take some time</p> 
               {currentSelectedFiles?.length > 0 && (
                 <RenderCurrentFiles
                   currentSelectedFiles={currentSelectedFiles}
@@ -332,7 +333,7 @@ const TableLayoutCellComponent = ({
               )}
 
               {/* </p> */}
-             {currentSelectedFiles?.length === 0 && <p>uploading large files may take some time</p> } 
+              
             </div>
           )
         }
