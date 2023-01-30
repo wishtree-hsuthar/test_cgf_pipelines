@@ -161,7 +161,7 @@ const AddMember = () => {
                     () => myRef.current()
                 );
                 console.log("Default values: ", tempDefaultValues);
-                reset({ tempDefaultValues });
+                reset({...tempDefaultValues});
                 setdisableAddMemberButton(false);
                 return true;
             }
@@ -686,12 +686,6 @@ const AddMember = () => {
                                                 {/* <div className="select-field"> */}
                                                 <label htmlFor="cgfActivity">
                                                     CGF Activity{" "}
-                                                    {watch("cgfCategory") !==
-                                                        "Other" && (
-                                                        <span className="mandatory">
-                                                            *
-                                                        </span>
-                                                    )}
                                                 </label>
                                                 <Dropdown
                                                     control={control}

@@ -1110,7 +1110,7 @@ const EditMember = () => {
                           onBlur={(e) =>
                             setValue("department", e.target.value?.trim())
                           }
-                          placeholder="N/A"
+                          placeholder="Enter department"
                         />
                       </div>
                     </div>

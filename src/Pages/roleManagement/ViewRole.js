@@ -364,7 +364,7 @@ const ViewRole = () => {
             <DialogBox
                 title={
                     <p>
-                        Delete role "{fieldValues ? fieldValues.roleName : ""}"
+                        Delete Role "{fieldValues ? fieldValues.roleName : ""}"
                     </p>
                 }
                 info1={

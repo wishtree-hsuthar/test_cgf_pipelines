@@ -32,6 +32,17 @@ import Loader from "../../utils/Loader";
 function AddOperationMember() {
     //custom hook to set title of page
     useDocumentTitle("Add Operation Member");
+    const defaultValues = {
+        salutation: "Mr.",
+            memberId: "",
+
+            // memberId: "",
+            // companyType: "",
+            countryCode: "",
+            address: "",
+            isCGFStaff: false,
+            roleId: "",
+    }
     const {
         handleSubmit,
         formState: { errors },
@@ -41,17 +52,7 @@ function AddOperationMember() {
         trigger,
         watch,
     } = useForm({
-        defaultValues: {
-            salutation: "Mr.",
-            memberId: "",
-
-            // memberId: "",
-            // companyType: "",
-            countryCode: "",
-            address: "",
-            isCGFStaff: false,
-            roleId: "",
-        },
+        defaultValues: defaultValues,
     });
 
     const navigate = useNavigate();
@@ -278,7 +279,7 @@ function AddOperationMember() {
             );
             if (response.status == 201) {
                 setIsAddOperationMemberLoading(false);
-                reset();
+                reset({...defaultValues});
                 setDisableAddOperationMemberButton(false);
                 setToasterDetails(
                     {
