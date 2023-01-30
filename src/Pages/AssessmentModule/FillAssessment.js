@@ -807,7 +807,7 @@ function FillAssessment() {
                             <span className="accrej-label">
                                 Assessment title <span>:</span>
                             </span>
-                            {assessment?.title?.length <= 41 ? (
+                            {assessment?.title?.length <= 36 ? (
                                 <span className="accrej-desc">
                                     {assessment?.title}
                                 </span>
@@ -815,7 +815,7 @@ function FillAssessment() {
                                 <Tooltip title={assessment?.title}>
                                     <span className="accrej-desc">
                                         {" "}
-                                        {assessment?.title?.slice(0, 44)}...
+                                        {assessment?.title?.slice(0, 39)}...
                                     </span>
                                 </Tooltip>
                             )}
@@ -829,7 +829,7 @@ function FillAssessment() {
                             </span>
 
                             {/* {assessment?.assessmentType} */}
-                            {assessment?.assessmentType?.length <= 41 ? (
+                            {assessment?.assessmentType?.length <= 36 ? (
                                 <span className="accrej-desc">
                                     {assessment?.assessmentType}
                                 </span>
@@ -839,7 +839,7 @@ function FillAssessment() {
                                         {" "}
                                         {assessment?.assessmentType?.slice(
                                             0,
-                                            44
+                                            39
                                         )}
                                         ...
                                     </span>
@@ -851,7 +851,7 @@ function FillAssessment() {
                                 Member company <span>:</span>
                             </span>
                             {assessment?.assignedMember?.companyName?.length <=
-                            41 ? (
+                            36 ? (
                                 <span className="accrej-desc">
                                     {assessment?.assignedMember?.companyName}
                                 </span>
@@ -865,7 +865,7 @@ function FillAssessment() {
                                         {" "}
                                         {assessment?.assignedMember?.companyName?.slice(
                                             0,
-                                            44
+                                            39
                                         )}
                                         ...
                                     </span>
