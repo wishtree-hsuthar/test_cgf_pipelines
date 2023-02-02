@@ -1646,6 +1646,7 @@ input:-webkit-autofill:active {
 }
 .add-row-btnblk {
     color: #f7a823;
+    display: inline-block;
     font-size: 14px;
     font-family: "ProximaNova-Semibold", serif, sans-serif;
     cursor: pointer;
@@ -2157,6 +2158,9 @@ input:-webkit-autofill:active {
 
 .que-column-count {
     width: 40px;
+}
+.assessment-table .que-column-count{
+    width: auto;
 }
 .que-column-layout-wrap {
     position: relative;
