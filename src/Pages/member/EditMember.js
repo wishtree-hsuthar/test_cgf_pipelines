@@ -614,9 +614,9 @@ const EditMember = () => {
                         {/* <div className="select-field"> */}
                         <label htmlFor="cgfActivity">
                           CGF Activity{" "}
-                          {watch("cgfCategory") !== "Other" && (
+                          
                             <span className="mandatory">*</span>
-                          )}
+                          
                         </label>
                         <Dropdown
                           control={control}

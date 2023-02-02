@@ -201,8 +201,9 @@ const AddMember = () => {
         isSubmited && setTimeout(() => navigate("/users/members"), 3000);
     };
     //method to handle on add more button click handler
-    const onAddMoreButtonClickHandlerAddMember = (data) => {
-        onSubmitFunctionCallAddMember(data);
+    const onAddMoreButtonClickHandlerAddMember = async (data) => {
+      const isSubmited =  await onSubmitFunctionCallAddMember(data);
+      if(isSubmited) getParentCompanyAddMember()
     };
     //method to handle region change for cgf office
 
@@ -358,7 +359,7 @@ const AddMember = () => {
         }
     };
 
-    const getParentCompanyAddMember = async (controller) => {
+    const getParentCompanyAddMember = async (controller = new AbortController()) => {
         try {
             const response = await axios.get(PARENT_COMPINES, {
                 signal: controller.signal,
@@ -685,7 +686,9 @@ const AddMember = () => {
                                             <div className="form-group">
                                                 {/* <div className="select-field"> */}
                                                 <label htmlFor="cgfActivity">
-                                                    CGF Activity{" "}
+                                                    CGF Activity{" "}<span className="mandatory">
+                                                        *
+                                                    </span>
                                                 </label>
                                                 <Dropdown
                                                     control={control}

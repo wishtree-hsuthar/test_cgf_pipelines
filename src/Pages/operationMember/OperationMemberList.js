@@ -182,6 +182,10 @@ function OperationMemberList() {
                                         type="text"
                                         placeholder="Search"
                                         value={search}
+                                        onKeyDown={(e) =>
+                                            e.key === "Enter" &&
+                                            setMakeApiCall(true)
+                                        }
                                         onChange={
                                             (e) => onSearchChangeHandler(e)
 

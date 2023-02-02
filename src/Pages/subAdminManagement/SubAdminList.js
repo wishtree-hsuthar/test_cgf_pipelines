@@ -204,7 +204,7 @@ const SubAdminList = () => {
         console.log("Search", search);
         let url = `${ADD_SUB_ADMIN}/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
 
-        if (search?.length >= 3) url += `&search=${search}`;
+        if (search?.length >= 0) url += `&search=${search}`;
 
         return url;
     };
@@ -433,6 +433,10 @@ const SubAdminList = () => {
                                 <input
                                     type="text"
                                     placeholder="Search"
+                                    onKeyDown={(e) =>
+                                        e.key === "Enter" &&
+                                        setMakeApiCall(true)
+                                    }
                                     onChange={(e) => onSearchChangeHandler(e)}
                                     name="search"
                                 />

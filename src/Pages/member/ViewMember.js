@@ -473,8 +473,7 @@ const ViewMember = () => {
         cgfOfficeRegion: data?.cgfOfficeRegion ?? "N/A",
         cgfOfficeCountry: data?.cgfOfficeCountry ?? "N/A",
         cgfOffice: data?.cgfOffice ?? "N/A",
-        memberContactSalutation:
-          data?.memberRepresentativeId[0]?.salutation,
+        memberContactSalutation: data?.memberRepresentativeId[0]?.salutation,
         memberContactFullName: data?.memberRepresentativeId[0]?.name ?? "N/A",
         title: data?.memberRepresentativeId[0]?.title ?? "N/A",
         department: data?.memberRepresentativeId[0]?.department ?? "N/A",
@@ -802,11 +801,7 @@ const ViewMember = () => {
                     <div className="form-group">
                       {/* <div className="select-field"> */}
                       <label htmlFor="cgfActivity">
-                        CGF Activity
-                        {watch("cgfCategory") &&
-                          watch("cgfCategory") !== "Other" && (
-                            <span className="mandatory">*</span>
-                          )}
+                        CGF Activity <span className="mandatory">*</span>
                       </label>
                       <Input
                         isDisabled
