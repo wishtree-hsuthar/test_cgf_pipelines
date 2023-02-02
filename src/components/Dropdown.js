@@ -39,7 +39,7 @@ function Dropdown({
   const width = window.innerWidth;
   const charLimit = width > 1000 ? 60 : 45;
 
-  console.log("Device width:- ", width);
+  // console.log("Device width:- ", width);
   const Placeholder = ({ children }) => {
     return <div className="select-placeholder">{children}</div>;
   };
