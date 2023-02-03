@@ -34,15 +34,15 @@ function AddOperationMember() {
     useDocumentTitle("Add Operation Member");
     const defaultValues = {
         salutation: "Mr.",
-            memberId: "",
+        memberId: "",
 
-            // memberId: "",
-            // companyType: "",
-            countryCode: "",
-            address: "",
-            isCGFStaff: false,
-            roleId: "",
-    }
+        // memberId: "",
+        // companyType: "",
+        countryCode: "",
+        address: "",
+        isCGFStaff: false,
+        roleId: "",
+    };
     const {
         handleSubmit,
         formState: { errors },
@@ -279,7 +279,10 @@ function AddOperationMember() {
             );
             if (response.status == 201) {
                 setIsAddOperationMemberLoading(false);
-                reset({...defaultValues});
+                let defaultRoleId = roles.filter(
+                    (role) => role.name == "Operation Member"
+                );
+                reset({ ...defaultValues, roleId: defaultRoleId[0]._id });
                 setDisableAddOperationMemberButton(false);
                 setToasterDetails(
                     {
