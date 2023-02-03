@@ -37,6 +37,7 @@ function FillAssesmentSection({
     handleFormSubmit,
     editMode,
     setEditMode,
+    disableFillAssessment,
 }) {
     const navigate = useNavigate();
     const params = useParams();
@@ -160,6 +161,7 @@ function FillAssesmentSection({
                         <button
                             type="submit"
                             onClick={(e) => handleFormSubmit(e, true)}
+                            disabled={disableFillAssessment}
                             className="outlined-button add-button mr-10"
                         >
                             Save as draft
@@ -167,6 +169,7 @@ function FillAssesmentSection({
                         <button
                             type="submit"
                             onClick={(e) => handleFormSubmit(e, false)}
+                            disabled={disableFillAssessment}
                             className="primary-button add-button"
                         >
                             Submit assessment

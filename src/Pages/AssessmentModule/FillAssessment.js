@@ -108,6 +108,7 @@ function FillAssessment() {
     const [errorQuestion, setErrorQuestion] = useState("");
     const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
     const [editMode, setEditMode] = useState(false);
+    const [disableFillAssessment, setDisableFillAssessment] = useState(false);
 
     const [errors, setErrors] = useState({});
     const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
@@ -269,6 +270,7 @@ function FillAssessment() {
                 }
             );
             if (response.status == 201) {
+                // setDisableFillAssessment(false);
                 !reOpen &&
                     setToasterDetails(
                         {
@@ -285,6 +287,8 @@ function FillAssessment() {
                     }, 3000);
             }
         } catch (error) {
+            // setDisableFillAssessment(false);
+
             handleCatchError(error, "saveAssessmentAsDraft");
         }
     };
@@ -519,6 +523,7 @@ function FillAssessment() {
             (key) => Object.keys(tempErrors[key]).length === 0
         );
         if (isValidated) {
+            setDisableFillAssessment(true);
             saveAssessmentAsDraft(
                 saveAsDraft,
                 undefined,
@@ -747,6 +752,8 @@ function FillAssessment() {
                     );
                 }
             } else {
+                setIsFillAssessmentLoading(false);
+
                 return setToasterDetails(
                     {
                         titleMessage: "error",
@@ -759,6 +766,8 @@ function FillAssessment() {
         } catch (error) {
             setFile("");
             setSelectedFileName("");
+            setIsFillAssessmentLoading(false);
+
             console.log("error in reupload assessment", error);
         }
     };
@@ -766,6 +775,7 @@ function FillAssessment() {
     const cancelImport = () => {
         setFile("");
         setSelectedFileName("");
+        setIsFillAssessmentLoading(false);
 
         setImportOpenDialog(false);
     };
@@ -1141,6 +1151,9 @@ function FillAssessment() {
                                             <FillAssesmentSection
                                                 assessmentQuestionnaire={
                                                     assessmentQuestionnaire
+                                                }
+                                                disableFillAssessment={
+                                                    disableFillAssessment
                                                 }
                                                 setAssessmentQuestionnaire={
                                                     setAssessmentQuestionnaire

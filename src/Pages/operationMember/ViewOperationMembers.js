@@ -193,7 +193,7 @@ const ViewOperationMembers = () => {
                     replacedOperationMember:
                         response?.data?.replacedUsers[0]?.name ?? "N/A",
                 });
-                fetchRole(response?.data?.roleId);
+                // fetchRole(response?.data?.roleId);
                 setIsViewOperationMemberLoading(false);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
