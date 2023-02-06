@@ -155,11 +155,11 @@ const TableLayoutCellComponent = ({
   };
   const onAttachmetChangeHandler = async (e) => {
     let files = await e?.target?.files;
-    if (Object.keys(files)?.length > 10) {
+    if (Object.keys(files)?.length > 100) {
       setToasterDetails(
         {
           titleMessage: "",
-          descriptionMessage: "Too many files to upload",
+          descriptionMessage: "Max file count 100 reached",
           messageType: "error",
         },
         () => myRef.current()
