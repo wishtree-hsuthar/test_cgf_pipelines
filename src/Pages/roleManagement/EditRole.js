@@ -87,7 +87,12 @@ const EditRole = () => {
             minLength: "minimum 3 characters required",
         },
     };
-
+    const validatePrivelages = (previleges) => {
+        return Object.values(previleges).some((module) => {
+          return Object.values(module).some((previlege) => previlege);
+        });
+      };
+    
     const onSubmit1 = async (data) => {
         try {
             console.log("input Data: ", data, "Previleges: ", previleges);
@@ -96,6 +101,17 @@ const EditRole = () => {
                 delete previlegesForBackend[p_key]["all"];
                 delete previlegesForBackend[p_key]["name"];
             });
+            if (!validatePrivelages(previlegesForBackend)) {
+                setToasterDetails2(
+                  {
+                    titleMessage: "Hurray!",
+                    descriptionMessage: "Select atleast 1 privilege",
+                    messageType: "error",
+                  },
+                  () => myRef2.current()
+                );
+                return;
+              }
             setIsLoading1(true);
 
             console.log("previleges : ", previlegesForBackend);

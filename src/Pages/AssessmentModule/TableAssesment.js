@@ -173,12 +173,12 @@ const TableAssessment = ({
                         {row &&
                           row?.cells?.map((cell, cellId) => (
                             <TableCell key={cell?.columnId}>
-                              {console.log(
+                                {/* {console.log(
                                 "Column Id:- ",
                                 cell?.columnId,
                                 "Row Id:- ",
                                 row?.uuid
-                              )}
+                              )} */}
                               <TableLayoutCellComponent
                                 sectionUUID={sectionUUID}
                                 isPrefilled={isPrefilled}
@@ -235,7 +235,7 @@ const TableAssessment = ({
 
                         if (isRowRenderd === -1) {
                           rowIdsArray?.push(assessmentQuestionnaireRowId);
-                          console.log("idx", idx);
+                          // console.log("idx", idx);
                           return (
                             <TableRow
                               key={assessmentQuestionnaireKey}
