@@ -29,12 +29,19 @@ const SectionContent = ({
     id,
     globalSectionTitleError,
     setGlobalSectionTitleError,
+    setSameSectionsNames,
+    sameSectionsNames,
+    err,
+    setErr,
+    tableErr,
+    setTableErr,
 }) => {
     const navigate = useNavigate();
     // state to handle question level erros
-    const [err, setErr] = useState({ questionTitle: "", option: "" });
+    // const [err, setErr] = useState({ questionTitle: "", option: "" });
+    // const [sameSectionsNames, setSameSectionsNames] = useState([]);
     // state to handle errors in table layout
-    const [tableErr, setTableErr] = useState("");
+    // const [tableErr, setTableErr] = useState("");
     const ITEM_HEIGHT = 42;
 
     const MenuProps = {
@@ -104,70 +111,296 @@ const SectionContent = ({
         setOpenDialog(false);
     };
 
-    const validateTableQuestions = (countError) => {
+    const validateTableQuestions = (tableCountError) => {
+        // let tableCountError = 0;
         console.log("inside table question validator");
-        questionnaire?.sections[index]?.columnValues.forEach(
-            (column, columnIdx) => {
-                if (column?.title === "") {
-                    setTableErr("Error hai");
-                    countError++;
-                }
-                if (column?.columnType === "prefilled") {
-                    console.log("inside prefiled");
-                    questionnaire?.sections[index]?.rowValues?.forEach(
-                        (row, rowId) => {
-                            if (row?.cells[columnIdx]?.value) return;
+        let filteredTableSections = questionnaire?.sections.filter(
+            (section) => section.layout === "table" // section.columnValues.map((col) => col.title)
+        );
+        let sameColumnTitleNamesInFilteredTableSections =
+            filteredTableSections.map((section) => ({
+                section: section.sectionTitle,
+                columnTitles: section.columnValues.map((col) => col.title),
+            }));
+
+        console.log(
+            "sameColumnTitleNamesInFilteredTableSections = ",
+            sameColumnTitleNamesInFilteredTableSections
+        );
+        for (
+            let sectionIndex = 0;
+            sectionIndex < questionnaire.sections.length;
+            sectionIndex++
+        ) {
+            const sectionObject = questionnaire.sections[sectionIndex];
+            console.log("section object = ", sectionObject);
+            if (sectionObject.layout === "table") {
+                for (
+                    let columnIndex = 0;
+                    columnIndex < sectionObject.columnValues.length;
+                    columnIndex++
+                ) {
+                    const columnTitle =
+                        sectionObject.columnValues[columnIndex].title;
+                    const columnType =
+                        sectionObject.columnValues[columnIndex].columnType;
+                    if (columnTitle === "") {
+                        setTableErr("Error hai");
+                        console.log(
+                            "title not present in section = ",
+                            sectionIndex
+                        );
+                        setValue(sectionIndex);
+                        tableCountError++;
+                    }
+                    if (columnType === "prefilled") {
+                        console.log("inside prefiled");
+                        questionnaire?.sections[
+                            sectionIndex
+                        ]?.rowValues?.forEach((row, rowId) => {
+                            if (row?.cells[columnIndex]?.value) return;
                             setTableErr("Error hai");
-                            countError++;
+                            tableCountError++;
+                        });
+                    }
+                    // let filteredSameColumnTitle = sameColumnTitleNames.filter(
+                    //     (name) => name === columnTitle
+                    // );
+                    // if (filteredSameColumnTitle.length > 1) {
+                    //     console.log(
+                    //         "same column names present = ",
+                    //         filteredSameColumnTitle
+                    //     );
+                    //     setTableErr("Error hai");
+
+                    //     tableCountError++;
+                    // }
+                    for (
+                        let sameColumnTitleNamesIndex = 0;
+                        sameColumnTitleNamesIndex <
+                        sameColumnTitleNamesInFilteredTableSections.length;
+                        sameColumnTitleNamesIndex++
+                    ) {
+                        let sameNameCount = 0;
+
+                        const sectionToCheckColumnValues =
+                            sameColumnTitleNamesInFilteredTableSections[
+                                sameColumnTitleNamesIndex
+                            ];
+                        for (
+                            let colIndex = 0;
+                            colIndex <
+                            sectionToCheckColumnValues.columnTitles.length;
+                            colIndex++
+                        ) {
+                            const elementToCheck =
+                                sectionToCheckColumnValues.columnTitles[
+                                    colIndex
+                                ];
+                            let sectionIndex = questionnaire.sections
+                                .map((section, index) => section.sectionTitle)
+                                .indexOf(sectionToCheckColumnValues.section);
+                            if (columnTitle === elementToCheck) {
+                                sameNameCount++;
+                            }
+                            if (sameNameCount > 1) {
+                                tableCountError++;
+                                console.log(
+                                    "Same name 1 se zyaada hai",
+                                    columnTitle
+                                );
+                                console.log("in section = ", sectionIndex);
+                                setTableErr("Same name hai");
+                                setValue(sectionIndex);
+                                // setValue(
+                                //     questionnaire.sections
+                                //         .map(
+                                //             (section) =>
+                                //                 sectionToCheckColumnValues.section
+                                //         )
+                                //         .indexOf(
+                                //             sectionToCheckColumnValues.section
+                                //         )
+                                // );
+
+                                break;
+                            }
                         }
-                    );
+                        // sectionToCheckColumnValues.columnTitles.map((title) => {
+                        //     if (columnTitle === title) {
+                        //         sameNameCount++;
+                        //     }
+                        //     if (sameNameCount > 1) {
+                        //         tableCountError++;
+                        //         console.log(
+                        //             "Same name 1 se zyaada hai",
+                        //             columnTitle
+                        //         );
+                        //         setTableErr("Same name hai");
+                        //         // setValue(sectionIndex);
+                        //     }
+                        // });
+                    }
                 }
             }
-        );
-        console.log("count Error in table validator: ", countError);
-        return countError;
+        }
+
+        // questionnaire?.sections[index]?.columnValues.forEach(
+        //     (column, columnIdx) => {
+        //         if (column?.title === "") {
+        //             setTableErr("Error hai");
+        //             countError++;
+        //         }
+        //         if (column?.columnType === "prefilled") {
+        //             console.log("inside prefiled");
+        //             questionnaire?.sections[index]?.rowValues?.forEach(
+        //                 (row, rowId) => {
+        //                     if (row?.cells[columnIdx]?.value) return;
+        //                     setTableErr("Error hai");
+        //                     countError++;
+        //                 }
+        //             );
+        //         }
+        //     }
+        // );
+        console.log("count Error in table validator: ", tableCountError);
+        return tableCountError;
     };
 
     const validateSection = async () => {
         let countError = 0;
-        if (questionnaire?.sections[index]?.layout === "table") {
-            countError = await validateTableQuestions(countError);
-        } else {
-            console.log("count Error", countError);
-            //Rajkumar's save section
-            let tempError = {
-                questionTitle: "",
-                option: "",
-            };
-            await questionnaire?.sections[index]?.questions?.map(
-                (question, questionIdx) => {
-                    if (question?.questionTitle === "") {
-                        tempError["questionTitle"] = "Enter question title";
-                        countError++;
-                    }
-                    //   console.log("question in validate section map",question)
-                    if (
-                        ["dropdown", "checkbox", "radioGroup"].includes(
-                            question?.inputType
-                        )
-                    ) {
-                        question?.options?.map((option) => {
-                            if (option === "") {
-                                tempError["option"] = "Enter option";
-                                countError++;
-                            }
-                        });
-                    }
+        let sectionTitles = questionnaire?.sections.map(
+            (section) => section.sectionTitle
+        );
+        let sameTitleSectionIndex = [];
+        setSameSectionsNames([...sectionTitles]);
+
+        for (let index = 0; index < questionnaire?.sections.length; index++) {
+            let sameNameCount = 0;
+            for (
+                let innerIndex = 0;
+                innerIndex < sameSectionsNames.length;
+                innerIndex++
+            ) {
+                const element = sameSectionsNames[innerIndex];
+                if (questionnaire.sections[index].sectionTitle === element) {
+                    sameNameCount++;
                 }
-            );
-            setErr({ ...tempError });
+            }
+            if (sameNameCount > 1) {
+                sameTitleSectionIndex.push(index);
+                // setValue(index);
+                console.log(
+                    "same name counter exceeds more than once",
+                    sameNameCount
+                );
+                countError++;
+            }
+            if (questionnaire.sections[index].layout == "table") {
+                countError = await validateTableQuestions(countError);
+            } else if (questionnaire.sections[index].layout == "form") {
+                console.log("count Error", countError);
+                //Rajkumar's save section
+                let tempError = {
+                    questionTitle: "",
+                    option: "",
+                };
+                for (
+                    let sectionIndex = 0;
+                    sectionIndex < questionnaire?.sections.length;
+                    sectionIndex++
+                ) {
+                    const index = sectionIndex;
+                    console.log("index -", index);
+                    questionnaire?.sections[index]?.questions?.map(
+                        (question, questionIdx) => {
+                            if (question?.questionTitle === "") {
+                                console.log(
+                                    "question title is empty in section",
+                                    index
+                                );
+                                tempError["questionTitle"] =
+                                    "Enter question title";
+                                countError++;
+                                setValue(index);
+                            }
+                            //   console.log("question in validate section map",question)
+                            if (
+                                ["dropdown", "checkbox", "radioGroup"].includes(
+                                    question?.inputType
+                                )
+                            ) {
+                                question?.options?.map((option) => {
+                                    if (option === "") {
+                                        tempError["option"] = "Enter option";
+                                        countError++;
+                                    }
+                                });
+                            }
+                        }
+                    );
+                    setErr({ ...tempError });
+                }
+            }
         }
+        if (sameTitleSectionIndex.length > 0) {
+            setValue(sameTitleSectionIndex[0]);
+            setGlobalSectionTitleError({
+                errMsg: "Section name already in use",
+            });
+            return false;
+        }
+        // if (questionnaire?.sections[index]?.layout === "table") {
+        //     countError = validateTableQuestions();
+        // } else {
+        //     console.log("count Error", countError);
+        //     //Rajkumar's save section
+        //     let tempError = {
+        //         questionTitle: "",
+        //         option: "",
+        //     };
+        //     for (
+        //         let sectionIndex = 0;
+        //         sectionIndex < questionnaire?.sections.length;
+        //         sectionIndex++
+        //     ) {
+        //         const index = sectionIndex;
+        //         console.log("index -", index);
+        //         questionnaire?.sections[index]?.questions?.map(
+        //             (question, questionIdx) => {
+        //                 if (question?.questionTitle === "") {
+        //                     console.log(
+        //                         "question title is empty in section",
+        //                         index
+        //                     );
+        //                     tempError["questionTitle"] = "Enter question title";
+        //                     countError++;
+        //                     setValue(index);
+        //                 }
+        //                 //   console.log("question in validate section map",question)
+        //                 if (
+        //                     ["dropdown", "checkbox", "radioGroup"].includes(
+        //                         question?.inputType
+        //                     )
+        //                 ) {
+        //                     question?.options?.map((option) => {
+        //                         if (option === "") {
+        //                             tempError["option"] = "Enter option";
+        //                             countError++;
+        //                         }
+        //                     });
+        //                 }
+        //             }
+        //         );
+        //         setErr({ ...tempError });
+        //     }
+        // }
 
         //Madhav's save section
         // console.log("questionnaire", questionnaire);
 
         if (questionnaire?.title === "" || questionnaire?.sheetName === "") {
-            setGlobalSectionTitleError({ errMsg: "Section title required" });
+            // setGlobalSectionTitleError({ errMsg: "Section title required" });
             countError++;
         }
         for (let i = 0; i < questionnaire.sections.length; i++) {
@@ -180,12 +413,28 @@ const SectionContent = ({
                 return false;
             }
         }
+
         if (countError === 0) {
+            console.log("count error is 0");
             setDisableButton(true);
 
             return true;
         }
         return false;
+    };
+    console.log("same name array = ", sameSectionsNames);
+    const checkNamePresentInSameNameArrayList = (name) => {
+        let listnames = [...sameSectionsNames];
+        let filteredSameName = listnames.filter(
+            (listName) => listName === name
+        );
+        console.log("filtered same name object = ", filteredSameName);
+        if (filteredSameName.length > 1) {
+            console.log("filteredSameName = ", filteredSameName);
+            return true;
+        } else {
+            return false;
+        }
     };
 
     const sectionLayoutChangeHandler = (e) => {
@@ -263,6 +512,8 @@ const SectionContent = ({
     };
     const handleSubmitSection = async (e, isPublished) => {
         e?.preventDefault();
+        // setSameSectionsNames([]);
+
         const response = await validateSection();
         if (response) {
             return await saveSection(undefined, isPublished);
@@ -483,6 +734,11 @@ const SectionContent = ({
                                                 section.sectionTitle === "" &&
                                                 globalSectionTitleError?.errMsg
                                                     ? "Enter the section name"
+                                                    : checkNamePresentInSameNameArrayList(
+                                                          section.sectionTitle
+                                                      ) &&
+                                                      globalSectionTitleError?.errMsg
+                                                    ? globalSectionTitleError?.errMsg
                                                     : " "
                                             }
                                         />
