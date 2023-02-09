@@ -115,7 +115,7 @@ function OnBoardedSubAdminsTable({
                 day: "2-digit",
                 year: "numeric",
             });
-            onboardedCGFAdmin["role"] = onboardedCGFAdmin["subRole"][0].name;
+            onboardedCGFAdmin["role"] = onboardedCGFAdmin["subRole"][0]?.name;
             delete onboardedCGFAdmin["subRole"];
             delete onboardedCGFAdmin["subRoleId"];
 

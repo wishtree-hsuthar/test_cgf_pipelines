@@ -237,9 +237,9 @@ const AddSubAdmin = () => {
     };
 
     const handleSaveAndMoreAddCGFAdmin = (data) => {
-        data.countryCode = data.countryCode.slice(
-            data.countryCode.indexOf("+")
-        );
+        // data.countryCode = data.countryCode.slice(
+        //     data.countryCode.indexOf("+")
+        // );
 
         addSubAdminData(data);
         console.log(data);

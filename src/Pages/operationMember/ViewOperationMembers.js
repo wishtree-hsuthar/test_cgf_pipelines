@@ -165,59 +165,61 @@ const ViewOperationMembers = () => {
         );
         console.log("response from fetch operation member", response);
 
-        isMounted && setFetchOperationMemberDetaills(response.data);
-        reset({
-          memberId: response?.data?.memberId?.companyName,
-          companyType: response?.data?.memberId?.companyType,
-          countryCode: response?.data?.countryCode,
-          phoneNumber: response?.data?.phoneNumber,
-          address: response?.data?.address,
-          title: response.data.title ? response.data.title : "N/A",
-          department: response?.data?.department
-            ? response?.data?.department
-            : "N/A",
-          email: response?.data?.email,
-          operationType: response?.data?.operationType
-            ? response?.data?.operationType
-            : "",
-          reportingManager: response?.data?.reportingManager[0]?.name
-            ? response?.data?.reportingManager[0]?.name
-            : "N/A",
-          name: response?.data?.name,
-          isActive: response?.data?.isActive,
-          isCGFStaff: response?.data?.isCGFStaff === true ? "true" : "false",
-          role: response?.data?.role?.name,
-          replacedOperationMember:
-            response?.data?.replacedUsers[0]?.name ?? "N/A",
-        });
-        fetchRole(response?.data?.roleId);
-        setIsViewOperationMemberLoading(false);
-      } catch (error) {
-        if (error?.code === "ERR_CANCELED") return;
-        setIsViewOperationMemberLoading(false);
-        console.log(
-          "error in fetch operation member method in view page",
-          error
-        );
-        if (error?.response?.status == 401) {
-          setToasterDetails(
-            {
-              titleMessage: "Oops!",
-              descriptionMessage: "Session Timeout: Please login again",
-              messageType: "error",
-            },
-            () => toasterRef.current()
-          );
-          setTimeout(() => {
-            navigate("/login");
-          }, 3000);
-        }
-        if (error?.response?.status === 500) {
-          navigate("/operation_member");
-        }
-      }
-    };
-    fetchOperationMember();
+                isMounted && setFetchOperationMemberDetaills(response.data);
+                reset({
+                    memberId: response?.data?.memberId?.companyName,
+                    companyType: response?.data?.memberId?.companyType,
+                    countryCode: response?.data?.countryCode,
+                    phoneNumber: response?.data?.phoneNumber,
+                    address: response?.data?.address,
+                    title: response.data.title ? response.data.title : "N/A",
+                    department: response?.data?.department
+                        ? response?.data?.department
+                        : "N/A",
+                    email: response?.data?.email,
+                    operationType: response?.data?.operationType
+                        ? response?.data?.operationType
+                        : "",
+                    reportingManager: response?.data?.reportingManager[0]?.name
+                        ? response?.data?.reportingManager[0]?.name
+                        : "N/A",
+                    name: response?.data?.name,
+                    isActive: response?.data?.isActive,
+                    isCGFStaff:
+                        response?.data?.isCGFStaff === true ? "true" : "false",
+                    role: response?.data?.role?.name,
+                    replacedOperationMember:
+                        response?.data?.replacedUsers[0]?.name ?? "N/A",
+                });
+                // fetchRole(response?.data?.roleId);
+                setIsViewOperationMemberLoading(false);
+            } catch (error) {
+                if (error?.code === "ERR_CANCELED") return;
+                setIsViewOperationMemberLoading(false);
+                console.log(
+                    "error in fetch operation member method in view page",
+                    error
+                );
+                if (error?.response?.status == 401) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage:
+                                "Session Timeout: Please login again",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                }
+                if (error?.response?.status === 500) {
+                    navigate("/operation_member");
+                }
+            }
+        };
+        fetchOperationMember();
 
     return () => {
       isMounted = false;
