@@ -47,6 +47,7 @@ function AddNewQuestionnaire() {
     // questionnaire id
     const [err, setErr] = useState({ questionTitle: "", option: "" });
     const [tableErr, setTableErr] = useState("");
+    const [questionTitleList, setQuestionTitleList] = useState([]);
 
     const { id } = useParams();
 
@@ -455,6 +456,12 @@ function AddNewQuestionnaire() {
                                                 }
                                                 setGlobalSectionTitleError={
                                                     setGlobalSectionTitleError
+                                                }
+                                                questionTitleList={
+                                                    questionTitleList
+                                                }
+                                                setQuestionTitleList={
+                                                    setQuestionTitleList
                                                 }
                                             />
                                         </TabPanel>

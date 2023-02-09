@@ -206,9 +206,14 @@ const TableQuestions = ({
                                             </label>
                                             <TextField
                                                 className={`input-field ${
-                                                    !column?.title &&
-                                                    tableErr &&
-                                                    "input-error"
+                                                    (!column?.title &&
+                                                        tableErr &&
+                                                        "input-error") ||
+                                                    (checkIfSameColumnTitlePresent(
+                                                        column?.title
+                                                    ) &&
+                                                        tableErr &&
+                                                        "input-error")
                                                 }`}
                                                 id="outlined-basic"
                                                 variant="outlined"

@@ -35,6 +35,8 @@ const SectionContent = ({
     setErr,
     tableErr,
     setTableErr,
+    questionTitleList,
+    setQuestionTitleList,
 }) => {
     const navigate = useNavigate();
     // state to handle question level erros
@@ -300,6 +302,8 @@ const SectionContent = ({
                 setGlobalSectionTitleError({
                     errMsg: "Section name already in use",
                 });
+                setValue(index);
+
                 return false;
             } else {
                 if (questionnaire.sections[index].layout == "table") {
@@ -318,6 +322,13 @@ const SectionContent = ({
                     ) {
                         const index = sectionIndex;
                         console.log("index -", index);
+                        let questionsOfListEachSection = questionnaire.sections[
+                            index
+                        ].questions.map((question) => question.questionTitle);
+                        console.log(
+                            "questionsOfListEachSection = ",
+                            questionsOfListEachSection
+                        );
                         questionnaire?.sections[index]?.questions?.map(
                             (question, questionIdx) => {
                                 if (question?.questionTitle === "") {
@@ -325,8 +336,28 @@ const SectionContent = ({
                                         "question title is empty in section",
                                         index
                                     );
+
                                     tempError["questionTitle"] =
                                         "Enter question title";
+                                    countError++;
+                                    setValue(index);
+                                }
+                                let filteredSameQuestionList =
+                                    questionsOfListEachSection.filter(
+                                        (ques) =>
+                                            ques === question?.questionTitle
+                                    );
+                                console.log(
+                                    "filterd question titles = ",
+                                    filteredSameQuestionList
+                                );
+                                if (filteredSameQuestionList.length > 1) {
+                                    console.log(
+                                        "Question title already in use = ",
+                                        question.questionTitle
+                                    );
+                                    tempError["questionTitle"] =
+                                        "Question title already in use.";
                                     countError++;
                                     setValue(index);
                                 }
@@ -723,9 +754,14 @@ const SectionContent = ({
                                         </label>
                                         <TextField
                                             className={`input-field ${
-                                                section.sectionTitle === "" &&
-                                                globalSectionTitleError?.errMsg &&
-                                                "input-error"
+                                                (section.sectionTitle === "" &&
+                                                    globalSectionTitleError?.errMsg &&
+                                                    "input-error") ||
+                                                (checkNamePresentInSameNameArrayList(
+                                                    section.sectionTitle
+                                                ) &&
+                                                    globalSectionTitleError?.errMsg &&
+                                                    "input-error")
                                             }`}
                                             id="outlined-basic"
                                             placeholder="Enter section name"
@@ -861,6 +897,8 @@ const SectionContent = ({
                     setQuestionnaire={setQuestionnaire}
                     err={err}
                     setErr={setErr}
+                    questionTitleList={questionTitleList}
+                    setQuestionTitleList={setQuestionTitleList}
                 />
             ) : (
                 <TableQuestions
