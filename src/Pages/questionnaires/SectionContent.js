@@ -272,84 +272,88 @@ const SectionContent = ({
         let sectionTitles = questionnaire?.sections.map(
             (section) => section.sectionTitle
         );
-        let sameTitleSectionIndex = [];
+        // let sameTitleSectionIndex = [];
         setSameSectionsNames([...sectionTitles]);
 
         for (let index = 0; index < questionnaire?.sections.length; index++) {
             let sameNameCount = 0;
             for (
                 let innerIndex = 0;
-                innerIndex < sameSectionsNames.length;
+                innerIndex < sectionTitles.length;
                 innerIndex++
             ) {
-                const element = sameSectionsNames[innerIndex];
+                const element = sectionTitles[innerIndex];
                 if (questionnaire.sections[index].sectionTitle === element) {
                     sameNameCount++;
+                    console.log("sameNameCount for section =", sameNameCount);
                 }
             }
             if (sameNameCount > 1) {
-                sameTitleSectionIndex.push(index);
+                // sameTitleSectionIndex.push(index);
                 // setValue(index);
                 console.log(
                     "same name counter exceeds more than once",
                     sameNameCount
                 );
+
                 countError++;
-            }
-            if (questionnaire.sections[index].layout == "table") {
-                countError = await validateTableQuestions(countError);
-            } else if (questionnaire.sections[index].layout == "form") {
-                console.log("count Error", countError);
-                //Rajkumar's save section
-                let tempError = {
-                    questionTitle: "",
-                    option: "",
-                };
-                for (
-                    let sectionIndex = 0;
-                    sectionIndex < questionnaire?.sections.length;
-                    sectionIndex++
-                ) {
-                    const index = sectionIndex;
-                    console.log("index -", index);
-                    questionnaire?.sections[index]?.questions?.map(
-                        (question, questionIdx) => {
-                            if (question?.questionTitle === "") {
-                                console.log(
-                                    "question title is empty in section",
-                                    index
-                                );
-                                tempError["questionTitle"] =
-                                    "Enter question title";
-                                countError++;
-                                setValue(index);
+                setGlobalSectionTitleError({
+                    errMsg: "Section name already in use",
+                });
+                return false;
+            } else {
+                if (questionnaire.sections[index].layout == "table") {
+                    countError = await validateTableQuestions(countError);
+                } else if (questionnaire.sections[index].layout == "form") {
+                    console.log("count Error", countError);
+                    //Rajkumar's save section
+                    let tempError = {
+                        questionTitle: "",
+                        option: "",
+                    };
+                    for (
+                        let sectionIndex = 0;
+                        sectionIndex < questionnaire?.sections.length;
+                        sectionIndex++
+                    ) {
+                        const index = sectionIndex;
+                        console.log("index -", index);
+                        questionnaire?.sections[index]?.questions?.map(
+                            (question, questionIdx) => {
+                                if (question?.questionTitle === "") {
+                                    console.log(
+                                        "question title is empty in section",
+                                        index
+                                    );
+                                    tempError["questionTitle"] =
+                                        "Enter question title";
+                                    countError++;
+                                    setValue(index);
+                                }
+                                //   console.log("question in validate section map",question)
+                                if (
+                                    [
+                                        "dropdown",
+                                        "checkbox",
+                                        "radioGroup",
+                                    ].includes(question?.inputType)
+                                ) {
+                                    question?.options?.map((option) => {
+                                        if (option === "") {
+                                            tempError["option"] =
+                                                "Enter option";
+                                            countError++;
+                                        }
+                                    });
+                                }
                             }
-                            //   console.log("question in validate section map",question)
-                            if (
-                                ["dropdown", "checkbox", "radioGroup"].includes(
-                                    question?.inputType
-                                )
-                            ) {
-                                question?.options?.map((option) => {
-                                    if (option === "") {
-                                        tempError["option"] = "Enter option";
-                                        countError++;
-                                    }
-                                });
-                            }
-                        }
-                    );
-                    setErr({ ...tempError });
+                        );
+                        setErr({ ...tempError });
+                    }
                 }
             }
         }
-        if (sameTitleSectionIndex.length > 0) {
-            setValue(sameTitleSectionIndex[0]);
-            setGlobalSectionTitleError({
-                errMsg: "Section name already in use",
-            });
-            return false;
-        }
+
         // if (questionnaire?.sections[index]?.layout === "table") {
         //     countError = validateTableQuestions();
         // } else {
