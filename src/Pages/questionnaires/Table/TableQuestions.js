@@ -173,6 +173,18 @@ const TableQuestions = ({
         return <div className="select-placeholder">{children}</div>;
     };
 
+    const checkIfSameColumnTitlePresent = (title) => {
+        let filterSameNameColumnTitle = questionnaire.sections[
+            sectionIndex
+        ].columnValues.filter((column) => column.title === title);
+        if (filterSameNameColumnTitle.length > 1) {
+            console.log("Same title appeared twice.");
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     return (
         <div className="que-column-layout-sect">
             {questionnaire &&
@@ -194,9 +206,14 @@ const TableQuestions = ({
                                             </label>
                                             <TextField
                                                 className={`input-field ${
-                                                    !column?.title &&
-                                                    tableErr &&
-                                                    "input-error"
+                                                    (!column?.title &&
+                                                        tableErr &&
+                                                        "input-error") ||
+                                                    (checkIfSameColumnTitlePresent(
+                                                        column?.title
+                                                    ) &&
+                                                        tableErr &&
+                                                        "input-error")
                                                 }`}
                                                 id="outlined-basic"
                                                 variant="outlined"
@@ -204,6 +221,10 @@ const TableQuestions = ({
                                                 helperText={
                                                     !column?.title && tableErr
                                                         ? "Enter the column title"
+                                                        : checkIfSameColumnTitlePresent(
+                                                              column?.title
+                                                          ) && tableErr
+                                                        ? "Column title already in use."
                                                         : " "
                                                 }
                                                 value={column?.title}

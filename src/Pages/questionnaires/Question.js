@@ -201,6 +201,18 @@ const Question = ({
         return <div className="select-placeholder">{children}</div>;
     };
 
+    const checkIfSameQuestionTitlePresent = (title) => {
+        let filterSameNameQuestionTitle = questionnaire.sections[
+            sectionIndex
+        ].questions.filter((question) => question.questionTitle === title);
+        if (filterSameNameQuestionTitle.length > 1) {
+            console.log("Same question title appeared twice.");
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     return (
         <div
             className={`que-card-blk ${
@@ -221,9 +233,14 @@ const Question = ({
                             </label>
                             <TextField
                                 className={`input-field ${
-                                    !question?.questionTitle &&
-                                    err?.questionTitle &&
-                                    "input-error"
+                                    (!question?.questionTitle &&
+                                        err?.questionTitle &&
+                                        "input-error") ||
+                                    (checkIfSameQuestionTitlePresent(
+                                        question?.questionTitle
+                                    ) &&
+                                        err?.questionTitle &&
+                                        "input-error")
                                 } `}
                                 placeholder="Enter question title"
                                 name="questionTitle"
@@ -232,6 +249,10 @@ const Question = ({
                                     !question?.questionTitle &&
                                     err?.questionTitle
                                         ? "Enter the question title"
+                                        : checkIfSameQuestionTitlePresent(
+                                              question?.questionTitle
+                                          ) && err?.questionTitle
+                                        ? "Question title already in use."
                                         : " "
                                 }
                                 onChange={(e) =>
@@ -347,9 +368,15 @@ const Question = ({
                                         <div className="que-checkbox-wrap">
                                             <div
                                                 className={`que-checkbox-blk ${
-                                                    question?.inputType === "dropdown" && "que-dropdown-blk" 
-                                                    || question?.inputType === "checkbox" && "que-checkbox-option" 
-                                                    || question?.inputType === "radioGroup" && "que-radio-option"
+                                                    (question?.inputType ===
+                                                        "dropdown" &&
+                                                        "que-dropdown-blk") ||
+                                                    (question?.inputType ===
+                                                        "checkbox" &&
+                                                        "que-checkbox-option") ||
+                                                    (question?.inputType ===
+                                                        "radioGroup" &&
+                                                        "que-radio-option")
                                                 }`}
                                             >
                                                 <TextField
@@ -369,11 +396,20 @@ const Question = ({
                                                             optionIdx
                                                         )
                                                     }
-                                                    className={question?.options.length !== 2 ? `input-field que-input-type adddropdown ${
-                                                        err?.option &&
-                                                        !option &&
-                                                        "input-error"
-                                                    }` : 'input-field que-input-type'}
+                                                    className={
+                                                        question?.options
+                                                            .length !== 2
+                                                            ? `input-field que-input-type adddropdown ${
+                                                                  err?.option &&
+                                                                  !option &&
+                                                                  "input-error"
+                                                              }`
+                                                            : `input-field que-input-type ${
+                                                                  err?.option &&
+                                                                  !option &&
+                                                                  "input-error"
+                                                              }`
+                                                    }
                                                     helperText={
                                                         err?.option && !option
                                                             ? "Enter the option value"

@@ -41,8 +41,14 @@ function AddNewQuestionnaire() {
     useDocumentTitle("Add Questionnaire");
     // state to manage to loader
     const [isQuestionnaireLoading, setIsQuestionnaireLoading] = useState(false);
+    const [sameSectionsNames, setSameSectionsNames] = useState([]);
+
     const [value, setValue] = React.useState(0);
     // questionnaire id
+    const [err, setErr] = useState({ questionTitle: "", option: "" });
+    const [tableErr, setTableErr] = useState("");
+    const [questionTitleList, setQuestionTitleList] = useState([]);
+
     const { id } = useParams();
 
     const [globalSectionTitleError, setGlobalSectionTitleError] = useState({
@@ -425,9 +431,19 @@ function AddNewQuestionnaire() {
                                             index={index}
                                         >
                                             <SectionContent
+                                                sameSectionsNames={
+                                                    sameSectionsNames
+                                                }
+                                                err={err}
+                                                setErr={setErr}
+                                                setSameSectionsNames={
+                                                    setSameSectionsNames
+                                                }
                                                 setQuestionnaire={
                                                     setQuestionnaire
                                                 }
+                                                tableErr={tableErr}
+                                                setTableErr={setTableErr}
                                                 questionnaire={questionnaire}
                                                 value={section.value}
                                                 uuid={section.uuid}
@@ -440,6 +456,12 @@ function AddNewQuestionnaire() {
                                                 }
                                                 setGlobalSectionTitleError={
                                                     setGlobalSectionTitleError
+                                                }
+                                                questionTitleList={
+                                                    questionTitleList
+                                                }
+                                                setQuestionTitleList={
+                                                    setQuestionTitleList
                                                 }
                                             />
                                         </TabPanel>
