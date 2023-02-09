@@ -225,7 +225,7 @@ function PreviewQuestionnaire(props) {
     }
   };
   const deleteDraft = async () => {
-    // TODO - Write draft delete logic here
+    
     try {
       await axios.delete(
         DELETE_QUESTIONNAIRE_DRAFT + `/${questionnaire?.uuid}`

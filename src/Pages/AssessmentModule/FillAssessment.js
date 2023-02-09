@@ -671,6 +671,9 @@ function FillAssessment() {
               handleCatchError(error, "reuploadAssessment");
               // setImportOpenDialog(false);
             }
+            finally{
+              setIsFillAssessmentLoading(false);
+            }
           };
         } else {
           setFile("");
@@ -687,6 +690,7 @@ function FillAssessment() {
           );
         }
       } else {
+        setIsFillAssessmentLoading(false)
         return setToasterDetails(
           {
             titleMessage: "error",
@@ -710,12 +714,13 @@ function FillAssessment() {
     setImportOpenDialog(false);
   };
   const addTableAssessmentValues = () => {
-      console.log("Inside add Table assessment value function")
+    console.log("Inside add Table assessment value function");
     if (questionnaire && Object.keys(questionnaire)?.length > 0) {
       questionnaire?.sections?.forEach((section) => {
         if (
           section?.layout === "table" &&
-          (!assessmentQuestionnaire[section?.uuid] || Object.keys(assessmentQuestionnaire[section?.uuid]).length === 0)
+          (!assessmentQuestionnaire[section?.uuid] ||
+            Object.keys(assessmentQuestionnaire[section?.uuid]).length === 0)
         ) {
           let tempAsssessmentQuestionnaire = {
             ...assessmentQuestionnaire,
