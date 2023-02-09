@@ -404,7 +404,11 @@ const Question = ({
                                                                   !option &&
                                                                   "input-error"
                                                               }`
-                                                            : "input-field que-input-type"
+                                                            : `input-field que-input-type ${
+                                                                  err?.option &&
+                                                                  !option &&
+                                                                  "input-error"
+                                                              }`
                                                     }
                                                     helperText={
                                                         err?.option && !option

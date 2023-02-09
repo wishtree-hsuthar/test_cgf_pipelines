@@ -113,7 +113,7 @@ const SectionContent = ({
         setOpenDialog(false);
     };
 
-    const validateTableQuestions = (tableCountError) => {
+    const validateTableQuestions = (tableCountError, tabIndex) => {
         // let tableCountError = 0;
         console.log("inside table question validator");
         let filteredTableSections = questionnaire?.sections.filter(
@@ -152,7 +152,8 @@ const SectionContent = ({
                             "title not present in section = ",
                             sectionIndex
                         );
-                        setValue(sectionIndex);
+                        // setValue(sectionIndex);
+                        tabIndex.push(sectionIndex);
                         tableCountError++;
                     }
                     if (columnType === "prefilled") {
@@ -162,6 +163,8 @@ const SectionContent = ({
                         ]?.rowValues?.forEach((row, rowId) => {
                             if (row?.cells[columnIndex]?.value) return;
                             setTableErr("Error hai");
+                            tabIndex.push(sectionIndex);
+
                             tableCountError++;
                         });
                     }
@@ -213,7 +216,9 @@ const SectionContent = ({
                                 );
                                 console.log("in section = ", sectionIndex);
                                 setTableErr("Same name hai");
-                                setValue(sectionIndex);
+                                tabIndex.push(sectionIndex);
+
+                                // setValue(sectionIndex);
                                 // setValue(
                                 //     questionnaire.sections
                                 //         .map(
@@ -275,6 +280,7 @@ const SectionContent = ({
             (section) => section.sectionTitle
         );
         // let sameTitleSectionIndex = [];
+        let tabIndex = [];
         setSameSectionsNames([...sectionTitles]);
 
         for (let index = 0; index < questionnaire?.sections.length; index++) {
@@ -292,7 +298,7 @@ const SectionContent = ({
             }
             if (sameNameCount > 1) {
                 // sameTitleSectionIndex.push(index);
-                // setValue(index);
+                setValue(index);
                 console.log(
                     "same name counter exceeds more than once",
                     sameNameCount
@@ -302,12 +308,16 @@ const SectionContent = ({
                 setGlobalSectionTitleError({
                     errMsg: "Section name already in use",
                 });
+                // tabIndex.push(index);
                 setValue(index);
 
                 return false;
             } else {
                 if (questionnaire.sections[index].layout == "table") {
-                    countError = await validateTableQuestions(countError);
+                    countError = await validateTableQuestions(
+                        countError,
+                        tabIndex
+                    );
                 } else if (questionnaire.sections[index].layout == "form") {
                     console.log("count Error", countError);
                     //Rajkumar's save section
@@ -340,6 +350,8 @@ const SectionContent = ({
                                     tempError["questionTitle"] =
                                         "Enter question title";
                                     countError++;
+                                    // tabIndex.push(sectionIndex);
+
                                     setValue(index);
                                 }
                                 let filteredSameQuestionList =
@@ -360,6 +372,7 @@ const SectionContent = ({
                                         "Question title already in use.";
                                     countError++;
                                     setValue(index);
+                                    // tabIndex.push(sectionIndex);
                                 }
                                 //   console.log("question in validate section map",question)
                                 if (
@@ -374,6 +387,7 @@ const SectionContent = ({
                                             tempError["option"] =
                                                 "Enter option";
                                             countError++;
+                                            // tabIndex.push(sectionIndex);
                                         }
                                     });
                                 }
@@ -444,17 +458,24 @@ const SectionContent = ({
                     errMsg: "Section title required",
                 });
                 setValue(i);
+                // tabIndex.push(i);
+
                 countError++;
                 return false;
             }
         }
-
+        // if (tabIndex.length > 0) {
+        //     let distinctTabIndex = [...tabIndex];
+        //     console.log("disticet tab index = ", distinctTabIndex);
+        //     setValue(distinctTabIndex[0]);
+        // }
         if (countError === 0) {
             console.log("count error is 0");
             setDisableButton(true);
 
             return true;
         }
+
         return false;
     };
     console.log("same name array = ", sameSectionsNames);
@@ -605,6 +626,7 @@ const SectionContent = ({
             }
             return response.data.uuid;
         } catch (error) {
+            setDisableButton(false);
             if (error?.code === "ERR_CANCELED") return;
             if (error?.response?.status == 401) {
                 console.log("Session timeout in save questionnaire");
