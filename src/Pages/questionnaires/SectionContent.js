@@ -89,16 +89,16 @@ const SectionContent = ({
             (section) => section.uuid !== uuid
         );
 
-        setQuestionnaire({
-            ...tempQuestionnare,
-            sections: tempSections,
-        });
-        let newObj = {
-            ...tempQuestionnare,
-            sections: tempSections,
-        };
+    setQuestionnaire({
+      ...tempQuestionnare,
+      sections: tempSections,
+    });
+    // let newObj = {
+    //   ...tempQuestionnare,
+    //   sections: tempSections,
+    // };
 
-        saveSection(newObj);
+    // saveSection(newObj);
 
         setValue(0);
         setOpenDialog(false);

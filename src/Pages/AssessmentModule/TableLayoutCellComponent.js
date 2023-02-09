@@ -155,6 +155,17 @@ const TableLayoutCellComponent = ({
   };
   const onAttachmetChangeHandler = async (e) => {
     let files = await e?.target?.files;
+    if (Object.keys(files)?.length > 100) {
+      setToasterDetails(
+        {
+          titleMessage: "",
+          descriptionMessage: "Max file count 100 reached",
+          messageType: "error",
+        },
+        () => myRef.current()
+      );
+      return;
+    }
     getFiles(files);
   };
   const getFilesForBackend = () => {
@@ -310,6 +321,7 @@ const TableLayoutCellComponent = ({
                     accept={
                       ".jpg, .jpeg, .png, .doc, .txt, .pdf, .docx, .xlsx, .xls, .ppt, .pptx, .mp4, .mp3, .zip, .rar"
                     }
+                    name="files[]"
                     // value={file}
                     onChange={onAttachmetChangeHandler}
                     multiple
@@ -323,7 +335,15 @@ const TableLayoutCellComponent = ({
                   </span>
                 </div>
               </Button>
-              <p style={{color:"#f7a823",fontFamily:"ProximaNova-Semibold, serif, sans-serif",margin:"10px 0px"}}>Uploading large files may take some time</p> 
+              <p
+                style={{
+                  color: "#f7a823",
+                  fontFamily: "ProximaNova-Semibold, serif, sans-serif",
+                  margin: "10px 0px",
+                }}
+              >
+                Uploading large files may take some time
+              </p>
               {currentSelectedFiles?.length > 0 && (
                 <RenderCurrentFiles
                   currentSelectedFiles={currentSelectedFiles}
@@ -333,7 +353,6 @@ const TableLayoutCellComponent = ({
               )}
 
               {/* </p> */}
-              
             </div>
           )
         }
