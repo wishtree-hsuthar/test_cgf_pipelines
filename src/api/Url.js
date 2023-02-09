@@ -48,6 +48,7 @@ export const REPLACE_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}positions/mapp
 
 // add questionnaire
 export const ADD_QUESTIONNAIRE = `${REACT_APP_API_ENDPOINT}questionnaires`;
+export const DELETE_QUESTIONNAIRE_DRAFT = `${REACT_APP_API_ENDPOINT}questionnaires/delete`
 
 // assessments
 export const FETCH_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;

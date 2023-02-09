@@ -92,12 +92,12 @@ const SectionContent = ({
       ...tempQuestionnare,
       sections: tempSections,
     });
-    let newObj = {
-      ...tempQuestionnare,
-      sections: tempSections,
-    };
+    // let newObj = {
+    //   ...tempQuestionnare,
+    //   sections: tempSections,
+    // };
 
-    saveSection(newObj);
+    // saveSection(newObj);
 
     setValue(0);
     setOpenDialog(false);
