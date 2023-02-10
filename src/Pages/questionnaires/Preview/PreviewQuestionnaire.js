@@ -285,15 +285,15 @@ function PreviewQuestionnaire(props) {
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
       <DialogBox
-        title={<p> Delete Questionnaire</p>}
+        title={<p> Delete Questionnaire {questionnaire && !questionnaire?.isPublished && "Draft"}</p>}
         info1={
           <p>
             {questionnaire && questionnaire?.isPublished
               ? "Deleting the questionnaire will also delete the related assessments. we recommend you make the questionnaire inactive"
-              : "Deleting questionnaire will be irreversible action."}
+              : "You can not access this draft version of questionnaire any more once delete."}
           </p>
         }
-        info2={<p>Are you sure you want to delete the questionnaire?</p>}
+        info2={<p>Are you sure you want to delete the questionnaire {questionnaire && !questionnaire?.isPublished && "draft"}?</p>}
         primaryButtonText={
           questionnaire && questionnaire?.isPublished
             ? "Delete Anyway"
