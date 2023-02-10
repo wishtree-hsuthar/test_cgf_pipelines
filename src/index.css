@@ -2601,8 +2601,8 @@ input::-ms-reveal {
 .upload-file-btn{background-color: #fff !important;
     box-shadow: none !important;
     padding: 0 !important;
-    /* width: 75%; */
-    max-width: 395px;
+    width: 75%;
+    min-width: 395px !important;
 }
 .file-upload-txt{font-size: 14px;line-height: 20px;color: rgba(30, 30, 30, 0.5);text-transform: initial;display: block;}
 .upload-icon svg{color: rgba(30, 30, 30, 0.5);}

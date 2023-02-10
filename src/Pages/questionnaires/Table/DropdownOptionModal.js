@@ -172,7 +172,8 @@ const DropdownOptionModal = ({
                                                                           !option &&
                                                                           "input-error"
                                                                       }`
-                                                                    : "input-field que-input-type"
+                                                                    : `input-field que-input-type ${tableOptionErr &&
+                                                                        !option && "input-error"}`
                                                             }
                                                             value={option}
                                                             onChange={(e) =>

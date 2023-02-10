@@ -418,7 +418,7 @@ const TableLayoutCellComponent = ({
               style={{
                 color: "#f7a823",
                 textDecoration: "none",
-                pointerEvents: `${params["*"].includes("view") && "none"}`,
+                pointerEvents: `${((editMode && params["*"].includes("view")) || !editMode) && "none"}`,
               }}
             >
               Add/Edit Attachments
