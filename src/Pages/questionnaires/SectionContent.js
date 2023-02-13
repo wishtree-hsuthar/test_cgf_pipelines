@@ -98,16 +98,16 @@ const SectionContent = ({
             (section) => section.uuid !== uuid
         );
 
-    setQuestionnaire({
-      ...tempQuestionnare,
-      sections: tempSections,
-    });
-    // let newObj = {
-    //   ...tempQuestionnare,
-    //   sections: tempSections,
-    // };
+        setQuestionnaire({
+            ...tempQuestionnare,
+            sections: tempSections,
+        });
+        // let newObj = {
+        //   ...tempQuestionnare,
+        //   sections: tempSections,
+        // };
 
-    // saveSection(newObj);
+        // saveSection(newObj);
 
         setValue(0);
         setOpenDialog(false);
@@ -298,7 +298,9 @@ const SectionContent = ({
             }
             if (sameNameCount > 1) {
                 // sameTitleSectionIndex.push(index);
-                setValue(index);
+                tabIndex.push(index);
+
+                // setValue(index);
                 console.log(
                     "same name counter exceeds more than once",
                     sameNameCount
@@ -308,10 +310,9 @@ const SectionContent = ({
                 setGlobalSectionTitleError({
                     errMsg: "Section name already in use",
                 });
-                // tabIndex.push(index);
-                setValue(index);
+                // setValue(index);
 
-                return false;
+                // return false;
             } else {
                 if (questionnaire.sections[index].layout == "table") {
                     countError = await validateTableQuestions(
@@ -350,9 +351,9 @@ const SectionContent = ({
                                     tempError["questionTitle"] =
                                         "Enter question title";
                                     countError++;
-                                    // tabIndex.push(sectionIndex);
+                                    tabIndex.push(sectionIndex);
 
-                                    setValue(index);
+                                    // setValue(index);
                                 }
                                 let filteredSameQuestionList =
                                     questionsOfListEachSection.filter(
@@ -371,8 +372,9 @@ const SectionContent = ({
                                     tempError["questionTitle"] =
                                         "Question title already in use.";
                                     countError++;
-                                    setValue(index);
-                                    // tabIndex.push(sectionIndex);
+                                    tabIndex.push(sectionIndex);
+
+                                    // setValue(index);
                                 }
                                 //   console.log("question in validate section map",question)
                                 if (
@@ -387,7 +389,7 @@ const SectionContent = ({
                                             tempError["option"] =
                                                 "Enter option";
                                             countError++;
-                                            // tabIndex.push(sectionIndex);
+                                            tabIndex.push(sectionIndex);
                                         }
                                     });
                                 }
@@ -455,20 +457,25 @@ const SectionContent = ({
         for (let i = 0; i < questionnaire.sections.length; i++) {
             if (questionnaire.sections[i].sectionTitle === "") {
                 setGlobalSectionTitleError({
-                    errMsg: "Section title required",
+                    ...globalSectionTitleError,
+                    sectionTitleEmpty: "Section title required",
                 });
-                setValue(i);
-                // tabIndex.push(i);
-
+                tabIndex.push(i);
+                console.log(
+                    "tab sections if section title is empty == ",
+                    tabIndex
+                );
+                // setValue(i);
                 countError++;
-                return false;
+                // return false;
             }
         }
-        // if (tabIndex.length > 0) {
-        //     let distinctTabIndex = [...tabIndex];
-        //     console.log("disticet tab index = ", distinctTabIndex);
-        //     setValue(distinctTabIndex[0]);
-        // }
+        if (tabIndex.length > 0) {
+            let distinctTabIndex = [...tabIndex];
+            console.log("disticet tab index = ", distinctTabIndex);
+            setValue(distinctTabIndex[0]);
+        }
+        console.log("tab which has errors =", tabIndex);
         if (countError === 0) {
             console.log("count error is 0");
             setDisableButton(true);
@@ -794,7 +801,7 @@ const SectionContent = ({
                                             name={"sectionTitle"}
                                             helperText={
                                                 section.sectionTitle === "" &&
-                                                globalSectionTitleError?.errMsg
+                                                globalSectionTitleError?.sectionTitleEmpty
                                                     ? "Enter the section name"
                                                     : checkNamePresentInSameNameArrayList(
                                                           section.sectionTitle
