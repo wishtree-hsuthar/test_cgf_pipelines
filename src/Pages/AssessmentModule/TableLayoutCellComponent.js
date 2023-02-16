@@ -208,6 +208,12 @@ const TableLayoutCellComponent = ({
         UPLOAD_ATTACHMENTS_MULTER +
         `/${params?.id}/attachments/${sectionUUID}/${columnUUID + "_" + rowId}`;
       const attachmentResponse = await privateAxios.post(url, formData);
+      // console.log("attachment");
+      console.log("old files:- ",oldFiles,"new files",attachmentResponse.data)
+      await privateAxios.put(url, {
+        attachments: [...oldFiles, ...attachmentResponse?.data],
+      });
+
       setIsDisabledPrimaryButton(false);
 
       let tempAssessment = { ...assessmentQuestionnaire };
@@ -418,7 +424,10 @@ const TableLayoutCellComponent = ({
               style={{
                 color: "#f7a823",
                 textDecoration: "none",
-                pointerEvents: `${((editMode && params["*"].includes("view")) || !editMode) && "none"}`,
+                pointerEvents: `${
+                  ((editMode && params["*"].includes("view")) || !editMode) &&
+                  "none"
+                }`,
               }}
             >
               Add/Edit Attachments
