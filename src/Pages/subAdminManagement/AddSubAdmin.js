@@ -198,6 +198,7 @@ const AddSubAdmin = () => {
             if (error?.code === "ERR_CANCELED") return;
             console.log("error from add sub admin page", error);
             setIsCgfAdminLoading(false);
+            setDisableSubmit(false);
 
             if (error?.response?.status === 401) {
                 setToasterDetails(

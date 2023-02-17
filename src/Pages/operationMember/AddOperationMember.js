@@ -302,6 +302,8 @@ function AddOperationMember() {
                 "error in submit data for add operation member method",
                 error
             );
+            setDisableAddOperationMemberButton(false);
+            setIsAddOperationMemberLoading(false);
 
             if (error?.response?.status == 401) {
                 setToasterDetails(
@@ -317,8 +319,6 @@ function AddOperationMember() {
                     navigate("/login");
                 }, 3000);
             } else {
-                setDisableAddOperationMemberButton(false);
-
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
@@ -339,7 +339,11 @@ function AddOperationMember() {
         console.log("data from handleSaveAndMore", data);
         await addOperationMember(data, true);
         setShowTextField(false);
-        reset();
+        let role = roles.filter((role) => role.name === "Operation Member");
+        reset({
+            ...defaultValues,
+            roleId: role[0]._id,
+        });
     };
 
     const handleCGFStaffChange = (e) => {

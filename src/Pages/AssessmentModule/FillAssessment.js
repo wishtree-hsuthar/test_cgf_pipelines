@@ -393,6 +393,43 @@ function FillAssessment() {
                                 sections.push(index);
                             }
                         } else if (
+                            column.columnType === "date" &&
+                            currentSectionAnswers[
+                                `${column?.uuid}_${tempRowId}`
+                            ] &&
+                            isNaN(
+                                new Date(
+                                    currentSectionAnswers[
+                                        `${column?.uuid}_${tempRowId}`
+                                    ]
+                                ).getTime()
+                            )
+                        ) {
+                            console.log(
+                                "Fetched value not present in column dropdown options"
+                            );
+                            sectionErrors[
+                                `${column?.uuid}_${tempRowId}`
+                            ] = `Entered value "${
+                                currentSectionAnswers[
+                                    `${column?.uuid}_${tempRowId}`
+                                ]
+                            }" is not valid date format.
+
+
+                            `;
+                            sections.push(index);
+                            console.log("sections = ", sections);
+                            tempAsssessmentQuestionnaire = {
+                                ...tempAsssessmentQuestionnaire,
+                                [section?.uuid]: {
+                                    ...tempAsssessmentQuestionnaire[
+                                        section?.uuid
+                                    ],
+                                    [`${column?.uuid}_${tempRowId}`]: "",
+                                },
+                            };
+                        } else if (
                             column.columnType !== "prefilled" &&
                             column?.validation == "alphabets" &&
                             currentSectionAnswers[
@@ -520,6 +557,34 @@ function FillAssessment() {
                     ) {
                         sectionErrors[question?.uuid] =
                             " This is an alphanumeric field";
+                        sections.push(index);
+                    } else if (
+                        question.inputType === "date" &&
+                        currentSectionAnswers[question?.uuid] &&
+                        isNaN(
+                            new Date(
+                                currentSectionAnswers[question?.uuid]
+                            ).getTime()
+                        )
+                    ) {
+                        console.log("error from date question");
+                        console.log("section no", index);
+                        console.log("section no", sections);
+
+                        sectionErrors[question?.uuid] = `
+                        
+                        Entered value
+                        "${
+                            currentSectionAnswers[question?.uuid]
+                        }" is not valid date.
+                        `;
+                        tempAsssessmentQuestionnaire = {
+                            ...tempAsssessmentQuestionnaire,
+                            [section?.uuid]: {
+                                ...tempAsssessmentQuestionnaire[section?.uuid],
+                                [question?.uuid]: "",
+                            },
+                        };
                         sections.push(index);
                     } else {
                         delete sectionErrors[question?.uuid];
