@@ -215,7 +215,7 @@ const TableLayoutCellComponent = ({
       });
 
       setIsDisabledPrimaryButton(false);
-
+      
       let tempAssessment = { ...assessmentQuestionnaire };
       tempAssessment[sectionUUID][`${columnUUID}_${rowId}`] = [
         ...oldFiles,
