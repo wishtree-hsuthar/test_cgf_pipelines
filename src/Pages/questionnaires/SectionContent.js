@@ -664,7 +664,9 @@ const SectionContent = ({
                     `${ADD_QUESTIONNAIRE}/publish/${response}`
                 );
             } catch (error) {
+                setDisableButton(false)
                 if (error?.code === "ERR_CANCELED") return;
+
                 console.log("in onPublishButtonClickHandler ");
                 setErrorToaster(error);
             }
@@ -773,6 +775,7 @@ const SectionContent = ({
                         </div>
                     )}
                     <form>
+                        {console.log("global section title error:- ",globalSectionTitleError.errMsg)}
                         <div className="sect-form-card-blk">
                             <div className="sect-form-card-innerblk flex-between">
                                 <div className="sect-card-form-leftfield">
@@ -784,7 +787,7 @@ const SectionContent = ({
                                         <TextField
                                             className={`input-field ${
                                                 (section.sectionTitle === "" &&
-                                                    globalSectionTitleError?.errMsg &&
+                                                    globalSectionTitleError?.sectionTitleEmpty &&
                                                     "input-error") ||
                                                 (checkNamePresentInSameNameArrayList(
                                                     section.sectionTitle

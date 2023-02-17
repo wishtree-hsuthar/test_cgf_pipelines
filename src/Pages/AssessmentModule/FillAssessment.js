@@ -308,6 +308,9 @@ function FillAssessment() {
 
             handleCatchError(error, "saveAssessmentAsDraft");
         }
+        finally{
+            setDisableFillAssessment(false)
+        }
     };
 
     const handleFormSubmit = (e, saveAsDraft) => {

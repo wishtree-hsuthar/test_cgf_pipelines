@@ -226,9 +226,9 @@ const AddSubAdmin = () => {
         }
     };
     const handleOnsubmitAddCGFAdmin = async (data) => {
-        data.countryCode = data.countryCode.slice(
-            data.countryCode.indexOf("+")
-        );
+        // data.countryCode = data.countryCode.slice(
+        //     data.countryCode.indexOf("+")
+        // );
 
         console.log("new phone number", data);
         addSubAdminData(data);
