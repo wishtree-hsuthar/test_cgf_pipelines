@@ -54,7 +54,11 @@ const FillAssessmentQuestion = ({
     const handleChecked = (e) => {
         const { name, value, checked } = e.target;
         let values = answer;
-     console.log("values :- ",values)
+        if (typeof answer === "string") {
+            values = answer.split(",");
+        }
+        console.log("Answer = ", answer);
+
         if (checked) {
             values.push(value);
         } else {
@@ -65,8 +69,7 @@ const FillAssessmentQuestion = ({
     };
 
     const params = useParams();
-console.log("error for date:- ",error
-)
+    console.log("error for date:- ", error);
     let questionComponent =
         question.inputType === "singleTextbox" ? (
             <TextField

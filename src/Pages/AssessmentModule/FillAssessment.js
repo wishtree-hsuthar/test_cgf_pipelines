@@ -307,9 +307,8 @@ function FillAssessment() {
             // setDisableFillAssessment(false);
 
             handleCatchError(error, "saveAssessmentAsDraft");
-        }
-        finally{
-            setDisableFillAssessment(false)
+        } finally {
+            setDisableFillAssessment(false);
         }
     };
 
@@ -500,6 +499,10 @@ function FillAssessment() {
                     ) {
                         console.log("error from required");
                         console.log("section no", index);
+                        console.log(
+                            "answer in required",
+                            currentSectionAnswers[question?.uuid]
+                        );
                         sectionErrors[question?.uuid] =
                             "This is required field";
                         sections.push(index);
@@ -529,6 +532,49 @@ function FillAssessment() {
                             },
                         };
                         sections.push(index);
+                    } else if (question.inputType == "checkbox") {
+                        let answerOptions =
+                            currentSectionAnswers[question?.uuid];
+                        if (typeof answerOptions === "string") {
+                            answerOptions =
+                                currentSectionAnswers[question?.uuid].split(
+                                    ","
+                                );
+                        }
+                        console.log("error from checkbox question");
+                        console.log("section no", index);
+                        console.log("section no", sections);
+                        console.log("answer for checkbox", answerOptions);
+
+                        let optionsFromQuestion = question.options;
+                        let optionsPresentInBothAnswerAndQuestionList =
+                            answerOptions.filter((option) =>
+                                optionsFromQuestion.includes(option)
+                            );
+
+                        if (
+                            optionsPresentInBothAnswerAndQuestionList.length ===
+                            0
+                        ) {
+                            sectionErrors[question?.uuid] = `
+                        
+                        Entered value
+                        "${
+                            currentSectionAnswers[question?.uuid]
+                        }" is not part of above list. Please select valid option among listed values from list.
+                        `;
+                            sections.push(index);
+                        } else {
+                            delete sectionErrors[question?.uuid];
+                        }
+                        tempAsssessmentQuestionnaire = {
+                            ...tempAsssessmentQuestionnaire,
+                            [section?.uuid]: {
+                                ...tempAsssessmentQuestionnaire[section?.uuid],
+                                [question?.uuid]:
+                                    optionsPresentInBothAnswerAndQuestionList,
+                            },
+                        };
                     } else if (
                         question.validation === "alphabets" &&
                         currentSectionAnswers[question?.uuid] &&
