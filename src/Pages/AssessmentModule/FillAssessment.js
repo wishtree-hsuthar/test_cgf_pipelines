@@ -82,6 +82,7 @@ function a11yProps(index) {
 const helperTextForReason = {
     comment: {
         required: "Enter the reason for rejecting assessment.",
+        minLength: "Minimum 3 character required.",
     },
 };
 
@@ -1059,6 +1060,7 @@ function FillAssessment() {
                         control={control}
                         rules={{
                             required: true,
+                            minLength: 3,
                         }}
                         render={({ field, fieldState: { error } }) => (
                             <TextField

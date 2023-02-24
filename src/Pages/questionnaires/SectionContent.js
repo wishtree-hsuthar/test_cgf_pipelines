@@ -451,7 +451,7 @@ const SectionContent = ({
         // console.log("questionnaire", questionnaire);
 
         if (questionnaire?.title === "" || questionnaire?.sheetName === "") {
-            // setGlobalSectionTitleError({ errMsg: "Section title required" });
+            setGlobalSectionTitleError({ errMsg: "Section title required" });
             countError++;
         }
         for (let i = 0; i < questionnaire.sections.length; i++) {
@@ -664,7 +664,7 @@ const SectionContent = ({
                     `${ADD_QUESTIONNAIRE}/publish/${response}`
                 );
             } catch (error) {
-                setDisableButton(false)
+                setDisableButton(false);
                 if (error?.code === "ERR_CANCELED") return;
 
                 console.log("in onPublishButtonClickHandler ");
@@ -775,7 +775,10 @@ const SectionContent = ({
                         </div>
                     )}
                     <form>
-                        {console.log("global section title error:- ",globalSectionTitleError.errMsg)}
+                        {console.log(
+                            "global section title error:- ",
+                            globalSectionTitleError.errMsg
+                        )}
                         <div className="sect-form-card-blk">
                             <div className="sect-form-card-innerblk flex-between">
                                 <div className="sect-card-form-leftfield">
