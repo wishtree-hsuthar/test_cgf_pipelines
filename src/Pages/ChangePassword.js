@@ -100,7 +100,9 @@ const ChangePassword = () => {
                     },
                     () => toasterRef.current()
                 );
-
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
                 reset();
             }
         } catch (error) {
