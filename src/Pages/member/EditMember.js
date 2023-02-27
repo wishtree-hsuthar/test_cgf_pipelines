@@ -28,13 +28,15 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import {
-    cgfActivitiesManufacturer,
-    cgfActivitiesRetailer,
-    cgfCategories,
-    defaultValues,
+  defaultValues,
+  getCategories,
+  getCGFOffices,
 } from "../../utils/MemberModuleUtil";
 import Loader from "../../utils/Loader";
+
 import { Logger } from "../../Logger/Logger";
+let MEMBER_LOOKUP = {}
+let CGF_OFFICES = []
 const EditMember = () => {
     //custom hook to set title of page
     useDocumentTitle("Edit Member");
@@ -429,11 +431,22 @@ const EditMember = () => {
         trigger(name);
         trigger(code);
     };
-    useEffect(() => {
+    
+  const callGetCategories =async () => {
+    MEMBER_LOOKUP =await  getCategories()
+
+    console.log("MEMBER LOOKUP",MEMBER_LOOKUP)
+  }
+  const callGetOffices = async () => {
+    CGF_OFFICES = await getCGFOffices();
+  }
+  useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
         (async () => {
-            isMounted && (await getMemberByID1(isMounted));
+            Object.keys(MEMBER_LOOKUP)?.length === 0 && callGetCategories();
+      CGF_OFFICES?.length === 0 && callGetOffices()
+      isMounted && (await getMemberByID1(isMounted));
             isMounted && (await getRegions1(controller));
             isMounted && (await getCountryCode1(controller));
             isMounted && fetchRoles();
@@ -516,1135 +529,767 @@ const EditMember = () => {
                                             </div>
                                         </div>
 
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="companyType">
-                                                    Company Type{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
-                                                <div className="radio-btn-field">
-                                                    <Controller
-                                                        name="companyType"
-                                                        control={control}
-                                                        render={({ field }) => (
-                                                            <RadioGroup
-                                                                {...field}
-                                                                aria-labelledby="demo-radio-buttons-group-label"
-                                                                name="radio-buttons-group"
-                                                                className="radio-btn"
-                                                            >
-                                                                <FormControlLabel
-                                                                    disabled
-                                                                    value="Internal"
-                                                                    control={
-                                                                        <Radio />
-                                                                    }
-                                                                    label="Internal"
-                                                                />
-                                                                <FormControlLabel
-                                                                    disabled
-                                                                    value="External"
-                                                                    control={
-                                                                        <Radio />
-                                                                    }
-                                                                    label="External"
-                                                                />
-                                                            </RadioGroup>
-                                                        )}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="parentCompany">
-                                                    Parent Company
-                                                </label>
-                                                <Controller
-                                                    name="parentCompany"
-                                                    control={control}
-                                                    render={({
-                                                        field,
-                                                        fieldState: { error },
-                                                    }) => (
-                                                        <EditMemberAutoComplete
-                                                            disabled
-                                                            className="searchable-input"
-                                                            PaperComponent={({
-                                                                children,
-                                                            }) => (
-                                                                <Paper
-                                                                    className={
-                                                                        "autocomplete-option-txt"
-                                                                    }
-                                                                >
-                                                                    {children}
-                                                                </Paper>
-                                                            )}
-                                                            {...field}
-                                                            onSubmit={() =>
-                                                                setValue(
-                                                                    "parentCompany",
-                                                                    ""
-                                                                )
-                                                            }
-                                                            onChange={(
-                                                                event,
-                                                                newValue
-                                                            ) => {
-                                                                Logger.debug(
-                                                                    "new Value ",
-                                                                    newValue
-                                                                );
-                                                                if (newValue) {
-                                                                    typeof newValue ===
-                                                                    "object"
-                                                                        ? setValue(
-                                                                              "parentCompany",
-                                                                              newValue.name
-                                                                          )
-                                                                        : setValue(
-                                                                              "parentCompany",
-                                                                              newValue
-                                                                          );
-                                                                }
-                                                            }}
-                                                            onBlur={(e) =>
-                                                                setValue(
-                                                                    "parentCompany",
-                                                                    e.target.value?.trim()
-                                                                )
-                                                            }
-                                                            selectOnFocus
-                                                            handleHomeEndKeys
-                                                            id="free-solo-with-text-demo"
-                                                            // options={parentCompany}
-                                                            // getOptionLabel={(option) => {
-                                                            //   // Value selected with enter, right from the input
-                                                            //   if (typeof option === "string") {
-                                                            //     // Logger.debug("option inside type string",option)
-                                                            //     return option;
-                                                            //   }
-                                                            //   return option;
-                                                            // }}
-                                                            renderOption={(
-                                                                props,
-                                                                option
-                                                            ) => (
-                                                                <li {...props}>
-                                                                    {option}
-                                                                </li>
-                                                            )}
-                                                            //   sx={{ width: 300 }}
-                                                            freeSolo
-                                                            renderInput={(
-                                                                params
-                                                            ) => (
-                                                                <TextField
-                                                                    {...params}
-                                                                    onChange={(
-                                                                        e
-                                                                    ) =>
-                                                                        setValue(
-                                                                            "parentCompany",
-                                                                            e
-                                                                                .target
-                                                                                .value
-                                                                        )
-                                                                    }
-                                                                    onSubmit={() =>
-                                                                        setValue(
-                                                                            "parentCompany",
-                                                                            ""
-                                                                        )
-                                                                    }
-                                                                    placeholder="N/A"
-                                                                />
-                                                            )}
-                                                        />
-                                                    )}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                {/* <div className="select-field"> */}
-                                                <label htmlFor="cgfCategory">
-                                                    CGF Category{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
-                                                <Dropdown
-                                                    control={control}
-                                                    name="cgfCategory"
-                                                    placeholder="Select category"
-                                                    myHelper={memberHelper}
-                                                    rules={{ required: true }}
-                                                    myOnChange={
-                                                        categoryChangeHandler1
-                                                    }
-                                                    options={cgfCategories}
-                                                />
-                                            </div>
-                                            {/* </div> */}
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                {/* <div className="select-field"> */}
-                                                <label htmlFor="cgfActivity">
-                                                    CGF Activity{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
-                                                <Dropdown
-                                                    control={control}
-                                                    name="cgfActivity"
-                                                    placeholder="Select activity"
-                                                    myHelper={memberHelper}
-                                                    rules={{
-                                                        validate: (value) => {
-                                                            if (
-                                                                !value &&
-                                                                (watch(
-                                                                    "cgfCategory"
-                                                                ) ===
-                                                                    "Manufacturer" ||
-                                                                    watch(
-                                                                        "cgfCategory"
-                                                                    ) ===
-                                                                        "Retailer")
-                                                            )
-                                                                return "Select activity";
-                                                        },
-                                                    }}
-                                                    options={
-                                                        watch("cgfCategory") ===
-                                                        "Manufacturer"
-                                                            ? cgfActivitiesManufacturer
-                                                            : cgfActivitiesRetailer
-                                                    }
-                                                    isDisabled={
-                                                        watch("cgfCategory") ===
-                                                        "Other"
-                                                    }
-                                                />
-                                            </div>
-                                            {/* </div> */}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-inner-wrap">
-                                    <h2 className="sub-heading1">
-                                        Contact Detail
-                                    </h2>
-                                    <div className="flex-between card-blk">
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="corporateEmail">
-                                                    Corporate Email{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
-                                                <Input
-                                                    control={control}
-                                                    name="corporateEmail"
-                                                    onBlur={(e) =>
-                                                        setValue(
-                                                            "corporateEmail",
-                                                            e.target.value?.trim()
-                                                        )
-                                                    }
-                                                    placeholder="example@domain.com"
-                                                    myHelper={memberHelper}
-                                                    rules={{
-                                                        required: "true",
-                                                        maxLength: 50,
-                                                        minLength: 3,
-                                                        pattern:
-                                                            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="phoneNumber">
-                                                    Phone Number
-                                                </label>
-                                                <div className="phone-number-field">
-                                                    <div className="select-field country-code">
-                                                        <Controller
-                                                            control={control}
-                                                            name="countryCode"
-                                                            rules={{
-                                                                validate:
-                                                                    () => {
-                                                                        if (
-                                                                            !watch(
-                                                                                "countryCode"
-                                                                            ) &&
-                                                                            watch(
-                                                                                "phoneNumber"
-                                                                            )
-                                                                        )
-                                                                            return "Invalid input";
-                                                                    },
-                                                            }}
-                                                            // rules={{
-                                                            //   validate: () => {
-                                                            //     if (watch("phoneNumber") && !watch("countryCode"))
-                                                            //       return "Invalid Input";
-                                                            //   },
-                                                            // }}
-                                                            render={({
-                                                                field,
-                                                                fieldState: {
-                                                                    error,
-                                                                },
-                                                            }) => (
-                                                                <EditMemberAutoComplete
-                                                                    popupIcon={
-                                                                        <KeyboardArrowDownRoundedIcon />
-                                                                    }
-                                                                    PaperComponent={({
-                                                                        children,
-                                                                    }) => (
-                                                                        <Paper
-                                                                            className={
-                                                                                arrOfCountryCode?.length >
-                                                                                5
-                                                                                    ? "autocomplete-option-txt autocomplete-option-limit"
-                                                                                    : "autocomplete-option-txt"
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                children
-                                                                            }
-                                                                        </Paper>
-                                                                    )}
-                                                                    {...field}
-                                                                    className={`${
-                                                                        error &&
-                                                                        "autocomplete-error"
-                                                                    }`}
-                                                                    onChange={(
-                                                                        event,
-                                                                        newValue
-                                                                    ) => {
-                                                                        Logger.debug(
-                                                                            "inside autocomplete onchange"
-                                                                        );
-                                                                        Logger.debug(
-                                                                            "new Value ",
-                                                                            newValue
-                                                                        );
-                                                                        newValue &&
-                                                                        typeof newValue ===
-                                                                            "object"
-                                                                            ? setValue(
-                                                                                  "countryCode",
-                                                                                  newValue.name
-                                                                              )
-                                                                            : setValue(
-                                                                                  "countryCode",
-                                                                                  newValue
-                                                                              );
-                                                                        trigger(
-                                                                            "countryCode"
-                                                                        );
-                                                                        trigger(
-                                                                            "phoneNumber"
-                                                                        );
-                                                                    }}
-                                                                    // sx={{ width: 200 }}
-                                                                    options={
-                                                                        arrOfCountryCode
-                                                                    }
-                                                                    autoHighlight
-                                                                    // placeholder="Select country code"
-                                                                    // getOptionLabel={(country) => country.name + " " + country}
-                                                                    renderOption={(
-                                                                        props,
-                                                                        option
-                                                                    ) => (
-                                                                        <li
-                                                                            {...props}
-                                                                        >
-                                                                            {
-                                                                                option
-                                                                            }
-                                                                        </li>
-                                                                    )}
-                                                                    renderInput={(
-                                                                        params
-                                                                    ) => (
-                                                                        <TextField
-                                                                            // className={`input-field ${
-                                                                            //   error && "input-error"
-                                                                            // }`}
-                                                                            {...params}
-                                                                            inputProps={{
-                                                                                ...params.inputProps,
-                                                                            }}
-                                                                            onChange={() =>
-                                                                                trigger(
-                                                                                    "countryCode"
-                                                                                )
-                                                                            }
-                                                                            // onSubmit={() => setValue("countryCode", "")}
-                                                                            placeholder={
-                                                                                "+91"
-                                                                            }
-                                                                            helperText={
-                                                                                error
-                                                                                    ? memberHelper
-                                                                                          .countryCode[
-                                                                                          error
-                                                                                              ?.type
-                                                                                      ]
-                                                                                    : " "
-                                                                            }
-                                                                        />
-                                                                    )}
-                                                                />
-                                                            )}
-                                                        />
-                                                    </div>
-                                                    <Input
-                                                        control={control}
-                                                        name="phoneNumber"
-                                                        myOnChange={(e) =>
-                                                            phoneNumberChangeHandler(
-                                                                e,
-                                                                "phoneNumber",
-                                                                "countryCode"
-                                                            )
-                                                        }
-                                                        onBlur={(e) =>
-                                                            setValue(
-                                                                "phoneNumber",
-                                                                e.target.value?.trim()
-                                                            )
-                                                        }
-                                                        placeholder="1234567890"
-                                                        myHelper={memberHelper}
-                                                        rules={{
-                                                            maxLength: 15,
-                                                            minLength: 7,
-                                                            validate: (
-                                                                value
-                                                            ) => {
-                                                                if (
-                                                                    !watch(
-                                                                        "phoneNumber"
-                                                                    ) &&
-                                                                    watch(
-                                                                        "countryCode"
-                                                                    )
-                                                                )
-                                                                    return "invalid input";
-                                                                if (
-                                                                    value &&
-                                                                    !Number(
-                                                                        value
-                                                                    )
-                                                                )
-                                                                    return "Invalid input";
-                                                            },
-                                                        }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="websiteUrl">
-                                                    Website URL
-                                                </label>
-                                                <Input
-                                                    control={control}
-                                                    name="websiteUrl"
-                                                    onBlur={(e) =>
-                                                        setValue(
-                                                            "websiteUrl",
-                                                            e.target.value?.trim()
-                                                        )
-                                                    }
-                                                    placeholder="www.google.com"
-                                                    myHelper={memberHelper}
-                                                    rules={{
-                                                        maxLength: 50,
-                                                        minLength: 3,
-                                                        pattern:
-                                                            /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-inner-wrap">
-                                    <h2 className="sub-heading1">
-                                        Company Address Detail
-                                    </h2>
-                                    <div className="flex-between card-blk">
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="region">
-                                                    Region{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
-                                                <Dropdown
-                                                    control={control}
-                                                    myOnChange={
-                                                        onRegionChangeHandler1
-                                                    }
-                                                    name="region"
-                                                    placeholder="Select region"
-                                                    myHelper={memberHelper}
-                                                    rules={{ required: true }}
-                                                    options={arrOfRegions}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="country">
-                                                    Country{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
-                                                <Dropdown
-                                                    isDisabled={
-                                                        !watch("region")
-                                                    }
-                                                    control={control}
-                                                    name="country"
-                                                    myOnChange={
-                                                        onCountryChangeHandler1
-                                                    }
-                                                    placeholder="Select country"
-                                                    myHelper={memberHelper}
-                                                    rules={{ required: true }}
-                                                    options={
-                                                        arrOfCountryRegions
-                                                    }
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="state">
-                                                    State
-                                                </label>
-                                                <Dropdown
-                                                    isDisabled={
-                                                        !watch("country")
-                                                    }
-                                                    control={control}
-                                                    name="state"
-                                                    placeholder="Enter state"
-                                                    myOnChange={
-                                                        onStateChangeHandler
-                                                    }
-                                                    myHelper={memberHelper}
-                                                    options={arrOfStateCountry}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="city">
-                                                    City
-                                                </label>
-                                                <Controller
-                                                    name="city"
-                                                    control={control}
-                                                    render={({
-                                                        field,
-                                                        fieldState: { error },
-                                                    }) => (
-                                                        <EditMemberAutoComplete
-                                                            {...field}
-                                                            className="searchable-input"
-                                                            PaperComponent={({
-                                                                children,
-                                                            }) =>
-                                                                watch("city")
-                                                                    ?.length >
-                                                                    0 && (
-                                                                    <Paper
-                                                                        className={
-                                                                            arrOfCites?.length >
-                                                                            5
-                                                                                ? "autocomplete-option-txt autocomplete-option-limit"
-                                                                                : "autocomplete-option-txt"
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            children
-                                                                        }
-                                                                    </Paper>
-                                                                )
-                                                            }
-                                                            disabled={
-                                                                !watch(
-                                                                    "country"
-                                                                )
-                                                            }
-                                                            onSubmit={() =>
-                                                                setValue(
-                                                                    "city",
-                                                                    ""
-                                                                )
-                                                            }
-                                                            onChange={(
-                                                                event,
-                                                                newValue
-                                                            ) => {
-                                                                Logger.debug(
-                                                                    "new Value ",
-                                                                    newValue
-                                                                );
-                                                                if (newValue) {
-                                                                    typeof newValue ===
-                                                                    "object"
-                                                                        ? setValue(
-                                                                              "city",
-                                                                              newValue.name
-                                                                          )
-                                                                        : setValue(
-                                                                              "city",
-                                                                              newValue
-                                                                          );
-                                                                }
-                                                            }}
-                                                            onBlur={(e) =>
-                                                                setValue(
-                                                                    "city",
-                                                                    e.target.value?.trim()
-                                                                )
-                                                            }
-                                                            selectOnFocus
-                                                            handleHomeEndKeys
-                                                            id="free-solo-with-text-demo"
-                                                            options={arrOfCites}
-                                                            // getOptionLabel={(option) => {
-                                                            //   // Value selected with enter, right from the input
-                                                            //   if (typeof option === "string") {
-                                                            //     // Logger.debug("option inside type string",option)
-                                                            //     return option;
-                                                            //   }
-                                                            //   return option;
-                                                            // }}
-                                                            renderOption={(
-                                                                props,
-                                                                option
-                                                            ) => (
-                                                                <li {...props}>
-                                                                    {option}
-                                                                </li>
-                                                            )}
-                                                            //   sx={{ width: 300 }}
-                                                            freeSolo
-                                                            renderInput={(
-                                                                params
-                                                            ) => (
-                                                                <TextField
-                                                                    {...params}
-                                                                    onChange={(
-                                                                        e
-                                                                    ) =>
-                                                                        setValue(
-                                                                            "city",
-                                                                            e
-                                                                                .target
-                                                                                .value
-                                                                        )
-                                                                    }
-                                                                    onSubmit={() =>
-                                                                        setValue(
-                                                                            "city",
-                                                                            ""
-                                                                        )
-                                                                    }
-                                                                    placeholder="N/A"
-                                                                />
-                                                            )}
-                                                        />
-                                                    )}
-                                                />
-                                            </div>
-                                        </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="companyType">
+                          Company Type <span className="mandatory">*</span>
+                        </label>
+                        <div className="radio-btn-field">
+                          <Controller
+                            name="companyType"
+                            control={control}
+                            render={({ field }) => (
+                              <RadioGroup
+                                {...field}
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="radio-buttons-group"
+                                className="radio-btn"
+                              >
+                                <FormControlLabel
+                                  disabled
+                                  value="Internal"
+                                  control={<Radio />}
+                                  label="Internal"
+                                />
+                                <FormControlLabel
+                                  disabled
+                                  value="External"
+                                  control={<Radio />}
+                                  label="External"
+                                />
+                              </RadioGroup>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="parentCompany">Parent Company</label>
+                        <Controller
+                          name="parentCompany"
+                          control={control}
+                          render={({ field, fieldState: { error } }) => (
+                            <EditMemberAutoComplete
+                              disabled
+                              className="searchable-input"
+                              PaperComponent={({ children }) => (
+                                <Paper className={"autocomplete-option-txt"}>
+                                  {children}
+                                </Paper>
+                              )}
+                              {...field}
+                              onSubmit={() => setValue("parentCompany", "")}
+                              onChange={(event, newValue) => {
+                                console.log("new Value ", newValue);
+                                if (newValue) {
+                                  typeof newValue === "object"
+                                    ? setValue("parentCompany", newValue.name)
+                                    : setValue("parentCompany", newValue);
+                                }
+                              }}
+                              onBlur={(e) =>
+                                setValue(
+                                  "parentCompany",
+                                  e.target.value?.trim()
+                                )
+                              }
+                              selectOnFocus
+                              handleHomeEndKeys
+                              id="free-solo-with-text-demo"
+                              // options={parentCompany}
+                              // getOptionLabel={(option) => {
+                              //   // Value selected with enter, right from the input
+                              //   if (typeof option === "string") {
+                              //     // console.log("option inside type string",option)
+                              //     return option;
+                              //   }
+                              //   return option;
+                              // }}
+                              renderOption={(props, option) => (
+                                <li {...props}>{option}</li>
+                              )}
+                              //   sx={{ width: 300 }}
+                              freeSolo
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  onChange={(e) =>
+                                    setValue("parentCompany", e.target.value)
+                                  }
+                                  onSubmit={() => setValue("parentCompany", "")}
+                                  placeholder="N/A"
+                                />
+                              )}
+                            />
+                          )}
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        {/* <div className="select-field"> */}
+                        <label htmlFor="cgfCategory">
+                          CGF Category <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          control={control}
+                          name="cgfCategory"
+                          placeholder="Select category"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          myOnChange={categoryChangeHandler1}
+                          options={Object.keys(MEMBER_LOOKUP)?.length > 0 && Object.keys(MEMBER_LOOKUP)}
+                        />
+                      </div>
+                      {/* </div> */}
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        {/* <div className="select-field"> */}
+                        <label htmlFor="cgfActivity">
+                          CGF Activity{" "}
+                          
+                            <span className="mandatory">*</span>
+                          
+                        </label>
+                        <Dropdown
+                          control={control}
+                          name="cgfActivity"
+                          placeholder="Select activity"
+                          myHelper={memberHelper}
+                          rules={{
+                            validate: (value) => {
+                              if (
+                                !value &&
+                                (watch("cgfCategory") === "Manufacturer" ||
+                                  watch("cgfCategory") === "Retailer")
+                              )
+                                return "Select activity";
+                            },
+                          }}
+                          options={Object.keys(MEMBER).length > 0 && MEMBER_LOOKUP[watch("cgfCategory")]}
+                          isDisabled={watch("cgfCategory") === "Other"}
+                        />
+                      </div>
+                      {/* </div> */}
+                    </div>
+                  </div>
+                </div>
+                <div className="card-inner-wrap">
+                  <h2 className="sub-heading1">Contact Detail</h2>
+                  <div className="flex-between card-blk">
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="corporateEmail">
+                          Corporate Email <span className="mandatory">*</span>
+                        </label>
+                        <Input
+                          control={control}
+                          name="corporateEmail"
+                          onBlur={(e) =>
+                            setValue("corporateEmail", e.target.value?.trim())
+                          }
+                          placeholder="example@domain.com"
+                          myHelper={memberHelper}
+                          rules={{
+                            required: "true",
+                            maxLength: 50,
+                            minLength: 3,
+                            pattern:
+                              /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="phoneNumber">Phone Number</label>
+                        <div className="phone-number-field">
+                          <div className="select-field country-code">
+                            <Controller
+                              control={control}
+                              name="countryCode"
+                              rules={{
+                                validate: () => {
+                                  if (
+                                    !watch("countryCode") &&
+                                    watch("phoneNumber")
+                                  )
+                                    return "Invalid input";
+                                },
+                              }}
+                              // rules={{
+                              //   validate: () => {
+                              //     if (watch("phoneNumber") && !watch("countryCode"))
+                              //       return "Invalid Input";
+                              //   },
+                              // }}
+                              render={({ field, fieldState: { error } }) => (
+                                <EditMemberAutoComplete
+                                  popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                  PaperComponent={({ children }) => (
+                                    <Paper
+                                      className={
+                                        arrOfCountryCode?.length > 5
+                                          ? "autocomplete-option-txt autocomplete-option-limit"
+                                          : "autocomplete-option-txt"
+                                      }
+                                    >
+                                      {children}
+                                    </Paper>
+                                  )}
+                                  {...field}
+                                  className={`${error && "autocomplete-error"}`}
+                                  onChange={(event, newValue) => {
+                                    console.log("inside autocomplete onchange");
+                                    console.log("new Value ", newValue);
+                                    newValue && typeof newValue === "object"
+                                      ? setValue("countryCode", newValue.name)
+                                      : setValue("countryCode", newValue);
+                                    trigger("countryCode");
+                                    trigger("phoneNumber");
+                                  }}
+                                  // sx={{ width: 200 }}
+                                  options={arrOfCountryCode}
+                                  autoHighlight
+                                  // placeholder="Select country code"
+                                  // getOptionLabel={(country) => country.name + " " + country}
+                                  renderOption={(props, option) => (
+                                    <li {...props}>{option}</li>
+                                  )}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      // className={`input-field ${
+                                      //   error && "input-error"
+                                      // }`}
+                                      {...params}
+                                      inputProps={{
+                                        ...params.inputProps,
+                                      }}
+                                      onChange={() => trigger("countryCode")}
+                                      // onSubmit={() => setValue("countryCode", "")}
+                                      placeholder={"+91"}
+                                      helperText={
+                                        error
+                                          ? memberHelper.countryCode[
+                                              error?.type
+                                            ]
+                                          : " "
+                                      }
+                                    />
+                                  )}
+                                />
+                              )}
+                            />
+                          </div>
+                          <Input
+                            control={control}
+                            name="phoneNumber"
+                            myOnChange={(e) =>
+                              phoneNumberChangeHandler(
+                                e,
+                                "phoneNumber",
+                                "countryCode"
+                              )
+                            }
+                            onBlur={(e) =>
+                              setValue("phoneNumber", e.target.value?.trim())
+                            }
+                            placeholder="1234567890"
+                            myHelper={memberHelper}
+                            rules={{
+                              maxLength: 15,
+                              minLength: 7,
+                              validate: (value) => {
+                                if (
+                                  !watch("phoneNumber") &&
+                                  watch("countryCode")
+                                )
+                                  return "invalid input";
+                                if (value && !Number(value))
+                                  return "Invalid input";
+                              },
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="websiteUrl">Website URL</label>
+                        <Input
+                          control={control}
+                          name="websiteUrl"
+                          onBlur={(e) =>
+                            setValue("websiteUrl", e.target.value?.trim())
+                          }
+                          placeholder="www.google.com"
+                          myHelper={memberHelper}
+                          rules={{
+                            maxLength: 50,
+                            minLength: 3,
+                            pattern:
+                              /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-inner-wrap">
+                  <h2 className="sub-heading1">Company Address Detail</h2>
+                  <div className="flex-between card-blk">
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="region">
+                          Region <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          control={control}
+                          myOnChange={onRegionChangeHandler1}
+                          name="region"
+                          placeholder="Select region"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          options={arrOfRegions}
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="country">
+                          Country <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          isDisabled={!watch("region")}
+                          control={control}
+                          name="country"
+                          myOnChange={onCountryChangeHandler1}
+                          placeholder="Select country"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          options={arrOfCountryRegions}
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="state">State</label>
+                        <Dropdown
+                          isDisabled={!watch("country")}
+                          control={control}
+                          name="state"
+                          placeholder="Enter state"
+                          myOnChange={onStateChangeHandler}
+                          myHelper={memberHelper}
+                          options={arrOfStateCountry}
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="city">City</label>
+                        <Controller
+                          name="city"
+                          control={control}
+                          render={({ field, fieldState: { error } }) => (
+                            <EditMemberAutoComplete
+                              {...field}
+                              className="searchable-input"
+                              PaperComponent={({ children }) =>
+                                watch("city")?.length > 0 && (
+                                  <Paper
+                                    className={
+                                      arrOfCites?.length > 5
+                                        ? "autocomplete-option-txt autocomplete-option-limit"
+                                        : "autocomplete-option-txt"
+                                    }
+                                  >
+                                    {children}
+                                  </Paper>
+                                )
+                              }
+                              disabled={!watch("country")}
+                              onSubmit={() => setValue("city", "")}
+                              onChange={(event, newValue) => {
+                                console.log("new Value ", newValue);
+                                if (newValue) {
+                                  typeof newValue === "object"
+                                    ? setValue("city", newValue.name)
+                                    : setValue("city", newValue);
+                                }
+                              }}
+                              onBlur={(e) =>
+                                setValue("city", e.target.value?.trim())
+                              }
+                              selectOnFocus
+                              handleHomeEndKeys
+                              id="free-solo-with-text-demo"
+                              options={arrOfCites}
+                              // getOptionLabel={(option) => {
+                              //   // Value selected with enter, right from the input
+                              //   if (typeof option === "string") {
+                              //     // console.log("option inside type string",option)
+                              //     return option;
+                              //   }
+                              //   return option;
+                              // }}
+                              renderOption={(props, option) => (
+                                <li {...props}>{option}</li>
+                              )}
+                              //   sx={{ width: 300 }}
+                              freeSolo
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  onChange={(e) =>
+                                    setValue("city", e.target.value)
+                                  }
+                                  onSubmit={() => setValue("city", "")}
+                                  placeholder="N/A"
+                                />
+                              )}
+                            />
+                          )}
+                        />
+                      </div>
+                    </div>
 
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="address">
-                                                    Address
-                                                </label>
-                                                <Controller
-                                                    name="address"
-                                                    control={control}
-                                                    rules={{
-                                                        minLength: 3,
-                                                        maxLength: 250,
-                                                    }}
-                                                    render={({
-                                                        field,
-                                                        fieldState: { error },
-                                                    }) => (
-                                                        <TextField
-                                                            multiline
-                                                            {...field}
-                                                            onBlur={(e) =>
-                                                                setValue(
-                                                                    "address",
-                                                                    e.target.value?.trim()
-                                                                )
-                                                            }
-                                                            inputProps={{
-                                                                maxLength: 250,
-                                                            }}
-                                                            className={`input-textarea ${
-                                                                error &&
-                                                                "input-textarea-error"
-                                                            }`}
-                                                            id="outlined-basic"
-                                                            placeholder="Enter address"
-                                                            helperText={
-                                                                error
-                                                                    ? memberHelper
-                                                                          .address[
-                                                                          error
-                                                                              .type
-                                                                      ]
-                                                                    : " "
-                                                            }
-                                                            variant="outlined"
-                                                        />
-                                                    )}
-                                                />
-                                                {/* Add Address Text Area field here */}
-                                                {/* <Input control={control} name="city" placeholder="Enter state"/> */}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-inner-wrap">
-                                    <h2 className="sub-heading1">
-                                        CGF Office Detail
-                                    </h2>
-                                    <div className="flex-between card-blk">
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="cgfOfficeRegion">
-                                                    Region{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
-                                                <Dropdown
-                                                    isDisabled
-                                                    control={control}
-                                                    name="cgfOfficeRegion"
-                                                    // myOnChange={cgfOfficeRegionChangeHandler}
-                                                    placeholder="Select Region"
-                                                    myHelper={memberHelper}
-                                                    rules={{ required: true }}
-                                                    options={arrOfRegions}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="cgfOfficeCountry">
-                                                    Country{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
-                                                <Dropdown
-                                                    isDisabled
-                                                    control={control}
-                                                    name="cgfOfficeCountry"
-                                                    placeholder="Select country"
-                                                    myHelper={memberHelper}
-                                                    rules={{ required: true }}
-                                                    options={
-                                                        arrOfCgfOfficeCountryRegions
-                                                            ? arrOfCgfOfficeCountryRegions
-                                                            : []
-                                                    }
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="cgfOffice">
-                                                    Office{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
-                                                <Dropdown
-                                                    isDisabled
-                                                    control={control}
-                                                    name="cgfOffice"
-                                                    placeholder="Select office"
-                                                    myHelper={memberHelper}
-                                                    rules={{ required: true }}
-                                                    options={[
-                                                        "Bogota",
-                                                        "Paris",
-                                                        "Shanghai",
-                                                        "Tokyo",
-                                                        "Washington",
-                                                    ]}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-inner-wrap">
-                                    <h2 className="sub-heading1">
-                                        Representative Contact Detail
-                                    </h2>
-                                    <div className="flex-between card-blk">
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <div className="salutation-wrap">
-                                                    <div className="salutation-blk">
-                                                        <label htmlFor="memberContactSalutation">
-                                                            Salutation{" "}
-                                                            <span className="mandatory">
-                                                                *
-                                                            </span>
-                                                        </label>
-                                                        <Dropdown
-                                                            control={control}
-                                                            name="memberContactSalutation"
-                                                            placeholder=""
-                                                            myHelper={
-                                                                memberHelper
-                                                            }
-                                                            rules={{
-                                                                required: true,
-                                                            }}
-                                                            options={[
-                                                                "Mr.",
-                                                                "Mrs.",
-                                                                "Ms.",
-                                                            ]}
-                                                        />
-                                                    </div>
-                                                    <div className="salutation-inputblk">
-                                                        <label htmlFor="memberContactFullName">
-                                                            Full Name{" "}
-                                                            <span className="mandatory">
-                                                                *
-                                                            </span>
-                                                        </label>
-                                                        <Input
-                                                            control={control}
-                                                            myHelper={
-                                                                memberHelper
-                                                            }
-                                                            rules={{
-                                                                required: true,
-                                                                maxLength: 50,
-                                                                minLength: 3,
-                                                                pattern:
-                                                                    /^[A-Za-z]+[A-Za-z ]*$/,
-                                                            }}
-                                                            name="memberContactFullName"
-                                                            onBlur={(e) =>
-                                                                setValue(
-                                                                    "memberContactFullName",
-                                                                    e.target.value?.trim()
-                                                                )
-                                                            }
-                                                            placeholder="Enter full name"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="title">
-                                                    Job Title
-                                                </label>
-                                                <Input
-                                                    control={control}
-                                                    myHelper={memberHelper}
-                                                    isDisabled={disableMember}
-                                                    rules={{
-                                                        maxLength: 50,
-                                                        minLength: 3,
-                                                    }}
-                                                    name="title"
-                                                    onBlur={(e) =>
-                                                        setValue(
-                                                            "title",
-                                                            e.target.value?.trim()
-                                                        )
-                                                    }
-                                                    placeholder="Enter job title"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="department">
-                                                    Department
-                                                </label>
-                                                <Input
-                                                    control={control}
-                                                    myHelper={memberHelper}
-                                                    rules={{
-                                                        maxLength: 50,
-                                                        minLength: 3,
-                                                    }}
-                                                    isDisabled={disableMember}
-                                                    name="department"
-                                                    onBlur={(e) =>
-                                                        setValue(
-                                                            "department",
-                                                            e.target.value?.trim()
-                                                        )
-                                                    }
-                                                    placeholder="Enter department"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="memberContactEmail">
-                                                    Email{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
-                                                <Input
-                                                    isDisabled
-                                                    control={control}
-                                                    myHelper={memberHelper}
-                                                    rules={{
-                                                        required: true,
-                                                        maxLength: 50,
-                                                        minLength: 3,
-                                                        pattern:
-                                                            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                                                    }}
-                                                    name="memberContactEmail"
-                                                    onBlur={(e) =>
-                                                        setValue(
-                                                            "memberContactEmail",
-                                                            e.target.value?.trim()
-                                                        )
-                                                    }
-                                                    placeholder="N/A"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="memberContactPhoneNumber">
-                                                    Phone Number
-                                                </label>
-                                                <div className="phone-number-field">
-                                                    <div className="select-field country-code">
-                                                        <Controller
-                                                            control={control}
-                                                            name="memberContactCountryCode"
-                                                            rules={{
-                                                                validate:
-                                                                    () => {
-                                                                        if (
-                                                                            !watch(
-                                                                                "memberContactCountryCode"
-                                                                            ) &&
-                                                                            watch(
-                                                                                "memberContactPhoneNuber"
-                                                                            )
-                                                                        )
-                                                                            return "Invalid input";
-                                                                    },
-                                                            }}
-                                                            render={({
-                                                                field,
-                                                                fieldState: {
-                                                                    error,
-                                                                },
-                                                            }) => (
-                                                                <EditMemberAutoComplete
-                                                                    {...field}
-                                                                    className={`${
-                                                                        error &&
-                                                                        "autocomplete-error"
-                                                                    }`}
-                                                                    popupIcon={
-                                                                        <KeyboardArrowDownRoundedIcon />
-                                                                    }
-                                                                    PaperComponent={({
-                                                                        children,
-                                                                    }) => (
-                                                                        <Paper
-                                                                            className={
-                                                                                arrOfCountryCode?.length >
-                                                                                5
-                                                                                    ? "autocomplete-option-txt autocomplete-option-limit"
-                                                                                    : "autocomplete-option-txt"
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                children
-                                                                            }
-                                                                        </Paper>
-                                                                    )}
-                                                                    onChange={(
-                                                                        event,
-                                                                        newValue
-                                                                    ) => {
-                                                                        newValue &&
-                                                                        typeof newValue ===
-                                                                            "object"
-                                                                            ? setValue(
-                                                                                  "memberContactCountryCode",
-                                                                                  newValue.name
-                                                                              )
-                                                                            : setValue(
-                                                                                  "memberContactCountryCode",
-                                                                                  newValue
-                                                                              );
-                                                                        trigger(
-                                                                            "memberContactCountryCode"
-                                                                        );
-                                                                        trigger(
-                                                                            "memberContactPhoneNuber"
-                                                                        );
-                                                                    }}
-                                                                    // sx={{ width: 200 }}
-                                                                    options={
-                                                                        arrOfCountryCode
-                                                                    }
-                                                                    autoHighlight
-                                                                    placeholder="Select country code"
-                                                                    // getOptionLabel={(country) => country.name + " " + country}
-                                                                    renderOption={(
-                                                                        props,
-                                                                        option
-                                                                    ) => (
-                                                                        <li
-                                                                            {...props}
-                                                                        >
-                                                                            {
-                                                                                option
-                                                                            }
-                                                                        </li>
-                                                                    )}
-                                                                    renderInput={(
-                                                                        params
-                                                                    ) => (
-                                                                        <TextField
-                                                                            {...params}
-                                                                            inputProps={{
-                                                                                ...params.inputProps,
-                                                                            }}
-                                                                            isDisabled={
-                                                                                disableMember
-                                                                            }
-                                                                            onChange={() =>
-                                                                                trigger(
-                                                                                    "memberContactPhoneNuber"
-                                                                                )
-                                                                            }
-                                                                            // onSubmit={() =>
-                                                                            //   setValue("memberContactCountryCode", "")
-                                                                            // }
-                                                                            placeholder={
-                                                                                "N/A"
-                                                                            }
-                                                                            disabled={
-                                                                                disableMember
-                                                                            }
-                                                                            helperText={
-                                                                                error
-                                                                                    ? memberHelper
-                                                                                          .countryCode[
-                                                                                          error
-                                                                                              ?.type
-                                                                                      ]
-                                                                                    : " "
-                                                                            }
-                                                                        />
-                                                                    )}
-                                                                />
-                                                            )}
-                                                        />
-                                                    </div>
-                                                    <Input
-                                                        control={control}
-                                                        name="memberContactPhoneNuber"
-                                                        myOnChange={(e) =>
-                                                            phoneNumberChangeHandler(
-                                                                e,
-                                                                "memberContactPhoneNuber",
-                                                                "memberContactCountryCode"
-                                                            )
-                                                        }
-                                                        onBlur={(e) =>
-                                                            setValue(
-                                                                "memberContactPhoneNuber",
-                                                                e.target.value?.trim()
-                                                            )
-                                                        }
-                                                        myHelper={memberHelper}
-                                                        rules={{
-                                                            maxLength: 15,
-                                                            minLength: 3,
-                                                            validate: (
-                                                                value
-                                                            ) => {
-                                                                if (
-                                                                    !watch(
-                                                                        "memberContactPhoneNuber"
-                                                                    ) &&
-                                                                    watch(
-                                                                        "memberContactCountryCode"
-                                                                    )
-                                                                )
-                                                                    return "invalid input";
-                                                                if (
-                                                                    value &&
-                                                                    !Number(
-                                                                        value
-                                                                    )
-                                                                )
-                                                                    return "Invalid input";
-                                                            },
-                                                        }}
-                                                        placeholder="1234567890"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="card-form-field">
-                                            <div className="form-group">
-                                                <label htmlFor="role">
-                                                    Role{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
-                                                </label>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="address">Address</label>
+                        <Controller
+                          name="address"
+                          control={control}
+                          rules={{
+                            minLength: 3,
+                            maxLength: 250,
+                          }}
+                          render={({ field, fieldState: { error } }) => (
+                            <TextField
+                              multiline
+                              {...field}
+                              onBlur={(e) =>
+                                setValue("address", e.target.value?.trim())
+                              }
+                              inputProps={{
+                                maxLength: 250,
+                              }}
+                              className={`input-textarea ${
+                                error && "input-textarea-error"
+                              }`}
+                              id="outlined-basic"
+                              placeholder="Enter address"
+                              helperText={
+                                error ? memberHelper.address[error.type] : " "
+                              }
+                              variant="outlined"
+                            />
+                          )}
+                        />
+                        {/* Add Address Text Area field here */}
+                        {/* <Input control={control} name="city" placeholder="Enter state"/> */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-inner-wrap">
+                  <h2 className="sub-heading1">CGF Office Detail</h2>
+                  <div className="flex-between card-blk">
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="cgfOfficeRegion">
+                          Region <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          isDisabled
+                          control={control}
+                          name="cgfOfficeRegion"
+                          // myOnChange={cgfOfficeRegionChangeHandler}
+                          placeholder="Select Region"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          options={arrOfRegions}
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="cgfOfficeCountry">
+                          Country <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          isDisabled
+                          control={control}
+                          name="cgfOfficeCountry"
+                          placeholder="Select country"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          options={
+                            arrOfCgfOfficeCountryRegions
+                              ? arrOfCgfOfficeCountryRegions
+                              : []
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="cgfOffice">
+                          Office <span className="mandatory">*</span>
+                        </label>
+                        <Dropdown
+                          isDisabled
+                          control={control}
+                          name="cgfOffice"
+                          placeholder="Select office"
+                          myHelper={memberHelper}
+                          rules={{ required: true }}
+                          options={CGF_OFFICES }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-inner-wrap">
+                  <h2 className="sub-heading1">
+                    Representative Contact Detail
+                  </h2>
+                  <div className="flex-between card-blk">
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <div className="salutation-wrap">
+                          <div className="salutation-blk">
+                            <label htmlFor="memberContactSalutation">
+                              Salutation <span className="mandatory">*</span>
+                            </label>
+                            <Dropdown
+                              control={control}
+                              name="memberContactSalutation"
+                              placeholder=""
+                              myHelper={memberHelper}
+                              rules={{
+                                required: true,
+                              }}
+                              options={["Mr.", "Mrs.", "Ms."]}
+                            />
+                          </div>
+                          <div className="salutation-inputblk">
+                            <label htmlFor="memberContactFullName">
+                              Full Name <span className="mandatory">*</span>
+                            </label>
+                            <Input
+                              control={control}
+                              myHelper={memberHelper}
+                              rules={{
+                                required: true,
+                                maxLength: 50,
+                                minLength: 3,
+                                pattern: /^[A-Za-z]+[A-Za-z ]*$/,
+                              }}
+                              name="memberContactFullName"
+                              onBlur={(e) =>
+                                setValue(
+                                  "memberContactFullName",
+                                  e.target.value?.trim()
+                                )
+                              }
+                              placeholder="Enter full name"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="title">Job Title</label>
+                        <Input
+                          control={control}
+                          myHelper={memberHelper}
+                          isDisabled={disableMember}
+                          rules={{
+                            maxLength: 50,
+                            minLength: 3,
+                          }}
+                          name="title"
+                          onBlur={(e) =>
+                            setValue("title", e.target.value?.trim())
+                          }
+                          placeholder="Enter job title"
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="department">Department</label>
+                        <Input
+                          control={control}
+                          myHelper={memberHelper}
+                          rules={{
+                            maxLength: 50,
+                            minLength: 3,
+                          }}
+                          isDisabled={disableMember}
+                          name="department"
+                          onBlur={(e) =>
+                            setValue("department", e.target.value?.trim())
+                          }
+                          placeholder="Enter department"
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="memberContactEmail">
+                          Email <span className="mandatory">*</span>
+                        </label>
+                        <Input
+                          isDisabled
+                          control={control}
+                          myHelper={memberHelper}
+                          rules={{
+                            required: true,
+                            maxLength: 50,
+                            minLength: 3,
+                            pattern:
+                              /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                          }}
+                          name="memberContactEmail"
+                          onBlur={(e) =>
+                            setValue(
+                              "memberContactEmail",
+                              e.target.value?.trim()
+                            )
+                          }
+                          placeholder="N/A"
+                        />
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="memberContactPhoneNumber">
+                          Phone Number
+                        </label>
+                        <div className="phone-number-field">
+                          <div className="select-field country-code">
+                            <Controller
+                              control={control}
+                              name="memberContactCountryCode"
+                              rules={{
+                                validate: () => {
+                                  if (
+                                    !watch("memberContactCountryCode") &&
+                                    watch("memberContactPhoneNuber")
+                                  )
+                                    return "Invalid input";
+                                },
+                              }}
+                              render={({ field, fieldState: { error } }) => (
+                                <EditMemberAutoComplete
+                                  {...field}
+                                  className={`${error && "autocomplete-error"}`}
+                                  popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                  PaperComponent={({ children }) => (
+                                    <Paper
+                                      className={
+                                        arrOfCountryCode?.length > 5
+                                          ? "autocomplete-option-txt autocomplete-option-limit"
+                                          : "autocomplete-option-txt"
+                                      }
+                                    >
+                                      {children}
+                                    </Paper>
+                                  )}
+                                  onChange={(event, newValue) => {
+                                    newValue && typeof newValue === "object"
+                                      ? setValue(
+                                          "memberContactCountryCode",
+                                          newValue.name
+                                        )
+                                      : setValue(
+                                          "memberContactCountryCode",
+                                          newValue
+                                        );
+                                    trigger("memberContactCountryCode");
+                                    trigger("memberContactPhoneNuber");
+                                  }}
+                                  // sx={{ width: 200 }}
+                                  options={arrOfCountryCode}
+                                  autoHighlight
+                                  placeholder="Select country code"
+                                  // getOptionLabel={(country) => country.name + " " + country}
+                                  renderOption={(props, option) => (
+                                    <li {...props}>{option}</li>
+                                  )}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      inputProps={{
+                                        ...params.inputProps,
+                                      }}
+                                      isDisabled={disableMember}
+                                      onChange={() =>
+                                        trigger("memberContactPhoneNuber")
+                                      }
+                                      // onSubmit={() =>
+                                      //   setValue("memberContactCountryCode", "")
+                                      // }
+                                      placeholder={"N/A"}
+                                      disabled={disableMember}
+                                      helperText={
+                                        error
+                                          ? memberHelper.countryCode[
+                                              error?.type
+                                            ]
+                                          : " "
+                                      }
+                                    />
+                                  )}
+                                />
+                              )}
+                            />
+                          </div>
+                          <Input
+                            control={control}
+                            name="memberContactPhoneNuber"
+                            myOnChange={(e) =>
+                              phoneNumberChangeHandler(
+                                e,
+                                "memberContactPhoneNuber",
+                                "memberContactCountryCode"
+                              )
+                            }
+                            onBlur={(e) =>
+                              setValue(
+                                "memberContactPhoneNuber",
+                                e.target.value?.trim()
+                              )
+                            }
+                            myHelper={memberHelper}
+                            rules={{
+                              maxLength: 15,
+                              minLength: 3,
+                              validate: (value) => {
+                                if (
+                                  !watch("memberContactPhoneNuber") &&
+                                  watch("memberContactCountryCode")
+                                )
+                                  return "invalid input";
+                                if (value && !Number(value))
+                                  return "Invalid input";
+                              },
+                            }}
+                            placeholder="1234567890"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="role">
+                          Role <span className="mandatory">*</span>
+                        </label>
 
                                                 <div>
                                                     <Dropdown

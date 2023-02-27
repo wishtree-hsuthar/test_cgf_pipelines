@@ -4,13 +4,16 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUser } from "../redux/UserSlice";
-import { LOGOUT_URL } from "../api/Url";
+import { LOGOUT_URL, MASTER_LINK } from "../api/Url";
 import { privateAxios } from "../api/axios";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 import "./Header.css";
+import axios from "axios";
+
+let REPORT_ISSUE_LINK = ""
 const Header = () => {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [isActive, setActive] = React.useState("false");
@@ -133,7 +136,23 @@ const Header = () => {
         },
         []
     );
+    
+    const getReportIssueLink =async () => {
+        try {
+            const response = await axios.get(MASTER_LINK+'/reportIssueOnZoho')
+            console.log("response:- ",response.data)
+            REPORT_ISSUE_LINK = response?.data
+        } catch (error) {
+            console.log("Error:- ",error)
+        }
+       
+    }
+    useEffect(() => {
+      REPORT_ISSUE_LINK?.length === 0 && getReportIssueLink()
 
+    }, [])
+    console.log("REPORT ISSUE LINK:- ",REPORT_ISSUE_LINK)
+    
     // Define state and function to update the value
     const [hoverStatus, setHover] = useState(false);
     const [hoverNameStatus, setNameHover] = useState(false);
@@ -545,6 +564,16 @@ const Header = () => {
                                                                     <span className="addmore-txt">
                                                                         Change
                                                                         Password
+                                                                    </span>
+                                                                </div>
+                                                                <div
+                                                                    className="tertiary-btn-blk mt-20"
+                                                                    onClick={
+                                                                        handleChangePassword
+                                                                    }
+                                                                >
+                                                                    <span className="addmore-txt">
+                                                                       <a href={REPORT_ISSUE_LINK} target={"_blank"} style={{textDecoration:"none",color:"#f7a823"}}>Raise an Issue</a> 
                                                                     </span>
                                                                 </div>
                                                                 <div className="form-btn flex-center mt-20">

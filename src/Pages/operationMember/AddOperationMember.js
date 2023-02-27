@@ -24,11 +24,13 @@ import {
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
-import { helperText } from "../../utils/OperationMemberModuleUtil";
+import { getOperationTypes, helperText } from "../../utils/OperationMemberModuleUtil";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
+
 import { Logger } from "../../Logger/Logger";
+let OPERATION_TYPES = []
 function AddOperationMember() {
     //custom hook to set title of page
     useDocumentTitle("Add Operation Member");
@@ -117,9 +119,13 @@ function AddOperationMember() {
         trigger(name);
         trigger(code);
     };
+    const callGetOperationType =async () => {
+       OPERATION_TYPES =await getOperationTypes()
+    }
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
+        OPERATION_TYPES?.length === 0 && callGetOperationType()
         const fetchMemberComapany = async () => {
             try {
                 const response = await privateAxios.get(MEMBER_DROPDOWN, {
@@ -759,12 +765,7 @@ function AddOperationMember() {
                                                     "Select operation type"
                                                 }
                                                 rules={{ required: true }}
-                                                options={[
-                                                    "Warehousing and Distribution",
-                                                    "Manufacturing/Bottling/Roasting",
-                                                    "Logistics and Transport",
-                                                    "Retail/Franchise/Merchandisers",
-                                                ]}
+                                                options={OPERATION_TYPES}
                                             />
                                         </div>
                                     </div>
