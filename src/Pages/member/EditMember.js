@@ -1,23 +1,23 @@
 import {
-  Autocomplete as EditMemberAutoComplete,
-  FormControlLabel,
-  Paper,
-  Radio,
-  RadioGroup,
-  TextField,
+    Autocomplete as EditMemberAutoComplete,
+    FormControlLabel,
+    Paper,
+    Radio,
+    RadioGroup,
+    TextField,
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  CITES,
-  COUNTRIES,
-  FETCH_ROLES,
-  MEMBER,
-  REGIONCOUNTRIES,
-  REGIONS,
-  STATES,
+    CITES,
+    COUNTRIES,
+    FETCH_ROLES,
+    MEMBER,
+    REGIONCOUNTRIES,
+    REGIONS,
+    STATES,
 } from "../../api/Url";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
@@ -36,388 +36,402 @@ import Loader from "../../utils/Loader";
 
 let MEMBER_LOOKUP = {}
 let CGF_OFFICES = []
-
+import { Logger } from "../../Logger/Logger";
 const EditMember = () => {
-  //custom hook to set title of page
-  useDocumentTitle("Edit Member");
+    //custom hook to set title of page
+    useDocumentTitle("Edit Member");
 
-  const param = useParams();
-  const navigate = useNavigate();
-  const [disableEditMemberUpdateButton, setDisableEditMemberUpdateButton] =
-    useState(false);
-  // Refr for Toaster
-  const myRef = React.useRef();
-  //Toaster Message setter
-  const [toasterDetailsEditMember, setToasterDetailsEditMember] =
-    useCallbackState({
-      titleMessage: "",
-      descriptionMessage: "",
-      messageType: "success",
-    });
-  //method to call all error toaster from this method
-  const setErrorToaster1 = (error) => {
-    console.log("error", error);
-    setToasterDetailsEditMember(
-      {
-        titleMessage: "Error",
-        descriptionMessage:
-          error?.response?.data?.message &&
-          typeof error.response.data.message === "string"
-            ? error.response.data.message
-            : "Something went wrong.",
-        messageType: "error",
-      },
-      () => myRef.current()
-    );
-  };
-  //to hold all regions
-  const [arrOfRegions, setArrOfRegions] = useState([]);
-  //to hold array of countries for perticular region for Company Adress
-  const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
-  //to hold array of Country states
-  const [arrOfStateCountry, setArrOfStateCountry] = useState([]);
-  //to hold array of countries for perticular region for CGF Office details
-  const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
-    useState([]);
-  const [arrOfCites, setArrOfCites] = useState([]);
-
-  // state to manage loader
-  const [isEditMemberLoading, setIsEditMemberLoading] = useState(true);
-  const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
-  const [member, setMember] = useState({});
-
-  // state to hold roles
-  const [roles, setRoles] = useState([]);
-
-  const [disableMember, setDisableMember] = useState(false);
-  const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
-    reValidateMode: "onChange",
-    defaultValues: defaultValues,
-  });
-  const onSubmitFunctionCall = async (data) => {
-    console.log("data", data);
-    setIsEditMemberLoading(true);
-    try {
-      let backendObject = {
-        parentCompany: data.parentCompany,
-        countryCode: data.countryCode,
-        phoneNumber: data.phoneNumber,
-        website: data.websiteUrl,
-        state: data.state,
-        city: data.city,
-        companyName: data.memberCompany,
-        companyType: data.companyType,
-        cgfCategory: data.cgfCategory,
-        cgfActivity: data?.cgfActivity ? data.cgfActivity : "N/A",
-        corporateEmail: data.corporateEmail,
-        region: data.region,
-        country: data.country,
-        address: data.address,
-        cgfOfficeRegion: data.cgfOfficeRegion,
-        cgfOfficeCountry: data.cgfOfficeCountry,
-        cgfOffice: data.cgfOffice,
-        memberRepresentative: {
-          id: member?.memberRepresentativeId[0]?._id,
-          title: data.title,
-          department: data.department,
-          salutation: data.memberContactSalutation,
-          name: data.memberContactFullName,
-          email: data.memberContactEmail,
-          countryCode: data.memberContactCountryCode,
-          phoneNumber: data?.memberContactPhoneNuber,
-          isActive: data.status === "active" ? true : false,
-          roleId: data.roleId,
-        },
-      };
-
-      console.log("Member Representative Id", member.createdBy);
-      const response = await axios.put(MEMBER + `/${param.id}`, {
-        ...backendObject,
-      });
-      if (response.status === 200) {
-        setIsEditMemberLoading(false);
-
-        setDisableEditMemberUpdateButton(false);
-        reset(defaultValues);
-
-        setToasterDetailsEditMember(
-          {
-            titleMessage: "Success!",
-            descriptionMessage: "Member details updated successfully!",
+    const param = useParams();
+    const navigate = useNavigate();
+    const [disableEditMemberUpdateButton, setDisableEditMemberUpdateButton] =
+        useState(false);
+    // Refr for Toaster
+    const myRef = React.useRef();
+    //Toaster Message setter
+    const [toasterDetailsEditMember, setToasterDetailsEditMember] =
+        useCallbackState({
+            titleMessage: "",
+            descriptionMessage: "",
             messageType: "success",
-          },
-          () => myRef.current()
-        );
-      }
-
-      console.log("Default values: ", defaultValues);
-    } catch (error) {
-      setIsEditMemberLoading(false);
-
-      if (error?.response?.status == 401) {
+        });
+    //method to call all error toaster from this method
+    const setErrorToaster1 = (error) => {
+        Logger.debug("error", error);
         setToasterDetailsEditMember(
-          {
-            titleMessage: "Error",
-            descriptionMessage: "Session Timeout: Please login again",
-            messageType: "error",
-          },
-          () => myRef.current()
+            {
+                titleMessage: "Error",
+                descriptionMessage:
+                    error?.response?.data?.message &&
+                    typeof error.response.data.message === "string"
+                        ? error.response.data.message
+                        : "Something went wrong.",
+                messageType: "error",
+            },
+            () => myRef.current()
         );
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
-      } else {
-        setErrorToaster1(error);
-      }
-    }
-  };
-  // On Click cancel handler
-  const onClickCancelHandler = () => {
-    reset({ defaultValues });
-    navigate("/users/members");
-  };
-  const onSubmit = (data) => {
-    console.log("data", data);
-    setDisableEditMemberUpdateButton(true);
+    };
+    //to hold all regions
+    const [arrOfRegions, setArrOfRegions] = useState([]);
+    //to hold array of countries for perticular region for Company Adress
+    const [arrOfCountryRegions, setArrOfCountryRegions] = useState([]);
+    //to hold array of Country states
+    const [arrOfStateCountry, setArrOfStateCountry] = useState([]);
+    //to hold array of countries for perticular region for CGF Office details
+    const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
+        useState([]);
+    const [arrOfCites, setArrOfCites] = useState([]);
 
-    onSubmitFunctionCall(data);
-    setTimeout(() => navigate("/users/members"), 3000);
-  };
-  const formatRegionCountries1 = (regionCountries) => {
-    regionCountries &&
-      regionCountries.forEach(
-        (country, id) =>
-          (regionCountries[id] = country.hasOwnProperty("_id")
-            ? country?.name
-            : country)
-      );
-    console.log("arr of country ", regionCountries);
-    return regionCountries;
-  };
+    // state to manage loader
+    const [isEditMemberLoading, setIsEditMemberLoading] = useState(true);
+    const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
+    const [member, setMember] = useState({});
 
-  //method to handle country change
-  const onCountryChangeHandler1 = async (e) => {
-    setValue("country", e.target.value);
-    setValue("state", "");
-    setValue("city", "");
-    getCites();
-    trigger("country");
-    try {
-      if (watch("country")) {
-        const stateCountries = await axios.get(STATES + `/${watch("country")}`);
-        setArrOfStateCountry(stateCountries.data);
-      }
-    } catch (error) {
-      console.log("error");
-    }
-  };
+    // state to hold roles
+    const [roles, setRoles] = useState([]);
 
-  //method to set region and update other fields accordingly
-  const onRegionChangeHandler1 = async (e) => {
-    setValue("country", "");
-    setValue("state", "");
-    setValue("city", "");
-    setValue("region", e.target.value);
-    trigger("region");
-    const countriesOnRegion = await getCountries1(watch("region"));
-    const arrOfCountryRegionsTemp = formatRegionCountries1(
-      countriesOnRegion?.data
-    );
-    arrOfCountryRegionsTemp &&
-      setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
-  };
+    const [disableMember, setDisableMember] = useState(false);
+    const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
+        reValidateMode: "onChange",
+        defaultValues: defaultValues,
+    });
+    const onSubmitFunctionCall = async (data) => {
+        Logger.debug("data", data);
+        setIsEditMemberLoading(true);
+        try {
+            let backendObject = {
+                parentCompany: data.parentCompany,
+                countryCode: data.countryCode,
+                phoneNumber: data.phoneNumber,
+                website: data.websiteUrl,
+                state: data.state,
+                city: data.city,
+                companyName: data.memberCompany,
+                companyType: data.companyType,
+                cgfCategory: data.cgfCategory,
+                cgfActivity: data?.cgfActivity ? data.cgfActivity : "N/A",
+                corporateEmail: data.corporateEmail,
+                region: data.region,
+                country: data.country,
+                address: data.address,
+                cgfOfficeRegion: data.cgfOfficeRegion,
+                cgfOfficeCountry: data.cgfOfficeCountry,
+                cgfOffice: data.cgfOffice,
+                memberRepresentative: {
+                    id: member?.memberRepresentativeId[0]?._id,
+                    title: data.title,
+                    department: data.department,
+                    salutation: data.memberContactSalutation,
+                    name: data.memberContactFullName,
+                    email: data.memberContactEmail,
+                    countryCode: data.memberContactCountryCode,
+                    phoneNumber: data?.memberContactPhoneNuber,
+                    isActive: data.status === "active" ? true : false,
+                    roleId: data.roleId,
+                },
+            };
 
-  const categoryChangeHandler1 = (e) => {
-    setValue("cgfCategory", e.target.value);
-    trigger("cgfCategory");
-    setValue("cgfActivity", "");
-  };
-  const getCites = async () => {
-    try {
-      let url =
-        CITES + `/?region=${watch("region")}&country=${watch("country")}`;
-      if (watch("state")) {
-        url += `&state=${watch("state")}`;
-      }
-      const response = await axios.get(url);
-      console.log("cites from backend", response?.data);
-      setArrOfCites(response?.data);
-    } catch (error) {
-      if (error?.code === "ERR_CANCELED") return;
+            Logger.debug("Member Representative Id", member.createdBy);
+            const response = await axios.put(MEMBER + `/${param.id}`, {
+                ...backendObject,
+            });
+            if (response.status === 200) {
+                setIsEditMemberLoading(false);
 
-      setErrorToaster1(error);
-    }
-  };
+                setDisableEditMemberUpdateButton(false);
+                reset(defaultValues);
 
-  //method to handle state change
-  const onStateChangeHandler = async (e) => {
-    setValue("state", e.target.value);
-    setValue("city", "");
-    getCites();
-  };
-  const getCountryCode1 = async (controller) => {
-    try {
-      const response = await axios.get(COUNTRIES, {
-        signal: controller.signal,
-      });
-      let arrOfCountryCodeTemp = [];
-      response.data.forEach((code, id) => {
-        if (!code.countryCode) return;
-        arrOfCountryCodeTemp.push(code.countryCode);
-      });
-      const countryCodeSet = new Set(arrOfCountryCodeTemp);
-      setArrOfCountryCode([...countryCodeSet]);
-    } catch (error) {
-      if (error?.code === "ERR_CANCELED") return;
-    }
-  };
-  const getCountries1 = async (region) => {
-    try {
-      if (region) {
-        return await axios.get(REGIONCOUNTRIES + `/${region}`);
-      }
-    } catch (error) {
-      if (error?.code === "ERR_CANCELED") return;
-      setErrorToaster1(error);
-      return [];
-    }
-  };
-  const getRegions1 = async (controller) => {
-    try {
-      const regions = await axios.get(REGIONS, {
-        signal: controller.signal,
-      });
+                setToasterDetailsEditMember(
+                    {
+                        titleMessage: "Success!",
+                        descriptionMessage:
+                            "Member details updated successfully!",
+                        messageType: "success",
+                    },
+                    () => myRef.current()
+                );
+            }
 
-      setArrOfRegions(regions?.data);
-      const countriesOnRegion1 = await getCountries1(watch("region"));
+            Logger.debug("Default values: ", defaultValues);
+        } catch (error) {
+            setIsEditMemberLoading(false);
 
-      const arrOfCountryRegionsTemp1 = formatRegionCountries1(
-        countriesOnRegion1.data
-      );
-      setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
-      const countriesOnRegion2 = await getCountries1(watch("cgfOfficeRegion"));
-      console.log("countriesOnRegion2", countriesOnRegion2);
-      const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries1(
-        countriesOnRegion2.data
-      );
-      setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp1]);
-      const stateCountries = await axios.get(STATES + `/${watch("country")}`);
-      console.log(
-        "stateCountries",
-        stateCountries,
-        "country",
-        watch("country")
-      );
-      setArrOfStateCountry(stateCountries.data);
+            if (error?.response?.status == 401) {
+                setToasterDetailsEditMember(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setErrorToaster1(error);
+            }
+        }
+    };
+    // On Click cancel handler
+    const onClickCancelHandler = () => {
+        reset({ defaultValues });
+        navigate("/users/members");
+    };
+    const onSubmit = (data) => {
+        Logger.debug("data", data);
+        setDisableEditMemberUpdateButton(true);
 
-      // getCountries1()
-      return arrOfRegions;
-    } catch (error) {
-      if (error?.code === "ERR_CANCELED") return;
+        onSubmitFunctionCall(data);
+        setTimeout(() => navigate("/users/members"), 3000);
+    };
+    const formatRegionCountries1 = (regionCountries) => {
+        regionCountries &&
+            regionCountries.forEach(
+                (country, id) =>
+                    (regionCountries[id] = country.hasOwnProperty("_id")
+                        ? country?.name
+                        : country)
+            );
+        Logger.debug("arr of country ", regionCountries);
+        return regionCountries;
+    };
 
-      return [];
-    }
-  };
-  // const getCgfOfficeCountryRegion = async () => {
-  //   console.log("Inside office change function: ", watch("cgfOfficeRegion"));
-  //   const countriesOnRegion = await getCountries1(watch("cgfOfficeRegion"));
-  //   console.log("countries region", countriesOnRegion);
-  //   const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries1(
-  //     countriesOnRegion.data
-  //   );
-  //   setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
-  // };
-  // Fetch roles
-  let fetchRoles = async () => {
-    try {
-      const response = await privateAxios.get(FETCH_ROLES);
-      console.log("Response from fetch roles - ", response);
-      setRoles(response.data);
-    } catch (error) {
-      console.log("Error from fetch roles", error);
-    }
-  };
-  const getMemberByID1 = async (isMounted) => {
-    try {
-      setIsEditMemberLoading(true);
-      const response = await axios.get(MEMBER + `/${param.id}`);
-      const data = response.data;
-      setIsEditMemberLoading(false);
-      reset({
-        memberCompany: data?.companyName,
-        companyType: data?.companyType,
-        parentCompany: data?.parentCompany,
-        cgfCategory: data?.cgfCategory,
-        cgfActivity: data?.cgfActivity ?? "N/A",
-        corporateEmail: data?.corporateEmail,
-        countryCode: data?.countryCode,
-        phoneNumber: data?.phoneNumber?.toString(),
-        websiteUrl: data?.website,
-        region: data?.region,
-        country: data?.country,
-        state: data?.state,
-        city: data?.city,
-        address: data?.address,
-        cgfOfficeRegion: data?.cgfOfficeRegion,
-        cgfOfficeCountry: data?.cgfOfficeCountry,
-        cgfOffice: data?.cgfOffice,
-        memberContactSalutation: "Mr.",
-        memberContactFullName: data?.memberRepresentativeId[0]?.name,
-        title: data?.memberRepresentativeId[0]?.title,
-        department: data?.memberRepresentativeId[0]?.department,
-        memberContactCountryCode: data?.memberRepresentativeId[0]?.countryCode,
-        memberContactEmail: data?.memberRepresentativeId[0]?.email,
-        memberContactPhoneNuber:
-          data?.memberRepresentativeId[0]?.phoneNumber?.toString(),
-        status: data?.memberRepresentativeId[0]?.isActive
-          ? "active"
-          : "inactive",
-        roleId: data?.memberRepresentativeId[0]?.roleId,
-      });
-      setMember(response.data);
-      getCites();
-      setDisableMember(
-        response?.data?.memberRepresentativeId?.length > 0 ? false : true
-      );
-    } catch (error) {
-      if (error?.code === "ERR_CANCELED") return;
-      console.log("error", error);
-      if (error?.response?.status == 401) {
-        setToasterDetailsEditMember(
-          {
-            titleMessage: "Error",
-            descriptionMessage: "Session Timeout: Please login again",
-            messageType: "error",
-          },
-          () => myRef.current()
+    //method to handle country change
+    const onCountryChangeHandler1 = async (e) => {
+        setValue("country", e.target.value);
+        setValue("state", "");
+        setValue("city", "");
+        getCites();
+        trigger("country");
+        try {
+            if (watch("country")) {
+                const stateCountries = await axios.get(
+                    STATES + `/${watch("country")}`
+                );
+                setArrOfStateCountry(stateCountries.data);
+            }
+        } catch (error) {
+            Logger.debug("error");
+        }
+    };
+
+    //method to set region and update other fields accordingly
+    const onRegionChangeHandler1 = async (e) => {
+        setValue("country", "");
+        setValue("state", "");
+        setValue("city", "");
+        setValue("region", e.target.value);
+        trigger("region");
+        const countriesOnRegion = await getCountries1(watch("region"));
+        const arrOfCountryRegionsTemp = formatRegionCountries1(
+            countriesOnRegion?.data
         );
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
-      } else {
-        setIsEditMemberLoading(false);
-        isMounted && setErrorToaster1(error);
-      }
-    }
-  };
-  //prevent form submission on press of enter key
-  const checkKeyDown = (e) => {
-    if (e.code === "Enter") e.preventDefault();
-  };
-  const phoneNumberChangeHandler = (e, name, code) => {
-    console.log(
-      "on number change",
-      e.target.value,
-      "name: ",
-      name,
-      "code",
-      code
-    );
-    setValue(name, e.target.value);
-    trigger(name);
-    trigger(code);
-  };
-  
+        arrOfCountryRegionsTemp &&
+            setArrOfCountryRegions([...arrOfCountryRegionsTemp]);
+    };
+
+    const categoryChangeHandler1 = (e) => {
+        setValue("cgfCategory", e.target.value);
+        trigger("cgfCategory");
+        setValue("cgfActivity", "");
+    };
+    const getCites = async () => {
+        try {
+            let url =
+                CITES +
+                `/?region=${watch("region")}&country=${watch("country")}`;
+            if (watch("state")) {
+                url += `&state=${watch("state")}`;
+            }
+            const response = await axios.get(url);
+            Logger.debug("cites from backend", response?.data);
+            setArrOfCites(response?.data);
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+
+            setErrorToaster1(error);
+        }
+    };
+
+    //method to handle state change
+    const onStateChangeHandler = async (e) => {
+        setValue("state", e.target.value);
+        setValue("city", "");
+        getCites();
+    };
+    const getCountryCode1 = async (controller) => {
+        try {
+            const response = await axios.get(COUNTRIES, {
+                signal: controller.signal,
+            });
+            let arrOfCountryCodeTemp = [];
+            response.data.forEach((code, id) => {
+                if (!code.countryCode) return;
+                arrOfCountryCodeTemp.push(code.countryCode);
+            });
+            const countryCodeSet = new Set(arrOfCountryCodeTemp);
+            setArrOfCountryCode([...countryCodeSet]);
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+        }
+    };
+    const getCountries1 = async (region) => {
+        try {
+            if (region) {
+                return await axios.get(REGIONCOUNTRIES + `/${region}`);
+            }
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+            setErrorToaster1(error);
+            return [];
+        }
+    };
+    const getRegions1 = async (controller) => {
+        try {
+            const regions = await axios.get(REGIONS, {
+                signal: controller.signal,
+            });
+
+            setArrOfRegions(regions?.data);
+            const countriesOnRegion1 = await getCountries1(watch("region"));
+
+            const arrOfCountryRegionsTemp1 = formatRegionCountries1(
+                countriesOnRegion1.data
+            );
+            setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
+            const countriesOnRegion2 = await getCountries1(
+                watch("cgfOfficeRegion")
+            );
+            Logger.debug("countriesOnRegion2", countriesOnRegion2);
+            const arrOfCgfOfficeCountryRegionsTemp1 =
+                await formatRegionCountries1(countriesOnRegion2.data);
+            setArrOfCgfOfficeCountryRegions([
+                ...arrOfCgfOfficeCountryRegionsTemp1,
+            ]);
+            const stateCountries = await axios.get(
+                STATES + `/${watch("country")}`
+            );
+            Logger.debug(
+                "stateCountries",
+                stateCountries,
+                "country",
+                watch("country")
+            );
+            setArrOfStateCountry(stateCountries.data);
+
+            // getCountries1()
+            return arrOfRegions;
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+
+            return [];
+        }
+    };
+    // const getCgfOfficeCountryRegion = async () => {
+    //   Logger.debug("Inside office change function: ", watch("cgfOfficeRegion"));
+    //   const countriesOnRegion = await getCountries1(watch("cgfOfficeRegion"));
+    //   Logger.debug("countries region", countriesOnRegion);
+    //   const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries1(
+    //     countriesOnRegion.data
+    //   );
+    //   setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
+    // };
+    // Fetch roles
+    let fetchRoles = async () => {
+        try {
+            const response = await privateAxios.get(FETCH_ROLES);
+            Logger.debug("Response from fetch roles - ", response);
+            setRoles(response.data);
+        } catch (error) {
+            Logger.debug("Error from fetch roles", error);
+        }
+    };
+    const getMemberByID1 = async (isMounted) => {
+        try {
+            setIsEditMemberLoading(true);
+            const response = await axios.get(MEMBER + `/${param.id}`);
+            const data = response.data;
+            setIsEditMemberLoading(false);
+            reset({
+                memberCompany: data?.companyName,
+                companyType: data?.companyType,
+                parentCompany: data?.parentCompany,
+                cgfCategory: data?.cgfCategory,
+                cgfActivity: data?.cgfActivity ?? "N/A",
+                corporateEmail: data?.corporateEmail,
+                countryCode: data?.countryCode,
+                phoneNumber: data?.phoneNumber?.toString(),
+                websiteUrl: data?.website,
+                region: data?.region,
+                country: data?.country,
+                state: data?.state,
+                city: data?.city,
+                address: data?.address,
+                cgfOfficeRegion: data?.cgfOfficeRegion,
+                cgfOfficeCountry: data?.cgfOfficeCountry,
+                cgfOffice: data?.cgfOffice,
+                memberContactSalutation: "Mr.",
+                memberContactFullName: data?.memberRepresentativeId[0]?.name,
+                title: data?.memberRepresentativeId[0]?.title,
+                department: data?.memberRepresentativeId[0]?.department,
+                memberContactCountryCode:
+                    data?.memberRepresentativeId[0]?.countryCode,
+                memberContactEmail: data?.memberRepresentativeId[0]?.email,
+                memberContactPhoneNuber:
+                    data?.memberRepresentativeId[0]?.phoneNumber?.toString(),
+                status: data?.memberRepresentativeId[0]?.isActive
+                    ? "active"
+                    : "inactive",
+                roleId: data?.memberRepresentativeId[0]?.roleId,
+            });
+            setMember(response.data);
+            getCites();
+            setDisableMember(
+                response?.data?.memberRepresentativeId?.length > 0
+                    ? false
+                    : true
+            );
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+            Logger.debug("error", error);
+            if (error?.response?.status == 401) {
+                setToasterDetailsEditMember(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            } else {
+                setIsEditMemberLoading(false);
+                isMounted && setErrorToaster1(error);
+            }
+        }
+    };
+    //prevent form submission on press of enter key
+    const checkKeyDown = (e) => {
+        if (e.code === "Enter") e.preventDefault();
+    };
+    const phoneNumberChangeHandler = (e, name, code) => {
+        Logger.debug(
+            "on number change",
+            e.target.value,
+            "name: ",
+            name,
+            "code",
+            code
+        );
+        setValue(name, e.target.value);
+        trigger(name);
+        trigger(code);
+    };
+    
   const callGetCategories =async () => {
     MEMBER_LOOKUP =await  getCategories()
 
@@ -427,85 +441,93 @@ const EditMember = () => {
     CGF_OFFICES = await getCGFOffices();
   }
   useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-    (async () => {
-      Object.keys(MEMBER_LOOKUP)?.length === 0 && callGetCategories();
+        let isMounted = true;
+        const controller = new AbortController();
+        (async () => {
+            Object.keys(MEMBER_LOOKUP)?.length === 0 && callGetCategories();
       CGF_OFFICES?.length === 0 && callGetOffices()
       isMounted && (await getMemberByID1(isMounted));
-      isMounted && (await getRegions1(controller));
-      isMounted && (await getCountryCode1(controller));
-      isMounted && fetchRoles();
-    })();
-    // console.log("member",member)
+            isMounted && (await getRegions1(controller));
+            isMounted && (await getCountryCode1(controller));
+            isMounted && fetchRoles();
+        })();
+        // Logger.debug("member",member)
 
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, [watch]);
-  console.log("member: ", member);
-  console.log("disable: ", disableMember);
-  return (
-    <div className="page-wrapper">
-      <Toaster
-        myRef={myRef}
-        titleMessage={toasterDetailsEditMember.titleMessage}
-        descriptionMessage={toasterDetailsEditMember.descriptionMessage}
-        messageType={toasterDetailsEditMember.messageType}
-      />
-      <div className="breadcrumb-wrapper">
-        <div className="container">
-          <ul className="breadcrumb">
-            <li>
-              <Link to="/users/members">Members</Link>
-            </li>
-            <li>
-              <Link to={`/users/members/view-member/${param.id}`}>
-                View Member
-              </Link>
-            </li>
-            <li>Edit Member</li>
-          </ul>
-        </div>
-      </div>
-      <section>
-        <div className="container">
-          <div className="form-header flex-between">
-            <h2 className="heading2">Edit Member</h2>
-          </div>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            onKeyDown={(e) => checkKeyDown(e)}
-          >
-            {isEditMemberLoading ? (
-              <Loader />
-            ) : (
-              <div className="card-wrapper">
-                <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Company Detail</h2>
-                  <div className="card-blk flex-between">
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="memberCompany">
-                          Member Company <span className="mandatory">*</span>
-                        </label>
-                        <Input
-                          control={control}
-                          name="memberCompany"
-                          onBlur={(e) =>
-                            setValue("memberCompany", e.target.value?.trim())
-                          }
-                          placeholder="Enter member company"
-                          myHelper={memberHelper}
-                          rules={{
-                            required: true,
-                            maxLength: 50,
-                            minLength: 3,
-                          }}
-                        />
-                      </div>
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
+    }, [watch]);
+    Logger.debug("member: ", member);
+    Logger.debug("disable: ", disableMember);
+    return (
+        <div className="page-wrapper">
+            <Toaster
+                myRef={myRef}
+                titleMessage={toasterDetailsEditMember.titleMessage}
+                descriptionMessage={toasterDetailsEditMember.descriptionMessage}
+                messageType={toasterDetailsEditMember.messageType}
+            />
+            <div className="breadcrumb-wrapper">
+                <div className="container">
+                    <ul className="breadcrumb">
+                        <li>
+                            <Link to="/users/members">Members</Link>
+                        </li>
+                        <li>
+                            <Link to={`/users/members/view-member/${param.id}`}>
+                                View Member
+                            </Link>
+                        </li>
+                        <li>Edit Member</li>
+                    </ul>
+                </div>
+            </div>
+            <section>
+                <div className="container">
+                    <div className="form-header flex-between">
+                        <h2 className="heading2">Edit Member</h2>
                     </div>
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        onKeyDown={(e) => checkKeyDown(e)}
+                    >
+                        {isEditMemberLoading ? (
+                            <Loader />
+                        ) : (
+                            <div className="card-wrapper">
+                                <div className="card-inner-wrap">
+                                    <h2 className="sub-heading1">
+                                        Company Detail
+                                    </h2>
+                                    <div className="card-blk flex-between">
+                                        <div className="card-form-field">
+                                            <div className="form-group">
+                                                <label htmlFor="memberCompany">
+                                                    Member Company{" "}
+                                                    <span className="mandatory">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <Input
+                                                    control={control}
+                                                    name="memberCompany"
+                                                    onBlur={(e) =>
+                                                        setValue(
+                                                            "memberCompany",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
+                                                    placeholder="Enter member company"
+                                                    myHelper={memberHelper}
+                                                    rules={{
+                                                        required: true,
+                                                        maxLength: 50,
+                                                        minLength: 3,
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
 
                     <div className="card-form-field">
                       <div className="form-group">
@@ -1269,78 +1291,87 @@ const EditMember = () => {
                           Role <span className="mandatory">*</span>
                         </label>
 
-                        <div>
-                          <Dropdown
-                            name="roleId"
-                            control={control}
-                            options={roles}
-                            rules={{
-                              required: true,
-                            }}
-                            myHelper={memberHelper}
-                            placeholder={"Select role"}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="status">
-                          Status <span className="mandatory">*</span>
-                        </label>
-                        <div className="radio-btn-field">
-                          <Controller
-                            name="status"
-                            control={control}
-                            render={({ field }) => (
-                              <RadioGroup
-                                {...field}
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="radio-buttons-group"
-                                className="radio-btn"
-                              >
-                                <FormControlLabel
-                                  value="active"
-                                  control={<Radio />}
-                                  label="Active"
-                                />
-                                <FormControlLabel
-                                  value="inactive"
-                                  control={<Radio />}
-                                  label="Inactive"
-                                />
-                              </RadioGroup>
-                            )}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                                                <div>
+                                                    <Dropdown
+                                                        name="roleId"
+                                                        control={control}
+                                                        options={roles}
+                                                        rules={{
+                                                            required: true,
+                                                        }}
+                                                        myHelper={memberHelper}
+                                                        placeholder={
+                                                            "Select role"
+                                                        }
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="card-form-field">
+                                            <div className="form-group">
+                                                <label htmlFor="status">
+                                                    Status{" "}
+                                                    <span className="mandatory">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <div className="radio-btn-field">
+                                                    <Controller
+                                                        name="status"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <RadioGroup
+                                                                {...field}
+                                                                aria-labelledby="demo-radio-buttons-group-label"
+                                                                name="radio-buttons-group"
+                                                                className="radio-btn"
+                                                            >
+                                                                <FormControlLabel
+                                                                    value="active"
+                                                                    control={
+                                                                        <Radio />
+                                                                    }
+                                                                    label="Active"
+                                                                />
+                                                                <FormControlLabel
+                                                                    value="inactive"
+                                                                    control={
+                                                                        <Radio />
+                                                                    }
+                                                                    label="Inactive"
+                                                                />
+                                                            </RadioGroup>
+                                                        )}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-btn flex-between add-members-btn">
+                                    <button
+                                        type="reset"
+                                        onClick={onClickCancelHandler}
+                                        className="secondary-button mr-10"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        //   onClick={}
+                                        disabled={disableEditMemberUpdateButton}
+                                        className="primary-button add-button"
+                                    >
+                                        Update
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </form>
                 </div>
-                <div className="form-btn flex-between add-members-btn">
-                  <button
-                    type="reset"
-                    onClick={onClickCancelHandler}
-                    className="secondary-button mr-10"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    //   onClick={}
-                    disabled={disableEditMemberUpdateButton}
-                    className="primary-button add-button"
-                  >
-                    Update
-                  </button>
-                </div>
-              </div>
-            )}
-          </form>
+            </section>
         </div>
-      </section>
-    </div>
-  );
+    );
 };
 
 export default EditMember;

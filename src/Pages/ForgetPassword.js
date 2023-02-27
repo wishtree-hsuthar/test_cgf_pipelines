@@ -12,6 +12,7 @@ import { FORGET_PASSWORD } from "../api/Url";
 import { useNavigate } from "react-router-dom";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
 import useCallbackState from "../utils/useCallBackState";
+import { Logger } from "../Logger/Logger";
 const forgetPasswordSchema = yup.object().shape({
     email: yup
         .string()
@@ -55,7 +56,7 @@ const ForgetPassword = () => {
             const response = await privateAxios.get(
                 `${FORGET_PASSWORD}${data.email}`
             );
-            console.log("response from forgot password", response);
+            Logger.debug("response from forgot password", response);
 
             if (response.status === 200) {
                 setToasterDetails(
@@ -76,8 +77,8 @@ const ForgetPassword = () => {
         } catch (error) {
             if (error?.response?.status === 400) {
                 let errorMsg = error?.response?.data?.message;
-                console.log("error message", errorMsg);
-                console.log("error body", error.response);
+                Logger.debug("error message", errorMsg);
+                Logger.debug("error body", error.response);
                 // setMessageType("error");
                 // setMessageTitle("Error");
 
@@ -96,7 +97,7 @@ const ForgetPassword = () => {
                 reset();
             }
         }
-        console.log(data);
+        Logger.debug(data);
     };
 
     return (

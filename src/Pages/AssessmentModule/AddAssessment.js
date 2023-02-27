@@ -12,7 +12,7 @@ import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import Loader2 from "../../assets/Loader/Loader2.svg";
-
+import { Logger } from "../../Logger/Logger";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -102,7 +102,7 @@ const AddAssessment = () => {
                     signal: controller.signal,
                 });
 
-                console.log(
+                Logger.debug(
                     "response from fetch member companies for add assessments",
                     response
                 );
@@ -115,7 +115,7 @@ const AddAssessment = () => {
                     );
                 setMemberRepresentatives(response.data);
             } catch (error) {
-                console.log("Error from fetch member company api", error);
+                Logger.debug("Error from fetch member company api", error);
             }
         };
         fetchMemberCompaniesForAddAssesments();
@@ -128,7 +128,7 @@ const AddAssessment = () => {
                         signal: controller.signal,
                     }
                 );
-                console.log("response from questionnaires api", response.data);
+                Logger.debug("response from questionnaires api", response.data);
                 isMounted &&
                     setQuestionnares(response.data.map((data) => data.title));
                 setQuestionnaresObj(
@@ -138,9 +138,9 @@ const AddAssessment = () => {
                     }))
                 );
             } catch (error) {
-                console.log("Error from fetch questionnaires", error);
+                Logger.debug("Error from fetch questionnaires", error);
                 if (error?.response?.status === 401) {
-                    console.log("Unauthorized user access");
+                    Logger.debug("Unauthorized user access");
                     // Add error toaster here
                     setToasterDetails(
                         {
@@ -174,7 +174,7 @@ const AddAssessment = () => {
                         ? FETCH_OPERATION_MEMBER + id + "/master/internal"
                         : FETCH_OPERATION_MEMBER + id + "/master"
                 );
-                console.log(
+                Logger.debug(
                     "Response from fetch operation member according to member company",
                     response
                 );
@@ -187,8 +187,8 @@ const AddAssessment = () => {
                 let representative = response.data.filter(
                     (data) => data?.isMemberRepresentative
                 );
-                console.log("Representative---", representative);
-                console.log("is Cgf staff---", checkCgfStaff);
+                Logger.debug("Representative---", representative);
+                Logger.debug("is Cgf staff---", checkCgfStaff);
                 checkCgfStaff
                     ? setValue("assignedOperationMember", "")
                     : setValue(
@@ -196,7 +196,7 @@ const AddAssessment = () => {
                           representative[0]?._id ? representative[0]?._id : ""
                       );
             } catch (error) {
-                console.log(
+                Logger.debug(
                     "Error from from fetch operation member according to member company",
                     error
                 );
@@ -205,13 +205,13 @@ const AddAssessment = () => {
 
     const handleChangeForMemberCompany = async (e) => {
         setValue("assignedMember", e.target.value);
-        console.log("assignedMember", e.target.value);
-        console.log("member representatives-----", memberRepresentatives);
+        Logger.debug("assignedMember", e.target.value);
+        Logger.debug("member representatives-----", memberRepresentatives);
 
         let cgfCompany = memberCompaniesForAddAssessments.filter(
             (data) => data._id === e.target.value
         );
-        console.log("cgf company-----", cgfCompany);
+        Logger.debug("cgf company-----", cgfCompany);
 
         let memberRepresentative = memberRepresentatives.filter(
             (data) => data._id === e.target.value
@@ -232,30 +232,30 @@ const AddAssessment = () => {
             trigger("assignedOperationMember");
         }
 
-        console.log("member representative----", memberRepresentative);
+        Logger.debug("member representative----", memberRepresentative);
 
         trigger("assignedMember");
     };
 
     const handleChangeForAssessmentModule = (e) => {
-        console.log("assessment type", e);
+        Logger.debug("assessment type", e);
         let filterQuestionnaireById = questionnaresObj.filter(
             (questionnare) => questionnare.name === e.target.value
         );
-        console.log("filtered questionnaire", filterQuestionnaireById);
+        Logger.debug("filtered questionnaire", filterQuestionnaireById);
         setValue("questionnaireId", filterQuestionnaireById[0]._id);
         setValue("assessmentType", e.target.value);
         trigger("assessmentType");
     };
 
     const submitAssessments = async (data) => {
-        console.log("data from on submit", data);
+        Logger.debug("data from on submit", data);
         setDisableEditAssessmentButton(true);
         let someDate = new Date(data.dueDate).setDate(
             new Date(data.dueDate).getDate() + 1
         );
 
-        console.log(
+        Logger.debug(
             "data after converting to ISOstring",
 
             new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString()
@@ -267,7 +267,7 @@ const AddAssessment = () => {
             ).toISOString(),
         };
 
-        console.log("submitted data", data);
+        Logger.debug("submitted data", data);
         setIsAssessmentLoading(true);
         try {
             const response = await privateAxios.post(ADD_ASSESSMENTS, data);
@@ -275,7 +275,7 @@ const AddAssessment = () => {
                 setIsAssessmentLoading(false);
 
                 setDisableEditAssessmentButton(false);
-                console.log("response from add assessments", response);
+                Logger.debug("response from add assessments", response);
                 reset({
                     title: "",
                     assessmentType: "",
@@ -304,7 +304,7 @@ const AddAssessment = () => {
             setDisableEditAssessmentButton(false);
 
             if (error?.response?.status === 401) {
-                console.log("Unauthorized user access");
+                Logger.debug("Unauthorized user access");
                 // Add error toaster here
                 setToasterDetails(
                     {
@@ -320,7 +320,7 @@ const AddAssessment = () => {
                 }, 3000);
             }
             if (error?.response?.status === 400) {
-                console.log("something went wrong");
+                Logger.debug("something went wrong");
                 // Add error toaster here
                 setToasterDetails(
                     {
@@ -332,7 +332,7 @@ const AddAssessment = () => {
                 );
             }
             if (error?.response?.status === 403) {
-                console.log("something went wrong");
+                Logger.debug("something went wrong");
                 // Add error toaster here
                 setToasterDetails(
                     {
@@ -529,7 +529,7 @@ const AddAssessment = () => {
                                                                 setDateValue(
                                                                     event
                                                                 );
-                                                                console.log(
+                                                                Logger.debug(
                                                                     "date" +
                                                                         "  " +
                                                                         event

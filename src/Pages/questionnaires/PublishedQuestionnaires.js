@@ -7,6 +7,7 @@ import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
+import { Logger } from "../../Logger/Logger";
 const PublishedQuestionnaires = ({
     makeApiCall,
     setMakeApiCall,
@@ -97,7 +98,7 @@ const PublishedQuestionnaires = ({
     };
 
     const generateUrl = () => {
-        console.log("Search", search);
+        Logger.debug("Search", search);
         let url = `${ADD_QUESTIONNAIRE}/list?page=${pagePublishedQuestionnaire}&size=${rowsPerPagePublishedQuestionnaire}&orderBy=${orderByPublishedQuestionnaire}&order=${orderPublishedQuestionnaire}`;
         if (search?.length >= 3) url += `&search=${search}`;
 
@@ -123,7 +124,7 @@ const PublishedQuestionnaires = ({
                 add: data?.add,
             },
         }));
-    console.log(
+    Logger.debug(
         "module access member in view member",
         moduleAccesForMember[0]?.questionnaire
     );
@@ -141,16 +142,16 @@ const PublishedQuestionnaires = ({
             setTotalRecordsPublishedQuestionnaire(
                 parseInt(response.headers["x-total-count"])
             );
-            console.log("Response from sub admin api get", response);
+            Logger.debug("Response from sub admin api get", response);
 
             updateRecords([...response.data]);
             setIsPublishedQuestionnaireLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            console.log("Error from questionnaire-------", error);
+            Logger.debug("Error from questionnaire-------", error);
 
             if (error.response.status === 401) {
-                console.log("Unauthorized user access");
+                Logger.debug("Unauthorized user access");
                 // Add error toaster here
                 setToasterDetails(
                     {
@@ -180,7 +181,7 @@ const PublishedQuestionnaires = ({
     };
 
     const onClickVisibilityIconHandler = (uuid) => {
-        console.log("id", uuid);
+        Logger.debug("id", uuid);
         return navigate(`/questionnaires/preview-questionnaire/${uuid}`);
     };
     const questionnaireToasterRef = useRef();
@@ -193,8 +194,8 @@ const PublishedQuestionnaires = ({
         let isMounted = true;
         const controller = new AbortController();
         makeApiCall && getPublishedQuestionnaire(isMounted, controller);
-        console.log("makeApiCall", makeApiCall);
-        console.log("inside use Effect");
+        Logger.debug("makeApiCall", makeApiCall);
+        Logger.debug("inside use Effect");
         return () => {
             isMounted = false;
             clearTimeout(searchTimeout);

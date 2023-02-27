@@ -37,8 +37,8 @@ const Login = (prop) => {
     const dispatch = useDispatch();
     Logger.info(prop);
     const location = useLocation();
-    console.log("location", location);
-    console.log("---------", prop);
+    Logger.debug("location", location);
+    Logger.debug("---------", prop);
     const navigate = useNavigate();
 
     const {
@@ -59,13 +59,13 @@ const Login = (prop) => {
                     withCredentials: true,
                     signal: controller.signal,
                 });
-                console.log("data from app fetcuser method app file", data);
+                Logger.debug("data from app fetcuser method app file", data);
                 if (status == 200) {
                     navigate("/home");
                 }
             } catch (error) {
                 if (error?.response?.status == 401) {
-                    console.log("Error from app file useEffect", error);
+                    Logger.debug("Error from app file useEffect", error);
                 }
             }
         };
@@ -96,19 +96,19 @@ const Login = (prop) => {
         navigate("/forget-password");
     };
     const submitLoginData = async (data) => {
-        console.log(data);
+        Logger.debug(data);
         try {
             const response = await publicAxios.post(LOGIN_URL, data, {
                 withCredentials: true,
             });
             if (response.status == 201) {
-                console.log("DATA", response?.data?.user);
+                Logger.debug("DATA", response?.data?.user);
                 dispatch(setUser(response?.data?.user));
                 dispatch(setPrivileges(response?.data?.user?.role));
                 navigate("/home");
             }
         } catch (error) {
-            console.log("error from submit login method", error);
+            Logger.debug("error from submit login method", error);
 
             if (
                 error.response.status == 401 &&

@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import Radio from "@mui/material/Radio";
+import { Logger } from "../Logger/Logger";
 
 import { MenuItem, Pagination, Select, Stack, Tooltip } from "@mui/material";
 import "./TableComponent.css";
@@ -167,7 +168,7 @@ export default function TableComponent({
         handleChangeRowsPerPage1(event);
     };
     const onClickVisibilityIconHandler = (id, isOperationMember) => {
-        console.log("Inside on click handler", isOperationMember);
+        Logger.debug("Inside on click handler", isOperationMember);
         onClickVisibilityIconHandler1(
             id,
             isOperationMember ? isOperationMember : false
@@ -188,7 +189,7 @@ export default function TableComponent({
     // Avoid a layout jump when reaching the last page with empty records.
     // const emptyRows =
     //   page > 1 ? Math.max(0, page * rowsPerPage - totalRecords) : 0;
-    // console.log("selected rows",selected)
+    // Logger.debug("selected rows",selected)
     return (
         <>
             <Box
@@ -220,7 +221,7 @@ export default function TableComponent({
                                     {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                    records.slice().sort(getComparator(order, orderBy)) */}
                                     {records.map((row, index) => {
-                                        console.log("row", row);
+                                        Logger.debug("row", row);
                                         const isItemSelected = isSelected(
                                             row._id
                                         );
@@ -410,7 +411,7 @@ export default function TableComponent({
                                                         } else if (
                                                             cell === "dueDate"
                                                         ) {
-                                                            console.log(
+                                                            Logger.debug(
                                                                 "due date  = ",
                                                                 new Date(
                                                                     row[cell]
@@ -418,13 +419,13 @@ export default function TableComponent({
                                                                     "en"
                                                                 )
                                                             );
-                                                            console.log(
+                                                            Logger.debug(
                                                                 "current date  = ",
                                                                 new Date().toLocaleDateString(
                                                                     "en"
                                                                 )
                                                             );
-                                                            console.log(
+                                                            Logger.debug(
                                                                 "Comparison = ",
                                                                 new Date(
                                                                     new Date(

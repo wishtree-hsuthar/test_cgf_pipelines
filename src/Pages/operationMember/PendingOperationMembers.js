@@ -6,7 +6,7 @@ import DialogBox from "../../components/DialogBox";
 import { ADD_OPERATION_MEMBER, WITHDRAW_OPERATION_MEMBER } from "../../api/Url";
 import { tableHead } from "../../utils/OperationMemberModuleUtil";
 import Loader from "../../utils/Loader";
-
+import { Logger } from "../../Logger/Logger";
 let tempTableHead = JSON.parse(JSON.stringify(tableHead));
 tempTableHead.push({
     id: "action",
@@ -75,7 +75,7 @@ function PendingOperationMembers({
 
     // update recordes from backend i.e remove unnecessary values
     const updatePendingRecords = (data) => {
-        console.log("data before update----", data);
+        Logger.debug("data before update----", data);
 
         let staleData = data;
         staleData.forEach((pendingOPMember) => {
@@ -122,7 +122,7 @@ function PendingOperationMembers({
                 pendingOPMember[k] = v;
             });
         });
-        console.log(
+        Logger.debug(
             "data in updaterecords method in pending method",
             staleData
         );
@@ -136,7 +136,7 @@ function PendingOperationMembers({
 
     // rows per page method for pending tab
     const handleRowsPerPageChangeForPendingTab = (event) => {
-        console.log("rows per page", event);
+        Logger.debug("rows per page", event);
         setRowsPerPageForPendingOperationMemberTab(
             parseInt(event.target.value, 10)
         );
@@ -145,7 +145,7 @@ function PendingOperationMembers({
 
     //  on click delete icon open delete modal
     const onClickDeleteIconHandler = (id) => {
-        console.log("id for delete", id);
+        Logger.debug("id for delete", id);
         setOpenDeleteDialogBoxPendingOperationMember(true);
         setWithdrawInviteidOfOperationMember(id);
     };
@@ -156,7 +156,7 @@ function PendingOperationMembers({
                 WITHDRAW_OPERATION_MEMBER + withdrawInviteidOfOperationMember
             );
             if (response.status == 200) {
-                console.log("operation member  invite withdrawn successfully");
+                Logger.debug("operation member  invite withdrawn successfully");
                 setToasterDetails(
                     {
                         titleMessage: "Success",
@@ -170,7 +170,10 @@ function PendingOperationMembers({
                 setOpenDeleteDialogBoxPendingOperationMember(false);
             }
         } catch (error) {
-            console.log("error from withdrawInvite id operation member", error);
+            Logger.debug(
+                "error from withdrawInvite id operation member",
+                error
+            );
             if (error?.response?.status == 401) {
                 setToasterDetails(
                     {
@@ -189,8 +192,8 @@ function PendingOperationMembers({
     };
 
     const generateUrlForPendingTab = () => {
-        console.log("filters", filters);
-        console.log("Search", search);
+        Logger.debug("filters", filters);
+        Logger.debug("Search", search);
 
         let url = `${ADD_OPERATION_MEMBER}/pending/list?page=${pageForPendingOperationMemberTab}&size=${rowsPerPageForPendingOperationMemberTab}&orderBy=${orderByForPendingOperationMember}&order=${orderForPendingOperationMemberTab}`;
         if (search.length > 0) url += `&search=${search}`;
@@ -216,7 +219,7 @@ function PendingOperationMembers({
             setTotalRecordsForPendingOperationMemberTab(
                 parseInt(response.headers["x-total-count"])
             );
-            console.log(
+            Logger.debug(
                 "Response from operation member api get for pending tab table",
                 response
             );
@@ -227,7 +230,7 @@ function PendingOperationMembers({
             if (error?.code === "ERR_CANCELED") return;
             setIsPendingOperationMemberLoading(false);
 
-            console.log(
+            Logger.debug(
                 "Error from get all pending operation member  tab table-------",
                 error
             );
@@ -267,8 +270,8 @@ function PendingOperationMembers({
         let isMounted = true;
         const controller = new AbortController();
         makeApiCall && getPendingOperationMember(isMounted, controller);
-        console.log("makeApiCall", makeApiCall);
-        console.log("inside use Effect");
+        Logger.debug("makeApiCall", makeApiCall);
+        Logger.debug("inside use Effect");
         return () => {
             isMounted = false;
             controller.abort();

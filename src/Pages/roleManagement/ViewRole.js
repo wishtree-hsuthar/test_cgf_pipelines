@@ -19,7 +19,7 @@ import {
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-
+import { Logger } from "../../Logger/Logger";
 //Internal Imports
 import TableComponent from "../../components/TableComponent";
 import DialogBox from "../../components/DialogBox";
@@ -110,7 +110,7 @@ const ViewRole = () => {
             );
             return setTimeout(() => navigate4("/roles"), 3000);
         } catch (error) {
-            console.log("error on delete", error);
+            Logger.debug("error on delete", error);
             if (error?.code === "ERR_CANCELED") return;
             if (error?.response?.status == 401) {
                 setToasterDetails4(
@@ -187,8 +187,8 @@ const ViewRole = () => {
         setPage(1);
     };
     const onClickVisibilityIconHandler = (id, isMemberRepresentative) => {
-        console.log("id", id);
-        console.log(
+        Logger.debug("id", id);
+        Logger.debug(
             "isMemberRepresentative in view role",
             isMemberRepresentative
         );
@@ -197,9 +197,9 @@ const ViewRole = () => {
             : navigate4(`/users/cgf-admin/view-cgf-admin/${id}`);
     };
     const createPrevileges3 = (tempPrivileges) => {
-        console.log("temp data", tempPrivileges);
+        Logger.debug("temp data", tempPrivileges);
         Object.keys(tempPrivileges).forEach((tempPriv) => {
-            // console.log("temp Previ value",tempPrivileges[tempPriv])
+            // Logger.debug("temp Previ value",tempPrivileges[tempPriv])
             privileges[tempPriv] = {
                 add: tempPrivileges[tempPriv]["add"],
                 fill: tempPrivileges[tempPriv]["fill"],
@@ -266,7 +266,7 @@ const ViewRole = () => {
         setRecords([...data]);
     };
     const updateFileds = async (data) => {
-        console.log("data", data);
+        Logger.debug("data", data);
         setFieldValues({
             roleName: data?.name,
             description: data?.description,
@@ -330,11 +330,11 @@ const ViewRole = () => {
                 ...previous,
                 subAdmin: response?.headers?.["x-total-count"],
             }));
-            console.log("response:- ", response);
+            Logger.debug("response:- ", response);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
 
-            console.log("error from get users", error);
+            Logger.debug("error from get users", error);
         }
     };
     useEffect(() => {

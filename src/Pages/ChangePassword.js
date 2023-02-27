@@ -10,6 +10,7 @@ import { CHANGE_PASSWORD } from "../api/Url";
 import Toaster from "../components/Toaster";
 import useCallbackState from "../utils/useCallBackState";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
+import { Logger } from "../Logger/Logger";
 const schema = yup.object().shape({
     oldPassword: yup
         .string()
@@ -82,7 +83,7 @@ const ChangePassword = () => {
     };
 
     const onSubmitChangePassword = async (data) => {
-        console.log("data", data);
+        Logger.debug("data", data);
         try {
             const response = await privateAxios.post(CHANGE_PASSWORD, {
                 oldPassword: data.oldPassword,
@@ -99,11 +100,13 @@ const ChangePassword = () => {
                     },
                     () => toasterRef.current()
                 );
-
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
                 reset();
             }
         } catch (error) {
-            console.log("Error from on change password data", error);
+            Logger.debug("Error from on change password data", error);
 
             if (error.response.status == 401) {
                 setToasterDetails(

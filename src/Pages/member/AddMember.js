@@ -12,7 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-
+import { Logger } from "../../Logger/Logger";
 import {
   CATEGORIES,
   CITES,
@@ -68,7 +68,7 @@ const AddMember = () => {
   //method to call all error toaster from this method
   const [disableAddMemberButton, setdisableAddMemberButton] = useState(false);
   const setErrorToaster = (error) => {
-    console.log("error", error);
+    Logger.debug("error", error);
     setToasterDetailsAddMember(
       {
         titleMessage: "Error",
@@ -118,7 +118,7 @@ const AddMember = () => {
   const onSubmitFunctionCallAddMember = async (data) => {
     setIsMemberLoading(true);
     setdisableAddMemberButton(true);
-    console.log("data", data);
+    Logger.debug("data", data);
     try {
       let backendObjectAddMember = {
         parentCompany: data.parentCompany,
@@ -152,7 +152,7 @@ const AddMember = () => {
       const response = await axios.post(MEMBER, {
         ...backendObjectAddMember,
       });
-      console.log("response : ", response);
+      Logger.debug("response : ", response);
       if (response.status === 201) {
         setIsMemberLoading(false);
 
@@ -164,8 +164,8 @@ const AddMember = () => {
           },
           () => myRef.current()
         );
-        console.log("Default values: ", tempDefaultValues);
-        reset({ ...tempDefaultValues });
+        Logger.debug("Default values: ", tempDefaultValues);
+        reset({  ...tempDefaultValues  });
         setdisableAddMemberButton(false);
         return true;
       }
@@ -188,46 +188,46 @@ const AddMember = () => {
         setErrorToaster(error);
         setdisableAddMemberButton(false);
 
-        return false;
-      }
-    }
-  };
-  // On Click cancel handler
-  const onClickCancelHandlerAddMember = () => {
-    reset({ tempDefaultValues });
-    navigate("/users/members");
-  };
-  const onSubmitAddMember = async (data) => {
-    console.log("data", data);
-    const isSubmited = await onSubmitFunctionCallAddMember(data);
-    console.log("is Submited", isSubmited);
-    isSubmited && setTimeout(() => navigate("/users/members"), 3000);
-  };
-  //method to handle on add more button click handler
-  const onAddMoreButtonClickHandlerAddMember = async (data) => {
-    const isSubmited = await onSubmitFunctionCallAddMember(data);
-    if (isSubmited) getParentCompanyAddMember();
-  };
-  //method to handle region change for cgf office
+                return false;
+            }
+        }
+    };
+    // On Click cancel handler
+    const onClickCancelHandlerAddMember = () => {
+        reset({ tempDefaultValues });
+        navigate("/users/members");
+    };
+    const onSubmitAddMember = async (data) => {
+        Logger.debug("data", data);
+        const isSubmited = await onSubmitFunctionCallAddMember(data);
+        Logger.debug("is Submited", isSubmited);
+        isSubmited && setTimeout(() => navigate("/users/members"), 3000);
+    };
+    //method to handle on add more button click handler
+    const onAddMoreButtonClickHandlerAddMember = async (data) => {
+        const isSubmited = await onSubmitFunctionCallAddMember(data);
+        if (isSubmited) getParentCompanyAddMember();
+    };
+    //method to handle region change for cgf office
 
-  const formatRegionCountriesAddMember = (regionCountries) => {
-    regionCountries.forEach(
-      (country, id) =>
-        (regionCountries[id] = country.hasOwnProperty("_id")
-          ? country.name
-          : country)
-    );
-    console.log("arr of country ", regionCountries);
-    return regionCountries;
-  };
+    const formatRegionCountriesAddMember = (regionCountries) => {
+        regionCountries.forEach(
+            (country, id) =>
+                (regionCountries[id] = country.hasOwnProperty("_id")
+                    ? country.name
+                    : country)
+        );
+        Logger.debug("arr of country ", regionCountries);
+        return regionCountries;
+    };
 
   //method to handle country change
   const onCountryChangeHandlerAddMember = async (e) => {
-    console.log("Inside Country Change ", e.target.value);
+    Logger.debug("Inside Country Change ", e.target.value);
     setValue("country", e.target.value);
     const stateCountries = await axios.get(STATES + `/${e.target.value}`);
     setArrOfStateCountryAddMember(stateCountries.data);
-    console.log("state countries: ", stateCountries);
+    Logger.debug("state countries: ", stateCountries);
     setValue("state", "");
     setValue("city", "");
     getCitesAddMember();
@@ -244,7 +244,7 @@ const AddMember = () => {
       setArrOfCitesAddMember(response.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      console.log("Error in getCitiesAddmember");
+      Logger.debug("Error in getCitiesAddmember");
     }
   };
   //method to handle state change
@@ -271,14 +271,14 @@ const AddMember = () => {
   };
   //method to set region and update other fields accordingly
   const onRegionChangeHandlerAddMember = async (e) => {
-    console.log("region: ", e.target.value);
+    Logger.debug("region: ", e.target.value);
     setValue("country", "");
     setValue("state", "");
     setValue("city", "");
     setValue("region", e.target.value);
     trigger("region");
     const countriesOnRegion = await getCountriesAddMember(watch("region"));
-    console.log("countries", countriesOnRegion);
+    Logger.debug("countries", countriesOnRegion);
     const arrOfCountryRegionsTemp = formatRegionCountriesAddMember(
       countriesOnRegion.data
     );
@@ -300,7 +300,7 @@ const AddMember = () => {
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
 
-      console.log("Error from getCountryCodeAddMember");
+      Logger.debug("Error from getCountryCodeAddMember");
     }
   };
   const getCountriesAddMember = async (region) => {
@@ -310,7 +310,7 @@ const AddMember = () => {
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
 
-      console.log("Error from getCountriesAddMember ");
+      Logger.debug("Error from getCountriesAddMember ");
       return [];
     }
   };
@@ -347,7 +347,7 @@ const AddMember = () => {
   let fetchRolesAddMember = async () => {
     try {
       const response = await privateAxios.get(FETCH_ROLES);
-    //   console.log("Response from fetch addMemberRoles - ", response);
+    //   Logger.debug("Response from fetch addMemberRoles - ", response);
       addMemberSetRoles(response.data);
       response.data.filter((data) => {
         if (data.name === "Member Representative") {
@@ -356,12 +356,14 @@ const AddMember = () => {
         }
       });
     } catch (error) {
-      console.log("Error from fetch addMemberRoles", error);
+      Logger.debug("Error from fetch addMemberRoles", error);
     }
   };
 
   const getParentCompanyAddMember = async (
+        
     controller = new AbortController()
+    
   ) => {
     try {
       const response = await axios.get(PARENT_COMPINES, {
@@ -370,7 +372,7 @@ const AddMember = () => {
       setArrOfParentCompanyAddMember(response?.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      console.log("error from getParentCompanyAddMember");
+      Logger.debug("error from getParentCompanyAddMember");
     }
   };
 
@@ -385,7 +387,7 @@ const AddMember = () => {
     setValue("cgfActivity", "");
   };
   const phoneNumberChangeHandlerAddMember = (e, name, code) => {
-    console.log(
+    Logger.debug(
       "on number change",
       e.target.value,
       "name: ",
@@ -425,81 +427,91 @@ const AddMember = () => {
     };
   }, []);
 
-  
-  return (
-    <div className="page-wrapper">
-      <Toaster
-        myRef={myRef}
-        titleMessage={toasterDetailsAddMember.titleMessage}
-        descriptionMessage={toasterDetailsAddMember.descriptionMessage}
-        messageType={toasterDetailsAddMember.messageType}
-      />
-      <div className="breadcrumb-wrapper">
-        <div className="container">
-          <ul className="breadcrumb">
-            <li>
-              <Link to="/users/members">Members</Link>
-            </li>
-            <li>Add Member</li>
-          </ul>
-        </div>
-      </div>
-      <section>
-        <div className="container">
-          <div className="form-header flex-between">
-            <h2 className="heading2">Add Member</h2>
-            <div className="form-header-right-txt">
-              <div
-                className="tertiary-btn-blk"
-                onClick={handleSubmit(onAddMoreButtonClickHandlerAddMember)}
-              >
-                <span
-                  //   onClick={handleSubmit(onAddMoreButtonClickHandlerAddMember)}
-                  className="addmore-icon"
-                >
-                  <i className="fa fa-plus"></i>
-                </span>
-                <span
-                  className="addmore-txt"
-                  //   onClick={handleSubmit(onAddMoreButtonClickHandlerAddMember)}
-                >
-                  Save & Add More
-                </span>
-              </div>
+    Logger.debug("arrOfparentCompnies", arrOfParentCompanyAddMember);
+    return (
+        <div className="page-wrapper">
+            <Toaster
+                myRef={myRef}
+                titleMessage={toasterDetailsAddMember.titleMessage}
+                descriptionMessage={toasterDetailsAddMember.descriptionMessage}
+                messageType={toasterDetailsAddMember.messageType}
+            />
+            <div className="breadcrumb-wrapper">
+                <div className="container">
+                    <ul className="breadcrumb">
+                        <li>
+                            <Link to="/users/members">Members</Link>
+                        </li>
+                        <li>Add Member</li>
+                    </ul>
+                </div>
             </div>
-          </div>
-          <form
-            onSubmit={handleSubmit(onSubmitAddMember)}
-            onKeyDown={(e) => checkKeyDown(e)}
-          >
-            {isMemberLoading ? (
-              <Loader />
-            ) : (
-              <div className="card-wrapper">
-                <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Company Detail</h2>
-                  <div className="card-blk flex-between">
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="memberCompany">
-                          Member Company <span className="mandatory">*</span>
-                        </label>
-                        <Input
-                          control={control}
-                          name="memberCompany"
-                          placeholder="Enter member company"
-                          onBlur={(e) =>
-                            setValue("memberCompany", e.target.value?.trim())
-                          }
-                          myHelper={memberHelper}
-                          rules={{
-                            required: true,
-                            maxLength: 50,
-                            minLength: 3,
-                          }}
-                        />
-                      </div>
+            <section>
+                <div className="container">
+                    <div className="form-header flex-between">
+                        <h2 className="heading2">Add Member</h2>
+                        <div className="form-header-right-txt">
+                            <div
+                                className="tertiary-btn-blk"
+                                onClick={handleSubmit(
+                                    onAddMoreButtonClickHandlerAddMember
+                                )}
+                            >
+                                <span
+                                    //   onClick={handleSubmit(onAddMoreButtonClickHandlerAddMember)}
+                                    className="addmore-icon"
+                                >
+                                    <i className="fa fa-plus"></i>
+                                </span>
+                                <span
+                                    className="addmore-txt"
+                                    //   onClick={handleSubmit(onAddMoreButtonClickHandlerAddMember)}
+                                >
+                                    Save & Add More
+                                </span>
+                            </div>
+                        </div>
                     </div>
+                    <form
+                        onSubmit={handleSubmit(onSubmitAddMember)}
+                        onKeyDown={(e) => checkKeyDown(e)}
+                    >
+                        {isMemberLoading ? (
+                            <Loader />
+                        ) : (
+                            <div className="card-wrapper">
+                                <div className="card-inner-wrap">
+                                    <h2 className="sub-heading1">
+                                        Company Detail
+                                    </h2>
+                                    <div className="card-blk flex-between">
+                                        <div className="card-form-field">
+                                            <div className="form-group">
+                                                <label htmlFor="memberCompany">
+                                                    Member Company{" "}
+                                                    <span className="mandatory">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <Input
+                                                    control={control}
+                                                    name="memberCompany"
+                                                    placeholder="Enter member company"
+                                                    onBlur={(e) =>
+                                                        setValue(
+                                                            "memberCompany",
+                                                            e.target.value?.trim()
+                                                        )
+                                                    }
+                                                    myHelper={memberHelper}
+                                                    rules={{
+                                                        required: true,
+                                                        maxLength: 50,
+                                                        minLength: 3,
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
 
                     <div className="card-form-field">
                       <div className="form-group">
@@ -568,7 +580,7 @@ const AddMember = () => {
                               }
                               onSubmit={() => setValue("parentCompany", "")}
                               onChange={(event, newValue) => {
-                                console.log("new Value ", newValue);
+                                Logger.debug("new Value ", newValue);
                                 if (newValue) {
                                   typeof newValue === "object"
                                     ? setValue("parentCompany", newValue.name)
@@ -625,7 +637,8 @@ const AddMember = () => {
                       <div className="form-group">
                         {/* <div className="select-field"> */}
                         <label htmlFor="cgfActivity">
-                          CGF Activity <span className="mandatory">*</span>
+                          CGF Activity 
+                                                    <span className="mandatory">*</span>
                         </label>
                         <Dropdown
                           control={control}
@@ -703,8 +716,8 @@ const AddMember = () => {
                                   {...field}
                                   className={`${error && "autocomplete-error"}`}
                                   onChange={(event, newValue) => {
-                                    console.log("inside autocomplete onchange");
-                                    console.log("new Value ", newValue);
+                                    Logger.debug("inside autocomplete onchange");
+                                    Logger.debug("new Value ", newValue);
                                     newValue && typeof newValue === "object"
                                       ? setValue("countryCode", newValue.name)
                                       : setValue("countryCode", newValue);
@@ -884,7 +897,7 @@ const AddMember = () => {
                               disabled={!watch("country")}
                               onSubmit={() => setValue("city", "")}
                               onChange={(event, newValue) => {
-                                console.log("new Value ", newValue);
+                                Logger.debug("new Value ", newValue);
                                 if (newValue) {
                                   typeof newValue === "object"
                                     ? setValue("city", newValue.name)
@@ -901,7 +914,7 @@ const AddMember = () => {
                               // getOptionLabel={(option) => {
                               //   // Value selected with enter, right from the input
                               //   if (typeof option === "string") {
-                              //     // console.log("option inside type string",option)
+                              //     // Logger.debug("option inside type string",option)
                               //     return option;
                               //   }
                               //   return option;

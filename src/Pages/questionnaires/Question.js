@@ -13,7 +13,7 @@ import {
     Typography,
 } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
-
+import { Logger } from "../../Logger/Logger";
 import CloseIcon from "@mui/icons-material/Close";
 import AntSwitch from "../../utils/AntSwitch";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
@@ -108,7 +108,7 @@ const Question = ({
 
         // deleting error  object
         // let tempErrArray = [...errArray];
-        // console.log("questionId: ", questionIdx);
+        // Logger.debug("questionId: ", questionIdx);
         // tempErrArray.splice(questionIdx, 1);
         // setErrArray(tempErrArray);
     };
@@ -189,13 +189,13 @@ const Question = ({
         ].options.push("");
         setQuestionnaire(tempQuestionnaire);
     };
-    // console.log("Error",err)
+    // Logger.debug("Error",err)
     useEffect(() => {
-        // console.log('Error: ',err)
+        // Logger.debug('Error: ',err)
 
         return () => {};
     }, [err]);
-    // console.log("Error inside question: ",err)
+    // Logger.debug("Error inside question: ",err)
 
     const Placeholder = ({ children }) => {
         return <div className="select-placeholder">{children}</div>;
@@ -206,7 +206,7 @@ const Question = ({
             sectionIndex
         ].questions.filter((question) => question.questionTitle === title);
         if (filterSameNameQuestionTitle.length > 1) {
-            console.log("Same question title appeared twice.");
+            Logger.debug("Same question title appeared twice.");
             return true;
         } else {
             return false;

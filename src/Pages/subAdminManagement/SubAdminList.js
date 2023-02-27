@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Tabs, Tab } from "@mui/material";
-
+import { Logger } from "../../Logger/Logger";
 import DownloadIcon from "@mui/icons-material/Download";
 import useCallbackState from "../../utils/useCallBackState";
 import { privateAxios } from "../../api/axios";
@@ -71,20 +71,20 @@ const SubAdminList = () => {
         role: "",
     });
     const onFilterChangeHandler = (e) => {
-        console.log("filter value: ", e.target.value);
-        // console.log("type of time out func",typeof(timoutFunc))
+        Logger.debug("filter value: ", e.target.value);
+        // Logger.debug("type of time out func",typeof(timoutFunc))
         setPage(1);
         setFilters({
             ...filters,
             [e.target.name]: e.target.value,
         });
-        console.log("filters in parent component", filters);
+        Logger.debug("filters in parent component", filters);
     };
     const onSearchChangeHandler = (e) => {
-        console.log("event", e.key);
+        Logger.debug("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
         setMakeApiCall(false);
-        console.log("search values", e.target.value);
+        Logger.debug("search values", e.target.value);
         setSearch(e.target.value);
         setSearchTimeout(
             setTimeout(() => {
@@ -110,7 +110,7 @@ const SubAdminList = () => {
     // let records = [];
 
     const updatePendingRecordsCGFAdmin = (data) => {
-        console.log("data before update----", data);
+        Logger.debug("data before update----", data);
 
         let staleData = data;
         staleData.forEach((cgfAdmin) => {
@@ -149,7 +149,7 @@ const SubAdminList = () => {
                 cgfAdmin[k] = v;
             });
         });
-        console.log(
+        Logger.debug(
             "data in updaterecords method in pending method",
             staleData
         );
@@ -163,14 +163,14 @@ const SubAdminList = () => {
 
     // rows per page method for pending tab
     const handleRowsPerPageChangeForPendingTab = (event) => {
-        console.log("rows per page", event);
+        Logger.debug("rows per page", event);
         setRowsPerPageForPendingTab(parseInt(event.target.value, 10));
         setPageForPendingTab(1);
     };
 
     //  on click delete icon open delete modal
     const onClickDeleteIconHandler = (id) => {
-        console.log("id for delete", id);
+        Logger.debug("id for delete", id);
         setOpenDeleteDialogBox(true);
         setWithdrawInviteid(id);
     };
@@ -181,7 +181,7 @@ const SubAdminList = () => {
                 WITHDRAW_SUB_ADMIN + withdrawInviteid
             );
             if (response.status == 200) {
-                console.log("user invite withdrawn successfully");
+                Logger.debug("user invite withdrawn successfully");
                 setToasterDetails(
                     {
                         titleMessage: "Success",
@@ -194,14 +194,14 @@ const SubAdminList = () => {
                 setOpenDeleteDialogBox(false);
             }
         } catch (error) {
-            console.log("error from withdrawInvite id", error);
+            Logger.debug("error from withdrawInvite id", error);
         }
     };
 
     // url for pending tab
     const generateUrlForPendingTab = () => {
-        console.log("filters", filters);
-        console.log("Search", search);
+        Logger.debug("filters", filters);
+        Logger.debug("Search", search);
         let url = `${ADD_SUB_ADMIN}/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
 
         if (search?.length >= 0) url += `&search=${search}`;
@@ -223,7 +223,7 @@ const SubAdminList = () => {
             setTotalRecordsForPendingTab(
                 parseInt(response.headers["x-total-count"])
             );
-            console.log(
+            Logger.debug(
                 "Response from sub admin api get for pending tab table",
                 response
             );
@@ -233,7 +233,7 @@ const SubAdminList = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
 
-            console.log(
+            Logger.debug(
                 "Error from getSubAdmin pending tab table-------",
                 error
             );
@@ -259,8 +259,8 @@ const SubAdminList = () => {
         () => {
             let isMounted = true;
             const controller = new AbortController();
-            console.log("makeApiCall", makeApiCall);
-            console.log("inside use Effect");
+            Logger.debug("makeApiCall", makeApiCall);
+            Logger.debug("inside use Effect");
             return () => {
                 isMounted = false;
                 clearTimeout(searchTimeout);
@@ -278,7 +278,7 @@ const SubAdminList = () => {
         ]
     );
     {
-        console.log("makeApiCall outside UseEffect ", makeApiCall);
+        Logger.debug("makeApiCall outside UseEffect ", makeApiCall);
     }
 
     const [selectedRoles, setSelectedRoles] = useState([]);
@@ -294,7 +294,7 @@ const SubAdminList = () => {
     //         const response = await privateAxios.get(DOWNLOAD_CGF_ADMIN, {
     //             responseType: "blob",
     //         });
-    //         console.log("resposne from download cgf admins", response);
+    //         Logger.debug("resposne from download cgf admins", response);
     //         const url = window.URL.createObjectURL(new Blob([response.data]));
     //         const link = document.createElement("a");
     //         link.href = url;
@@ -313,15 +313,15 @@ const SubAdminList = () => {
     //             );
     //         }
     //     } catch (error) {
-    //         console.log("Error from download cgf admins", error);
+    //         Logger.debug("Error from download cgf admins", error);
     //     }
     // };
 
-    console.log("selected roles---", selectedRoles);
+    Logger.debug("selected roles---", selectedRoles);
 
-    console.log("Selected status filter---", selectedStatusFilter);
+    Logger.debug("Selected status filter---", selectedStatusFilter);
 
-    console.log("Search text---", searchText);
+    Logger.debug("Search text---", searchText);
 
     return (
         <div className="page-wrapper">

@@ -12,7 +12,7 @@ import Loader2 from "../../assets/Loader/Loader2.svg";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-
+import { Logger } from "../../Logger/Logger";
 const tableHead1 = [
     {
         id: "name",
@@ -78,8 +78,8 @@ const RolesList = () => {
     const [showStatusFilterPlaceholder, setShowStatusFilterPlaceholder] =
         useState(filters.status === "none");
     const onFilterChangeHandler = (e) => {
-        console.log("value: ", e.target.value);
-        // console.log("type of time out func",typeof(timoutFunc))
+        Logger.debug("value: ", e.target.value);
+        // Logger.debug("type of time out func",typeof(timoutFunc))
         setPage(1);
         setFilters({
             ...filters,
@@ -87,10 +87,10 @@ const RolesList = () => {
         });
     };
     const onSearchChangeHandler = (e) => {
-        console.log("event", e.key);
+        Logger.debug("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
         setMakeApiCall(false);
-        console.log("search values", e.target.value);
+        Logger.debug("search values", e.target.value);
         setSearch(e.target.value);
         setSearchTimeout(
             setTimeout(() => {
@@ -140,11 +140,11 @@ const RolesList = () => {
         setPage(1);
     };
     const onClickVisibilityIconHandler = (id) => {
-        console.log("id", id);
+        Logger.debug("id", id);
         return navigate3(`view-role/${id}`);
     };
     const generateUrl = () => {
-        console.log("filters", filters);
+        Logger.debug("filters", filters);
         let url = `${REACT_APP_API_ENDPOINT}roles/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
         if (search) url = url + `&search=${search}`;
         if (filters?.status !== "none" && filters?.status !== "all")
@@ -161,7 +161,7 @@ const RolesList = () => {
             const response = await axios.get(url, {
                 signal: controller.signal,
             });
-            console.log("Response: ", response);
+            Logger.debug("Response: ", response);
             setTotalRecords(parseInt(response.headers["x-total-count"]));
             updateRecords(response.data);
             setIsLoading2(false);
@@ -205,8 +205,8 @@ const RolesList = () => {
         let isMounted = true;
         const controller = new AbortController();
         makeApiCall && getRoles(isMounted, controller);
-        console.log("makeApiCall", makeApiCall);
-        console.log("inside use Effect");
+        Logger.debug("makeApiCall", makeApiCall);
+        Logger.debug("inside use Effect");
         return () => {
             isMounted = false;
             clearTimeout(searchTimeout);
@@ -214,7 +214,7 @@ const RolesList = () => {
         };
     }, [page, rowsPerPage, orderBy, order, filters, makeApiCall]);
     {
-        console.log("Records: ", records);
+        Logger.debug("Records: ", records);
     }
     return (
         <div className="page-wrapper">

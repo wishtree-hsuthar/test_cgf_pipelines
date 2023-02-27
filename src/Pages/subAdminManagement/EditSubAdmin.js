@@ -26,6 +26,7 @@ import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
+import { Logger } from "../../Logger/Logger";
 
 const helperTextForCGFAdmin = {
     countryCode: {
@@ -98,7 +99,7 @@ const EditSubAdmin = () => {
     });
 
     const phoneNumberChangeHandler = (e, name, code) => {
-        console.log("inside on Change");
+        Logger.debug("inside on Change");
         setValue(name, e.target.value);
         trigger(name);
         trigger(code);
@@ -111,7 +112,7 @@ const EditSubAdmin = () => {
                 const response = await axios.get(COUNTRIES, {
                     signal: controller.signal,
                 });
-                console.log("response", response);
+                Logger.debug("response", response);
                 if (isMounted) {
                     let tempCountryCode = response?.data.map(
                         (country) => country.countryCode
@@ -120,7 +121,7 @@ const EditSubAdmin = () => {
                     setCountries([...tempCountryCodeSet]);
                 }
             } catch (error) {
-                console.log(
+                Logger.debug(
                     "error from countries api of edit sub-admin",
                     error
                 );
@@ -161,7 +162,7 @@ const EditSubAdmin = () => {
                     }
                 );
                 setIsEditCgfAdminLoading(false);
-                console.log(
+                Logger.debug(
                     "response from sub admin view page fetch api",
                     response
                 );
@@ -177,7 +178,7 @@ const EditSubAdmin = () => {
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
                 setIsEditCgfAdminLoading(false);
-                console.log("error from sub admin view page fetch api", error);
+                Logger.debug("error from sub admin view page fetch api", error);
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
@@ -210,10 +211,10 @@ const EditSubAdmin = () => {
         let fetchRoles = async () => {
             try {
                 const response = await privateAxios.get(FETCH_ROLES);
-                console.log("Response from fetch roles - ", response);
+                Logger.debug("Response from fetch roles - ", response);
                 setRoles(response.data);
             } catch (error) {
-                console.log("Error from fetch roles", error);
+                Logger.debug("Error from fetch roles", error);
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
@@ -245,13 +246,13 @@ const EditSubAdmin = () => {
         };
     }, []);
 
-    console.log("fetchdetails in edit sub admin", fetchSubAdminDetailsForEdit);
+    Logger.debug("fetchdetails in edit sub admin", fetchSubAdminDetailsForEdit);
 
     const location = useLocation();
-    console.log(location);
+    Logger.debug(location);
 
     const handleOnSubmit = async (data) => {
-        console.log("data from handle submit edit", data);
+        Logger.debug("data from handle submit edit", data);
         setDisableEditCgfAdminButton(true);
         setIsEditCgfAdminLoading(true);
         try {
@@ -265,7 +266,7 @@ const EditSubAdmin = () => {
                     isActive: data.status === "active" ? true : false,
                 }
             );
-            console.log("response from edit sub admin method", response);
+            Logger.debug("response from edit sub admin method", response);
             if (response.status == 200) {
                 setIsEditCgfAdminLoading(false);
 
@@ -285,7 +286,7 @@ const EditSubAdmin = () => {
                 }, 2000);
             }
         } catch (error) {
-            console.log("error from edit sub admin submit method");
+            Logger.debug("error from edit sub admin submit method");
             setIsEditCgfAdminLoading(false);
 
             if (error?.response?.status == 400) {
@@ -517,10 +518,10 @@ const EditSubAdmin = () => {
                                                                     event,
                                                                     newValue
                                                                 ) => {
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "inside autocomplete onchange"
                                                                     );
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "new Value ",
                                                                         newValue
                                                                     );

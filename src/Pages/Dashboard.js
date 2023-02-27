@@ -6,6 +6,7 @@ import { GET_USER } from "../api/Url";
 import { useDispatch, useSelector } from "react-redux";
 import useCallbackState from "../utils/useCallBackState";
 import Toaster from "../components/Toaster";
+import { Logger } from "../Logger/Logger";
 const Dashboard = (props) => {
     //custom hook to set title of page
     useDocumentTitle("Home");
@@ -16,8 +17,8 @@ const Dashboard = (props) => {
     let userRoleDeleted =
         Object.keys(checkPrivilege).length === 0 &&
         checkUser?.role?.name !== "Super Admin";
-    console.log("user role is deleted  =  ", userRoleDeleted);
-    console.log(
+    Logger.debug("user role is deleted  =  ", userRoleDeleted);
+    Logger.debug(
         "user is  super Admin = ",
         Object.keys(checkPrivilege).length === 0 &&
             checkUser?.role?.name === "Super Admin"
@@ -51,7 +52,7 @@ const Dashboard = (props) => {
 
             // isMounted && dispatch(setUser(response.data));
             // isMounted && dispatch(setPrivileges(response.data?.role));
-            console.log("in userloggedin - ", response);
+            Logger.debug("in userloggedin - ", response);
         } catch (error) {
             if (error?.response?.status == 401) {
                 setHomeToasterDetails(

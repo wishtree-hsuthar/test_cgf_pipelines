@@ -3,7 +3,7 @@ import { Backdrop, Box, Fade, Modal, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setOldQuestionnaire } from "../../../redux/UserSlice";
-
+import { Logger } from "../../../Logger/Logger";
 /* Popup */
 const style = {
     position: "absolute",
@@ -28,7 +28,7 @@ const DropdownOptionModal = ({
     setTableErr,
 }) => {
     const dispatch = useDispatch();
-    // console.log("old options:- ",oldOptions)
+    // Logger.debug("old options:- ",oldOptions)
 
     // const questionnaireCopy = Object.assign(questionnaire,{})
     // const  questionnaireCopy= structuredClone( questionnaire)
@@ -76,10 +76,10 @@ const DropdownOptionModal = ({
         !isError && setOpenModal(false);
     };
     let oldOptions = useSelector((state) => state.user.questionnaire);
-    // console.log("old options:- ", oldQuestionnare);
+    // Logger.debug("old options:- ", oldQuestionnare);
     //method to handle cancel questionnaire
     const onCancelButtonClickHandler = () => {
-        console.log("old Questionnaire:- ", oldOptions);
+        Logger.debug("old Questionnaire:- ", oldOptions);
 
         let tempQuestionnaire = { ...questionnaire };
         if (
@@ -172,8 +172,11 @@ const DropdownOptionModal = ({
                                                                           !option &&
                                                                           "input-error"
                                                                       }`
-                                                                    : `input-field que-input-type ${tableOptionErr &&
-                                                                        !option && "input-error"}`
+                                                                    : `input-field que-input-type ${
+                                                                          tableOptionErr &&
+                                                                          !option &&
+                                                                          "input-error"
+                                                                      }`
                                                             }
                                                             value={option}
                                                             onChange={(e) =>

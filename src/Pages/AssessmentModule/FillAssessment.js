@@ -22,7 +22,7 @@ import Toaster from "../../components/Toaster";
 import { downloadFunction } from "../../utils/downloadFunction";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-
+import { Logger } from "../../Logger/Logger";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import Loader from "../../utils/Loader";
 const FillAssesmentSection = React.lazy(() =>
@@ -131,7 +131,7 @@ function FillAssessment() {
     };
 
     const handleCatchError = (error, functionName) => {
-        console.log("error occured in ", functionName);
+        Logger.debug("error occured in ", functionName);
         if (error?.response?.status === 401) {
             setToasterDetails(
                 {
@@ -177,7 +177,7 @@ function FillAssessment() {
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
 
-                console.log("error from fetch questionnaire", error);
+                Logger.debug("error from fetch questionnaire", error);
                 if (error?.response?.status === 401) {
                     isMounted &&
                         setToasterDetails(
@@ -206,7 +206,7 @@ function FillAssessment() {
                     }
                 );
                 setIsFillAssessmentLoading(false);
-                console.log("response from fetch assessment", response);
+                Logger.debug("response from fetch assessment", response);
                 setEditMode(
                     userAuth?._id ===
                         response?.data?.assignedOperationMember?._id
@@ -261,7 +261,7 @@ function FillAssessment() {
                     }, 3000);
                 }
                 setIsFillAssessmentLoading(false);
-                console.log("error from fetch assessment", error);
+                Logger.debug("error from fetch assessment", error);
             }
         };
         fetchAssessments();
@@ -328,11 +328,11 @@ function FillAssessment() {
                 const transformedColValues = getTransformedColumns(
                     section?.columnValues
                 );
-                console.log(
+                Logger.debug(
                     "curren assessment Questionnaire:- ",
                     currentSectionAnswers
                 );
-                console.log(
+                Logger.debug(
                     "transformed column values:- ",
                     transformedColValues
                 );
@@ -365,7 +365,7 @@ function FillAssessment() {
                                 ]
                             )
                         ) {
-                            console.log(
+                            Logger.debug(
                                 "Fetched value not present in column dropdown options"
                             );
                             sectionErrors[
@@ -379,7 +379,7 @@ function FillAssessment() {
 
                             `;
                             sections.push(index);
-                            console.log("sections = ", sections);
+                            Logger.debug("sections = ", sections);
                             tempAsssessmentQuestionnaire = {
                                 ...tempAsssessmentQuestionnaire,
                                 [section?.uuid]: {
@@ -408,7 +408,7 @@ function FillAssessment() {
                                 ).getTime()
                             )
                         ) {
-                            console.log(
+                            Logger.debug(
                                 "Fetched value not present in column dropdown options"
                             );
                             sectionErrors[
@@ -422,7 +422,7 @@ function FillAssessment() {
 
                             `;
                             sections.push(index);
-                            console.log("sections = ", sections);
+                            Logger.debug("sections = ", sections);
                             tempAsssessmentQuestionnaire = {
                                 ...tempAsssessmentQuestionnaire,
                                 [section?.uuid]: {
@@ -446,7 +446,7 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${column?.uuid}_${tempRowId}`] =
                                 "This is an alphabetic field.";
-                            console.log("in table alphabets only");
+                            Logger.debug("in table alphabets only");
                             sections.push(index);
                         } else if (
                             column?.columnType !== "prefilled" &&
@@ -462,7 +462,7 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${column?.uuid}_${tempRowId}`] =
                                 "This is a numeric field.";
-                            console.log("in table numeric only");
+                            Logger.debug("in table numeric only");
                             sections.push(index);
                         } else if (
                             column.columnType !== "prefilled" &&
@@ -478,7 +478,7 @@ function FillAssessment() {
                         ) {
                             sectionErrors[`${column?.uuid}_${tempRowId}`] =
                                 " This is an alphanumeric field.";
-                            console.log("in table alphanumeric only");
+                            Logger.debug("in table alphanumeric only");
                             sections.push(index);
                         } else {
                             delete sectionErrors[
@@ -487,7 +487,7 @@ function FillAssessment() {
                         }
                     });
                 });
-                console.log("Section errors in table layout ", sectionErrors);
+                Logger.debug("Section errors in table layout ", sectionErrors);
             } else {
                 // form validators
                 section?.questions.forEach((question) => {
@@ -498,9 +498,9 @@ function FillAssessment() {
                                 0) &&
                         saveAsDraft === false
                     ) {
-                        console.log("error from required");
-                        console.log("section no", index);
-                        console.log(
+                        Logger.debug("error from required");
+                        Logger.debug("section no", index);
+                        Logger.debug(
                             "answer in required",
                             currentSectionAnswers[question?.uuid]
                         );
@@ -514,9 +514,9 @@ function FillAssessment() {
                             currentSectionAnswers[question?.uuid]
                         )
                     ) {
-                        console.log("error from dropdown question");
-                        console.log("section no", index);
-                        console.log("section no", sections);
+                        Logger.debug("error from dropdown question");
+                        Logger.debug("section no", index);
+                        Logger.debug("section no", sections);
 
                         sectionErrors[question?.uuid] = `
                         
@@ -542,10 +542,10 @@ function FillAssessment() {
                                     ","
                                 );
                         }
-                        console.log("error from checkbox question");
-                        console.log("section no", index);
-                        console.log("section no", sections);
-                        console.log("answer for checkbox", answerOptions);
+                        Logger.debug("error from checkbox question");
+                        Logger.debug("section no", index);
+                        Logger.debug("section no", sections);
+                        Logger.debug("answer for checkbox", answerOptions);
 
                         let optionsFromQuestion = question.options;
                         let optionsPresentInBothAnswerAndQuestionList =
@@ -583,7 +583,7 @@ function FillAssessment() {
                             currentSectionAnswers[question?.uuid]
                         ) === false
                     ) {
-                        console.log("error from numric if elese");
+                        Logger.debug("error from numric if elese");
 
                         sectionErrors[question?.uuid] =
                             "This is an alphabetic field";
@@ -617,9 +617,9 @@ function FillAssessment() {
                             ).getTime()
                         )
                     ) {
-                        console.log("error from date question");
-                        console.log("section no", index);
-                        console.log("section no", sections);
+                        Logger.debug("error from date question");
+                        Logger.debug("section no", index);
+                        Logger.debug("section no", sections);
 
                         sectionErrors[question?.uuid] = `
                         
@@ -643,8 +643,8 @@ function FillAssessment() {
             }
 
             setTabValue(sections.length > 0 ? sections[0] : 0);
-            console.log("Section errors in  ", sectionErrors);
-            console.log("Section : ", sections);
+            Logger.debug("Section errors in  ", sectionErrors);
+            Logger.debug("Section : ", sections);
 
             tempErrors[section?.uuid] = { ...sectionErrors };
         });
@@ -673,7 +673,7 @@ function FillAssessment() {
                     comment: data.comment,
                 }
             );
-            console.log(
+            Logger.debug(
                 "Response from backend for decline assessment",
                 response
             );
@@ -860,7 +860,7 @@ function FillAssessment() {
                                     } catch (error) {
                                         setIsFillAssessmentLoading(false);
 
-                                        console.log(
+                                        Logger.debug(
                                             "Error from corections doc download",
                                             error
                                         );
@@ -868,7 +868,7 @@ function FillAssessment() {
                                 }
                             }
                         } catch (error) {
-                            console.log("Error from UPLOAD api", error);
+                            Logger.debug("Error from UPLOAD api", error);
 
                             setIsFillAssessmentLoading(false);
                             setSelectedFileName("");
@@ -911,7 +911,7 @@ function FillAssessment() {
             setSelectedFileName("");
             setIsFillAssessmentLoading(false);
 
-            console.log("error in reupload assessment", error);
+            Logger.debug("error in reupload assessment", error);
         }
     };
 
@@ -923,7 +923,7 @@ function FillAssessment() {
         setImportOpenDialog(false);
     };
     const addTableAssessmentValues = () => {
-        console.log("Inside add Table assessment value function");
+        Logger.debug("Inside add Table assessment value function");
         if (questionnaire && Object.keys(questionnaire)?.length > 0) {
             questionnaire?.sections?.forEach((section) => {
                 if (

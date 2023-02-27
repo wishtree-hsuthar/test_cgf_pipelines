@@ -48,7 +48,7 @@ const FormQuestions = ({
     setQuestionTitleList,
 }) => {
     //On click of Save button handler
-    // console.log("section Index",sectionIndex,"questionnaire",questionnaire)
+    // Logger.debug("section Index",sectionIndex,"questionnaire",questionnaire)
     return (
         <>
             <div className="que-form-card-wrapper">

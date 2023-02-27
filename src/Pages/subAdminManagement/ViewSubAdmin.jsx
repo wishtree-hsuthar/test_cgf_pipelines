@@ -20,6 +20,7 @@ import Toaster from "../../components/Toaster";
 import DialogBox from "../../components/DialogBox";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { Logger } from "../../Logger/Logger";
 
 const ViewSubAdmin = () => {
     //custom hook to set title of page
@@ -57,7 +58,7 @@ const ViewSubAdmin = () => {
                         signal: controller.signal,
                     }
                 );
-                console.log(
+                Logger.debug(
                     "response from sub admin view page fetch api",
                     response
                 );
@@ -65,7 +66,7 @@ const ViewSubAdmin = () => {
                 setIsCgfLoading(false);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
-                console.log("error from sub admin view page fetch api", error);
+                Logger.debug("error from sub admin view page fetch api", error);
                 setIsCgfLoading(false);
                 if (error?.response?.status === 500) {
                     navigate("/users/cgf-admin/");
@@ -112,7 +113,7 @@ const ViewSubAdmin = () => {
                 }, 2000);
             }
         } catch (error) {
-            console.log("error from delete API", error);
+            Logger.debug("error from delete API", error);
 
             if (error?.response?.status === 401) {
                 setToasterDetails(
@@ -139,15 +140,15 @@ const ViewSubAdmin = () => {
             }
         }
     };
-    console.log("fetchedSubAdminDetails---", fetchedSubAdminDetails?.isActive);
+    Logger.debug("fetchedSubAdminDetails---", fetchedSubAdminDetails?.isActive);
     const handleToggle = () => {
         setActive(!isActive);
     };
     const handleOpen = (index) => {
         // setOpen(true);
         // setData(data[index]);
-        console.log("clicked", index);
-        console.log(index);
+        Logger.debug("clicked", index);
+        Logger.debug(index);
         if (index === 0) {
             // setOpen(false);
             history(`/users/cgf-admin/edit-cgf-admin/${params.id}`);

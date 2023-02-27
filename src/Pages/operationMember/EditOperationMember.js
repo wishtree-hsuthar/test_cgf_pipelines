@@ -17,6 +17,7 @@ import {
     Controller as EditOperationMemberController,
     useForm,
 } from "react-hook-form";
+import { Logger } from "../../Logger/Logger";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import {
@@ -93,8 +94,8 @@ function EditOperationMember() {
         messageType: "error",
     });
     const [roles, setRoles] = useState([]);
-    console.log("operationMember", operationMember);
-    console.log("watch country code", watch("countryCode"));
+    Logger.debug("operationMember", operationMember);
+    Logger.debug("watch country code", watch("countryCode"));
     const fetchReportingManagers = async (id) => {
         try {
             const response = await privateAxios.get(
@@ -107,7 +108,7 @@ function EditOperationMember() {
                         name: data?.name,
                     }))
                 );
-                console.log(
+                Logger.debug(
                     "reporting managersssss",
                     response?.data.map((data) => ({
                         _id: data?._id,
@@ -116,14 +117,14 @@ function EditOperationMember() {
                 );
             }
         } catch (error) {
-            console.log("error from fetching reporting managers", error);
+            Logger.debug("error from fetching reporting managers", error);
         }
     };
     // fetch all countries and its objects
     const fetchCountries = async (isMounted, controller) => {
         try {
             const response = await privateAxios.get(COUNTRIES);
-            console.log("response from countries", response);
+            Logger.debug("response from countries", response);
             // isMounted &&
             let tempCountries = response.data.map(
                 (country) => country?.countryCode
@@ -133,17 +134,17 @@ function EditOperationMember() {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
 
-            console.log("error from countries api", error);
+            Logger.debug("error from countries api", error);
         }
     };
     // Fetch all member comapanies
     const fetchMemberComapany = async (isMounted, controller) => {
         try {
             const response = await privateAxios.get(MEMBER + "/list");
-            console.log(
+            Logger.debug(
                 "member company---",
                 response.data.map((data) => {
-                    console.log("member company=", data?.companyName);
+                    Logger.debug("member company=", data?.companyName);
                 })
             );
 
@@ -158,17 +159,17 @@ function EditOperationMember() {
                     );
             }
 
-            console.log("member company---", memberCompanies);
+            Logger.debug("member company---", memberCompanies);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
 
-            console.log("error from fetch member company", error);
+            Logger.debug("error from fetch member company", error);
         }
     };
 
     // Fetch reporting managers of all member companies
     const fetchRm = async (id, isCGFStaff) => {
-        console.log("operation member----", operationMember);
+        Logger.debug("operation member----", operationMember);
         try {
             const response = await privateAxios.get(
                 // FETCH_REPORTING_MANAGER + id
@@ -180,7 +181,7 @@ function EditOperationMember() {
                     ? FETCH_OPERATION_MEMBER + id + "/master/external"
                     : FETCH_OPERATION_MEMBER + id + "/master/internal"
             );
-            console.log("response from rm", response);
+            Logger.debug("response from rm", response);
             setReportingManagers(
                 response.data
                     .filter((data) => data._id !== params.id)
@@ -190,12 +191,12 @@ function EditOperationMember() {
                     }))
             );
         } catch (error) {
-            console.log("Error from fetching rm reporting manager", error);
+            Logger.debug("Error from fetching rm reporting manager", error);
         }
     };
 
     // fetch operation member by id
-    console.log("reporting managers", reportingManagers);
+    Logger.debug("reporting managers", reportingManagers);
 
     const fetchOperationMember = async (controller, isMounted) => {
         try {
@@ -238,7 +239,7 @@ function EditOperationMember() {
                     //     response?.data?.reportingManager?._id,
                 });
             setOperationMember(response.data);
-            console.log("response data ----", operationMember);
+            Logger.debug("response data ----", operationMember);
             let isCGFStaff = response?.data?.isCGFStaff ? true : false;
             fetchRm(response?.data?.memberId?._id, isCGFStaff);
         } catch (error) {
@@ -259,7 +260,7 @@ function EditOperationMember() {
                 }, 3000);
             }
             setIsEditOperationMemberLoading(false);
-            console.log("error from edit operation members", error);
+            Logger.debug("error from edit operation members", error);
         }
     };
 
@@ -269,16 +270,16 @@ function EditOperationMember() {
             const response = await privateAxios.get(FETCH_ROLES, {
                 signal: controller.signal,
             });
-            console.log("Response from fetch roles - ", response);
+            Logger.debug("Response from fetch roles - ", response);
             setRoles(response.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
 
-            console.log("Error from fetch roles", error);
+            Logger.debug("Error from fetch roles", error);
         }
     };
     const phoneNumberChangeHandler = (e, name, code) => {
-        console.log(
+        Logger.debug(
             "on number change",
             e.target.value,
             "name: ",
@@ -310,8 +311,8 @@ function EditOperationMember() {
             controller.abort();
         };
     }, []);
-    console.log("countries----", countries);
-    console.log("members companies----", memberCompanies);
+    Logger.debug("countries----", countries);
+    Logger.debug("members companies----", memberCompanies);
 
     const editOperationMember = async (data, navigateToListPage) => {
         setDisableEditMemberUpdateButton(true);
@@ -344,7 +345,7 @@ function EditOperationMember() {
                 }, 3000);
             }
         } catch (error) {
-            console.log(
+            Logger.debug(
                 "error in submit data  add operation member method",
                 error
             );
@@ -366,7 +367,7 @@ function EditOperationMember() {
     };
 
     const handleOnSubmit = async (data) => {
-        console.log("data from onsubmit", data);
+        Logger.debug("data from onsubmit", data);
         editOperationMember(data);
     };
 
@@ -601,10 +602,10 @@ function EditOperationMember() {
                                                                     event,
                                                                     newValue
                                                                 ) => {
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "inside autocomplete onchange .of edit operation member"
                                                                     );
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "new Value ",
                                                                         newValue
                                                                     );
@@ -862,10 +863,10 @@ function EditOperationMember() {
                                                                           "memberId",
                                                                           newValue
                                                                       );
-                                                                console.log(
+                                                                Logger.debug(
                                                                     "inside autocomplete onchange"
                                                                 );
-                                                                console.log(
+                                                                Logger.debug(
                                                                     "new Value ",
                                                                     newValue
                                                                 );

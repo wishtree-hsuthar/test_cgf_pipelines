@@ -6,6 +6,7 @@ import TableComponent from "../../components/TableComponent";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
+import { Logger } from "../../Logger/Logger";
 const onBoardedTableColumnHead = [
     {
         id: "name",
@@ -88,11 +89,11 @@ function OnBoardedSubAdminsTable({
             "isActive",
         ];
 
-        console.log("data before update----", data);
+        Logger.debug("data before update----", data);
 
         let staleData = data;
         staleData.forEach((onboardedCGFAdmin) => {
-            console.log("subRole-------", onboardedCGFAdmin["subRoleId"].name);
+            Logger.debug("subRole-------", onboardedCGFAdmin["subRoleId"].name);
             delete onboardedCGFAdmin["updatedAt"];
             delete onboardedCGFAdmin["updatedBy"];
             delete onboardedCGFAdmin["createdBy"];
@@ -125,13 +126,13 @@ function OnBoardedSubAdminsTable({
                 onboardedCGFAdmin[k] = v;
             });
         });
-        console.log("data in updaterecords method", staleData);
+        Logger.debug("data in updaterecords method", staleData);
         setRecords([...staleData]);
     };
 
     const generateUrl = () => {
-        console.log("filters in onboarded table----", filters);
-        console.log("Search", search);
+        Logger.debug("filters in onboarded table----", filters);
+        Logger.debug("Search", search);
         let url = `${ADD_SUB_ADMIN}/list/?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
 
         if (search) url += `&search=${search}`;
@@ -151,13 +152,13 @@ function OnBoardedSubAdminsTable({
             setTotalRecords(
                 parseInt(onBoardedCGFAdmin.headers["x-total-count"])
             );
-            console.log("Response from sub admin api get", onBoardedCGFAdmin);
+            Logger.debug("Response from sub admin api get", onBoardedCGFAdmin);
 
             updateRecords([...onBoardedCGFAdmin.data]);
             setIsOnboardedCgfAdminLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            console.log("Error from getSubAdmin-------", error);
+            Logger.debug("Error from getSubAdmin-------", error);
 
             if (error?.onBoardedCGFAdmin?.status == 401) {
                 setonBoardedCgfAdmintoasterDetails(
@@ -187,7 +188,7 @@ function OnBoardedSubAdminsTable({
     };
     // on click eye icon to  navigate view page
     const onClickVisibilityIconHandler = (id) => {
-        console.log("id", id);
+        Logger.debug("id", id);
         return navigate(`view-cgf-admin/${id}`);
     };
 
@@ -195,8 +196,8 @@ function OnBoardedSubAdminsTable({
         let isMounted = true;
         const controller = new AbortController();
         makeApiCall && getSubAdmin(isMounted, controller);
-        console.log("makeApiCall", makeApiCall);
-        console.log("inside use Effect");
+        Logger.debug("makeApiCall", makeApiCall);
+        Logger.debug("inside use Effect");
         return () => {
             isMounted = false;
             clearTimeout(searchTimeout);

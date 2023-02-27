@@ -30,7 +30,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
 
 let OPERATION_TYPES = []
-
+import { Logger } from "../../Logger/Logger";
 function AddOperationMember() {
     //custom hook to set title of page
     useDocumentTitle("Add Operation Member");
@@ -94,7 +94,7 @@ function AddOperationMember() {
     let fetchRoles = async () => {
         try {
             const response = await privateAxios.get(FETCH_ROLES);
-            console.log("Response from fetch roles - ", response);
+            Logger.debug("Response from fetch roles - ", response);
             setRoles(response.data);
             response.data.filter(
                 (data) =>
@@ -102,12 +102,12 @@ function AddOperationMember() {
                     reset({ roleId: data._id })
             );
         } catch (error) {
-            console.log("Error from fetch roles", error);
+            Logger.debug("Error from fetch roles", error);
         }
     };
 
     const phoneNumberChangeHandler = (e, name, code) => {
-        console.log(
+        Logger.debug(
             "on number change",
             e.target.value,
             "name: ",
@@ -131,10 +131,10 @@ function AddOperationMember() {
                 const response = await privateAxios.get(MEMBER_DROPDOWN, {
                     signal: controller.signal,
                 });
-                console.log(
+                Logger.debug(
                     "member company---",
                     response.data.map((data) => {
-                        console.log("member company=", data?.companyName);
+                        Logger.debug("member company=", data?.companyName);
                     })
                 );
 
@@ -167,13 +167,13 @@ function AddOperationMember() {
                     );
                 }
 
-                console.log("member company---", memberCompanies);
-                console.log(
+                Logger.debug("member company---", memberCompanies);
+                Logger.debug(
                     "member company labels only = ",
                     memberComapniesLabelsOnly
                 );
             } catch (error) {
-                console.log("error from fetch member company", error);
+                Logger.debug("error from fetch member company", error);
                 if (error?.response?.status == 401) {
                     isMounted &&
                         setToasterDetails(
@@ -207,7 +207,7 @@ function AddOperationMember() {
                 const response = await privateAxios.get(COUNTRIES, {
                     signal: controller.signal,
                 });
-                console.log("response", response);
+                Logger.debug("response", response);
                 if (isMounted) {
                     let tempCountryCode = response.data.map(
                         (country) => country?.countryCode
@@ -216,7 +216,7 @@ function AddOperationMember() {
                     setCountries([...conutryCodeSet]);
                 }
             } catch (error) {
-                console.log("error from countries api", error);
+                Logger.debug("error from countries api", error);
             }
         };
         fetchCountries();
@@ -244,7 +244,7 @@ function AddOperationMember() {
                 );
             }
         } catch (error) {
-            console.log("error from fetching reporting managers", error);
+            Logger.debug("error from fetching reporting managers", error);
 
             if (error?.response?.status == 401) {
                 setToasterDetails(
@@ -266,7 +266,7 @@ function AddOperationMember() {
         let selectedMemberCompany = memberCompanies.filter(
             (company) => company.companyName === data.memberId
         );
-        console.log("Selected member company = ", selectedMemberCompany);
+        Logger.debug("Selected member company = ", selectedMemberCompany);
         setDisableAddOperationMemberButton(true);
         data = {
             ...data,
@@ -276,7 +276,7 @@ function AddOperationMember() {
                     ? cgfMember[0]._id
                     : selectedMemberCompany[0]._id,
         };
-        console.log("Data while adding operation member - ", data);
+        Logger.debug("Data while adding operation member - ", data);
         setIsAddOperationMemberLoading(true);
         try {
             const response = await privateAxios.post(
@@ -304,7 +304,7 @@ function AddOperationMember() {
                     }, 3000);
             }
         } catch (error) {
-            console.log(
+            Logger.debug(
                 "error in submit data for add operation member method",
                 error
             );
@@ -338,11 +338,11 @@ function AddOperationMember() {
     };
 
     const handleOnSubmit = async (data) => {
-        console.log("data from onsubmit", data);
+        Logger.debug("data from onsubmit", data);
         addOperationMember(data, false);
     };
     const handleSaveAndMore = async (data) => {
-        console.log("data from handleSaveAndMore", data);
+        Logger.debug("data from handleSaveAndMore", data);
         await addOperationMember(data, true);
         setShowTextField(false);
         let role = roles.filter((role) => role.name === "Operation Member");
@@ -356,8 +356,8 @@ function AddOperationMember() {
         let cgfCompany = memberCompanies?.filter(
             (company) => company.companyName === "The Consumer Goods Forum"
         );
-        console.log(e);
-        console.log(cgfCompany[0]._id);
+        Logger.debug(e);
+        Logger.debug(cgfCompany[0]._id);
         if (e.target.value === "true") {
             setValue("companyType", "Internal");
             setValue("memberId", cgfCompany[0].companyName);
@@ -376,7 +376,7 @@ function AddOperationMember() {
         }
         trigger("memberId");
     };
-    console.log("member Id", memberCompanies?._id);
+    Logger.debug("member Id", memberCompanies?._id);
     return (
         <div className="page-wrapper">
             <Toaster
@@ -614,10 +614,10 @@ function AddOperationMember() {
                                                                     event,
                                                                     newValue
                                                                 ) => {
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "inside autocomplete onchange of addoperation member"
                                                                     );
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "new Value operation member",
                                                                         newValue
                                                                     );
@@ -891,7 +891,7 @@ function AddOperationMember() {
                                                                                 company.companyName ===
                                                                                 newValue
                                                                         );
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "Selected member company = ",
                                                                         selectedMemberCompany
                                                                     );
@@ -902,10 +902,10 @@ function AddOperationMember() {
                                                                             //     ._id
                                                                             newValue
                                                                         );
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "inside autocomplete onchange"
                                                                     );
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "new Value ",
                                                                         newValue
                                                                     );

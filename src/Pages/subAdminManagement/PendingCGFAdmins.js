@@ -5,6 +5,7 @@ import { ADD_SUB_ADMIN, WITHDRAW_SUB_ADMIN } from "../../api/Url";
 import DialogBox from "../../components/DialogBox";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../utils/Loader";
+import { Logger } from "../../Logger/Logger";
 const pendingTableColumnHead = [
     {
         id: "name",
@@ -98,7 +99,7 @@ function PendingCGFAdmins({
         // "token",
     ];
     const updatePendingRecordsCGFAdmin = (data) => {
-        console.log("data before update----", data);
+        Logger.debug("data before update----", data);
 
         let staleData = data;
         staleData.forEach((object) => {
@@ -139,7 +140,7 @@ function PendingCGFAdmins({
                 object[k] = v;
             });
         });
-        console.log(
+        Logger.debug(
             "data in updaterecords method in pending method",
             staleData
         );
@@ -153,21 +154,21 @@ function PendingCGFAdmins({
 
     // rows per page method for pending tab
     const handleRowsPerPageChangeForPendingTabCGFAdmin = (event) => {
-        console.log("rows per page", event);
+        Logger.debug("rows per page", event);
         setRowsPerPageForPendingTabCGFAdmin(parseInt(event.target.value, 10));
         setPageForPendingTabCGFAdmin(1);
     };
 
     //  on click delete icon open delete modal
     const onClickDeleteIconHandlerCGFAdmin = async (id) => {
-        console.log("id for delete", id);
+        Logger.debug("id for delete", id);
         setOpenDeleteDialogBoxPendingCGFAdmin(true);
         setWithdrawInviteidPendingCGFAdmin(id);
-        console.log("records: ", recordsForPendingTabCGFAdmin);
+        Logger.debug("records: ", recordsForPendingTabCGFAdmin);
         const withdrawCgfAdmin = recordsForPendingTabCGFAdmin.filter(
             (user) => user?._id === id
         );
-        console.log("Withdraw user", withdrawCgfAdmin);
+        Logger.debug("Withdraw user", withdrawCgfAdmin);
         setWithdrawInviteUserPendingCGFAdmin([...withdrawCgfAdmin]);
     };
 
@@ -177,7 +178,7 @@ function PendingCGFAdmins({
                 WITHDRAW_SUB_ADMIN + withdrawInviteidPendingCGFAdmin
             );
             if (response.status == 200) {
-                console.log("user invite withdrawn successfully");
+                Logger.debug("user invite withdrawn successfully");
                 setPendingCgfToasterDetails(
                     {
                         titleMessage: "Success",
@@ -204,14 +205,14 @@ function PendingCGFAdmins({
                     navigate("/login");
                 }, 3000);
             }
-            console.log("error from withdrawInvite id", error);
+            Logger.debug("error from withdrawInvite id", error);
         }
     };
 
     // url for pending tab
     const generateUrlForPendingTabCGFAdmin = () => {
-        console.log("filters", filters);
-        console.log("Search", search);
+        Logger.debug("filters", filters);
+        Logger.debug("Search", search);
         let url = `${ADD_SUB_ADMIN}/pending/list?page=${pageForPendingTabCGFAdmin}&size=${rowsPerPageForPendingTabCGFAdmin}&orderBy=${orderByForPending}&order=${orderForPendingTabCGFAdmin}`;
 
         if (search) url += `&search=${search}`;
@@ -233,7 +234,7 @@ function PendingCGFAdmins({
             setTotalRecordsForPendingTabCGFAdmin(
                 parseInt(response.headers["x-total-count"])
             );
-            console.log(
+            Logger.debug(
                 "Response from sub admin api get for pending tab table",
                 response
             );
@@ -274,7 +275,7 @@ function PendingCGFAdmins({
                 setIsPendingCgfAdmin(false);
             }
 
-            console.log(
+            Logger.debug(
                 "Error from getSubAdmin pending tab table-------",
                 error
             );
@@ -285,8 +286,8 @@ function PendingCGFAdmins({
         let isMounted = true;
         const controller = new AbortController();
         makeApiCall && getSubAdminPendingCGFAdmin(isMounted, controller);
-        console.log("makeApiCall", makeApiCall);
-        console.log("inside use Effect");
+        Logger.debug("makeApiCall", makeApiCall);
+        Logger.debug("inside use Effect");
         return () => {
             isMounted = false;
             clearTimeout(searchTimeoutPendingCGFAdmin);
@@ -304,7 +305,7 @@ function PendingCGFAdmins({
         orderForPendingTabCGFAdmin,
     ]);
     {
-        console.log("makeApiCall outside UseEffect ", makeApiCall);
+        Logger.debug("makeApiCall outside UseEffect ", makeApiCall);
     }
     return (
         <>

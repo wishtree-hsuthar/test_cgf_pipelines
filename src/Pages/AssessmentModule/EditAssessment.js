@@ -28,6 +28,7 @@ import axios from "axios";
 import DialogBox from "../../components/DialogBox";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
+import { Logger } from "../../Logger/Logger";
 const helperTextForAssessment = {
     title: {
         required: "Enter the assessment title",
@@ -106,7 +107,7 @@ function EditAssessment() {
                     //     ? FETCH_OPERATION_MEMBER + id + "/master/internal"
                     //     : FETCH_OPERATION_MEMBER + id
                 );
-                console.log(
+                Logger.debug(
                     "Response from fetch operation member according to member company",
                     responseEditMember
                 );
@@ -120,8 +121,8 @@ function EditAssessment() {
                     (data) => data?.isMemberRepresentative
                 );
 
-                console.log("Representative---", representative);
-                console.log("is Cgf staff---", checkIfItIsCgfStaff);
+                Logger.debug("Representative---", representative);
+                Logger.debug("is Cgf staff---", checkIfItIsCgfStaff);
                 checkIfItIsCgfStaff
                     ? setValue("assignedOperationMember", "")
                     : setValue(
@@ -129,7 +130,7 @@ function EditAssessment() {
                           representative[0]._id
                       );
             } catch (error) {
-                console.log(
+                Logger.debug(
                     "Error from from fetch operation member according to member company",
                     error
                 );
@@ -150,7 +151,7 @@ function EditAssessment() {
                     }
                 );
                 setIsEditAssessmentLoading(false);
-                console.log(
+                Logger.debug(
                     "responseEditMember from fetch assessment",
                     responseEditMember.data
                 );
@@ -196,7 +197,7 @@ function EditAssessment() {
                     }, 3000);
                 }
                 setIsEditAssessmentLoading(false);
-                console.log("Error from fetch assessment", error);
+                Logger.debug("Error from fetch assessment", error);
             }
         };
         fetchAssessment();
@@ -209,7 +210,7 @@ function EditAssessment() {
                     }
                 );
 
-                console.log(
+                Logger.debug(
                     "responseEditMember from fetch member companies for add assessments",
                     responseEditMember
                 );
@@ -221,7 +222,7 @@ function EditAssessment() {
                         }))
                     );
             } catch (error) {
-                console.log("Error from fetch member company api", error);
+                Logger.debug("Error from fetch member company api", error);
             }
         };
         fetchMemberCompaniesForAddAssesments();
@@ -234,7 +235,7 @@ function EditAssessment() {
                         signal: controller.signal,
                     }
                 );
-                console.log(
+                Logger.debug(
                     "responseEditMember from questionnaires api",
                     responseEditMember.data
                 );
@@ -249,7 +250,7 @@ function EditAssessment() {
                     }))
                 );
             } catch (error) {
-                console.log("Error from fetch questionnaires", error);
+                Logger.debug("Error from fetch questionnaires", error);
             }
         };
         fetchQuestionnaires();
@@ -265,7 +266,7 @@ function EditAssessment() {
             const responseEditMember = await privateAxios.get(
                 ADD_OPERATION_MEMBER + "/member/" + id + "/master"
             );
-            console.log("Member fetched", responseEditMember.data);
+            Logger.debug("Member fetched", responseEditMember.data);
             setOperationMemberForAddAssessments(
                 responseEditMember.data.map((data) => ({
                     _id: data._id,
@@ -273,14 +274,14 @@ function EditAssessment() {
                 }))
             );
         } catch (error) {
-            console.log("error from fetch member api", error);
+            Logger.debug("error from fetch member api", error);
         }
     };
 
     const updateAssessment = async (data) => {
         setDisableEditAssessmentButton(true);
         setIsEditAssessmentLoading(true);
-        console.log("data for update assessment", data);
+        Logger.debug("data for update assessment", data);
         data = {
             ...data,
             questionnaireId: questionnaireId,
@@ -297,7 +298,7 @@ function EditAssessment() {
                 UPDATE_ASSESSMENT_BY_ID + params.id,
                 data
             );
-            console.log("responseEditMember from update assessment page");
+            Logger.debug("responseEditMember from update assessment page");
             if (responseEditMember.status === 200) {
                 setDisableEditAssessmentButton(false);
                 setIsEditAssessmentLoading(true);
@@ -326,12 +327,12 @@ function EditAssessment() {
                 }, 2000);
             }
         } catch (error) {
-            console.log("error from update assessment url", error);
+            Logger.debug("error from update assessment url", error);
             setDisableEditAssessmentButton(false);
             setIsEditAssessmentLoading(false);
 
             if (error.responseEditMember.status === 401) {
-                console.log("Unauthorized user access");
+                Logger.debug("Unauthorized user access");
                 // Add error toaster here
                 setToasterDetails(
                     {
@@ -345,7 +346,7 @@ function EditAssessment() {
                 navigate("/login");
             }
             if (error.responseEditMember.status === 400) {
-                console.log("something went wrong");
+                Logger.debug("something went wrong");
                 // Add error toaster here
                 setToasterDetails(
                     {
@@ -358,7 +359,7 @@ function EditAssessment() {
                 );
             }
             if (error.responseEditMember.status === 403) {
-                console.log("something went wrong");
+                Logger.debug("something went wrong");
                 // Add error toaster here
                 setToasterDetails(
                     {
@@ -374,7 +375,7 @@ function EditAssessment() {
 
     const handleChangeForMemberCompany = (e) => {
         setValue("assignedMember", e.target.value);
-        console.log("assignedMember", e.target.value);
+        Logger.debug("assignedMember", e.target.value);
         // let memberRepresentative = memberRepresentatives.filter(
 
         // setValue(
@@ -388,7 +389,7 @@ function EditAssessment() {
         let cgfCompany = memberCompaniesForAddAssessments.filter(
             (data) => data._id === e.target.value
         );
-        console.log("cgf company-----", cgfCompany);
+        Logger.debug("cgf company-----", cgfCompany);
 
         if (cgfCompany[0].name === "The Consumer Goods Forum") {
             setIsCGFStaff(true);
@@ -406,11 +407,11 @@ function EditAssessment() {
     };
 
     const handleChangeForAssessmentModule = (e) => {
-        console.log("assessment type", e);
+        Logger.debug("assessment type", e);
         let filterQuestionnaireById = questionnaresObj.filter(
             (questionnare) => questionnare.name === e.target.value
         );
-        console.log("filtered questionnaire", filterQuestionnaireById);
+        Logger.debug("filtered questionnaire", filterQuestionnaireById);
         setValue("questionnaireId", filterQuestionnaireById[0]._id);
         setQuestionnaireId(filterQuestionnaireById[0]._id);
         setValue("assessmentType", e.target.value);
@@ -681,7 +682,7 @@ function EditAssessment() {
                                                             // value={datevalue}
                                                             // onChange={(value) => {
                                                             //     setDateValue(value);
-                                                            //     console.log(
+                                                            //     Logger.debug(
                                                             //         "date",
                                                             //         new Date(
                                                             //             value
