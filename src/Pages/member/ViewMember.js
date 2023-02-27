@@ -34,11 +34,13 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { defaultValues } from "../../utils/MemberModuleUtil";
+import { defaultValues, getCategories, getCGFOffices } from "../../utils/MemberModuleUtil";
 import Loader from "../../utils/Loader";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
+let MEMBER_LOOKUP = {}
+let CGF_OFFICES = []
 // CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
 const cgfActivites = [
@@ -59,6 +61,7 @@ const cgfActivites = [
   "Wholesaler",
   "N/A",
 ];
+
 
 const ViewMember = () => {
   //Code for Operatiom Member List
@@ -570,10 +573,20 @@ const ViewMember = () => {
       if (error?.code === "ERR_CANCELED") return;
     }
   };
+  const callGetCategories =async () => {
+    MEMBER_LOOKUP =await  getCategories()
+    console.log("MEMBER LOOKUP",MEMBER_LOOKUP)
+  }
+
+  const callGetOffices = async () => {
+    CGF_OFFICES = await getCGFOffices();
+  }
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
     (async () => {
+      Object.keys(MEMBER_LOOKUP)?.length === 0 && callGetCategories();
+      CGF_OFFICES?.length === 0 && callGetOffices()
       isMounted && makeApiCall && (await getMemberByID(isMounted, controller));
       isMounted && (await getCountryCode(isMounted, controller));
       isMounted && (await getRegions(isMounted, controller));
@@ -792,7 +805,7 @@ const ViewMember = () => {
                         control={control}
                         name="cgfCategory"
                         placeholder="N/A"
-                        options={cgfCategories}
+                        options={Object.keys(MEMBER_LOOKUP)?.length > 0 && Object.keys(MEMBER_LOOKUP)}
                       />
                     </div>
                     {/* </div> */}
@@ -1036,13 +1049,7 @@ const ViewMember = () => {
                         control={control}
                         name="cgfOffice"
                         placeholder="Select office"
-                        options={[
-                          "Bogota",
-                          "Paris",
-                          "Shanghai",
-                          "Washington",
-                          "Tokyo",
-                        ]}
+                        options={CGF_OFFICES}
                       />
                     </div>
                   </div>

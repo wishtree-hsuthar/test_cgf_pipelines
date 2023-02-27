@@ -1,3 +1,6 @@
+import axios from "axios";
+import { OPERATION_TYPES } from "../api/Url";
+
 export const helperText = {
     salutation: {
         required: "Select salutation",
@@ -117,3 +120,13 @@ export const tableHead = [
         label: "Created At",
     }
 ];
+
+export const getOperationTypes = async() => {
+    try {
+        const response = await axios.get(OPERATION_TYPES)
+        console.log("response",response)
+        return response?.data
+    } catch (error) {
+        console.log("Error:- ",error)   
+    }
+}

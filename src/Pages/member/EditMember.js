@@ -28,12 +28,14 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import {
-  cgfActivitiesManufacturer,
-  cgfActivitiesRetailer,
-  cgfCategories,
   defaultValues,
+  getCategories,
+  getCGFOffices,
 } from "../../utils/MemberModuleUtil";
 import Loader from "../../utils/Loader";
+
+let MEMBER_LOOKUP = {}
+let CGF_OFFICES = []
 
 const EditMember = () => {
   //custom hook to set title of page
@@ -415,10 +417,21 @@ const EditMember = () => {
     trigger(name);
     trigger(code);
   };
+  
+  const callGetCategories =async () => {
+    MEMBER_LOOKUP =await  getCategories()
+
+    console.log("MEMBER LOOKUP",MEMBER_LOOKUP)
+  }
+  const callGetOffices = async () => {
+    CGF_OFFICES = await getCGFOffices();
+  }
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
     (async () => {
+      Object.keys(MEMBER_LOOKUP)?.length === 0 && callGetCategories();
+      CGF_OFFICES?.length === 0 && callGetOffices()
       isMounted && (await getMemberByID1(isMounted));
       isMounted && (await getRegions1(controller));
       isMounted && (await getCountryCode1(controller));
@@ -604,7 +617,7 @@ const EditMember = () => {
                           myHelper={memberHelper}
                           rules={{ required: true }}
                           myOnChange={categoryChangeHandler1}
-                          options={cgfCategories}
+                          options={Object.keys(MEMBER_LOOKUP)?.length > 0 && Object.keys(MEMBER_LOOKUP)}
                         />
                       </div>
                       {/* </div> */}
@@ -633,11 +646,7 @@ const EditMember = () => {
                                 return "Select activity";
                             },
                           }}
-                          options={
-                            watch("cgfCategory") === "Manufacturer"
-                              ? cgfActivitiesManufacturer
-                              : cgfActivitiesRetailer
-                          }
+                          options={Object.keys(MEMBER).length > 0 && MEMBER_LOOKUP[watch("cgfCategory")]}
                           isDisabled={watch("cgfCategory") === "Other"}
                         />
                       </div>
@@ -1015,13 +1024,7 @@ const EditMember = () => {
                           placeholder="Select office"
                           myHelper={memberHelper}
                           rules={{ required: true }}
-                          options={[
-                            "Bogota",
-                            "Paris",
-                            "Shanghai",
-                            "Tokyo",
-                            "Washington",
-                          ]}
+                          options={CGF_OFFICES }
                         />
                       </div>
                     </div>

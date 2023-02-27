@@ -31,7 +31,7 @@ import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
-import { helperText } from "../../utils/OperationMemberModuleUtil";
+import { getOperationTypes, helperText } from "../../utils/OperationMemberModuleUtil";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 const defaultValues = {
@@ -54,6 +54,8 @@ const defaultValues = {
     isActive: "",
     isCGFStaff: "",
 };
+
+let OPERATION_TYPES = []
 
 function EditOperationMember() {
     //custom hook to set title of page
@@ -288,10 +290,15 @@ function EditOperationMember() {
         trigger(name);
         trigger(code);
     };
+    const callGetOperatinType = async () => {
+        OPERATION_TYPES = await getOperationTypes()
+
+    }
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
 
+        OPERATION_TYPES?.length === 0 && callGetOperatinType()
         countries.length === 0 && fetchCountries(controller);
         memberCompanies.length === 0 && fetchMemberComapany(controller);
         roles.length === 0 && fetchRoles(isMounted, controller);
@@ -730,12 +737,7 @@ function EditOperationMember() {
                                                     required:
                                                         !operationMember?.isMemberRepresentative,
                                                 }}
-                                                options={[
-                                                    "Warehousing and Distribution",
-                                                    "Manufacturing/Bottling/Roasting",
-                                                    "Logistics and Transport",
-                                                    "Retail/Franchise/Merchandisers",
-                                                ]}
+                                                options={OPERATION_TYPES}
                                             />
                                         </div>
                                     </div>

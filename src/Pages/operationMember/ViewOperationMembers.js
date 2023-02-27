@@ -30,6 +30,7 @@ import { useSelector } from "react-redux";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
+import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
 
 const defaultValues = {
   memberCompany: "",
@@ -48,6 +49,7 @@ const defaultValues = {
   role: "",
   replacedOperationMember: "",
 };
+const OPERATION_TYPES = []
 const ViewOperationMembers = () => {
   //custom hook to set title of page
   useDocumentTitle("View Operation Member");
@@ -108,9 +110,13 @@ const ViewOperationMembers = () => {
       console.log("error in fetchRole", error);
     }
   };
+  const callGetOpeationMember = async() => {
+    OPERATION_TYPES = getOperationTypes()
+  } 
   useEffect(() => {
     let isMounted = true;
     let controller = new AbortController();
+    OPERATION_TYPES?.length === 0 && callGetOpeationMember()
     const fetchMemberComapany = async () => {
       try {
         const response = await privateAxios.get(MEMBER + "/list", {
@@ -184,6 +190,7 @@ const ViewOperationMembers = () => {
                         ? response?.data?.reportingManager[0]?.name
                         : "N/A",
                     name: response?.data?.name,
+                    salutation: response?.data?.salutation,
                     isActive: response?.data?.isActive,
                     isCGFStaff:
                         response?.data?.isCGFStaff === true ? "true" : "false",
@@ -523,12 +530,7 @@ const ViewOperationMembers = () => {
                         control={control}
                         name="operationType"
                         placeholder="N/A"
-                        options={[
-                          "Warehousing and Distribution",
-                          "Manufacturing/Bottling/Roasting",
-                          "Logistics and Transport",
-                          "Retail/Franchise/Merchandisers",
-                        ]}
+                        options={OPERATION_TYPES}
                       />
                     </div>
                   </div>

@@ -17,6 +17,10 @@ export const REGIONS = `${REACT_APP_API_ENDPOINT}master/region/list`;
 export const REGIONCOUNTRIES = `${REACT_APP_API_ENDPOINT}master/region`;
 export const COUNTRIES = `${REACT_APP_API_ENDPOINT}master/country/list`;
 export const STATES = `${REACT_APP_API_ENDPOINT}master/country`;
+export const CATEGORIES = `${REACT_APP_API_ENDPOINT}master/categories`;
+export const CGF_OFFICES = `${REACT_APP_API_ENDPOINT}master/offices`;
+export const OPERATION_TYPES = `${REACT_APP_API_ENDPOINT}master/operationTypes`;
+export const MASTER_LINK = `${REACT_APP_API_ENDPOINT}master/link`;
 
 //Member
 export const MEMBER = `${REACT_APP_API_ENDPOINT}members`;
