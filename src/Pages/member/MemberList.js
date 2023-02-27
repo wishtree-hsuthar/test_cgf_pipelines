@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { downloadFunction } from "../../utils/downloadFunction";
 import Loader from "../../utils/Loader";
-
+import { Logger } from "../../Logger/Logger";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -92,7 +92,7 @@ const MemberList = () => {
                 add: data?.add,
             },
         }));
-    console.log(
+    Logger.debug(
         "module access member in view member",
         moduleAccesForMember[0]?.member
     );
@@ -207,10 +207,10 @@ const MemberList = () => {
 
     //method for time based searching
     const onSearchChangeHandler = (e) => {
-        console.log("event", e.key);
+        Logger.debug("event", e.key);
         if (searchTimeoutMemberList) clearTimeout(searchTimeoutMemberList);
         setMakeApiCallMemberList(false);
-        console.log("searchMember values", e.target.value);
+        Logger.debug("searchMember values", e.target.value);
         setSearchMemberList(e.target.value);
         setSearchTimeoutMemberList(
             setTimeout(() => {
@@ -222,7 +222,7 @@ const MemberList = () => {
     //handle sigle select memberFilters
     const onFilterChangehandler = (e) => {
         const { name, value } = e.target;
-        console.log("name", name, "Value ", value);
+        Logger.debug("name", name, "Value ", value);
         setMemberFilters({
             ...memberFilters,
             [name]: value,
@@ -231,7 +231,7 @@ const MemberList = () => {
     //handle createdBy filter change handler
     const handleCreatedByFilter = (e) => {
         const { name, value } = e.target;
-        console.log("name", name, "value", value);
+        Logger.debug("name", name, "value", value);
         if (value[value.length - 1] === "")
             return selectedCreatedBy.length - 1 === allMembers.length
                 ? setSelectedCreatedBy(["none"])
@@ -246,11 +246,11 @@ const MemberList = () => {
         setMemberListPage(1);
     };
     const onClickVisibilityIconHandler = (id) => {
-        console.log("id", id);
+        Logger.debug("id", id);
         return navigate(`/users/members/view-member/${id}`);
     };
     const generateUrl = () => {
-        console.log("memberFilters", memberFilters);
+        Logger.debug("memberFilters", memberFilters);
 
         const namesMappings = {
             initialRender: "",
@@ -278,7 +278,7 @@ const MemberList = () => {
     //         const response = await privateAxios.get(DOWNLOAD_MEMBERS, {
     //             responseType: "blob",
     //         });
-    //         console.log("resposne from download  members ", response);
+    //         Logger.debug("resposne from download  members ", response);
     //         const url = window.URL.createObjectURL(new Blob([response.data]));
     //         const link = document.createElement("a");
     //         link.href = url;
@@ -297,7 +297,7 @@ const MemberList = () => {
     //             );
     //         }
     //     } catch (error) {
-    //         console.log("Error from download  members", error);
+    //         Logger.debug("Error from download  members", error);
     //     }
     // };
     const getMembers = async (isMounted, controller) => {
@@ -310,11 +310,11 @@ const MemberList = () => {
             setTotalRecordsMemberList(
                 parseInt(response.headers["x-total-count"])
             );
-            console.log("response from backend", response);
+            Logger.debug("response from backend", response);
             setIsMemberListLoading(false);
             updateRecords(response?.data);
         } catch (error) {
-            console.log("error from get members api - ", error);
+            Logger.debug("error from get members api - ", error);
             if (error?.code === "ERR_CANCELED") return;
             if (error?.response?.status === 401) {
                 setToasterDetailsMemberList(

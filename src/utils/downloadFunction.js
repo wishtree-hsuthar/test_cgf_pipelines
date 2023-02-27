@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { privateAxios } from "../api/axios";
-
+import { Logger } from "../Logger/Logger";
 export const downloadFunction = async (
     filename,
     setToasterDetails,
@@ -10,7 +10,7 @@ export const downloadFunction = async (
 
     navigate
 ) => {
-    console.log("navigate = ", navigate);
+    Logger.debug("navigate = ", navigate);
     try {
         const response = await privateAxios.get(
             id ? downloadUrl + id + `/download` : downloadUrl,
@@ -18,7 +18,7 @@ export const downloadFunction = async (
                 responseType: "blob",
             }
         );
-        console.log(`resposne from ${filename}  assessment `, response);
+        Logger.debug(`resposne from ${filename}  assessment `, response);
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement(`a`);
         link.href = url;
@@ -50,7 +50,7 @@ export const downloadFunction = async (
             );
         }
     } catch (error) {
-        console.log(`Error from ${filename}  Assessment`, error);
+        Logger.debug(`Error from ${filename}  Assessment`, error);
         if (error.response.status == 401) {
             setToasterDetails(
                 {

@@ -7,7 +7,7 @@ import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
-
+import { Logger } from "../../Logger/Logger";
 function DraftedQuestionnaires({
     makeApiCall,
     setMakeApiCall,
@@ -139,7 +139,7 @@ function DraftedQuestionnaires({
             if (error?.code === "ERR_CANCELED") return;
 
             if (error.response.status === 401) {
-                console.log("Unauthorized user access");
+                Logger.debug("Unauthorized user access");
                 // Add error toaster here
                 setToasterDetails(
                     {

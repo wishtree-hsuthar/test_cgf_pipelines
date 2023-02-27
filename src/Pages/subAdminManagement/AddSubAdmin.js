@@ -14,7 +14,7 @@ import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
-
+import { Logger } from "../../Logger/Logger";
 const helperTextForCGFAdmin = {
     countryCode: {
         validate: "Select the country code",
@@ -66,7 +66,7 @@ const AddSubAdmin = () => {
         },
     });
     const location = useLocation();
-    console.log(location);
+    Logger.debug(location);
     const [roleSelected, setRoleSelected] = useState("");
     const [countriesAddCGFAdmin, setCountriesAddCGFAdmin] = useState([]);
     const [rolesAddCGFAdmin, setRolesAddCGFAdmin] = useState([]);
@@ -79,7 +79,7 @@ const AddSubAdmin = () => {
     });
 
     const phoneNumberChangeHandlerAddCGFAdmin = (e, name, code) => {
-        console.log("inside on Change");
+        Logger.debug("inside on Change");
         setValue(name, e.target.value);
         trigger(name);
         trigger(code);
@@ -92,7 +92,7 @@ const AddSubAdmin = () => {
                 const response = await privateAxios.get(FETCH_ROLES, {
                     signal: controller.signal,
                 });
-                console.log(
+                Logger.debug(
                     "Response from fetch rolesAddCGFAdmin - ",
                     response
                 );
@@ -104,7 +104,7 @@ const AddSubAdmin = () => {
                 );
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
-                console.log("Error from fetch rolesAddCGFAdmin", error);
+                Logger.debug("Error from fetch rolesAddCGFAdmin", error);
                 if (error?.response?.status === 401) {
                     isMounted &&
                         setToasterDetails(
@@ -141,7 +141,7 @@ const AddSubAdmin = () => {
                 const response = await axios.get(COUNTRIES, {
                     signal: controller.signal,
                 });
-                console.log("response from countries API-", response);
+                Logger.debug("response from countries API-", response);
                 if (isMounted) {
                     let tempCountryCode = response?.data.map(
                         (country) => country.countryCode
@@ -151,7 +151,7 @@ const AddSubAdmin = () => {
                 }
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
-                console.log("error from countries api", error);
+                Logger.debug("error from countries api", error);
 
                 isMounted &&
                     setToasterDetails(
@@ -169,7 +169,7 @@ const AddSubAdmin = () => {
         fetchRoles();
         addCGFAdminFetchCountries();
     }, []);
-    console.log("countriess----", countriesAddCGFAdmin);
+    Logger.debug("countriess----", countriesAddCGFAdmin);
 
     const handleRoleSelection = (e) => {
         setRoleSelected(e.target.value);
@@ -196,7 +196,7 @@ const AddSubAdmin = () => {
             }
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            console.log("error from add sub admin page", error);
+            Logger.debug("error from add sub admin page", error);
             setIsCgfAdminLoading(false);
             setDisableSubmit(false);
 
@@ -230,7 +230,7 @@ const AddSubAdmin = () => {
         //     data.countryCode.indexOf("+")
         // );
 
-        console.log("new phone number", data);
+        Logger.debug("new phone number", data);
         addSubAdminData(data);
         setTimeout(() => {
             navigate("/users/cgf-admin/");
@@ -243,7 +243,7 @@ const AddSubAdmin = () => {
         // );
 
         addSubAdminData(data);
-        console.log(data);
+        Logger.debug(data);
         reset();
         setValue("");
         setRoleSelected("");
@@ -438,10 +438,10 @@ const AddSubAdmin = () => {
                                                                     event,
                                                                     newValue
                                                                 ) => {
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "inside autocomplete onchange"
                                                                     );
-                                                                    console.log(
+                                                                    Logger.debug(
                                                                         "new Value ",
                                                                         newValue
                                                                     );

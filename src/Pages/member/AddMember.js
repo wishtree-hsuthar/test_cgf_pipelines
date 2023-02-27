@@ -12,7 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-
+import { Logger } from "../../Logger/Logger";
 import {
     CITES,
     COUNTRIES,
@@ -66,7 +66,7 @@ const AddMember = () => {
     //method to call all error toaster from this method
     const [disableAddMemberButton, setdisableAddMemberButton] = useState(false);
     const setErrorToaster = (error) => {
-        console.log("error", error);
+        Logger.debug("error", error);
         setToasterDetailsAddMember(
             {
                 titleMessage: "Error",
@@ -114,7 +114,7 @@ const AddMember = () => {
     const onSubmitFunctionCallAddMember = async (data) => {
         setIsMemberLoading(true);
         setdisableAddMemberButton(true);
-        console.log("data", data);
+        Logger.debug("data", data);
         try {
             let backendObjectAddMember = {
                 parentCompany: data.parentCompany,
@@ -148,7 +148,7 @@ const AddMember = () => {
             const response = await axios.post(MEMBER, {
                 ...backendObjectAddMember,
             });
-            console.log("response : ", response);
+            Logger.debug("response : ", response);
             if (response.status === 201) {
                 setIsMemberLoading(false);
 
@@ -160,8 +160,8 @@ const AddMember = () => {
                     },
                     () => myRef.current()
                 );
-                console.log("Default values: ", tempDefaultValues);
-                reset({...tempDefaultValues});
+                Logger.debug("Default values: ", tempDefaultValues);
+                reset({ ...tempDefaultValues });
                 setdisableAddMemberButton(false);
                 return true;
             }
@@ -195,15 +195,15 @@ const AddMember = () => {
         navigate("/users/members");
     };
     const onSubmitAddMember = async (data) => {
-        console.log("data", data);
+        Logger.debug("data", data);
         const isSubmited = await onSubmitFunctionCallAddMember(data);
-        console.log("is Submited", isSubmited);
+        Logger.debug("is Submited", isSubmited);
         isSubmited && setTimeout(() => navigate("/users/members"), 3000);
     };
     //method to handle on add more button click handler
     const onAddMoreButtonClickHandlerAddMember = async (data) => {
-      const isSubmited =  await onSubmitFunctionCallAddMember(data);
-      if(isSubmited) getParentCompanyAddMember()
+        const isSubmited = await onSubmitFunctionCallAddMember(data);
+        if (isSubmited) getParentCompanyAddMember();
     };
     //method to handle region change for cgf office
 
@@ -214,17 +214,17 @@ const AddMember = () => {
                     ? country.name
                     : country)
         );
-        console.log("arr of country ", regionCountries);
+        Logger.debug("arr of country ", regionCountries);
         return regionCountries;
     };
 
     //method to handle country change
     const onCountryChangeHandlerAddMember = async (e) => {
-        console.log("Inside Country Change ", e.target.value);
+        Logger.debug("Inside Country Change ", e.target.value);
         setValue("country", e.target.value);
         const stateCountries = await axios.get(STATES + `/${e.target.value}`);
         setArrOfStateCountryAddMember(stateCountries.data);
-        console.log("state countries: ", stateCountries);
+        Logger.debug("state countries: ", stateCountries);
         setValue("state", "");
         setValue("city", "");
         getCitesAddMember();
@@ -242,7 +242,7 @@ const AddMember = () => {
             setArrOfCitesAddMember(response.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            console.log("Error in getCitiesAddmember");
+            Logger.debug("Error in getCitiesAddmember");
         }
     };
     //method to handle state change
@@ -269,14 +269,14 @@ const AddMember = () => {
     };
     //method to set region and update other fields accordingly
     const onRegionChangeHandlerAddMember = async (e) => {
-        console.log("region: ", e.target.value);
+        Logger.debug("region: ", e.target.value);
         setValue("country", "");
         setValue("state", "");
         setValue("city", "");
         setValue("region", e.target.value);
         trigger("region");
         const countriesOnRegion = await getCountriesAddMember(watch("region"));
-        console.log("countries", countriesOnRegion);
+        Logger.debug("countries", countriesOnRegion);
         const arrOfCountryRegionsTemp = formatRegionCountriesAddMember(
             countriesOnRegion.data
         );
@@ -298,7 +298,7 @@ const AddMember = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
 
-            console.log("Error from getCountryCodeAddMember");
+            Logger.debug("Error from getCountryCodeAddMember");
         }
     };
     const getCountriesAddMember = async (region) => {
@@ -308,7 +308,7 @@ const AddMember = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
 
-            console.log("Error from getCountriesAddMember ");
+            Logger.debug("Error from getCountriesAddMember ");
             return [];
         }
     };
@@ -346,7 +346,7 @@ const AddMember = () => {
     let fetchRolesAddMember = async () => {
         try {
             const response = await privateAxios.get(FETCH_ROLES);
-            console.log("Response from fetch addMemberRoles - ", response);
+            Logger.debug("Response from fetch addMemberRoles - ", response);
             addMemberSetRoles(response.data);
             response.data.filter((data) => {
                 if (data.name === "Member Representative") {
@@ -355,11 +355,13 @@ const AddMember = () => {
                 }
             });
         } catch (error) {
-            console.log("Error from fetch addMemberRoles", error);
+            Logger.debug("Error from fetch addMemberRoles", error);
         }
     };
 
-    const getParentCompanyAddMember = async (controller = new AbortController()) => {
+    const getParentCompanyAddMember = async (
+        controller = new AbortController()
+    ) => {
         try {
             const response = await axios.get(PARENT_COMPINES, {
                 signal: controller.signal,
@@ -367,7 +369,7 @@ const AddMember = () => {
             setArrOfParentCompanyAddMember(response?.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            console.log("error from getParentCompanyAddMember");
+            Logger.debug("error from getParentCompanyAddMember");
         }
     };
 
@@ -382,7 +384,7 @@ const AddMember = () => {
         setValue("cgfActivity", "");
     };
     const phoneNumberChangeHandlerAddMember = (e, name, code) => {
-        console.log(
+        Logger.debug(
             "on number change",
             e.target.value,
             "name: ",
@@ -411,7 +413,7 @@ const AddMember = () => {
         };
     }, [watch]);
 
-    console.log("arrOfparentCompnies", arrOfParentCompanyAddMember);
+    Logger.debug("arrOfparentCompnies", arrOfParentCompanyAddMember);
     return (
         <div className="page-wrapper">
             <Toaster
@@ -592,7 +594,7 @@ const AddMember = () => {
                                                                 event,
                                                                 newValue
                                                             ) => {
-                                                                console.log(
+                                                                Logger.debug(
                                                                     "new Value ",
                                                                     newValue
                                                                 );
@@ -686,7 +688,8 @@ const AddMember = () => {
                                             <div className="form-group">
                                                 {/* <div className="select-field"> */}
                                                 <label htmlFor="cgfActivity">
-                                                    CGF Activity{" "}<span className="mandatory">
+                                                    CGF Activity{" "}
+                                                    <span className="mandatory">
                                                         *
                                                     </span>
                                                 </label>
@@ -808,10 +811,10 @@ const AddMember = () => {
                                                                         event,
                                                                         newValue
                                                                     ) => {
-                                                                        console.log(
+                                                                        Logger.debug(
                                                                             "inside autocomplete onchange"
                                                                         );
-                                                                        console.log(
+                                                                        Logger.debug(
                                                                             "new Value ",
                                                                             newValue
                                                                         );
@@ -1097,7 +1100,7 @@ const AddMember = () => {
                                                                 event,
                                                                 newValue
                                                             ) => {
-                                                                console.log(
+                                                                Logger.debug(
                                                                     "new Value ",
                                                                     newValue
                                                                 );
@@ -1129,7 +1132,7 @@ const AddMember = () => {
                                                             // getOptionLabel={(option) => {
                                                             //   // Value selected with enter, right from the input
                                                             //   if (typeof option === "string") {
-                                                            //     // console.log("option inside type string",option)
+                                                            //     // Logger.debug("option inside type string",option)
                                                             //     return option;
                                                             //   }
                                                             //   return option;

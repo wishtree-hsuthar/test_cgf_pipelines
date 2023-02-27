@@ -19,7 +19,7 @@ import { styled } from "@mui/material/styles";
 import { Stack } from "@mui/system";
 import { event } from "jquery";
 import AntSwitch from "../../../utils/AntSwitch.js";
-
+import { Logger } from "../../../Logger/Logger.js";
 const ITEM_HEIGHT = 42;
 const MenuProps = {
     PaperProps: {
@@ -86,11 +86,11 @@ const TableQuestions = ({
     };
     const onColumnTogleChangeHandler = (event, columnId) => {
         let tempQuestionnaire = { ...questionnaire };
-        console.log("temp Questionnaire before :- ", tempQuestionnaire);
+        Logger.debug("temp Questionnaire before :- ", tempQuestionnaire);
         tempQuestionnaire.sections[sectionIndex].columnValues[
             columnId
         ].isRequired = event.target.checked;
-        console.log("temp Questionnaire after:- ", tempQuestionnaire);
+        Logger.debug("temp Questionnaire after:- ", tempQuestionnaire);
         setQuestionnaire(tempQuestionnaire);
     };
     const onColumnBlurHandler = (event, columnId) => {
@@ -163,7 +163,7 @@ const TableQuestions = ({
     };
 
     const onEditOptionClickHandler = (columnIdx) => {
-        // console.log("columnIdx",columnIdx)
+        // Logger.debug("columnIdx",columnIdx)
         setOpenModal(true);
         setModalIndex(columnIdx);
     };
@@ -178,7 +178,7 @@ const TableQuestions = ({
             sectionIndex
         ].columnValues.filter((column) => column.title === title);
         if (filterSameNameColumnTitle.length > 1) {
-            console.log("Same title appeared twice.");
+            Logger.debug("Same title appeared twice.");
             return true;
         } else {
             return false;

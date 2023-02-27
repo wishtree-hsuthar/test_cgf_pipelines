@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import DialogBox from "../../components/DialogBox";
-
+import { Logger } from "../../Logger/Logger";
 const FillAssessmentQuestion = React.lazy(() =>
     import("./FillAssessmentQuestions")
 );
@@ -56,7 +56,7 @@ function FillAssesmentSection({
         });
     };
     const handleAnswersBlur = (name, value) => {
-        console.log("inside on Blur");
+        Logger.debug("inside on Blur");
 
         setAssessmentQuestionnaire({
             ...assessmentQuestionnaire,

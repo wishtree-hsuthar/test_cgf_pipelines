@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { ADD_OPERATION_MEMBER } from "../../api/Url";
 import { tableHead } from "../../utils/OperationMemberModuleUtil";
 import Loader from "../../utils/Loader";
-
+import { Logger } from "../../Logger/Logger";
 let tempTableHead = JSON.parse(JSON.stringify(tableHead));
 tempTableHead.push({
     id: "isActive",
@@ -49,10 +49,11 @@ function OnboardedOperationMember({
                 add: data?.add,
             },
         }));
-    console.log(
+    Logger.info(
         "member operation privilege",
         moduleAccessForOperationMember[0]?.operationMember
     );
+    Logger.info("privilege", privilege);
 
     const navigate = useNavigate();
     const [
@@ -95,7 +96,7 @@ function OnboardedOperationMember({
             "isActive",
         ];
 
-        console.log("data before update----", data);
+        Logger.debug("data before update----", data);
 
         let staleData = data;
         staleData.forEach((opMember) => {
@@ -149,13 +150,13 @@ function OnboardedOperationMember({
                 opMember[k] = v;
             });
         });
-        console.log("data in updaterecords method", staleData);
+        Logger.debug("data in updaterecords method", staleData);
         setRecordsForOnboardedOperationMemberTab([...staleData]);
     };
 
     const generateUrl = () => {
-        console.log("filters in onboarded table----", filters);
-        console.log("Search", search);
+        Logger.debug("filters in onboarded table----", filters);
+        Logger.debug("Search", search);
         let url = `${ADD_OPERATION_MEMBER}/list?page=${pageForOnboardedOperationMemberTab}&size=${rowsPerPageForOnboardedOperationMemberTab}&orderBy=${orderByForOnboardedOperationMember}&order=${orderForOnboardedOperationMemberTab}`;
         if (search) url += `&search=${search}`;
 
@@ -175,14 +176,14 @@ function OnboardedOperationMember({
             setTotalRecordsForOnboardedOperationMemberTab(
                 parseInt(response.headers["x-total-count"])
             );
-            console.log("Response from sub admin api get", response);
+            Logger.debug("Response from sub admin api get", response);
 
             updateRecords([...response.data]);
             setIsOnboardedOperationMemberLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             setIsOnboardedOperationMemberLoading(false);
-            console.log("Error from getSubAdmin-------", error);
+            Logger.debug("Error from getSubAdmin-------", error);
 
             if (error?.response?.status == 401) {
                 setToasterDetails(
@@ -213,15 +214,15 @@ function OnboardedOperationMember({
     };
     // on click eye icon to  navigate view page
     const onClickVisibilityIconHandler = (id) => {
-        console.log("id", id);
+        Logger.debug("id", id);
         return navigate(`/users/operation-member/view-operation-member/${id}`);
     };
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
         makeApiCall && getSubAdmin(isMounted, controller);
-        console.log("makeApiCall", makeApiCall);
-        console.log("inside use Effect");
+        Logger.debug("makeApiCall", makeApiCall);
+        Logger.debug("inside use Effect");
         return () => {
             isMounted = false;
             clearTimeout(searchTimeout);

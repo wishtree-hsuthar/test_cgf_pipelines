@@ -11,6 +11,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
+import { Logger } from "../../Logger/Logger";
 
 const assessmentListTableHead = [
     {
@@ -103,10 +104,10 @@ const AssessmentList = () => {
     let icons = [];
 
     const onSearchChangeHandler = (e) => {
-        console.log("event", e.key);
+        Logger.debug("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
         setMakeApiCall(false);
-        console.log("search values", e.target.value);
+        Logger.debug("search values", e.target.value);
         setSearch(e.target.value);
         setSearchTimeout(
             setTimeout(() => {

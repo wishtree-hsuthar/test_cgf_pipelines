@@ -13,6 +13,7 @@ import {
 } from "../../api/Url";
 import Toaster from "../../components/Toaster";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { Logger } from "../../Logger/Logger";
 const replaceOperationMemberTableHead = [
     {
         id: "",
@@ -43,7 +44,7 @@ const ReplaceOperationMember = () => {
     //custom hook to set title of page
     useDocumentTitle("Replace Operation Member");
     const setErrorToaster = (error) => {
-        console.log("error", error);
+        Logger.debug("error", error);
         setToasterDetails(
             {
                 titleMessage: "Error",
@@ -87,10 +88,10 @@ const ReplaceOperationMember = () => {
     });
     // seacrchReplaceOP function
     const onSearchChangeHandlerReplaceOP = (e) => {
-        console.log("event", e.key);
+        Logger.debug("event", e.key);
         if (searchTimeoutReplaceOP) clearTimeout(searchTimeoutReplaceOP);
         setMakeApiCallReplaceOP(false);
-        console.log("seacrchReplaceOP values", e.target.value);
+        Logger.debug("seacrchReplaceOP values", e.target.value);
         setSearchReplaceOP(e.target.value);
         setSearchTimeoutReplaceOP(
             setTimeout(() => {
@@ -100,7 +101,7 @@ const ReplaceOperationMember = () => {
         );
     };
     const generateUrl = (multiFilterString) => {
-        console.log("Search", seacrchReplaceOP);
+        Logger.debug("Search", seacrchReplaceOP);
 
         let url = `${ADD_OPERATION_MEMBER}/${id}/replaces/list?page=${opListPage}&size=${rowsPerPageReplaceOP}&orderBy=${orderByReplaceOP}&order=${orderReplaceOP}`;
         if (seacrchReplaceOP?.length >= 3)
@@ -110,7 +111,7 @@ const ReplaceOperationMember = () => {
     };
 
     const updateRecords = (data) => {
-        console.log("data before update----", data);
+        Logger.debug("data before update----", data);
 
         let staleData = data;
         staleData.forEach((object) => {
@@ -151,7 +152,7 @@ const ReplaceOperationMember = () => {
                 object[k] = v;
             });
         });
-        console.log("data in updaterecords method", staleData);
+        Logger.debug("data in updaterecords method", staleData);
         setRecordsReplaceOP([...staleData]);
     };
 
@@ -168,12 +169,12 @@ const ReplaceOperationMember = () => {
             setTotalRecordsReplaceOP(
                 parseInt(response.headers["x-total-count"])
             );
-            console.log("Response from operation member api get", response);
+            Logger.debug("Response from operation member api get", response);
 
             updateRecords(response.data.filter((data) => data._id !== id));
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            console.log("Error from operation member-------", error);
+            Logger.debug("Error from operation member-------", error);
         }
     };
 
@@ -185,7 +186,7 @@ const ReplaceOperationMember = () => {
                     signal: controller.signal,
                 }
             );
-            console.log("response from fetch sub admin by id", response);
+            Logger.debug("response from fetch sub admin by id", response);
             setOperationMemberReplaceOP(response.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
@@ -205,7 +206,7 @@ const ReplaceOperationMember = () => {
                 }, 3000);
             }
             if (error?.response?.status == 500) {
-                console.log(
+                Logger.debug(
                     "Error status 500 while fetchiing subadmin from replace sub-admin"
                 );
                 navigate("/sub-admins");
@@ -216,8 +217,8 @@ const ReplaceOperationMember = () => {
         let isMounted = true;
         const controller = new AbortController();
         makeApiCallReplaceOP && getOperationMember(isMounted, controller);
-        console.log("makeApiCallReplaceOP", makeApiCallReplaceOP);
-        console.log("inside use Effect");
+        Logger.debug("makeApiCallReplaceOP", makeApiCallReplaceOP);
+        Logger.debug("inside use Effect");
         fetchOperationMember(isMounted, controller);
 
         return () => {
@@ -234,7 +235,7 @@ const ReplaceOperationMember = () => {
     ]);
 
     const handleTableTesterPageChange = (newPage) => {
-        console.log("new Page", newPage);
+        Logger.debug("new Page", newPage);
         setOPPage(newPage);
     };
 
@@ -256,7 +257,7 @@ const ReplaceOperationMember = () => {
                 }
             );
             if (response.status == 201) {
-                console.log(
+                Logger.debug(
                     selectedOperationMember[0].name +
                         " has replaced " +
                         operationMemberReplaceOP.name +
@@ -280,7 +281,7 @@ const ReplaceOperationMember = () => {
                 }, 3000);
             }
         } catch (error) {
-            console.log("error from replace user");
+            Logger.debug("error from replace user");
             if (error.response.status == 400) {
                 setErrorToaster(error);
                 setOpen(false);
@@ -290,7 +291,7 @@ const ReplaceOperationMember = () => {
                 setOpen(false);
             }
             if (error?.response?.status == 500) {
-                console.log(
+                Logger.debug(
                     "Error status 500 while fetchiing subadmin from replace sub-admin"
                 );
                 navigate("/sub-admins");
@@ -300,24 +301,24 @@ const ReplaceOperationMember = () => {
     const [searchTextReplaceOP, setSearchTextReplaceOP] = useState("");
     const [open, setOpen] = useState(false);
 
-    console.log("Search text---", searchTextReplaceOP);
+    Logger.debug("Search text---", searchTextReplaceOP);
 
     const handleYes = () => {
-        console.log(
+        Logger.debug(
             "Yes replcae" + id + " replace id with",
             selectedUserReplaceOP
         );
         replaceUser();
     };
     const handleNo = () => {
-        console.log("No replcae");
+        Logger.debug("No replcae");
         navigate("/users/operation-members");
     };
     const openReplaceDailogBox = () => {
         setOpen(true);
     };
     const selectSingleUser = (opId) => {
-        console.log("select single user---", opId);
+        Logger.debug("select single user---", opId);
         setSelectedUserReplaceOP(opId);
         setSelectedOperationMember({
             ...recordsReplaceOP.filter(
