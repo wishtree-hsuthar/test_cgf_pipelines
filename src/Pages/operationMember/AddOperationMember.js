@@ -29,8 +29,8 @@ import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
 
-let OPERATION_TYPES = []
 import { Logger } from "../../Logger/Logger";
+let OPERATION_TYPES = []
 function AddOperationMember() {
     //custom hook to set title of page
     useDocumentTitle("Add Operation Member");

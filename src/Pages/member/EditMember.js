@@ -34,9 +34,9 @@ import {
 } from "../../utils/MemberModuleUtil";
 import Loader from "../../utils/Loader";
 
+import { Logger } from "../../Logger/Logger";
 let MEMBER_LOOKUP = {}
 let CGF_OFFICES = []
-import { Logger } from "../../Logger/Logger";
 const EditMember = () => {
     //custom hook to set title of page
     useDocumentTitle("Edit Member");
