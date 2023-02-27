@@ -5,17 +5,17 @@ const paramDebug = params.get("debug");
 export const Logger = {
     debug(str, value) {
         if (paramDebug === "1") {
-            console.log(str, value);
-            // console.log("In debug function", value);
+            Logger.debug(str, value);
+            // Logger.debug("In debug function", value);
         } else {
-            console.log = () => {};
+            Logger.debug = () => {};
         }
     },
 
     info(str, value) {
         if (queryString === "?debug=1" || queryString === "?info=1") {
             console.info(str, value);
-            // console.log("In info function", value);
+            // Logger.debug("In info function", value);
         } else {
             console.info = () => {};
         }

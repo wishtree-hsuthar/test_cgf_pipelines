@@ -14,6 +14,8 @@ import { FORGOT_PASSWORD, FORGOT_PASSWORD_VERIFY_TOKEN } from "../api/Url";
 import Toaster from "../components/Toaster";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
+import { Logger } from "../Logger/Logger";
+
 const schema = yup.object().shape({
     newPassword: yup
         .string()
@@ -61,13 +63,13 @@ const ResetPassword = () => {
                     return null;
                 }
             } catch (error) {
-                console.log("error from verify token", error);
+                Logger.debug("error from verify token", error);
                 if (error?.response?.status == 400) {
                     setTimeout(() => {
                         resetPasswordToasterRef.current();
                     }, 1000);
 
-                    console.log("Invalid Token");
+                    Logger.debug("Invalid Token");
                     setResetPassordMessageType("error");
                     setResetPasswordMessageTitle("Invalid token");
                     setResetPasswordMessageDescription(
@@ -115,7 +117,7 @@ const ResetPassword = () => {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
-    console.log("params", params);
+    Logger.debug("params", params);
     const submitForm = async (data) => {
         try {
             const response = await axios.post(
@@ -137,7 +139,7 @@ const ResetPassword = () => {
                 reset();
             }
         } catch (error) {
-            console.log("error from reset password submit method", error);
+            Logger.debug("error from reset password submit method", error);
             if (error?.response?.status == 400) {
                 setResetPassordMessageType("error");
                 setResetPasswordMessageTitle("Password Reset Failure");
