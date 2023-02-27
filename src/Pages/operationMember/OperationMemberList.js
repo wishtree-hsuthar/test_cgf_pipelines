@@ -13,7 +13,7 @@ import { DOWNLOAD_OPERATION_MEMBER } from "../../api/Url";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import { downloadFunction } from "../../utils/downloadFunction";
 import TabHeader from "../../utils/tabUtils/TabHeader";
-
+import { Logger } from "../../Logger/Logger";
 function OperationMemberList() {
     //custom hook to set title of page
     useDocumentTitle("Operation Members");
@@ -41,16 +41,16 @@ function OperationMemberList() {
                 add: data.add,
             },
         }));
-    console.log(
+    Logger.debug(
         "member operation privilege",
         moduleAccessForOperationMember[0]?.operationMember
     );
 
     const onSearchChangeHandler = (e) => {
-        console.log("event", e.key);
+        Logger.debug("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
         setMakeApiCall(false);
-        console.log("search values", e.target.value);
+        Logger.debug("search values", e.target.value);
         setSearch(e.target.value);
         setSearchTimeout(
             setTimeout(() => {

@@ -17,7 +17,7 @@ import useCallbackState from "../../utils/useCallBackState";
 import TableQuestions from "./Table/TableQuestions.js";
 import { v4 as uuidv4 } from "uuid";
 import Toaster from "../../components/Toaster";
-
+import { Logger } from "../../Logger/Logger";
 const SectionContent = ({
     value,
     questionnaire,
@@ -115,7 +115,7 @@ const SectionContent = ({
 
     const validateTableQuestions = (tableCountError, tabIndex) => {
         // let tableCountError = 0;
-        console.log("inside table question validator");
+        Logger.debug("inside table question validator");
         let filteredTableSections = questionnaire?.sections.filter(
             (section) => section.layout === "table" // section.columnValues.map((col) => col.title)
         );
@@ -125,7 +125,7 @@ const SectionContent = ({
                 columnTitles: section.columnValues.map((col) => col.title),
             }));
 
-        console.log(
+        Logger.debug(
             "sameColumnTitleNamesInFilteredTableSections = ",
             sameColumnTitleNamesInFilteredTableSections
         );
@@ -135,7 +135,7 @@ const SectionContent = ({
             sectionIndex++
         ) {
             const sectionObject = questionnaire.sections[sectionIndex];
-            console.log("section object = ", sectionObject);
+            Logger.debug("section object = ", sectionObject);
             if (sectionObject.layout === "table") {
                 for (
                     let columnIndex = 0;
@@ -148,7 +148,7 @@ const SectionContent = ({
                         sectionObject.columnValues[columnIndex].columnType;
                     if (columnTitle === "") {
                         setTableErr("Error hai");
-                        console.log(
+                        Logger.debug(
                             "title not present in section = ",
                             sectionIndex
                         );
@@ -157,7 +157,7 @@ const SectionContent = ({
                         tableCountError++;
                     }
                     if (columnType === "prefilled") {
-                        console.log("inside prefiled");
+                        Logger.debug("inside prefiled");
                         questionnaire?.sections[
                             sectionIndex
                         ]?.rowValues?.forEach((row, rowId) => {
@@ -172,7 +172,7 @@ const SectionContent = ({
                     //     (name) => name === columnTitle
                     // );
                     // if (filteredSameColumnTitle.length > 1) {
-                    //     console.log(
+                    //     Logger.debug(
                     //         "same column names present = ",
                     //         filteredSameColumnTitle
                     //     );
@@ -210,11 +210,11 @@ const SectionContent = ({
                             }
                             if (sameNameCount > 1) {
                                 tableCountError++;
-                                console.log(
+                                Logger.debug(
                                     "Same name 1 se zyaada hai",
                                     columnTitle
                                 );
-                                console.log("in section = ", sectionIndex);
+                                Logger.debug("in section = ", sectionIndex);
                                 setTableErr("Same name hai");
                                 tabIndex.push(sectionIndex);
 
@@ -239,7 +239,7 @@ const SectionContent = ({
                         //     }
                         //     if (sameNameCount > 1) {
                         //         tableCountError++;
-                        //         console.log(
+                        //         Logger.debug(
                         //             "Same name 1 se zyaada hai",
                         //             columnTitle
                         //         );
@@ -259,7 +259,7 @@ const SectionContent = ({
         //             countError++;
         //         }
         //         if (column?.columnType === "prefilled") {
-        //             console.log("inside prefiled");
+        //             Logger.debug("inside prefiled");
         //             questionnaire?.sections[index]?.rowValues?.forEach(
         //                 (row, rowId) => {
         //                     if (row?.cells[columnIdx]?.value) return;
@@ -270,7 +270,7 @@ const SectionContent = ({
         //         }
         //     }
         // );
-        console.log("count Error in table validator: ", tableCountError);
+        Logger.debug("count Error in table validator: ", tableCountError);
         return tableCountError;
     };
 
@@ -293,7 +293,7 @@ const SectionContent = ({
                 const element = sectionTitles[innerIndex];
                 if (questionnaire.sections[index].sectionTitle === element) {
                     sameNameCount++;
-                    console.log("sameNameCount for section =", sameNameCount);
+                    Logger.debug("sameNameCount for section =", sameNameCount);
                 }
             }
             if (sameNameCount > 1) {
@@ -301,7 +301,7 @@ const SectionContent = ({
                 tabIndex.push(index);
 
                 // setValue(index);
-                console.log(
+                Logger.debug(
                     "same name counter exceeds more than once",
                     sameNameCount
                 );
@@ -320,7 +320,7 @@ const SectionContent = ({
                         tabIndex
                     );
                 } else if (questionnaire.sections[index].layout == "form") {
-                    console.log("count Error", countError);
+                    Logger.debug("count Error", countError);
                     //Rajkumar's save section
                     let tempError = {
                         questionTitle: "",
@@ -332,18 +332,18 @@ const SectionContent = ({
                         sectionIndex++
                     ) {
                         const index = sectionIndex;
-                        console.log("index -", index);
+                        Logger.debug("index -", index);
                         let questionsOfListEachSection = questionnaire.sections[
                             index
                         ].questions.map((question) => question.questionTitle);
-                        console.log(
+                        Logger.debug(
                             "questionsOfListEachSection = ",
                             questionsOfListEachSection
                         );
                         questionnaire?.sections[index]?.questions?.map(
                             (question, questionIdx) => {
                                 if (question?.questionTitle === "") {
-                                    console.log(
+                                    Logger.debug(
                                         "question title is empty in section",
                                         index
                                     );
@@ -360,12 +360,12 @@ const SectionContent = ({
                                         (ques) =>
                                             ques === question?.questionTitle
                                     );
-                                console.log(
+                                Logger.debug(
                                     "filterd question titles = ",
                                     filteredSameQuestionList
                                 );
                                 if (filteredSameQuestionList.length > 1) {
-                                    console.log(
+                                    Logger.debug(
                                         "Question title already in use = ",
                                         question.questionTitle
                                     );
@@ -376,7 +376,7 @@ const SectionContent = ({
 
                                     // setValue(index);
                                 }
-                                //   console.log("question in validate section map",question)
+                                //   Logger.debug("question in validate section map",question)
                                 if (
                                     [
                                         "dropdown",
@@ -404,7 +404,7 @@ const SectionContent = ({
         // if (questionnaire?.sections[index]?.layout === "table") {
         //     countError = validateTableQuestions();
         // } else {
-        //     console.log("count Error", countError);
+        //     Logger.debug("count Error", countError);
         //     //Rajkumar's save section
         //     let tempError = {
         //         questionTitle: "",
@@ -416,11 +416,11 @@ const SectionContent = ({
         //         sectionIndex++
         //     ) {
         //         const index = sectionIndex;
-        //         console.log("index -", index);
+        //         Logger.debug("index -", index);
         //         questionnaire?.sections[index]?.questions?.map(
         //             (question, questionIdx) => {
         //                 if (question?.questionTitle === "") {
-        //                     console.log(
+        //                     Logger.debug(
         //                         "question title is empty in section",
         //                         index
         //                     );
@@ -428,7 +428,7 @@ const SectionContent = ({
         //                     countError++;
         //                     setValue(index);
         //                 }
-        //                 //   console.log("question in validate section map",question)
+        //                 //   Logger.debug("question in validate section map",question)
         //                 if (
         //                     ["dropdown", "checkbox", "radioGroup"].includes(
         //                         question?.inputType
@@ -448,10 +448,10 @@ const SectionContent = ({
         // }
 
         //Madhav's save section
-        // console.log("questionnaire", questionnaire);
+        // Logger.debug("questionnaire", questionnaire);
 
         if (questionnaire?.title === "" || questionnaire?.sheetName === "") {
-            // setGlobalSectionTitleError({ errMsg: "Section title required" });
+            setGlobalSectionTitleError({ errMsg: "Section title required" });
             countError++;
         }
         for (let i = 0; i < questionnaire.sections.length; i++) {
@@ -461,7 +461,7 @@ const SectionContent = ({
                     sectionTitleEmpty: "Section title required",
                 });
                 tabIndex.push(i);
-                console.log(
+                Logger.debug(
                     "tab sections if section title is empty == ",
                     tabIndex
                 );
@@ -472,12 +472,12 @@ const SectionContent = ({
         }
         if (tabIndex.length > 0) {
             let distinctTabIndex = [...tabIndex];
-            console.log("disticet tab index = ", distinctTabIndex);
+            Logger.debug("disticet tab index = ", distinctTabIndex);
             setValue(distinctTabIndex[0]);
         }
-        console.log("tab which has errors =", tabIndex);
+        Logger.debug("tab which has errors =", tabIndex);
         if (countError === 0) {
-            console.log("count error is 0");
+            Logger.debug("count error is 0");
             setDisableButton(true);
 
             return true;
@@ -485,15 +485,15 @@ const SectionContent = ({
 
         return false;
     };
-    console.log("same name array = ", sameSectionsNames);
+    Logger.debug("same name array = ", sameSectionsNames);
     const checkNamePresentInSameNameArrayList = (name) => {
         let listnames = [...sameSectionsNames];
         let filteredSameName = listnames.filter(
             (listName) => listName === name
         );
-        console.log("filtered same name object = ", filteredSameName);
+        Logger.debug("filtered same name object = ", filteredSameName);
         if (filteredSameName.length > 1) {
-            console.log("filteredSameName = ", filteredSameName);
+            Logger.debug("filteredSameName = ", filteredSameName);
             return true;
         } else {
             return false;
@@ -502,9 +502,9 @@ const SectionContent = ({
 
     const sectionLayoutChangeHandler = (e) => {
         const { name, value } = e.target;
-        console.log("name:", name, "value:", value);
+        Logger.debug("name:", name, "value:", value);
         let tempQuestionnaire = { ...questionnaire };
-        console.log("tempQuestionnaire: ", tempQuestionnaire);
+        Logger.debug("tempQuestionnaire: ", tempQuestionnaire);
         tempQuestionnaire.sections[index]["layout"] = value;
         //check if layout is table remove form layout questions and add initial rows and colums
         if (value === "table") {
@@ -557,7 +557,10 @@ const SectionContent = ({
                 },
             ];
         }
-        console.log("tempQuestionnaire after layout update", tempQuestionnaire);
+        Logger.debug(
+            "tempQuestionnaire after layout update",
+            tempQuestionnaire
+        );
         setQuestionnaire(tempQuestionnaire);
     };
     const handleInputSection = (e) => {
@@ -619,11 +622,11 @@ const SectionContent = ({
                             },
                             () => myRef.current()
                         );
-                        console.log("index after save section ", index);
+                        Logger.debug("index after save section ", index);
                         setTimeout(() => navigate("/questionnaires"), 3000);
                         return true;
                     } catch (error) {
-                        console.log("error from fetch questionnaire", error);
+                        Logger.debug("error from fetch questionnaire", error);
 
                         setErrorToaster(error);
                         return false;
@@ -636,7 +639,7 @@ const SectionContent = ({
             setDisableButton(false);
             if (error?.code === "ERR_CANCELED") return;
             if (error?.response?.status == 401) {
-                console.log("Session timeout in save questionnaire");
+                Logger.debug("Session timeout in save questionnaire");
                 setToasterDetails(
                     {
                         titleMessage: "Error!",
@@ -656,7 +659,7 @@ const SectionContent = ({
         setOpenDialog1(true);
     };
     const onPublishButtonClickHandler = async (e) => {
-        console.log("inside publist button click");
+        Logger.debug("inside publist button click");
         const response = await handleSubmitSection(e, true);
         if (response) {
             try {
@@ -664,10 +667,10 @@ const SectionContent = ({
                     `${ADD_QUESTIONNAIRE}/publish/${response}`
                 );
             } catch (error) {
-                setDisableButton(false)
+                setDisableButton(false);
                 if (error?.code === "ERR_CANCELED") return;
 
-                console.log("in onPublishButtonClickHandler ");
+                Logger.debug("in onPublishButtonClickHandler ");
                 setErrorToaster(error);
             }
         }
@@ -775,7 +778,10 @@ const SectionContent = ({
                         </div>
                     )}
                     <form>
-                        {console.log("global section title error:- ",globalSectionTitleError.errMsg)}
+                        {Logger.debug(
+                            "global section title error:- ",
+                            globalSectionTitleError.errMsg
+                        )}
                         <div className="sect-form-card-blk">
                             <div className="sect-form-card-innerblk flex-between">
                                 <div className="sect-card-form-leftfield">

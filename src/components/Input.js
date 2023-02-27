@@ -1,6 +1,7 @@
 import { TextField } from "@mui/material";
 import React from "react";
 import { useController } from "react-hook-form";
+import { Logger } from "../Logger/Logger";
 const Input = ({
     control,
     name,
@@ -21,7 +22,7 @@ const Input = ({
         rules: rules,
         defaultValue: "",
     });
-    // console.log("error on text inputs: ",myHelper)
+    Logger.debug("error on text inputs: ", myHelper);
     return (
         <TextField
             disabled={isDisabled}

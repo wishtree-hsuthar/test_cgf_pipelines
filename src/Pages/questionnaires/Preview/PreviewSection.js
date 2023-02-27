@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PreviewQuestions from "./PreviewQuestions";
 import TableRender from "../Table/TableRender.js";
+import { Logger } from "../../../Logger/Logger";
 function PreviewSection({
     questionnaire,
 
@@ -8,7 +9,7 @@ function PreviewSection({
     sectionIndex,
 }) {
     useEffect(() => {
-        console.log("section:- ", section);
+        Logger.debug("section:- ", section);
     }, []);
     return (
         <>

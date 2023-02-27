@@ -12,6 +12,7 @@ import Toaster from "../components/Toaster";
 import useCallbackState from "../utils/useCallBackState";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
+import { Logger } from "../Logger/Logger";
 const schema = yup.object().shape({
     password: yup
         .string()
@@ -51,9 +52,9 @@ const SetPassword = () => {
                     return null;
                 }
             } catch (error) {
-                console.log("error from verify token", error);
+                Logger.debug("error from verify token", error);
                 if (error?.response?.status == 400) {
-                    console.log("Invalid Token");
+                    Logger.debug("Invalid Token");
                     setPasswordToasterDetails(
                         {
                             titleMessage: "Oops!",
@@ -101,7 +102,7 @@ const SetPassword = () => {
                 CONFIRM_PASSWORD + params.id,
                 data
             );
-            console.log("response from confirm passowrd", response);
+            Logger.debug("response from confirm passowrd", response);
             if (response.status == 201) {
                 setPasswordToasterDetails(
                     {
@@ -117,7 +118,7 @@ const SetPassword = () => {
                 }, 3000);
             }
         } catch (error) {
-            console.log("error from confirm password", error);
+            Logger.debug("error from confirm password", error);
             setPasswordToasterDetails(
                 {
                     titleMessage: "Oops!",

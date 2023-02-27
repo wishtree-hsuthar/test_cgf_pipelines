@@ -22,6 +22,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
+import { Logger } from "../../Logger/Logger";
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
@@ -119,7 +120,7 @@ function AddNewQuestionnaire() {
                     }
                 );
                 setIsQuestionnaireLoading(false);
-                console.log("response from fetch questionnaire", response);
+                Logger.debug("response from fetch questionnaire", response);
                 isMounted && setQuestionnaire({ ...response.data });
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
@@ -140,7 +141,7 @@ function AddNewQuestionnaire() {
                     }, 3000);
                 }
                 // setErrorToaster(error)
-                // console.log("error from fetch questionnaire", error);
+                // Logger.debug("error from fetch questionnaire", error);
             }
         };
         fetch();
@@ -154,7 +155,7 @@ function AddNewQuestionnaire() {
             navigate(`/questionnaires/preview-questionnaire/${id}`);
     };
     const addSection = () => {
-        // console.log("questionnare: ",questionnaire)
+        // Logger.debug("questionnare: ",questionnaire)
         setQuestionnaire({
             ...questionnaire,
             sections: [

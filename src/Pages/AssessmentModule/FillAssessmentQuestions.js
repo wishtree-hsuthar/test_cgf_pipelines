@@ -18,7 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { useParams } from "react-router-dom";
-
+import { Logger } from "../../Logger/Logger";
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9 ]+$/i;
@@ -57,7 +57,7 @@ const FillAssessmentQuestion = ({
         if (typeof answer === "string") {
             values = answer.split(",");
         }
-        console.log("Answer = ", answer);
+        Logger.debug("Answer = ", answer);
 
         if (checked) {
             values.push(value);
@@ -69,7 +69,7 @@ const FillAssessmentQuestion = ({
     };
 
     const params = useParams();
-    console.log("error for date:- ", error);
+    Logger.debug("error for date:- ", error);
     let questionComponent =
         question.inputType === "singleTextbox" ? (
             <TextField

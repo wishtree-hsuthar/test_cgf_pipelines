@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
-import {
-    FETCH_ASSESSMENT_BY_ID,
-    MEMBER_OPERATION_MEMBERS,
-    REASSIGN_ASSESSMENTS,
-} from "../../api/Url";
+import { FETCH_ASSESSMENT_BY_ID, REASSIGN_ASSESSMENTS } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import Loader2 from "../../assets/Loader/Loader2.svg";
-
+import { Logger } from "../../Logger/Logger";
 const tableHead = [
     {
         id: "",
@@ -70,10 +65,10 @@ const AssignAssessmentToOperationMember = () => {
     // search function
     const onSearchChangeHandler = (e) => {
         e.preventDefault();
-        console.log("event", e.key);
+        Logger.debug("event", e.key);
         if (searchTimeout) clearTimeout(searchTimeout);
         setMakeApiCall(false);
-        console.log("search values", e.target.value);
+        Logger.debug("search values", e.target.value);
         setSearch(e.target.value);
         setSearchTimeout(
             setTimeout(() => {
@@ -83,8 +78,8 @@ const AssignAssessmentToOperationMember = () => {
         );
     };
     const generateUrl = () => {
-        console.log("Search", search);
-        console.log(
+        Logger.debug("Search", search);
+        Logger.debug(
             "assessment?",
             assessment,
             window.location.pathname.split("/")[-1]
@@ -105,7 +100,7 @@ const AssignAssessmentToOperationMember = () => {
     };
 
     const updateRecords = (data) => {
-        console.log("data before update----", data);
+        Logger.debug("data before update----", data);
 
         let staleData = data;
         staleData.forEach((object) => {
@@ -144,7 +139,7 @@ const AssignAssessmentToOperationMember = () => {
                 object[k] = v;
             });
         });
-        console.log("data in updaterecords method", staleData);
+        Logger.debug("data in updaterecords method", staleData);
         setRecords([...staleData]);
     };
 
@@ -159,7 +154,7 @@ const AssignAssessmentToOperationMember = () => {
                 signal: controller.signal,
             });
             setTotalRecords(parseInt(response.headers["x-total-count"]));
-            console.log(
+            Logger.debug(
                 "Response from  api get operation member api",
                 response
             );
@@ -170,7 +165,7 @@ const AssignAssessmentToOperationMember = () => {
             setIsLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            console.log("Error from operation member-------", error);
+            Logger.debug("Error from operation member-------", error);
             isMounted &&
                 setToasterDetails(
                     {
@@ -187,7 +182,7 @@ const AssignAssessmentToOperationMember = () => {
                 );
             setIsLoading(false);
             if (error?.response?.status == 500) {
-                console.log(
+                Logger.debug(
                     "Error status 500 while fetchiing operation member"
                 );
             }
@@ -195,7 +190,7 @@ const AssignAssessmentToOperationMember = () => {
     };
 
     const handleTableTesterPageChange = (newPage) => {
-        console.log("new Page", newPage);
+        Logger.debug("new Page", newPage);
         setPage(newPage);
     };
 
@@ -206,7 +201,7 @@ const AssignAssessmentToOperationMember = () => {
     };
     // selects single operation member
     const selectSingleUser = (opId) => {
-        console.log("select single user---", opId);
+        Logger.debug("select single user---", opId);
 
         setSelectedUser(opId);
         setNewOperationMember(opId);
@@ -228,12 +223,12 @@ const AssignAssessmentToOperationMember = () => {
             memberId = response?.data?.assignedMember?._id;
             operationMemberId = response?.data?.assignedOperationMember?._id;
 
-            console.log(
+            Logger.debug(
                 "response from fetch assessment in assign assessment page",
                 response
             );
         } catch (error) {
-            console.log(
+            Logger.debug(
                 "Error from fetch assessment in assign assessment page",
                 error
             );
@@ -242,7 +237,7 @@ const AssignAssessmentToOperationMember = () => {
 
     // assign assessment to operation member
     const handleReassignAssessment = async () => {
-        console.log(
+        Logger.debug(
             `data from re-assign assessment-${id} and operation-member-${newOperationMember}`
         );
         try {
@@ -252,7 +247,7 @@ const AssignAssessmentToOperationMember = () => {
                     reassignTo: newOperationMember,
                 }
             );
-            console.log("response from handle re-assign assessment", response);
+            Logger.debug("response from handle re-assign assessment", response);
             if (response.status == 201) {
                 setToasterDetails(
                     {
@@ -268,7 +263,7 @@ const AssignAssessmentToOperationMember = () => {
                 }, 2000);
             }
         } catch (error) {
-            console.log("Error from re-assign assessment", error);
+            Logger.debug("Error from re-assign assessment", error);
             if (error?.response?.status == 400) {
                 setToasterDetails(
                     {
@@ -300,7 +295,7 @@ const AssignAssessmentToOperationMember = () => {
                 await fetchAssessment(isMounted, controller);
                 await getOperationMembers(isMounted, controller);
             })();
-        console.log("assessment - ", assessment);
+        Logger.debug("assessment - ", assessment);
 
         return () => {
             isMounted = false;
