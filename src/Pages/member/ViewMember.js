@@ -34,13 +34,17 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { defaultValues, getCategories, getCGFOffices } from "../../utils/MemberModuleUtil";
+import {
+    defaultValues,
+    getCategories,
+    getCGFOffices,
+} from "../../utils/MemberModuleUtil";
 import Loader from "../../utils/Loader";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
-let MEMBER_LOOKUP = {}
-let CGF_OFFICES = []
+let MEMBER_LOOKUP = {};
+let CGF_OFFICES = [];
 // CGF Categories (Ideally get from backend)
 const cgfCategories = ["Manufacturer", "Retailer", "Other"];
 const cgfActivites = [
@@ -61,7 +65,6 @@ const cgfActivites = [
     "Wholesaler",
     "N/A",
 ];
-
 
 const ViewMember = () => {
     //Code for Operatiom Member List
@@ -594,21 +597,21 @@ const ViewMember = () => {
             if (error?.code === "ERR_CANCELED") return;
         }
     };
-    const callGetCategories =async () => {
-    MEMBER_LOOKUP =await  getCategories()
-    console.log("MEMBER LOOKUP",MEMBER_LOOKUP)
-  }
+    const callGetCategories = async () => {
+        MEMBER_LOOKUP = await getCategories();
+        Logger.debug("MEMBER LOOKUP", MEMBER_LOOKUP);
+    };
 
-  const callGetOffices = async () => {
-    CGF_OFFICES = await getCGFOffices();
-  }
-  useEffect(() => {
+    const callGetOffices = async () => {
+        CGF_OFFICES = await getCGFOffices();
+    };
+    useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
         (async () => {
             Object.keys(MEMBER_LOOKUP)?.length === 0 && callGetCategories();
-      CGF_OFFICES?.length === 0 && callGetOffices()
-      isMounted &&
+            CGF_OFFICES?.length === 0 && callGetOffices();
+            isMounted &&
                 makeApiCall &&
                 (await getMemberByID(isMounted, controller));
             isMounted && (await getCountryCode(isMounted, controller));
@@ -873,7 +876,11 @@ const ViewMember = () => {
                                                 control={control}
                                                 name="cgfCategory"
                                                 placeholder="N/A"
-                                                options={Object.keys(MEMBER_LOOKUP)?.length > 0 && Object.keys(MEMBER_LOOKUP)}
+                                                options={
+                                                    Object.keys(MEMBER_LOOKUP)
+                                                        ?.length > 0 &&
+                                                    Object.keys(MEMBER_LOOKUP)
+                                                }
                                             />
                                         </div>
                                         {/* </div> */}
@@ -1094,258 +1101,324 @@ const ViewMember = () => {
                                         </div>
                                     </div>
 
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="address">Address </label>
-                      <TextField
-                        disabled
-                        multiline
-                        value={member?.address ? member.address : ""}
-                        //   {...field}
-                        inputProps={{
-                          maxLength: 250,
-                        }}
-                        className={`input-textarea`}
-                        id="outlined-basic"
-                        placeholder="Enter address"
-                        variant="outlined"
-                        helperText=" "
-                      />
-                      {/* Add Address Text Area field here */}
-                      {/* <Input control={control} name="city" placeholder="Enter state"/> */}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="card-inner-wrap">
-                <h2 className="sub-heading1">CGF Office Details</h2>
-                <div className="flex-between card-blk">
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="cgfOfficeRegion">
-                        Region <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        isDisabled
-                        control={control}
-                        name="cgfOfficeRegion"
-                        options={arrOfRegions}
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="cgfOfficeCountry">
-                        Country <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        isDisabled
-                        control={control}
-                        name="cgfOfficeCountry"
-                        placeholder="Select country"
-                        options={
-                          arrOfCgfOfficeCountryRegions
-                            ? arrOfCgfOfficeCountryRegions
-                            : []
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="cgfOffice">
-                        Office <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        isDisabled
-                        control={control}
-                        name="cgfOffice"
-                        placeholder="Select office"
-                        options={CGF_OFFICES}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="card-inner-wrap">
-                <h2 className="sub-heading1">Representative Contact Details</h2>
-                <div className="flex-between card-blk">
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <div className="salutation-wrap">
-                        <div className="salutation-blk">
-                          <label htmlFor="memberContactSalutation">
-                            Salutation <span className="mandatory">*</span>
-                          </label>
-                          <Dropdown
-                            isDisabled
-                            control={control}
-                            name="memberContactSalutation"
-                            placeholder="N/A"
-                            options={["Mr.", "Mrs.", "Ms."]}
-                          />
-                        </div>
-                        <div className="salutation-inputblk">
-                          <label htmlFor="memberContactFullName">
-                            Full Name <span className="mandatory">*</span>
-                          </label>
-                          <Input
-                            isDisabled
-                            control={control}
-                            name="memberContactFullName"
-                            placeholder="N/A"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="title">Job Title</label>
-                      <Input
-                        isDisabled
-                        control={control}
-                        name="title"
-                        placeholder="N/A"
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="department">Department</label>
-                      <Input
-                        isDisabled
-                        control={control}
-                        name="department"
-                        placeholder="N/A"
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="memberContactEmail">
-                        Email <span className="mandatory">*</span>
-                      </label>
-                      <Input
-                        isDisabled
-                        control={control}
-                        name="memberContactEmail"
-                        placeholder="N/A"
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="memberContactPhoneNumber">
-                        Phone Number
-                      </label>
-                      <div className="phone-number-field">
-                        <div className="select-field country-code">
-                          <Autocomplete
-                            disabled
-                            popupIcon={<KeyboardArrowDownRoundedIcon />}
-                            className="phone-number-disable"
-                            readOnly
-                            value={
-                              member?.memberRepresentativeId
-                                ? member?.memberRepresentativeId[0]?.countryCode
-                                : ""
-                            }
-                            options={arrOfCountryCode}
-                            autoHighlight
-                            placeholder="Select country code"
-                            renderOption={(props, option) => (
-                              <li {...props}>{option}</li>
-                            )}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                inputProps={{
-                                  ...params.inputProps,
-                                }}
-                                onChange={() =>
-                                  trigger("memberContactPhoneNuber")
-                                }
-                                placeholder={"N/A"}
-                              />
-                            )}
-                          />
-                        </div>
-                        <Input
-                          isDisabled
-                          control={control}
-                          name="memberContactPhoneNuber"
-                          placeholder="N/A"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="status">
-                        Status <span className="mandatory">*</span>
-                      </label>
-                      <div className="radio-btn-field">
-                        <RadioGroup
-                          // {...field}
-                          value={
-                            member?.memberRepresentativeId &&
-                            member?.memberRepresentativeId[0]?.isActive
-                              ? "active"
-                              : "inactive"
-                          }
-                          aria-labelledby="demo-radio-buttons-group-label"
-                          name="radio-buttons-group"
-                          className="radio-btn"
-                        >
-                          <FormControlLabel
-                            disabled
-                            value="active"
-                            control={<Radio />}
-                            label="Active"
-                          />
-                          <FormControlLabel
-                            disabled
-                            value="inactive"
-                            control={<Radio />}
-                            label="Inactive"
-                          />
-                        </RadioGroup>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="totalOperationMembers">
-                        Toatal Operation Member{" "}
-                        <span className="mandatory">*</span>
-                      </label>
-                      <Input
-                        isDisabled
-                        control={control}
-                        name="totalOperationMembers"
-                        placeholder="N/A"
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="createdBy">
-                        Created By <span className="mandatory">*</span>
-                      </label>
-                      <Input
-                        isDisabled
-                        control={control}
-                        name="createdBy"
-                        placeholder="N/A"
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="role">
-                        Role <span className="mandatory">*</span>
-                      </label>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="address">
+                                                Address{" "}
+                                            </label>
+                                            <TextField
+                                                disabled
+                                                multiline
+                                                value={
+                                                    member?.address
+                                                        ? member.address
+                                                        : ""
+                                                }
+                                                //   {...field}
+                                                inputProps={{
+                                                    maxLength: 250,
+                                                }}
+                                                className={`input-textarea`}
+                                                id="outlined-basic"
+                                                placeholder="Enter address"
+                                                variant="outlined"
+                                                helperText=" "
+                                            />
+                                            {/* Add Address Text Area field here */}
+                                            {/* <Input control={control} name="city" placeholder="Enter state"/> */}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="card-inner-wrap">
+                                <h2 className="sub-heading1">
+                                    CGF Office Details
+                                </h2>
+                                <div className="flex-between card-blk">
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="cgfOfficeRegion">
+                                                Region{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Dropdown
+                                                isDisabled
+                                                control={control}
+                                                name="cgfOfficeRegion"
+                                                options={arrOfRegions}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="cgfOfficeCountry">
+                                                Country{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Dropdown
+                                                isDisabled
+                                                control={control}
+                                                name="cgfOfficeCountry"
+                                                placeholder="Select country"
+                                                options={
+                                                    arrOfCgfOfficeCountryRegions
+                                                        ? arrOfCgfOfficeCountryRegions
+                                                        : []
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="cgfOffice">
+                                                Office{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Dropdown
+                                                isDisabled
+                                                control={control}
+                                                name="cgfOffice"
+                                                placeholder="Select office"
+                                                options={CGF_OFFICES}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="card-inner-wrap">
+                                <h2 className="sub-heading1">
+                                    Representative Contact Details
+                                </h2>
+                                <div className="flex-between card-blk">
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <div className="salutation-wrap">
+                                                <div className="salutation-blk">
+                                                    <label htmlFor="memberContactSalutation">
+                                                        Salutation{" "}
+                                                        <span className="mandatory">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <Dropdown
+                                                        isDisabled
+                                                        control={control}
+                                                        name="memberContactSalutation"
+                                                        placeholder="N/A"
+                                                        options={[
+                                                            "Mr.",
+                                                            "Mrs.",
+                                                            "Ms.",
+                                                        ]}
+                                                    />
+                                                </div>
+                                                <div className="salutation-inputblk">
+                                                    <label htmlFor="memberContactFullName">
+                                                        Full Name{" "}
+                                                        <span className="mandatory">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <Input
+                                                        isDisabled
+                                                        control={control}
+                                                        name="memberContactFullName"
+                                                        placeholder="N/A"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="title">
+                                                Job Title
+                                            </label>
+                                            <Input
+                                                isDisabled
+                                                control={control}
+                                                name="title"
+                                                placeholder="N/A"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="department">
+                                                Department
+                                            </label>
+                                            <Input
+                                                isDisabled
+                                                control={control}
+                                                name="department"
+                                                placeholder="N/A"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="memberContactEmail">
+                                                Email{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Input
+                                                isDisabled
+                                                control={control}
+                                                name="memberContactEmail"
+                                                placeholder="N/A"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="memberContactPhoneNumber">
+                                                Phone Number
+                                            </label>
+                                            <div className="phone-number-field">
+                                                <div className="select-field country-code">
+                                                    <Autocomplete
+                                                        disabled
+                                                        popupIcon={
+                                                            <KeyboardArrowDownRoundedIcon />
+                                                        }
+                                                        className="phone-number-disable"
+                                                        readOnly
+                                                        value={
+                                                            member?.memberRepresentativeId
+                                                                ? member
+                                                                      ?.memberRepresentativeId[0]
+                                                                      ?.countryCode
+                                                                : ""
+                                                        }
+                                                        options={
+                                                            arrOfCountryCode
+                                                        }
+                                                        autoHighlight
+                                                        placeholder="Select country code"
+                                                        renderOption={(
+                                                            props,
+                                                            option
+                                                        ) => (
+                                                            <li {...props}>
+                                                                {option}
+                                                            </li>
+                                                        )}
+                                                        renderInput={(
+                                                            params
+                                                        ) => (
+                                                            <TextField
+                                                                {...params}
+                                                                inputProps={{
+                                                                    ...params.inputProps,
+                                                                }}
+                                                                onChange={() =>
+                                                                    trigger(
+                                                                        "memberContactPhoneNuber"
+                                                                    )
+                                                                }
+                                                                placeholder={
+                                                                    "N/A"
+                                                                }
+                                                            />
+                                                        )}
+                                                    />
+                                                </div>
+                                                <Input
+                                                    isDisabled
+                                                    control={control}
+                                                    name="memberContactPhoneNuber"
+                                                    placeholder="N/A"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="status">
+                                                Status{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div className="radio-btn-field">
+                                                <RadioGroup
+                                                    // {...field}
+                                                    value={
+                                                        member?.memberRepresentativeId &&
+                                                        member
+                                                            ?.memberRepresentativeId[0]
+                                                            ?.isActive
+                                                            ? "active"
+                                                            : "inactive"
+                                                    }
+                                                    aria-labelledby="demo-radio-buttons-group-label"
+                                                    name="radio-buttons-group"
+                                                    className="radio-btn"
+                                                >
+                                                    <FormControlLabel
+                                                        disabled
+                                                        value="active"
+                                                        control={<Radio />}
+                                                        label="Active"
+                                                    />
+                                                    <FormControlLabel
+                                                        disabled
+                                                        value="inactive"
+                                                        control={<Radio />}
+                                                        label="Inactive"
+                                                    />
+                                                </RadioGroup>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="totalOperationMembers">
+                                                Toatal Operation Member{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Input
+                                                isDisabled
+                                                control={control}
+                                                name="totalOperationMembers"
+                                                placeholder="N/A"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="createdBy">
+                                                Created By{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Input
+                                                isDisabled
+                                                control={control}
+                                                name="createdBy"
+                                                placeholder="N/A"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="role">
+                                                Role{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
 
                                             <div>
                                                 {/* <Input/> */}

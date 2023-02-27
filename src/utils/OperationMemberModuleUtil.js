@@ -1,6 +1,6 @@
 import axios from "axios";
 import { OPERATION_TYPES } from "../api/Url";
-
+import { Logger } from "../Logger/Logger";
 export const helperText = {
     salutation: {
         required: "Select salutation",
@@ -77,9 +77,9 @@ export const helperText = {
         // minLength: "Role must contain atleast 3 characters",
         // pattern: "Invalid format",
     },
-    isCGFStaff:{
+    isCGFStaff: {
         required: "Select the CGFSTaff",
-    }
+    },
 };
 
 export const tableHead = [
@@ -118,15 +118,15 @@ export const tableHead = [
         // width: "30%",
         disablePadding: false,
         label: "Created At",
-    }
+    },
 ];
 
-export const getOperationTypes = async() => {
+export const getOperationTypes = async () => {
     try {
-        const response = await axios.get(OPERATION_TYPES)
-        console.log("response",response)
-        return response?.data
+        const response = await axios.get(OPERATION_TYPES);
+        Logger.debug("response", response);
+        return response?.data;
     } catch (error) {
-        console.log("Error:- ",error)   
+        Logger.debug("Error:- ", error);
     }
-}
+};

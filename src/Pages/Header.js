@@ -13,7 +13,7 @@ import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 import "./Header.css";
 import axios from "axios";
 
-let REPORT_ISSUE_LINK = ""
+let REPORT_ISSUE_LINK = "";
 const Header = () => {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [isActive, setActive] = React.useState("false");
@@ -136,23 +136,23 @@ const Header = () => {
         },
         []
     );
-    
-    const getReportIssueLink =async () => {
-        try {
-            const response = await axios.get(MASTER_LINK+'/reportIssueOnZoho')
-            console.log("response:- ",response.data)
-            REPORT_ISSUE_LINK = response?.data
-        } catch (error) {
-            console.log("Error:- ",error)
-        }
-       
-    }
-    useEffect(() => {
-      REPORT_ISSUE_LINK?.length === 0 && getReportIssueLink()
 
-    }, [])
-    console.log("REPORT ISSUE LINK:- ",REPORT_ISSUE_LINK)
-    
+    const getReportIssueLink = async () => {
+        try {
+            const response = await axios.get(
+                MASTER_LINK + "/reportIssueOnZoho"
+            );
+            Logger.debug("response:- ", response.data);
+            REPORT_ISSUE_LINK = response?.data;
+        } catch (error) {
+            Logger.debug("Error:- ", error);
+        }
+    };
+    useEffect(() => {
+        REPORT_ISSUE_LINK?.length === 0 && getReportIssueLink();
+    }, []);
+    Logger.debug("REPORT ISSUE LINK:- ", REPORT_ISSUE_LINK);
+
     // Define state and function to update the value
     const [hoverStatus, setHover] = useState(false);
     const [hoverNameStatus, setNameHover] = useState(false);
@@ -573,7 +573,23 @@ const Header = () => {
                                                                     }
                                                                 >
                                                                     <span className="addmore-txt">
-                                                                       <a href={REPORT_ISSUE_LINK} target={"_blank"} style={{textDecoration:"none",color:"#f7a823"}}>Raise an Issue</a> 
+                                                                        <a
+                                                                            href={
+                                                                                REPORT_ISSUE_LINK
+                                                                            }
+                                                                            target={
+                                                                                "_blank"
+                                                                            }
+                                                                            style={{
+                                                                                textDecoration:
+                                                                                    "none",
+                                                                                color: "#f7a823",
+                                                                            }}
+                                                                        >
+                                                                            Raise
+                                                                            an
+                                                                            Issue
+                                                                        </a>
                                                                     </span>
                                                                 </div>
                                                                 <div className="form-btn flex-center mt-20">
