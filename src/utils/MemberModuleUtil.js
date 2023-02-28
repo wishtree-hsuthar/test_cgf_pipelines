@@ -1,6 +1,8 @@
 import axios from "axios";
 import { CATEGORIES, CGF_OFFICES } from "../api/Url";
+import { Logger } from "../Logger/Logger";
 export const Member_Lookup = {};
+
 let MEMBER_LOOKUP = {};
 const updateLookUp = (categoriesArray) => {
     // Logger.debug("Categories:- ",categoriesArray)

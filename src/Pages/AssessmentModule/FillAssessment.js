@@ -533,6 +533,32 @@ function FillAssessment() {
                             },
                         };
                         sections.push(index);
+                    } else if (
+                        question.inputType == "radioGroup" &&
+                        currentSectionAnswers[question?.uuid] &&
+                        !question.options.includes(
+                            currentSectionAnswers[question?.uuid]
+                        )
+                    ) {
+                        Logger.debug("error from radio group question");
+                        Logger.debug("section no", index);
+                        Logger.debug("section no", sections);
+
+                        sectionErrors[question?.uuid] = `
+                        
+                        Entered value
+                        "${
+                            currentSectionAnswers[question?.uuid]
+                        }" is not part of above list. Please select valid option among listed values from list.
+                        `;
+                        tempAsssessmentQuestionnaire = {
+                            ...tempAsssessmentQuestionnaire,
+                            [section?.uuid]: {
+                                ...tempAsssessmentQuestionnaire[section?.uuid],
+                                [question?.uuid]: "",
+                            },
+                        };
+                        sections.push(index);
                     } else if (question.inputType == "checkbox") {
                         let answerOptions =
                             currentSectionAnswers[question?.uuid];
