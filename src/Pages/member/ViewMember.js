@@ -1382,7 +1382,7 @@ const ViewMember = () => {
                                     <div className="card-form-field">
                                         <div className="form-group">
                                             <label htmlFor="totalOperationMembers">
-                                                Toatal Operation Member{" "}
+                                                Total Operation Member{" "}
                                                 <span className="mandatory">
                                                     *
                                                 </span>

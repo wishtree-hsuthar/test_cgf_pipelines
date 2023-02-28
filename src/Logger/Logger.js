@@ -5,10 +5,10 @@ const paramDebug = params.get("debug");
 export const Logger = {
     debug(str, value) {
         if (paramDebug === "1") {
-            Logger.debug(str, value);
-            // Logger.debug("In debug function", value);
+            console.debug(str, value);
+            // console.debug("In debug function", value);
         } else {
-            Logger.debug = () => {};
+            console.debug = () => {};
         }
     },
 
