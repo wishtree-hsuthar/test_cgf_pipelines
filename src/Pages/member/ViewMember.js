@@ -163,7 +163,20 @@ const ViewMember = () => {
                 delete: data?.delete,
             },
         }));
-
+    let operationMemberRights = viewMemberPrivilegeArray
+        .filter((data) => data?.moduleId?.name === "Operation Members")
+        .map((data) => ({
+            operationMember: {
+                list: data?.list,
+                view: data?.view,
+                edit: data?.edit,
+                delete: data?.delete,
+                add: data?.add,
+            },
+        }));
+    moduleAccesForMember.push(...operationMemberRights);
+    console.log("moduleAccesForMember = ", moduleAccesForMember);
+    console.log("moduleAccesForMember = ", viewMemberPrivilegeArray);
     //format records as backend requires
     const updateRecords = (data) => {
         data.forEach((object) => {
@@ -570,7 +583,24 @@ const ViewMember = () => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute("download", `Operation members${Date.now()}.xls`);
+            let date =
+                new Date().getDate() < 10
+                    ? "0" + new Date().getDate().toString()
+                    : new Date().getDate().toString();
+            let month =
+                new Date().getMonth() < 10
+                    ? "0" + (new Date().getMonth() + 1).toString()
+                    : new Date().getMonth().toString();
+            let year = new Date().getFullYear().toString();
+            let hours = new Date().getHours();
+            let minutes = new Date().getMinutes();
+            let seconds = new Date().getSeconds();
+            let timeStamp =
+                month + date + year + "_" + hours + minutes + seconds;
+            link.setAttribute(
+                `download`,
+                `Operation members - ${timeStamp}.xls`
+            );
             document.body.appendChild(link);
             link.click();
             if (response.status == 200) {
@@ -1477,7 +1507,16 @@ const ViewMember = () => {
                                         </span>
                                         Download
                                     </div>
-                                    <div className="form-btn">
+                                    <div
+                                        className="form-btn"
+                                        hidden={
+                                            SUPER_ADMIN === true
+                                                ? false
+                                                : !moduleAccesForMember[1]
+                                                      ?.operationMember?.add
+                                            // true
+                                        }
+                                    >
                                         <button
                                             type="submit"
                                             className="primary-button add-button"
