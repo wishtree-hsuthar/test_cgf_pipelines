@@ -302,14 +302,15 @@ function FillAssessment() {
                 !reOpen &&
                     setTimeout(() => {
                         navigate("/assessment-list");
+                        setDisableFillAssessment(false);
                     }, 3000);
             }
         } catch (error) {
-            // setDisableFillAssessment(false);
+            setDisableFillAssessment(false);
 
             handleCatchError(error, "saveAssessmentAsDraft");
         } finally {
-            setDisableFillAssessment(false);
+            // setDisableFillAssessment(false);
         }
     };
 
