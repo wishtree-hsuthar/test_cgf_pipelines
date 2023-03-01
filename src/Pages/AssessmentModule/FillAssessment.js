@@ -560,7 +560,10 @@ function FillAssessment() {
                             },
                         };
                         sections.push(index);
-                    } else if (question.inputType == "checkbox") {
+                    } else if (
+                        question.inputType == "checkbox" &&
+                        currentSectionAnswers[question?.uuid]
+                    ) {
                         let answerOptions =
                             currentSectionAnswers[question?.uuid];
                         if (typeof answerOptions === "string") {
@@ -576,8 +579,9 @@ function FillAssessment() {
 
                         let optionsFromQuestion = question.options;
                         let optionsPresentInBothAnswerAndQuestionList =
-                            answerOptions.filter((option) =>
-                                optionsFromQuestion.includes(option)
+                            answerOptions &&
+                            answerOptions?.filter((option) =>
+                                optionsFromQuestion?.includes(option)
                             );
 
                         if (
