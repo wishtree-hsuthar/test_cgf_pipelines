@@ -251,7 +251,8 @@ function FillAssessment() {
                         setToasterDetails(
                             {
                                 titleMessage: "Oops!",
-                                descriptionMessage: "Invalid assessment",
+                                descriptionMessage:
+                                    "Oops!! There is some error while saving assessment details. Either someone has removed this assessment or looks like invalid assessment getting submitted. For more details please contact system / CGF admin",
                                 messageType: "error",
                             },
                             () => myRef.current()
@@ -307,8 +308,26 @@ function FillAssessment() {
             }
         } catch (error) {
             setDisableFillAssessment(false);
+            if (
+                error?.response?.status === 400 &&
+                error?.response?.data?.message === "Invalid assessment"
+            ) {
+                console.log("in invalid assessment");
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage:
+                            "Oops!! There is some error while saving assessment details. Either someone has removed this assessment or looks like invalid assessment getting submitted. For more details please contact system / CGF admin",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/assessment-list");
+                }, 3000);
+            }
 
-            handleCatchError(error, "saveAssessmentAsDraft");
+            // handleCatchError(error, "saveAssessmentAsDraft");
         } finally {
             // setDisableFillAssessment(false);
         }
