@@ -554,15 +554,34 @@ ul.breadcrumb li a:hover {
 .input-textarea-error fieldset {
     border-color: #e53850;
 }
-
-.loader-blk {
+/* 
+ .loader-blk {
+    z-index: 10;
     text-align: center;
     width: 200px;
-    margin: 0 auto;
+    margin: 0 auto; 
+ }  */
+.loader-blk{
+    width: 100%;
+    height: 100%;
+    background-color: #f4f7fc;
+    position: fixed;
+    left: 0;
+    top: 0;
 }
+
+.loader-image-blk{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+
 .loader-blk img {
     width: 100%;
 }
+
 .select-reusable {
     width: 100%;
 }
@@ -2434,6 +2453,7 @@ input:-webkit-autofill:active {
 }
 .MuiTooltip-tooltip {
     font-family: "ProximaNova-Regular", serif, sans-serif !important;
+    z-index:0;
 }
 .country-code-auto-search .Mui-disabled.MuiInputBase-root {
     padding-right: 0 !important;
