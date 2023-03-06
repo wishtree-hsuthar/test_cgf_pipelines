@@ -289,7 +289,6 @@ function FillAssessment() {
                 }
             );
             if (response.status == 201) {
-                // setDisableFillAssessment(false);
                 !reOpen &&
                     setToasterDetails(
                         {
@@ -858,7 +857,10 @@ function FillAssessment() {
                                     },
                                     () => myRef.current()
                                 );
-
+                                console.log(
+                                    "Answers:- ",
+                                    response.data.answers
+                                );
                                 // await AssessmentQuestionnairePromise(response.data.answers);
                                 setAssessmentQuestionnaire(
                                     response.data.answers

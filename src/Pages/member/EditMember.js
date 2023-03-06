@@ -371,7 +371,7 @@ const EditMember = () => {
                 cgfOfficeRegion: data?.cgfOfficeRegion,
                 cgfOfficeCountry: data?.cgfOfficeCountry,
                 cgfOffice: data?.cgfOffice,
-                memberContactSalutation: "Mr.",
+                memberContactSalutation: data?.memberRepresentativeId[0]?.salutation,
                 memberContactFullName: data?.memberRepresentativeId[0]?.name,
                 title: data?.memberRepresentativeId[0]?.title,
                 department: data?.memberRepresentativeId[0]?.department,

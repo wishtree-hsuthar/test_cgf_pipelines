@@ -49,7 +49,7 @@ const defaultValues = {
     role: "",
     replacedOperationMember: "",
 };
-const OPERATION_TYPES = []
+let OPERATION_TYPES = []
 const ViewOperationMembers = () => {
     //custom hook to set title of page
     useDocumentTitle("View Operation Member");
@@ -110,125 +110,126 @@ const ViewOperationMembers = () => {
             Logger.debug("error in fetchRole", error);
         }
     };
+    const fetchMemberComapany = async (controller, isMounted) => {
+        try {
+            const response = await privateAxios.get(MEMBER + "/list", {
+                signal: controller.signal,
+            });
+            Logger.debug(
+                "member company---",
+                response.data.map((data) => {
+                    Logger.debug("member company=", data.companyName);
+                })
+            );
+
+            if ((response.status = 200)) {
+                isMounted &&
+                    setMemberCompanies(
+                        response.data.map((data) => ({
+                            _id: data._id,
+                            companyName: data.companyName,
+                            companyType: data.companyType,
+                        }))
+                    );
+            }
+
+            Logger.debug("member company---", memberCompanies);
+        } catch (error) {
+            Logger.debug("error from fetch member company", error);
+        }
+    };
+    let fetchCountries = async (controller, isMounted) => {
+        try {
+            const response = await privateAxios.get(COUNTRIES, {
+                signal: controller.signal,
+            });
+            Logger.debug("response", response);
+            isMounted &&
+                setCountries(
+                    response.data.map((country) => country.countryCode)
+                );
+        } catch (error) {
+            Logger.debug("error from countries api", error);
+        }
+    };
+    const fetchOperationMember = async (controller, isMounted) => {
+        try {
+            setIsViewOperationMemberLoading(true);
+            const response = await privateAxios.get(
+                GET_OPERATION_MEMBER_BY_ID + params.id,
+                {
+                    signal: controller.signal,
+                }
+            );
+            Logger.debug("response from fetch operation member", response);
+
+            isMounted && setFetchOperationMemberDetaills(response.data);
+            reset({
+                memberId: response?.data?.memberId?.companyName,
+                companyType: response?.data?.memberId?.companyType,
+                countryCode: response?.data?.countryCode,
+                phoneNumber: response?.data?.phoneNumber,
+                address: response?.data?.address,
+                title: response.data.title ? response.data.title : "N/A",
+                department: response?.data?.department
+                    ? response?.data?.department
+                    : "N/A",
+                email: response?.data?.email,
+                operationType: response?.data?.operationType
+                    ? response?.data?.operationType
+                    : "",
+                reportingManager: response?.data?.reportingManager[0]?.name
+                    ? response?.data?.reportingManager[0]?.name
+                    : "N/A",
+                name: response?.data?.name,
+                salutation: response?.data?.salutation,
+                isActive: response?.data?.isActive,
+                isCGFStaff:
+                    response?.data?.isCGFStaff === true ? "true" : "false",
+                role: response?.data?.role?.name,
+                replacedOperationMember:
+                    response?.data?.replacedUsers[0]?.name ?? "N/A",
+            });
+            // fetchRole(response?.data?.roleId);
+            setIsViewOperationMemberLoading(false);
+        } catch (error) {
+            if (error?.code === "ERR_CANCELED") return;
+            setIsViewOperationMemberLoading(false);
+            Logger.debug(
+                "error in fetch operation member method in view page",
+                error
+            );
+            if (error?.response?.status == 401) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage:
+                            "Session Timeout: Please login again",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+            }
+            if (error?.response?.status === 500) {
+                navigate("/operation_member");
+            }
+        }
+    };
     const callGetOpeationMember = async() => {
-    OPERATION_TYPES = getOperationTypes()
+    OPERATION_TYPES =await getOperationTypes()
   } 
   useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
         OPERATION_TYPES?.length === 0 && callGetOpeationMember()
-    const fetchMemberComapany = async () => {
-            try {
-                const response = await privateAxios.get(MEMBER + "/list", {
-                    signal: controller.signal,
-                });
-                Logger.debug(
-                    "member company---",
-                    response.data.map((data) => {
-                        Logger.debug("member company=", data.companyName);
-                    })
-                );
+        countries?.length === 0 && fetchCountries(controller, isMounted);
+        memberCompanies?.length === 0 && fetchMemberComapany(controller, isMounted);
 
-                if ((response.status = 200)) {
-                    isMounted &&
-                        setMemberCompanies(
-                            response.data.map((data) => ({
-                                _id: data._id,
-                                companyName: data.companyName,
-                                companyType: data.companyType,
-                            }))
-                        );
-                }
-
-                Logger.debug("member company---", memberCompanies);
-            } catch (error) {
-                Logger.debug("error from fetch member company", error);
-            }
-        };
-        let fetchCountries = async () => {
-            try {
-                const response = await privateAxios.get(COUNTRIES, {
-                    signal: controller.signal,
-                });
-                Logger.debug("response", response);
-                isMounted &&
-                    setCountries(
-                        response.data.map((country) => country.countryCode)
-                    );
-            } catch (error) {
-                Logger.debug("error from countries api", error);
-            }
-        };
-        fetchCountries();
-        fetchMemberComapany();
-
-        const fetchOperationMember = async () => {
-            try {
-                setIsViewOperationMemberLoading(true);
-                const response = await privateAxios.get(
-                    GET_OPERATION_MEMBER_BY_ID + params.id,
-                    {
-                        signal: controller.signal,
-                    }
-                );
-                Logger.debug("response from fetch operation member", response);
-
-                isMounted && setFetchOperationMemberDetaills(response.data);
-                reset({
-                    memberId: response?.data?.memberId?.companyName,
-                    companyType: response?.data?.memberId?.companyType,
-                    countryCode: response?.data?.countryCode,
-                    phoneNumber: response?.data?.phoneNumber,
-                    address: response?.data?.address,
-                    title: response.data.title ? response.data.title : "N/A",
-                    department: response?.data?.department
-                        ? response?.data?.department
-                        : "N/A",
-                    email: response?.data?.email,
-                    operationType: response?.data?.operationType
-                        ? response?.data?.operationType
-                        : "",
-                    reportingManager: response?.data?.reportingManager[0]?.name
-                        ? response?.data?.reportingManager[0]?.name
-                        : "N/A",
-                    name: response?.data?.name,
-                    salutation: response?.data?.salutation,
-                    isActive: response?.data?.isActive,
-                    isCGFStaff:
-                        response?.data?.isCGFStaff === true ? "true" : "false",
-                    role: response?.data?.role?.name,
-                    replacedOperationMember:
-                        response?.data?.replacedUsers[0]?.name ?? "N/A",
-                });
-                // fetchRole(response?.data?.roleId);
-                setIsViewOperationMemberLoading(false);
-            } catch (error) {
-                if (error?.code === "ERR_CANCELED") return;
-                setIsViewOperationMemberLoading(false);
-                Logger.debug(
-                    "error in fetch operation member method in view page",
-                    error
-                );
-                if (error?.response?.status == 401) {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage:
-                                "Session Timeout: Please login again",
-                            messageType: "error",
-                        },
-                        () => toasterRef.current()
-                    );
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
-                }
-                if (error?.response?.status === 500) {
-                    navigate("/operation_member");
-                }
-            }
-        };
-        fetchOperationMember();
+        
+        fetchOperationMember(controller,isMounted);
 
         return () => {
             isMounted = false;
@@ -502,7 +503,7 @@ const ViewOperationMembers = () => {
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
-                      <label htmlfor="phoneNumber">Phone Number</label>
+                      <label htmlFor="phoneNumber">Phone Number</label>
                       <div className="phone-number-field">
                         <div className="select-field country-code">
                           <Controller
