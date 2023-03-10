@@ -309,12 +309,7 @@ const Header = () => {
                                                         >
                                                             <a
                                                                 onClick={() => {
-                                                                    // setActiveStateForMembers(
-                                                                    //     false
-                                                                    // );
-                                                                    // setActiveStateForOperationMembers(
-                                                                    //     false
-                                                                    // );
+                                                                    
                                                                     navigate(
                                                                         "/users/cgf-admin"
                                                                     );

@@ -1,33 +1,27 @@
+import CloseIcon from "@mui/icons-material/Close";
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import {
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  FormHelperText,
   Button,
+  FormControl,
+  FormHelperText,
+  MenuItem,
+  Select,
+  TextField,
   Tooltip,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
-import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
-import { v4 as uuidv4 } from "uuid";
-import { Logger } from "../../Logger/Logger";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  DOWNlOAD_FILE,
-  REACT_APP_FILE_ENCRYPT_SECRET,
-  UPLOAD_ATTACHMENTS,
-  UPLOAD_ATTACHMENTS_MULTER,
-} from "../../api/Url";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import { privateAxios } from "../../api/axios";
+import { DOWNlOAD_FILE, UPLOAD_ATTACHMENTS_MULTER } from "../../api/Url";
+import Loader2 from "../../assets/Loader/Loader2.svg";
 import DialogBox from "../../components/DialogBox";
-import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
+import { Logger } from "../../Logger/Logger";
+import useCallbackState from "../../utils/useCallBackState";
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
 export const NumericRegEx = /^[0-9]+$/i;
 export const AlphaNumRegEx = /^[a-z0-9]+$/i;
@@ -91,25 +85,7 @@ const TableLayoutCellComponent = ({
       !Object.keys(assessmentQuestionnaire).length > 0)
       ? cell?.columnId
       : columnId;
-  const getSingleFileAsUrl = (file) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    return new Promise((resolve, reject) => {
-      reader.onload = async (e) => {
-        const result = e.target.result;
-        // const encryptedFile = CryptoJS.AES.encrypt(
-        //   result,
-        //   REACT_APP_FILE_ENCRYPT_SECRET
-        // ).toString();
-        resolve(result);
-        // const encryptedFile = CryptoJS.AES.encrypt(
-        //   result,
-        //   REACT_APP_FILE_ENCRYPT_SECRET
-        // ).toString();
-        resolve(result);
-      };
-    });
-  };
+
   const getFiles = async (files) => {
     let tempCurrentSelectedFiles = [...currentSelectedFiles];
     let isFileSizeExceed = 0;
@@ -207,7 +183,7 @@ const TableLayoutCellComponent = ({
         UPLOAD_ATTACHMENTS_MULTER +
         `/${params?.id}/attachments/${sectionUUID}/${columnUUID + "_" + rowId}`;
       const attachmentResponse = await privateAxios.post(url, formData);
-      // Logger.debug("attachment");
+
       Logger.debug(
         "old files:- ",
         oldFiles,
@@ -260,8 +236,6 @@ const TableLayoutCellComponent = ({
     setIsFileRemoved(false);
     setOpenFileAttachmntDialog(false);
   };
-  // Logger.debug("current selected files:- ", currentSelectedFiles);
-  // Logger.debug("Answer in first Render :- ", answer);
   const oldSelectedContainsCurrentSelectedFile = (file) => {
     let files = oldfilesSelected.filter(
       (dataFile) => file.location === dataFile.location
@@ -502,13 +476,6 @@ const TableLayoutCellComponent = ({
                             textDecoration: "none",
                             color: `${!file.location && "#1e1e1e"}`,
                             cursor: `${file.location ? "pointer" : "default"}`,
-                            //   pointerEvents: `${
-                            //       oldSelectedContainsCurrentSelectedFile(
-                            //           file
-                            //       )
-                            //           ? "none"
-                            //           : ""
-                            //   }`,
                           }}
                         >
                           {`${file?.name?.slice(0, 30)}...`}
@@ -632,9 +599,6 @@ const TableLayoutCellComponent = ({
                       )
                 }
               >
-                {/* <MenuItem value="" disabled>
-                                    Select option
-                                </MenuItem> */}
                 {transformedColumns[columnUUID].options.map((option) => (
                   <MenuItem key={option} value={option}>
                     {option?.length <= 40 ? (
@@ -706,7 +670,7 @@ const RenderCurrentFiles = ({
     setCurrentSelectedFiles(tempCurrentSelectedFiles);
     setIsFileRemoved(true);
   };
-  // Logger.debug("current Selected Files:- ", currentSelectedFiles);
+  
   return (
     <>
       {currentSelectedFiles.map((file, fileIdx) =>

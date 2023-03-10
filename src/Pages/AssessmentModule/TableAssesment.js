@@ -211,12 +211,7 @@ const TableAssessment = ({
                                                                     cell?.columnId
                                                                 }
                                                             >
-                                                                {/* {Logger.debug(
-                                "Column Id:- ",
-                                cell?.columnId,
-                                "Row Id:- ",
-                                row?.uuid
-                              )} */}
+                                                               
                                                                 <TableLayoutCellComponent
                                                                     sectionUUID={
                                                                         sectionUUID
@@ -312,7 +307,7 @@ const TableAssessment = ({
                                                     rowIdsArray?.push(
                                                         assessmentQuestionnaireRowId
                                                     );
-                                                    // Logger.debug("idx", idx);
+                                                    
                                                     return (
                                                         <TableRow
                                                             key={
