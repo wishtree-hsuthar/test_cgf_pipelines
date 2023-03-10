@@ -580,34 +580,36 @@ const ViewMember = () => {
                     responseType: "blob",
                 }
             );
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            let date =
+            const urlLink = window.URL.createObjectURL(
+                new Blob([response.data])
+            );
+            const linkFile = document.createElement("a");
+            linkFile.href = urlLink;
+            let ddate =
                 new Date().getDate() < 10
                     ? "0" + new Date().getDate().toString()
                     : new Date().getDate().toString();
-            let month =
+            let dmonth =
                 new Date().getMonth() < 10
                     ? "0" + (new Date().getMonth() + 1).toString()
                     : new Date().getMonth().toString();
-            let year = new Date().getFullYear().toString();
-            let hours = new Date().getHours();
-            let minutes = new Date().getMinutes();
-            let seconds = new Date().getSeconds();
+            let dyear = new Date().getFullYear().toString();
+            let dhours = new Date().getHours();
+            let dminutes = new Date().getMinutes();
+            let dseconds = new Date().getSeconds();
             let timeStamp =
-                month + date + year + "_" + hours + minutes + seconds;
-            link.setAttribute(
+                dmonth + ddate + dyear + "_" + dhours + dminutes + dseconds;
+            linkFile.setAttribute(
                 `download`,
                 `Operation members - ${timeStamp}.xls`
             );
-            document.body.appendChild(link);
-            link.click();
+            document.body.appendChild(linkFile);
+            linkFile.click();
             if (response.status == 200) {
                 setToasterDetailsViewMember(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage: "Downloaded successfully!",
+                        descriptionMessage: "Downloaded successfully",
 
                         messageType: "success",
                     },
