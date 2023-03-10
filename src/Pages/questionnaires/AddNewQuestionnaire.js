@@ -140,8 +140,8 @@ function AddNewQuestionnaire() {
                         navigate("/login");
                     }, 3000);
                 }
-                // setErrorToaster(error)
-                // Logger.debug("error from fetch questionnaire", error);
+
+
             }
         };
         fetch();

@@ -472,7 +472,7 @@ function AddOperationMember() {
                                                             maxLength: 50,
                                                             minLength: 3,
                                                             pattern:
-                                                                /^[A-Za-z]+[A-Za-z ]*$/,
+                                                            /^[a-zA-Z][a-zA-Z ]*$/,
                                                         }}
                                                     />
                                                 </div>
@@ -551,7 +551,7 @@ function AddOperationMember() {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                                                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                                                 }}
                                             />
                                         </div>

@@ -79,11 +79,7 @@ const ForgetPassword = () => {
                 let errorMsg = error?.response?.data?.message;
                 Logger.debug("error message", errorMsg);
                 Logger.debug("error body", error.response);
-                // setMessageType("error");
-                // setMessageTitle("Error");
-
-                // setMessageDescription(errorMsg);
-                // setTimeout(() => {
+                
                 setToasterDetails(
                     {
                         titleMessage: "Error!",

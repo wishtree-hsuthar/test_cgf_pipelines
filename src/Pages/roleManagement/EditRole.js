@@ -26,6 +26,7 @@ import Loader2 from "../../assets/Loader/Loader2.svg";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import CommonTableHead from "./CommonTableHead";
+import Loader from "../../utils/Loader";
 
 const titleMessage = "";
 const descriptionMessage = "";
@@ -278,9 +279,7 @@ const EditRole = () => {
                         <h2 className="heading2">Edit Role</h2>
                     </div>
                     {isLoading1 ? (
-                        <div className="loader-blk">
-                            <img src={Loader2} alt="Loading" />
-                        </div>
+                        <Loader/>
                     ) : (
                         <form onSubmit={handleSubmit(onSubmit1)}>
                             <div className="card-wrapper">

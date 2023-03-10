@@ -326,9 +326,9 @@ function FillAssessment() {
                 }, 3000);
             }
 
-            // handleCatchError(error, "saveAssessmentAsDraft");
+            
         } finally {
-            // setDisableFillAssessment(false);
+            
         }
     };
 
@@ -861,7 +861,6 @@ function FillAssessment() {
                                     "Answers:- ",
                                     response.data.answers
                                 );
-                                // await AssessmentQuestionnairePromise(response.data.answers);
                                 setAssessmentQuestionnaire(
                                     response.data.answers
                                 );
@@ -925,7 +924,7 @@ function FillAssessment() {
                             setIsFillAssessmentLoading(false);
                             setSelectedFileName("");
                             handleCatchError(error, "reuploadAssessment");
-                            // setImportOpenDialog(false);
+                            
                         } finally {
                             setIsFillAssessmentLoading(false);
                         }
@@ -1036,7 +1035,7 @@ function FillAssessment() {
                                 Assessment type <span>:</span>
                             </span>
 
-                            {/* {assessment?.assessmentType} */}
+                    
                             {assessment?.assessmentType?.length <= 36 ? (
                                 <span className="accrej-desc">
                                     {assessment?.assessmentType}

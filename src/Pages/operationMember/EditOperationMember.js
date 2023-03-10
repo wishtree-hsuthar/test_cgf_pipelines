@@ -469,7 +469,7 @@ function EditOperationMember() {
                                                         rules={{
                                                             required: true,
                                                             pattern:
-                                                                /^[A-Za-z]+[A-Za-z ]*$/,
+                                                            /^[a-zA-Z][a-zA-Z ]*$/,
                                                             maxLength: 50,
                                                             minLength: 3,
                                                         }}
