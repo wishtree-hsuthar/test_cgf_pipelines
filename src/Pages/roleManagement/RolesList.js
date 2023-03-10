@@ -8,11 +8,11 @@ import { useNavigate } from "react-router-dom";
 import TableComponent from "../../components/TableComponent";
 import "../../components/TableComponent.css";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { Logger } from "../../Logger/Logger";
+import Loader from "../../utils/Loader";
 const tableHead1 = [
     {
         id: "name",
@@ -328,9 +328,7 @@ const RolesList = () => {
                             </div>
                         </div>
                         {isLoading2 ? (
-                            <div className="loader-blk">
-                                <img src={Loader2} alt="Loading" />
-                            </div>
+                            <Loader/>
                         ) : (
                             <div className="member-info-wrapper table-content-wrap table-content-width table-footer-btm-space">
                                 <TableComponent

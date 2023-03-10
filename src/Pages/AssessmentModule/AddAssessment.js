@@ -11,7 +11,6 @@ import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import { Logger } from "../../Logger/Logger";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -23,6 +22,7 @@ import {
     MEMBER_DROPDOWN,
 } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import Loader from "../../utils/Loader";
 
 const helperTextForAssessment = {
     title: {
@@ -371,9 +371,7 @@ const AddAssessment = () => {
             </div>
             <section>
                 {isAssessmentLoading ? (
-                    <div className="loader-blk">
-                        <img src={Loader2} alt="Loading" />
-                    </div>
+                    <Loader/>
                 ) : (
                     <div className="container">
                         <form onSubmit={handleSubmit(submitAssessments)}>

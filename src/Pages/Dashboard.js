@@ -26,7 +26,7 @@ const Dashboard = (props) => {
     const navigate = useNavigate();
     const homeRef = useRef();
 
-    // const dispatch = useDispatch();
+    
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
@@ -50,8 +50,6 @@ const Dashboard = (props) => {
                 signal: controller.signal,
             });
 
-            // isMounted && dispatch(setUser(response.data));
-            // isMounted && dispatch(setPrivileges(response.data?.role));
             Logger.debug("in userloggedin - ", response);
         } catch (error) {
             if (error?.response?.status == 401) {

@@ -406,7 +406,7 @@ const EditSubAdmin = () => {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                        /^[A-Za-z]+[A-Za-z ]*$/,
+                                                    /^[a-zA-Z][a-zA-Z ]*$/,
                                                 }}
                                             />
                                             {/* <p className={`input-error-msg`}>{errors.subAdminName?.message}</p> */}
@@ -454,7 +454,7 @@ const EditSubAdmin = () => {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                                                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                                                 }}
                                             />
                                             {/* <p className={`input-error-msg`}>{errors.email?.message}</p> */}

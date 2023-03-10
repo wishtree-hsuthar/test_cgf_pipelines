@@ -318,7 +318,7 @@ const AddRole = () => {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                        /^[A-Za-z]+[A-Za-z ]*$/,
+                                                    /^[a-zA-Z][a-zA-Z ]*$/,
                                                 }}
                                                 control={control}
                                                 render={({

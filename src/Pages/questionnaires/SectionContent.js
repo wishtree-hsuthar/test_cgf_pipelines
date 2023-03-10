@@ -81,7 +81,7 @@ const SectionContent = ({
         deleteSection(uuid);
     };
     const onDialogPrimaryButtonClickHandler1 = () => {
-        // handleSubmitSection();
+        
         setOpenDialog1(false);
         navigate("/questionnaires");
     };
@@ -102,13 +102,7 @@ const SectionContent = ({
             ...tempQuestionnare,
             sections: tempSections,
         });
-        // let newObj = {
-        //   ...tempQuestionnare,
-        //   sections: tempSections,
-        // };
-
-        // saveSection(newObj);
-
+      
         setValue(0);
         setOpenDialog(false);
     };
@@ -152,7 +146,7 @@ const SectionContent = ({
                             "title not present in section = ",
                             sectionIndex
                         );
-                        // setValue(sectionIndex);
+                        
                         tabIndex.push(sectionIndex);
                         tableCountError++;
                     }
@@ -168,18 +162,6 @@ const SectionContent = ({
                             tableCountError++;
                         });
                     }
-                    // let filteredSameColumnTitle = sameColumnTitleNames.filter(
-                    //     (name) => name === columnTitle
-                    // );
-                    // if (filteredSameColumnTitle.length > 1) {
-                    //     Logger.debug(
-                    //         "same column names present = ",
-                    //         filteredSameColumnTitle
-                    //     );
-                    //     setTableErr("Error hai");
-
-                    //     tableCountError++;
-                    // }
                     for (
                         let sameColumnTitleNamesIndex = 0;
                         sameColumnTitleNamesIndex <
@@ -218,17 +200,7 @@ const SectionContent = ({
                                 setTableErr("Same name hai");
                                 tabIndex.push(sectionIndex);
 
-                                // setValue(sectionIndex);
-                                // setValue(
-                                //     questionnaire.sections
-                                //         .map(
-                                //             (section) =>
-                                //                 sectionToCheckColumnValues.section
-                                //         )
-                                //         .indexOf(
-                                //             sectionToCheckColumnValues.section
-                                //         )
-                                // );
+                              
 
                                 break;
                             }
@@ -310,9 +282,7 @@ const SectionContent = ({
                 setGlobalSectionTitleError({
                     errMsg: "Section name already in use",
                 });
-                // setValue(index);
-
-                // return false;
+              
             } else {
                 if (questionnaire.sections[index].layout == "table") {
                     countError = await validateTableQuestions(
@@ -376,7 +346,7 @@ const SectionContent = ({
 
                                     // setValue(index);
                                 }
-                                //   Logger.debug("question in validate section map",question)
+                              
                                 if (
                                     [
                                         "dropdown",
