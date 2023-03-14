@@ -172,7 +172,7 @@ const AddRole = () => {
                 setToasterDetails1(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage: "New role added successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => myRef.current()
@@ -318,7 +318,7 @@ const AddRole = () => {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                    /^[a-zA-Z][a-zA-Z ]*$/,
+                                                        /^[a-zA-Z][a-zA-Z ]*$/,
                                                 }}
                                                 control={control}
                                                 render={({

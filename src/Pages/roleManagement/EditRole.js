@@ -130,8 +130,7 @@ const EditRole = () => {
                 setToasterDetails2(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage:
-                            "Role details updated successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => myRef2.current()
@@ -279,7 +278,7 @@ const EditRole = () => {
                         <h2 className="heading2">Edit Role</h2>
                     </div>
                     {isLoading1 ? (
-                        <Loader/>
+                        <Loader />
                     ) : (
                         <form onSubmit={handleSubmit(onSubmit1)}>
                             <div className="card-wrapper">

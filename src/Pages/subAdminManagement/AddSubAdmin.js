@@ -186,7 +186,7 @@ const AddSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage: "New CGF admin added successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -325,7 +325,7 @@ const AddSubAdmin = () => {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                    /^[a-zA-Z][a-zA-Z ]*$/,
+                                                        /^[a-zA-Z][a-zA-Z ]*$/,
                                                 }}
                                             />
 
@@ -374,7 +374,7 @@ const AddSubAdmin = () => {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                                        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                                                 }}
                                             />
                                         </div>

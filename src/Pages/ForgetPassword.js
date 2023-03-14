@@ -63,7 +63,7 @@ const ForgetPassword = () => {
                     {
                         titleMessage: "Hurray!",
                         descriptionMessage:
-                            "Reset password link has been successfully sent on the entered email address! Kindly check your email to reset your password!",
+                            "Reset password link has been successfully sent on the entered email address! Kindly check your email to reset your password.",
                         messageType: "success",
                     },
                     () => forgetPasswordToasterRef.current()
@@ -79,7 +79,7 @@ const ForgetPassword = () => {
                 let errorMsg = error?.response?.data?.message;
                 Logger.debug("error message", errorMsg);
                 Logger.debug("error body", error.response);
-                
+
                 setToasterDetails(
                     {
                         titleMessage: "Error!",

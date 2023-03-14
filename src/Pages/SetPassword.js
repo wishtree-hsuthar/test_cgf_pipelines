@@ -112,8 +112,7 @@ const SetPassword = () => {
                 setPasswordToasterDetails(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage:
-                            "Your password has been set successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => setPasswordToasterRef.current()

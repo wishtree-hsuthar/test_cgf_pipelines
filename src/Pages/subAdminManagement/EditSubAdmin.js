@@ -273,8 +273,7 @@ const EditSubAdmin = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage:
-                            "CGF admin details updated successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -406,7 +405,7 @@ const EditSubAdmin = () => {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                    /^[a-zA-Z][a-zA-Z ]*$/,
+                                                        /^[a-zA-Z][a-zA-Z ]*$/,
                                                 }}
                                             />
                                             {/* <p className={`input-error-msg`}>{errors.subAdminName?.message}</p> */}
@@ -454,7 +453,7 @@ const EditSubAdmin = () => {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                                        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                                                 }}
                                             />
                                             {/* <p className={`input-error-msg`}>{errors.email?.message}</p> */}
