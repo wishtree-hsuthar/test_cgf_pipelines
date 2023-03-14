@@ -143,8 +143,7 @@ const EditMember = () => {
                 setToasterDetailsEditMember(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage:
-                            "Member details updated successfully.",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => myRef.current()

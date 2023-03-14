@@ -42,7 +42,7 @@ export const downloadFunction = async (
             setToasterDetails(
                 {
                     titleMessage: `Success!`,
-                    descriptionMessage: `Downloaded successfully!`,
+                    descriptionMessage: response.data.message,
 
                     messageType: `success`,
                 },

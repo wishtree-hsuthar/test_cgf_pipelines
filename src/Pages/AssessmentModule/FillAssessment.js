@@ -325,10 +325,6 @@ function FillAssessment() {
                     navigate("/assessment-list");
                 }, 3000);
             }
-
-            
-        } finally {
-            
         }
     };
 
@@ -924,7 +920,6 @@ function FillAssessment() {
                             setIsFillAssessmentLoading(false);
                             setSelectedFileName("");
                             handleCatchError(error, "reuploadAssessment");
-                            
                         } finally {
                             setIsFillAssessmentLoading(false);
                         }
@@ -1035,7 +1030,6 @@ function FillAssessment() {
                                 Assessment type <span>:</span>
                             </span>
 
-                    
                             {assessment?.assessmentType?.length <= 36 ? (
                                 <span className="accrej-desc">
                                     {assessment?.assessmentType}

@@ -291,7 +291,7 @@ const AddAssessment = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage: "Assessment added sucessfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -371,7 +371,7 @@ const AddAssessment = () => {
             </div>
             <section>
                 {isAssessmentLoading ? (
-                    <Loader/>
+                    <Loader />
                 ) : (
                     <div className="container">
                         <form onSubmit={handleSubmit(submitAssessments)}>

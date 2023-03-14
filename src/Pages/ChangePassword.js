@@ -95,7 +95,7 @@ const ChangePassword = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage: "Password updated successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => toasterRef.current()

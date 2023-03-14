@@ -422,11 +422,13 @@ function EditAssessment() {
     };
     const onDialogPrimaryButtonClickHandler = async () => {
         try {
-            await axios.delete(FETCH_ASSESSMENT_BY_ID + `${params?.id}`);
+            const response = await axios.delete(
+                FETCH_ASSESSMENT_BY_ID + `${params?.id}`
+            );
             setToasterDetails(
                 {
                     titleMessage: "Success",
-                    descriptionMessage: `Assessment deleted successfully!`,
+                    descriptionMessage: response.data.message,
                     messageType: "success",
                 },
                 () => toasterRef.current()

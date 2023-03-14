@@ -160,7 +160,7 @@ const AddMember = () => {
                 setToasterDetailsAddMember(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage: "New member added successfully!",
+                        descriptionMessage: response?.data?.message,
                         messageType: "success",
                     },
                     () => myRef.current()
