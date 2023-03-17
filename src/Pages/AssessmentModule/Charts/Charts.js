@@ -4,11 +4,11 @@ import Statistics from "./Statistics.js";
 import Chart2 from "./Chart2.js";
 import Chart1 from "./Chart1.js";
 
-const Charts = ({graphResult,graphLevelBreakdown}) => {
+const Charts = ({graphResult,graphLevelBreakdown, questionnaireTitle}) => {
   return (
     <>
       {/* <Statistics /> */}
-      <Chart1 graphResult={graphResult}/>
+      <Chart1 graphResult={graphResult } questionnaireTitle={questionnaireTitle}/>
       <Chart2 graphLevelBreakdown={graphLevelBreakdown}/>
     </>
   );

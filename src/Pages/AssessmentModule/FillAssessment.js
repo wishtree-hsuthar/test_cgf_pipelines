@@ -1198,6 +1198,7 @@ function FillAssessment() {
                       disableFillAssessment={disableFillAssessment}
                       setAssessmentQuestionnaire={setAssessmentQuestionnaire}
                       section={section}
+                      questionnaireTitle={questionnaire?.title}
                       errorQuestion={errorQuestion}
                       setErrorQuestion={setErrorQuestion}
                       errorQuestionUUID={errorQuestionUUID}

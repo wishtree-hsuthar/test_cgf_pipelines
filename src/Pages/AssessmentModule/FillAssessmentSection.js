@@ -27,6 +27,7 @@ const getTransformedRows = (rows) => {
 
 function FillAssesmentSection({
   section,
+  questionnaireTitle,
   graphLevelBreakdown,
   graphResult,
   setAssessmentQuestionnaire,
@@ -180,13 +181,22 @@ function FillAssesmentSection({
           </div>
         )}
       </div>
-      {(section?.sectionTitle ===
-        "HRDD SYSTEMS AT THE GLOBAL LEVEL (ALL OPERATIONS)" ||
+      {((questionnaireTitle ===
+        "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)" &&
         section?.sectionTitle ===
-          "HRDD SYSTEMS AT THE GLOBAL LEVEL FOR SELECTED OPERATION" ||
-        section?.sectionTitle ===
-          "HRDD SYSTEMS AT THE COUNTRY LEVEL FOR SELECTED OPERATION") && (
-        <Charts graphResult={graphResult} graphLevelBreakdown={graphLevelBreakdown} />
+          "HRDD SYSTEMS AT THE GLOBAL LEVEL (ALL OPERATIONS)") ||
+        (questionnaireTitle ===
+          "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)" &&
+          section?.sectionTitle ===
+            "HRDD SYSTEMS AT THE GLOBAL LEVEL FOR SELECTED OPERATION") ||
+        (questionnaireTitle === "COUNTRY- OPERATION HRDD REQUIREMENTS" &&
+          section?.sectionTitle ===
+            "HRDD SYSTEMS AT THE COUNTRY LEVEL FOR SELECTED OPERATION")) && (
+        <Charts
+          questionnaireTitle={questionnaireTitle}  
+          graphResult={graphResult}
+          graphLevelBreakdown={graphLevelBreakdown}
+        />
       )}
     </>
   );

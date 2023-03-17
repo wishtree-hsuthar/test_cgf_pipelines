@@ -4,7 +4,7 @@ import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
 Chart.register(ChartDataLabels);
-const Chart1 = ({ graphResult }) => {
+const Chart1 = ({ graphResult, questionnaireTitle }) => {
   console.log("graph result:- ", graphResult);
   const labels = [
     "Not Initiated",
@@ -13,11 +13,23 @@ const Chart1 = ({ graphResult }) => {
     "Leadership",
     "General Result",
   ];
+  const getChartLabel = () => {
+    switch(questionnaireTitle){
+      case "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)":
+        return "HRDD HQ Level Result";
+      case "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)":
+        return "Global Operation HRDD Result";
+      case "COUNTRY- OPERATION HRDD REQUIREMENTS":
+        return "Country Operation HRDD Result"
+      default:
+        return "HRDD Result"
+    }
+  }
   const data = {
     labels: labels,
     datasets: [
       {
-        label: "Pass as Prop(Get from backend or get based on section title) ",
+        label: getChartLabel(),
         backgroundColor: "#3498db",
         borderColor: "#3498db",
         data: [
@@ -25,7 +37,7 @@ const Chart1 = ({ graphResult }) => {
           graphResult["Launched"],
           graphResult["Established"],
           graphResult["Leadership"],
-          graphResult["General"],
+          graphResult["General"] ?? 0,
         ],
         barThickness: 25,
       },
@@ -33,7 +45,7 @@ const Chart1 = ({ graphResult }) => {
   };
 
   return (
-    <div style={{ height: "400px" }}>
+    <div style={{ height: "400px" }} className="preview-card-wrapper">
       <Bar
         data={data}
         options={{
@@ -44,9 +56,20 @@ const Chart1 = ({ graphResult }) => {
             padding: 10,
           },
           plugins: {
+            legend: {
+              display: false,
+            },
+            title: {
+              text: getChartLabel(),
+              display: true,
+              font: {
+                weight: "bold",
+                size: 16
+              },
+            },
             datalabels: {
               color: "black",
-              formatter: (value) => value + "%",
+              formatter: (value) => "      " + value + "%",
             },
             tooltip: {
               enabled: false,
