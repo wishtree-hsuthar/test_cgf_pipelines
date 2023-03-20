@@ -48,6 +48,8 @@ const ResetPassword = () => {
     const navigate = useNavigate();
     const resetPasswordToasterRef = useRef();
     const params = useParams();
+    const [showInvalidTokenMessage, setShowInvalidTokenMessage] =
+        useState(false);
     useEffect(() => {
         document.body.classList.add("login-page");
         let controller = new AbortController();
@@ -65,19 +67,20 @@ const ResetPassword = () => {
             } catch (error) {
                 Logger.debug("error from verify token", error);
                 if (error?.response?.status == 400) {
-                    setTimeout(() => {
-                        resetPasswordToasterRef.current();
-                    }, 1000);
+                    // setTimeout(() => {
+                    //     resetPasswordToasterRef.current();
+                    // }, 1000);
 
                     Logger.debug("Invalid Token");
-                    setResetPassordMessageType("error");
-                    setResetPasswordMessageTitle("Invalid token");
-                    setResetPasswordMessageDescription(
-                        error?.response?.data?.message
-                    );
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
+                    // setResetPassordMessageType("error");
+                    // setResetPasswordMessageTitle("Invalid token");
+                    // setResetPasswordMessageDescription(
+                    //     error?.response?.data?.message
+                    // );
+                    // setTimeout(() => {
+                    //     navigate("/login");
+                    // }, 3000);
+                    setShowInvalidTokenMessage(true);
                 }
             }
         };
@@ -154,6 +157,9 @@ const ResetPassword = () => {
         }
     };
 
+    const message = `Oops! The link to reset password is expired or looks like you're trying using an invalid link.
+        \nIf you don't remember your password, please click on \"Forgot Password\" button below to reset your password.`;
+
     return (
         <div className="page-wrapper login-page-wrap">
             <Toaster
@@ -182,196 +188,255 @@ const ResetPassword = () => {
                                         className="img-fluid"
                                     />
                                 </div>
-                                <h2 className="heading1 text-uppercase">
-                                    Reset Password
+                                <h2
+                                    className={`${
+                                        showInvalidTokenMessage
+                                            ? "warning-message"
+                                            : "heading1 text-uppercase"
+                                    }`}
+                                >
+                                    {showInvalidTokenMessage ? (
+                                        <>
+                                            <div>
+                                                Oops! The link to reset password
+                                                is expired or looks like you're
+                                                trying using an invalid link.
+                                            </div>
+                                            <br />
+                                            <p>
+                                                If you don't remember your
+                                                password, please click on
+                                                "Forgot Password" button below
+                                                to reset your password.
+                                            </p>
+                                        </>
+                                    ) : (
+                                        "Reset Password"
+                                    )}
                                 </h2>
                                 <div className="login-form">
-                                    <form onSubmit={handleSubmit(submitForm)}>
-                                        <div className="form-group">
-                                            <label for="password">
-                                                New Password{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
-                                            </label>
-                                            <div className="password-field">
-                                                <ResetPasswordOutlinedInput
-                                                    fullWidth
-                                                    id="outlined-adornment-password"
-                                                    type={
-                                                        values.showNewPassword
-                                                            ? "text"
-                                                            : "password"
-                                                    }
-                                                    // value={values.newPassword}
-                                                    // onChange={handleChange('newPassword')}
-                                                    placeholder="Enter new password"
-                                                    className={`input-field ${
-                                                        errors.newPassword &&
-                                                        "input-error"
-                                                    }`}
-                                                    inputProps={{
-                                                        maxLength: 15,
-                                                    }}
-                                                    endAdornment={
-                                                        <ResetPasswordInputAdornment position="end">
-                                                            <ResetPasswordIconButton
-                                                                aria-label="toggle password visibility"
-                                                                onClick={
-                                                                    handleClickShowNewPassword
-                                                                }
-                                                                onMouseDown={
-                                                                    handleMouseDownPassword
-                                                                }
-                                                                edge="end"
-                                                                className="eye-btn"
-                                                            >
-                                                                {values.showNewPassword ? (
-                                                                    <img
-                                                                        src={
-                                                                            process
-                                                                                .env
-                                                                                .PUBLIC_URL +
-                                                                            "/images/non-visibleicon.svg"
-                                                                        }
-                                                                        alt=""
-                                                                        className="img-fluid"
-                                                                    />
-                                                                ) : (
-                                                                    <img
-                                                                        src={
-                                                                            process
-                                                                                .env
-                                                                                .PUBLIC_URL +
-                                                                            "/images/visibleicon.svg"
-                                                                        }
-                                                                        alt=""
-                                                                        className="img-fluid"
-                                                                    />
-                                                                )}
-                                                            </ResetPasswordIconButton>
-                                                        </ResetPasswordInputAdornment>
-                                                    }
-                                                    {...register("newPassword")}
-                                                    onBlur={(e) =>
-                                                        setValue(
-                                                            "newPassword",
-                                                            e.target.value.trim()
-                                                        )
-                                                    }
-                                                />
-                                                <p className={`password-error`}>
-                                                    {errors?.newPassword ? (
-                                                        errors.newPassword
-                                                            ?.message
-                                                    ) : (
-                                                        <span>&nbsp;</span>
-                                                    )}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <label for="password">
-                                                Confirm Password{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
-                                            </label>
-                                            <div className="password-field">
-                                                <ResetPasswordOutlinedInput
-                                                    fullWidth
-                                                    id="outlined-adornment-password"
-                                                    type={
-                                                        values.showConfirmPassword
-                                                            ? "text"
-                                                            : "password"
-                                                    }
-                                                    // value={values.confirmPassword}
-                                                    // onChange={handleChange('confirmPassword')}
-                                                    placeholder="Enter confirm password"
-                                                    className={`input-field ${
-                                                        errors.confirmPassword &&
-                                                        "input-error"
-                                                    }`}
-                                                    inputProps={{
-                                                        maxLength: 15,
-                                                    }}
-                                                    endAdornment={
-                                                        <ResetPasswordInputAdornment position="end">
-                                                            <ResetPasswordIconButton
-                                                                aria-label="toggle password visibility"
-                                                                onClick={
-                                                                    handleClickShowConfirmPassword
-                                                                }
-                                                                onMouseDown={
-                                                                    handleMouseDownPassword
-                                                                }
-                                                                edge="end"
-                                                                className="eye-btn"
-                                                            >
-                                                                {values.showConfirmPassword ? (
-                                                                    <img
-                                                                        src={
-                                                                            process
-                                                                                .env
-                                                                                .PUBLIC_URL +
-                                                                            "/images/non-visibleicon.svg"
-                                                                        }
-                                                                        alt=""
-                                                                        className="img-fluid"
-                                                                    />
-                                                                ) : (
-                                                                    <img
-                                                                        src={
-                                                                            process
-                                                                                .env
-                                                                                .PUBLIC_URL +
-                                                                            "/images/visibleicon.svg"
-                                                                        }
-                                                                        alt=""
-                                                                        className="img-fluid"
-                                                                    />
-                                                                )}
-                                                            </ResetPasswordIconButton>
-                                                        </ResetPasswordInputAdornment>
-                                                    }
-                                                    {...register(
-                                                        "confirmPassword"
-                                                    )}
-                                                    onBlur={(e) =>
-                                                        setValue(
-                                                            "confirmPassword",
-                                                            e.target.value.trim()
-                                                        )
-                                                    }
-                                                />
-                                                <p className={`password-error`}>
-                                                    {errors?.confirmPassword ? (
-                                                        errors.confirmPassword
-                                                            .message
-                                                    ) : (
-                                                        <span>&nbsp;</span>
-                                                    )}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="form-btn flex-between">
+                                    {showInvalidTokenMessage ? (
+                                        <div
+                                            className="form-btn flex-between"
+                                            // style={{
+                                            //     justifyContent: "flex-end",
+                                            // }}
+                                        >
                                             <button
                                                 type="submit"
                                                 className="primary-button"
-                                            >
-                                                Reset
-                                            </button>
-                                            <div
                                                 onClick={() =>
-                                                    navigate("/login")
+                                                    navigate("/forget-password")
+                                                }
+                                            >
+                                                Forgot password
+                                            </button>
+                                            {/* <div
+                                                onClick={() =>
+                                                    navigate("/forget-password")
                                                 }
                                                 className="tertiary-btn-blk mr-10"
                                             >
-                                                Back to login
-                                            </div>
+                                                Forget password?
+                                            </div> */}
                                         </div>
-                                    </form>
+                                    ) : (
+                                        <form
+                                            onSubmit={handleSubmit(submitForm)}
+                                        >
+                                            <div className="form-group">
+                                                <label for="password">
+                                                    New Password{" "}
+                                                    <span className="mandatory">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <div className="password-field">
+                                                    <ResetPasswordOutlinedInput
+                                                        fullWidth
+                                                        id="outlined-adornment-password"
+                                                        type={
+                                                            values.showNewPassword
+                                                                ? "text"
+                                                                : "password"
+                                                        }
+                                                        // value={values.newPassword}
+                                                        // onChange={handleChange('newPassword')}
+                                                        placeholder="Enter new password"
+                                                        className={`input-field ${
+                                                            errors.newPassword &&
+                                                            "input-error"
+                                                        }`}
+                                                        inputProps={{
+                                                            maxLength: 15,
+                                                        }}
+                                                        endAdornment={
+                                                            <ResetPasswordInputAdornment position="end">
+                                                                <ResetPasswordIconButton
+                                                                    aria-label="toggle password visibility"
+                                                                    onClick={
+                                                                        handleClickShowNewPassword
+                                                                    }
+                                                                    onMouseDown={
+                                                                        handleMouseDownPassword
+                                                                    }
+                                                                    edge="end"
+                                                                    className="eye-btn"
+                                                                >
+                                                                    {values.showNewPassword ? (
+                                                                        <img
+                                                                            src={
+                                                                                process
+                                                                                    .env
+                                                                                    .PUBLIC_URL +
+                                                                                "/images/non-visibleicon.svg"
+                                                                            }
+                                                                            alt=""
+                                                                            className="img-fluid"
+                                                                        />
+                                                                    ) : (
+                                                                        <img
+                                                                            src={
+                                                                                process
+                                                                                    .env
+                                                                                    .PUBLIC_URL +
+                                                                                "/images/visibleicon.svg"
+                                                                            }
+                                                                            alt=""
+                                                                            className="img-fluid"
+                                                                        />
+                                                                    )}
+                                                                </ResetPasswordIconButton>
+                                                            </ResetPasswordInputAdornment>
+                                                        }
+                                                        {...register(
+                                                            "newPassword"
+                                                        )}
+                                                        onBlur={(e) =>
+                                                            setValue(
+                                                                "newPassword",
+                                                                e.target.value.trim()
+                                                            )
+                                                        }
+                                                    />
+                                                    <p
+                                                        className={`password-error`}
+                                                    >
+                                                        {errors?.newPassword ? (
+                                                            errors.newPassword
+                                                                ?.message
+                                                        ) : (
+                                                            <span>&nbsp;</span>
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="form-group">
+                                                <label for="password">
+                                                    Confirm Password{" "}
+                                                    <span className="mandatory">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <div className="password-field">
+                                                    <ResetPasswordOutlinedInput
+                                                        fullWidth
+                                                        id="outlined-adornment-password"
+                                                        type={
+                                                            values.showConfirmPassword
+                                                                ? "text"
+                                                                : "password"
+                                                        }
+                                                        // value={values.confirmPassword}
+                                                        // onChange={handleChange('confirmPassword')}
+                                                        placeholder="Enter confirm password"
+                                                        className={`input-field ${
+                                                            errors.confirmPassword &&
+                                                            "input-error"
+                                                        }`}
+                                                        inputProps={{
+                                                            maxLength: 15,
+                                                        }}
+                                                        endAdornment={
+                                                            <ResetPasswordInputAdornment position="end">
+                                                                <ResetPasswordIconButton
+                                                                    aria-label="toggle password visibility"
+                                                                    onClick={
+                                                                        handleClickShowConfirmPassword
+                                                                    }
+                                                                    onMouseDown={
+                                                                        handleMouseDownPassword
+                                                                    }
+                                                                    edge="end"
+                                                                    className="eye-btn"
+                                                                >
+                                                                    {values.showConfirmPassword ? (
+                                                                        <img
+                                                                            src={
+                                                                                process
+                                                                                    .env
+                                                                                    .PUBLIC_URL +
+                                                                                "/images/non-visibleicon.svg"
+                                                                            }
+                                                                            alt=""
+                                                                            className="img-fluid"
+                                                                        />
+                                                                    ) : (
+                                                                        <img
+                                                                            src={
+                                                                                process
+                                                                                    .env
+                                                                                    .PUBLIC_URL +
+                                                                                "/images/visibleicon.svg"
+                                                                            }
+                                                                            alt=""
+                                                                            className="img-fluid"
+                                                                        />
+                                                                    )}
+                                                                </ResetPasswordIconButton>
+                                                            </ResetPasswordInputAdornment>
+                                                        }
+                                                        {...register(
+                                                            "confirmPassword"
+                                                        )}
+                                                        onBlur={(e) =>
+                                                            setValue(
+                                                                "confirmPassword",
+                                                                e.target.value.trim()
+                                                            )
+                                                        }
+                                                    />
+                                                    <p
+                                                        className={`password-error`}
+                                                    >
+                                                        {errors?.confirmPassword ? (
+                                                            errors
+                                                                .confirmPassword
+                                                                .message
+                                                        ) : (
+                                                            <span>&nbsp;</span>
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="form-btn flex-between">
+                                                <button
+                                                    type="submit"
+                                                    className="primary-button"
+                                                >
+                                                    Reset
+                                                </button>
+                                                <div
+                                                    onClick={() =>
+                                                        navigate("/login")
+                                                    }
+                                                    className="tertiary-btn-blk mr-10"
+                                                >
+                                                    Back to login
+                                                </div>
+                                            </div>
+                                        </form>
+                                    )}
                                 </div>
                             </div>
                         </div>

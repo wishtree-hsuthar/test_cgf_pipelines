@@ -228,6 +228,23 @@ const AssignAssessmentToOperationMember = () => {
                 response
             );
         } catch (error) {
+            if (
+                error?.response?.status === 400 &&
+                error?.response?.data?.message === "Invalid assessment!"
+            ) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage:
+                            "Oops!! There is some error while saving assessment details. Either someone has removed this assessment or looks like invalid assessment getting submitted. For more details please contact system / CGF admin",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/assessment-list");
+                }, 3000);
+            }
             Logger.debug(
                 "Error from fetch assessment in assign assessment page",
                 error
@@ -278,6 +295,23 @@ const AssignAssessmentToOperationMember = () => {
                     },
                     () => myRef.current()
                 );
+            }
+            if (
+                error?.response?.status === 400 &&
+                error?.response?.data?.message === "Invalid assessment!"
+            ) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage:
+                            "Oops!! There is some error while saving assessment details. Either someone has removed this assessment or looks like invalid assessment getting submitted. For more details please contact system / CGF admin",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/assessment-list");
+                }, 3000);
             }
         }
     };

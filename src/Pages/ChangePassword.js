@@ -95,7 +95,7 @@ const ChangePassword = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage: "Password updated successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -121,11 +121,27 @@ const ChangePassword = () => {
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else if (error.response.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
             } else {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
                         messageType: "error",
                     },
                     () => toasterRef.current()

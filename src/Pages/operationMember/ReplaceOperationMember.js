@@ -204,12 +204,36 @@ const ReplaceOperationMember = () => {
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
-            }
-            if (error?.response?.status == 500) {
+            } else if (error?.response?.status == 500) {
                 Logger.debug(
                     "Error status 500 while fetchiing subadmin from replace sub-admin"
                 );
                 navigate("/sub-admins");
+            } else if (error?.response?.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
             }
         }
     };

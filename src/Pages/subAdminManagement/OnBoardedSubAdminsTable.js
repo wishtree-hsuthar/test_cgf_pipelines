@@ -160,7 +160,7 @@ function OnBoardedSubAdminsTable({
             if (error?.code === "ERR_CANCELED") return;
             Logger.debug("Error from getSubAdmin-------", error);
 
-            if (error?.onBoardedCGFAdmin?.status == 401) {
+            if (error?.response?.status == 401) {
                 setonBoardedCgfAdmintoasterDetails(
                     {
                         titleMessage: "Oops!",
@@ -173,6 +173,29 @@ function OnBoardedSubAdminsTable({
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setonBoardedCgfAdmintoasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => onBoardedCGFAdminRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
+            } else {
+                setonBoardedCgfAdmintoasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message,
+                        messageType: "error",
+                    },
+                    () => onBoardedCGFAdminRef.current()
+                );
             }
             setIsOnboardedCgfAdminLoading(false);
         }

@@ -187,6 +187,31 @@ function PendingOperationMembers({
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
             }
         }
     };
@@ -247,6 +272,21 @@ function PendingOperationMembers({
                     );
                 setTimeout(() => {
                     navigate("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                isMounted &&
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => myRef.current()
+                    );
+                setTimeout(() => {
+                    navigate("/home");
                 }, 3000);
             } else {
                 isMounted &&

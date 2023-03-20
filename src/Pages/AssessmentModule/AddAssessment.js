@@ -154,6 +154,20 @@ const AddAssessment = () => {
                     setTimeout(() => {
                         navigate("/login");
                     }, 3000);
+                } else if (error.response.status === 403) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/home");
+                    }, 3000);
                 }
             }
         };
@@ -291,7 +305,7 @@ const AddAssessment = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage: "Assessment added sucessfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => toasterRef.current()
@@ -337,11 +351,16 @@ const AddAssessment = () => {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
-                        descriptionMessage: "Something went wrong",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
                         messageType: "error",
                     },
                     () => toasterRef.current()
                 );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
             }
         }
         setIsAssessmentLoading(false);
@@ -371,7 +390,7 @@ const AddAssessment = () => {
             </div>
             <section>
                 {isAssessmentLoading ? (
-                    <Loader/>
+                    <Loader />
                 ) : (
                     <div className="container">
                         <form onSubmit={handleSubmit(submitAssessments)}>
