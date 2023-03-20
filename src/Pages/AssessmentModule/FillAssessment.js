@@ -295,7 +295,7 @@ function FillAssessment() {
                 }
                 if (
                     error?.response?.status === 400 &&
-                    error?.response?.data?.message === "Invalid assessment"
+                    error?.response?.data?.message === "Invalid assessment!"
                 ) {
                     isMounted &&
                         setToasterDetails(
@@ -850,7 +850,25 @@ function FillAssessment() {
                 DOWNLOAD_ASSESSMENT_BY_ID,
                 navigate
             );
-        } catch (error) {}
+        } catch (error) {
+            if (
+                error?.response?.status === 400 &&
+                error?.response?.data?.message === "Invalid assessment!"
+            ) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage:
+                            "Oops!! There is some error while saving assessment details. Either someone has removed this assessment or looks like invalid assessment getting submitted. For more details please contact system / CGF admin",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/assessment-list");
+                }, 3000);
+            }
+        }
     };
 
     const [importOpenDialog, setImportOpenDialog] = useState(false);
@@ -970,7 +988,26 @@ function FillAssessment() {
 
                             setIsFillAssessmentLoading(false);
                             setSelectedFileName("");
-                            handleCatchError(error, "reuploadAssessment");
+                            if (
+                                error?.response?.status === 400 &&
+                                error?.response?.data?.message ===
+                                    "Invalid assessment!"
+                            ) {
+                                setToasterDetails(
+                                    {
+                                        titleMessage: "Oops!",
+                                        descriptionMessage:
+                                            "Oops!! There is some error while saving assessment details. Either someone has removed this assessment or looks like invalid assessment getting submitted. For more details please contact system / CGF admin",
+                                        messageType: "error",
+                                    },
+                                    () => myRef.current()
+                                );
+                                setTimeout(() => {
+                                    navigate("/assessment-list");
+                                }, 3000);
+                            } else {
+                                handleCatchError(error, "reuploadAssessment");
+                            }
                         } finally {
                             setIsFillAssessmentLoading(false);
                         }
