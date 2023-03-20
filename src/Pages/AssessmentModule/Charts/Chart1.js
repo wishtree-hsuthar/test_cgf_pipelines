@@ -1,0 +1,106 @@
+import React from "react";
+import Chart from "chart.js/auto";
+import { Bar } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
+Chart.register(ChartDataLabels);
+const Chart1 = ({ graphResult, questionnaireTitle }) => {
+  console.log("graph result:- ", graphResult);
+  const labels = [
+    "Not Initiated",
+    "Launched",
+    "Established",
+    "Leadership",
+    "General Result",
+  ];
+  const getChartLabel = () => {
+    switch(questionnaireTitle){
+      case "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)":
+        return "HRDD HQ Level Result";
+      case "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)":
+        return "Global Operation HRDD Result";
+      case "COUNTRY- OPERATION HRDD REQUIREMENTS":
+        return "Country Operation HRDD Result"
+      default:
+        return "HRDD Result"
+    }
+  }
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: getChartLabel(),
+        backgroundColor: "#3498db",
+        borderColor: "#3498db",
+        data: [
+          graphResult["Not Initiated"],
+          graphResult["Launched"],
+          graphResult["Established"],
+          graphResult["Leadership"],
+          graphResult["General"] ?? 0,
+        ],
+        barThickness: 25,
+      },
+    ],
+  };
+
+  return (
+    <div style={{ height: "400px" }} className="preview-card-wrapper">
+      <Bar
+        data={data}
+        options={{
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: {
+            padding: 10,
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+            title: {
+              text: getChartLabel(),
+              display: true,
+              font: {
+                weight: "bold",
+                size: 16
+              },
+            },
+            datalabels: {
+              color: "black",
+              formatter: (value) => "      " + value + "%",
+            },
+            tooltip: {
+              enabled: false,
+            },
+          },
+          scales: {
+            y: {
+              grid: {
+                display: false,
+              },
+              alignToPixels: "center",
+              align: "start",
+            },
+            x: {
+              grid: {
+                display: false,
+              },
+              min: 0,
+              max: 100,
+              ticks: {
+                stepSize: 10,
+                callback: function (value, index, values) {
+                  return value + "%";
+                },
+              },
+            },
+          },
+        }}
+      />
+    </div>
+  );
+};
+
+export default Chart1;
