@@ -144,6 +144,20 @@ function FillAssessment() {
             setTimeout(() => {
                 navigate("/login");
             }, 3000);
+        } else if (error?.response?.status === 403) {
+            setToasterDetails(
+                {
+                    titleMessage: "Oops!",
+                    descriptionMessage: error?.response?.data?.message
+                        ? error?.response?.data?.message
+                        : "Something went wrong",
+                    messageType: "error",
+                },
+                () => myRef.current()
+            );
+            setTimeout(() => {
+                navigate("/home");
+            }, 3000);
         } else {
             setToasterDetails(
                 {
@@ -192,6 +206,31 @@ function FillAssessment() {
                     setTimeout(() => {
                         navigate("/login");
                     }, 3000);
+                } else if (error?.response?.status === 403) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => myRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/home");
+                    }, 3000);
+                } else {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => myRef.current()
+                    );
                 }
             }
         };
@@ -242,8 +281,7 @@ function FillAssessment() {
                     setTimeout(() => {
                         navigate("/login");
                     }, 3000);
-                }
-                if (
+                } else if (
                     error?.response?.status === 400 &&
                     error?.response?.data?.message === "Invalid assessment"
                 ) {
@@ -260,6 +298,33 @@ function FillAssessment() {
                     setTimeout(() => {
                         navigate("/assessment-list");
                     }, 3000);
+                } else if (error?.response?.status === 403) {
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage: error?.response?.data
+                                    ?.message
+                                    ? error?.response?.data?.message
+                                    : "Something went wrong",
+                                messageType: "error",
+                            },
+                            () => myRef.current()
+                        );
+                    setTimeout(() => {
+                        navigate("/home");
+                    }, 3000);
+                } else {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => myRef.current()
+                    );
                 }
                 setIsFillAssessmentLoading(false);
                 Logger.debug("error from fetch assessment", error);

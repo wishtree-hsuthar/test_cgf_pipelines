@@ -7,30 +7,33 @@ import { useDispatch, useSelector } from "react-redux";
 import useCallbackState from "../utils/useCallBackState";
 import Toaster from "../components/Toaster";
 import { Logger } from "../Logger/Logger";
+import { setUser, setPrivileges } from "../redux/UserSlice";
+
 const Dashboard = (props) => {
     //custom hook to set title of page
+    const dispatch = useDispatch();
     useDocumentTitle("Home");
     const checkPrivilege = useSelector(
         (state) => state?.user?.privilege?.privileges
     );
     const checkUser = useSelector((state) => state?.user?.userObj);
     let userRoleDeleted =
+        checkPrivilege != undefined &&
         Object.keys(checkPrivilege).length === 0 &&
         checkUser?.role?.name !== "Super Admin";
     Logger.debug("user role is deleted  =  ", userRoleDeleted);
     Logger.debug(
         "user is  super Admin = ",
-        Object.keys(checkPrivilege).length === 0 &&
+        checkPrivilege != undefined &&
+            Object.keys(checkPrivilege).length === 0 &&
             checkUser?.role?.name === "Super Admin"
     );
     const navigate = useNavigate();
     const homeRef = useRef();
 
-    
     useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
-
         isMounted && fetchHomeUser(isMounted, controller);
         return () => {
             isMounted = false;
@@ -46,11 +49,13 @@ const Dashboard = (props) => {
 
     const fetchHomeUser = async (isMounted, controller) => {
         try {
-            const response = await privateAxios.get(GET_USER, {
+            const { data } = await privateAxios.get(GET_USER, {
                 signal: controller.signal,
             });
+            dispatch(setUser(data));
+            dispatch(setPrivileges(data?.role));
 
-            Logger.debug("in userloggedin - ", response);
+            Logger.debug("in userloggedin - ", data);
         } catch (error) {
             if (error?.response?.status == 401) {
                 setHomeToasterDetails(
@@ -65,6 +70,25 @@ const Dashboard = (props) => {
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setHomeToasterDetails({
+                    titleMessage: "Error",
+                    descriptionMessage: error?.response?.data?.message
+                        ? error?.response?.data?.message
+                        : "Something went wrong",
+                    messageType: "error",
+                });
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
+            } else {
+                setHomeToasterDetails({
+                    titleMessage: "Error",
+                    descriptionMessage: error?.response?.data?.message
+                        ? error?.response?.data?.message
+                        : "Something went wrong",
+                    messageType: "error",
+                });
             }
         }
     };

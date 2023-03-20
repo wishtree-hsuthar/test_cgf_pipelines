@@ -204,6 +204,31 @@ function PendingCGFAdmins({
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setPendingCgfToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
+            } else {
+                setPendingCgfToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
             }
             Logger.debug("error from withdrawInvite id", error);
         }
@@ -256,6 +281,20 @@ function PendingCGFAdmins({
                 );
                 setTimeout(() => {
                     navigate("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                setPendingCgfToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
                 }, 3000);
             } else {
                 isMounted &&

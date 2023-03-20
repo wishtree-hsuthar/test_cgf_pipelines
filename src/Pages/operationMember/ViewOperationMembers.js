@@ -30,7 +30,8 @@ import { useSelector } from "react-redux";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
-import { Logger } from "../../Logger/Logger";import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
+import { Logger } from "../../Logger/Logger";
+import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
 
 const defaultValues = {
     memberCompany: "",
@@ -49,7 +50,7 @@ const defaultValues = {
     role: "",
     replacedOperationMember: "",
 };
-let OPERATION_TYPES = []
+let OPERATION_TYPES = [];
 const ViewOperationMembers = () => {
     //custom hook to set title of page
     useDocumentTitle("View Operation Member");
@@ -190,7 +191,7 @@ const ViewOperationMembers = () => {
                 replacedOperationMember:
                     response?.data?.replacedUsers[0]?.name ?? "N/A",
             });
-            
+
             setIsViewOperationMemberLoading(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
@@ -212,24 +213,48 @@ const ViewOperationMembers = () => {
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
-            }
-            if (error?.response?.status === 500) {
+            } else if (error?.response?.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
+            } else if (error?.response?.status === 500) {
                 navigate("/operation_member");
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
             }
         }
     };
-    const callGetOpeationMember = async() => {
-    OPERATION_TYPES =await getOperationTypes()
-  } 
-  useEffect(() => {
+    const callGetOpeationMember = async () => {
+        OPERATION_TYPES = await getOperationTypes();
+    };
+    useEffect(() => {
         let isMounted = true;
         let controller = new AbortController();
-        OPERATION_TYPES?.length === 0 && callGetOpeationMember()
+        OPERATION_TYPES?.length === 0 && callGetOpeationMember();
         countries?.length === 0 && fetchCountries(controller, isMounted);
-        memberCompanies?.length === 0 && fetchMemberComapany(controller, isMounted);
+        memberCompanies?.length === 0 &&
+            fetchMemberComapany(controller, isMounted);
 
-        
-        fetchOperationMember(controller,isMounted);
+        fetchOperationMember(controller, isMounted);
 
         return () => {
             isMounted = false;
@@ -271,6 +296,20 @@ const ViewOperationMembers = () => {
                 );
                 setTimeout(() => {
                     navigate("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
                 }, 3000);
             } else {
                 setToasterDetails(
@@ -464,152 +503,237 @@ const ViewOperationMembers = () => {
                                                         </span>
                                                     </label>
 
-                          <Dropdown
-                            control={control}
-                            name="salutation"
-                            isDisabled
-                            placeholder="Mr."
-                            options={["Mr.", "Mrs.", "Ms."]}
-                          />
-                        </div>
-                        <div className="salutation-inputblk">
-                          <label htmlFor="name">
-                            Full Name <span className="mandatory">*</span>
-                          </label>
-                          <Input isDisabled name={"name"} control={control} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="email">Job Title </label>
-                      <Input isDisabled name={"title"} control={control} />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="email">Department </label>
-                      <Input isDisabled name={"department"} control={control} />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="email">
-                        Email <span className="mandatory">*</span>
-                      </label>
-                      <Input name={"email"} control={control} isDisabled />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="phoneNumber">Phone Number</label>
-                      <div className="phone-number-field">
-                        <div className="select-field country-code">
-                          <Controller
-                            control={control}
-                            name="countryCode"
-                            rules={{
-                              required: true,
-                            }}
-                            render={({ field, fieldState: { error } }) => (
-                              <Autocomplete
-                                disabled
-                                popupIcon={<KeyboardArrowDownRoundedIcon />}
-                                className="phone-number-disable"
-                                {...field}
-                                options={countries}
-                                autoHighlight
-                                // placeholder="Select country code"
-                                getOptionLabel={(country) => country}
-                                renderOption={(props, option) => (
-                                  <li {...props}>{option}</li>
-                                )}
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    inputProps={{
-                                      ...params.inputProps,
-                                    }}
-                                    onChange={() => trigger("countryCode")}
-                                    placeholder={"N/A"}
-                                    disabled
-                                  />
-                                )}
-                              />
-                            )}
-                          />
-                        </div>
-                        <Input
-                          name={"phoneNumber"}
-                          placeholder="N/A"
-                          control={control}
-                          isDisabled
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="">
-                        Operation Type <span className="mandatory">*</span>
-                      </label>
-                      <Dropdown
-                        isDisabled
-                        control={control}
-                        name="operationType"
-                        placeholder="N/A"
-                        options={OPERATION_TYPES}
-                      />
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="">
-                        CGF Staff <span className="mandatory">*</span>
-                      </label>
-                      <div className="radio-btn-field">
-                        <Controller
-                          name="isCGFStaff"
-                          control={control}
-                          render={({ field }) => (
-                            <RadioGroup
-                              {...field}
-                              onChange={(e) => {
-                                field.onChange(e);
-                                e.target.value === "true"
-                                  ? setValue("companyType", "Internal")
-                                  : setValue("companyType", "External");
-                              }}
-                              // value={field.name}
-                              // value={field.isCGFStaff}
-                              aria-labelledby="demo-radio-buttons-group-label"
-                              name="radio-buttons-group"
-                              className="radio-btn"
-                            >
-                              <FormControlLabel
-                                value="true"
-                                control={<Radio disabled />}
-                                label="Yes"
-                              />
-                              <FormControlLabel
-                                value="false"
-                                control={<Radio disabled />}
-                                label="No"
-                              />
-                            </RadioGroup>
-                          )}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="">
-                        Member Company <span className="mandatory">*</span>
-                      </label>
-                      <div className="country-code-auto-search">
-                        {/* <Controller
+                                                    <Dropdown
+                                                        control={control}
+                                                        name="salutation"
+                                                        isDisabled
+                                                        placeholder="Mr."
+                                                        options={[
+                                                            "Mr.",
+                                                            "Mrs.",
+                                                            "Ms.",
+                                                        ]}
+                                                    />
+                                                </div>
+                                                <div className="salutation-inputblk">
+                                                    <label htmlFor="name">
+                                                        Full Name{" "}
+                                                        <span className="mandatory">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <Input
+                                                        isDisabled
+                                                        name={"name"}
+                                                        control={control}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="email">
+                                                Job Title{" "}
+                                            </label>
+                                            <Input
+                                                isDisabled
+                                                name={"title"}
+                                                control={control}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="email">
+                                                Department{" "}
+                                            </label>
+                                            <Input
+                                                isDisabled
+                                                name={"department"}
+                                                control={control}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="email">
+                                                Email{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Input
+                                                name={"email"}
+                                                control={control}
+                                                isDisabled
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="phoneNumber">
+                                                Phone Number
+                                            </label>
+                                            <div className="phone-number-field">
+                                                <div className="select-field country-code">
+                                                    <Controller
+                                                        control={control}
+                                                        name="countryCode"
+                                                        rules={{
+                                                            required: true,
+                                                        }}
+                                                        render={({
+                                                            field,
+                                                            fieldState: {
+                                                                error,
+                                                            },
+                                                        }) => (
+                                                            <Autocomplete
+                                                                disabled
+                                                                popupIcon={
+                                                                    <KeyboardArrowDownRoundedIcon />
+                                                                }
+                                                                className="phone-number-disable"
+                                                                {...field}
+                                                                options={
+                                                                    countries
+                                                                }
+                                                                autoHighlight
+                                                                // placeholder="Select country code"
+                                                                getOptionLabel={(
+                                                                    country
+                                                                ) => country}
+                                                                renderOption={(
+                                                                    props,
+                                                                    option
+                                                                ) => (
+                                                                    <li
+                                                                        {...props}
+                                                                    >
+                                                                        {option}
+                                                                    </li>
+                                                                )}
+                                                                renderInput={(
+                                                                    params
+                                                                ) => (
+                                                                    <TextField
+                                                                        {...params}
+                                                                        inputProps={{
+                                                                            ...params.inputProps,
+                                                                        }}
+                                                                        onChange={() =>
+                                                                            trigger(
+                                                                                "countryCode"
+                                                                            )
+                                                                        }
+                                                                        placeholder={
+                                                                            "N/A"
+                                                                        }
+                                                                        disabled
+                                                                    />
+                                                                )}
+                                                            />
+                                                        )}
+                                                    />
+                                                </div>
+                                                <Input
+                                                    name={"phoneNumber"}
+                                                    placeholder="N/A"
+                                                    control={control}
+                                                    isDisabled
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="">
+                                                Operation Type{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <Dropdown
+                                                isDisabled
+                                                control={control}
+                                                name="operationType"
+                                                placeholder="N/A"
+                                                options={OPERATION_TYPES}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="">
+                                                CGF Staff{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div className="radio-btn-field">
+                                                <Controller
+                                                    name="isCGFStaff"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <RadioGroup
+                                                            {...field}
+                                                            onChange={(e) => {
+                                                                field.onChange(
+                                                                    e
+                                                                );
+                                                                e.target
+                                                                    .value ===
+                                                                "true"
+                                                                    ? setValue(
+                                                                          "companyType",
+                                                                          "Internal"
+                                                                      )
+                                                                    : setValue(
+                                                                          "companyType",
+                                                                          "External"
+                                                                      );
+                                                            }}
+                                                            // value={field.name}
+                                                            // value={field.isCGFStaff}
+                                                            aria-labelledby="demo-radio-buttons-group-label"
+                                                            name="radio-buttons-group"
+                                                            className="radio-btn"
+                                                        >
+                                                            <FormControlLabel
+                                                                value="true"
+                                                                control={
+                                                                    <Radio
+                                                                        disabled
+                                                                    />
+                                                                }
+                                                                label="Yes"
+                                                            />
+                                                            <FormControlLabel
+                                                                value="false"
+                                                                control={
+                                                                    <Radio
+                                                                        disabled
+                                                                    />
+                                                                }
+                                                                label="No"
+                                                            />
+                                                        </RadioGroup>
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="">
+                                                Member Company{" "}
+                                                <span className="mandatory">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <div className="country-code-auto-search">
+                                                {/* <Controller
                                                 control={control}
                                                 name="memberId"
                                                 rules={{ required: true }}

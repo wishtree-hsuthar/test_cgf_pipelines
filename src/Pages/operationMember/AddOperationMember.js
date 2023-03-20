@@ -24,13 +24,16 @@ import {
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import Toaster from "../../components/Toaster";
-import { getOperationTypes, helperText } from "../../utils/OperationMemberModuleUtil";
+import {
+    getOperationTypes,
+    helperText,
+} from "../../utils/OperationMemberModuleUtil";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
 
 import { Logger } from "../../Logger/Logger";
-let OPERATION_TYPES = []
+let OPERATION_TYPES = [];
 function AddOperationMember() {
     //custom hook to set title of page
     useDocumentTitle("Add Operation Member");
@@ -119,13 +122,13 @@ function AddOperationMember() {
         trigger(name);
         trigger(code);
     };
-    const callGetOperationType =async () => {
-       OPERATION_TYPES =await getOperationTypes()
-    }
+    const callGetOperationType = async () => {
+        OPERATION_TYPES = await getOperationTypes();
+    };
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
-        OPERATION_TYPES?.length === 0 && callGetOperationType()
+        OPERATION_TYPES?.length === 0 && callGetOperationType();
         const fetchMemberComapany = async () => {
             try {
                 const response = await privateAxios.get(MEMBER_DROPDOWN, {
@@ -187,6 +190,22 @@ function AddOperationMember() {
                         );
                     setTimeout(() => {
                         navigate("/login");
+                    }, 3000);
+                } else if (error?.response?.status === 403) {
+                    isMounted &&
+                        setToasterDetails(
+                            {
+                                titleMessage: "Oops!",
+                                descriptionMessage: error?.response?.data
+                                    ?.message
+                                    ? error?.response?.data?.message
+                                    : "Something went wrong",
+                                messageType: "error",
+                            },
+                            () => toasterRef.current()
+                        );
+                    setTimeout(() => {
+                        navigate("/home");
                     }, 3000);
                 } else {
                     isMounted &&
@@ -259,6 +278,31 @@ function AddOperationMember() {
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
             }
         }
     };
@@ -288,7 +332,13 @@ function AddOperationMember() {
                 let defaultRoleId = roles.filter(
                     (role) => role.name == "Operation Member"
                 );
-                reset({ ...defaultValues, roleId: defaultRoleId[0]._id });
+                reset({
+                    ...defaultValues,
+                    roleId:
+                        defaultRoleId.length > 0 && defaultRoleId[0]._id
+                            ? defaultRoleId[0]._id
+                            : "",
+                });
                 setDisableAddOperationMemberButton(false);
                 setToasterDetails(
                     {
@@ -308,6 +358,7 @@ function AddOperationMember() {
                 "error in submit data for add operation member method",
                 error
             );
+            console.log("error from handle submit", error);
             setDisableAddOperationMemberButton(false);
             setIsAddOperationMemberLoading(false);
 
@@ -323,6 +374,20 @@ function AddOperationMember() {
                 );
                 setTimeout(() => {
                     navigate("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
                 }, 3000);
             } else {
                 setToasterDetails(
@@ -348,7 +413,7 @@ function AddOperationMember() {
         let role = roles.filter((role) => role.name === "Operation Member");
         reset({
             ...defaultValues,
-            roleId: role[0]._id,
+            roleId: role.length > 0 && role[0]._id ? role[0]._id : "",
         });
     };
 
@@ -472,7 +537,7 @@ function AddOperationMember() {
                                                             maxLength: 50,
                                                             minLength: 3,
                                                             pattern:
-                                                            /^[a-zA-Z][a-zA-Z ]*$/,
+                                                                /^[a-zA-Z][a-zA-Z ]*$/,
                                                         }}
                                                     />
                                                 </div>
@@ -551,7 +616,7 @@ function AddOperationMember() {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                                        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                                                 }}
                                             />
                                         </div>

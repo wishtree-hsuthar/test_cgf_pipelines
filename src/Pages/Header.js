@@ -40,7 +40,7 @@ const Header = () => {
     };
 
     let privilegeArray =
-        userAuth?.roleId?.name === "Super Admin"
+        userAuth?.role?.name === "Super Admin"
             ? []
             : Object.values(privilege?.privileges);
 
@@ -309,7 +309,6 @@ const Header = () => {
                                                         >
                                                             <a
                                                                 onClick={() => {
-                                                                    
                                                                     navigate(
                                                                         "/users/cgf-admin"
                                                                     );

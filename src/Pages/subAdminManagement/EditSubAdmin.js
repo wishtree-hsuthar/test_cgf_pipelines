@@ -148,6 +148,31 @@ const EditSubAdmin = () => {
                     setTimeout(() => {
                         navigate("/login");
                     }, 3000);
+                } else if (error?.response?.status === 403) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/home");
+                    }, 3000);
+                } else {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
                 }
             }
         };
@@ -201,6 +226,20 @@ const EditSubAdmin = () => {
                     setTimeout(() => {
                         navigate("/login");
                     }, 3000);
+                } else if (error?.response?.status === 403) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/home");
+                    }, 3000);
                 }
                 setTimeout(() => {
                     navigate("/users/cgf-admin/");
@@ -235,6 +274,20 @@ const EditSubAdmin = () => {
                     );
                     setTimeout(() => {
                         navigate("/login");
+                    }, 3000);
+                } else if (error?.response?.status === 403) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/home");
                     }, 3000);
                 }
             }
@@ -297,8 +350,7 @@ const EditSubAdmin = () => {
                     },
                     () => toasterRef.current()
                 );
-            }
-            if (error?.response?.status === 401) {
+            } else if (error?.response?.status === 401) {
                 setToasterDetails(
                     {
                         titleMessage: "Oops!",
@@ -311,6 +363,31 @@ const EditSubAdmin = () => {
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
+            } else {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => toasterRef.current()
+                );
             }
         }
     };

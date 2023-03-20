@@ -181,6 +181,21 @@ const RolesList = () => {
                 setTimeout(() => {
                     navigate3("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails3(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+
+                        messageType: "error",
+                    },
+                    () => myRef3.current()
+                );
+                setTimeout(() => {
+                    navigate3("/home");
+                }, 3000);
             } else {
                 isMounted &&
                     setToasterDetails3(
@@ -328,7 +343,7 @@ const RolesList = () => {
                             </div>
                         </div>
                         {isLoading2 ? (
-                            <Loader/>
+                            <Loader />
                         ) : (
                             <div className="member-info-wrapper table-content-wrap table-content-width table-footer-btm-space">
                                 <TableComponent

@@ -616,6 +616,18 @@ const SectionContent = ({
                     () => myRef.current()
                 );
                 setTimeout(() => navigate("/login"), 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Error!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => navigate("/home"), 3000);
             } else {
                 setErrorToaster(error);
                 return false;

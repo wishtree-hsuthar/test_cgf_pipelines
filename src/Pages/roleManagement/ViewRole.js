@@ -127,6 +127,20 @@ const ViewRole = () => {
                 setTimeout(() => {
                     navigate4("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails4(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef4.current()
+                );
+                setTimeout(() => {
+                    navigate4("/home");
+                }, 3000);
             } else {
                 setToasterDetails4(
                     {
@@ -299,6 +313,20 @@ const ViewRole = () => {
                 );
                 setTimeout(() => {
                     navigate4("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails4(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef4.current()
+                );
+                setTimeout(() => {
+                    navigate4("/home");
                 }, 3000);
             } else {
                 setIsLoading3(false);

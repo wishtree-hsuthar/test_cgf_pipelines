@@ -186,6 +186,20 @@ const AddMember = () => {
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetailsAddMember(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
             } else {
                 setErrorToaster(error);
                 setdisableAddMemberButton(false);
@@ -339,6 +353,21 @@ const AddMember = () => {
                     );
                 setTimeout(() => {
                     navigate("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                isMounted &&
+                    setToasterDetailsAddMember(
+                        {
+                            titleMessage: "Error",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => myRef.current()
+                    );
+                setTimeout(() => {
+                    navigate("/home");
                 }, 3000);
             } else {
                 setErrorToaster(error);
