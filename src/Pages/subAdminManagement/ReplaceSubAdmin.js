@@ -182,6 +182,21 @@ const ReplaceSubAdmin = () => {
                     return navigate("/login");
                 }, 3000);
                 setOpen(false);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Oops",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    return navigate("/home");
+                }, 3000);
+                setOpen(false);
             } else if (error?.response?.status == 500) {
                 Logger.debug(
                     "Error status 500 while fetchiing subadmin from replace sub-admin"

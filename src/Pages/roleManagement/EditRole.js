@@ -130,8 +130,7 @@ const EditRole = () => {
                 setToasterDetails2(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage:
-                            "Role details updated successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => myRef2.current()
@@ -159,7 +158,23 @@ const EditRole = () => {
                     },
                     () => myRef2.current()
                 );
-                navigate2("/login");
+                setTimeout(() => {
+                    navigate2("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails2(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef2.current()
+                );
+                setTimeout(() => {
+                    navigate2("/home");
+                }, 3000);
             } else {
                 setErrorToaster(error);
             }
@@ -234,6 +249,20 @@ const EditRole = () => {
                 setTimeout(() => {
                     navigate2("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails2(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef2.current()
+                );
+                setTimeout(() => {
+                    navigate2("/home");
+                }, 3000);
             } else {
                 setIsLoading1(false);
                 setErrorToaster(error);
@@ -279,7 +308,7 @@ const EditRole = () => {
                         <h2 className="heading2">Edit Role</h2>
                     </div>
                     {isLoading1 ? (
-                        <Loader/>
+                        <Loader />
                     ) : (
                         <form onSubmit={handleSubmit(onSubmit1)}>
                             <div className="card-wrapper">

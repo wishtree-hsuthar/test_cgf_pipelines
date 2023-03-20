@@ -172,7 +172,7 @@ const AddRole = () => {
                 setToasterDetails1(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage: "New role added successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => myRef.current()
@@ -196,7 +196,23 @@ const AddRole = () => {
                     },
                     () => myRef.current()
                 );
-                navigate1("/login");
+                setTimeout(() => {
+                    navigate1("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails1(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate1("/home");
+                }, 3000);
             } else {
                 setErrorToaster(error);
 
@@ -236,6 +252,20 @@ const AddRole = () => {
                 );
                 setTimeout(() => {
                     navigate1("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails1(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate1("/home");
                 }, 3000);
             } else {
                 setErrorToaster(error);
@@ -318,7 +348,7 @@ const AddRole = () => {
                                                     maxLength: 50,
                                                     minLength: 3,
                                                     pattern:
-                                                    /^[a-zA-Z][a-zA-Z ]*$/,
+                                                        /^[a-zA-Z][a-zA-Z ]*$/,
                                                 }}
                                                 control={control}
                                                 render={({

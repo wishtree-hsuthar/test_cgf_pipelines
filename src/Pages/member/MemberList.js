@@ -331,6 +331,22 @@ const MemberList = () => {
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetailsMemberList(
+                    {
+                        titleMessage: "Error",
+
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+
+                        messageType: "error",
+                    },
+                    () => memberRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
+                }, 3000);
             } else {
                 setIsMemberListLoading(false);
                 isMounted &&

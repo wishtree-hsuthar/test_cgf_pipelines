@@ -5,9 +5,9 @@ const paramDebug = params.get("debug");
 export const Logger = {
     debug(str, value) {
         if (paramDebug === "1") {
-            console.debug(str, value);
+            console.log(str, value);
         } else {
-            console.debug = () => {};
+            console.log = () => {};
         }
     },
 

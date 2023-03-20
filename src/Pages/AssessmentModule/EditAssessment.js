@@ -195,6 +195,31 @@ function EditAssessment() {
                     setTimeout(() => {
                         navigate("/login");
                     }, 3000);
+                } else if (error?.response?.status === 403) {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
+                    setTimeout(() => {
+                        navigate("/home");
+                    }, 3000);
+                } else {
+                    setToasterDetails(
+                        {
+                            titleMessage: "Oops!",
+                            descriptionMessage: error?.response?.data?.message
+                                ? error?.response?.data?.message
+                                : "Something went wrong",
+                            messageType: "error",
+                        },
+                        () => toasterRef.current()
+                    );
                 }
                 setIsEditAssessmentLoading(false);
                 Logger.debug("Error from fetch assessment", error);
@@ -422,11 +447,13 @@ function EditAssessment() {
     };
     const onDialogPrimaryButtonClickHandler = async () => {
         try {
-            await axios.delete(FETCH_ASSESSMENT_BY_ID + `${params?.id}`);
+            const response = await axios.delete(
+                FETCH_ASSESSMENT_BY_ID + `${params?.id}`
+            );
             setToasterDetails(
                 {
                     titleMessage: "Success",
-                    descriptionMessage: `Assessment deleted successfully!`,
+                    descriptionMessage: response.data.message,
                     messageType: "success",
                 },
                 () => toasterRef.current()

@@ -143,8 +143,7 @@ const EditMember = () => {
                 setToasterDetailsEditMember(
                     {
                         titleMessage: "Success!",
-                        descriptionMessage:
-                            "Member details updated successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => myRef.current()
@@ -167,6 +166,20 @@ const EditMember = () => {
                 );
                 setTimeout(() => {
                     navigate("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetailsEditMember(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
                 }, 3000);
             } else {
                 setErrorToaster1(error);
@@ -371,7 +384,8 @@ const EditMember = () => {
                 cgfOfficeRegion: data?.cgfOfficeRegion,
                 cgfOfficeCountry: data?.cgfOfficeCountry,
                 cgfOffice: data?.cgfOffice,
-                memberContactSalutation: data?.memberRepresentativeId[0]?.salutation,
+                memberContactSalutation:
+                    data?.memberRepresentativeId[0]?.salutation,
                 memberContactFullName: data?.memberRepresentativeId[0]?.name,
                 title: data?.memberRepresentativeId[0]?.title,
                 department: data?.memberRepresentativeId[0]?.department,
@@ -407,6 +421,20 @@ const EditMember = () => {
                 );
                 setTimeout(() => {
                     navigate("/login");
+                }, 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetailsEditMember(
+                    {
+                        titleMessage: "Error",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => {
+                    navigate("/home");
                 }, 3000);
             } else {
                 setIsEditMemberLoading(false);
@@ -787,7 +815,7 @@ const EditMember = () => {
                                                         maxLength: 50,
                                                         minLength: 3,
                                                         pattern:
-                                                        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                                                     }}
                                                 />
                                             </div>
@@ -1377,7 +1405,7 @@ const EditMember = () => {
                                                                 maxLength: 50,
                                                                 minLength: 3,
                                                                 pattern:
-                                                                /^[a-zA-Z][a-zA-Z ]*$/,
+                                                                    /^[a-zA-Z][a-zA-Z ]*$/,
                                                             }}
                                                             name="memberContactFullName"
                                                             onBlur={(e) =>
@@ -1457,7 +1485,7 @@ const EditMember = () => {
                                                         maxLength: 50,
                                                         minLength: 3,
                                                         pattern:
-                                                        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                                                     }}
                                                     name="memberContactEmail"
                                                     onBlur={(e) =>

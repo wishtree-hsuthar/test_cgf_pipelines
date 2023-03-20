@@ -81,7 +81,6 @@ const SectionContent = ({
         deleteSection(uuid);
     };
     const onDialogPrimaryButtonClickHandler1 = () => {
-        
         setOpenDialog1(false);
         navigate("/questionnaires");
     };
@@ -102,7 +101,7 @@ const SectionContent = ({
             ...tempQuestionnare,
             sections: tempSections,
         });
-      
+
         setValue(0);
         setOpenDialog(false);
     };
@@ -146,7 +145,7 @@ const SectionContent = ({
                             "title not present in section = ",
                             sectionIndex
                         );
-                        
+
                         tabIndex.push(sectionIndex);
                         tableCountError++;
                     }
@@ -199,8 +198,6 @@ const SectionContent = ({
                                 Logger.debug("in section = ", sectionIndex);
                                 setTableErr("Same name hai");
                                 tabIndex.push(sectionIndex);
-
-                              
 
                                 break;
                             }
@@ -282,7 +279,6 @@ const SectionContent = ({
                 setGlobalSectionTitleError({
                     errMsg: "Section name already in use",
                 });
-              
             } else {
                 if (questionnaire.sections[index].layout == "table") {
                     countError = await validateTableQuestions(
@@ -346,7 +342,7 @@ const SectionContent = ({
 
                                     // setValue(index);
                                 }
-                              
+
                                 if (
                                     [
                                         "dropdown",
@@ -583,11 +579,12 @@ const SectionContent = ({
                         setToasterDetails(
                             {
                                 titleMessage: "Success!",
-                                descriptionMessage: `${
-                                    isPublished
-                                        ? "Questionnaire published successfully!"
-                                        : "Section details saved successfully!"
-                                }`,
+                                descriptionMessage: response.data.message,
+                                // descriptionMessage: `${
+                                //     isPublished
+                                //         ? "Questionnaire published successfully!"
+                                //         : "Section details saved successfully!"
+                                // }`,
                                 messageType: "success",
                             },
                             () => myRef.current()
@@ -619,6 +616,18 @@ const SectionContent = ({
                     () => myRef.current()
                 );
                 setTimeout(() => navigate("/login"), 3000);
+            } else if (error?.response?.status === 403) {
+                setToasterDetails(
+                    {
+                        titleMessage: "Error!",
+                        descriptionMessage: error?.response?.data?.message
+                            ? error?.response?.data?.message
+                            : "Something went wrong",
+                        messageType: "error",
+                    },
+                    () => myRef.current()
+                );
+                setTimeout(() => navigate("/home"), 3000);
             } else {
                 setErrorToaster(error);
                 return false;

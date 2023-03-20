@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Slider from "./Slider";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -37,6 +37,7 @@ const SetPassword = () => {
     } = useForm({
         resolver: yupResolver(schema),
     });
+    const [showExpiredLinkMessage, setShowExpiredLinkMessage] = useState(false);
     useEffect(() => {
         let controller = new AbortController();
         document.body.classList.add("login-page");
@@ -55,17 +56,18 @@ const SetPassword = () => {
                 Logger.debug("error from verify token", error);
                 if (error?.response?.status == 400) {
                     Logger.debug("Invalid Token");
-                    setPasswordToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message,
-                            messageType: "error",
-                        },
-                        () => setPasswordToasterRef.current()
-                    );
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
+                    // setPasswordToasterDetails(
+                    //     {
+                    //         titleMessage: "Oops!",
+                    //         descriptionMessage: error?.response?.data?.message,
+                    //         messageType: "error",
+                    //     },
+                    //     () => setPasswordToasterRef.current()
+                    // );
+                    // setTimeout(() => {
+                    //     navigate("/login");
+                    // }, 3000);
+                    setShowExpiredLinkMessage(true);
                 }
             }
         };
@@ -75,6 +77,9 @@ const SetPassword = () => {
             controller.abort();
         };
     }, []);
+    const expiredLinkMessage =
+        "Oops! The link to set password is expired or looks like you're trying using an invalid link. Please contact CGF Admin.";
+
     const [passwordToasterDetails, setPasswordToasterDetails] =
         useCallbackState({
             titleMessage: "",
@@ -107,8 +112,7 @@ const SetPassword = () => {
                 setPasswordToasterDetails(
                     {
                         titleMessage: "Hurray!",
-                        descriptionMessage:
-                            "Your password has been set successfully!",
+                        descriptionMessage: response.data.message,
                         messageType: "success",
                     },
                     () => setPasswordToasterRef.current()
@@ -170,184 +174,204 @@ const SetPassword = () => {
                                         className="img-fluid"
                                     />
                                 </div>
-                                <h2 className="heading1 text-uppercase">
-                                    Set Password
+                                <h2
+                                    className={`${
+                                        showExpiredLinkMessage
+                                            ? "warning-message"
+                                            : "heading1 text-uppercase"
+                                    } `}
+                                >
+                                    {showExpiredLinkMessage
+                                        ? expiredLinkMessage
+                                        : "Set Password"}
                                 </h2>
-                                <div className="login-form">
-                                    <form onSubmit={handleSubmit(submitForm)}>
-                                        <div className="form-group">
-                                            <label for="password">
-                                                New Password{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
-                                            </label>
-                                            <div className="password-field">
-                                                <OutlinedInput
-                                                    fullWidth
-                                                    id="outlined-adornment-password"
-                                                    type={
-                                                        values.showNewPassword
-                                                            ? "text"
-                                                            : "password"
-                                                    }
-                                                    // value={values.password}
-                                                    // onChange={handleChange('password')}
-                                                    placeholder="Enter new password"
-                                                    className={`input-field ${
-                                                        errors.password &&
-                                                        "input-error"
-                                                    }`}
-                                                    inputProps={{
-                                                        maxLength: 15,
-                                                    }}
-                                                    endAdornment={
-                                                        <InputAdornment position="end">
-                                                            <IconButton
-                                                                aria-label="toggle password visibility"
-                                                                onClick={
-                                                                    handleClickShowNewPassword
-                                                                }
-                                                                onMouseDown={
-                                                                    handleMouseDownPassword
-                                                                }
-                                                                edge="end"
-                                                                className="eye-btn"
-                                                            >
-                                                                {!values.showNewPassword ? (
-                                                                    <img
-                                                                        src={
-                                                                            process
-                                                                                .env
-                                                                                .PUBLIC_URL +
-                                                                            "/images/non-visibleicon.svg"
-                                                                        }
-                                                                        alt=""
-                                                                        className="img-fluid"
-                                                                    />
-                                                                ) : (
-                                                                    <img
-                                                                        src={
-                                                                            process
-                                                                                .env
-                                                                                .PUBLIC_URL +
-                                                                            "/images/visibleicon.svg"
-                                                                        }
-                                                                        alt=""
-                                                                        className="img-fluid"
-                                                                    />
-                                                                )}
-                                                            </IconButton>
-                                                        </InputAdornment>
-                                                    }
-                                                    {...register("password")}
-                                                    error={
-                                                        errors.password
-                                                            ? true
-                                                            : false
-                                                    }
-                                                />
-                                                <p className={`password-error`}>
-                                                    {errors?.password ? (
-                                                        errors.password.message
-                                                    ) : (
-                                                        <span>&nbsp;</span>
-                                                    )}
-                                                </p>
+                                {showExpiredLinkMessage ? null : (
+                                    <div className="login-form">
+                                        <form
+                                            onSubmit={handleSubmit(submitForm)}
+                                        >
+                                            <div className="form-group">
+                                                <label for="password">
+                                                    New Password{" "}
+                                                    <span className="mandatory">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <div className="password-field">
+                                                    <OutlinedInput
+                                                        fullWidth
+                                                        id="outlined-adornment-password"
+                                                        type={
+                                                            values.showNewPassword
+                                                                ? "text"
+                                                                : "password"
+                                                        }
+                                                        // value={values.password}
+                                                        // onChange={handleChange('password')}
+                                                        placeholder="Enter new password"
+                                                        className={`input-field ${
+                                                            errors.password &&
+                                                            "input-error"
+                                                        }`}
+                                                        inputProps={{
+                                                            maxLength: 15,
+                                                        }}
+                                                        endAdornment={
+                                                            <InputAdornment position="end">
+                                                                <IconButton
+                                                                    aria-label="toggle password visibility"
+                                                                    onClick={
+                                                                        handleClickShowNewPassword
+                                                                    }
+                                                                    onMouseDown={
+                                                                        handleMouseDownPassword
+                                                                    }
+                                                                    edge="end"
+                                                                    className="eye-btn"
+                                                                >
+                                                                    {!values.showNewPassword ? (
+                                                                        <img
+                                                                            src={
+                                                                                process
+                                                                                    .env
+                                                                                    .PUBLIC_URL +
+                                                                                "/images/non-visibleicon.svg"
+                                                                            }
+                                                                            alt=""
+                                                                            className="img-fluid"
+                                                                        />
+                                                                    ) : (
+                                                                        <img
+                                                                            src={
+                                                                                process
+                                                                                    .env
+                                                                                    .PUBLIC_URL +
+                                                                                "/images/visibleicon.svg"
+                                                                            }
+                                                                            alt=""
+                                                                            className="img-fluid"
+                                                                        />
+                                                                    )}
+                                                                </IconButton>
+                                                            </InputAdornment>
+                                                        }
+                                                        {...register(
+                                                            "password"
+                                                        )}
+                                                        error={
+                                                            errors.password
+                                                                ? true
+                                                                : false
+                                                        }
+                                                    />
+                                                    <p
+                                                        className={`password-error`}
+                                                    >
+                                                        {errors?.password ? (
+                                                            errors.password
+                                                                .message
+                                                        ) : (
+                                                            <span>&nbsp;</span>
+                                                        )}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <label for="password">
-                                                Confirm Password{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
-                                            </label>
-                                            <div className="password-field">
-                                                <OutlinedInput
-                                                    fullWidth
-                                                    id="outlined-adornment-password"
-                                                    type={
-                                                        values.showConfirmPassword
-                                                            ? "text"
-                                                            : "password"
-                                                    }
-                                                    // value={values.confirmPassword}
-                                                    // onChange={handleChange('confirmPassword')}
-                                                    placeholder="Enter confirm password"
-                                                    className={`input-field ${
-                                                        errors.confirmPassword &&
-                                                        "input-error"
-                                                    }`}
-                                                    inputProps={{
-                                                        maxLength: 15,
-                                                    }}
-                                                    endAdornment={
-                                                        <InputAdornment position="end">
-                                                            <IconButton
-                                                                aria-label="toggle password visibility"
-                                                                onClick={
-                                                                    handleClickShowConfirmPassword
-                                                                }
-                                                                onMouseDown={
-                                                                    handleMouseDownPassword
-                                                                }
-                                                                edge="end"
-                                                                className="eye-btn"
-                                                            >
-                                                                {!values.showConfirmPassword ? (
-                                                                    <img
-                                                                        src={
-                                                                            process
-                                                                                .env
-                                                                                .PUBLIC_URL +
-                                                                            "/images/non-visibleicon.svg"
-                                                                        }
-                                                                        alt=""
-                                                                        className="img-fluid"
-                                                                    />
-                                                                ) : (
-                                                                    <img
-                                                                        src={
-                                                                            process
-                                                                                .env
-                                                                                .PUBLIC_URL +
-                                                                            "/images/visibleicon.svg"
-                                                                        }
-                                                                        alt=""
-                                                                        className="img-fluid"
-                                                                    />
-                                                                )}
-                                                            </IconButton>
-                                                        </InputAdornment>
-                                                    }
-                                                    {...register(
-                                                        "confirmPassword"
-                                                    )}
-                                                    error={
-                                                        errors.confirmPassword
-                                                            ? true
-                                                            : false
-                                                    }
-                                                />
-                                                <p className={`password-error`}>
-                                                    {errors?.confirmPassword ? (
-                                                        errors.confirmPassword
-                                                            .message
-                                                    ) : (
-                                                        <span>&nbsp;</span>
-                                                    )}
-                                                </p>
+                                            <div className="form-group">
+                                                <label for="password">
+                                                    Confirm Password{" "}
+                                                    <span className="mandatory">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <div className="password-field">
+                                                    <OutlinedInput
+                                                        fullWidth
+                                                        id="outlined-adornment-password"
+                                                        type={
+                                                            values.showConfirmPassword
+                                                                ? "text"
+                                                                : "password"
+                                                        }
+                                                        // value={values.confirmPassword}
+                                                        // onChange={handleChange('confirmPassword')}
+                                                        placeholder="Enter confirm password"
+                                                        className={`input-field ${
+                                                            errors.confirmPassword &&
+                                                            "input-error"
+                                                        }`}
+                                                        inputProps={{
+                                                            maxLength: 15,
+                                                        }}
+                                                        endAdornment={
+                                                            <InputAdornment position="end">
+                                                                <IconButton
+                                                                    aria-label="toggle password visibility"
+                                                                    onClick={
+                                                                        handleClickShowConfirmPassword
+                                                                    }
+                                                                    onMouseDown={
+                                                                        handleMouseDownPassword
+                                                                    }
+                                                                    edge="end"
+                                                                    className="eye-btn"
+                                                                >
+                                                                    {!values.showConfirmPassword ? (
+                                                                        <img
+                                                                            src={
+                                                                                process
+                                                                                    .env
+                                                                                    .PUBLIC_URL +
+                                                                                "/images/non-visibleicon.svg"
+                                                                            }
+                                                                            alt=""
+                                                                            className="img-fluid"
+                                                                        />
+                                                                    ) : (
+                                                                        <img
+                                                                            src={
+                                                                                process
+                                                                                    .env
+                                                                                    .PUBLIC_URL +
+                                                                                "/images/visibleicon.svg"
+                                                                            }
+                                                                            alt=""
+                                                                            className="img-fluid"
+                                                                        />
+                                                                    )}
+                                                                </IconButton>
+                                                            </InputAdornment>
+                                                        }
+                                                        {...register(
+                                                            "confirmPassword"
+                                                        )}
+                                                        error={
+                                                            errors.confirmPassword
+                                                                ? true
+                                                                : false
+                                                        }
+                                                    />
+                                                    <p
+                                                        className={`password-error`}
+                                                    >
+                                                        {errors?.confirmPassword ? (
+                                                            errors
+                                                                .confirmPassword
+                                                                .message
+                                                        ) : (
+                                                            <span>&nbsp;</span>
+                                                        )}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="form-btn flex-between">
-                                            <button className="primary-button">
-                                                Submit
-                                            </button>
-                                            {/* <div className="tertiary-btn-blk mr-10">Back to login</div> */}
-                                        </div>
-                                    </form>
-                                </div>
+                                            <div className="form-btn flex-between">
+                                                <button className="primary-button">
+                                                    Submit
+                                                </button>
+                                                {/* <div className="tertiary-btn-blk mr-10">Back to login</div> */}
+                                            </div>
+                                        </form>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
