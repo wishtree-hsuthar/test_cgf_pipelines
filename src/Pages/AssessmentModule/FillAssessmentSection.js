@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import DialogBox from "../../components/DialogBox";
 import { Logger } from "../../Logger/Logger";
-import Charts from "./Charts/Charts";
 const FillAssessmentQuestion = React.lazy(() =>
   import("./FillAssessmentQuestions")
 );
@@ -27,9 +26,6 @@ const getTransformedRows = (rows) => {
 
 function FillAssesmentSection({
   section,
-  questionnaireTitle,
-  graphLevelBreakdown,
-  graphResult,
   setAssessmentQuestionnaire,
   assessmentQuestionnaire,
   errorQuestion,
@@ -181,23 +177,7 @@ function FillAssesmentSection({
           </div>
         )}
       </div>
-      {((questionnaireTitle ===
-        "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)" &&
-        section?.sectionTitle ===
-          "HRDD SYSTEMS AT THE GLOBAL LEVEL (ALL OPERATIONS)") ||
-        (questionnaireTitle ===
-          "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)" &&
-          section?.sectionTitle ===
-            "HRDD SYSTEMS AT THE GLOBAL LEVEL FOR SELECTED OPERATION") ||
-        (questionnaireTitle === "COUNTRY- OPERATION HRDD REQUIREMENTS" &&
-          section?.sectionTitle ===
-            "HRDD SYSTEMS AT THE COUNTRY LEVEL FOR SELECTED OPERATION")) && (
-        <Charts
-          questionnaireTitle={questionnaireTitle}  
-          graphResult={graphResult}
-          graphLevelBreakdown={graphLevelBreakdown}
-        />
-      )}
+     
     </>
   );
 }

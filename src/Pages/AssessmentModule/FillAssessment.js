@@ -25,6 +25,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { Logger } from "../../Logger/Logger";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import Loader from "../../utils/Loader";
+import Charts from "./Charts/Charts";
 const FillAssesmentSection = React.lazy(() =>
   import("./FillAssessmentSection")
 );
@@ -215,7 +216,9 @@ function FillAssessment() {
         isMounted &&
           response?.data?.graphResult &&
           setGraphResult({ ...response?.data?.graphResult });
-        isMounted && response?.data?.graphLevelBreakdown && setGraphLevelBreakdown({...response?.data?.graphLevelBreakdown})
+        isMounted &&
+          response?.data?.graphLevelBreakdown &&
+          setGraphLevelBreakdown({ ...response?.data?.graphLevelBreakdown });
         fetchQuestionnaire(response?.data?.questionnaireId);
         setReOpenAssessmentDialogBox(
           response?.data?.isSubmitted && !params["*"].includes("view")
@@ -907,6 +910,7 @@ function FillAssessment() {
     }
   };
   addTableAssessmentValues();
+  console.log("value 1:- ", value);
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
       <DialogBox
@@ -1181,6 +1185,19 @@ function FillAssessment() {
                         />
                       </Tooltip>
                     ))}
+                    {questionnaire?.title &&
+                      (questionnaire?.title ===
+                        "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)" ||
+                        questionnaire?.title ===
+                          "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)" ||
+                        questionnaire?.title ===
+                          "COUNTRY- OPERATION HRDD REQUIREMENTS") && (
+                        <Tab
+                          className="section-tab-item"
+                          label="Results"
+                          {...a11yProps(questionnaire?.sections?.length)}
+                        />
+                      )}
                   </Tabs>
                 </Box>
               </div>
@@ -1193,8 +1210,6 @@ function FillAssessment() {
                   <TabPanel value={value} index={index} key={section?.uuid}>
                     <FillAssesmentSection
                       assessmentQuestionnaire={assessmentQuestionnaire}
-                      graphLevelBreakdown={graphLevelBreakdown}
-                      graphResult={graphResult}
                       disableFillAssessment={disableFillAssessment}
                       setAssessmentQuestionnaire={setAssessmentQuestionnaire}
                       section={section}
@@ -1210,6 +1225,27 @@ function FillAssessment() {
                     />
                   </TabPanel>
                 ))}
+                {console.log("questionnaireTitle", questionnaire?.title)}
+
+                {questionnaire?.title &&
+                  (questionnaire?.title ===
+                    "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)" ||
+                    questionnaire?.title ===
+                      "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)" ||
+                    questionnaire?.title ===
+                      "COUNTRY- OPERATION HRDD REQUIREMENTS") && (
+                    <TabPanel
+                      value={value}
+                      index={questionnaire?.sections?.length}
+                    >
+                      {console.log("value", value)}
+                      <Charts
+                        questionnaireTitle={questionnaire?.title}
+                        graphResult={graphResult}
+                        graphLevelBreakdown={graphLevelBreakdown}
+                      />
+                    </TabPanel>
+                  )}
               </div>
             )}
           </div>
