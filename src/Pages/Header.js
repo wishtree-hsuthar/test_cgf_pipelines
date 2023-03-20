@@ -130,39 +130,42 @@ const Header = () => {
         window.addEventListener("resize", compareSize);
     }, []);
 
-    // remove resize listener again on "componentWillUnmount"
-    useEffect(
-        () => () => {
-            window.removeEventListener("resize", compareSize);
-        },
-        []
-    );
-    const replaceSpecialCharcters = (tempReportIssueLink) => {
-        tempReportIssueLink = tempReportIssueLink.replaceAll("?", "%3F");
-        tempReportIssueLink = tempReportIssueLink.replaceAll("&", "%26");
-        // tempReportIssueLink = tempReportIssueLink.replaceAll("/", "%2F");
-        tempReportIssueLink = tempReportIssueLink.replaceAll("<", "%3C");
-        tempReportIssueLink = tempReportIssueLink.replaceAll(">", "%3E");
-        tempReportIssueLink = tempReportIssueLink.replaceAll(" ", "%20");
-        return tempReportIssueLink;
-    };
-    const getReportIssueLink = async () => {
-        try {
-            const response = await axios.get(
-                MASTER_LINK + "/reportIssueOnZoho"
-            );
-            Logger.debug("response:- ", response.data);
-            REPORT_ISSUE_LINK = response?.data;
-            REPORT_ISSUE_LINK = replaceSpecialCharcters(REPORT_ISSUE_LINK);
-            console.log("REPORT AN ISSUE", REPORT_ISSUE_LINK);
-        } catch (error) {
-            Logger.debug("Error:- ", error);
-        }
-    };
-    useEffect(() => {
-        REPORT_ISSUE_LINK?.length === 0 && getReportIssueLink();
-    }, []);
-    Logger.debug("REPORT ISSUE LINK:- ", REPORT_ISSUE_LINK);
+  // remove resize listener again on "componentWillUnmount"
+  useEffect(
+    () => () => {
+      window.removeEventListener("resize", compareSize);
+    },
+    []
+  );
+  const replaceSpecialCharcters = (tempReportIssueLink) => {
+    let tempLink = tempReportIssueLink;
+    // console.log("link after slice:- ", tempLink);
+
+    tempLink = tempLink.replaceAll("?", "%3F");
+    tempLink = tempLink.replaceAll("&", "%26");
+    // tempLink = tempLink.replaceAll("/", "%2F");
+    tempLink = tempLink.replaceAll("<", "%3C");
+    tempLink = tempLink.replaceAll(">", "%3E");
+    tempLink = tempLink.replaceAll(" ", "%20");
+    // tempLink = tempLink.replaceAll("-", "%2D");
+
+    return tempLink;
+  };
+  const getReportIssueLink = async () => {
+    try {
+      const response = await axios.get(MASTER_LINK + "/reportIssueOnZoho");
+      Logger.debug("response:- ", response.data);
+
+      REPORT_ISSUE_LINK = replaceSpecialCharcters(response?.data);
+    //   console.log("REPORT AN ISSUE", REPORT_ISSUE_LINK);
+    } catch (error) {
+      Logger.debug("Error:- ", error);
+    }
+  };
+  useEffect(() => {
+    REPORT_ISSUE_LINK?.length === 0 && getReportIssueLink();
+  }, []);
+  Logger.debug("REPORT ISSUE LINK:- ", REPORT_ISSUE_LINK);
 
     // Define state and function to update the value
     const [hoverStatus, setHover] = useState(false);
