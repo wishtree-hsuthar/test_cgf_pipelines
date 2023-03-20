@@ -25,6 +25,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { Logger } from "../../Logger/Logger";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import Loader from "../../utils/Loader";
+import Charts from "./Charts/Charts";
 const FillAssesmentSection = React.lazy(() =>
     import("./FillAssessmentSection")
 );
@@ -106,6 +107,8 @@ function FillAssessment() {
     const [assessment, setAssessments] = useState({});
     const [questionnaire, setQuestionnaire] = useState({});
     const [assessmentQuestionnaire, setAssessmentQuestionnaire] = useState({});
+    const [graphLevelBreakdown, setGraphLevelBreakdown] = useState({});
+    const [graphResult, setGraphResult] = useState({});
     const [errorQuestion, setErrorQuestion] = useState("");
     const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
     const [editMode, setEditMode] = useState(false);
@@ -255,6 +258,14 @@ function FillAssessment() {
                     setAssessmentQuestionnaire({
                         ...response.data.answers,
                     });
+                isMounted &&
+                    response?.data?.graphResult &&
+                    setGraphResult({ ...response?.data?.graphResult });
+                isMounted &&
+                    response?.data?.graphLevelBreakdown &&
+                    setGraphLevelBreakdown({
+                        ...response?.data?.graphLevelBreakdown,
+                    });
                 fetchQuestionnaire(response?.data?.questionnaireId);
                 setReOpenAssessmentDialogBox(
                     response?.data?.isSubmitted && !params["*"].includes("view")
@@ -281,7 +292,8 @@ function FillAssessment() {
                     setTimeout(() => {
                         navigate("/login");
                     }, 3000);
-                } else if (
+                }
+                if (
                     error?.response?.status === 400 &&
                     error?.response?.data?.message === "Invalid assessment"
                 ) {
@@ -298,33 +310,6 @@ function FillAssessment() {
                     setTimeout(() => {
                         navigate("/assessment-list");
                     }, 3000);
-                } else if (error?.response?.status === 403) {
-                    isMounted &&
-                        setToasterDetails(
-                            {
-                                titleMessage: "Oops!",
-                                descriptionMessage: error?.response?.data
-                                    ?.message
-                                    ? error?.response?.data?.message
-                                    : "Something went wrong",
-                                messageType: "error",
-                            },
-                            () => myRef.current()
-                        );
-                    setTimeout(() => {
-                        navigate("/home");
-                    }, 3000);
-                } else {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message
-                                ? error?.response?.data?.message
-                                : "Something went wrong",
-                            messageType: "error",
-                        },
-                        () => myRef.current()
-                    );
                 }
                 setIsFillAssessmentLoading(false);
                 Logger.debug("error from fetch assessment", error);
@@ -390,6 +375,7 @@ function FillAssessment() {
                     navigate("/assessment-list");
                 }, 3000);
             }
+        } finally {
         }
     };
 
@@ -1061,6 +1047,7 @@ function FillAssessment() {
         }
     };
     addTableAssessmentValues();
+    console.log("value 1:- ", value);
     return (
         <div
             className="page-wrapper"
@@ -1390,6 +1377,22 @@ function FillAssessment() {
                                                 </Tooltip>
                                             )
                                         )}
+                                        {questionnaire?.title &&
+                                            (questionnaire?.title ===
+                                                "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)" ||
+                                                questionnaire?.title ===
+                                                    "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)" ||
+                                                questionnaire?.title ===
+                                                    "COUNTRY- OPERATION HRDD REQUIREMENTS") && (
+                                                <Tab
+                                                    className="section-tab-item"
+                                                    label="Results"
+                                                    {...a11yProps(
+                                                        questionnaire?.sections
+                                                            ?.length
+                                                    )}
+                                                />
+                                            )}
                                     </Tabs>
                                 </Box>
                             </div>
@@ -1416,6 +1419,9 @@ function FillAssessment() {
                                                     setAssessmentQuestionnaire
                                                 }
                                                 section={section}
+                                                questionnaireTitle={
+                                                    questionnaire?.title
+                                                }
                                                 errorQuestion={errorQuestion}
                                                 setErrorQuestion={
                                                     setErrorQuestion
@@ -1438,6 +1444,36 @@ function FillAssessment() {
                                         </TabPanel>
                                     )
                                 )}
+                                {console.log(
+                                    "questionnaireTitle",
+                                    questionnaire?.title
+                                )}
+
+                                {questionnaire?.title &&
+                                    (questionnaire?.title ===
+                                        "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)" ||
+                                        questionnaire?.title ===
+                                            "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)" ||
+                                        questionnaire?.title ===
+                                            "COUNTRY- OPERATION HRDD REQUIREMENTS") && (
+                                        <TabPanel
+                                            value={value}
+                                            index={
+                                                questionnaire?.sections?.length
+                                            }
+                                        >
+                                            {console.log("value", value)}
+                                            <Charts
+                                                questionnaireTitle={
+                                                    questionnaire?.title
+                                                }
+                                                graphResult={graphResult}
+                                                graphLevelBreakdown={
+                                                    graphLevelBreakdown
+                                                }
+                                            />
+                                        </TabPanel>
+                                    )}
                             </div>
                         )}
                     </div>

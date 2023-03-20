@@ -137,7 +137,15 @@ const Header = () => {
         },
         []
     );
-
+    const replaceSpecialCharcters = (tempReportIssueLink) => {
+        tempReportIssueLink = tempReportIssueLink.replaceAll("?", "%3F");
+        tempReportIssueLink = tempReportIssueLink.replaceAll("&", "%26");
+        // tempReportIssueLink = tempReportIssueLink.replaceAll("/", "%2F");
+        tempReportIssueLink = tempReportIssueLink.replaceAll("<", "%3C");
+        tempReportIssueLink = tempReportIssueLink.replaceAll(">", "%3E");
+        tempReportIssueLink = tempReportIssueLink.replaceAll(" ", "%20");
+        return tempReportIssueLink;
+    };
     const getReportIssueLink = async () => {
         try {
             const response = await axios.get(
@@ -145,6 +153,8 @@ const Header = () => {
             );
             Logger.debug("response:- ", response.data);
             REPORT_ISSUE_LINK = response?.data;
+            REPORT_ISSUE_LINK = replaceSpecialCharcters(REPORT_ISSUE_LINK);
+            console.log("REPORT AN ISSUE", REPORT_ISSUE_LINK);
         } catch (error) {
             Logger.debug("Error:- ", error);
         }
