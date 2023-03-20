@@ -42,7 +42,7 @@ export const downloadFunction = async (
             setToasterDetails(
                 {
                     titleMessage: `Success!`,
-                    descriptionMessage: response.data.message,
+                    descriptionMessage: "Downloaded Successfully!",
 
                     messageType: `success`,
                 },
@@ -80,6 +80,7 @@ export const downloadFunction = async (
                 navigate("/home");
             }, 3000);
         } else {
+            console.log("Error from delete else block");
             setToasterDetails(
                 {
                     titleMessage: `Oops!`,
