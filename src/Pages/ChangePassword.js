@@ -223,7 +223,7 @@ const ChangePassword = () => {
                                                                     "/images/non-visibleicon.svg"
                                                                 }
                                                                 alt=""
-                                                                class="img-fluid"
+                                                                className="img-fluid"
                                                             />
                                                         ) : (
                                                             <img
@@ -233,7 +233,7 @@ const ChangePassword = () => {
                                                                     "/images/visibleicon.svg"
                                                                 }
                                                                 alt=""
-                                                                class="img-fluid"
+                                                                className="img-fluid"
                                                             />
                                                         )}
                                                     </IconButton>
@@ -264,10 +264,10 @@ const ChangePassword = () => {
                             </div>
                         </div>
                         <div className="card-form-field">
-                            <div class="form-group">
-                                <label for="password">
+                            <div className="form-group">
+                                <label htmlFor="password">
                                     New Password{" "}
-                                    <span class="mandatory">*</span>
+                                    <span className="mandatory">*</span>
                                 </label>
                                 <div className="password-field">
                                     <OutlinedInput
@@ -308,7 +308,7 @@ const ChangePassword = () => {
                                                                 "/images/non-visibleicon.svg"
                                                             }
                                                             alt=""
-                                                            class="img-fluid"
+                                                            className="img-fluid"
                                                         />
                                                     ) : (
                                                         <img
@@ -318,7 +318,7 @@ const ChangePassword = () => {
                                                                 "/images/visibleicon.svg"
                                                             }
                                                             alt=""
-                                                            class="img-fluid"
+                                                            className="img-fluid"
                                                         />
                                                     )}
                                                 </IconButton>
@@ -344,10 +344,10 @@ const ChangePassword = () => {
                             </div>
                         </div>
                         <div className="card-form-field">
-                            <div class="form-group">
-                                <label for="password">
+                            <div className="form-group">
+                                <label htmlFor="password">
                                     Confirm Password{" "}
-                                    <span class="mandatory">*</span>
+                                    <span className="mandatory">*</span>
                                 </label>
                                 <div className="password-field">
                                     <OutlinedInput
@@ -389,7 +389,7 @@ const ChangePassword = () => {
                                                                 "/images/non-visibleicon.svg"
                                                             }
                                                             alt=""
-                                                            class="img-fluid"
+                                                            className="img-fluid"
                                                         />
                                                     ) : (
                                                         <img
@@ -399,7 +399,7 @@ const ChangePassword = () => {
                                                                 "/images/visibleicon.svg"
                                                             }
                                                             alt=""
-                                                            class="img-fluid"
+                                                            className="img-fluid"
                                                         />
                                                     )}
                                                 </IconButton>
