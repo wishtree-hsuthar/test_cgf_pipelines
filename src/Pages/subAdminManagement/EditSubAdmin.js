@@ -439,7 +439,7 @@ const EditSubAdmin = () => {
                                 <div className="card-blk flex-between">
                                     <div className="card-form-field">
                                         <div className="form-group">
-                                            <label for="subAdminName">
+                                            <label htmlFor="subAdminName">
                                                 CGF Admin Name{" "}
                                                 <span className="mandatory">
                                                     *
@@ -490,7 +490,7 @@ const EditSubAdmin = () => {
                                     </div>
                                     <div className="card-form-field">
                                         <div className="form-group">
-                                            <label for="email">
+                                            <label htmlFor="email">
                                                 Email{" "}
                                                 <span className="mandatory">
                                                     *
@@ -736,7 +736,7 @@ const EditSubAdmin = () => {
                                     </div>
                                     <div className="card-form-field">
                                         <div className="form-group">
-                                            <label for="role">
+                                            <label htmlFor="role">
                                                 Role{" "}
                                                 <span className="mandatory">
                                                     *

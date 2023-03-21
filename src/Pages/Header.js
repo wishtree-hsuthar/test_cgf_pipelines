@@ -155,10 +155,15 @@ const Header = () => {
     try {
       const response = await axios.get(MASTER_LINK + "/reportIssueOnZoho");
       Logger.debug("response:- ", response.data);
+      
+      const url =  new URL(response.data)
 
-      REPORT_ISSUE_LINK = replaceSpecialCharcters(response?.data);
+      REPORT_ISSUE_LINK = url;
+      console.log("url:- ",url)
+    //   REPORT_ISSUE_LINK = replaceSpecialCharcters(response?.data);
     //   console.log("REPORT AN ISSUE", REPORT_ISSUE_LINK);
     } catch (error) {
+        console.log("error",error)
       Logger.debug("Error:- ", error);
     }
   };
@@ -166,7 +171,7 @@ const Header = () => {
     REPORT_ISSUE_LINK?.length === 0 && getReportIssueLink();
   }, []);
   Logger.debug("REPORT ISSUE LINK:- ", REPORT_ISSUE_LINK);
-
+  console.log("LINK",REPORT_ISSUE_LINK)
     // Define state and function to update the value
     const [hoverStatus, setHover] = useState(false);
     const [hoverNameStatus, setNameHover] = useState(false);

@@ -448,7 +448,7 @@ const TableQuestions = ({
                                             </div>
                                         )}
                                     </div>
-                                    <div class="que-card-icon-sect">
+                                    <div className="que-card-icon-sect">
                                         <div className="required-toggle-btnblk">
                                             <FormGroup>
                                                 <Stack
