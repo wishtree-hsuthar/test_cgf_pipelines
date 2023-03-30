@@ -18,6 +18,7 @@ export const downloadFunction = async (
                 responseType: "blob",
             }
         );
+        
         Logger.debug(`resposne from ${filename}  assessment `, response);
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement(`a`);

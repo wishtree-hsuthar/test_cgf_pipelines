@@ -162,6 +162,7 @@ const TableLayoutCellComponent = ({
         for (const file of newlyAddedFiles) {
             formData.append("files[]", file);
         }
+        formData.append("dummy","dummy Content")
         return formData;
     };
     const printFormData = (formData) => {
