@@ -34,6 +34,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import CommonTableHead from "./CommonTableHead";
 import Loader from "../../utils/Loader";
+import { catchError } from "../../utils/CatchError";
 
 const tableHead = [
     {
@@ -114,47 +115,48 @@ const ViewRole = () => {
         } catch (error) {
             Logger.debug("error on delete", error);
             if (error?.code === "ERR_CANCELED") return;
-            if (error?.response?.status == 401) {
-                setToasterDetails4(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef4.current()
-                );
-                setTimeout(() => {
-                    navigate4("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetails4(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef4.current()
-                );
-                setTimeout(() => {
-                    navigate4("/home");
-                }, 3000);
-            } else {
-                setToasterDetails4(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.message &&
-                            typeof error.response.data.message === "string"
-                                ? error.response.data.message
-                                : "Something went wrong.",
-                        messageType: "error",
-                    },
-                    () => myRef4.current()
-                );
-            }
+            catchError(error, setToasterDetails4, myRef4, navigate4);
+            // if (error?.response?.status == 401) {
+            //     setToasterDetails4(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef4.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate4("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails4(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef4.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate4("/home");
+            //     }, 3000);
+            // } else {
+            //     setToasterDetails4(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 error?.response?.data?.message &&
+            //                 typeof error.response.data.message === "string"
+            //                     ? error.response.data.message
+            //                     : "Something went wrong.",
+            //             messageType: "error",
+            //         },
+            //         () => myRef4.current()
+            //     );
+            // }
         } finally {
             setOpenDialog(false);
         }
@@ -301,50 +303,51 @@ const ViewRole = () => {
             setIsLoading3(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            if (error?.response?.status == 401) {
-                setToasterDetails4(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef4.current()
-                );
-                setTimeout(() => {
-                    navigate4("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetails4(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef4.current()
-                );
-                setTimeout(() => {
-                    navigate4("/home");
-                }, 3000);
-            } else {
-                setIsLoading3(false);
+            catchError(error, setToasterDetails4, myRef4, navigate4);
+            // if (error?.response?.status == 401) {
+            //     setToasterDetails4(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef4.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate4("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails4(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef4.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate4("/home");
+            //     }, 3000);
+            // } else {
+            //     setIsLoading3(false);
 
-                isMounted &&
-                    setToasterDetails4(
-                        {
-                            titleMessage: "Error",
-                            descriptionMessage:
-                                error?.response?.data?.message &&
-                                typeof error.response.data.message === "string"
-                                    ? error.response.data.message
-                                    : "Something went wrong.",
-                            messageType: "error",
-                        },
-                        () => myRef4.current()
-                    );
-            }
+            //     isMounted &&
+            //         setToasterDetails4(
+            //             {
+            //                 titleMessage: "Error",
+            //                 descriptionMessage:
+            //                     error?.response?.data?.message &&
+            //                     typeof error.response.data.message === "string"
+            //                         ? error.response.data.message
+            //                         : "Something went wrong.",
+            //                 messageType: "error",
+            //             },
+            //             () => myRef4.current()
+            //         );
+            // }
         }
     };
     const getUsersByRole = async () => {

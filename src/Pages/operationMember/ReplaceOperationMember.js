@@ -14,6 +14,7 @@ import {
 import Toaster from "../../components/Toaster";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { Logger } from "../../Logger/Logger";
+import { catchError } from "../../utils/CatchError";
 const replaceOperationMemberTableHead = [
     {
         id: "",
@@ -190,51 +191,57 @@ const ReplaceOperationMember = () => {
             setOperationMemberReplaceOP(response.data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-
-            if (error?.response?.status == 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else if (error?.response?.status == 500) {
-                Logger.debug(
-                    "Error status 500 while fetchiing subadmin from replace sub-admin"
-                );
-                navigate("/sub-admins");
-            } else if (error?.response?.status === 403) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            } else {
-                setToasterDetails(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-            }
+            catchError(
+                error,
+                setToasterDetails,
+                myRef,
+                navigate,
+                "/users/operation-members"
+            );
+            // if (error?.response?.status == 401) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status == 500) {
+            //     Logger.debug(
+            //         "Error status 500 while fetchiing subadmin from replace sub-admin"
+            //     );
+            //     navigate("/sub-admins");
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // } else {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            // }
         }
     };
     useEffect(() => {
@@ -306,20 +313,27 @@ const ReplaceOperationMember = () => {
             }
         } catch (error) {
             Logger.debug("error from replace user");
-            if (error.response.status == 400) {
-                setErrorToaster(error);
-                setOpen(false);
-            }
-            if (error.response.status == 401) {
-                setErrorToaster(error);
-                setOpen(false);
-            }
-            if (error?.response?.status == 500) {
-                Logger.debug(
-                    "Error status 500 while fetchiing subadmin from replace sub-admin"
-                );
-                navigate("/sub-admins");
-            }
+            // if (error.response.status == 400) {
+            //     setErrorToaster(error);
+            //     setOpen(false);
+            // }
+            // if (error.response.status == 401) {
+            //     setErrorToaster(error);
+            //     setOpen(false);
+            // }
+            // if (error?.response?.status == 500) {
+            //     Logger.debug(
+            //         "Error status 500 while fetchiing subadmin from replace sub-admin"
+            //     );
+            //     navigate("/sub-admins");
+            // }
+            catchError(
+                error,
+                setToasterDetails,
+                myRef,
+                navigate,
+                "/users/operation-members"
+            );
         }
     };
     const [searchTextReplaceOP, setSearchTextReplaceOP] = useState("");

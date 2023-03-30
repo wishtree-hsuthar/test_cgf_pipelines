@@ -26,6 +26,7 @@ import useCallbackState from "../../utils/useCallBackState";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import CommonTableHead from "./CommonTableHead";
+import { catchError } from "../../utils/CatchError";
 
 const AddRole = () => {
     useDocumentTitle("Add Role");
@@ -240,36 +241,37 @@ const AddRole = () => {
             createModules(data);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
-            if (error?.response?.status == 401) {
-                setToasterDetails1(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate1("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetails1(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate1("/home");
-                }, 3000);
-            } else {
-                setErrorToaster(error);
-            }
+            catchError(error, setToasterDetails1, myRef, navigate1);
+            // if (error?.response?.status == 401) {
+            //     setToasterDetails1(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate1("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails1(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate1("/home");
+            //     }, 3000);
+            // } else {
+            //     setErrorToaster(error);
+            // }
         }
     };
 

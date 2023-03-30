@@ -29,6 +29,7 @@ import DialogBox from "../../components/DialogBox";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
+import { catchError } from "../../utils/CatchError";
 const helperTextForAssessment = {
     title: {
         required: "Enter the assessment title",
@@ -181,46 +182,47 @@ function EditAssessment() {
                 fetchMember(responseEditMember.data.assignedMember?._id);
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
-                if (error?.response?.status === 401) {
-                    isMounted &&
-                        setToasterDetails(
-                            {
-                                titleMessage: "Oops!",
-                                descriptionMessage:
-                                    "Session Timeout: Please login again",
-                                messageType: "error",
-                            },
-                            () => toasterRef.current()
-                        );
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
-                } else if (error?.response?.status === 403) {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message
-                                ? error?.response?.data?.message
-                                : "Something went wrong",
-                            messageType: "error",
-                        },
-                        () => toasterRef.current()
-                    );
-                    setTimeout(() => {
-                        navigate("/home");
-                    }, 3000);
-                } else {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message
-                                ? error?.response?.data?.message
-                                : "Something went wrong",
-                            messageType: "error",
-                        },
-                        () => toasterRef.current()
-                    );
-                }
+                catchError(error, setToasterDetails, toasterRef, navigate);
+                // if (error?.response?.status === 401) {
+                //     isMounted &&
+                //         setToasterDetails(
+                //             {
+                //                 titleMessage: "Oops!",
+                //                 descriptionMessage:
+                //                     "Session Timeout: Please login again",
+                //                 messageType: "error",
+                //             },
+                //             () => toasterRef.current()
+                //         );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // } else if (error?.response?.status === 403) {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: error?.response?.data?.message
+                //                 ? error?.response?.data?.message
+                //                 : "Something went wrong",
+                //             messageType: "error",
+                //         },
+                //         () => toasterRef.current()
+                //     );
+                //     setTimeout(() => {
+                //         navigate("/home");
+                //     }, 3000);
+                // } else {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: error?.response?.data?.message
+                //                 ? error?.response?.data?.message
+                //                 : "Something went wrong",
+                //             messageType: "error",
+                //         },
+                //         () => toasterRef.current()
+                //     );
+                // }
                 setIsEditAssessmentLoading(false);
                 Logger.debug("Error from fetch assessment", error);
             }
@@ -355,46 +357,46 @@ function EditAssessment() {
             Logger.debug("error from update assessment url", error);
             setDisableEditAssessmentButton(false);
             setIsEditAssessmentLoading(false);
-
-            if (error.responseEditMember.status === 401) {
-                Logger.debug("Unauthorized user access");
-                // Add error toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            error?.responseEditMember?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                navigate("/login");
-            }
-            if (error.responseEditMember.status === 400) {
-                Logger.debug("something went wrong");
-                // Add error toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            error?.responseEditMember?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
-            if (error.responseEditMember.status === 403) {
-                Logger.debug("something went wrong");
-                // Add error toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
+            catchError(error, setToasterDetails, toasterRef, navigate);
+            // if (error.responseEditMember.status === 401) {
+            //     Logger.debug("Unauthorized user access");
+            //     // Add error toaster here
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 error?.responseEditMember?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     navigate("/login");
+            // }
+            // if (error.responseEditMember.status === 400) {
+            //     Logger.debug("something went wrong");
+            //     // Add error toaster here
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 error?.responseEditMember?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            // }
+            // if (error.responseEditMember.status === 403) {
+            //     Logger.debug("something went wrong");
+            //     // Add error toaster here
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            // }
         }
     };
 
