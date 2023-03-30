@@ -27,6 +27,7 @@ import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import CommonTableHead from "./CommonTableHead";
 import Loader from "../../utils/Loader";
+import { catchError } from "../../utils/CatchError";
 
 const titleMessage = "";
 const descriptionMessage = "";
@@ -148,36 +149,37 @@ const EditRole = () => {
             }
         } catch (error) {
             Logger.debug("error", error);
-            if (error?.response?.status == 401) {
-                setToasterDetails2(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef2.current()
-                );
-                setTimeout(() => {
-                    navigate2("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetails2(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef2.current()
-                );
-                setTimeout(() => {
-                    navigate2("/home");
-                }, 3000);
-            } else {
-                setErrorToaster(error);
-            }
+            catchError(error, setToasterDetails2, myRef2, navigate2);
+            // if (error?.response?.status == 401) {
+            //     setToasterDetails2(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef2.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate2("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails2(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef2.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate2("/home");
+            //     }, 3000);
+            // } else {
+            //     setErrorToaster(error);
+            // }
         }
     };
     const onClickCancelHandler2 = () => {
@@ -236,37 +238,38 @@ const EditRole = () => {
         } catch (error) {
             Logger.debug("Error", error);
             if (error?.code === "ERR_CANCELED") return;
-            if (error?.response?.status === 401) {
-                setToasterDetails2(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef2.current()
-                );
-                setTimeout(() => {
-                    navigate2("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetails2(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef2.current()
-                );
-                setTimeout(() => {
-                    navigate2("/home");
-                }, 3000);
-            } else {
-                setIsLoading1(false);
-                setErrorToaster(error);
-            }
+            setIsLoading1(false);
+            catchError(error, setToasterDetails2, myRef2, navigate2);
+            // if (error?.response?.status === 401) {
+            //     setToasterDetails2(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef2.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate2("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails2(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef2.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate2("/home");
+            //     }, 3000);
+            // } else {
+            //     setErrorToaster(error);
+            // }
         }
     };
     useEffect(() => {

@@ -23,6 +23,7 @@ import {
 } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
+import { catchError } from "../../utils/CatchError";
 
 const helperTextForAssessment = {
     title: {
@@ -139,36 +140,37 @@ const AddAssessment = () => {
                 );
             } catch (error) {
                 Logger.debug("Error from fetch questionnaires", error);
-                if (error?.response?.status === 401) {
-                    Logger.debug("Unauthorized user access");
-                    // Add error toaster here
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage:
-                                "Session Timeout: Please login again",
-                            messageType: "error",
-                        },
-                        () => toasterRef.current()
-                    );
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
-                } else if (error.response.status === 403) {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message
-                                ? error?.response?.data?.message
-                                : "Something went wrong",
-                            messageType: "error",
-                        },
-                        () => toasterRef.current()
-                    );
-                    setTimeout(() => {
-                        navigate("/home");
-                    }, 3000);
-                }
+                catchError(error, toasterDetails, toasterRef, navigate);
+                // if (error?.response?.status === 401) {
+                //     Logger.debug("Unauthorized user access");
+                //     // Add error toaster here
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage:
+                //                 "Session Timeout: Please login again",
+                //             messageType: "error",
+                //         },
+                //         () => toasterRef.current()
+                //     );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // } else if (error.response.status === 403) {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: error?.response?.data?.message
+                //                 ? error?.response?.data?.message
+                //                 : "Something went wrong",
+                //             messageType: "error",
+                //         },
+                //         () => toasterRef.current()
+                //     );
+                //     setTimeout(() => {
+                //         navigate("/home");
+                //     }, 3000);
+                // }
             }
         };
         fetchQuestionnaires();
@@ -316,52 +318,53 @@ const AddAssessment = () => {
             }
         } catch (error) {
             setDisableEditAssessmentButton(false);
+            catchError(error, setToasterDetails, toasterRef, navigate);
 
-            if (error?.response?.status === 401) {
-                Logger.debug("Unauthorized user access");
-                // Add error toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            }
-            if (error?.response?.status === 400) {
-                Logger.debug("something went wrong");
-                // Add error toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
-            if (error?.response?.status === 403) {
-                Logger.debug("something went wrong");
-                // Add error toaster here
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            }
+            // if (error?.response?.status === 401) {
+            //     Logger.debug("Unauthorized user access");
+            //     // Add error toaster here
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // }
+            // if (error?.response?.status === 400) {
+            //     Logger.debug("something went wrong");
+            //     // Add error toaster here
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            // }
+            // if (error?.response?.status === 403) {
+            //     Logger.debug("something went wrong");
+            //     // Add error toaster here
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // }
         }
         setIsAssessmentLoading(false);
     };

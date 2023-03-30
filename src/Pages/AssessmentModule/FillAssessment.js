@@ -26,6 +26,7 @@ import { Logger } from "../../Logger/Logger";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import Loader from "../../utils/Loader";
 import Charts from "./Charts/Charts";
+import { catchError } from "../../utils/CatchError";
 import axios from "axios";
 const FillAssesmentSection = React.lazy(() =>
   import("./FillAssessmentSection")
@@ -194,48 +195,50 @@ function FillAssessment() {
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
 
-        Logger.debug("error from fetch questionnaire", error);
-        if (error?.response?.status === 401) {
-          isMounted &&
-            setToasterDetails(
-              {
-                titleMessage: "Oops!",
-                descriptionMessage: "Session Timeout: Please login again",
-                messageType: "error",
-              },
-              () => myRef.current()
-            );
-          setTimeout(() => {
-            navigate("/login");
-          }, 3000);
-        } else if (error?.response?.status === 403) {
-          setToasterDetails(
-            {
-              titleMessage: "Oops!",
-              descriptionMessage: error?.response?.data?.message
-                ? error?.response?.data?.message
-                : "Something went wrong",
-              messageType: "error",
-            },
-            () => myRef.current()
-          );
-          setTimeout(() => {
-            navigate("/home");
-          }, 3000);
-        } else {
-          setToasterDetails(
-            {
-              titleMessage: "Oops!",
-              descriptionMessage: error?.response?.data?.message
-                ? error?.response?.data?.message
-                : "Something went wrong",
-              messageType: "error",
-            },
-            () => myRef.current()
-          );
-        }
-      }
-    };
+                Logger.debug("error from fetch questionnaire", error);
+                catchError(error, setToasterDetails, myRef, navigate);
+                // if (error?.response?.status === 401) {
+                //     isMounted &&
+                //         setToasterDetails(
+                //             {
+                //                 titleMessage: "Oops!",
+                //                 descriptionMessage:
+                //                     "Session Timeout: Please login again",
+                //                 messageType: "error",
+                //             },
+                //             () => myRef.current()
+                //         );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // } else if (error?.response?.status === 403) {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: error?.response?.data?.message
+                //                 ? error?.response?.data?.message
+                //                 : "Something went wrong",
+                //             messageType: "error",
+                //         },
+                //         () => myRef.current()
+                //     );
+                //     setTimeout(() => {
+                //         navigate("/home");
+                //     }, 3000);
+                // } else {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: error?.response?.data?.message
+                //                 ? error?.response?.data?.message
+                //                 : "Something went wrong",
+                //             messageType: "error",
+                //         },
+                //         () => myRef.current()
+                //     );
+                // }
+            }
+        };
 
     const fetchAssessments = async () => {
       try {
@@ -461,109 +464,131 @@ function FillAssessment() {
 
 
                             `;
-              sections.push(index);
-              Logger.debug("sections = ", sections);
-              tempAsssessmentQuestionnaire = {
-                ...tempAsssessmentQuestionnaire,
-                [section?.uuid]: {
-                  ...tempAsssessmentQuestionnaire[section?.uuid],
-                  [`${column?.uuid}_${tempRowId}`]: "",
-                },
-              };
-            } else if (
-              column.columnType !== "prefilled" &&
-              column?.validation == "alphabets" &&
-              currentSectionAnswers[`${column?.uuid}_${tempRowId}`]?.length >
-                0 &&
-              !AlphaRegEx.test(
-                currentSectionAnswers[`${column?.uuid}_${tempRowId}`]
-              )
-            ) {
-              sectionErrors[`${column?.uuid}_${tempRowId}`] =
-                "This is an alphabetic field.";
-              Logger.debug("in table alphabets only");
-              sections.push(index);
-            } else if (
-              column?.columnType !== "prefilled" &&
-              column?.validation == "numeric" &&
-              currentSectionAnswers[`${column?.uuid}_${tempRowId}`]?.length >
-                0 &&
-              !NumericRegEx.test(
-                currentSectionAnswers[`${column?.uuid}_${tempRowId}`]
-              )
-            ) {
-              sectionErrors[`${column?.uuid}_${tempRowId}`] =
-                "This is a numeric field.";
-              Logger.debug("in table numeric only");
-              sections.push(index);
-            } else if (
-              column.columnType !== "prefilled" &&
-              column?.validation == "alphanumeric" &&
-              currentSectionAnswers[`${column?.uuid}_${tempRowId}`]?.length >
-                0 &&
-              !AlphaNumRegEx.test(
-                currentSectionAnswers[`${column?.uuid}_${tempRowId}`]
-              )
-            ) {
-              sectionErrors[`${column?.uuid}_${tempRowId}`] =
-                " This is an alphanumeric field.";
-              Logger.debug("in table alphanumeric only");
-              sections.push(index);
+                            sections.push(index);
+                            Logger.debug("sections = ", sections);
+                            tempAsssessmentQuestionnaire = {
+                                ...tempAsssessmentQuestionnaire,
+                                [section?.uuid]: {
+                                    ...tempAsssessmentQuestionnaire[
+                                        section?.uuid
+                                    ],
+                                    [`${column?.uuid}_${tempRowId}`]: "",
+                                },
+                            };
+                        } else if (
+                            column.columnType !== "prefilled" &&
+                            column?.validation == "alphabets" &&
+                            currentSectionAnswers[
+                                `${column?.uuid}_${tempRowId}`
+                            ]?.length > 0 &&
+                            !AlphaRegEx.test(
+                                currentSectionAnswers[
+                                    `${column?.uuid}_${tempRowId}`
+                                ]
+                            )
+                        ) {
+                            sectionErrors[`${column?.uuid}_${tempRowId}`] =
+                                "This is an alphabetic field.";
+                            Logger.debug("in table alphabets only");
+                            sections.push(index);
+                        } else if (
+                            column?.columnType !== "prefilled" &&
+                            column?.validation == "numeric" &&
+                            currentSectionAnswers[
+                                `${column?.uuid}_${tempRowId}`
+                            ]?.length > 0 &&
+                            !NumericRegEx.test(
+                                currentSectionAnswers[
+                                    `${column?.uuid}_${tempRowId}`
+                                ]
+                            )
+                        ) {
+                            sectionErrors[`${column?.uuid}_${tempRowId}`] =
+                                "This is a numeric field.";
+                            Logger.debug("in table numeric only");
+                            sections.push(index);
+                        } else if (
+                            column.columnType !== "prefilled" &&
+                            column?.validation == "alphanumeric" &&
+                            currentSectionAnswers[
+                                `${column?.uuid}_${tempRowId}`
+                            ]?.length > 0 &&
+                            !AlphaNumRegEx.test(
+                                currentSectionAnswers[
+                                    `${column?.uuid}_${tempRowId}`
+                                ]
+                            )
+                        ) {
+                            sectionErrors[`${column?.uuid}_${tempRowId}`] =
+                                " This is an alphanumeric field.";
+                            Logger.debug("in table alphanumeric only");
+                            sections.push(index);
+                        } else {
+                            delete sectionErrors[
+                                `${column?.uuid}_${tempRowId}`
+                            ];
+                        }
+                    });
+                });
+                Logger.debug("Section errors in table layout ", sectionErrors);
             } else {
-              delete sectionErrors[`${column?.uuid}_${tempRowId}`];
-            }
-          });
-        });
-        Logger.debug("Section errors in table layout ", sectionErrors);
-      } else {
-        // form validators
-        section?.questions.forEach((question) => {
-          if (
-            question.isRequired &&
-            (!currentSectionAnswers[question?.uuid] ||
-              currentSectionAnswers[question?.uuid].length === 0) &&
-            saveAsDraft === false
-          ) {
-            Logger.debug("error from required");
-            Logger.debug("section no", index);
-            Logger.debug(
-              "answer in required",
-              currentSectionAnswers[question?.uuid]
-            );
-            sectionErrors[question?.uuid] = "This is required field";
-            sections.push(index);
-          } else if (
-            question.inputType == "dropdown" &&
-            currentSectionAnswers[question?.uuid] &&
-            !question.options.includes(currentSectionAnswers[question?.uuid])
-          ) {
-            Logger.debug("error from dropdown question");
-            Logger.debug("section no", index);
-            Logger.debug("section no", sections);
+                // form validators
+                section?.questions.forEach((question) => {
+                    if (
+                        question.isRequired &&
+                        (!currentSectionAnswers[question?.uuid] ||
+                            currentSectionAnswers[question?.uuid].length ===
+                                0) &&
+                        saveAsDraft === false
+                    ) {
+                        Logger.debug("error from required");
+                        Logger.debug("section no", index);
+                        Logger.debug(
+                            "answer in required",
+                            currentSectionAnswers[question?.uuid]
+                        );
+                        sectionErrors[question?.uuid] =
+                            "This is required field";
+                        sections.push(index);
+                    }
+                    // else if (
+                    //     question.inputType == "dropdown" &&
+                    //     currentSectionAnswers[question?.uuid] &&
+                    //     !question.options.includes(
+                    //         currentSectionAnswers[question?.uuid]
+                    //     )
+                    // ) {
+                    //     Logger.debug("error from dropdown question");
+                    //     Logger.debug("section no", index);
+                    //     Logger.debug("section no", sections);
 
-            sectionErrors[question?.uuid] = `
-                        
-                        Entered value
-                        "${
-                          currentSectionAnswers[question?.uuid]
-                        }" is not part of above list. Please select valid option among listed values from list.
-                        `;
-            tempAsssessmentQuestionnaire = {
-              ...tempAsssessmentQuestionnaire,
-              [section?.uuid]: {
-                ...tempAsssessmentQuestionnaire[section?.uuid],
-                [question?.uuid]: "",
-              },
-            };
-            sections.push(index);
-          } else if (
-            question.inputType == "radioGroup" &&
-            currentSectionAnswers[question?.uuid] &&
-            !question.options.includes(currentSectionAnswers[question?.uuid])
-          ) {
-            Logger.debug("error from radio group question");
-            Logger.debug("section no", index);
-            Logger.debug("section no", sections);
+                    //     sectionErrors[question?.uuid] = `
+
+                    //     Entered value
+                    //     "${
+                    //         currentSectionAnswers[question?.uuid]
+                    //     }" is not part of above list. Please select valid option among listed values from list.
+                    //     `;
+                    //     tempAsssessmentQuestionnaire = {
+                    //         ...tempAsssessmentQuestionnaire,
+                    //         [section?.uuid]: {
+                    //             ...tempAsssessmentQuestionnaire[section?.uuid],
+                    //             [question?.uuid]: "",
+                    //         },
+                    //     };
+                    //     sections.push(index);
+                    // }
+                    else if (
+                        (question.inputType == "radioGroup" ||
+                            question.inputType == "dropdown") &&
+                        currentSectionAnswers[question?.uuid] &&
+                        !question.options.includes(
+                            currentSectionAnswers[question?.uuid]
+                        )
+                    ) {
+                        Logger.debug("error from radio group question");
+                        Logger.debug("section no", index);
+                        Logger.debug("section no", sections);
 
             sectionErrors[question?.uuid] = `
                         

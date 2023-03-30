@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router";
 import { privateAxios } from "../api/axios";
 import { Logger } from "../Logger/Logger";
+import { catchError } from "./CatchError";
 export const downloadFunction = async (
     filename,
     setToasterDetails,
@@ -52,48 +52,49 @@ export const downloadFunction = async (
         }
     } catch (error) {
         Logger.debug(`Error from ${filename}  Assessment`, error);
-        if (error.response.status == 401) {
-            setToasterDetails(
-                {
-                    titleMessage: `Oops!`,
-                    descriptionMessage: `Session Timeout: Please login again!`,
+        catchError(error, setToasterDetails, myRef, navigate);
+        // if (error.response.status == 401) {
+        //     setToasterDetails(
+        //         {
+        //             titleMessage: `Oops!`,
+        //             descriptionMessage: `Session Timeout: Please login again!`,
 
-                    messageType: `error`,
-                },
-                () => myRef.current()
-            );
-            setTimeout(() => {
-                navigate("/login");
-            }, 3000);
-        } else if (error?.response?.status === 403) {
-            setToasterDetails(
-                {
-                    titleMessage: `Oops!`,
-                    descriptionMessage: error?.response?.data?.message
-                        ? error?.response?.data?.message
-                        : "Something went wrong",
+        //             messageType: `error`,
+        //         },
+        //         () => myRef.current()
+        //     );
+        //     setTimeout(() => {
+        //         navigate("/login");
+        //     }, 3000);
+        // } else if (error?.response?.status === 403) {
+        //     setToasterDetails(
+        //         {
+        //             titleMessage: `Oops!`,
+        //             descriptionMessage: error?.response?.data?.message
+        //                 ? error?.response?.data?.message
+        //                 : "Something went wrong",
 
-                    messageType: `error`,
-                },
-                () => myRef.current()
-            );
-            setTimeout(() => {
-                navigate("/home");
-            }, 3000);
-        } else {
-            console.log("Error from delete else block");
-            setToasterDetails(
-                {
-                    titleMessage: `Oops!`,
-                    descriptionMessage: error?.response?.data?.message
-                        ? error?.response?.data?.message
-                        : "Something went wrong",
+        //             messageType: `error`,
+        //         },
+        //         () => myRef.current()
+        //     );
+        //     setTimeout(() => {
+        //         navigate("/home");
+        //     }, 3000);
+        // } else {
+        //     console.log("Error from delete else block");
+        //     setToasterDetails(
+        //         {
+        //             titleMessage: `Oops!`,
+        //             descriptionMessage: error?.response?.data?.message
+        //                 ? error?.response?.data?.message
+        //                 : "Something went wrong",
 
-                    messageType: `error`,
-                },
-                () => myRef.current()
-            );
-        }
+        //             messageType: `error`,
+        //         },
+        //         () => myRef.current()
+        //     );
+        // }
         return error;
     }
 };

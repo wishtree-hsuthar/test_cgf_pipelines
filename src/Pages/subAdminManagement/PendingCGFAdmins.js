@@ -6,6 +6,7 @@ import DialogBox from "../../components/DialogBox";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
+import { catchError } from "../../utils/CatchError";
 const pendingTableColumnHead = [
     {
         id: "name",
@@ -191,45 +192,46 @@ function PendingCGFAdmins({
                 setOpenDeleteDialogBoxPendingCGFAdmin(false);
             }
         } catch (error) {
-            if (error?.response?.status == 401) {
-                setPendingCgfToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setPendingCgfToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            } else {
-                setPendingCgfToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-            }
+            catchError(error, setPendingCgfToasterDetails, myRef, navigate);
+            // if (error?.response?.status == 401) {
+            //     setPendingCgfToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setPendingCgfToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // } else {
+            //     setPendingCgfToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            // }
             Logger.debug("error from withdrawInvite id", error);
         }
     };
@@ -268,51 +270,51 @@ function PendingCGFAdmins({
             setIsPendingCgfAdmin(false);
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
+            catchError(error, setPendingCgfToasterDetails, myRef, navigate);
+            // if (error?.response?.status == 401) {
+            //     setPendingCgfToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setPendingCgfToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // } else {
+            //     isMounted &&
+            //         setPendingCgfToasterDetails(
+            //             {
+            //                 titleMessage: "Error",
+            //                 descriptionMessage:
+            //                     error?.response?.data?.message &&
+            //                     typeof error.response.data.message === "string"
+            //                         ? error.response.data.message
+            //                         : "Something went wrong.",
 
-            if (error?.response?.status == 401) {
-                setPendingCgfToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setPendingCgfToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            } else {
-                isMounted &&
-                    setPendingCgfToasterDetails(
-                        {
-                            titleMessage: "Error",
-                            descriptionMessage:
-                                error?.response?.data?.message &&
-                                typeof error.response.data.message === "string"
-                                    ? error.response.data.message
-                                    : "Something went wrong.",
-
-                            messageType: "error",
-                        },
-                        () => myRef.current()
-                    );
-                setIsPendingCgfAdmin(false);
-            }
+            //                 messageType: "error",
+            //             },
+            //             () => myRef.current()
+            //         );
+            //     setIsPendingCgfAdmin(false);
+            // }
 
             Logger.debug(
                 "Error from getSubAdmin pending tab table-------",

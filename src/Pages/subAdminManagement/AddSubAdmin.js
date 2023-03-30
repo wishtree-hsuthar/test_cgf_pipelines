@@ -15,6 +15,7 @@ import Dropdown from "../../components/Dropdown";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
+import { catchError } from "../../utils/CatchError";
 const helperTextForCGFAdmin = {
     countryCode: {
         validate: "Select the country code",
@@ -105,51 +106,52 @@ const AddSubAdmin = () => {
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
                 Logger.debug("Error from fetch rolesAddCGFAdmin", error);
-                if (error?.response?.status === 401) {
-                    isMounted &&
-                        setToasterDetails(
-                            {
-                                titleMessage: "Oops!",
-                                descriptionMessage:
-                                    "Session Timeout: Please login again",
-                                messageType: "error",
-                            },
-                            () => toasterRef.current()
-                        );
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
-                } else if (error?.response?.status === 403) {
-                    isMounted &&
-                        setToasterDetails(
-                            {
-                                titleMessage: "Oops!",
-                                descriptionMessage: error?.response?.data
-                                    ?.message
-                                    ? error?.response?.data?.message
-                                    : "Something went wrong",
-                                messageType: "error",
-                            },
-                            () => toasterRef.current()
-                        );
-                    setTimeout(() => {
-                        navigate("/home");
-                    }, 3000);
-                } else {
-                    isMounted &&
-                        setToasterDetails(
-                            {
-                                titleMessage: "Oops!",
-                                descriptionMessage:
-                                    error?.response?.data?.message,
-                                messageType: "error",
-                            },
-                            () => toasterRef.current()
-                        );
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
-                }
+                catchError(error, toasterDetails, toasterRef, navigate);
+                // if (error?.response?.status === 401) {
+                //     isMounted &&
+                //         setToasterDetails(
+                //             {
+                //                 titleMessage: "Oops!",
+                //                 descriptionMessage:
+                //                     "Session Timeout: Please login again",
+                //                 messageType: "error",
+                //             },
+                //             () => toasterRef.current()
+                //         );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // } else if (error?.response?.status === 403) {
+                //     isMounted &&
+                //         setToasterDetails(
+                //             {
+                //                 titleMessage: "Oops!",
+                //                 descriptionMessage: error?.response?.data
+                //                     ?.message
+                //                     ? error?.response?.data?.message
+                //                     : "Something went wrong",
+                //                 messageType: "error",
+                //             },
+                //             () => toasterRef.current()
+                //         );
+                //     setTimeout(() => {
+                //         navigate("/home");
+                //     }, 3000);
+                // } else {
+                //     isMounted &&
+                //         setToasterDetails(
+                //             {
+                //                 titleMessage: "Oops!",
+                //                 descriptionMessage:
+                //                     error?.response?.data?.message,
+                //                 messageType: "error",
+                //             },
+                //             () => toasterRef.current()
+                //         );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // }
             }
         };
         let addCGFAdminFetchCountries = async () => {
@@ -169,16 +171,16 @@ const AddSubAdmin = () => {
                 if (error?.code === "ERR_CANCELED") return;
                 Logger.debug("error from countries api", error);
 
-                isMounted &&
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message,
-                            messageType: "error",
-                        },
-                        () => toasterRef.current()
-                    );
-                navigate("/login");
+                // isMounted &&
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: error?.response?.data?.message,
+                //             messageType: "error",
+                //         },
+                //         () => toasterRef.current()
+                //     );
+                // navigate("/login");
                 // }
             }
         };
@@ -215,44 +217,44 @@ const AddSubAdmin = () => {
             Logger.debug("error from add sub admin page", error);
             setIsCgfAdminLoading(false);
             setDisableSubmit(false);
-
-            if (error?.response?.status === 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            } else {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
+            catchError(error, toasterDetails, toasterRef, navigate);
+            // if (error?.response?.status === 401) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // } else {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            // }
         }
     };
     const handleOnsubmitAddCGFAdmin = async (data) => {

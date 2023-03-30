@@ -112,45 +112,46 @@ function PreviewQuestionnaire(props) {
             } catch (error) {
                 if (error?.code === "ERR_CANCELED") return;
                 setIsPreviewQuestionnaireLoading(false);
-                if (error?.response?.status == 401) {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Error",
-                            descriptionMessage:
-                                "Session Timeout: Please login again",
-                            messageType: "error",
-                        },
-                        () => questionnairePreviewRef.current()
-                    );
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
-                } else if (error?.response?.status === 403) {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Error",
-                            descriptionMessage: error?.response?.data?.message
-                                ? error?.response?.data?.message
-                                : "Something went wrong",
-                            messageType: "error",
-                        },
-                        () => questionnairePreviewRef.current()
-                    );
-                    setTimeout(() => {
-                        navigate("/home");
-                    }, 3000);
-                } else {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Error",
-                            descriptionMessage: error?.response?.data?.message
-                                ? error?.response?.data?.message
-                                : "Something went wrong",
-                            messageType: "error",
-                        },
-                        () => questionnairePreviewRef.current()
-                    );
-                }
+                handleError(error);
+                // if (error?.response?.status == 401) {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Error",
+                //             descriptionMessage:
+                //                 "Session Timeout: Please login again",
+                //             messageType: "error",
+                //         },
+                //         () => questionnairePreviewRef.current()
+                //     );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // } else if (error?.response?.status === 403) {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Error",
+                //             descriptionMessage: error?.response?.data?.message
+                //                 ? error?.response?.data?.message
+                //                 : "Something went wrong",
+                //             messageType: "error",
+                //         },
+                //         () => questionnairePreviewRef.current()
+                //     );
+                //     setTimeout(() => {
+                //         navigate("/home");
+                //     }, 3000);
+                // } else {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Error",
+                //             descriptionMessage: error?.response?.data?.message
+                //                 ? error?.response?.data?.message
+                //                 : "Something went wrong",
+                //             messageType: "error",
+                //         },
+                //         () => questionnairePreviewRef.current()
+                //     );
+                // }
                 Logger.debug("error from fetch questionnaire", error);
             }
         };
@@ -224,6 +225,23 @@ function PreviewQuestionnaire(props) {
             );
             setTimeout(() => {
                 navigate("/home");
+            }, 3000);
+        } else if (
+            error?.response?.status === 400 &&
+            error.response.data.message === "Invalid questionnaire!"
+        ) {
+            setToasterDetails(
+                {
+                    titleMessage: "Error",
+                    descriptionMessage: error?.response?.data?.message
+                        ? error?.response?.data?.message
+                        : "Something went wrong",
+                    messageType: "error",
+                },
+                () => questionnairePreviewRef.current()
+            );
+            setTimeout(() => {
+                navigate("/questionnaires");
             }, 3000);
         } else {
             setToasterDetails(
