@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
 Chart.register(ChartDataLabels);
-const Chart1 = ({ graphResult, questionnaireTitle }) => {
-  console.log("graph result:- ", graphResult);
+Chart.register({
+  id: "customCanvasBackgroundColor",
+  beforeDraw: (chart, args, options) => {
+    const { ctx } = chart;
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.fillStyle = options.color || "#fff";
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  },
+});
+const Chart1 = ({
+  graphResult,
+  questionnaireTitle,
+  chartImages,
+  setChartImages,
+}) => {
+  const chartRef = useRef(null);
+  // console.log("graph result:- ", graphResult);
   const labels = [
     "Not Initiated",
     "Launched",
@@ -14,17 +31,17 @@ const Chart1 = ({ graphResult, questionnaireTitle }) => {
     "General Result",
   ];
   const getChartLabel = () => {
-    switch(questionnaireTitle){
+    switch (questionnaireTitle) {
       case "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)":
         return "HRDD HQ Level Result";
       case "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)":
         return "Global Operation HRDD Result";
       case "COUNTRY- OPERATION HRDD REQUIREMENTS":
-        return "Country Operation HRDD Result"
+        return "Country Operation HRDD Result";
       default:
-        return "HRDD Result"
+        return "HRDD Result";
     }
-  }
+  };
   const data = {
     labels: labels,
     datasets: [
@@ -43,12 +60,23 @@ const Chart1 = ({ graphResult, questionnaireTitle }) => {
       },
     ],
   };
+  useEffect(() => {
+    console.log("chartImages in chart1:- ", chartImages.resultsGraph);
+    if (chartImages.resultsGraph === undefined) {
+      console.log("inside condition");
+      let temp = { ...chartImages };
+      temp.resultsGraph = chartRef.current.toBase64Image();
+      setChartImages(temp);
+    }
+  });
 
   return (
     <div style={{ height: "400px" }} className="preview-card-wrapper">
       <Bar
+        ref={chartRef}
         data={data}
         options={{
+          animation: false,
           indexAxis: "y",
           responsive: true,
           maintainAspectRatio: false,
@@ -64,7 +92,7 @@ const Chart1 = ({ graphResult, questionnaireTitle }) => {
               display: true,
               font: {
                 weight: "bold",
-                size: 16
+                size: 16,
               },
             },
             datalabels: {
