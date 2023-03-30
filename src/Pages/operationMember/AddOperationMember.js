@@ -33,6 +33,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
 
 import { Logger } from "../../Logger/Logger";
+import { catchError } from "../../utils/CatchError";
 let OPERATION_TYPES = [];
 function AddOperationMember() {
     //custom hook to set title of page
@@ -177,48 +178,49 @@ function AddOperationMember() {
                 );
             } catch (error) {
                 Logger.debug("error from fetch member company", error);
-                if (error?.response?.status == 401) {
-                    isMounted &&
-                        setToasterDetails(
-                            {
-                                titleMessage: "Oops!",
-                                descriptionMessage:
-                                    "Session Timeout: Please login again",
-                                messageType: "error",
-                            },
-                            () => toasterRef.current()
-                        );
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
-                } else if (error?.response?.status === 403) {
-                    isMounted &&
-                        setToasterDetails(
-                            {
-                                titleMessage: "Oops!",
-                                descriptionMessage: error?.response?.data
-                                    ?.message
-                                    ? error?.response?.data?.message
-                                    : "Something went wrong",
-                                messageType: "error",
-                            },
-                            () => toasterRef.current()
-                        );
-                    setTimeout(() => {
-                        navigate("/home");
-                    }, 3000);
-                } else {
-                    isMounted &&
-                        setToasterDetails(
-                            {
-                                titleMessage: "Oops!",
-                                descriptionMessage:
-                                    error?.response?.data?.message,
-                                messageType: "error",
-                            },
-                            () => toasterRef.current()
-                        );
-                }
+                catchError(error, setToasterDetails, toasterRef, navigate);
+                // if (error?.response?.status == 401) {
+                //     isMounted &&
+                //         setToasterDetails(
+                //             {
+                //                 titleMessage: "Oops!",
+                //                 descriptionMessage:
+                //                     "Session Timeout: Please login again",
+                //                 messageType: "error",
+                //             },
+                //             () => toasterRef.current()
+                //         );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // } else if (error?.response?.status === 403) {
+                //     isMounted &&
+                //         setToasterDetails(
+                //             {
+                //                 titleMessage: "Oops!",
+                //                 descriptionMessage: error?.response?.data
+                //                     ?.message
+                //                     ? error?.response?.data?.message
+                //                     : "Something went wrong",
+                //                 messageType: "error",
+                //             },
+                //             () => toasterRef.current()
+                //         );
+                //     setTimeout(() => {
+                //         navigate("/home");
+                //     }, 3000);
+                // } else {
+                //     isMounted &&
+                //         setToasterDetails(
+                //             {
+                //                 titleMessage: "Oops!",
+                //                 descriptionMessage:
+                //                     error?.response?.data?.message,
+                //                 messageType: "error",
+                //             },
+                //             () => toasterRef.current()
+                //         );
+                // }
             }
         };
         let fetchCountries = async () => {
@@ -264,46 +266,46 @@ function AddOperationMember() {
             }
         } catch (error) {
             Logger.debug("error from fetching reporting managers", error);
-
-            if (error?.response?.status == 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            } else {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
+            catchError(error, setToasterDetails, toasterRef, navigate);
+            // if (error?.response?.status == 401) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // } else {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            // }
         }
     };
     const addOperationMember = async (data, navigateToListPage) => {
@@ -361,44 +363,44 @@ function AddOperationMember() {
             console.log("error from handle submit", error);
             setDisableAddOperationMemberButton(false);
             setIsAddOperationMemberLoading(false);
-
-            if (error?.response?.status == 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            } else {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
+            catchError(error, setToasterDetails, toasterRef, navigate);
+            // if (error?.response?.status == 401) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // } else {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            // }
         }
     };
 

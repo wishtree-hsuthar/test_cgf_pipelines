@@ -60,7 +60,7 @@ function Toaster({
         <div className="toaster-sect">
             <button style={{ display: "none" }}>Show Toast !</button>
             <ToastContainer
-                key={key}
+                // key={key}
                 className={`toaster-wrap ${
                     messageType === "success" && "toaster-wrap-success"
                 } `}

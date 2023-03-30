@@ -35,6 +35,7 @@ import {
 import Loader from "../../utils/Loader";
 
 import { Logger } from "../../Logger/Logger";
+import { catchError } from "../../utils/CatchError";
 let MEMBER_LOOKUP = {};
 let CGF_OFFICES = [];
 const EditMember = () => {
@@ -153,37 +154,37 @@ const EditMember = () => {
             Logger.debug("Default values: ", defaultValues);
         } catch (error) {
             setIsEditMemberLoading(false);
-
-            if (error?.response?.status == 401) {
-                setToasterDetailsEditMember(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetailsEditMember(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            } else {
-                setErrorToaster1(error);
-            }
+            catchError(error, setToasterDetailsEditMember, myRef, navigate);
+            // if (error?.response?.status == 401) {
+            //     setToasterDetailsEditMember(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetailsEditMember(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // } else {
+            //     setErrorToaster1(error);
+            // }
         }
     };
     // On Click cancel handler
@@ -409,37 +410,39 @@ const EditMember = () => {
         } catch (error) {
             if (error?.code === "ERR_CANCELED") return;
             Logger.debug("error", error);
-            if (error?.response?.status == 401) {
-                setToasterDetailsEditMember(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetailsEditMember(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => myRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            } else {
-                setIsEditMemberLoading(false);
-                isMounted && setErrorToaster1(error);
-            }
+            setIsEditMemberLoading(false);
+            catchError(error, setToasterDetailsEditMember, myRef, navigate);
+            // if (error?.response?.status == 401) {
+            //     setToasterDetailsEditMember(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetailsEditMember(
+            //         {
+            //             titleMessage: "Error",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => myRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // } else {
+            //     setIsEditMemberLoading(false);
+            //     isMounted && setErrorToaster1(error);
+            // }
         }
     };
     //prevent form submission on press of enter key

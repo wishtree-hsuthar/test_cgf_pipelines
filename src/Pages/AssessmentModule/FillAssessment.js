@@ -26,6 +26,7 @@ import { Logger } from "../../Logger/Logger";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import Loader from "../../utils/Loader";
 import Charts from "./Charts/Charts";
+import { catchError } from "../../utils/CatchError";
 const FillAssesmentSection = React.lazy(() =>
     import("./FillAssessmentSection")
 );
@@ -135,46 +136,47 @@ function FillAssessment() {
 
     const handleCatchError = (error, functionName) => {
         Logger.debug("error occured in ", functionName);
-        if (error?.response?.status === 401) {
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: "Session Timeout: Please login again",
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
-            setTimeout(() => {
-                navigate("/login");
-            }, 3000);
-        } else if (error?.response?.status === 403) {
-            setToasterDetails(
-                {
-                    titleMessage: "Oops!",
-                    descriptionMessage: error?.response?.data?.message
-                        ? error?.response?.data?.message
-                        : "Something went wrong",
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
-            setTimeout(() => {
-                navigate("/home");
-            }, 3000);
-        } else {
-            setToasterDetails(
-                {
-                    titleMessage: "Error",
-                    descriptionMessage:
-                        error?.response?.data?.message &&
-                        typeof error.response.data.message === "string"
-                            ? error.response.data.message
-                            : "Something went wrong.",
-                    messageType: "error",
-                },
-                () => myRef.current()
-            );
-        }
+        catchError(error, setToasterDetails, myRef, navigate);
+        // if (error?.response?.status === 401) {
+        //     setToasterDetails(
+        //         {
+        //             titleMessage: "Oops!",
+        //             descriptionMessage: "Session Timeout: Please login again",
+        //             messageType: "error",
+        //         },
+        //         () => myRef.current()
+        //     );
+        //     setTimeout(() => {
+        //         navigate("/login");
+        //     }, 3000);
+        // } else if (error?.response?.status === 403) {
+        //     setToasterDetails(
+        //         {
+        //             titleMessage: "Oops!",
+        //             descriptionMessage: error?.response?.data?.message
+        //                 ? error?.response?.data?.message
+        //                 : "Something went wrong",
+        //             messageType: "error",
+        //         },
+        //         () => myRef.current()
+        //     );
+        //     setTimeout(() => {
+        //         navigate("/home");
+        //     }, 3000);
+        // } else {
+        //     setToasterDetails(
+        //         {
+        //             titleMessage: "Error",
+        //             descriptionMessage:
+        //                 error?.response?.data?.message &&
+        //                 typeof error.response.data.message === "string"
+        //                     ? error.response.data.message
+        //                     : "Something went wrong.",
+        //             messageType: "error",
+        //         },
+        //         () => myRef.current()
+        //     );
+        // }
     };
 
     const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
@@ -195,46 +197,47 @@ function FillAssessment() {
                 if (error?.code === "ERR_CANCELED") return;
 
                 Logger.debug("error from fetch questionnaire", error);
-                if (error?.response?.status === 401) {
-                    isMounted &&
-                        setToasterDetails(
-                            {
-                                titleMessage: "Oops!",
-                                descriptionMessage:
-                                    "Session Timeout: Please login again",
-                                messageType: "error",
-                            },
-                            () => myRef.current()
-                        );
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
-                } else if (error?.response?.status === 403) {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message
-                                ? error?.response?.data?.message
-                                : "Something went wrong",
-                            messageType: "error",
-                        },
-                        () => myRef.current()
-                    );
-                    setTimeout(() => {
-                        navigate("/home");
-                    }, 3000);
-                } else {
-                    setToasterDetails(
-                        {
-                            titleMessage: "Oops!",
-                            descriptionMessage: error?.response?.data?.message
-                                ? error?.response?.data?.message
-                                : "Something went wrong",
-                            messageType: "error",
-                        },
-                        () => myRef.current()
-                    );
-                }
+                catchError(error, setToasterDetails, myRef, navigate);
+                // if (error?.response?.status === 401) {
+                //     isMounted &&
+                //         setToasterDetails(
+                //             {
+                //                 titleMessage: "Oops!",
+                //                 descriptionMessage:
+                //                     "Session Timeout: Please login again",
+                //                 messageType: "error",
+                //             },
+                //             () => myRef.current()
+                //         );
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 3000);
+                // } else if (error?.response?.status === 403) {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: error?.response?.data?.message
+                //                 ? error?.response?.data?.message
+                //                 : "Something went wrong",
+                //             messageType: "error",
+                //         },
+                //         () => myRef.current()
+                //     );
+                //     setTimeout(() => {
+                //         navigate("/home");
+                //     }, 3000);
+                // } else {
+                //     setToasterDetails(
+                //         {
+                //             titleMessage: "Oops!",
+                //             descriptionMessage: error?.response?.data?.message
+                //                 ? error?.response?.data?.message
+                //                 : "Something went wrong",
+                //             messageType: "error",
+                //         },
+                //         () => myRef.current()
+                //     );
+                // }
             }
         };
 
@@ -573,34 +576,37 @@ function FillAssessment() {
                         sectionErrors[question?.uuid] =
                             "This is required field";
                         sections.push(index);
-                    } else if (
-                        question.inputType == "dropdown" &&
-                        currentSectionAnswers[question?.uuid] &&
-                        !question.options.includes(
-                            currentSectionAnswers[question?.uuid]
-                        )
-                    ) {
-                        Logger.debug("error from dropdown question");
-                        Logger.debug("section no", index);
-                        Logger.debug("section no", sections);
+                    }
+                    // else if (
+                    //     question.inputType == "dropdown" &&
+                    //     currentSectionAnswers[question?.uuid] &&
+                    //     !question.options.includes(
+                    //         currentSectionAnswers[question?.uuid]
+                    //     )
+                    // ) {
+                    //     Logger.debug("error from dropdown question");
+                    //     Logger.debug("section no", index);
+                    //     Logger.debug("section no", sections);
 
-                        sectionErrors[question?.uuid] = `
-                        
-                        Entered value
-                        "${
-                            currentSectionAnswers[question?.uuid]
-                        }" is not part of above list. Please select valid option among listed values from list.
-                        `;
-                        tempAsssessmentQuestionnaire = {
-                            ...tempAsssessmentQuestionnaire,
-                            [section?.uuid]: {
-                                ...tempAsssessmentQuestionnaire[section?.uuid],
-                                [question?.uuid]: "",
-                            },
-                        };
-                        sections.push(index);
-                    } else if (
-                        question.inputType == "radioGroup" &&
+                    //     sectionErrors[question?.uuid] = `
+
+                    //     Entered value
+                    //     "${
+                    //         currentSectionAnswers[question?.uuid]
+                    //     }" is not part of above list. Please select valid option among listed values from list.
+                    //     `;
+                    //     tempAsssessmentQuestionnaire = {
+                    //         ...tempAsssessmentQuestionnaire,
+                    //         [section?.uuid]: {
+                    //             ...tempAsssessmentQuestionnaire[section?.uuid],
+                    //             [question?.uuid]: "",
+                    //         },
+                    //     };
+                    //     sections.push(index);
+                    // }
+                    else if (
+                        (question.inputType == "radioGroup" ||
+                            question.inputType == "dropdown") &&
                         currentSectionAnswers[question?.uuid] &&
                         !question.options.includes(
                             currentSectionAnswers[question?.uuid]

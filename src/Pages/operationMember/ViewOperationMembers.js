@@ -32,6 +32,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
 import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
+import { catchError } from "../../utils/CatchError";
 
 const defaultValues = {
     memberCompany: "",
@@ -200,47 +201,43 @@ const ViewOperationMembers = () => {
                 "error in fetch operation member method in view page",
                 error
             );
-            if (error?.response?.status == 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            } else if (error?.response?.status === 500) {
-                navigate("/operation_member");
-            } else {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
+
+            catchError(
+                error,
+                setToasterDetails,
+                toasterRef,
+                navigate,
+                "/users/operation-members"
+            );
+
+            // if (error?.response?.status == 401) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // }
         }
     };
     const callGetOpeationMember = async () => {
@@ -284,43 +281,44 @@ const ViewOperationMembers = () => {
             }
         } catch (error) {
             Logger.debug("error from handle delete operation member", error);
-            if (error?.response?.status == 401) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage:
-                            "Session Timeout: Please login again",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            } else if (error?.response?.status === 403) {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message
-                            ? error?.response?.data?.message
-                            : "Something went wrong",
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-                setTimeout(() => {
-                    navigate("/home");
-                }, 3000);
-            } else {
-                setToasterDetails(
-                    {
-                        titleMessage: "Oops!",
-                        descriptionMessage: error?.response?.data?.message,
-                        messageType: "error",
-                    },
-                    () => toasterRef.current()
-                );
-            }
+            catchError(error, setToasterDetails, toasterRef, navigate);
+            // if (error?.response?.status == 401) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage:
+            //                 "Session Timeout: Please login again",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/login");
+            //     }, 3000);
+            // } else if (error?.response?.status === 403) {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message
+            //                 ? error?.response?.data?.message
+            //                 : "Something went wrong",
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            //     setTimeout(() => {
+            //         navigate("/home");
+            //     }, 3000);
+            // } else {
+            //     setToasterDetails(
+            //         {
+            //             titleMessage: "Oops!",
+            //             descriptionMessage: error?.response?.data?.message,
+            //             messageType: "error",
+            //         },
+            //         () => toasterRef.current()
+            //     );
+            // }
         }
     };
 
