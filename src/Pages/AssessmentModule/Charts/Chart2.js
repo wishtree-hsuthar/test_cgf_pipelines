@@ -35,16 +35,16 @@ const Chart2 = ({ graphLevelBreakdown, chartImages, setChartImages }) => {
         borderColor: "#f7a823",
         // inflateAmount: "auto",
         data: [
-          graphLevelBreakdown["Policy Commitment & Governance"],
+          graphLevelBreakdown["Policy Commitment & Governance"] ?? 0,
           graphLevelBreakdown[
             "Assess Human Rights Potential and Actual Impacts"
-          ],
+          ] ?? 0,
           graphLevelBreakdown[
             "Integrate and Act in Order to Prevent and Mitigate"
-          ],
-          graphLevelBreakdown["Track the Effectiveness of Responses"],
-          graphLevelBreakdown["Report"],
-          graphLevelBreakdown["Remedy"],
+          ] ?? 0,
+          graphLevelBreakdown["Track the Effectiveness of Responses"] ?? 0,
+          graphLevelBreakdown["Report"] ?? 0,
+          graphLevelBreakdown["Remedy"] ?? 0,
         ],
         barThickness: 50,
       },

@@ -99,7 +99,7 @@ function FillAssessment() {
   const [file, setFile] = useState("");
 
   const { handleSubmit, control, setValue } = useForm({});
-  const [value, setTabValue] = useState(4);
+  const [value, setTabValue] = useState(0);
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -110,8 +110,8 @@ function FillAssessment() {
   const [assessment, setAssessments] = useState({});
   const [questionnaire, setQuestionnaire] = useState({});
   const [assessmentQuestionnaire, setAssessmentQuestionnaire] = useState({});
-  const [graphLevelBreakdown, setGraphLevelBreakdown] = useState({});
-  const [graphResult, setGraphResult] = useState({});
+  const [graphLevelBreakdown, setGraphLevelBreakdown] = useState(null);
+  const [graphResult, setGraphResult] = useState(null);
   const [errorQuestion, setErrorQuestion] = useState("");
   const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
   const [editMode, setEditMode] = useState(false);
@@ -264,6 +264,9 @@ function FillAssessment() {
           setGraphLevelBreakdown({
             ...response?.data?.graphLevelBreakdown,
           });
+        response?.data?.graphResult &&
+          response?.data?.graphLevelBreakdown &&
+          setTabValue(4);
         fetchQuestionnaire(response?.data?.questionnaireId);
         setReOpenAssessmentDialogBox(
           response?.data?.isSubmitted && !params["*"].includes("view")
@@ -768,55 +771,59 @@ function FillAssessment() {
     setFile(e.target.files[0]);
   };
 
-//   const getFormData = () => {
-//     const formData = new FormData();
-//     formData.append("dummy", "dummy content");
-//     formData.append("files[]", chartImages.chart1);
-//     formData.append("files[]", chartImages.chart2);
-//     return formData;
-//   };
+  //   const getFormData = () => {
+  //     const formData = new FormData();
+  //     formData.append("dummy", "dummy content");
+  //     formData.append("files[]", chartImages.chart1);
+  //     formData.append("files[]", chartImages.chart2);
+  //     return formData;
+  //   };
   const handleDownloadAssessment = async () => {
     try {
-      //   await downloadFunction(
-      //     "Assessment",
-      //     setToasterDetails,
-      //     params.id,
-      //     myRef,
-      //     DOWNLOAD_ASSESSMENT_BY_ID,
-      //     navigate
-      //   );
+      if (graphLevelBreakdown && graphResult) {
+        const response = await privateAxios.post(
+          DOWNLOAD_ASSESSMENT_BY_ID + params.id + "/download",
+          { ...chartImages },
+          { responseType: "blob" }
+        );
+        // console.log("response:- ", response);
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement(`a`);
+        link.href = url;
+        let date =
+          new Date().getDate() < 10
+            ? "0" + new Date().getDate().toString()
+            : new Date().getDate().toString();
+        let month =
+          new Date().getMonth() < 10
+            ? "0" + (new Date().getMonth() + 1).toString()
+            : new Date().getMonth().toString();
+        let year = new Date().getFullYear().toString();
+        let hours = new Date().getHours();
+        let minutes = new Date().getMinutes();
+        let seconds = new Date().getSeconds();
+        let timeStamp = month + date + year + "_" + hours + minutes + seconds;
+        link.setAttribute(`download`, `Assessment - ${timeStamp}.xls`);
+        document.body.appendChild(link);
+        link.click();
+      } else {
+        await downloadFunction(
+          "Assessment",
+          setToasterDetails,
+          params.id,
+          myRef,
+          DOWNLOAD_ASSESSMENT_BY_ID,
+          navigate
+        );
+      }
+
       //   setTabValue(4);
 
-    //  Object.values(chartImages).forEach((v) => {
+      //  Object.values(chartImages).forEach((v) => {
       //     formData.append("files[]", v);
       //     console.log('V', v)
       //   })
-    //   const formData = getFormData();
-      const response = await privateAxios.post(
-        DOWNLOAD_ASSESSMENT_BY_ID + params.id + "/download",
-        { ...chartImages },
-        { responseType: "blob" }
-      );
-      // console.log("response:- ", response);
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement(`a`);
-      link.href = url;
-      let date =
-        new Date().getDate() < 10
-          ? "0" + new Date().getDate().toString()
-          : new Date().getDate().toString();
-      let month =
-        new Date().getMonth() < 10
-          ? "0" + (new Date().getMonth() + 1).toString()
-          : new Date().getMonth().toString();
-      let year = new Date().getFullYear().toString();
-      let hours = new Date().getHours();
-      let minutes = new Date().getMinutes();
-      let seconds = new Date().getSeconds();
-      let timeStamp = month + date + year + "_" + hours + minutes + seconds;
-      link.setAttribute(`download`, `Assessment - ${timeStamp}.xls`);
-      document.body.appendChild(link);
-      link.click();
+      //   const formData = getFormData();
       // API Call
       // method call
     } catch (error) {
@@ -1307,19 +1314,13 @@ function FillAssessment() {
                         />
                       </Tooltip>
                     ))}
-                    {questionnaire?.title &&
-                      (questionnaire?.title ===
-                        "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)" ||
-                        questionnaire?.title ===
-                          "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)" ||
-                        questionnaire?.title ===
-                          "COUNTRY- OPERATION HRDD REQUIREMENTS") && (
-                        <Tab
-                          className="section-tab-item"
-                          label="Results"
-                          {...a11yProps(questionnaire?.sections?.length)}
-                        />
-                      )}
+                    {graphResult && graphLevelBreakdown && (
+                      <Tab
+                        className="section-tab-item"
+                        label="Results"
+                        {...a11yProps(questionnaire?.sections?.length)}
+                      />
+                    )}
                   </Tabs>
                 </Box>
               </div>
@@ -1349,27 +1350,21 @@ function FillAssessment() {
                 ))}
                 {/* {console.log("questionnaireTitle", questionnaire?.title)} */}
 
-                {questionnaire?.title &&
-                  (questionnaire?.title ===
-                    "HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)" ||
-                    questionnaire?.title ===
-                      "GLOBAL OPERATION HRDD REQUIREMENTS (SELECTED OPERATION)" ||
-                    questionnaire?.title ===
-                      "COUNTRY- OPERATION HRDD REQUIREMENTS") && (
-                    <TabPanel
-                      value={value}
-                      index={questionnaire?.sections?.length}
-                    >
-                      {/* {console.log("value", value)} */}
-                      <Charts
-                        chartImages={chartImages}
-                        setChartImages={setChartImages}
-                        questionnaireTitle={questionnaire?.title}
-                        graphResult={graphResult}
-                        graphLevelBreakdown={graphLevelBreakdown}
-                      />
-                    </TabPanel>
-                  )}
+                {graphLevelBreakdown && graphResult && (
+                  <TabPanel
+                    value={value}
+                    index={questionnaire?.sections?.length}
+                  >
+                    {/* {console.log("value", value)} */}
+                    <Charts
+                      chartImages={chartImages}
+                      setChartImages={setChartImages}
+                      questionnaireTitle={questionnaire?.title}
+                      graphResult={graphResult}
+                      graphLevelBreakdown={graphLevelBreakdown}
+                    />
+                  </TabPanel>
+                )}
               </div>
             )}
           </div>
