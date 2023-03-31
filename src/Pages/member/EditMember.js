@@ -1288,10 +1288,7 @@ const EditMember = () => {
                                         <div className="card-form-field">
                                             <div className="form-group">
                                                 <label htmlFor="cgfOfficeRegion">
-                                                    Region{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
+                                                    Region{" "}                                                    
                                                 </label>
                                                 <Dropdown
                                                     isDisabled
@@ -1300,7 +1297,6 @@ const EditMember = () => {
                                                     // myOnChange={cgfOfficeRegionChangeHandler}
                                                     placeholder="Select Region"
                                                     myHelper={memberHelper}
-                                                    rules={{ required: true }}
                                                     options={arrOfRegions}
                                                 />
                                             </div>
@@ -1309,17 +1305,13 @@ const EditMember = () => {
                                             <div className="form-group">
                                                 <label htmlFor="cgfOfficeCountry">
                                                     Country{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
                                                 </label>
                                                 <Dropdown
                                                     isDisabled
                                                     control={control}
                                                     name="cgfOfficeCountry"
                                                     placeholder="Select country"
-                                                    myHelper={memberHelper}
-                                                    rules={{ required: true }}
+                                                    myHelper={memberHelper}                                                    
                                                     options={
                                                         arrOfCgfOfficeCountryRegions
                                                             ? arrOfCgfOfficeCountryRegions
@@ -1332,9 +1324,6 @@ const EditMember = () => {
                                             <div className="form-group">
                                                 <label htmlFor="cgfOffice">
                                                     Office{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
                                                 </label>
                                                 <Dropdown
                                                     isDisabled
@@ -1342,7 +1331,6 @@ const EditMember = () => {
                                                     name="cgfOffice"
                                                     placeholder="Select office"
                                                     myHelper={memberHelper}
-                                                    rules={{ required: true }}
                                                     options={CGF_OFFICES}
                                                 />
                                             </div>

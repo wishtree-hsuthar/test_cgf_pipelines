@@ -650,7 +650,8 @@ const ViewMember = () => {
     const getRoleNameByRoleId = async (isMounted, controller, data) => {
         try {
             const roleId = data?.memberRepresentativeId?.[0]?.roleId;
-            const response = await axios.get(VIEW_ROLE + roleId);
+            if(!roleId) return "";
+            const response = await axios.get(VIEW_ROLE + roleId );
             Logger.debug("response", response?.data?.name);
             return response?.data?.name;
         } catch (error) {
@@ -1191,9 +1192,6 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="cgfOfficeRegion">
                                                 Region{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Dropdown
                                                 isDisabled
@@ -1207,9 +1205,6 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="cgfOfficeCountry">
                                                 Country{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Dropdown
                                                 isDisabled
@@ -1228,9 +1223,6 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="cgfOffice">
                                                 Office{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Dropdown
                                                 isDisabled

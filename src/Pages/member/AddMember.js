@@ -1007,7 +1007,7 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="cgfOfficeRegion">
-                          Region <span className="mandatory">*</span>
+                          Region 
                         </label>
                         <Dropdown
                           control={control}
@@ -1015,7 +1015,6 @@ const AddMember = () => {
                           myOnChange={cgfOfficeRegionChangeHandlerAddMember}
                           placeholder="Select region"
                           myHelper={memberHelper}
-                          rules={{ required: true }}
                           options={arrOfRegionsAddMember}
                         />
                       </div>
@@ -1023,7 +1022,7 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="cgfOfficeCountry">
-                          Country <span className="mandatory">*</span>
+                          Country 
                         </label>
                         <Dropdown
                           isDisabled={!watch("cgfOfficeRegion")}
@@ -1031,7 +1030,6 @@ const AddMember = () => {
                           name="cgfOfficeCountry"
                           placeholder="Select country"
                           myHelper={memberHelper}
-                          rules={{ required: true }}
                           options={arrOfCgfOfficeCountryRegionsAddMember}
                         />
                       </div>
@@ -1039,14 +1037,13 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="cgfOffice">
-                          Office <span className="mandatory">*</span>
+                          Office 
                         </label>
                         <Dropdown
                           control={control}
                           name="cgfOffice"
                           placeholder="Select office"
                           myHelper={memberHelper}
-                          rules={{ required: true }}
                           options={CGF_OFFICES}
                         />
                       </div>
