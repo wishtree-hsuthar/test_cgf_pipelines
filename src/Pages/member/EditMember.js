@@ -581,19 +581,19 @@ const EditMember = () => {
                                                             >
                                                                 <FormControlLabel
                                                                     disabled
-                                                                    value="Internal"
+                                                                    value="Partner"
                                                                     control={
                                                                         <Radio />
                                                                     }
-                                                                    label="Internal"
+                                                                    label="Partner"
                                                                 />
                                                                 <FormControlLabel
                                                                     disabled
-                                                                    value="External"
+                                                                    value="Member"
                                                                     control={
                                                                         <Radio />
                                                                     }
-                                                                    label="External"
+                                                                    label="Member"
                                                                 />
                                                             </RadioGroup>
                                                         )}
@@ -1093,7 +1093,7 @@ const EditMember = () => {
                                                     }
                                                     control={control}
                                                     name="state"
-                                                    placeholder="Enter state"
+                                                    placeholder="Select state"
                                                     myOnChange={
                                                         onStateChangeHandler
                                                     }
@@ -1218,7 +1218,7 @@ const EditMember = () => {
                                                                             ""
                                                                         )
                                                                     }
-                                                                    placeholder="N/A"
+                                                                    placeholder="Enter city"
                                                                 />
                                                             )}
                                                         />

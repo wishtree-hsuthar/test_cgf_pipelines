@@ -856,15 +856,15 @@ const ViewMember = () => {
                                                 >
                                                     <FormControlLabel
                                                         disabled
-                                                        value="Internal"
+                                                        value="Partner"
                                                         control={<Radio />}
-                                                        label="Internal"
+                                                        label="Partner"
                                                     />
                                                     <FormControlLabel
                                                         disabled
-                                                        value="External"
+                                                        value="Member"
                                                         control={<Radio />}
-                                                        label="External"
+                                                        label="Member"
                                                     />
                                                 </RadioGroup>
                                             </div>
@@ -1071,7 +1071,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="region"
-                                                placeholder="Select region"
+                                                placeholder="N/A"
                                                 options={arrOfRegions}
                                             />
                                         </div>
@@ -1085,7 +1085,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="country"
-                                                placeholder="Select country"
+                                                placeholder="N/A"
                                                 myHelper={myHelper}
                                                 options={arrOfCountryRegions}
                                             />
@@ -1098,7 +1098,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="state"
-                                                placeholder="Enter state"
+                                                placeholder="N/A"
                                                 options={arrOfStateCountry}
                                             />
                                         </div>
@@ -1173,7 +1173,7 @@ const ViewMember = () => {
                                                 }}
                                                 className={`input-textarea`}
                                                 id="outlined-basic"
-                                                placeholder="Enter address"
+                                                placeholder="N/A"
                                                 variant="outlined"
                                                 helperText=" "
                                             />
@@ -1196,6 +1196,7 @@ const ViewMember = () => {
                                             <Dropdown
                                                 isDisabled
                                                 control={control}
+                                                placeholder="N/A"
                                                 name="cgfOfficeRegion"
                                                 options={arrOfRegions}
                                             />
@@ -1210,7 +1211,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="cgfOfficeCountry"
-                                                placeholder="Select country"
+                                                placeholder="N/A"
                                                 options={
                                                     arrOfCgfOfficeCountryRegions
                                                         ? arrOfCgfOfficeCountryRegions
@@ -1228,7 +1229,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="cgfOffice"
-                                                placeholder="Select office"
+                                                placeholder="N/A"
                                                 options={CGF_OFFICES}
                                             />
                                         </div>

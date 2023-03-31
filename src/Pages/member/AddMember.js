@@ -549,14 +549,14 @@ const AddMember = () => {
                                 className="radio-btn"
                               >
                                 <FormControlLabel
-                                  value="Internal"
+                                  value="Partner"
                                   control={<Radio />}
-                                  label="Internal"
+                                  label="Partner"
                                 />
                                 <FormControlLabel
-                                  value="External"
+                                  value="Member"
                                   control={<Radio />}
-                                  label="External"
+                                  label="Member"
                                 />
                               </MemberRadio>
                             )}
