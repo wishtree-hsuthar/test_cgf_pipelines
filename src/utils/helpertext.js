@@ -12,7 +12,7 @@ export const memberHelper = {
         validate: "Select the CGF activity",
     },
     corporateEmail: {
-        required: "Enter the corporate email",
+
         maxLength: "Max char limit exceed",
         minLength: "minimum 3 characters required",
         pattern: "Invalid Input",

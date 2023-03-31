@@ -797,10 +797,7 @@ const EditMember = () => {
                                         <div className="card-form-field">
                                             <div className="form-group">
                                                 <label htmlFor="corporateEmail">
-                                                    Corporate Email{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
+                                                    Corporate Email{" "}                                            
                                                 </label>
                                                 <Input
                                                     control={control}
@@ -814,7 +811,6 @@ const EditMember = () => {
                                                     placeholder="example@domain.com"
                                                     myHelper={memberHelper}
                                                     rules={{
-                                                        required: "true",
                                                         maxLength: 50,
                                                         minLength: 3,
                                                         pattern:

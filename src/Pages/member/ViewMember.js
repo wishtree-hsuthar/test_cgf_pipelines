@@ -975,9 +975,6 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="corporateEmail">
                                                 Corporate Email{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Input
                                                 isDisabled
