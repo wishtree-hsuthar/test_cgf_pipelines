@@ -1065,9 +1065,6 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="region">
                                                 Region{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Dropdown
                                                 isDisabled
@@ -1082,9 +1079,6 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="country">
                                                 Country{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Dropdown
                                                 isDisabled

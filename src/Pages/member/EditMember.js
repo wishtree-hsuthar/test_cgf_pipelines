@@ -1045,9 +1045,6 @@ const EditMember = () => {
                                             <div className="form-group">
                                                 <label htmlFor="region">
                                                     Region{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
                                                 </label>
                                                 <Dropdown
                                                     control={control}
@@ -1057,7 +1054,6 @@ const EditMember = () => {
                                                     name="region"
                                                     placeholder="Select region"
                                                     myHelper={memberHelper}
-                                                    rules={{ required: true }}
                                                     options={arrOfRegions}
                                                 />
                                             </div>
@@ -1066,9 +1062,7 @@ const EditMember = () => {
                                             <div className="form-group">
                                                 <label htmlFor="country">
                                                     Country{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
+                                                    
                                                 </label>
                                                 <Dropdown
                                                     isDisabled={
@@ -1081,7 +1075,7 @@ const EditMember = () => {
                                                     }
                                                     placeholder="Select country"
                                                     myHelper={memberHelper}
-                                                    rules={{ required: true }}
+                                                    
                                                     options={
                                                         arrOfCountryRegions
                                                     }

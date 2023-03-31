@@ -33,14 +33,8 @@ export const memberHelper = {
         minLength: "minimum 3 characters required",
         pattern: "Enter valid URL",
     },
-    region: {
-        required: "Select the region",
-    },
     cgfOfficeRegion: {
         required: "Select the region",
-    },
-    country: {
-        required: "Select the country",
     },
     cgfOfficeCountry: {
         required: "Select the country",

@@ -852,7 +852,7 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="region">
-                          Region <span className="mandatory">*</span>
+                          Region 
                         </label>
                         <Dropdown
                           control={control}
@@ -860,7 +860,6 @@ const AddMember = () => {
                           name="region"
                           placeholder="Select region"
                           myHelper={memberHelper}
-                          rules={{ required: true }}
                           options={arrOfRegionsAddMember}
                         />
                       </div>
@@ -868,7 +867,7 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="country">
-                          Country <span className="mandatory">*</span>
+                          Country 
                         </label>
                         <Dropdown
                           isDisabled={!watch("region")}
@@ -876,8 +875,7 @@ const AddMember = () => {
                           name="country"
                           myOnChange={onCountryChangeHandlerAddMember}
                           placeholder="Select country"
-                          myHelper={memberHelper}
-                          rules={{ required: true }}
+                          myHelper={memberHelper}            
                           options={arrOfCountryRegionsAddMember}
                         />
                       </div>
