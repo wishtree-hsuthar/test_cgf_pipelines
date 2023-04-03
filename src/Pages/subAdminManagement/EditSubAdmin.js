@@ -204,7 +204,7 @@ const EditSubAdmin = () => {
           setToasterDetails,
           toasterRef,
           navigate,
-          "/users/cgf-adminn/"
+          "/users/cgf-admin"
         );
         // setToasterDetails(
         //     {
