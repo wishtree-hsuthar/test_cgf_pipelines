@@ -33,7 +33,7 @@ export const getCGFOffices = async () => {
 };
 export const defaultValues = {
     memberCompany: "",
-    companyType: "Internal",
+    companyType: "Partner",
     parentCompany: "",
     cgfCategory: "Manufacturer",
     cgfActivity: "",

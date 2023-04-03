@@ -581,19 +581,19 @@ const EditMember = () => {
                                                             >
                                                                 <FormControlLabel
                                                                     disabled
-                                                                    value="Internal"
+                                                                    value="Partner"
                                                                     control={
                                                                         <Radio />
                                                                     }
-                                                                    label="Internal"
+                                                                    label="Partner"
                                                                 />
                                                                 <FormControlLabel
                                                                     disabled
-                                                                    value="External"
+                                                                    value="Member"
                                                                     control={
                                                                         <Radio />
                                                                     }
-                                                                    label="External"
+                                                                    label="Member"
                                                                 />
                                                             </RadioGroup>
                                                         )}
@@ -797,10 +797,7 @@ const EditMember = () => {
                                         <div className="card-form-field">
                                             <div className="form-group">
                                                 <label htmlFor="corporateEmail">
-                                                    Corporate Email{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
+                                                    Corporate Email{" "}                                            
                                                 </label>
                                                 <Input
                                                     control={control}
@@ -814,7 +811,6 @@ const EditMember = () => {
                                                     placeholder="example@domain.com"
                                                     myHelper={memberHelper}
                                                     rules={{
-                                                        required: "true",
                                                         maxLength: 50,
                                                         minLength: 3,
                                                         pattern:
@@ -1049,9 +1045,6 @@ const EditMember = () => {
                                             <div className="form-group">
                                                 <label htmlFor="region">
                                                     Region{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
                                                 </label>
                                                 <Dropdown
                                                     control={control}
@@ -1061,7 +1054,6 @@ const EditMember = () => {
                                                     name="region"
                                                     placeholder="Select region"
                                                     myHelper={memberHelper}
-                                                    rules={{ required: true }}
                                                     options={arrOfRegions}
                                                 />
                                             </div>
@@ -1070,9 +1062,7 @@ const EditMember = () => {
                                             <div className="form-group">
                                                 <label htmlFor="country">
                                                     Country{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
+                                                    
                                                 </label>
                                                 <Dropdown
                                                     isDisabled={
@@ -1085,7 +1075,7 @@ const EditMember = () => {
                                                     }
                                                     placeholder="Select country"
                                                     myHelper={memberHelper}
-                                                    rules={{ required: true }}
+                                                    
                                                     options={
                                                         arrOfCountryRegions
                                                     }
@@ -1103,7 +1093,7 @@ const EditMember = () => {
                                                     }
                                                     control={control}
                                                     name="state"
-                                                    placeholder="Enter state"
+                                                    placeholder="Select state"
                                                     myOnChange={
                                                         onStateChangeHandler
                                                     }
@@ -1228,7 +1218,7 @@ const EditMember = () => {
                                                                             ""
                                                                         )
                                                                     }
-                                                                    placeholder="N/A"
+                                                                    placeholder="Enter city"
                                                                 />
                                                             )}
                                                         />
@@ -1298,10 +1288,7 @@ const EditMember = () => {
                                         <div className="card-form-field">
                                             <div className="form-group">
                                                 <label htmlFor="cgfOfficeRegion">
-                                                    Region{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
+                                                    Region{" "}                                                    
                                                 </label>
                                                 <Dropdown
                                                     isDisabled
@@ -1310,7 +1297,6 @@ const EditMember = () => {
                                                     // myOnChange={cgfOfficeRegionChangeHandler}
                                                     placeholder="Select Region"
                                                     myHelper={memberHelper}
-                                                    rules={{ required: true }}
                                                     options={arrOfRegions}
                                                 />
                                             </div>
@@ -1319,17 +1305,13 @@ const EditMember = () => {
                                             <div className="form-group">
                                                 <label htmlFor="cgfOfficeCountry">
                                                     Country{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
                                                 </label>
                                                 <Dropdown
                                                     isDisabled
                                                     control={control}
                                                     name="cgfOfficeCountry"
                                                     placeholder="Select country"
-                                                    myHelper={memberHelper}
-                                                    rules={{ required: true }}
+                                                    myHelper={memberHelper}                                                    
                                                     options={
                                                         arrOfCgfOfficeCountryRegions
                                                             ? arrOfCgfOfficeCountryRegions
@@ -1342,9 +1324,6 @@ const EditMember = () => {
                                             <div className="form-group">
                                                 <label htmlFor="cgfOffice">
                                                     Office{" "}
-                                                    <span className="mandatory">
-                                                        *
-                                                    </span>
                                                 </label>
                                                 <Dropdown
                                                     isDisabled
@@ -1352,7 +1331,6 @@ const EditMember = () => {
                                                     name="cgfOffice"
                                                     placeholder="Select office"
                                                     myHelper={memberHelper}
-                                                    rules={{ required: true }}
                                                     options={CGF_OFFICES}
                                                 />
                                             </div>

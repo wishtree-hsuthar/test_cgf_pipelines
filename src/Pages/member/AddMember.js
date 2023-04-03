@@ -549,14 +549,14 @@ const AddMember = () => {
                                 className="radio-btn"
                               >
                                 <FormControlLabel
-                                  value="Internal"
+                                  value="Partner"
                                   control={<Radio />}
-                                  label="Internal"
+                                  label="Partner"
                                 />
                                 <FormControlLabel
-                                  value="External"
+                                  value="Member"
                                   control={<Radio />}
-                                  label="External"
+                                  label="Member"
                                 />
                               </MemberRadio>
                             )}
@@ -693,7 +693,7 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="corporateEmail">
-                          Corporate Email <span className="mandatory">*</span>
+                          Corporate Email 
                         </label>
                         <Input
                           control={control}
@@ -704,7 +704,6 @@ const AddMember = () => {
                           placeholder="example@domain.com"
                           myHelper={memberHelper}
                           rules={{
-                            required: "true",
                             maxLength: 50,
                             minLength: 3,
                             pattern:
@@ -853,7 +852,7 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="region">
-                          Region <span className="mandatory">*</span>
+                          Region 
                         </label>
                         <Dropdown
                           control={control}
@@ -861,7 +860,6 @@ const AddMember = () => {
                           name="region"
                           placeholder="Select region"
                           myHelper={memberHelper}
-                          rules={{ required: true }}
                           options={arrOfRegionsAddMember}
                         />
                       </div>
@@ -869,7 +867,7 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="country">
-                          Country <span className="mandatory">*</span>
+                          Country 
                         </label>
                         <Dropdown
                           isDisabled={!watch("region")}
@@ -877,8 +875,7 @@ const AddMember = () => {
                           name="country"
                           myOnChange={onCountryChangeHandlerAddMember}
                           placeholder="Select country"
-                          myHelper={memberHelper}
-                          rules={{ required: true }}
+                          myHelper={memberHelper}            
                           options={arrOfCountryRegionsAddMember}
                         />
                       </div>
@@ -1010,7 +1007,7 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="cgfOfficeRegion">
-                          Region <span className="mandatory">*</span>
+                          Region 
                         </label>
                         <Dropdown
                           control={control}
@@ -1018,7 +1015,6 @@ const AddMember = () => {
                           myOnChange={cgfOfficeRegionChangeHandlerAddMember}
                           placeholder="Select region"
                           myHelper={memberHelper}
-                          rules={{ required: true }}
                           options={arrOfRegionsAddMember}
                         />
                       </div>
@@ -1026,7 +1022,7 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="cgfOfficeCountry">
-                          Country <span className="mandatory">*</span>
+                          Country 
                         </label>
                         <Dropdown
                           isDisabled={!watch("cgfOfficeRegion")}
@@ -1034,7 +1030,6 @@ const AddMember = () => {
                           name="cgfOfficeCountry"
                           placeholder="Select country"
                           myHelper={memberHelper}
-                          rules={{ required: true }}
                           options={arrOfCgfOfficeCountryRegionsAddMember}
                         />
                       </div>
@@ -1042,14 +1037,13 @@ const AddMember = () => {
                     <div className="card-form-field">
                       <div className="form-group">
                         <label htmlFor="cgfOffice">
-                          Office <span className="mandatory">*</span>
+                          Office 
                         </label>
                         <Dropdown
                           control={control}
                           name="cgfOffice"
                           placeholder="Select office"
                           myHelper={memberHelper}
-                          rules={{ required: true }}
                           options={CGF_OFFICES}
                         />
                       </div>
