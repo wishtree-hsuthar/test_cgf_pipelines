@@ -650,7 +650,8 @@ const ViewMember = () => {
     const getRoleNameByRoleId = async (isMounted, controller, data) => {
         try {
             const roleId = data?.memberRepresentativeId?.[0]?.roleId;
-            const response = await axios.get(VIEW_ROLE + roleId);
+            if(!roleId) return "";
+            const response = await axios.get(VIEW_ROLE + roleId );
             Logger.debug("response", response?.data?.name);
             return response?.data?.name;
         } catch (error) {
@@ -855,15 +856,15 @@ const ViewMember = () => {
                                                 >
                                                     <FormControlLabel
                                                         disabled
-                                                        value="Internal"
+                                                        value="Partner"
                                                         control={<Radio />}
-                                                        label="Internal"
+                                                        label="Partner"
                                                     />
                                                     <FormControlLabel
                                                         disabled
-                                                        value="External"
+                                                        value="Member"
                                                         control={<Radio />}
-                                                        label="External"
+                                                        label="Member"
                                                     />
                                                 </RadioGroup>
                                             </div>
@@ -975,9 +976,6 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="corporateEmail">
                                                 Corporate Email{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Input
                                                 isDisabled
@@ -1068,15 +1066,12 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="region">
                                                 Region{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Dropdown
                                                 isDisabled
                                                 control={control}
                                                 name="region"
-                                                placeholder="Select region"
+                                                placeholder="N/A"
                                                 options={arrOfRegions}
                                             />
                                         </div>
@@ -1085,15 +1080,12 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="country">
                                                 Country{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Dropdown
                                                 isDisabled
                                                 control={control}
                                                 name="country"
-                                                placeholder="Select country"
+                                                placeholder="N/A"
                                                 myHelper={myHelper}
                                                 options={arrOfCountryRegions}
                                             />
@@ -1106,7 +1098,7 @@ const ViewMember = () => {
                                                 isDisabled
                                                 control={control}
                                                 name="state"
-                                                placeholder="Enter state"
+                                                placeholder="N/A"
                                                 options={arrOfStateCountry}
                                             />
                                         </div>
@@ -1181,7 +1173,7 @@ const ViewMember = () => {
                                                 }}
                                                 className={`input-textarea`}
                                                 id="outlined-basic"
-                                                placeholder="Enter address"
+                                                placeholder="N/A"
                                                 variant="outlined"
                                                 helperText=" "
                                             />
@@ -1200,13 +1192,11 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="cgfOfficeRegion">
                                                 Region{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Dropdown
                                                 isDisabled
                                                 control={control}
+                                                placeholder="N/A"
                                                 name="cgfOfficeRegion"
                                                 options={arrOfRegions}
                                             />
@@ -1216,15 +1206,12 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="cgfOfficeCountry">
                                                 Country{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Dropdown
                                                 isDisabled
                                                 control={control}
                                                 name="cgfOfficeCountry"
-                                                placeholder="Select country"
+                                                placeholder="N/A"
                                                 options={
                                                     arrOfCgfOfficeCountryRegions
                                                         ? arrOfCgfOfficeCountryRegions
@@ -1237,15 +1224,12 @@ const ViewMember = () => {
                                         <div className="form-group">
                                             <label htmlFor="cgfOffice">
                                                 Office{" "}
-                                                <span className="mandatory">
-                                                    *
-                                                </span>
                                             </label>
                                             <Dropdown
                                                 isDisabled
                                                 control={control}
                                                 name="cgfOffice"
-                                                placeholder="Select office"
+                                                placeholder="N/A"
                                                 options={CGF_OFFICES}
                                             />
                                         </div>
