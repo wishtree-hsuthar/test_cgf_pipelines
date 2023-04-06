@@ -100,7 +100,7 @@ const PublishedQuestionnaires = ({
     const generateUrl = () => {
         Logger.debug("Search", search);
         let url = `${ADD_QUESTIONNAIRE}/list?page=${pagePublishedQuestionnaire}&size=${rowsPerPagePublishedQuestionnaire}&orderBy=${orderByPublishedQuestionnaire}&order=${orderPublishedQuestionnaire}`;
-        if (search?.length >= 3) url += `&search=${search}`;
+        if (search?.length) url += `&search=${search}`;
 
         return url;
     };
