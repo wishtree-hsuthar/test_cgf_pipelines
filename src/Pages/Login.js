@@ -126,7 +126,7 @@ const Login = (prop) => {
       if (
         error.response.status == 401 &&
         error.response.data.message ===
-          "You no longer have access to the system. Kindly contact system admin."
+          "Access denied. Kindly contact system admin."
       ) {
         return setLoginToasterDetails(
           {

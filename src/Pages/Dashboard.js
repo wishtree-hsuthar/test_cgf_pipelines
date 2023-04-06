@@ -29,7 +29,8 @@ const Dashboard = (props) => {
   //   );
   let userRoleDeleted =
     Object.keys(checkUser.role).length === 0 ||
-    Object.keys(checkPrivilege).length === 0;
+    (Object.keys(checkPrivilege).length === 0 &&
+      checkUser?.role?.name !== "Super Admin");
   // checkPrivilege !== undefined &&
   // Object.keys(checkPrivilege).length === 0 &&
   // checkUser?.role?.name !== "Super Admin";
