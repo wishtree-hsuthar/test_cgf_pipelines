@@ -473,7 +473,7 @@ const ViewSubAdmin = () => {
                     <TextField
                       className={`input-field `}
                       id="outlined-basic"
-                      placeholder="Enter email address"
+                      placeholder="N/A"
                       variant="outlined"
                       disabled={true}
                       value={
