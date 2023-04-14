@@ -97,7 +97,7 @@ const Chart1 = ({
             },
             datalabels: {
               color: "black",
-              formatter: (value) => "      " + value + "%",
+              formatter: (value) =>  "    "+ value + "%",
             },
             tooltip: {
               enabled: false,
