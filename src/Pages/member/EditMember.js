@@ -248,6 +248,7 @@ const EditMember = () => {
     const categoryChangeHandler1 = (e) => {
         setValue("cgfCategory", e.target.value);
         trigger("cgfCategory");
+        trigger("cgfActivity")
         setValue("cgfActivity", "");
     };
     const getCites = async () => {

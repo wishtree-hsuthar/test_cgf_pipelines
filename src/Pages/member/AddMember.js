@@ -132,7 +132,7 @@ const AddMember = () => {
         companyName: data.memberCompany,
         companyType: data.companyType,
         cgfCategory: data.cgfCategory,
-        cgfActivity: data.cgfActivity ? data.cgfActivity : "N/A",
+        cgfActivity: data.cgfActivity ?? "N/A",
         corporateEmail: data.corporateEmail,
         region: data.region,
         country: data.country,
@@ -413,6 +413,7 @@ const AddMember = () => {
   const categoryChangeHandlerAddMember = (e) => {
     setValue("cgfCategory", e.target.value);
     trigger("cgfCategory");
+    trigger("cgfActivity")
     setValue("cgfActivity", "");
   };
   const phoneNumberChangeHandlerAddMember = (e, name, code) => {

@@ -257,7 +257,7 @@ const ResetPassword = () => {
                                     <img
                                       src={
                                         process.env.PUBLIC_URL +
-                                        "/images/non-visibleicon.svg"
+                                        "/images/visibleicon.svg"
                                       }
                                       alt=""
                                       className="img-fluid"
@@ -266,7 +266,7 @@ const ResetPassword = () => {
                                     <img
                                       src={
                                         process.env.PUBLIC_URL +
-                                        "/images/visibleicon.svg"
+                                        "/images/non-visibleicon.svg"
                                       }
                                       alt=""
                                       className="img-fluid"
@@ -322,7 +322,7 @@ const ResetPassword = () => {
                                     <img
                                       src={
                                         process.env.PUBLIC_URL +
-                                        "/images/non-visibleicon.svg"
+                                        "/images/visibleicon.svg"
                                       }
                                       alt=""
                                       className="img-fluid"
@@ -331,7 +331,7 @@ const ResetPassword = () => {
                                     <img
                                       src={
                                         process.env.PUBLIC_URL +
-                                        "/images/visibleicon.svg"
+                                        "/images/non-visibleicon.svg"
                                       }
                                       alt=""
                                       className="img-fluid"
