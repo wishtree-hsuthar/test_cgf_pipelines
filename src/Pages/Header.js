@@ -162,6 +162,15 @@ const Header = () => {
       //   REPORT_ISSUE_LINK = replaceSpecialCharcters(response?.data);
       //   console.log("REPORT AN ISSUE", REPORT_ISSUE_LINK);
     } catch (error) {
+      if (
+        error?.response?.status === 403 &&
+        error?.response?.data?.message ===
+          "You don't have required privileges to access this resource!"
+      ) {
+        Logger.debug(
+          "You don't have required privileges to access this resource!"
+        );
+      }
       console.log("error", error);
       Logger.debug("Error:- ", error);
     }
@@ -187,6 +196,18 @@ const Header = () => {
     navigate("/change-password");
     setAnchorElUser(null);
     setActive(!isActive);
+  };
+  const showContent = () => {
+    Logger.debug("show content function");
+    let hideContent;
+    if (SUPER_ADMIN && Object.keys(userAuth?.role?.privileges).length === 0) {
+      Logger.debug("showing content to super admin");
+      hideContent = false;
+    } else {
+      Logger.debug("hiding content to others");
+      hideContent = true;
+    }
+    return hideContent;
   };
   return (
     <AppBar position="sticky" className="header-sect">
@@ -513,12 +534,10 @@ const Header = () => {
                                     Change Password
                                   </span>
                                 </div>
-                                <div
-                                  className="tertiary-btn-blk mt-20"
-                                  onClick={handleChangePassword}
-                                >
+                                <div className="tertiary-btn-blk mt-20">
                                   <span className="addmore-txt">
                                     <a
+                                      hidden={showContent()}
                                       href={REPORT_ISSUE_LINK}
                                       target={"_blank"}
                                       style={{

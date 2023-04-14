@@ -137,7 +137,10 @@ const ResetPassword = () => {
       }
     } catch (error) {
       Logger.debug("error from reset password submit method", error);
-      if (error?.response?.status == 400) {
+      if (
+        error?.response?.status == 400 &&
+        error?.response?.data?.message !== "Invalid token"
+      ) {
         setResetPassordMessageType("error");
         setResetPasswordMessageTitle("Password Reset Failure");
         setResetPasswordMessageDescription(error?.response?.data?.message);
@@ -145,6 +148,11 @@ const ResetPassword = () => {
         setTimeout(() => {
           resetPasswordToasterRef.current();
         }, 1000);
+      } else if (
+        error?.response?.status === 400 &&
+        error?.response?.data?.message === "Invalid token"
+      ) {
+        setShowInvalidTokenMessage(true);
       }
     }
   };
