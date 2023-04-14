@@ -86,7 +86,7 @@ const Chart2 = ({ graphLevelBreakdown, chartImages, setChartImages }) => {
               },
             },
             datalabels: {
-              align: 'top',
+              // align: 'top',
               color: "black",
               formatter: (value) => value + "%",
             },
