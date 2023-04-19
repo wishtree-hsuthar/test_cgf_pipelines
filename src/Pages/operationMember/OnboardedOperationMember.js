@@ -17,6 +17,8 @@ tempTableHead.push({
 });
 
 function OnboardedOperationMember({
+    pageForOnboardedOperationMemberTab,
+    setPageForOnboardedOperationMemberTab,
     makeApiCall,
     setMakeApiCall,
     search,
@@ -57,10 +59,7 @@ function OnboardedOperationMember({
     Logger.info("privilege", privilege);
 
     const navigate = useNavigate();
-    const [
-        pageForOnboardedOperationMemberTab,
-        setPageForOnboardedOperationMemberTab,
-    ] = React.useState(1);
+   
     const [
         rowsPerPageForOnboardedOperationMemberTab,
         setRowsPerPageForOnboardedOperationMemberTab,

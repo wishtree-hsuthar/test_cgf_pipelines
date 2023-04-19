@@ -17,6 +17,8 @@ tempTableHead.push({
 
 function PendingOperationMembers({
     makeApiCall,
+    pageForPendingOperationMemberTab,
+    setPageForPendingOperationMemberTab,
     setMakeApiCall,
     search,
     filters,
@@ -38,10 +40,7 @@ function PendingOperationMembers({
         setWithdrawInviteidOfOperationMember,
     ] = useState("");
 
-    const [
-        pageForPendingOperationMemberTab,
-        setPageForPendingOperationMemberTab,
-    ] = React.useState(1);
+    
     const [
         rowsPerPageForPendingOperationMemberTab,
         setRowsPerPageForPendingOperationMemberTab,

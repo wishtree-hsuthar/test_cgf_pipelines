@@ -45,7 +45,10 @@ const onBoardedTableColumnHead = [
   //     label: "Action",
   // },
 ];
+
 function OnBoardedSubAdminsTable({
+  page,
+  setPage,
   makeApiCall,
   setMakeApiCall,
   search,
@@ -53,7 +56,7 @@ function OnBoardedSubAdminsTable({
   selectedRoles,
 }) {
   const navigate = useNavigate();
-  const [page, setPage] = React.useState(1);
+  // const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("");

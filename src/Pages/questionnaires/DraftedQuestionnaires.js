@@ -9,6 +9,8 @@ import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
 function DraftedQuestionnaires({
+    pageDraftedQuestionnaire,
+    setPageDraftedQuestionnaire,
     makeApiCall,
     setMakeApiCall,
     search,
@@ -44,7 +46,7 @@ function DraftedQuestionnaires({
     const keysOrder = ["_id", "title", "uuid", "createdAt", "isActive"];
 
     //code of tablecomponent
-    const [pageDraftedQuestionnaire, setPageDraftedQuestionnaire] = useState(1);
+   
     const [
         rowsPerPageDraftedQuestionnaire,
         setRowsPerPageDraftedQuestionnaire,

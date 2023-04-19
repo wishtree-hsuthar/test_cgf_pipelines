@@ -22,6 +22,14 @@ function OperationMemberList() {
         descriptionMessage: "",
         messageType: "success",
     });
+    const [
+        pageForOnboardedOperationMemberTab,
+        setPageForOnboardedOperationMemberTab,
+    ] = React.useState(1);
+    const [
+        pageForPendingOperationMemberTab,
+        setPageForPendingOperationMemberTab,
+    ] = React.useState(1);
     const operationMemberRef = useRef();
     const [search, setSearch] = useState("");
     const [value, setValue] = React.useState(0);
@@ -55,6 +63,8 @@ function OperationMemberList() {
         setSearchTimeout(
             setTimeout(() => {
                 setMakeApiCall(true);
+                setPageForOnboardedOperationMemberTab(1)
+                setPageForPendingOperationMemberTab(1)
             }, 1000)
         );
     };
@@ -68,6 +78,16 @@ function OperationMemberList() {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+    const onKeyDownChangeHandler = (e) => {
+        if(e.key === "Enter"){
+            
+            setMakeApiCall(true)
+            setPageForOnboardedOperationMemberTab(1)
+            setPageForPendingOperationMemberTab(1)
+            // setPage(1)
+        }
+
+    }
     const navigate = useNavigate();
     return (
         <>
@@ -182,10 +202,7 @@ function OperationMemberList() {
                                         type="text"
                                         placeholder="Search"
                                         value={search}
-                                        onKeyDown={(e) =>
-                                            e.key === "Enter" &&
-                                            setMakeApiCall(true)
-                                        }
+                                        onKeyDown={onKeyDownChangeHandler}
                                         onChange={
                                             (e) => onSearchChangeHandler(e)
 
@@ -203,6 +220,8 @@ function OperationMemberList() {
                         <div className="member-info-wrapper table-content-wrap">
                             <TabPanel value={value} index={0}>
                                 <OnboardedOperationMember
+                                pageForOnboardedOperationMemberTab={pageForOnboardedOperationMemberTab}
+                                setPageForOnboardedOperationMemberTab={setPageForOnboardedOperationMemberTab}
                                     makeApiCall={makeApiCall}
                                     setMakeApiCall={setMakeApiCall}
                                     search={search}
@@ -217,6 +236,8 @@ function OperationMemberList() {
                             </TabPanel>
                             <TabPanel value={value} index={1}>
                                 <PendingOperationMembers
+                                    pageForPendingOperationMemberTab={pageForPendingOperationMemberTab}
+                                    setPageForPendingOperationMemberTab={setPageForPendingOperationMemberTab}
                                     makeApiCall={makeApiCall}
                                     setMakeApiCall={setMakeApiCall}
                                     search={search}
