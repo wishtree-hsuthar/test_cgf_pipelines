@@ -364,6 +364,12 @@ const ReplaceOperationMember = () => {
             ),
         });
     };
+    const onKeyDownChangeHandler = (e) => {
+        if(e.key === "Enter"){
+            setMakeApiCallReplaceOP(true)
+            setOPPage(1)
+        }
+    }
     return (
         <div className="page-wrapper">
             <Toaster
@@ -431,6 +437,7 @@ const ReplaceOperationMember = () => {
                                     onChange={(e) =>
                                         onSearchChangeHandlerReplaceOP(e)
                                     }
+                                    onKeyDown={onKeyDownChangeHandler}
                                     name="search"
                                 />
                                 <button type="submit">

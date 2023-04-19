@@ -46,7 +46,8 @@ function PendingCGFAdmins({
   setMakeApiCall,
   search,
   filters,
-
+  pageForPendingTabCGFAdmin,
+  setPageForPendingTabCGFAdmin,
   myRef,
   pendingCgftoasterDetails,
   setPendingCgfToasterDetails,
@@ -64,7 +65,7 @@ function PendingCGFAdmins({
 
   // state to manage loader
   const [isPendingCgfAdmin, setIsPendingCgfAdmin] = useState(true);
-
+  const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
   //state to hold search timeout delay
   const [searchTimeoutPendingCGFAdmin, setSearchTimeoutPendingCGFAdmin] =
     useState(null);
@@ -72,8 +73,7 @@ function PendingCGFAdmins({
 
   const navigate = useNavigate();
   //(onboarded users/cgf-admin/ table) order in which records needs to show
-  const [pageForPendingTabCGFAdmin, setPageForPendingTabCGFAdmin] =
-    React.useState(1);
+ 
   const [
     rowsPerPageForPendingTabCGFAdmin,
     setRowsPerPageForPendingTabCGFAdmin,
