@@ -2,6 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!-- <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self';script-src 'unsafe-inline' code.jquery.com/jquery-3.4.1.min.js localhost:3003/static/js/bundle.js; connect-src http://*; img-src 'self'; style-src 'unsafe-inline' localhost:3003/css/font-awesome/css/all.min.css ;base-uri 'self';form-action 'self'"
+    /> -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' code.jquery.com/jquery-3.4.1.min.js 'sha256-nWEXNECyF8fcu3RB3v8D45l+M4NMWlxxi2wfzDjfxcg=' ;connect-src http://localhost:* ws://localhost:* "
+    />
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
