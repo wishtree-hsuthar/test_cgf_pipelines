@@ -369,6 +369,15 @@ const ReplaceSubAdmin = () => {
       ),
     });
   };
+  const onKeyDownChangeHandler = (e) => {
+    if(e.key === "Enter"){
+        setMakeApiCallReplaceCGFAdmin(true)
+        // setMakeApiCall(true)
+        setReplaceCGFAdminPage(1)
+        // setPage(1)
+    }
+
+}
   return (
     <div className="page-wrapper">
       <Toaster
@@ -424,9 +433,7 @@ const ReplaceSubAdmin = () => {
                 <input
                   type="text"
                   placeholder="Search"
-                  onKeyDown={(e) =>
-                    e.key === "Enter" && setMakeApiCallReplaceCGFAdmin(true)
-                  }
+                  onKeyDown={onKeyDownChangeHandler}
                   onChange={(e) => onSearchChangeHandler(e)}
                   name="search"
                 />

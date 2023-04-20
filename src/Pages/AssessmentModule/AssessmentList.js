@@ -310,7 +310,13 @@ const AssessmentList = () => {
 
         return icons;
     };
+    const onKeyDownChangeHandler = (e) => {
+        if(e.key === "Enter"){
+            setMakeApiCall(true)
+            setPage(1)
+        }
 
+    }
     return (
         <div>
             <Toaster
@@ -334,10 +340,7 @@ const AssessmentList = () => {
                                             value={search}
                                             name="search"
                                             placeholder="Search"
-                                            onKeyDown={(e) =>
-                                                e.key === "Enter" &&
-                                                setMakeApiCall(true)
-                                            }
+                                            onKeyDown={onKeyDownChangeHandler}
                                             onChange={onSearchChangeHandler}
                                         />
                                         <button type="submit">

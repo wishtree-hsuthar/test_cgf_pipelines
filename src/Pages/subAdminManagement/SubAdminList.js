@@ -1,409 +1,200 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Box, Tabs, Tab } from "@mui/material";
-import { Logger } from "../../Logger/Logger";
 import DownloadIcon from "@mui/icons-material/Download";
-import useCallbackState from "../../utils/useCallBackState";
-import { privateAxios } from "../../api/axios";
-import Toaster from "../../components/Toaster";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Logger } from "../../Logger/Logger";
 import {
-    ADD_SUB_ADMIN,
-    DOWNLOAD_CGF_ADMIN,
-    FETCH_ROLES,
-    WITHDRAW_SUB_ADMIN,
+    DOWNLOAD_CGF_ADMIN
 } from "../../api/Url";
-import DialogBox from "../../components/DialogBox";
-import OnBoardedSubAdminsTable from "./OnBoardedSubAdminsTable";
-import PendingCGFAdmins from "./PendingCGFAdmins";
-import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { TabPanel } from "../../utils/tabUtils/TabPanel";
+import Toaster from "../../components/Toaster";
 import { downloadFunction } from "../../utils/downloadFunction";
 import TabHeader from "../../utils/tabUtils/TabHeader";
+import { TabPanel } from "../../utils/tabUtils/TabPanel";
+import useCallbackState from "../../utils/useCallBackState";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import OnBoardedSubAdminsTable from "./OnBoardedSubAdminsTable";
+import PendingCGFAdmins from "./PendingCGFAdmins";
 function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        "aria-controls": `simple-tabpanel-${index}`,
-    };
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
 }
 
 const SubAdminList = () => {
-    //custom hook to set title of page
-    useDocumentTitle("CGF Admins");
+  //custom hook to set title of page
+  useDocumentTitle("CGF Admins");
 
-    const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(0);
 
-    //Refr for Toaster
-    const cgfAdminRef = React.useRef();
-    //Toaster Message setter
-    const [toasterDetails, setToasterDetails] = useCallbackState({
-        titleMessage: "",
-        descriptionMessage: "",
-        messageType: "success",
+  //Refr for Toaster
+  const cgfAdminRef = React.useRef();
+  //Toaster Message setter
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "success",
+  });
+  // const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
+  const [withdrawInviteid, setWithdrawInviteid] = useState("");
+
+  // state to manage loader
+  const [isLoading, setIsLoading] = useState(false);
+
+  //state to hold search timeout delay
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  //state to hold wheather to make api call or not
+  const [makeApiCall, setMakeApiCall] = useState(true);
+
+  const navigate = useNavigate();
+  //(onboarded users/cgf-admin/ table) order in which records needs to show
+
+  // const [page, setPage] = React.useState(1);
+
+  const pendingKeysOrder = [
+    "_id",
+    "name",
+    "email",
+    "role",
+    "createdAt",
+    // "token",
+  ];
+
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState({
+    status: "all",
+    role: "",
+  });
+  const onFilterChangeHandler = (e) => {
+    Logger.debug("filter value: ", e.target.value);
+    // Logger.debug("type of time out func",typeof(timoutFunc))
+    setPage(1);
+    setFilters({
+      ...filters,
+      [e.target.name]: e.target.value,
     });
-    const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
-    const [withdrawInviteid, setWithdrawInviteid] = useState("");
-
-    // state to manage loader
-    const [isLoading, setIsLoading] = useState(false);
-
-    //state to hold search timeout delay
-    const [searchTimeout, setSearchTimeout] = useState(null);
-    //state to hold wheather to make api call or not
-    const [makeApiCall, setMakeApiCall] = useState(true);
-
-    const navigate = useNavigate();
-    //(onboarded users/cgf-admin/ table) order in which records needs to show
-
-    const [page, setPage] = React.useState(1);
-
-    const pendingKeysOrder = [
-        "_id",
-        "name",
-        "email",
-        "role",
-        "createdAt",
-        // "token",
-    ];
-
-    const [search, setSearch] = useState("");
-    const [filters, setFilters] = useState({
-        status: "all",
-        role: "",
-    });
-    const onFilterChangeHandler = (e) => {
-        Logger.debug("filter value: ", e.target.value);
-        // Logger.debug("type of time out func",typeof(timoutFunc))
+    Logger.debug("filters in parent component", filters);
+  };
+  const onSearchChangeHandler = (e) => {
+    Logger.debug("event", e.key);
+    if (searchTimeout) clearTimeout(searchTimeout);
+    setMakeApiCall(false);
+    Logger.debug("search values", e.target.value);
+    setSearch(e.target.value);
+    setSearchTimeout(
+      setTimeout(() => {
+        setMakeApiCall(true);
+        // setPageForPendingTab(1)
+        setPageForPendingTabCGFAdmin(1);
         setPage(1);
-        setFilters({
-            ...filters,
-            [e.target.name]: e.target.value,
-        });
-        Logger.debug("filters in parent component", filters);
-    };
-    const onSearchChangeHandler = (e) => {
-        Logger.debug("event", e.key);
-        if (searchTimeout) clearTimeout(searchTimeout);
-        setMakeApiCall(false);
-        Logger.debug("search values", e.target.value);
-        setSearch(e.target.value);
-        setSearchTimeout(
-            setTimeout(() => {
-                setMakeApiCall(true);
-                setPage(1);
-            }, 1000)
-        );
-    };
-    //code of tablecomponent onboarded tab
-
-    //code of tablecomponent pending tab
-    const [pageForPendingTab, setPageForPendingTab] = React.useState(1);
-    const [rowsPerPageForPendingTab, setRowsPerPageForPendingTab] =
-        React.useState(10);
-    const [orderForPendingTab, setOrderForPendingTab] = React.useState("desc");
-    const [orderByForPending, setOrderByForPendingTab] =
-        React.useState("createdAt");
-    const [recordsForPendingTab, setRecordsForPendingTab] = React.useState([]);
-    const [totalRecordsForPendingTab, setTotalRecordsForPendingTab] =
-        React.useState(0);
-
-    //implemention of pagination on front-end
-    // let records = [];
-
-    const updatePendingRecordsCGFAdmin = (data) => {
-        Logger.debug("data before update----", data);
-
-        let staleData = data;
-        staleData.forEach((cgfAdmin) => {
-            delete cgfAdmin["updatedAt"];
-            delete cgfAdmin["data"]["description"];
-            delete cgfAdmin["data"]["countryCode"];
-            delete cgfAdmin["data"]["isDeleted"];
-            delete cgfAdmin["__v"];
-            delete cgfAdmin["data"]["password"];
-            delete cgfAdmin["data"]["roleId"];
-            delete cgfAdmin["data"]["salt"];
-            delete cgfAdmin["data"]["uuid"];
-            delete cgfAdmin["data"]["phoneNumber"];
-            delete cgfAdmin["token"];
-            delete cgfAdmin["tokenExpiry"];
-            delete cgfAdmin["tokenType"];
-
-            cgfAdmin["createdAt"] = new Date(
-                cgfAdmin["createdAt"]
-            ).toLocaleDateString("en-US", {
-                month: "2-digit",
-                day: "2-digit",
-                year: "numeric",
-            });
-
-            cgfAdmin["role"] = cgfAdmin["subRole"][0].name;
-            cgfAdmin["name"] = cgfAdmin["data"].name;
-            cgfAdmin["email"] = cgfAdmin["data"].email;
-            delete cgfAdmin["subRole"];
-            delete cgfAdmin["data"];
-            delete cgfAdmin["memberData"];
-
-            pendingKeysOrder.forEach((k) => {
-                const v = cgfAdmin[k];
-                delete cgfAdmin[k];
-                cgfAdmin[k] = v;
-            });
-        });
-        Logger.debug(
-            "data in updaterecords method in pending method",
-            staleData
-        );
-        setRecordsForPendingTab([...staleData]);
-    };
-
-    //page change method for pending tab
-    const handlePendingTablePageChange = (newPage) => {
-        setPageForPendingTab(newPage);
-    };
-
-    // rows per page method for pending tab
-    const handleRowsPerPageChangeForPendingTab = (event) => {
-        Logger.debug("rows per page", event);
-        setRowsPerPageForPendingTab(parseInt(event.target.value, 10));
-        setPageForPendingTab(1);
-    };
-
-    //  on click delete icon open delete modal
-    const onClickDeleteIconHandler = (id) => {
-        Logger.debug("id for delete", id);
-        setOpenDeleteDialogBox(true);
-        setWithdrawInviteid(id);
-    };
-
-    const withdrawInviteByIdCGFAdmin = async () => {
-        try {
-            const response = await privateAxios.delete(
-                WITHDRAW_SUB_ADMIN + withdrawInviteid
-            );
-            if (response.status == 200) {
-                Logger.debug("user invite withdrawn successfully");
-                setToasterDetails(
-                    {
-                        titleMessage: "Success",
-                        descriptionMessage: response?.data?.message,
-                        messageType: "success",
-                    },
-                    () => cgfAdminRef.current()
-                );
-                getSubAdminPending();
-                setOpenDeleteDialogBox(false);
-            }
-        } catch (error) {
-            Logger.debug("error from withdrawInvite id", error);
-        }
-    };
-
-    // url for pending tab
-    const generateUrlForPendingTab = () => {
-        Logger.debug("filters", filters);
-        Logger.debug("Search", search);
-        let url = `${ADD_SUB_ADMIN}/pending?page=${pageForPendingTab}&size=${rowsPerPageForPendingTab}&orderBy=${orderByForPending}&order=${orderForPendingTab}`;
-
-        if (search?.length >= 0) url += `&search=${search}`;
-
-        return url;
-    };
-
-    const getSubAdminPending = async (
-        isMounted = true,
-        controller = new AbortController()
-    ) => {
-        try {
-            let url = generateUrlForPendingTab();
-            setIsLoading(true);
-            const response = await privateAxios.get(url, {
-                signal: controller.signal,
-            });
-
-            setTotalRecordsForPendingTab(
-                parseInt(response.headers["x-total-count"])
-            );
-            Logger.debug(
-                "Response from sub admin api get for pending tab table",
-                response
-            );
-
-            updatePendingRecordsCGFAdmin(response.data);
-            setIsLoading(false);
-        } catch (error) {
-            if (error?.code === "ERR_CANCELED") return;
-
-            Logger.debug(
-                "Error from getSubAdmin pending tab table-------",
-                error
-            );
-            isMounted &&
-                setToasterDetails(
-                    {
-                        titleMessage: "Error",
-                        descriptionMessage:
-                            error?.response?.data?.error &&
-                            typeof error.response.data.error === "string"
-                                ? error.response.data.error
-                                : "Something went wrong.",
-
-                        messageType: "error",
-                    },
-                    () => cgfAdminRef.current()
-                );
-            setIsLoading(false);
-        }
-    };
-
-    useEffect(
-        () => {
-            let isMounted = true;
-            const controller = new AbortController();
-            Logger.debug("makeApiCall", makeApiCall);
-            Logger.debug("inside use Effect");
-            return () => {
-                isMounted = false;
-                clearTimeout(searchTimeout);
-                controller.abort();
-            };
-        },
-        [
-            // filters,
-            // makeApiCall,
-            // value,
-            // pageForPendingTab,
-            // rowsPerPageForPendingTab,
-            // orderByForPending,
-            // orderForPendingTab,
-        ]
+      }, 1000)
     );
-    {
-        Logger.debug("makeApiCall outside UseEffect ", makeApiCall);
-    }
+  };
+  //code of tablecomponent onboarded tab
 
-    const [selectedRoles, setSelectedRoles] = useState([]);
-    const [selectedStatusFilter, setSelectedStatusFilter] = useState("");
+  //code of tablecomponent pending tab
+  const [pageForPendingTab, setPageForPendingTab] = React.useState(1);
+  const [pageForPendingTabCGFAdmin, setPageForPendingTabCGFAdmin] =
+    React.useState(1);
+  const [page, setPage] = React.useState(1);
+  const [rowsPerPageForPendingTab, setRowsPerPageForPendingTab] =
+    React.useState(10);
+  const [orderForPendingTab, setOrderForPendingTab] = React.useState("desc");
+  const [orderByForPending, setOrderByForPendingTab] =
+    React.useState("createdAt");
+  const [recordsForPendingTab, setRecordsForPendingTab] = React.useState([]);
+  const [totalRecordsForPendingTab, setTotalRecordsForPendingTab] =
+    React.useState(0);
 
-    const [searchText, setSearchText] = useState("");
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    Logger.debug("makeApiCall", makeApiCall);
+    Logger.debug("inside use Effect");
+    return () => {
+      isMounted = false;
+      clearTimeout(searchTimeout);
+      controller.abort();
     };
+  }, []);
+  {
+    Logger.debug("makeApiCall outside UseEffect ", makeApiCall);
+  }
 
-    // const downloadCGFAdmins = async () => {
-    //     try {
-    //         const response = await privateAxios.get(DOWNLOAD_CGF_ADMIN, {
-    //             responseType: "blob",
-    //         });
-    //         Logger.debug("resposne from download cgf admins", response);
-    //         const url = window.URL.createObjectURL(new Blob([response.data]));
-    //         const link = document.createElement("a");
-    //         link.href = url;
-    //         link.setAttribute("download", `CGF-Admins - ${new Date()}.xls`);
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         if (response.status == 200) {
-    //             setToasterDetails(
-    //                 {
-    //                     titleMessage: "Success!",
-    //                     descriptionMessage: "Download successfull!",
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState("");
 
-    //                     messageType: "success",
-    //                 },
-    //                 () => myRef.current()
-    //             );
-    //         }
-    //     } catch (error) {
-    //         Logger.debug("Error from download cgf admins", error);
-    //     }
-    // };
+  const [searchText, setSearchText] = useState("");
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
-    Logger.debug("selected roles---", selectedRoles);
+  Logger.debug("selected roles---", selectedRoles);
 
-    Logger.debug("Selected status filter---", selectedStatusFilter);
+  Logger.debug("Selected status filter---", selectedStatusFilter);
 
-    Logger.debug("Search text---", searchText);
+  Logger.debug("Search text---", searchText);
+  const onKeyDownChangeHandler = (e) => {
+    if (e.key === "Enter") {
+      setMakeApiCall(true);
+      // setPageForPendingTab(1)
+      setPageForPendingTabCGFAdmin(1);
+      setPage(1);
+    }
+  };
+  return (
+    <div className="page-wrapper">
+      <Toaster
+        myRef={cgfAdminRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
+      <section>
+        <div className="container">
+          <div className="member-filter-sect"></div>
 
-    return (
-        <div className="page-wrapper">
-            <DialogBox
-                title={<p>Withdraw CGF Admin Invitation</p>}
-                info1={
-                    <p>
-                        On withdrawal, cgf admin will not be able to verify
-                        their account?
-                    </p>
-                }
-                info2={<p>Do you want to withdraw the invitation?</p>}
-                primaryButtonText={"Yes"}
-                secondaryButtonText={"No"}
-                onPrimaryModalButtonClickHandler={() => {
-                    withdrawInviteByIdCGFAdmin();
-                }}
-                onSecondaryModalButtonClickHandler={() => {
-                    setOpenDeleteDialogBox(false);
-                }}
-                openModal={openDeleteDialogBox}
-                setOpenModal={setOpenDeleteDialogBox}
-            />
-            <Toaster
-                myRef={cgfAdminRef}
-                titleMessage={toasterDetails.titleMessage}
-                descriptionMessage={toasterDetails.descriptionMessage}
-                messageType={toasterDetails.messageType}
-            />
-            <section>
-                <div className="container">
-                    <div className="member-filter-sect"></div>
+          <div className="form-header member-form-header flex-between">
+            <div className="form-header-left-blk flex-start">
+              <h2 className="heading2">CGF Admins</h2>
+            </div>
 
-                    <div className="form-header member-form-header flex-between">
-                        <div className="form-header-left-blk flex-start">
-                            <h2 className="heading2">CGF Admins</h2>
-                        </div>
-
-                        <div className="form-header-right-txt">
-                            {value == 0 && (
-                                <div
-                                    className="tertiary-btn-blk mr-20"
-                                    onClick={() =>
-                                        downloadFunction(
-                                            "CGF Admins",
-                                            setToasterDetails,
-                                            false,
-                                            cgfAdminRef,
-                                            DOWNLOAD_CGF_ADMIN,
-                                            navigate
-                                        )
-                                    }
-                                >
-                                    <span className="download-icon">
-                                        <DownloadIcon />
-                                    </span>
-                                    Download
-                                </div>
-                            )}
-                            {value === 0 && (
-                                <div className="form-btn">
-                                    <button
-                                        onClick={() =>
-                                            navigate(
-                                                "/users/cgf-admin/add-cgf-admin"
-                                            )
-                                        }
-                                        className="primary-button add-button"
-                                    >
-                                        Add CGF Admin
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <div className="member-filter-wrap flex-between">
-                        <div className="member-tab-left">
-                            <TabHeader
-                                value={value}
-                                handleChange={handleChange}
-                            />
-                            {/* <div className="member-tab-wrapper">
+            <div className="form-header-right-txt">
+              {value == 0 && (
+                <div
+                  className="tertiary-btn-blk mr-20"
+                  onClick={() =>
+                    downloadFunction(
+                      "CGF Admins",
+                      setToasterDetails,
+                      false,
+                      cgfAdminRef,
+                      DOWNLOAD_CGF_ADMIN,
+                      navigate
+                    )
+                  }
+                >
+                  <span className="download-icon">
+                    <DownloadIcon />
+                  </span>
+                  Download
+                </div>
+              )}
+              {value === 0 && (
+                <div className="form-btn">
+                  <button
+                    onClick={() => navigate("/users/cgf-admin/add-cgf-admin")}
+                    className="primary-button add-button"
+                  >
+                    Add CGF Admin
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="member-filter-wrap flex-between">
+            <div className="member-tab-left">
+              <TabHeader value={value} handleChange={handleChange} />
+              {/* <div className="member-tab-wrapper">
                                 <Box
                                     sx={{
                                         borderBottom: 1,
@@ -427,26 +218,23 @@ const SubAdminList = () => {
                                     </Tabs>
                                 </Box>
                             </div> */}
-                        </div>
-                        <div className="member-filter-left">
-                            <div className="searchbar">
-                                <input
-                                    type="text"
-                                    placeholder="Search"
-                                    onKeyDown={(e) =>
-                                        e.key === "Enter" &&
-                                        setMakeApiCall(true)
-                                    }
-                                    onChange={(e) => onSearchChangeHandler(e)}
-                                    name="search"
-                                />
-                                <button type="submit">
-                                    <i className="fa fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div className="member-filter-right">
-                            {/* <div className="filter-select-wrap flex-between">
+            </div>
+            <div className="member-filter-left">
+              <div className="searchbar">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  onKeyDown={onKeyDownChangeHandler}
+                  onChange={(e) => onSearchChangeHandler(e)}
+                  name="search"
+                />
+                <button type="submit">
+                  <i className="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+            <div className="member-filter-right">
+              {/* <div className="filter-select-wrap flex-between">
                                 <div className="filter-select-field">
                                     <div className="dropdown-field">
                                         <Select
@@ -494,39 +282,43 @@ const SubAdminList = () => {
                                     </div>
                                 </div>
                             </div> */}
-                        </div>
-                    </div>
-                    <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
-                        <TabPanel value={value} index={0}>
-                            {value === 0 && (
-                                <OnBoardedSubAdminsTable
-                                    makeApiCall={makeApiCall}
-                                    setMakeApiCall={setMakeApiCall}
-                                    search={search}
-                                    filters={filters}
-                                    selectedRoles={selectedRoles}
-                                />
-                            )}
-                        </TabPanel>
-                        <TabPanel value={value} index={1}>
-                            {/* <TableTester /> */}
+            </div>
+          </div>
+          <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
+            <TabPanel value={value} index={0}>
+              {value === 0 && (
+                <OnBoardedSubAdminsTable
+                  page={page}
+                  setPage={setPage}
+                  makeApiCall={makeApiCall}
+                  setMakeApiCall={setMakeApiCall}
+                  search={search}
+                  filters={filters}
+                  selectedRoles={selectedRoles}
+                />
+              )}
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              {/* <TableTester /> */}
 
-                            <PendingCGFAdmins
-                                makeApiCall={makeApiCall}
-                                setMakeApiCall={setMakeApiCall}
-                                search={search}
-                                filters={filters}
-                                myRef={cgfAdminRef}
-                                selectedRoles={selectedRoles}
-                                pendingCgftoasterDetails={toasterDetails}
-                                setPendingCgfToasterDetails={setToasterDetails}
-                            />
-                        </TabPanel>
-                    </div>
-                </div>
-            </section>
+              <PendingCGFAdmins
+                makeApiCall={makeApiCall}
+                setMakeApiCall={setMakeApiCall}
+                search={search}
+                filters={filters}
+                myRef={cgfAdminRef}
+                selectedRoles={selectedRoles}
+                pageForPendingTabCGFAdmin={pageForPendingTabCGFAdmin}
+                setPageForPendingTabCGFAdmin={setPageForPendingTabCGFAdmin}
+                pendingCgftoasterDetails={toasterDetails}
+                setPendingCgfToasterDetails={setToasterDetails}
+              />
+            </TabPanel>
+          </div>
         </div>
-    );
+      </section>
+    </div>
+  );
 };
 
 export default SubAdminList;

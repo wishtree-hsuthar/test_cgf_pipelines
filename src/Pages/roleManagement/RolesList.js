@@ -215,7 +215,13 @@ const RolesList = () => {
             }
         }
     };
+    const onKeyDownChangeHandler = (e) => {
+        if(e.key === "Enter"){
+            setMakeApiCall(true)
+            setPage(1)
+        }
 
+    }
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
@@ -253,10 +259,7 @@ const RolesList = () => {
                                             type="text"
                                             placeholder="Search"
                                             onChange={onSearchChangeHandler}
-                                            onKeyDown={(e) =>
-                                                e.key === "Enter" &&
-                                                setMakeApiCall(true)
-                                            }
+                                            onKeyDown={onKeyDownChangeHandler}
                                             value={search}
                                             name="search"
                                         />

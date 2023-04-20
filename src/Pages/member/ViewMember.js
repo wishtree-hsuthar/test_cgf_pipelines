@@ -651,6 +651,13 @@ const ViewMember = () => {
   const callGetOffices = async () => {
     CGF_OFFICES = await getCGFOffices();
   };
+  const onKeyDownChangeHandler = (e) => {
+    if (e.key === "Enter") {
+      setMakeApiCall(true);
+      setPageInViewMember(1);
+      // setPage(1)
+    }
+  };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -1341,9 +1348,7 @@ const ViewMember = () => {
                       value={search}
                       name="search"
                       placeholder="Search"
-                      onKeyDown={(e) =>
-                        e.key === "Enter" && setMakeApiCall(true)
-                      }
+                      onKeyDown={onKeyDownChangeHandler}
                       onChange={onSearchChangeHandler}
                     />
                     <button type="submit">

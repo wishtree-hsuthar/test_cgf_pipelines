@@ -9,6 +9,8 @@ import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
 const PublishedQuestionnaires = ({
+    pagePublishedQuestionnaire,
+    setPagePublishedQuestionnaire,
     makeApiCall,
     setMakeApiCall,
     search,
@@ -53,8 +55,7 @@ const PublishedQuestionnaires = ({
     ];
 
     //code of tablecomponent
-    const [pagePublishedQuestionnaire, setPagePublishedQuestionnaire] =
-        useState(1);
+    
     const [
         rowsPerPagePublishedQuestionnaire,
         setRowsPerPagePublishedQuestionnaire,
