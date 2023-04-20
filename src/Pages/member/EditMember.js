@@ -311,15 +311,16 @@ const EditMember = () => {
 
       setArrOfRegions(regions?.data);
       const countriesOnRegion1 = await getCountries1(watch("region"));
-
+      console.log("countriesOnRegion",countriesOnRegion1)
       const arrOfCountryRegionsTemp1 = formatRegionCountries1(
-        countriesOnRegion1.data
+        countriesOnRegion1?.data
       );
       setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
+      console.log("cgfOfficeRegion",watch('cgfOfficeRegion'))
       const countriesOnRegion2 = await getCountries1(watch("cgfOfficeRegion"));
       Logger.debug("countriesOnRegion2", countriesOnRegion2);
       const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries1(
-        countriesOnRegion2.data
+        countriesOnRegion2?.data ?? []
       );
       setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp1]);
       const stateCountries = await axios.get(STATES + `/${watch("country")}`);
@@ -329,13 +330,13 @@ const EditMember = () => {
         "country",
         watch("country")
       );
-      setArrOfStateCountry(stateCountries.data);
+      setArrOfStateCountry(stateCountries?.data);
 
       // getCountries1()
       return arrOfRegions;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-
+      console.log("caught in catch",error)
       return [];
     }
   };
