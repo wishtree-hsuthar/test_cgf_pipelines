@@ -132,7 +132,7 @@ const AddMember = () => {
         companyName: data.memberCompany,
         companyType: data.companyType,
         cgfCategory: data.cgfCategory,
-        cgfActivity: data.cgfActivity ?? "N/A",
+        cgfActivity: data.cgfActivity ? data.cgfActivity : "N/A",
         corporateEmail: data.corporateEmail,
         region: data.region,
         country: data.country,
@@ -416,6 +416,10 @@ const AddMember = () => {
     trigger("cgfActivity")
     setValue("cgfActivity", "");
   };
+  const activityChangeHandler = (e) => {
+    setValue("cgfActivity",e.target.value)
+    trigger("cgfActivity")
+  }
   const phoneNumberChangeHandlerAddMember = (e, name, code) => {
     Logger.debug(
       "on number change",
@@ -666,6 +670,7 @@ const AddMember = () => {
                           control={control}
                           name="cgfActivity"
                           placeholder="Select activity"
+                          myOnChange={activityChangeHandler}
                           myHelper={memberHelper}
                           rules={{
                             validate: (value) => {
