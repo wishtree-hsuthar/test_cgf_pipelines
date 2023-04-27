@@ -297,7 +297,7 @@ const AssessmentList = () => {
     let icon = Object.entries(assessmentAccessObj).filter(
       (key) => key[1] === true && icons.push(key[0])
     );
-    if (SUPER_ADMIN || userAuth?.isCGFAdmin == true) {
+    if (SUPER_ADMIN) {
       icons = ["edit", "visibility"];
       return icons;
     } else if (icons.includes("fill")) {
