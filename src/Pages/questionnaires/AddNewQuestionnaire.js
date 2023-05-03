@@ -230,6 +230,15 @@ function AddNewQuestionnaire() {
             <li>
               <Link to="/questionnaires">Questionnaire</Link>
             </li>
+            {(questionnaire?.isDraft || questionnaire?.isPublished) && (
+              <li>
+                <Link
+                  to={`/questionnaires/preview-questionnaire/${urlParams.id}`}
+                >
+                  Preview Questionnaire
+                </Link>
+              </li>
+            )}
             {questionnaire?.isDraft || questionnaire?.isPublished ? (
               <li>Edit Questionnaire</li>
             ) : (

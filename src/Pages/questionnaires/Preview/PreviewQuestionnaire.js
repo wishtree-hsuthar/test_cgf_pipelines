@@ -376,49 +376,7 @@ function PreviewQuestionnaire(props) {
                 Questionnaire
               </Link>
             </li>
-            {(SUPER_ADMIN === true ||
-              moduleAccesForMember[0]?.questionnaire?.add) &&
-              !params["*"].includes("version") &&
-              !questionnaire?.isDraft &&
-              !questionnaire?.isPublished && (
-                <li>
-                  <Link
-                    to={`/questionnaires/add-questionnaire/${params.id}`}
-                    style={{ cursor: "pointer" }}
-                  >
-                    Add Questionnaire
-                  </Link>
-                  {/* <a
-                    onClick={() =>
-                      navigate(`/questionnaires/add-questionnaire/${params.id}`)
-                    }
-                    style={{ cursor: "pointer" }}
-                  >
-                    Add Questionnaire
-                  </a> */}
-                </li>
-              )}
-            {(SUPER_ADMIN === true ||
-              moduleAccesForMember[0]?.questionnaire?.edit) &&
-              !params["*"].includes("version") &&
-              (questionnaire?.isDraft || questionnaire?.isPublished) && (
-                <li>
-                  {/* <a
-                    onClick={() =>
-                      navigate(`/questionnaires/add-questionnaire/${params.id}`)
-                    }
-                    style={{ cursor: "pointer" }}
-                  >
-                    Edit Questionnaire
-                  </a> */}
-                  <Link
-                    to={`/questionnaires/edit-questionnaire/${params.id}`}
-                    style={{ cursor: "pointer" }}
-                  >
-                    Edit Questionnaire
-                  </Link>
-                </li>
-              )}
+
             {params["*"].includes("version") && (
               <li>
                 <Link
@@ -434,6 +392,33 @@ function PreviewQuestionnaire(props) {
             ) : (
               <li>Preview Questionnaire </li>
             )}
+            {/* {(SUPER_ADMIN === true ||
+              moduleAccesForMember[0]?.questionnaire?.add) &&
+              !params["*"].includes("version") &&
+              !questionnaire?.isDraft &&
+              !questionnaire?.isPublished && (
+                <li>
+                  <Link
+                    to={`/questionnaires/add-questionnaire/${params.id}`}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Add Questionnaire
+                  </Link>
+                </li>
+              )}
+            {(SUPER_ADMIN === true ||
+              moduleAccesForMember[0]?.questionnaire?.edit) &&
+              !params["*"].includes("version") &&
+              (questionnaire?.isDraft || questionnaire?.isPublished) && (
+                <li>
+                  <Link
+                    to={`/questionnaires/edit-questionnaire/${params.id}`}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Edit Questionnaire
+                  </Link>
+                </li>
+              )} */}
           </ul>
         </div>
       </div>
