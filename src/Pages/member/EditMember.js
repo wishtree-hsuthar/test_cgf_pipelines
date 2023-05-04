@@ -250,9 +250,13 @@ const EditMember = () => {
   const categoryChangeHandler1 = (e) => {
     setValue("cgfCategory", e.target.value);
     trigger("cgfCategory");
-    trigger("cgfActivity");
     setValue("cgfActivity", "");
+    trigger("cgfActivity");
   };
+  const activityChangeHandler1 = (e) => {
+    setValue("cgfActivity",e.target.value)
+    trigger("cgfActivity")
+  }
   const getCites = async () => {
     try {
       let url =
@@ -674,6 +678,7 @@ const EditMember = () => {
                           control={control}
                           name="cgfActivity"
                           placeholder="Select activity"
+                          myOnChange={activityChangeHandler1}
                           myHelper={memberHelper}
                           rules={{
                             validate: (value) => {
