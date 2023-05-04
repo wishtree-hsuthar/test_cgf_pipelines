@@ -404,7 +404,9 @@ export default function TableComponent({
                             )}
                             {icons.includes("send") &&
                               (row?.assessmentStatus == "In Progress" ||
-                                row?.assessmentStatus == "Re-opened") && (
+                                row?.assessmentStatus == "Re-opened" ||
+                                row?.assessmentStatus == "Accepted") &&
+                              row.isUserAuthorizedToFillAssessment && (
                                 <span className="icon">
                                   <Tooltip title="Assign to Operation Member">
                                     <GroupAddOutlinedIcon
