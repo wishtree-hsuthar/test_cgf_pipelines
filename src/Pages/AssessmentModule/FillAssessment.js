@@ -1353,6 +1353,8 @@ function FillAssessment() {
                       handleFormSubmit={handleFormSubmit}
                       editMode={editMode}
                       setEditMode={setEditMode}
+                      index={index}
+                      totalSections={questionnaire?.sections?.length}
                     />
                   </TabPanel>
                 ))}

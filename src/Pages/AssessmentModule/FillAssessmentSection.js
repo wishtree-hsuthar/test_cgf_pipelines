@@ -38,11 +38,24 @@ function FillAssesmentSection({
   editMode,
   setEditMode,
   disableFillAssessment,
+  totalSections,
+  index,
 }) {
   const navigate = useNavigate();
   const params = useParams();
 
+  const showSubmitOnFinalSection = () => {
+    console.log("total sections = ", totalSections);
+    console.log("current index = ", index);
+    if (totalSections === index + 1) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   // cancel dailog box open/close state
+  console.log("section - ", section);
 
   const [openCancelDailog, setOpenCancelDailog] = useState(false);
 
@@ -161,6 +174,7 @@ function FillAssesmentSection({
               onClick={(e) => handleFormSubmit(e, false)}
               disabled={disableFillAssessment}
               className="primary-button add-button"
+              hidden={showSubmitOnFinalSection()}
             >
               Submit assessment
             </button>
@@ -177,7 +191,6 @@ function FillAssesmentSection({
           </div>
         )}
       </div>
-     
     </>
   );
 }
