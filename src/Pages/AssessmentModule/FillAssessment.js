@@ -354,9 +354,9 @@ function FillAssessment() {
 
         !reOpen &&
           setTimeout(() => {
-            navigate("/assessment-list");
+            !saveAsDraft && navigate("/assessment-list");
             setDisableFillAssessment(false);
-          }, 3000);
+          }, 2000);
       }
     } catch (error) {
       setDisableFillAssessment(false);
