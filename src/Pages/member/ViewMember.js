@@ -615,7 +615,10 @@ const ViewMember = () => {
       let dseconds = new Date().getSeconds();
       let timeStamp =
         dmonth + ddate + dyear + "_" + dhours + dminutes + dseconds;
-      linkFile.setAttribute(`download`, `Operation members - ${timeStamp}.xls`);
+      linkFile.setAttribute(
+        `download`,
+        `Operation members - ${timeStamp}.xlsx`
+      );
       document.body.appendChild(linkFile);
       linkFile.click();
       if (response.status == 200) {

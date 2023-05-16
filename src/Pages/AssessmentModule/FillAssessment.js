@@ -811,7 +811,7 @@ function FillAssessment() {
         let minutes = new Date().getMinutes();
         let seconds = new Date().getSeconds();
         let timeStamp = month + date + year + "_" + hours + minutes + seconds;
-        link.setAttribute(`download`, `Assessment - ${timeStamp}.xls`);
+        link.setAttribute(`download`, `Assessment - ${timeStamp}.xlsx`);
         document.body.appendChild(link);
         link.click();
       } else {
