@@ -240,7 +240,7 @@ const VersionHistory = () => {
       </div>
       <div className="container">
         <div className="form-header flex-between">
-          <h2 className="heading2">Questionnaire history</h2>
+          <h2 className="heading2">Questionnaire History</h2>
         </div>
       </div>
       <section>
