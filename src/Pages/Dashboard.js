@@ -8,6 +8,7 @@ import useCallbackState from "../utils/useCallBackState";
 import Toaster from "../components/Toaster";
 import { Logger } from "../Logger/Logger";
 import { setUser, setPrivileges } from "../redux/UserSlice";
+import HomePageTrainingSilder from "./HomePageTrainingSilder";
 
 const Dashboard = (props) => {
   //custom hook to set title of page
@@ -115,7 +116,7 @@ const Dashboard = (props) => {
       <section>
         <div className="container">
           <div className="dashboard-sect">
-            <img
+            {/* <img
               src={
                 process.env.PUBLIC_URL +
                 "/images/WorkInProgress-removebg-preview.png"
@@ -126,7 +127,17 @@ const Dashboard = (props) => {
               {userRoleDeleted
                 ? "You are not authorized, Please contact System Administrator"
                 : "Coming Soon..."}
-            </h1>
+            </h1> */}
+
+            <p className="dashboard-header-message">
+              Welcome to the CGF Human Rights Coalition HRDD Dashboard! We are
+              delighted to have you here. This powerful tool empowers you to
+              navigate and fill in the Human Rights Due Diligence (HRDD)
+              assessment. As you familiarize yourself with this dashboard, below
+              are some resources that can help you to get started. We encourage
+              you to explore its features and fill in the assessment.
+            </p>
+            <HomePageTrainingSilder />
           </div>
         </div>
       </section>
