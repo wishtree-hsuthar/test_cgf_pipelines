@@ -2735,8 +2735,8 @@ input::-ms-reveal {
 .arrow {
   position: absolute;
   border-radius: 3px;
-  font-size: 26px;
-  top: 50%;
+  font-size: 90px;
+  top: 30%;
 }
 
 .arrow:hover {
@@ -2750,4 +2750,13 @@ input::-ms-reveal {
 
 .prev {
   left: 10px;
+}
+
+/* Header text for homepage */
+
+.dashboard-header-message {
+  font-weight: 600;
+  text-align: justify;
+  margin: 10px 0;
+  font-size: 16px;
 }

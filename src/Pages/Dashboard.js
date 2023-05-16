@@ -128,6 +128,15 @@ const Dashboard = (props) => {
                 ? "You are not authorized, Please contact System Administrator"
                 : "Coming Soon..."}
             </h1> */}
+
+            <p className="dashboard-header-message">
+              Welcome to the CGF Human Rights Coalition HRDD Dashboard! We are
+              delighted to have you here. This powerful tool empowers you to
+              navigate and fill in the Human Rights Due Diligence (HRDD)
+              assessment. As you familiarize yourself with this dashboard, below
+              are some resources that can help you to get started. We encourage
+              you to explore its features and fill in the assessment.
+            </p>
             <HomePageTrainingSilder />
           </div>
         </div>
