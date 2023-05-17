@@ -10,7 +10,9 @@ const HomePageTrainingSilder = () => {
       loop
       dots
       nav
-      autoPlay
+      autoplay
+      autoplayTimeout={5000}
+      autoplayHoverPause
       navText={[
         '<span class="arrow prev">‹</span>',
         '<span class="arrow next">›</span>',
