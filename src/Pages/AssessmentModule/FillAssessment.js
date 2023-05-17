@@ -187,12 +187,15 @@ function FillAssessment() {
     let isMounted = true;
     let controller = new AbortController();
 
-    const fetchQuestionnaire = async (id) => {
+    const fetchQuestionnaire = async (id, graphResult, graphLevelBreakdown) => {
       try {
         const response = await privateAxios.get(`${ADD_QUESTIONNAIRE}/${id}`, {
           signal: controller.signal,
         });
         isMounted && setQuestionnaire({ ...response.data });
+        graphResult &&
+          graphLevelBreakdown &&
+          setTabValue(response?.data?.sections?.length);
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
 
@@ -268,10 +271,14 @@ function FillAssessment() {
           setGraphLevelBreakdown({
             ...response?.data?.graphLevelBreakdown,
           });
-        response?.data?.graphResult &&
-          response?.data?.graphLevelBreakdown &&
-          setTabValue(4);
-        fetchQuestionnaire(response?.data?.questionnaireId);
+        // response?.data?.graphResult &&
+        //   response?.data?.graphLevelBreakdown &&
+        //   setTabValue(4);
+        fetchQuestionnaire(
+          response?.data?.questionnaireId,
+          response?.data?.graphResult,
+          response?.data?.graphLevelBreakdown
+        );
         setReOpenAssessmentDialogBox(
           response?.data?.isSubmitted && !params["*"].includes("view")
         );
