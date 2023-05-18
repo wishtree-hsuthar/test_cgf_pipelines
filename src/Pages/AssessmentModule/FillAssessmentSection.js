@@ -157,6 +157,7 @@ function FillAssesmentSection({
               type="reset"
               onClick={() => setOpenCancelDailog(true)}
               className="secondary-button mr-10"
+              disabled={disableFillAssessment}
             >
               Cancel
             </button>

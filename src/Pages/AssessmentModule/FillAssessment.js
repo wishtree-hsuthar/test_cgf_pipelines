@@ -117,6 +117,7 @@ function FillAssessment() {
   const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [disableFillAssessment, setDisableFillAssessment] = useState(false);
+  const [disableImport, setDisableImport] = useState(false)
 
   const [errors, setErrors] = useState({});
   const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
@@ -877,19 +878,20 @@ function FillAssessment() {
       if (file) {
         let reader = new FileReader();
         reader.readAsDataURL(file);
-
+        
         if (
           file.type === "application/vnd.ms-excel" ||
           file.type ===
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         ) {
           reader.onloadend = async () => {
             let result = reader.result;
             let encryptedFile = CryptoJs.AES.encrypt(
               result,
               REACT_APP_FILE_ENCRYPT_SECRET
-            ).toString();
-            try {
+              ).toString();
+              try {
+              setDisableImport(true)
               const response = await privateAxios.post(
                 IMPORT_ASSESSMENT + `${params.id}/upload`,
                 {
@@ -902,7 +904,7 @@ function FillAssessment() {
 
                 setFile("");
                 setSelectedFileName("");
-
+                setDisableImport(false)
                 setImportOpenDialog(false);
                 setToasterDetails(
                   {
@@ -958,7 +960,7 @@ function FillAssessment() {
               }
             } catch (error) {
               Logger.debug("Error from UPLOAD api", error);
-
+              setDisableImport(false)
               setIsFillAssessmentLoading(false);
               setSelectedFileName("");
               if (
@@ -974,9 +976,9 @@ function FillAssessment() {
                   },
                   () => myRef.current()
                 );
-                setTimeout(() => {
-                  navigate("/assessment-list");
-                }, 3000);
+                // setTimeout(() => {
+                //   navigate("/assessment-list");
+                // }, 3000);
               } else {
                 handleCatchError(error, "reuploadAssessment");
               }
@@ -1231,6 +1233,7 @@ function FillAssessment() {
         primaryButtonText={"Upload"}
         secondaryButtonText={"Cancel"}
         onPrimaryModalButtonClickHandler={() => reUploadAssessment()}
+        isDisabledPrimaryButton={disableImport}
         onSecondaryModalButtonClickHandler={() => cancelImport()}
         openModal={importOpenDialog}
         setOpenModal={setImportOpenDialog}

@@ -358,7 +358,7 @@ function EditOperationMember() {
       if (response.status == 200) {
         setIsEditOperationMemberLoading(false);
 
-        setDisableEditMemberUpdateButton(false);
+        // setDisableEditMemberUpdateButton(false);
         setToasterDetails(
           {
             titleMessage: "Hurray!",
@@ -906,7 +906,7 @@ function EditOperationMember() {
                     >
                       Cancel
                     </button>
-                    <button type="submit" className="primary-button add-button">
+                    <button type="submit" className="primary-button add-button" disabled={disableEditMemberUpdateButton}>
                       Update
                     </button>
                   </div>
