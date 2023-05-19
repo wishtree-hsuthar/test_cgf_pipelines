@@ -52,6 +52,7 @@ const ReplaceSubAdmin = () => {
   //custom hook to set title of page
   useDocumentTitle("Replace CGF Admin");
   const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
+  const [disableSubmit, setDisableSubmit] = useState(false)
   const [replaceCGFAdminPage, setReplaceCGFAdminPage] = React.useState(1);
   const [replaceCGFAdminRowsPerPage, setReplaceCGFAdminRowsPerPage] =
     React.useState(10);
@@ -279,6 +280,7 @@ const ReplaceSubAdmin = () => {
 
   const replaceUser = async () => {
     try {
+      setDisableSubmit(true)
       const response = await privateAxios.post(REPLACE_SUB_ADMIN + "replace", {
         replacingTo: id,
         replacingWith: selectedReplacedCGFAdminUser,
@@ -303,6 +305,7 @@ const ReplaceSubAdmin = () => {
         }, 3000);
       }
     } catch (error) {
+      setDisableSubmit(false)
       Logger.debug("error from replace user");
       if (error?.code === "ERR_CANCELED") return;
       if (error?.response?.status == 400) {
@@ -476,7 +479,7 @@ const ReplaceSubAdmin = () => {
               Cancel
             </button>
             <button
-              disabled={selectedReplacedCGFAdminUser === ""}
+              disabled={selectedReplacedCGFAdminUser === "" || disableSubmit}
               onClick={openReplaceDailogBox}
               className="primary-button add-button replace-assign-btn"
             >
