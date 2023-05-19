@@ -980,7 +980,8 @@ function FillAssessment() {
                 //   navigate("/assessment-list");
                 // }, 3000);
               } else {
-                handleCatchError(error, "reuploadAssessment");
+                catchError(error, setToasterDetails, myRef, navigate);
+                // handleCatchError(error, "reuploadAssessment");
               }
             } finally {
               setIsFillAssessmentLoading(false);
