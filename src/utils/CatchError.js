@@ -24,7 +24,7 @@ export const catchError = async (
         titleMessage: `Oops!`,
         descriptionMessage: error?.response?.data?.message
           ? error?.response?.data?.message
-          : "Oops! Oops! Something went wrong. Please try again later.. Please try again later.",
+          : "Oops! Something went wrong. Please try again later.",
 
         messageType: `error`,
       },
@@ -42,7 +42,7 @@ export const catchError = async (
         titleMessage: `Oops!`,
         descriptionMessage: error?.response?.data?.message
           ? error?.response?.data?.message
-          : "Oops! Oops! Something went wrong. Please try again later.. Please try again later.",
+          : "Oops! Something went wrong. Please try again later.",
 
         messageType: `error`,
       },
