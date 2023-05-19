@@ -145,6 +145,24 @@ const HomePageTrainingSilder = () => {
           />
         </div>
       </div>
+      <div className="item">
+        <div className="login-slide-img">
+          <img
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/15.jpeg"}
+            alt=""
+            className="img-fluid"
+          />
+        </div>
+      </div>
+      <div className="item">
+        <div className="login-slide-img">
+          <img
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/16.jpeg"}
+            alt=""
+            className="img-fluid"
+          />
+        </div>
+      </div>
     </OwlCarousel>
   );
 };

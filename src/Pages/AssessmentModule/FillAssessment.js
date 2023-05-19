@@ -411,6 +411,9 @@ function FillAssessment() {
         Object.keys(currentSectionAnswers).forEach((answersKeys) => {
           let tempRowId = answersKeys?.split("_")[1];
           section?.columnValues?.forEach((column) => {
+            let caseInsensitiveOptions = column?.options?.map((option) =>
+              option.toLowerCase()
+            );
             if (
               column.columnType !== "prefilled" &&
               saveAsDraft === false &&
@@ -425,8 +428,10 @@ function FillAssessment() {
             } else if (
               column.columnType === "dropdown" &&
               currentSectionAnswers[`${column?.uuid}_${tempRowId}`] &&
-              !column.options.includes(
-                currentSectionAnswers[`${column?.uuid}_${tempRowId}`]
+              !caseInsensitiveOptions.options.includes(
+                currentSectionAnswers[
+                  `${column?.uuid}_${tempRowId}`
+                ].toLowerCase()
               )
             ) {
               Logger.debug(
