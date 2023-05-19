@@ -152,7 +152,7 @@ const EditSubAdmin = () => {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => toasterRef.current()
@@ -166,7 +166,7 @@ const EditSubAdmin = () => {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => toasterRef.current()
@@ -209,7 +209,7 @@ const EditSubAdmin = () => {
         // setToasterDetails(
         //     {
         //         titleMessage: "Oops!",
-        //         descriptionMessage: "Something went wrong",
+        //         descriptionMessage: "Oops! Something went wrong. Please try again later.",
         //         messageType: "error",
         //     },
         //     () => toasterRef.current()
@@ -234,7 +234,7 @@ const EditSubAdmin = () => {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => toasterRef.current()
@@ -284,7 +284,7 @@ const EditSubAdmin = () => {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => toasterRef.current()
@@ -340,7 +340,7 @@ const EditSubAdmin = () => {
     } catch (error) {
       Logger.debug("error from edit sub admin submit method");
       setIsEditCgfAdminLoading(false);
-      setDisableEditCgfAdminButton(false)
+      setDisableEditCgfAdminButton(false);
       catchError(error, toasterDetails, toasterRef, navigate);
       // if (error?.response?.status == 400) {
       //     setToasterDetails(
@@ -370,7 +370,7 @@ const EditSubAdmin = () => {
       //             titleMessage: "Oops!",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => toasterRef.current()
@@ -384,7 +384,7 @@ const EditSubAdmin = () => {
       //             titleMessage: "Oops!",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => toasterRef.current()

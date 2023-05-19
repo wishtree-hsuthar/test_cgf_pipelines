@@ -65,7 +65,7 @@ const EditMember = () => {
           error?.response?.data?.message &&
           typeof error.response.data.message === "string"
             ? error.response.data.message
-            : "Something went wrong.",
+            : "Oops! Something went wrong. Please try again later..",
         messageType: "error",
       },
       () => myRef.current()
@@ -158,7 +158,7 @@ const EditMember = () => {
       Logger.debug("Default values: ", defaultValues);
     } catch (error) {
       setIsEditMemberLoading(false);
-      setDisableEditMemberUpdateButton(false)
+      setDisableEditMemberUpdateButton(false);
       catchError(error, setToasterDetailsEditMember, myRef, navigate);
       // if (error?.response?.status == 401) {
       //     setToasterDetailsEditMember(
@@ -179,7 +179,7 @@ const EditMember = () => {
       //             titleMessage: "Error",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => myRef.current()
@@ -255,9 +255,9 @@ const EditMember = () => {
     trigger("cgfActivity");
   };
   const activityChangeHandler1 = (e) => {
-    setValue("cgfActivity",e.target.value)
-    trigger("cgfActivity")
-  }
+    setValue("cgfActivity", e.target.value);
+    trigger("cgfActivity");
+  };
   const getCites = async () => {
     try {
       let url =
@@ -316,12 +316,12 @@ const EditMember = () => {
 
       setArrOfRegions(regions?.data);
       const countriesOnRegion1 = await getCountries1(watch("region"));
-      console.log("countriesOnRegion",countriesOnRegion1)
+      console.log("countriesOnRegion", countriesOnRegion1);
       const arrOfCountryRegionsTemp1 = formatRegionCountries1(
         countriesOnRegion1?.data
       );
       setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
-      console.log("cgfOfficeRegion",watch('cgfOfficeRegion'))
+      console.log("cgfOfficeRegion", watch("cgfOfficeRegion"));
       const countriesOnRegion2 = await getCountries1(watch("cgfOfficeRegion"));
       Logger.debug("countriesOnRegion2", countriesOnRegion2);
       const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries1(
@@ -341,7 +341,7 @@ const EditMember = () => {
       return arrOfRegions;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      console.log("caught in catch",error)
+      console.log("caught in catch", error);
       return [];
     }
   };
@@ -430,7 +430,7 @@ const EditMember = () => {
       //             titleMessage: "Error",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => myRef.current()

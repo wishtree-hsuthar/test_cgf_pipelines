@@ -271,7 +271,7 @@ function EditOperationMember() {
       //                 titleMessage: "Oops!",
       //                 descriptionMessage: error?.response?.data?.message
       //                     ? error?.response?.data?.message
-      //                     : "Something went wrong",
+      //                     : "Oops! Something went wrong. Please try again later.",
       //                 messageType: "error",
       //             },
       //             () => toasterRef.current()
@@ -285,7 +285,7 @@ function EditOperationMember() {
       //             titleMessage: "Oops!",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => toasterRef.current()
@@ -906,7 +906,11 @@ function EditOperationMember() {
                     >
                       Cancel
                     </button>
-                    <button type="submit" className="primary-button add-button" disabled={disableEditMemberUpdateButton}>
+                    <button
+                      type="submit"
+                      className="primary-button add-button"
+                      disabled={disableEditMemberUpdateButton}
+                    >
                       Update
                     </button>
                   </div>

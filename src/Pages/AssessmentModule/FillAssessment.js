@@ -117,7 +117,7 @@ function FillAssessment() {
   const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [disableFillAssessment, setDisableFillAssessment] = useState(false);
-  const [disableImport, setDisableImport] = useState(false)
+  const [disableImport, setDisableImport] = useState(false);
 
   const [errors, setErrors] = useState({});
   const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
@@ -159,7 +159,7 @@ function FillAssessment() {
     //       titleMessage: "Oops!",
     //       descriptionMessage: error?.response?.data?.message
     //         ? error?.response?.data?.message
-    //         : "Something went wrong",
+    //         : "Oops! Something went wrong. Please try again later.",
     //       messageType: "error",
     //     },
     //     () => myRef.current()
@@ -175,7 +175,7 @@ function FillAssessment() {
     //         error?.response?.data?.message &&
     //         typeof error.response.data.message === "string"
     //           ? error.response.data.message
-    //           : "Something went wrong.",
+    //           : "Oops! Something went wrong. Please try again later..",
     //       messageType: "error",
     //     },
     //     () => myRef.current()
@@ -222,7 +222,7 @@ function FillAssessment() {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => myRef.current()
@@ -236,7 +236,7 @@ function FillAssessment() {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => myRef.current()
@@ -883,20 +883,20 @@ function FillAssessment() {
       if (file) {
         let reader = new FileReader();
         reader.readAsDataURL(file);
-        
+
         if (
           file.type === "application/vnd.ms-excel" ||
           file.type ===
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         ) {
           reader.onloadend = async () => {
             let result = reader.result;
             let encryptedFile = CryptoJs.AES.encrypt(
               result,
               REACT_APP_FILE_ENCRYPT_SECRET
-              ).toString();
-              try {
-              setDisableImport(true)
+            ).toString();
+            try {
+              setDisableImport(true);
               const response = await privateAxios.post(
                 IMPORT_ASSESSMENT + `${params.id}/upload`,
                 {
@@ -909,7 +909,7 @@ function FillAssessment() {
 
                 setFile("");
                 setSelectedFileName("");
-                setDisableImport(false)
+                setDisableImport(false);
                 setImportOpenDialog(false);
                 setToasterDetails(
                   {
@@ -965,7 +965,7 @@ function FillAssessment() {
               }
             } catch (error) {
               Logger.debug("Error from UPLOAD api", error);
-              setDisableImport(false)
+              setDisableImport(false);
               setIsFillAssessmentLoading(false);
               setSelectedFileName("");
               if (

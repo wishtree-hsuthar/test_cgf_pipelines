@@ -56,7 +56,7 @@ const EditRole = () => {
           error?.response?.data?.message &&
           typeof error.response.data.message === "string"
             ? error.response.data.message
-            : "Something went wrong.",
+            : "Oops! Something went wrong. Please try again later..",
         messageType: "error",
       },
       () => myRef2.current()
@@ -118,7 +118,7 @@ const EditRole = () => {
       setIsLoading1(true);
 
       Logger.debug("previleges : ", previlegesForBackend);
-      setDisableButton(true)
+      setDisableButton(true);
       const response = await axios.put(
         REACT_APP_API_ENDPOINT + `roles/${params.id}`,
         {
@@ -148,7 +148,7 @@ const EditRole = () => {
       }
     } catch (error) {
       Logger.debug("error", error);
-      setDisableButton(false)
+      setDisableButton(false);
       catchError(error, setToasterDetails2, myRef2, navigate2);
       // if (error?.response?.status == 401) {
       //     setToasterDetails2(
@@ -169,7 +169,7 @@ const EditRole = () => {
       //             titleMessage: "Error",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => myRef2.current()
@@ -258,7 +258,7 @@ const EditRole = () => {
       //             titleMessage: "Error",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => myRef2.current()

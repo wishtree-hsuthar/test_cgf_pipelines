@@ -78,7 +78,7 @@ const AddMember = () => {
           error?.response?.data?.message &&
           typeof error.response.data.message === "string"
             ? error.response.data.message
-            : "Something went wrong.",
+            : "Oops! Something went wrong. Please try again later..",
         messageType: "error",
       },
       () => myRef.current()
@@ -192,7 +192,7 @@ const AddMember = () => {
             titleMessage: "Error",
             descriptionMessage: error?.response?.data?.message
               ? error?.response?.data?.message
-              : "Something went wrong",
+              : "Oops! Something went wrong. Please try again later.",
             messageType: "error",
           },
           () => myRef.current()
@@ -359,7 +359,7 @@ const AddMember = () => {
               titleMessage: "Error",
               descriptionMessage: error?.response?.data?.message
                 ? error?.response?.data?.message
-                : "Something went wrong",
+                : "Oops! Something went wrong. Please try again later.",
               messageType: "error",
             },
             () => myRef.current()
@@ -413,13 +413,13 @@ const AddMember = () => {
   const categoryChangeHandlerAddMember = (e) => {
     setValue("cgfCategory", e.target.value);
     trigger("cgfCategory");
-    trigger("cgfActivity")
+    trigger("cgfActivity");
     setValue("cgfActivity", "");
   };
   const activityChangeHandler = (e) => {
-    setValue("cgfActivity",e.target.value)
-    trigger("cgfActivity")
-  }
+    setValue("cgfActivity", e.target.value);
+    trigger("cgfActivity");
+  };
   const phoneNumberChangeHandlerAddMember = (e, name, code) => {
     Logger.debug(
       "on number change",
@@ -698,9 +698,7 @@ const AddMember = () => {
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
                       <div className="form-group">
-                        <label htmlFor="corporateEmail">
-                          Corporate Email 
-                        </label>
+                        <label htmlFor="corporateEmail">Corporate Email</label>
                         <Input
                           control={control}
                           name="corporateEmail"
@@ -857,9 +855,7 @@ const AddMember = () => {
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
                       <div className="form-group">
-                        <label htmlFor="region">
-                          Region 
-                        </label>
+                        <label htmlFor="region">Region</label>
                         <Dropdown
                           control={control}
                           myOnChange={onRegionChangeHandlerAddMember}
@@ -872,16 +868,14 @@ const AddMember = () => {
                     </div>
                     <div className="card-form-field">
                       <div className="form-group">
-                        <label htmlFor="country">
-                          Country 
-                        </label>
+                        <label htmlFor="country">Country</label>
                         <Dropdown
                           isDisabled={!watch("region")}
                           control={control}
                           name="country"
                           myOnChange={onCountryChangeHandlerAddMember}
                           placeholder="Select country"
-                          myHelper={memberHelper}            
+                          myHelper={memberHelper}
                           options={arrOfCountryRegionsAddMember}
                         />
                       </div>
@@ -1012,9 +1006,7 @@ const AddMember = () => {
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
                       <div className="form-group">
-                        <label htmlFor="cgfOfficeRegion">
-                          Region 
-                        </label>
+                        <label htmlFor="cgfOfficeRegion">Region</label>
                         <Dropdown
                           control={control}
                           name="cgfOfficeRegion"
@@ -1027,9 +1019,7 @@ const AddMember = () => {
                     </div>
                     <div className="card-form-field">
                       <div className="form-group">
-                        <label htmlFor="cgfOfficeCountry">
-                          Country 
-                        </label>
+                        <label htmlFor="cgfOfficeCountry">Country</label>
                         <Dropdown
                           isDisabled={!watch("cgfOfficeRegion")}
                           control={control}
@@ -1042,9 +1032,7 @@ const AddMember = () => {
                     </div>
                     <div className="card-form-field">
                       <div className="form-group">
-                        <label htmlFor="cgfOffice">
-                          Office 
-                        </label>
+                        <label htmlFor="cgfOffice">Office</label>
                         <Dropdown
                           control={control}
                           name="cgfOffice"

@@ -335,7 +335,7 @@ const MemberList = () => {
 
             descriptionMessage: error?.response?.data?.message
               ? error?.response?.data?.message
-              : "Something went wrong",
+              : "Oops! Something went wrong. Please try again later.",
 
             messageType: "error",
           },
@@ -354,7 +354,7 @@ const MemberList = () => {
                 error?.response?.data?.message &&
                 typeof error.response.data.message === "string"
                   ? error.response.data.message
-                  : "Something went wrong.",
+                  : "Oops! Something went wrong. Please try again later..",
 
               messageType: "error",
             },

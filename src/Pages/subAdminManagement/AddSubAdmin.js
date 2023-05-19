@@ -124,7 +124,7 @@ const AddSubAdmin = () => {
         //                 descriptionMessage: error?.response?.data
         //                     ?.message
         //                     ? error?.response?.data?.message
-        //                     : "Something went wrong",
+        //                     : "Oops! Something went wrong. Please try again later.",
         //                 messageType: "error",
         //             },
         //             () => toasterRef.current()
@@ -232,7 +232,7 @@ const AddSubAdmin = () => {
       //             titleMessage: "Oops!",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => toasterRef.current()

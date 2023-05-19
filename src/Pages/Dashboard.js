@@ -88,7 +88,7 @@ const Dashboard = (props) => {
           titleMessage: "Error",
           descriptionMessage: error?.response?.data?.message
             ? error?.response?.data?.message
-            : "Something went wrong",
+            : "Oops! Something went wrong. Please try again later.",
           messageType: "error",
         });
         setTimeout(() => {
@@ -99,7 +99,7 @@ const Dashboard = (props) => {
           titleMessage: "Error",
           descriptionMessage: error?.response?.data?.message
             ? error?.response?.data?.message
-            : "Something went wrong",
+            : "Oops! Something went wrong. Please try again later.",
           messageType: "error",
         });
       }
