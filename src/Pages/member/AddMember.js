@@ -78,7 +78,7 @@ const AddMember = () => {
           error?.response?.data?.message &&
           typeof error.response.data.message === "string"
             ? error.response.data.message
-            : "Oops! Something went wrong. Please try again later..",
+            : "Oops! Something went wrong. Please try again later.",
         messageType: "error",
       },
       () => myRef.current()

@@ -210,7 +210,7 @@ const ReplaceSubAdmin = () => {
                 error?.response?.data?.error &&
                 typeof error.response.data.error === "string"
                   ? error.response.data.error
-                  : "Oops! Something went wrong. Please try again later..",
+                  : "Oops! Something went wrong. Please try again later.",
 
               messageType: "error",
             },

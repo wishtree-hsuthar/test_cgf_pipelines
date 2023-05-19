@@ -463,7 +463,7 @@ function EditAssessment() {
             error?.responseEditMember?.data?.message &&
             typeof error.responseEditMember.data.message === "string"
               ? error.responseEditMember.data.message
-              : "Oops! Something went wrong. Please try again later..",
+              : "Oops! Something went wrong. Please try again later.",
           messageType: "error",
         },
         () => toasterRef.current()
