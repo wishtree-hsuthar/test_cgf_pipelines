@@ -73,7 +73,7 @@ function PendingCGFAdmins({
 
   const navigate = useNavigate();
   //(onboarded users/cgf-admin/ table) order in which records needs to show
- 
+
   const [
     rowsPerPageForPendingTabCGFAdmin,
     setRowsPerPageForPendingTabCGFAdmin,
@@ -208,7 +208,7 @@ function PendingCGFAdmins({
       //             titleMessage: "Oops!",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => myRef.current()
@@ -222,7 +222,7 @@ function PendingCGFAdmins({
       //             titleMessage: "Oops!",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => myRef.current()
@@ -286,7 +286,7 @@ function PendingCGFAdmins({
       //             titleMessage: "Oops!",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => myRef.current()
@@ -303,7 +303,7 @@ function PendingCGFAdmins({
       //                     error?.response?.data?.message &&
       //                     typeof error.response.data.message === "string"
       //                         ? error.response.data.message
-      //                         : "Something went wrong.",
+      //                         : "Oops! Something went wrong. Please try again later..",
 
       //                 messageType: "error",
       //             },

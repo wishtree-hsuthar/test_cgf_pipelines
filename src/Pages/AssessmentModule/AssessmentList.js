@@ -179,7 +179,7 @@ const AssessmentList = () => {
             titleMessage: "Error",
             descriptionMessage: error?.response?.data?.message
               ? error?.response?.data?.message
-              : "Something went wrong",
+              : "Oops! Something went wrong. Please try again later.",
             messageType: "error",
           },
           () => myRef.current()
@@ -193,7 +193,7 @@ const AssessmentList = () => {
             titleMessage: "Error",
             descriptionMessage: error?.response?.data?.message
               ? error?.response?.data?.message
-              : "Something went wrong",
+              : "Oops! Something went wrong. Please try again later.",
             messageType: "error",
           },
           () => myRef.current()

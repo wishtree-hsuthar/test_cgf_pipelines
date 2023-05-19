@@ -10,291 +10,290 @@ import { Logger } from "../../Logger/Logger";
 import { catchError } from "../../utils/CatchError";
 let tempTableHead = JSON.parse(JSON.stringify(tableHead));
 tempTableHead.push({
-    id: "isActive",
-    // with: "30%",
-    disablePadding: false,
-    label: "Status",
+  id: "isActive",
+  // with: "30%",
+  disablePadding: false,
+  label: "Status",
 });
 
 function OnboardedOperationMember({
+  pageForOnboardedOperationMemberTab,
+  setPageForOnboardedOperationMemberTab,
+  makeApiCall,
+  setMakeApiCall,
+  search,
+  filters,
+  myRef,
+  toasterDetails,
+  setToasterDetails,
+  searchTimeout,
+  setSearchTimeout,
+}) {
+  // const [
+  //     openDeleteDialogBoxOnboardedOperationMember,
+  //     setOpenDeleteDialogBoxOnboardedOperationMember,
+  // ] = useState(false);
+  // state to manage loaders
+  const [
+    isOnboardedOperationMemberLoading,
+    setIsOnboardedOperationMemberLoading,
+  ] = useState(true);
+  const privilege = useSelector((state) => state?.user?.privilege);
+  const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
+  let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
+  let moduleAccessForOperationMember = privilegeArray
+    .filter((data) => data?.moduleId?.name === "Operation Members")
+    .map((data) => ({
+      operationMember: {
+        list: data?.list,
+        view: data?.view,
+        edit: data?.edit,
+        delete: data?.delete,
+        add: data?.add,
+      },
+    }));
+  Logger.info(
+    "member operation privilege",
+    moduleAccessForOperationMember[0]?.operationMember
+  );
+  Logger.info("privilege", privilege);
+
+  const navigate = useNavigate();
+
+  const [
+    rowsPerPageForOnboardedOperationMemberTab,
+    setRowsPerPageForOnboardedOperationMemberTab,
+  ] = React.useState(10);
+  const [
+    orderForOnboardedOperationMemberTab,
+    setOrderForOnboardedOperationMemberTab,
+  ] = React.useState("desc");
+  const [
+    orderByForOnboardedOperationMember,
+    setOrderByForOnboardedOperationMemberTab,
+  ] = React.useState("");
+  const [
+    recordsForOnboardedOperationMemberTab,
+    setRecordsForOnboardedOperationMemberTab,
+  ] = React.useState([]);
+  const [
+    totalRecordsForOnboardedOperationMemberTab,
+    setTotalRecordsForOnboardedOperationMemberTab,
+  ] = React.useState(0);
+  const [selectedOnboardOperationMember, setSelectedOnboardOperationMember] =
+    useState([]);
+
+  const updateRecords = (data) => {
+    const onboardedKeysOrder = [
+      "_id",
+      "name",
+      "email",
+      "memberCompany",
+      "companyType",
+      "createdByName",
+
+      "createdAt",
+      "isActive",
+    ];
+
+    Logger.debug("data before update----", data);
+
+    let staleData = data;
+    staleData.forEach((opMember) => {
+      delete opMember["updatedAt"];
+      delete opMember["description"];
+      delete opMember["countryCode"];
+      delete opMember["isDeleted"];
+      delete opMember["__v"];
+      delete opMember["password"];
+      delete opMember["roleId"];
+      delete opMember["role"];
+      delete opMember["salt"];
+      delete opMember["uuid"];
+      delete opMember["phoneNumber"];
+      delete opMember["token"];
+      delete opMember["tokenExpiry"];
+      delete opMember["tokenType"];
+      delete opMember["address"];
+      delete opMember["isMemberRepresentative"];
+      delete opMember["isCGFStaff"];
+      delete opMember["isOperationMember"];
+
+      opMember["memberCompany"] = opMember["memberData"]["companyName"];
+      opMember["companyType"] = opMember["memberData"]["companyType"];
+      opMember["createdByName"] = opMember["createdBy"]["name"];
+      opMember["createdAt"] = new Date(
+        opMember["createdAt"]
+      ).toLocaleDateString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric",
+      });
+      delete opMember["replacedUsers"];
+      delete opMember["isReplaced"];
+      delete opMember["department"];
+      delete opMember["title"];
+      delete opMember["salutation"];
+      delete opMember["createdBy"];
+      delete opMember["updatedBy"];
+      delete opMember["subRole"];
+      delete opMember["data"];
+      delete opMember["memberData"];
+      delete opMember["operationType"];
+      delete opMember["reportingManager"];
+      delete opMember["memberId"];
+      delete opMember["assessmentCount"];
+
+      onboardedKeysOrder.forEach((k) => {
+        const v = opMember[k];
+        delete opMember[k];
+        opMember[k] = v;
+      });
+    });
+    Logger.debug("data in updaterecords method", staleData);
+    setRecordsForOnboardedOperationMemberTab([...staleData]);
+  };
+
+  const generateUrl = () => {
+    Logger.debug("filters in onboarded table----", filters);
+    Logger.debug("Search", search);
+    let url = `${ADD_OPERATION_MEMBER}/list?page=${pageForOnboardedOperationMemberTab}&size=${rowsPerPageForOnboardedOperationMemberTab}&orderBy=${orderByForOnboardedOperationMember}&order=${orderForOnboardedOperationMemberTab}`;
+    if (search) url += `&search=${search}`;
+
+    return url;
+  };
+  const getSubAdmin = async (
+    isMounted = true,
+    controller = new AbortController()
+  ) => {
+    try {
+      let url = generateUrl();
+      setIsOnboardedOperationMemberLoading(true);
+      const response = await privateAxios.get(url, {
+        signal: controller.signal,
+      });
+
+      setTotalRecordsForOnboardedOperationMemberTab(
+        parseInt(response.headers["x-total-count"])
+      );
+      Logger.debug("Response from sub admin api get", response);
+
+      updateRecords([...response.data]);
+      setIsOnboardedOperationMemberLoading(false);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      setIsOnboardedOperationMemberLoading(false);
+      Logger.debug("Error from getSubAdmin-------", error);
+      catchError(error, setToasterDetails, myRef, navigate);
+      // if (error?.response?.status == 401) {
+      //     setToasterDetails(
+      //         {
+      //             titleMessage: "Oops!",
+      //             descriptionMessage:
+      //                 "Session Timeout: Please login again",
+      //             messageType: "error",
+      //         },
+      //         () => myRef.current()
+      //     );
+      //     setTimeout(() => {
+      //         navigate("/login");
+      //     }, 3000);
+      // } else if (error?.response?.status === 403) {
+      //     setToasterDetails(
+      //         {
+      //             titleMessage: "Oops!",
+      //             descriptionMessage: error?.response?.data?.message
+      //                 ? error?.response?.data?.message
+      //                 : "Oops! Something went wrong. Please try again later.",
+      //             messageType: "error",
+      //         },
+      //         () => myRef.current()
+      //     );
+      //     setTimeout(() => {
+      //         navigate("/home");
+      //     }, 3000);
+      // } else {
+      //     setToasterDetails(
+      //         {
+      //             titleMessage: "Oops!",
+      //             descriptionMessage: error?.response?.data?.message
+      //                 ? error?.response?.data?.message
+      //                 : "Oops! Something went wrong. Please try again later.",
+      //             messageType: "error",
+      //         },
+      //         () => myRef.current()
+      //     );
+      // }
+    }
+  };
+  const handleTablePageChange = (newPage) => {
+    setPageForOnboardedOperationMemberTab(newPage);
+  };
+
+  // rows per page method for onboarded tab
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPageForOnboardedOperationMemberTab(
+      parseInt(event.target.value, 10)
+    );
+    setPageForOnboardedOperationMemberTab(1);
+  };
+  // on click eye icon to  navigate view page
+  const onClickVisibilityIconHandler = (id) => {
+    Logger.debug("id", id);
+    return navigate(`/users/operation-member/view-operation-member/${id}`);
+  };
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    makeApiCall && getSubAdmin(isMounted, controller);
+    Logger.debug("makeApiCall", makeApiCall);
+    Logger.debug("inside use Effect");
+    return () => {
+      isMounted = false;
+      clearTimeout(searchTimeout);
+      controller.abort();
+    };
+  }, [
     pageForOnboardedOperationMemberTab,
-    setPageForOnboardedOperationMemberTab,
+    rowsPerPageForOnboardedOperationMemberTab,
+    orderByForOnboardedOperationMember,
+    orderForOnboardedOperationMemberTab,
+
     makeApiCall,
     setMakeApiCall,
-    search,
-    filters,
-    myRef,
-    toasterDetails,
-    setToasterDetails,
     searchTimeout,
-    setSearchTimeout,
-}) {
-    // const [
-    //     openDeleteDialogBoxOnboardedOperationMember,
-    //     setOpenDeleteDialogBoxOnboardedOperationMember,
-    // ] = useState(false);
-    // state to manage loaders
-    const [
-        isOnboardedOperationMemberLoading,
-        setIsOnboardedOperationMemberLoading,
-    ] = useState(true);
-    const privilege = useSelector((state) => state?.user?.privilege);
-    const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
-    let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
-    let moduleAccessForOperationMember = privilegeArray
-        .filter((data) => data?.moduleId?.name === "Operation Members")
-        .map((data) => ({
-            operationMember: {
-                list: data?.list,
-                view: data?.view,
-                edit: data?.edit,
-                delete: data?.delete,
-                add: data?.add,
-            },
-        }));
-    Logger.info(
-        "member operation privilege",
-        moduleAccessForOperationMember[0]?.operationMember
-    );
-    Logger.info("privilege", privilege);
-
-    const navigate = useNavigate();
-   
-    const [
-        rowsPerPageForOnboardedOperationMemberTab,
-        setRowsPerPageForOnboardedOperationMemberTab,
-    ] = React.useState(10);
-    const [
-        orderForOnboardedOperationMemberTab,
-        setOrderForOnboardedOperationMemberTab,
-    ] = React.useState("desc");
-    const [
-        orderByForOnboardedOperationMember,
-        setOrderByForOnboardedOperationMemberTab,
-    ] = React.useState("");
-    const [
-        recordsForOnboardedOperationMemberTab,
-        setRecordsForOnboardedOperationMemberTab,
-    ] = React.useState([]);
-    const [
-        totalRecordsForOnboardedOperationMemberTab,
-        setTotalRecordsForOnboardedOperationMemberTab,
-    ] = React.useState(0);
-    const [selectedOnboardOperationMember, setSelectedOnboardOperationMember] =
-        useState([]);
-
-    const updateRecords = (data) => {
-        const onboardedKeysOrder = [
-            "_id",
-            "name",
-            "email",
-            "memberCompany",
-            "companyType",
-            "createdByName",
-
-            "createdAt",
-            "isActive",
-        ];
-
-        Logger.debug("data before update----", data);
-
-        let staleData = data;
-        staleData.forEach((opMember) => {
-            delete opMember["updatedAt"];
-            delete opMember["description"];
-            delete opMember["countryCode"];
-            delete opMember["isDeleted"];
-            delete opMember["__v"];
-            delete opMember["password"];
-            delete opMember["roleId"];
-            delete opMember["role"];
-            delete opMember["salt"];
-            delete opMember["uuid"];
-            delete opMember["phoneNumber"];
-            delete opMember["token"];
-            delete opMember["tokenExpiry"];
-            delete opMember["tokenType"];
-            delete opMember["address"];
-            delete opMember["isMemberRepresentative"];
-            delete opMember["isCGFStaff"];
-            delete opMember["isOperationMember"];
-
-            opMember["memberCompany"] = opMember["memberData"]["companyName"];
-            opMember["companyType"] = opMember["memberData"]["companyType"];
-            opMember["createdByName"] = opMember["createdBy"]["name"];
-            opMember["createdAt"] = new Date(
-                opMember["createdAt"]
-            ).toLocaleDateString("en-US", {
-                month: "2-digit",
-                day: "2-digit",
-                year: "numeric",
-            });
-            delete opMember["replacedUsers"];
-            delete opMember["isReplaced"];
-            delete opMember["department"];
-            delete opMember["title"];
-            delete opMember["salutation"];
-            delete opMember["createdBy"];
-            delete opMember["updatedBy"];
-            delete opMember["subRole"];
-            delete opMember["data"];
-            delete opMember["memberData"];
-            delete opMember["operationType"];
-            delete opMember["reportingManager"];
-            delete opMember["memberId"];
-            delete opMember["assessmentCount"];
-
-            onboardedKeysOrder.forEach((k) => {
-                const v = opMember[k];
-                delete opMember[k];
-                opMember[k] = v;
-            });
-        });
-        Logger.debug("data in updaterecords method", staleData);
-        setRecordsForOnboardedOperationMemberTab([...staleData]);
-    };
-
-    const generateUrl = () => {
-        Logger.debug("filters in onboarded table----", filters);
-        Logger.debug("Search", search);
-        let url = `${ADD_OPERATION_MEMBER}/list?page=${pageForOnboardedOperationMemberTab}&size=${rowsPerPageForOnboardedOperationMemberTab}&orderBy=${orderByForOnboardedOperationMember}&order=${orderForOnboardedOperationMemberTab}`;
-        if (search) url += `&search=${search}`;
-
-        return url;
-    };
-    const getSubAdmin = async (
-        isMounted = true,
-        controller = new AbortController()
-    ) => {
-        try {
-            let url = generateUrl();
-            setIsOnboardedOperationMemberLoading(true);
-            const response = await privateAxios.get(url, {
-                signal: controller.signal,
-            });
-
-            setTotalRecordsForOnboardedOperationMemberTab(
-                parseInt(response.headers["x-total-count"])
-            );
-            Logger.debug("Response from sub admin api get", response);
-
-            updateRecords([...response.data]);
-            setIsOnboardedOperationMemberLoading(false);
-        } catch (error) {
-            if (error?.code === "ERR_CANCELED") return;
-            setIsOnboardedOperationMemberLoading(false);
-            Logger.debug("Error from getSubAdmin-------", error);
-            catchError(error, setToasterDetails, myRef, navigate);
-            // if (error?.response?.status == 401) {
-            //     setToasterDetails(
-            //         {
-            //             titleMessage: "Oops!",
-            //             descriptionMessage:
-            //                 "Session Timeout: Please login again",
-            //             messageType: "error",
-            //         },
-            //         () => myRef.current()
-            //     );
-            //     setTimeout(() => {
-            //         navigate("/login");
-            //     }, 3000);
-            // } else if (error?.response?.status === 403) {
-            //     setToasterDetails(
-            //         {
-            //             titleMessage: "Oops!",
-            //             descriptionMessage: error?.response?.data?.message
-            //                 ? error?.response?.data?.message
-            //                 : "Something went wrong",
-            //             messageType: "error",
-            //         },
-            //         () => myRef.current()
-            //     );
-            //     setTimeout(() => {
-            //         navigate("/home");
-            //     }, 3000);
-            // } else {
-            //     setToasterDetails(
-            //         {
-            //             titleMessage: "Oops!",
-            //             descriptionMessage: error?.response?.data?.message
-            //                 ? error?.response?.data?.message
-            //                 : "Something went wrong",
-            //             messageType: "error",
-            //         },
-            //         () => myRef.current()
-            //     );
-            // }
-        }
-    };
-    const handleTablePageChange = (newPage) => {
-        setPageForOnboardedOperationMemberTab(newPage);
-    };
-
-    // rows per page method for onboarded tab
-    const handleRowsPerPageChange = (event) => {
-        setRowsPerPageForOnboardedOperationMemberTab(
-            parseInt(event.target.value, 10)
-        );
-        setPageForOnboardedOperationMemberTab(1);
-    };
-    // on click eye icon to  navigate view page
-    const onClickVisibilityIconHandler = (id) => {
-        Logger.debug("id", id);
-        return navigate(`/users/operation-member/view-operation-member/${id}`);
-    };
-    useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
-        makeApiCall && getSubAdmin(isMounted, controller);
-        Logger.debug("makeApiCall", makeApiCall);
-        Logger.debug("inside use Effect");
-        return () => {
-            isMounted = false;
-            clearTimeout(searchTimeout);
-            controller.abort();
-        };
-    }, [
-        pageForOnboardedOperationMemberTab,
-        rowsPerPageForOnboardedOperationMemberTab,
-        orderByForOnboardedOperationMember,
-        orderForOnboardedOperationMemberTab,
-
-        makeApiCall,
-        setMakeApiCall,
-        searchTimeout,
-    ]);
-    return (
-        <>
-            {isOnboardedOperationMemberLoading ? (
-                <Loader />
-            ) : (
-                <TableComponent
-                    tableHead={tempTableHead}
-                    records={recordsForOnboardedOperationMemberTab}
-                    handleChangePage1={handleTablePageChange}
-                    handleChangeRowsPerPage1={handleRowsPerPageChange}
-                    page={pageForOnboardedOperationMemberTab}
-                    rowsPerPage={rowsPerPageForOnboardedOperationMemberTab}
-                    totalRecords={totalRecordsForOnboardedOperationMemberTab}
-                    orderBy={orderByForOnboardedOperationMember}
-                    // icons={["visibility"]}
-                    onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
-                    order={orderForOnboardedOperationMemberTab}
-                    setOrder={setOrderForOnboardedOperationMemberTab}
-                    setOrderBy={setOrderByForOnboardedOperationMemberTab}
-                    setCheckBoxes={false}
-                    setSelected={setSelectedOnboardOperationMember}
-                    selected={selectedOnboardOperationMember}
-                    onRowClick={
-                        SUPER_ADMIN === true
-                            ? true
-                            : moduleAccessForOperationMember[0]?.operationMember
-                                  .view
-                    }
-                />
-            )}
-        </>
-    );
+  ]);
+  return (
+    <>
+      {isOnboardedOperationMemberLoading ? (
+        <Loader />
+      ) : (
+        <TableComponent
+          tableHead={tempTableHead}
+          records={recordsForOnboardedOperationMemberTab}
+          handleChangePage1={handleTablePageChange}
+          handleChangeRowsPerPage1={handleRowsPerPageChange}
+          page={pageForOnboardedOperationMemberTab}
+          rowsPerPage={rowsPerPageForOnboardedOperationMemberTab}
+          totalRecords={totalRecordsForOnboardedOperationMemberTab}
+          orderBy={orderByForOnboardedOperationMember}
+          // icons={["visibility"]}
+          onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
+          order={orderForOnboardedOperationMemberTab}
+          setOrder={setOrderForOnboardedOperationMemberTab}
+          setOrderBy={setOrderByForOnboardedOperationMemberTab}
+          setCheckBoxes={false}
+          setSelected={setSelectedOnboardOperationMember}
+          selected={selectedOnboardOperationMember}
+          onRowClick={
+            SUPER_ADMIN === true
+              ? true
+              : moduleAccessForOperationMember[0]?.operationMember.view
+          }
+        />
+      )}
+    </>
+  );
 }
 
 export default OnboardedOperationMember;
