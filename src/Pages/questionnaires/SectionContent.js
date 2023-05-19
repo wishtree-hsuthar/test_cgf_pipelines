@@ -931,6 +931,7 @@ const SectionContent = ({
                     type="reset"
                     className="secondary-button mr-10"
                     onClick={onCancelClickHandler}
+                    
                 >
                     Cancel
                 </button>

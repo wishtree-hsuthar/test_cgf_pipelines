@@ -331,7 +331,7 @@ const EditSubAdmin = () => {
           },
           () => toasterRef.current()
         );
-        setDisableEditCgfAdminButton(false);
+        // setDisableEditCgfAdminButton(false);
 
         setTimeout(() => {
           navigate(`/users/cgf-admin/`);
@@ -340,6 +340,7 @@ const EditSubAdmin = () => {
     } catch (error) {
       Logger.debug("error from edit sub admin submit method");
       setIsEditCgfAdminLoading(false);
+      setDisableEditCgfAdminButton(false)
       catchError(error, toasterDetails, toasterRef, navigate);
       // if (error?.response?.status == 400) {
       //     setToasterDetails(

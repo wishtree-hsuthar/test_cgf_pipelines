@@ -68,6 +68,7 @@ const ReplaceOperationMember = () => {
 
     const { id } = useParams();
     //state to hold search timeout delay
+    const [disableSubmit, setdisableSubmit] = useState(false)
     const [selectedOperationMember, setSelectedOperationMember] = useState({});
     const [searchTimeoutReplaceOP, setSearchTimeoutReplaceOP] = useState(null);
     const [selectedReplaceOP, setSelectedReplaceOP] = React.useState([]);
@@ -278,6 +279,7 @@ const ReplaceOperationMember = () => {
 
     const replaceUser = async () => {
         try {
+            setdisableSubmit(true)
             const response = await privateAxios.post(
                 REPLACE_SUB_ADMIN + "replace",
 
@@ -312,6 +314,7 @@ const ReplaceOperationMember = () => {
                 }, 3000);
             }
         } catch (error) {
+            setdisableSubmit(false)
             Logger.debug("error from replace user");
             // if (error.response.status == 400) {
             //     setErrorToaster(error);
@@ -481,7 +484,7 @@ const ReplaceOperationMember = () => {
                             Cancel
                         </button>
                         <button
-                            disabled={selectedUserReplaceOP === ""}
+                            disabled={selectedUserReplaceOP === "" || disableSubmit}
                             onClick={openReplaceDailogBox}
                             className="primary-button add-button replace-assign-btn"
                         >

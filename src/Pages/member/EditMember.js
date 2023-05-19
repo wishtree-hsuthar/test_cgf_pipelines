@@ -138,7 +138,7 @@ const EditMember = () => {
       if (response.status === 200) {
         setIsEditMemberLoading(false);
 
-        setDisableEditMemberUpdateButton(false);
+        // setDisableEditMemberUpdateButton(false);
         reset({
           ...defaultValues,
           isActive: data.status === "active" ? "active" : "inactive",
@@ -158,6 +158,7 @@ const EditMember = () => {
       Logger.debug("Default values: ", defaultValues);
     } catch (error) {
       setIsEditMemberLoading(false);
+      setDisableEditMemberUpdateButton(false)
       catchError(error, setToasterDetailsEditMember, myRef, navigate);
       // if (error?.response?.status == 401) {
       //     setToasterDetailsEditMember(
