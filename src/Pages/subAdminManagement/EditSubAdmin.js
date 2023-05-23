@@ -9,7 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 
-import "react-phone-number-input/style.css";
+// import "react-phone-number-input/style.css";
 import axios from "axios";
 import { Controller as EditSubAdminController, useForm } from "react-hook-form";
 import Toaster from "../../components/Toaster";
@@ -152,7 +152,7 @@ const EditSubAdmin = () => {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => toasterRef.current()
@@ -166,7 +166,7 @@ const EditSubAdmin = () => {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => toasterRef.current()
@@ -209,7 +209,7 @@ const EditSubAdmin = () => {
         // setToasterDetails(
         //     {
         //         titleMessage: "Oops!",
-        //         descriptionMessage: "Something went wrong",
+        //         descriptionMessage: "Oops! Something went wrong. Please try again later.",
         //         messageType: "error",
         //     },
         //     () => toasterRef.current()
@@ -234,7 +234,7 @@ const EditSubAdmin = () => {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => toasterRef.current()
@@ -284,7 +284,7 @@ const EditSubAdmin = () => {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => toasterRef.current()
@@ -331,7 +331,7 @@ const EditSubAdmin = () => {
           },
           () => toasterRef.current()
         );
-        setDisableEditCgfAdminButton(false);
+        // setDisableEditCgfAdminButton(false);
 
         setTimeout(() => {
           navigate(`/users/cgf-admin/`);
@@ -340,6 +340,7 @@ const EditSubAdmin = () => {
     } catch (error) {
       Logger.debug("error from edit sub admin submit method");
       setIsEditCgfAdminLoading(false);
+      setDisableEditCgfAdminButton(false);
       catchError(error, toasterDetails, toasterRef, navigate);
       // if (error?.response?.status == 400) {
       //     setToasterDetails(
@@ -369,7 +370,7 @@ const EditSubAdmin = () => {
       //             titleMessage: "Oops!",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => toasterRef.current()
@@ -383,7 +384,7 @@ const EditSubAdmin = () => {
       //             titleMessage: "Oops!",
       //             descriptionMessage: error?.response?.data?.message
       //                 ? error?.response?.data?.message
-      //                 : "Something went wrong",
+      //                 : "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => toasterRef.current()

@@ -117,6 +117,7 @@ function FillAssessment() {
   const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [disableFillAssessment, setDisableFillAssessment] = useState(false);
+  const [disableImport, setDisableImport] = useState(false);
 
   const [errors, setErrors] = useState({});
   const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
@@ -158,7 +159,7 @@ function FillAssessment() {
     //       titleMessage: "Oops!",
     //       descriptionMessage: error?.response?.data?.message
     //         ? error?.response?.data?.message
-    //         : "Something went wrong",
+    //         : "Oops! Something went wrong. Please try again later.",
     //       messageType: "error",
     //     },
     //     () => myRef.current()
@@ -174,7 +175,7 @@ function FillAssessment() {
     //         error?.response?.data?.message &&
     //         typeof error.response.data.message === "string"
     //           ? error.response.data.message
-    //           : "Something went wrong.",
+    //           : "Oops! Something went wrong. Please try again later.",
     //       messageType: "error",
     //     },
     //     () => myRef.current()
@@ -221,7 +222,7 @@ function FillAssessment() {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => myRef.current()
@@ -235,7 +236,7 @@ function FillAssessment() {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => myRef.current()
@@ -411,6 +412,9 @@ function FillAssessment() {
         Object.keys(currentSectionAnswers).forEach((answersKeys) => {
           let tempRowId = answersKeys?.split("_")[1];
           section?.columnValues?.forEach((column) => {
+            // let caseInsensitiveOptions = column?.options?.map((option) =>
+            //   option.toLowerCase()
+            // );
             if (
               column.columnType !== "prefilled" &&
               saveAsDraft === false &&
@@ -425,8 +429,10 @@ function FillAssessment() {
             } else if (
               column.columnType === "dropdown" &&
               currentSectionAnswers[`${column?.uuid}_${tempRowId}`] &&
-              !column.options.includes(
-                currentSectionAnswers[`${column?.uuid}_${tempRowId}`]
+              column.options?.includes(
+                currentSectionAnswers[
+                  `${column?.uuid}_${tempRowId}`
+                ].toLowerCase()
               )
             ) {
               Logger.debug(
@@ -890,6 +896,7 @@ function FillAssessment() {
               REACT_APP_FILE_ENCRYPT_SECRET
             ).toString();
             try {
+              setDisableImport(true);
               const response = await privateAxios.post(
                 IMPORT_ASSESSMENT + `${params.id}/upload`,
                 {
@@ -902,7 +909,7 @@ function FillAssessment() {
 
                 setFile("");
                 setSelectedFileName("");
-
+                setDisableImport(false);
                 setImportOpenDialog(false);
                 setToasterDetails(
                   {
@@ -958,7 +965,7 @@ function FillAssessment() {
               }
             } catch (error) {
               Logger.debug("Error from UPLOAD api", error);
-
+              setDisableImport(false);
               setIsFillAssessmentLoading(false);
               setSelectedFileName("");
               if (
@@ -974,11 +981,12 @@ function FillAssessment() {
                   },
                   () => myRef.current()
                 );
-                setTimeout(() => {
-                  navigate("/assessment-list");
-                }, 3000);
+                // setTimeout(() => {
+                //   navigate("/assessment-list");
+                // }, 3000);
               } else {
-                handleCatchError(error, "reuploadAssessment");
+                catchError(error, setToasterDetails, myRef, navigate);
+                // handleCatchError(error, "reuploadAssessment");
               }
             } finally {
               setIsFillAssessmentLoading(false);
@@ -1231,6 +1239,7 @@ function FillAssessment() {
         primaryButtonText={"Upload"}
         secondaryButtonText={"Cancel"}
         onPrimaryModalButtonClickHandler={() => reUploadAssessment()}
+        isDisabledPrimaryButton={disableImport}
         onSecondaryModalButtonClickHandler={() => cancelImport()}
         openModal={importOpenDialog}
         setOpenModal={setImportOpenDialog}

@@ -200,7 +200,7 @@ function EditAssessment() {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => toasterRef.current()
@@ -214,7 +214,7 @@ function EditAssessment() {
         //             titleMessage: "Oops!",
         //             descriptionMessage: error?.response?.data?.message
         //                 ? error?.response?.data?.message
-        //                 : "Something went wrong",
+        //                 : "Oops! Something went wrong. Please try again later.",
         //             messageType: "error",
         //         },
         //         () => toasterRef.current()
@@ -365,7 +365,7 @@ function EditAssessment() {
       //     navigate("/login");
       // }
       // if (error.responseEditMember.status === 400) {
-      //     Logger.debug("something went wrong");
+      //     Logger.debug("Oops! Something went wrong. Please try again later.");
       //     // Add error toaster here
       //     setToasterDetails(
       //         {
@@ -378,12 +378,12 @@ function EditAssessment() {
       //     );
       // }
       // if (error.responseEditMember.status === 403) {
-      //     Logger.debug("something went wrong");
+      //     Logger.debug("Oops! Something went wrong. Please try again later.");
       //     // Add error toaster here
       //     setToasterDetails(
       //         {
       //             titleMessage: "Oops!",
-      //             descriptionMessage: "Something went wrong",
+      //             descriptionMessage: "Oops! Something went wrong. Please try again later.",
       //             messageType: "error",
       //         },
       //         () => toasterRef.current()
@@ -463,7 +463,7 @@ function EditAssessment() {
             error?.responseEditMember?.data?.message &&
             typeof error.responseEditMember.data.message === "string"
               ? error.responseEditMember.data.message
-              : "Something went wrong.",
+              : "Oops! Something went wrong. Please try again later.",
           messageType: "error",
         },
         () => toasterRef.current()

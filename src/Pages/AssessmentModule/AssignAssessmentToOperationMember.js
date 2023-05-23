@@ -172,7 +172,7 @@ const AssignAssessmentToOperationMember = () => {
               error?.response?.data?.error &&
               typeof error.response.data.error === "string"
                 ? error.response.data.error
-                : "Something went wrong.",
+                : "Oops! Something went wrong. Please try again later.",
 
             messageType: "error",
           },
@@ -282,7 +282,7 @@ const AssignAssessmentToOperationMember = () => {
               error?.response?.data?.error &&
               typeof error.response.data.error === "string"
                 ? error.response.data.error
-                : "Something went wrong.",
+                : "Oops! Something went wrong. Please try again later.",
 
             messageType: "error",
           },
