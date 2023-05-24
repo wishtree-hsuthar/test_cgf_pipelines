@@ -22,7 +22,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/1.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/1.webp"}
             alt=""
             className="img-fluid"
           />
@@ -31,7 +31,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/2.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/2.webp"}
             alt=""
             className="img-fluid"
           />
@@ -40,7 +40,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/3.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/3.webp"}
             alt=""
             className="img-fluid"
           />
@@ -49,7 +49,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/4.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/4.webp"}
             alt=""
             className="img-fluid"
           />
@@ -58,7 +58,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/5.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/5.webp"}
             alt=""
             className="img-fluid"
           />
@@ -67,7 +67,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/6.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/6.webp"}
             alt=""
             className="img-fluid"
           />
@@ -76,7 +76,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/7.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/7.webp"}
             alt=""
             className="img-fluid"
           />
@@ -85,7 +85,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/8.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/8.webp"}
             alt=""
             className="img-fluid"
           />
@@ -94,7 +94,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/9.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/9.webp"}
             alt=""
             className="img-fluid"
           />
@@ -103,7 +103,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/10.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/10.webp"}
             alt=""
             className="img-fluid"
           />
@@ -112,7 +112,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/11.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/11.webp"}
             alt=""
             className="img-fluid"
           />
@@ -121,7 +121,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/12.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/12.webp"}
             alt=""
             className="img-fluid"
           />
@@ -130,7 +130,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/13.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/13.webp"}
             alt=""
             className="img-fluid"
           />
@@ -139,7 +139,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/14.png"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/14.webp"}
             alt=""
             className="img-fluid"
           />
@@ -148,7 +148,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/15.jpeg"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/15.webp"}
             alt=""
             className="img-fluid"
           />
@@ -157,7 +157,7 @@ const HomePageTrainingSilder = () => {
       <div className="item">
         <div className="login-slide-img">
           <img
-            src={process.env.PUBLIC_URL + "/images/TrainningImages/16.jpeg"}
+            src={process.env.PUBLIC_URL + "/images/TrainningImages/16.webp"}
             alt=""
             className="img-fluid"
           />
@@ -178,23 +178,23 @@ export default HomePageTrainingSilder;
 //     <OwlCarousel className="owl-theme" items="1" dots loop autoplay>
 //       {/* <div className='item'>
 //                 <div className="login-slide-img">
-//                     <img src={process.env.PUBLIC_URL + '/images/login-slide1.png'} alt="" className="img-fluid" />
+//                     <img src={process.env.PUBLIC_URL + '/images/login-slide1.webp'} alt="" className="img-fluid" />
 //                 </div>
 //             </div>
 //             <div className='item'>
 //                 <div className="login-slide-img">
-//                     <img src={process.env.PUBLIC_URL + '/images/login-slide2.png'} alt="" className="img-fluid" />
+//                     <img src={process.env.PUBLIC_URL + '/images/login-slide2.webp'} alt="" className="img-fluid" />
 //                 </div>
 //             </div>
 //             <div className='item'>
 //                 <div className="login-slide-img">
-//                     <img src={process.env.PUBLIC_URL + '/images/login-slide3.png'} alt="" className="img-fluid" />
+//                     <img src={process.env.PUBLIC_URL + '/images/login-slide3.webp'} alt="" className="img-fluid" />
 //                 </div>
 //             </div> */}
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/1.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/1.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -203,7 +203,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/2.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/2.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -212,7 +212,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/3.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/3.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -221,7 +221,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/4.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/4.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -230,7 +230,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/5.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/5.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -239,7 +239,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/6.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/6.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -248,7 +248,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/7.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/7.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -257,7 +257,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/8.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/8.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -266,7 +266,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/9.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/9.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -275,7 +275,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/10.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/10.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -284,7 +284,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/11.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/11.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -293,7 +293,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/12.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/12.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -302,7 +302,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/13.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/13.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
@@ -311,7 +311,7 @@ export default HomePageTrainingSilder;
 //       <div className="item">
 //         <div className="login-slide-img">
 //           <img
-//             src={process.env.PUBLIC_URL + "/images/TrainningImages/14.png"}
+//             src={process.env.PUBLIC_URL + "/images/TrainningImages/14.webp"}
 //             alt=""
 //             className="img-fluid"
 //           />
