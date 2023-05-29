@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { TextField } from "@mui/material";
 
@@ -42,9 +42,7 @@ const ForgetPassword = () => {
     };
   }, []);
   const forgetPasswordToasterRef = useRef();
-  const [messageType, setMessageType] = useState("");
-  const [messageDescription, setMessageDescription] = useState("");
-  const [messageTitle, setMessageTitle] = useState("");
+
   const [toasterDetails, setToasterDetails] = useCallbackState({
     titleMessage: "",
     descriptionMessage: "",
@@ -89,7 +87,6 @@ const ForgetPassword = () => {
           () => forgetPasswordToasterRef.current()
         );
 
-        // }, 1000);
         reset();
       }
     }
