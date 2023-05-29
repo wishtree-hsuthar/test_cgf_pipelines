@@ -294,9 +294,10 @@ const AssessmentList = () => {
 
   let assessmentAccessObj = { ...moduleAccesForAssessment[0]?.assessment };
   let handleActionIcons = () => {
-    let icon = Object.entries(assessmentAccessObj).filter(
+  let icon = Object.entries(assessmentAccessObj).filter(
       (key) => key[1] === true && icons.push(key[0])
     );
+  Logger.debug(icon)  
     if (SUPER_ADMIN) {
       icons = ["edit", "visibility"];
       return icons;
