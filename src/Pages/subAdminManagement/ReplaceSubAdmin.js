@@ -14,6 +14,7 @@ import {
 import Toaster from "../../components/Toaster";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { Logger } from "../../Logger/Logger";
+import Loader from "../../utils/Loader";
 const tableHead = [
   {
     id: "",
@@ -343,9 +344,7 @@ const ReplaceSubAdmin = () => {
   };
   const [searchText, setSearchText] = useState("");
   const [open, setOpen] = useState(false);
-  const handleSearchText = (e) => {
-    setSearchText(e.target.value);
-  };
+
   Logger.debug("Search text---", searchText);
 
   const handleYes = () => {
@@ -449,25 +448,29 @@ const ReplaceSubAdmin = () => {
 
           <div className="member-info-wrapper table-content-wrap">
             <div className="member-data-sect replace-admin-table">
-              <TableComponent
-                tableHead={tableHead}
-                records={replaceCGFAdminRecords}
-                handleChangePage1={handleTableTesterPageChange}
-                handleChangeRowsPerPage1={handleTableTesterRowsPerPageChange}
-                page={replaceCGFAdminPage}
-                rowsPerPage={replaceCGFAdminRowsPerPage}
-                totalRecords={totalReplaceCGFAdminRecords}
-                orderBy={replaceCGFAdminOrderBy}
-                order={replaceCGFAdminOrder}
-                setOrder={setReplaceCGFAdminOrder}
-                setOrderBy={setOrderBy}
-                selected={selectedCGFAdminsArray}
-                setSelected={setSelectedCGFAdminsArray}
-                setCheckBoxes={false}
-                setSingleSelect={true}
-                handleSingleUserSelect={selectSingleUser}
-                selectedUser={selectedReplacedCGFAdminUser}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TableComponent
+                  tableHead={tableHead}
+                  records={replaceCGFAdminRecords}
+                  handleChangePage1={handleTableTesterPageChange}
+                  handleChangeRowsPerPage1={handleTableTesterRowsPerPageChange}
+                  page={replaceCGFAdminPage}
+                  rowsPerPage={replaceCGFAdminRowsPerPage}
+                  totalRecords={totalReplaceCGFAdminRecords}
+                  orderBy={replaceCGFAdminOrderBy}
+                  order={replaceCGFAdminOrder}
+                  setOrder={setReplaceCGFAdminOrder}
+                  setOrderBy={setOrderBy}
+                  selected={selectedCGFAdminsArray}
+                  setSelected={setSelectedCGFAdminsArray}
+                  setCheckBoxes={false}
+                  setSingleSelect={true}
+                  handleSingleUserSelect={selectSingleUser}
+                  selectedUser={selectedReplacedCGFAdminUser}
+                />
+              )}
             </div>
           </div>
           <div className="form-btn flex-between add-members-btn mb-20 pb-20 replace-cgf-admin-btnblk">

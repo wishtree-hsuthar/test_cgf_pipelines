@@ -6,7 +6,6 @@ import { useForm, Controller as AddSubAdminController } from "react-hook-form";
 import axios from "axios";
 import { privateAxios } from "../../api/axios";
 import { ADD_SUB_ADMIN, COUNTRIES, FETCH_ROLES } from "../../api/Url";
-import { useSelector } from "react-redux";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
@@ -47,7 +46,6 @@ const AddSubAdmin = () => {
   useDocumentTitle("Add CGF Admin");
   const [disableSubmit, setDisableSubmit] = useState(false);
 
-  const authUser = useSelector((state) => state.user.userObj);
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -68,7 +66,6 @@ const AddSubAdmin = () => {
   });
   const location = useLocation();
   Logger.debug(location);
-  const [roleSelected, setRoleSelected] = useState("");
   const [countriesAddCGFAdmin, setCountriesAddCGFAdmin] = useState([]);
   const [rolesAddCGFAdmin, setRolesAddCGFAdmin] = useState([]);
   const [isCgfAdminLoading, setIsCgfAdminLoading] = useState(false);
@@ -184,10 +181,6 @@ const AddSubAdmin = () => {
   }, []);
   Logger.debug("countriess----", countriesAddCGFAdmin);
 
-  const handleRoleSelection = (e) => {
-    setRoleSelected(e.target.value);
-  };
-
   const addSubAdminData = async (data) => {
     setIsCgfAdminLoading(true);
     setDisableSubmit(true);
@@ -273,7 +266,6 @@ const AddSubAdmin = () => {
     Logger.debug(data);
     reset();
     setValue("");
-    setRoleSelected("");
   };
   const handleCancel = () => {
     navigate("/users/cgf-admin/");
@@ -378,7 +370,7 @@ const AddSubAdmin = () => {
                           maxLength: 50,
                           minLength: 3,
                           pattern:
-                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                         }}
                       />
                     </div>

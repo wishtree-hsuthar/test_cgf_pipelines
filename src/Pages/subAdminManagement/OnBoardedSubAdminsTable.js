@@ -52,7 +52,7 @@ function OnBoardedSubAdminsTable({
   makeApiCall,
   setMakeApiCall,
   search,
-  filters,
+
   selectedRoles,
 }) {
   const navigate = useNavigate();
@@ -67,7 +67,6 @@ function OnBoardedSubAdminsTable({
     useState(true);
 
   //state to hold search timeout delay
-  const [searchTimeout, setSearchTimeout] = useState(null);
   //state to hold wheather to make api call or not
   // const [makeApiCall, setMakeApiCall] = useState(true);
   //Refr for Toaster
@@ -132,7 +131,6 @@ function OnBoardedSubAdminsTable({
   };
 
   const generateUrl = () => {
-    Logger.debug("filters in onboarded table----", filters);
     Logger.debug("Search", search);
     let url = `${ADD_SUB_ADMIN}/list/?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
 
@@ -221,19 +219,9 @@ function OnBoardedSubAdminsTable({
     Logger.debug("inside use Effect");
     return () => {
       isMounted = false;
-      clearTimeout(searchTimeout);
       controller.abort();
     };
-  }, [
-    page,
-    rowsPerPage,
-    orderBy,
-    order,
-    filters,
-    makeApiCall,
-    setMakeApiCall,
-    searchTimeout,
-  ]);
+  }, [page, rowsPerPage, orderBy, order, makeApiCall, setMakeApiCall]);
   return (
     <>
       <Toaster

@@ -2,9 +2,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logger } from "../../Logger/Logger";
-import {
-    DOWNLOAD_CGF_ADMIN
-} from "../../api/Url";
+import { DOWNLOAD_CGF_ADMIN } from "../../api/Url";
 import Toaster from "../../components/Toaster";
 import { downloadFunction } from "../../utils/downloadFunction";
 import TabHeader from "../../utils/tabUtils/TabHeader";
@@ -35,10 +33,8 @@ const SubAdminList = () => {
     messageType: "success",
   });
   // const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
-  const [withdrawInviteid, setWithdrawInviteid] = useState("");
 
   // state to manage loader
-  const [isLoading, setIsLoading] = useState(false);
 
   //state to hold search timeout delay
   const [searchTimeout, setSearchTimeout] = useState(null);
@@ -50,30 +46,8 @@ const SubAdminList = () => {
 
   // const [page, setPage] = React.useState(1);
 
-  const pendingKeysOrder = [
-    "_id",
-    "name",
-    "email",
-    "role",
-    "createdAt",
-    // "token",
-  ];
-
   const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState({
-    status: "all",
-    role: "",
-  });
-  const onFilterChangeHandler = (e) => {
-    Logger.debug("filter value: ", e.target.value);
-    // Logger.debug("type of time out func",typeof(timoutFunc))
-    setPage(1);
-    setFilters({
-      ...filters,
-      [e.target.name]: e.target.value,
-    });
-    Logger.debug("filters in parent component", filters);
-  };
+
   const onSearchChangeHandler = (e) => {
     Logger.debug("event", e.key);
     if (searchTimeout) clearTimeout(searchTimeout);
@@ -92,18 +66,9 @@ const SubAdminList = () => {
   //code of tablecomponent onboarded tab
 
   //code of tablecomponent pending tab
-  const [pageForPendingTab, setPageForPendingTab] = React.useState(1);
   const [pageForPendingTabCGFAdmin, setPageForPendingTabCGFAdmin] =
     React.useState(1);
   const [page, setPage] = React.useState(1);
-  const [rowsPerPageForPendingTab, setRowsPerPageForPendingTab] =
-    React.useState(10);
-  const [orderForPendingTab, setOrderForPendingTab] = React.useState("desc");
-  const [orderByForPending, setOrderByForPendingTab] =
-    React.useState("createdAt");
-  const [recordsForPendingTab, setRecordsForPendingTab] = React.useState([]);
-  const [totalRecordsForPendingTab, setTotalRecordsForPendingTab] =
-    React.useState(0);
 
   useEffect(() => {
     let isMounted = true;
@@ -120,19 +85,10 @@ const SubAdminList = () => {
     Logger.debug("makeApiCall outside UseEffect ", makeApiCall);
   }
 
-  const [selectedRoles, setSelectedRoles] = useState([]);
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState("");
-
-  const [searchText, setSearchText] = useState("");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  Logger.debug("selected roles---", selectedRoles);
-
-  Logger.debug("Selected status filter---", selectedStatusFilter);
-
-  Logger.debug("Search text---", searchText);
   const onKeyDownChangeHandler = (e) => {
     if (e.key === "Enter") {
       setMakeApiCall(true);
@@ -293,8 +249,6 @@ const SubAdminList = () => {
                   makeApiCall={makeApiCall}
                   setMakeApiCall={setMakeApiCall}
                   search={search}
-                  filters={filters}
-                  selectedRoles={selectedRoles}
                 />
               )}
             </TabPanel>
@@ -305,9 +259,7 @@ const SubAdminList = () => {
                 makeApiCall={makeApiCall}
                 setMakeApiCall={setMakeApiCall}
                 search={search}
-                filters={filters}
                 myRef={cgfAdminRef}
-                selectedRoles={selectedRoles}
                 pageForPendingTabCGFAdmin={pageForPendingTabCGFAdmin}
                 setPageForPendingTabCGFAdmin={setPageForPendingTabCGFAdmin}
                 pendingCgftoasterDetails={toasterDetails}
