@@ -45,7 +45,7 @@ function PendingCGFAdmins({
   makeApiCall,
   setMakeApiCall,
   search,
-  filters,
+
   pageForPendingTabCGFAdmin,
   setPageForPendingTabCGFAdmin,
   myRef,
@@ -65,10 +65,8 @@ function PendingCGFAdmins({
 
   // state to manage loader
   const [isPendingCgfAdmin, setIsPendingCgfAdmin] = useState(true);
-  const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
   //state to hold search timeout delay
-  const [searchTimeoutPendingCGFAdmin, setSearchTimeoutPendingCGFAdmin] =
-    useState(null);
+
   //state to hold wheather to make api call or not
 
   const navigate = useNavigate();
@@ -234,7 +232,6 @@ function PendingCGFAdmins({
 
   // url for pending tab
   const generateUrlForPendingTabCGFAdmin = () => {
-    Logger.debug("filters", filters);
     Logger.debug("Search", search);
     let url = `${ADD_SUB_ADMIN}/pending/list?page=${pageForPendingTabCGFAdmin}&size=${rowsPerPageForPendingTabCGFAdmin}&orderBy=${orderByForPending}&order=${orderForPendingTabCGFAdmin}`;
 
@@ -324,15 +321,15 @@ function PendingCGFAdmins({
     Logger.debug("inside use Effect");
     return () => {
       isMounted = false;
-      clearTimeout(searchTimeoutPendingCGFAdmin);
+      // clearTimeout(searchTimeoutPendingCGFAdmin);
       controller.abort();
     };
   }, [
-    filters,
+    ,
     makeApiCall,
 
     setMakeApiCall,
-    searchTimeoutPendingCGFAdmin,
+    // searchTimeoutPendingCGFAdmin,
     pageForPendingTabCGFAdmin,
     rowsPerPageForPendingTabCGFAdmin,
     orderByForPending,

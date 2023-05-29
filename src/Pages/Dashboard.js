@@ -116,19 +116,6 @@ const Dashboard = (props) => {
       <section>
         <div className="container">
           <div className="dashboard-sect">
-            {/* <img
-              src={
-                process.env.PUBLIC_URL +
-                "/images/WorkInProgress-removebg-preview.png"
-              }
-              className="mb-30"
-            />
-            <h1 className="coming-soon-txt">
-              {userRoleDeleted
-                ? "You are not authorized, Please contact System Administrator"
-                : "Coming Soon..."}
-            </h1> */}
-
             <p className="dashboard-header-message">
               Welcome to the CGF Human Rights Coalition HRDD Dashboard! We are
               delighted to have you here. This powerful tool empowers you to
