@@ -159,14 +159,6 @@ const TableLayoutCellComponent = ({
     formData.append("dummy", "dummy Content");
     return formData;
   };
-  const printFormData = (formData) => {
-    const tempFormData = { ...formData };
-    Logger.debug("temp Form Data", tempFormData);
-    Logger.debug("inside print Data");
-    for (const pair of formData) {
-      Logger.debug("key:- ", pair[0], "value:- ", pair[1]);
-    }
-  };
   const uploadAttachmentButtonClickHandler = async () => {
     Logger.debug("Current Selected files:- ", currentSelectedFiles);
     setIsDisabledPrimaryButton(true);
@@ -175,7 +167,6 @@ const TableLayoutCellComponent = ({
       const newlyAddedFiles = getFilesForBackend();
 
       const formData = getFormData(newlyAddedFiles);
-      //   printFormData(formData);
       Logger.debug("newly Added files:- ", newlyAddedFiles);
 
       const oldFiles = getFilesNotRemoved();
@@ -268,12 +259,7 @@ const TableLayoutCellComponent = ({
     setIsFileRemoved(false);
     setOpenFileAttachmntDialog(false);
   };
-  const oldSelectedContainsCurrentSelectedFile = (file) => {
-    let files = oldfilesSelected.filter(
-      (dataFile) => file.location === dataFile.location
-    );
-    return files.length > 0 ? false : true;
-  };
+  
   useEffect(() => {
     if (
       answer &&
@@ -282,7 +268,7 @@ const TableLayoutCellComponent = ({
       currentSelectedFiles?.length === 0 &&
       !isFileRemoved
     ) {
-      // Logger.debug("answer inside Use Effect:-", answer);
+      
       setOldfilesSelected([...answer]);
     }
     if (
@@ -294,7 +280,7 @@ const TableLayoutCellComponent = ({
       setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
     }
   }, []);
-  //   Logger.debug("current Selected Files:- ",currentSelectedFiles)
+ 
   useEffect(() => {
     if (
       answer &&
@@ -303,11 +289,11 @@ const TableLayoutCellComponent = ({
       currentSelectedFiles?.length === 0 &&
       !isFileRemoved
     ) {
-      // Logger.debug("answer inside Use Effect:-", answer);
+      
       setCurrentSelectedFiles([...answer]);
     }
   }, [currentSelectedFiles]);
-  // Logger.debug("assessment Questionnaire",assessmentQuestionnaire)
+  
   return (
     <>
       <Toaster
@@ -465,6 +451,7 @@ const TableLayoutCellComponent = ({
           answer?.length > 0 &&
           Array.isArray(answer) && (
             <>
+            {console.log("answer: ",answer)}
               {answer.map((file, fileIdx) =>
                 file?.name?.length <= 30
                   ? (fileIdx <= 1 || showMoreAttachment) && (
@@ -519,7 +506,7 @@ const TableLayoutCellComponent = ({
                 <a
                   href="#"
                   onClick={(e) => {
-                    //   e.preventDefault();
+                    
                     setShowMoreAttachment(false);
                   }}
                   className="show-more-less-txt"
@@ -534,7 +521,7 @@ const TableLayoutCellComponent = ({
                 <a
                   href="#"
                   onClick={(e) => {
-                    // e.preventDefault();
+                    
                     setShowMoreAttachment(true);
                   }}
                   className="show-more-less-txt"
