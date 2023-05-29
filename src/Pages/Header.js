@@ -9,7 +9,6 @@ import { privateAxios } from "../api/axios";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 import { Logger } from "../Logger/Logger";
 import "./Header.css";
 import axios from "axios";
@@ -136,20 +135,7 @@ const Header = () => {
     },
     []
   );
-  const replaceSpecialCharcters = (tempReportIssueLink) => {
-    let tempLink = tempReportIssueLink;
-    // console.log("link after slice:- ", tempLink);
 
-    tempLink = tempLink.replaceAll("?", "%3F");
-    tempLink = tempLink.replaceAll("&", "%26");
-    // tempLink = tempLink.replaceAll("/", "%2F");
-    tempLink = tempLink.replaceAll("<", "%3C");
-    tempLink = tempLink.replaceAll(">", "%3E");
-    tempLink = tempLink.replaceAll(" ", "%20");
-    // tempLink = tempLink.replaceAll("-", "%2D");
-
-    return tempLink;
-  };
   const getReportIssueLink = async () => {
     try {
       const response = await axios.get(MASTER_LINK + "/reportIssueOnZoho");

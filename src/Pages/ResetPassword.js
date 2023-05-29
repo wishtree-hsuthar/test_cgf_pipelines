@@ -157,9 +157,6 @@ const ResetPassword = () => {
     }
   };
 
-  const message = `Oops! The link to reset password is expired or looks like you're trying using an invalid link.
-        \nIf you don't remember your password, please click on \"Forgot Password\" button below to reset your password.`;
-
   return (
     <div className="page-wrapper login-page-wrap">
       <Toaster
