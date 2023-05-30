@@ -1,37 +1,36 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import {
-  TextField,
+  Autocomplete,
+  FormControlLabel,
   Radio,
   RadioGroup,
-  FormControlLabel,
-  Autocomplete,
+  TextField,
 } from "@mui/material";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { privateAxios } from "../../api/axios";
 import {
-  GET_OPERATION_MEMBER_BY_ID,
-  DELETE_OPERATION_MEMBER,
-  MEMBER,
   COUNTRIES,
-  ROLE_BY_ID,
+  DELETE_OPERATION_MEMBER,
+  GET_OPERATION_MEMBER_BY_ID,
+  MEMBER
 } from "../../api/Url";
+import { privateAxios } from "../../api/axios";
 
-import useCallbackState from "../../utils/useCallBackState";
-import Toaster from "../../components/Toaster";
-import DialogBox from "../../components/DialogBox";
-import { Controller, useForm } from "react-hook-form";
-import Input from "../../components/Input";
-import Dropdown from "../../components/Dropdown";
-import { useSelector } from "react-redux";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import Loader from "../../utils/Loader";
+import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { Logger } from "../../Logger/Logger";
-import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
+import DialogBox from "../../components/DialogBox";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
+import Toaster from "../../components/Toaster";
 import { catchError } from "../../utils/CatchError";
+import Loader from "../../utils/Loader";
+import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
+import useCallbackState from "../../utils/useCallBackState";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const defaultValues = {
   memberCompany: "",

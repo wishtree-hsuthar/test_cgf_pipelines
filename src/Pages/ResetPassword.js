@@ -1,21 +1,19 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import Slider from "./Slider";
-import {
-  IconButton as ResetPasswordIconButton,
-  OutlinedInput as ResetPasswordOutlinedInput,
-  InputAdornment as ResetPasswordInputAdornment,
-} from "@mui/material";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import {
+  OutlinedInput as ResetPasswordOutlinedInput
+} from "@mui/material";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import * as yup from "yup";
+import { Logger } from "../Logger/Logger";
 import { FORGOT_PASSWORD, FORGOT_PASSWORD_VERIFY_TOKEN } from "../api/Url";
 import Toaster from "../components/Toaster";
-import { useParams, useNavigate } from "react-router-dom";
-import { useDocumentTitle } from "../utils/useDocumentTitle";
-import { Logger } from "../Logger/Logger";
 import CustomInputAdornment from "../utils/CustomInputAdornment";
+import { useDocumentTitle } from "../utils/useDocumentTitle";
+import Slider from "./Slider";
 
 const schema = yup.object().shape({
   newPassword: yup

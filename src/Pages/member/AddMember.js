@@ -1,20 +1,18 @@
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import {
   Autocomplete,
   FormControlLabel,
+  RadioGroup as MemberRadio,
   Paper,
   Radio,
-  RadioGroup as MemberRadio,
   TextField,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import Input from "../../components/Input";
-import Dropdown from "../../components/Dropdown";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { Logger } from "../../Logger/Logger";
 import {
-  CATEGORIES,
   CITES,
   COUNTRIES,
   FETCH_ROLES,
@@ -22,20 +20,21 @@ import {
   PARENT_COMPINES,
   REGIONCOUNTRIES,
   REGIONS,
-  STATES,
+  STATES
 } from "../../api/Url";
-import axios from "axios";
-import useCallbackState from "../../utils/useCallBackState";
-import Toaster from "../../components/Toaster";
-import { memberHelper } from "../../utils/helpertext";
 import { privateAxios } from "../../api/axios";
-import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
+import Toaster from "../../components/Toaster";
+import Loader from "../../utils/Loader";
 import {
   defaultValues,
-  getCategories,
   getCGFOffices,
+  getCategories,
 } from "../../utils/MemberModuleUtil";
-import Loader from "../../utils/Loader";
+import { memberHelper } from "../../utils/helpertext";
+import useCallbackState from "../../utils/useCallBackState";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 //Parent company (Ideally get from backend)
 //CGF Categories (Ideally get from backend)

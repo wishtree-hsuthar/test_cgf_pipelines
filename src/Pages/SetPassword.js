@@ -1,19 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
-import Slider from "./Slider";
-import IconButton from "@mui/material/IconButton";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { publicAxios } from "../api/axios";
-import { CONFIRM_PASSWORD, SET_PASSWORD_VERIFY_TOKEN } from "../api/Url";
-import Toaster from "../components/Toaster";
-import useCallbackState from "../utils/useCallBackState";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import React, { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDocumentTitle } from "../utils/useDocumentTitle";
+import * as yup from "yup";
 import { Logger } from "../Logger/Logger";
+import { CONFIRM_PASSWORD, SET_PASSWORD_VERIFY_TOKEN } from "../api/Url";
+import { publicAxios } from "../api/axios";
+import Toaster from "../components/Toaster";
 import CustomInputAdornment from "../utils/CustomInputAdornment";
+import useCallbackState from "../utils/useCallBackState";
+import { useDocumentTitle } from "../utils/useDocumentTitle";
+import Slider from "./Slider";
 const schema = yup.object().shape({
   password: yup
     .string()

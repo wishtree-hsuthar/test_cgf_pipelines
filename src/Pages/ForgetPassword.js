@@ -2,17 +2,17 @@ import React, { useEffect, useRef } from "react";
 
 import { TextField } from "@mui/material";
 
-import Slider from "./Slider";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { Logger } from "../Logger/Logger";
+import { FORGET_PASSWORD } from "../api/Url";
 import { privateAxios } from "../api/axios";
 import Toaster from "../components/Toaster";
-import { FORGET_PASSWORD } from "../api/Url";
-import { useNavigate } from "react-router-dom";
-import { useDocumentTitle } from "../utils/useDocumentTitle";
 import useCallbackState from "../utils/useCallBackState";
-import { Logger } from "../Logger/Logger";
+import { useDocumentTitle } from "../utils/useDocumentTitle";
+import Slider from "./Slider";
 const forgetPasswordSchema = yup.object().shape({
   email: yup
     .string()

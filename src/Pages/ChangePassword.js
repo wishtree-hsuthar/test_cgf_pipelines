@@ -2,17 +2,17 @@ import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import { OutlinedInput } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { privateAxios } from "../api/axios";
-import { CHANGE_PASSWORD } from "../api/Url";
-import Toaster from "../components/Toaster";
-import useCallbackState from "../utils/useCallBackState";
-import { useDocumentTitle } from "../utils/useDocumentTitle";
 import { Logger } from "../Logger/Logger";
+import { CHANGE_PASSWORD } from "../api/Url";
+import { privateAxios } from "../api/axios";
+import Toaster from "../components/Toaster";
 import { catchError } from "../utils/CatchError";
 import CustomInputAdornment from "../utils/CustomInputAdornment";
+import useCallbackState from "../utils/useCallBackState";
+import { useDocumentTitle } from "../utils/useDocumentTitle";
 const schema = yup.object().shape({
   oldPassword: yup
     .string()
