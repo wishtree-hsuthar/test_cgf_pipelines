@@ -732,7 +732,6 @@ const AddMember = () => {
                                   )
                                     return "Invalid input";
                                 },
-                              
                               }}
                               render={({ field, fieldState: { error } }) => (
                                 <Autocomplete
@@ -917,7 +916,6 @@ const AddMember = () => {
                               onSubmit={() => setValue("city", "")}
                               disabled={!watch("country")}
                               onChange={(event, newValue) => {
-                                
                                 if (newValue) {
                                   typeof newValue === "object"
                                     ? setValue("city", newValue.name)
@@ -931,7 +929,6 @@ const AddMember = () => {
                               id="free-solo-with-text-demo"
                               options={arrOfCitesAddMember}
                               selectOnFocus
-                            
                               renderOption={(props, option) => (
                                 <li {...props}>{option}</li>
                               )}
@@ -943,8 +940,8 @@ const AddMember = () => {
                                   onChange={(e) =>
                                     setValue("city", e.target.value)
                                   }
-                                  onSubmit={() => setValue("city", "")}
                                   placeholder="Enter city"
+                                  onSubmit={() => setValue("city", "")}
                                 />
                               )}
                             />
@@ -1248,8 +1245,8 @@ const AddMember = () => {
                               maxLength: 15,
                               validate: (value) => {
                                 if (
-                                  !watch("memberContactPhoneNuber") &&
-                                  watch("memberContactCountryCode")
+                                  watch("memberContactCountryCode") &&
+                                  !watch("memberContactPhoneNuber")
                                 )
                                   return "invalid input";
                                 if (value && !Number(value))
