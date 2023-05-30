@@ -342,10 +342,7 @@ const ReplaceSubAdmin = () => {
       }
     }
   };
-  const [searchText, setSearchText] = useState("");
   const [open, setOpen] = useState(false);
-
-  Logger.debug("Search text---", searchText);
 
   const handleYes = () => {
     Logger.debug(

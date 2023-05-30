@@ -238,36 +238,6 @@ const AddRole = () => {
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       catchError(error, setToasterDetails1, myRef, navigate1);
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails1(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate1("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails1(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate1("/home");
-      //     }, 3000);
-      // } else {
-      //     setErrorToaster(error);
-      // }
     }
   };
 

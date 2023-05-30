@@ -111,7 +111,6 @@ const ChangePassword = () => {
       Logger.debug("Error from on change password data", error);
       reset();
       catchError(error, setToasterDetails, toasterRef, navigate);
-     
     }
   };
 
