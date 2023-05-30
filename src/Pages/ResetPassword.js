@@ -66,19 +66,8 @@ const ResetPassword = () => {
       } catch (error) {
         Logger.debug("error from verify token", error);
         if (error?.response?.status == 400) {
-          // setTimeout(() => {
-          //     resetPasswordToasterRef.current();
-          // }, 1000);
-
           Logger.debug("Invalid Token");
-          // setResetPassordMessageType("error");
-          // setResetPasswordMessageTitle("Invalid token");
-          // setResetPasswordMessageDescription(
-          //     error?.response?.data?.message
-          // );
-          // setTimeout(() => {
-          //     navigate("/login");
-          // }, 3000);
+
           setShowInvalidTokenMessage(true);
         }
       }
@@ -207,12 +196,7 @@ const ResetPassword = () => {
                 </h2>
                 <div className="login-form">
                   {showInvalidTokenMessage ? (
-                    <div
-                      className="form-btn flex-between"
-                      // style={{
-                      //     justifyContent: "flex-end",
-                      // }}
-                    >
+                    <div className="form-btn flex-between">
                       <button
                         type="submit"
                         className="primary-button"
@@ -220,14 +204,6 @@ const ResetPassword = () => {
                       >
                         Forgot password
                       </button>
-                      {/* <div
-                                                onClick={() =>
-                                                    navigate("/forget-password")
-                                                }
-                                                className="tertiary-btn-blk mr-10"
-                                            >
-                                                Forget password?
-                                            </div> */}
                     </div>
                   ) : (
                     <form onSubmit={handleSubmit(submitForm)}>
@@ -305,8 +281,6 @@ const ResetPassword = () => {
                             type={
                               values.showConfirmPassword ? "text" : "password"
                             }
-                            // value={values.confirmPassword}
-                            // onChange={handleChange('confirmPassword')}
                             placeholder="Enter confirm password"
                             className={`input-field ${
                               errors.confirmPassword && "input-error"

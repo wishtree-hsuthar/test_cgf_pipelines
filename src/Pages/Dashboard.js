@@ -17,24 +17,16 @@ const Dashboard = (props) => {
   const checkPrivilege = useSelector(
     (state) => state?.user?.privilege?.privileges
   );
-  //   const checkUser = useSelector(
-  //     (state) => state?.user
-  //   );
+
   const checkUser = useSelector((state) => state?.user?.userObj);
   console.log("checkPrvilege = ", checkPrivilege);
   console.log("user = ", checkUser);
 
-  //   console.log(
-  //     "check user = ",
-  //     Object.keys(checkUser?.role?.privileges).length === 0
-  //   );
   let userRoleDeleted =
     Object.keys(checkUser.role).length === 0 ||
     (Object.keys(checkPrivilege).length === 0 &&
       checkUser?.role?.name !== "Super Admin");
-  // checkPrivilege !== undefined &&
-  // Object.keys(checkPrivilege).length === 0 &&
-  // checkUser?.role?.name !== "Super Admin";
+
   Logger.debug("user role is deleted  =  ", userRoleDeleted);
   Logger.debug(
     "user is  super Admin = ",

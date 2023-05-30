@@ -52,11 +52,8 @@ function OnBoardedSubAdminsTable({
   makeApiCall,
   setMakeApiCall,
   search,
-
-  selectedRoles,
 }) {
   const navigate = useNavigate();
-  // const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("");
@@ -93,7 +90,6 @@ function OnBoardedSubAdminsTable({
 
     let staleData = data;
     staleData.forEach((onboardedCGFAdmin) => {
-      // Logger.debug("subRole-------", onboardedCGFAdmin["subRoleId"].name);
       delete onboardedCGFAdmin["updatedAt"];
       delete onboardedCGFAdmin["updatedBy"];
       delete onboardedCGFAdmin["createdBy"];

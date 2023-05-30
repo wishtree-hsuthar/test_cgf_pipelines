@@ -56,17 +56,7 @@ const SetPassword = () => {
         Logger.debug("error from verify token", error);
         if (error?.response?.status == 400) {
           Logger.debug("Invalid Token");
-          // setPasswordToasterDetails(
-          //     {
-          //         titleMessage: "Oops!",
-          //         descriptionMessage: error?.response?.data?.message,
-          //         messageType: "error",
-          //     },
-          //     () => setPasswordToasterRef.current()
-          // );
-          // setTimeout(() => {
-          //     navigate("/login");
-          // }, 3000);
+
           setShowExpiredLinkMessage(true);
         }
       }
