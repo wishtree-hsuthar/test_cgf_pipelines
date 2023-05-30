@@ -12,6 +12,7 @@ import useCallbackState from "../utils/useCallBackState";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
 import { Logger } from "../Logger/Logger";
 import { catchError } from "../utils/CatchError";
+import CustomInputAdornment from "../utils/CustomInputAdornment";
 const schema = yup.object().shape({
   oldPassword: yup
     .string()
@@ -110,46 +111,7 @@ const ChangePassword = () => {
       Logger.debug("Error from on change password data", error);
       reset();
       catchError(error, setToasterDetails, toasterRef, navigate);
-      // if (error.response.status == 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error.response.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-
-      // }
+     
     }
   };
 
@@ -198,35 +160,12 @@ const ChangePassword = () => {
                         maxLength: 15,
                       }}
                       endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowOldPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            className="eye-btn"
-                          >
-                            {!values.showOldPassword ? (
-                              <img
-                                src={
-                                  process.env.PUBLIC_URL +
-                                  "/images/non-visibleicon.svg"
-                                }
-                                alt=""
-                                className="img-fluid"
-                              />
-                            ) : (
-                              <img
-                                src={
-                                  process.env.PUBLIC_URL +
-                                  "/images/visibleicon.svg"
-                                }
-                                alt=""
-                                className="img-fluid"
-                              />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
+                        <CustomInputAdornment
+                          show={values?.showOldPassword}
+                          onClickHandler={handleClickShowOldPassword}
+                          onMouseDown={handleMouseDownPassword}
+                        />
+                       
                       }
                       {...register("oldPassword")}
                       onBlur={(e) =>
@@ -265,36 +204,14 @@ const ChangePassword = () => {
                       maxLength: 15,
                     }}
                     endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowNewPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                          className="eye-btn"
-                        >
-                          {!values.showNewPassword ? (
-                            <img
-                              src={
-                                process.env.PUBLIC_URL +
-                                "/images/non-visibleicon.svg"
-                              }
-                              alt=""
-                              className="img-fluid"
-                            />
-                          ) : (
-                            <img
-                              src={
-                                process.env.PUBLIC_URL +
-                                "/images/visibleicon.svg"
-                              }
-                              alt=""
-                              className="img-fluid"
-                            />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
+                      <CustomInputAdornment
+                        show={values?.showNewPassword}
+                        onClickHandler={handleClickShowNewPassword}
+                        mouseDownHandler={handleMouseDownPassword}
+                      />
                     }
+                    // endAdornment={
+
                     {...register("newPassword")}
                     onBlur={(e) =>
                       setValue("newPassword", e.target.value.trim())
@@ -331,35 +248,12 @@ const ChangePassword = () => {
                       maxLength: 15,
                     }}
                     endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowConfirmPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                          className="eye-btn"
-                        >
-                          {!values.showConfirmPassword ? (
-                            <img
-                              src={
-                                process.env.PUBLIC_URL +
-                                "/images/non-visibleicon.svg"
-                              }
-                              alt=""
-                              className="img-fluid"
-                            />
-                          ) : (
-                            <img
-                              src={
-                                process.env.PUBLIC_URL +
-                                "/images/visibleicon.svg"
-                              }
-                              alt=""
-                              className="img-fluid"
-                            />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
+                      <CustomInputAdornment
+                        show={values?.showConfirmPassword}
+                        onClickHandler={handleClickShowConfirmPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      />
+                    
                     }
                     {...register("confirmPassword")}
                     onBlur={(e) =>

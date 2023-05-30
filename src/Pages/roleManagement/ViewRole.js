@@ -577,8 +577,8 @@ const ViewRole = () => {
                                     {temp[previleg]["name"] ===
                                       "Assessment" && (
                                       <Checkbox
+                                      className="table-checkbox"
                                         disabled
-                                        className="table-checkbox"
                                         checked={temp[previleg]["fill"]}
                                       />
                                     )}
@@ -586,36 +586,36 @@ const ViewRole = () => {
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
-                                      className="table-checkbox"
                                       checked={temp[previleg]["list"]}
+                                      className="table-checkbox"
                                     />
                                   </TableCell>
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
-                                      disabled
                                       className="table-checkbox"
+                                      disabled
                                       checked={temp[previleg]["add"]}
                                     />
                                   </TableCell>
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
-                                      className="table-checkbox"
                                       checked={temp[previleg]["edit"]}
+                                      className="table-checkbox"
                                     />
                                   </TableCell>
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
-                                      className="table-checkbox"
                                       checked={temp[previleg]["view"]}
+                                      className="table-checkbox"
                                     />
                                   </TableCell>
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
-                                      className="table-checkbox"
                                       checked={temp[previleg]["delete"]}
+                                      className="table-checkbox"
                                     />
                                   </TableCell>
                                   {/* <TableCell align="center" padding="checkbox">

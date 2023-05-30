@@ -18,48 +18,46 @@ import { Logger } from "../../Logger/Logger";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
+const commonObj = {disablePadding: false}
 const tableHead = [
   {
+    ...commonObj,
     id: "companyName",
-    // width: "30%",
-    disablePadding: false,
     label: "Company",
   },
   {
+    ...commonObj,
     id: "name",
-    disablePadding: false,
     label: "Representative",
   },
   {
+    ...commonObj,
     id: "email",
-    disablePadding: false,
     label: "Email",
   },
   {
+    ...commonObj,
     id: "companyType",
-    disablePadding: false,
     label: "Company Type",
   },
   {
+    ...commonObj,
     id: "totalOperationMembers",
-    disablePadding: false,
     label: "Ops. Members",
   },
   {
+    ...commonObj,
     id: "createdBy",
-    disablePadding: false,
-    // width: "20%",
     label: "Created By",
   },
   {
+    ...commonObj,
     id: "createdAt",
-    disablePadding: false,
     label: "Created At",
   },
   {
+    ...commonObj,
     id: "isActive",
-    disablePadding: false,
-    // width: "15%",
     label: "Status",
   },
 ];

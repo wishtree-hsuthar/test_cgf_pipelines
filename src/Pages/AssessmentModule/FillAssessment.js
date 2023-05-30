@@ -140,7 +140,6 @@ function FillAssessment() {
   const handleCatchError = (error, functionName) => {
     Logger.debug("error occured in ", functionName);
     catchError(error, setToasterDetails, myRef, navigate, "/assessment-list");
-    
   };
 
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
@@ -162,7 +161,6 @@ function FillAssessment() {
 
         Logger.debug("error from fetch questionnaire", error);
         catchError(error, setToasterDetails, myRef, navigate);
-       
       }
     };
 
@@ -193,7 +191,7 @@ function FillAssessment() {
           setGraphLevelBreakdown({
             ...response?.data?.graphLevelBreakdown,
           });
-        
+
         fetchQuestionnaire(
           response?.data?.questionnaireId,
           response?.data?.graphResult,
@@ -331,7 +329,6 @@ function FillAssessment() {
         Object.keys(currentSectionAnswers).forEach((answersKeys) => {
           let tempRowId = answersKeys?.split("_")[1];
           section?.columnValues?.forEach((column) => {
-          
             if (
               column.columnType !== "prefilled" &&
               saveAsDraft === false &&
@@ -465,9 +462,7 @@ function FillAssessment() {
             );
             sectionErrors[question?.uuid] = "This is required field";
             sections.push(index);
-          }
-          
-          else if (
+          } else if (
             (question.inputType == "radioGroup" ||
               question.inputType == "dropdown") &&
             currentSectionAnswers[question?.uuid] &&
@@ -690,23 +685,23 @@ function FillAssessment() {
           { ...chartImages },
           { responseType: "blob" }
         );
-        
+
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement(`a`);
         link.href = url;
-        let date =
-          new Date().getDate() < 10
-            ? "0" + new Date().getDate().toString()
-            : new Date().getDate().toString();
         let month =
           new Date().getMonth() < 10
             ? "0" + (new Date().getMonth() + 1).toString()
             : new Date().getMonth().toString();
-        let year = new Date().getFullYear().toString();
+        let date =
+          new Date().getDate() < 10
+            ? "0" + new Date().getDate().toString()
+            : new Date().getDate().toString();
         let hours = new Date().getHours();
+        let year = new Date().getFullYear().toString();
         let minutes = new Date().getMinutes();
-        let seconds = new Date().getSeconds();
         let timeStamp = month + date + year + "_" + hours + minutes + seconds;
+        let seconds = new Date().getSeconds();
         link.setAttribute(`download`, `Assessment - ${timeStamp}.xlsx`);
         document.body.appendChild(link);
         link.click();
@@ -794,7 +789,7 @@ function FillAssessment() {
                   },
                   () => myRef.current()
                 );
-                
+
                 setAssessmentQuestionnaire(response.data.answers);
                 addTableAssessmentValues();
                 if (response.data.containsErrors) {
@@ -856,10 +851,8 @@ function FillAssessment() {
                   },
                   () => myRef.current()
                 );
-               
               } else {
                 catchError(error, setToasterDetails, myRef, navigate);
-              
               }
             } finally {
               setIsFillAssessmentLoading(false);
@@ -1247,13 +1240,12 @@ function FillAssessment() {
                     />
                   </TabPanel>
                 ))}
-               
+
                 {graphLevelBreakdown && graphResult && (
                   <TabPanel
                     value={value}
                     index={questionnaire?.sections?.length}
                   >
-                    
                     <Charts
                       chartImages={chartImages}
                       setChartImages={setChartImages}

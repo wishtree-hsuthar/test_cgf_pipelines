@@ -18,6 +18,7 @@ import { setUser, setPrivileges } from "../redux/UserSlice";
 import useCallbackState from "../utils/useCallBackState";
 import { publicAxios } from "../api/axios";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
+import CustomInputAdornment from "../utils/CustomInputAdornment";
 const loginFormSchema = yup.object().shape({
   email: yup
     .string()
@@ -208,35 +209,11 @@ const Login = (prop) => {
                             errors.password && "input-error"
                           }`}
                           endAdornment={
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                className="eye-btn"
-                              >
-                                {!values.showPassword ? (
-                                  <img
-                                    src={
-                                      process.env.PUBLIC_URL +
-                                      "/images/non-visibleicon.svg"
-                                    }
-                                    alt=""
-                                    className="img-fluid"
-                                  />
-                                ) : (
-                                  <img
-                                    src={
-                                      process.env.PUBLIC_URL +
-                                      "/images/visibleicon.svg"
-                                    }
-                                    alt=""
-                                    className="img-fluid"
-                                  />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
+                            <CustomInputAdornment
+                              show={values?.showPassword}
+                              onClickHandler={handleClickShowPassword}
+                              mouseDownHandler={handleMouseDownPassword}
+                            />
                           }
                           {...register("password")}
                           onBlur={(e) =>
