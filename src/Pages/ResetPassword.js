@@ -1,20 +1,19 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import Slider from "./Slider";
-import {
-  IconButton as ResetPasswordIconButton,
-  OutlinedInput as ResetPasswordOutlinedInput,
-  InputAdornment as ResetPasswordInputAdornment,
-} from "@mui/material";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import {
+  OutlinedInput as ResetPasswordOutlinedInput
+} from "@mui/material";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import * as yup from "yup";
+import { Logger } from "../Logger/Logger";
 import { FORGOT_PASSWORD, FORGOT_PASSWORD_VERIFY_TOKEN } from "../api/Url";
 import Toaster from "../components/Toaster";
-import { useParams, useNavigate } from "react-router-dom";
+import CustomInputAdornment from "../utils/CustomInputAdornment";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
-import { Logger } from "../Logger/Logger";
+import Slider from "./Slider";
 
 const schema = yup.object().shape({
   newPassword: yup
@@ -226,35 +225,11 @@ const ResetPassword = () => {
                               maxLength: 15,
                             }}
                             endAdornment={
-                              <ResetPasswordInputAdornment position="end">
-                                <ResetPasswordIconButton
-                                  aria-label="toggle password visibility"
-                                  onClick={handleClickShowNewPassword}
-                                  onMouseDown={handleMouseDownPassword}
-                                  edge="end"
-                                  className="eye-btn"
-                                >
-                                  {values.showNewPassword ? (
-                                    <img
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/visibleicon.svg"
-                                      }
-                                      alt=""
-                                      className="img-fluid"
-                                    />
-                                  ) : (
-                                    <img
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/non-visibleicon.svg"
-                                      }
-                                      alt=""
-                                      className="img-fluid"
-                                    />
-                                  )}
-                                </ResetPasswordIconButton>
-                              </ResetPasswordInputAdornment>
+                              <CustomInputAdornment
+                                show={values?.showNewPassword}
+                                onClickHandler={handleClickShowNewPassword}
+                                onMouseDown={handleMouseDownPassword}
+                              />
                             }
                             {...register("newPassword")}
                             onBlur={(e) =>
@@ -289,35 +264,11 @@ const ResetPassword = () => {
                               maxLength: 15,
                             }}
                             endAdornment={
-                              <ResetPasswordInputAdornment position="end">
-                                <ResetPasswordIconButton
-                                  aria-label="toggle password visibility"
-                                  onClick={handleClickShowConfirmPassword}
-                                  onMouseDown={handleMouseDownPassword}
-                                  edge="end"
-                                  className="eye-btn"
-                                >
-                                  {values.showConfirmPassword ? (
-                                    <img
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/visibleicon.svg"
-                                      }
-                                      alt=""
-                                      className="img-fluid"
-                                    />
-                                  ) : (
-                                    <img
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/non-visibleicon.svg"
-                                      }
-                                      alt=""
-                                      className="img-fluid"
-                                    />
-                                  )}
-                                </ResetPasswordIconButton>
-                              </ResetPasswordInputAdornment>
+                              <CustomInputAdornment
+                                show={values?.showConfirmPassword}
+                                onClickHandler={handleClickShowConfirmPassword}
+                                onMouseDown={handleMouseDownPassword}
+                              />
                             }
                             {...register("confirmPassword")}
                             onBlur={(e) =>

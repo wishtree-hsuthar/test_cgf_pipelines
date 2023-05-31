@@ -138,7 +138,7 @@ const EditMember = () => {
       if (response.status === 200) {
         setIsEditMemberLoading(false);
 
-        // setDisableEditMemberUpdateButton(false);
+        
         reset({
           ...defaultValues,
           isActive: data.status === "active" ? "active" : "inactive",
@@ -160,36 +160,7 @@ const EditMember = () => {
       setIsEditMemberLoading(false);
       setDisableEditMemberUpdateButton(false);
       catchError(error, setToasterDetailsEditMember, myRef, navigate);
-      // if (error?.response?.status == 401) {
-      //     setToasterDetailsEditMember(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetailsEditMember(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setErrorToaster1(error);
-      // }
+      
     }
   };
   // On Click cancel handler
@@ -345,15 +316,7 @@ const EditMember = () => {
       return [];
     }
   };
-  // const getCgfOfficeCountryRegion = async () => {
-  //   Logger.debug("Inside office change function: ", watch("cgfOfficeRegion"));
-  //   const countriesOnRegion = await getCountries1(watch("cgfOfficeRegion"));
-  //   Logger.debug("countries region", countriesOnRegion);
-  //   const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountries1(
-  //     countriesOnRegion.data
-  //   );
-  //   setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp]);
-  // };
+  
   // Fetch roles
   let fetchRoles = async () => {
     try {
@@ -411,37 +374,7 @@ const EditMember = () => {
       Logger.debug("error", error);
       setIsEditMemberLoading(false);
       catchError(error, setToasterDetailsEditMember, myRef, navigate);
-      // if (error?.response?.status == 401) {
-      //     setToasterDetailsEditMember(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetailsEditMember(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setIsEditMemberLoading(false);
-      //     isMounted && setErrorToaster1(error);
-      // }
+     
     }
   };
   //prevent form submission on press of enter key

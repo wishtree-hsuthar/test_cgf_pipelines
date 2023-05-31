@@ -311,7 +311,6 @@ function EditOperationMember() {
       if (response.status == 200) {
         setIsEditOperationMemberLoading(false);
 
-        // setDisableEditMemberUpdateButton(false);
         setToasterDetails(
           {
             titleMessage: "Hurray!",

@@ -2,16 +2,17 @@ import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import { OutlinedInput } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { privateAxios } from "../api/axios";
+import { Logger } from "../Logger/Logger";
 import { CHANGE_PASSWORD } from "../api/Url";
+import { privateAxios } from "../api/axios";
 import Toaster from "../components/Toaster";
+import { catchError } from "../utils/CatchError";
+import CustomInputAdornment from "../utils/CustomInputAdornment";
 import useCallbackState from "../utils/useCallBackState";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
-import { Logger } from "../Logger/Logger";
-import { catchError } from "../utils/CatchError";
 const schema = yup.object().shape({
   oldPassword: yup
     .string()
@@ -158,35 +159,12 @@ const ChangePassword = () => {
                         maxLength: 15,
                       }}
                       endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowOldPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            className="eye-btn"
-                          >
-                            {!values.showOldPassword ? (
-                              <img
-                                src={
-                                  process.env.PUBLIC_URL +
-                                  "/images/non-visibleicon.svg"
-                                }
-                                alt=""
-                                className="img-fluid"
-                              />
-                            ) : (
-                              <img
-                                src={
-                                  process.env.PUBLIC_URL +
-                                  "/images/visibleicon.svg"
-                                }
-                                alt=""
-                                className="img-fluid"
-                              />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
+                        <CustomInputAdornment
+                          show={values?.showOldPassword}
+                          onClickHandler={handleClickShowOldPassword}
+                          onMouseDown={handleMouseDownPassword}
+                        />
+                       
                       }
                       {...register("oldPassword")}
                       onBlur={(e) =>
@@ -225,36 +203,14 @@ const ChangePassword = () => {
                       maxLength: 15,
                     }}
                     endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowNewPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                          className="eye-btn"
-                        >
-                          {!values.showNewPassword ? (
-                            <img
-                              src={
-                                process.env.PUBLIC_URL +
-                                "/images/non-visibleicon.svg"
-                              }
-                              alt=""
-                              className="img-fluid"
-                            />
-                          ) : (
-                            <img
-                              src={
-                                process.env.PUBLIC_URL +
-                                "/images/visibleicon.svg"
-                              }
-                              alt=""
-                              className="img-fluid"
-                            />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
+                      <CustomInputAdornment
+                        show={values?.showNewPassword}
+                        onClickHandler={handleClickShowNewPassword}
+                        mouseDownHandler={handleMouseDownPassword}
+                      />
                     }
+                    // endAdornment={
+
                     {...register("newPassword")}
                     onBlur={(e) =>
                       setValue("newPassword", e.target.value.trim())
@@ -291,35 +247,12 @@ const ChangePassword = () => {
                       maxLength: 15,
                     }}
                     endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowConfirmPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                          className="eye-btn"
-                        >
-                          {!values.showConfirmPassword ? (
-                            <img
-                              src={
-                                process.env.PUBLIC_URL +
-                                "/images/non-visibleicon.svg"
-                              }
-                              alt=""
-                              className="img-fluid"
-                            />
-                          ) : (
-                            <img
-                              src={
-                                process.env.PUBLIC_URL +
-                                "/images/visibleicon.svg"
-                              }
-                              alt=""
-                              className="img-fluid"
-                            />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
+                      <CustomInputAdornment
+                        show={values?.showConfirmPassword}
+                        onClickHandler={handleClickShowConfirmPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      />
+                    
                     }
                     {...register("confirmPassword")}
                     onBlur={(e) =>

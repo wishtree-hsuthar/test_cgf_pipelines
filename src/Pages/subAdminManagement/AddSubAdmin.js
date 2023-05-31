@@ -214,15 +214,15 @@ const AddSubAdmin = () => {
                         CGF Admin Name <span className="mandatory">*</span>
                       </label>
                       <Input
-                        name={"name"}
-                        onBlur={(e) => setValue("name", e.target.value?.trim())}
                         control={control}
+                        onBlur={(e) => setValue("name", e.target.value?.trim())}
+                        name={"name"}
                         placeholder={"Enter CGF admin name"}
                         myHelper={helperTextForCGFAdmin}
                         rules={{
-                          required: true,
                           maxLength: 50,
                           minLength: 3,
+                          required: true,
                           pattern: /^[a-zA-Z][a-zA-Z ]*$/,
                         }}
                       />
@@ -341,8 +341,8 @@ const AddSubAdmin = () => {
                           }
                           myHelper={helperTextForCGFAdmin}
                           rules={{
-                            maxLength: 15,
                             minLength: 7,
+                            maxLength: 15,
                             validate: (value) => {
                               if (!watch("phoneNumber") && watch("countryCode"))
                                 return "invalid input";

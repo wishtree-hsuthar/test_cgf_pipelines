@@ -1,25 +1,22 @@
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import {
     FormControl,
     FormGroup,
     FormHelperText,
     MenuItem,
     Select,
-    Switch,
     TextField,
     Tooltip,
-    Typography,
+    Typography
 } from "@mui/material";
-import { v4 as uuidv4 } from "uuid";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import TableRender from "./TableRender.js";
-import React, { useEffect, useState } from "react";
-import DropdownOptionModal from "./DropdownOptionModal.js";
-import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-import { styled } from "@mui/material/styles";
 import { Stack } from "@mui/system";
-import { event } from "jquery";
-import AntSwitch from "../../../utils/AntSwitch.js";
+import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Logger } from "../../../Logger/Logger.js";
+import AntSwitch from "../../../utils/AntSwitch.js";
+import DropdownOptionModal from "./DropdownOptionModal.js";
+import TableRender from "./TableRender.js";
 const ITEM_HEIGHT = 42;
 const MenuProps = {
     PaperProps: {

@@ -1,23 +1,22 @@
 import React, { useEffect, useRef } from "react";
 
-import Slider from "./Slider";
-import { TextField } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Logger } from "../Logger/Logger";
-import Toaster from "../components/Toaster";
-import { GET_USER, LOGIN_URL } from "../api/Url";
+import { TextField } from "@mui/material";
+import OutlinedInput from "@mui/material/OutlinedInput";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { setUser, setPrivileges } from "../redux/UserSlice";
-import useCallbackState from "../utils/useCallBackState";
+import { useLocation, useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { Logger } from "../Logger/Logger";
+import { GET_USER, LOGIN_URL } from "../api/Url";
 import { publicAxios } from "../api/axios";
+import Toaster from "../components/Toaster";
+import { setPrivileges, setUser } from "../redux/UserSlice";
+import CustomInputAdornment from "../utils/CustomInputAdornment";
+import useCallbackState from "../utils/useCallBackState";
 import { useDocumentTitle } from "../utils/useDocumentTitle";
+import Slider from "./Slider";
 const loginFormSchema = yup.object().shape({
   email: yup
     .string()
@@ -208,35 +207,11 @@ const Login = (prop) => {
                             errors.password && "input-error"
                           }`}
                           endAdornment={
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                className="eye-btn"
-                              >
-                                {!values.showPassword ? (
-                                  <img
-                                    src={
-                                      process.env.PUBLIC_URL +
-                                      "/images/non-visibleicon.svg"
-                                    }
-                                    alt=""
-                                    className="img-fluid"
-                                  />
-                                ) : (
-                                  <img
-                                    src={
-                                      process.env.PUBLIC_URL +
-                                      "/images/visibleicon.svg"
-                                    }
-                                    alt=""
-                                    className="img-fluid"
-                                  />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
+                            <CustomInputAdornment
+                              show={values?.showPassword}
+                              onClickHandler={handleClickShowPassword}
+                              mouseDownHandler={handleMouseDownPassword}
+                            />
                           }
                           {...register("password")}
                           onBlur={(e) =>

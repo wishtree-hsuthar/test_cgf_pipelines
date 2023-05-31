@@ -1,18 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
-import Slider from "./Slider";
-import IconButton from "@mui/material/IconButton";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { publicAxios } from "../api/axios";
-import { CONFIRM_PASSWORD, SET_PASSWORD_VERIFY_TOKEN } from "../api/Url";
-import Toaster from "../components/Toaster";
-import useCallbackState from "../utils/useCallBackState";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import React, { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDocumentTitle } from "../utils/useDocumentTitle";
+import * as yup from "yup";
 import { Logger } from "../Logger/Logger";
+import { CONFIRM_PASSWORD, SET_PASSWORD_VERIFY_TOKEN } from "../api/Url";
+import { publicAxios } from "../api/axios";
+import Toaster from "../components/Toaster";
+import CustomInputAdornment from "../utils/CustomInputAdornment";
+import useCallbackState from "../utils/useCallBackState";
+import { useDocumentTitle } from "../utils/useDocumentTitle";
+import Slider from "./Slider";
 const schema = yup.object().shape({
   password: yup
     .string()
@@ -191,35 +190,11 @@ const SetPassword = () => {
                               maxLength: 15,
                             }}
                             endAdornment={
-                              <InputAdornment position="end">
-                                <IconButton
-                                  aria-label="toggle password visibility"
-                                  onClick={handleClickShowNewPassword}
-                                  onMouseDown={handleMouseDownPassword}
-                                  edge="end"
-                                  className="eye-btn"
-                                >
-                                  {!values.showNewPassword ? (
-                                    <img
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/non-visibleicon.svg"
-                                      }
-                                      alt=""
-                                      className="img-fluid"
-                                    />
-                                  ) : (
-                                    <img
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/visibleicon.svg"
-                                      }
-                                      alt=""
-                                      className="img-fluid"
-                                    />
-                                  )}
-                                </IconButton>
-                              </InputAdornment>
+                              <CustomInputAdornment
+                                show={values?.showNewPassword}
+                                onClickHandler={handleClickShowNewPassword}
+                                mouseDownHandler={handleMouseDownPassword}
+                              />
                             }
                             {...register("password")}
                             error={errors.password ? true : false}
@@ -254,35 +229,11 @@ const SetPassword = () => {
                               maxLength: 15,
                             }}
                             endAdornment={
-                              <InputAdornment position="end">
-                                <IconButton
-                                  aria-label="toggle password visibility"
-                                  onClick={handleClickShowConfirmPassword}
-                                  onMouseDown={handleMouseDownPassword}
-                                  edge="end"
-                                  className="eye-btn"
-                                >
-                                  {!values.showConfirmPassword ? (
-                                    <img
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/non-visibleicon.svg"
-                                      }
-                                      alt=""
-                                      className="img-fluid"
-                                    />
-                                  ) : (
-                                    <img
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/visibleicon.svg"
-                                      }
-                                      alt=""
-                                      className="img-fluid"
-                                    />
-                                  )}
-                                </IconButton>
-                              </InputAdornment>
+                              <CustomInputAdornment
+                                show={values?.showConfirmPassword}
+                                onClickHandler={handleClickShowConfirmPassword}
+                                mouseDownHandler={handleMouseDownPassword}
+                              />
                             }
                             {...register("confirmPassword")}
                             error={errors.confirmPassword ? true : false}
