@@ -5,11 +5,6 @@ import {
   Paper,
   Radio,
   RadioGroup as EditOPRadioGroup,
-  // FormControlLabel,
-  // MenuItem,
-  // Radio,
-  // RadioGroup,
-  // Select,
   TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
@@ -86,7 +81,6 @@ function EditOperationMember() {
   const [memberCompanies, setMemberCompanies] = useState([]);
   const [disableEditMemberUpdateButton, setDisableEditMemberUpdateButton] =
     useState(false);
-  const [disableReportingManager, setDisableReportingManager] = useState(true);
   const [countries, setCountries] = useState([]);
   const [reportingManagers, setReportingManagers] = useState([]);
   const [operationMember, setOperationMember] = useState({});
@@ -250,47 +244,6 @@ function EditOperationMember() {
         navigate,
         "/users/operation-members"
       );
-      // if (error?.response?.status === 401) {
-      //     isMounted &&
-      //         setToasterDetails(
-      //             {
-      //                 titleMessage: "Oops!",
-      //                 descriptionMessage:
-      //                     "Session Timeout: Please login again",
-      //                 messageType: "error",
-      //             },
-      //             () => toasterRef.current()
-      //         );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     isMounted &&
-      //         setToasterDetails(
-      //             {
-      //                 titleMessage: "Oops!",
-      //                 descriptionMessage: error?.response?.data?.message
-      //                     ? error?.response?.data?.message
-      //                     : "Oops! Something went wrong. Please try again later.",
-      //                 messageType: "error",
-      //             },
-      //             () => toasterRef.current()
-      //         );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
     }
   };
 
@@ -426,19 +379,7 @@ function EditOperationMember() {
           <form onSubmit={handleSubmit(handleOnSubmit)}>
             <div className="form-header flex-between">
               <h2 className="heading2">Edit Operation Member</h2>
-              <div className="form-header-right-txt">
-                {/* <div
-                                    className="tertiary-btn-blk"
-                                    onClick={handleSubmit(handleSaveAndMore)}
-                                >
-                                    <span className="addmore-icon">
-                                        <i className="fa fa-plus"></i>
-                                    </span>
-                                    <span className="addmore-txt">
-                                        Save & Add More
-                                    </span>
-                                </div> */}
-              </div>
+              <div className="form-header-right-txt"></div>
             </div>
             {isEditOperationMemberLoading ? (
               <Loader />
@@ -677,8 +618,6 @@ function EditOperationMember() {
                                   ? setValue("companyType", "Internal")
                                   : setValue("companyType", "External");
                               }}
-                              // value={field.name}
-                              // value={field.isCGFStaff}
                               aria-labelledby="demo-radio-buttons-group-label"
                               name="radio-buttons-group"
                               className="radio-btn"
@@ -740,7 +679,6 @@ function EditOperationMember() {
                                 Logger.debug("new Value ", newValue);
                                 setValue("reportingManager", "");
                                 trigger("memberId");
-                                setDisableReportingManager(false);
                                 // call fetch Reporting managers here
                                 fetchReportingManagers(newValue._id);
                                 setValue("companyType", newValue.companyType);

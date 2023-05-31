@@ -144,7 +144,7 @@ function AddOperationMember() {
           )
         );
 
-        if ((response.status = 200)) {
+        if (response.status == 200) {
           isMounted &&
             setMemberCompanies(
               response?.data
