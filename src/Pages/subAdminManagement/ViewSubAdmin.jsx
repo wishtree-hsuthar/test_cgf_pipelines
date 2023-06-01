@@ -123,6 +123,9 @@ const ViewSubAdmin = () => {
     };
   }, []);
 
+  const getParams = useParams();
+  Logger.debug("page params", getParams["*"].includes("pending"));
+
   const handleDeleteSubAdmin = async () => {
     try {
       const response = await privateAxios.delete(DELETE_SUB_ADMIN + params.id);
@@ -230,6 +233,10 @@ const ViewSubAdmin = () => {
       secondarybtn: "Replace Sub-admin",
       primarybtn: "Delete Anyway",
     },
+    {
+      id: 4,
+      action: "Resend",
+    },
   ];
   const style = {
     position: "absolute",
@@ -305,8 +312,10 @@ const ViewSubAdmin = () => {
                   {data.map((d, index) => (
                     <li
                       hidden={
-                        !fetchedSubAdminDetails.hasOwnProperty("subRoleId") &&
-                        d.action == "Replace"
+                        (!fetchedSubAdminDetails.hasOwnProperty("subRoleId") &&
+                          d.action == "Replace") ||
+                        (!getParams["*"].includes("/pending") &&
+                          d.action == "Resend")
                       }
                       onClick={() => handleOpen(index)}
                       key={index}

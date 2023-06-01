@@ -105,6 +105,14 @@ const ProtectedPages = () => {
             </RequireAuth>
           }
         />
+        <Route
+          path="/users/cgf-admin/pending/view-cgf-admin/:id"
+          element={
+            <RequireAuth moduleName={""} page={""}>
+              <ViewSubAdmin />
+            </RequireAuth>
+          }
+        />
 
         <Route
           path="/users/cgf-admin/edit-cgf-admin/:id"

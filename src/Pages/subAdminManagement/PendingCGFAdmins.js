@@ -32,13 +32,6 @@ const pendingTableColumnHead = [
     disablePadding: false,
     label: "Created At",
   },
-
-  {
-    id: "action",
-
-    disablePadding: false,
-    label: "Actions",
-  },
 ];
 
 function PendingCGFAdmins({
@@ -243,6 +236,11 @@ function PendingCGFAdmins({
     return url;
   };
 
+  const onClickVisibilityIconHandler = (id) => {
+    Logger.debug("id", id);
+    return navigate(`/users/cgf-admin/pending/view-cgf-admin/${id}`);
+  };
+
   const getSubAdminPendingCGFAdmin = async (
     isMounted = true,
     controller = new AbortController()
@@ -383,16 +381,12 @@ function PendingCGFAdmins({
           rowsPerPage={rowsPerPageForPendingTabCGFAdmin}
           totalRecords={totalRecordsForPendingTabCGFAdmin}
           orderBy={orderByForPending}
-          icons={["delete"]}
-          // onClickVisibilityIconHandler1={
-          //     onClickDeleteIconHandlerCGFAdmin
-          // }
-          onClickDeleteIconHandler1={onClickDeleteIconHandlerCGFAdmin}
+          onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
           order={orderForPendingTabCGFAdmin}
           setOrder={setOrderForPendingTabCGFAdmin}
           setOrderBy={setOrderByForPendingTab}
           setCheckBoxes={false}
-          onRowClick={false}
+          onRowClick={true}
         />
       )}
     </>
