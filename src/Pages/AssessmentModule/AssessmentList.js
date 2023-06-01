@@ -13,47 +13,43 @@ import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
 
+const listObj = {
+  width: "30%",
+  disablePadding: false,
+};
 const assessmentListTableHead = [
   {
-    disablePadding: false,
-    width: "30%",
+    ...listObj,
     id: "title",
     label: "Title",
   },
   {
-    disablePadding: false,
-    width: "30%",
+    ...listObj,
     id: "assessmentType",
     label: "Assessment Type",
   },
   {
-    disablePadding: false,
-
-    width: "30%",
+    ...listObj,
     id: "assignedMember.name",
     label: "Assigned Member",
   },
   {
-    disablePadding: false,
-    width: "30%",
+    ...listObj,
     id: "assignedOperationMember.name",
     label: "Assigned To",
   },
   {
-    disablePadding: false,
-    width: "30%",
+    ...listObj,
     id: "assessmentStatus",
     label: "Status",
   },
   {
-    disablePadding: false,
-    width: "30%",
+    ...listObj,
     id: "dueDate",
     label: "Due Date",
   },
   {
-    disablePadding: false,
-    width: "30%",
+    ...listObj,
     id: "action",
     label: "Actions",
   },
@@ -297,6 +293,7 @@ const AssessmentList = () => {
     let icon = Object.entries(assessmentAccessObj).filter(
       (key) => key[1] === true && icons.push(key[0])
     );
+    Logger.debug(icon);
     if (SUPER_ADMIN) {
       icons = ["edit", "visibility"];
       return icons;

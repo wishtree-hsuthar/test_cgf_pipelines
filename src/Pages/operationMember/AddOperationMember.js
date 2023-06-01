@@ -144,7 +144,7 @@ function AddOperationMember() {
           )
         );
 
-        if ((response.status = 200)) {
+        if (response.status == 200) {
           isMounted &&
             setMemberCompanies(
               response?.data
@@ -174,48 +174,7 @@ function AddOperationMember() {
       } catch (error) {
         Logger.debug("error from fetch member company", error);
         catchError(error, setToasterDetails, toasterRef, navigate);
-        // if (error?.response?.status == 401) {
-        //     isMounted &&
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage:
-        //                     "Session Timeout: Please login again",
-        //                 messageType: "error",
-        //             },
-        //             () => toasterRef.current()
-        //         );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // } else if (error?.response?.status === 403) {
-        //     isMounted &&
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage: error?.response?.data
-        //                     ?.message
-        //                     ? error?.response?.data?.message
-        //                     : "Oops! Something went wrong. Please try again later.",
-        //                 messageType: "error",
-        //             },
-        //             () => toasterRef.current()
-        //         );
-        //     setTimeout(() => {
-        //         navigate("/home");
-        //     }, 3000);
-        // } else {
-        //     isMounted &&
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage:
-        //                     error?.response?.data?.message,
-        //                 messageType: "error",
-        //             },
-        //             () => toasterRef.current()
-        //         );
-        // }
+       
       }
     };
     let fetchCountries = async () => {
@@ -262,45 +221,7 @@ function AddOperationMember() {
     } catch (error) {
       Logger.debug("error from fetching reporting managers", error);
       catchError(error, setToasterDetails, toasterRef, navigate);
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
+     
     }
   };
   const addOperationMember = async (data, navigateToListPage) => {
@@ -356,43 +277,7 @@ function AddOperationMember() {
       setDisableAddOperationMemberButton(false);
       setIsAddOperationMemberLoading(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message,
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
+     
     }
   };
 
@@ -572,7 +457,7 @@ function AddOperationMember() {
                           maxLength: 50,
                           minLength: 3,
                           pattern:
-                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                         }}
                       />
                     </div>

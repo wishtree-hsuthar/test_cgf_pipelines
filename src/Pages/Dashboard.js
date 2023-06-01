@@ -17,24 +17,16 @@ const Dashboard = (props) => {
   const checkPrivilege = useSelector(
     (state) => state?.user?.privilege?.privileges
   );
-  //   const checkUser = useSelector(
-  //     (state) => state?.user
-  //   );
+
   const checkUser = useSelector((state) => state?.user?.userObj);
   console.log("checkPrvilege = ", checkPrivilege);
   console.log("user = ", checkUser);
 
-  //   console.log(
-  //     "check user = ",
-  //     Object.keys(checkUser?.role?.privileges).length === 0
-  //   );
   let userRoleDeleted =
     Object.keys(checkUser.role).length === 0 ||
     (Object.keys(checkPrivilege).length === 0 &&
       checkUser?.role?.name !== "Super Admin");
-  // checkPrivilege !== undefined &&
-  // Object.keys(checkPrivilege).length === 0 &&
-  // checkUser?.role?.name !== "Super Admin";
+
   Logger.debug("user role is deleted  =  ", userRoleDeleted);
   Logger.debug(
     "user is  super Admin = ",
@@ -116,19 +108,6 @@ const Dashboard = (props) => {
       <section>
         <div className="container">
           <div className="dashboard-sect">
-            {/* <img
-              src={
-                process.env.PUBLIC_URL +
-                "/images/WorkInProgress-removebg-preview.png"
-              }
-              className="mb-30"
-            />
-            <h1 className="coming-soon-txt">
-              {userRoleDeleted
-                ? "You are not authorized, Please contact System Administrator"
-                : "Coming Soon..."}
-            </h1> */}
-
             <p className="dashboard-header-message">
               Welcome to the CGF Human Rights Coalition HRDD Dashboard! We are
               delighted to have you here. This powerful tool empowers you to

@@ -1,38 +1,36 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import {
-  TextField,
+  Autocomplete,
+  FormControlLabel,
   Radio,
   RadioGroup,
-  FormControlLabel,
-  Autocomplete,
+  TextField,
 } from "@mui/material";
 
-// import "react-phone-number-input/style.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { privateAxios } from "../../api/axios";
 import {
-  GET_OPERATION_MEMBER_BY_ID,
   DELETE_OPERATION_MEMBER,
+  GET_OPERATION_MEMBER_BY_ID,
   MEMBER,
   COUNTRIES,
-  ROLE_BY_ID,
 } from "../../api/Url";
+import { privateAxios } from "../../api/axios";
 
-import useCallbackState from "../../utils/useCallBackState";
-import Toaster from "../../components/Toaster";
-import DialogBox from "../../components/DialogBox";
-import { Controller, useForm } from "react-hook-form";
-import Input from "../../components/Input";
-import Dropdown from "../../components/Dropdown";
-import { useSelector } from "react-redux";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import Loader from "../../utils/Loader";
+import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { Logger } from "../../Logger/Logger";
-import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
+import DialogBox from "../../components/DialogBox";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
+import Toaster from "../../components/Toaster";
 import { catchError } from "../../utils/CatchError";
+import Loader from "../../utils/Loader";
+import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
+import useCallbackState from "../../utils/useCallBackState";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 const defaultValues = {
   memberCompany: "",
@@ -58,7 +56,7 @@ const ViewOperationMembers = () => {
   // state to manage to loaders
   const [isViewOperationMemberLoading, setIsViewOperationMemberLoading] =
     useState(true);
-  const { control, reset, trigger } = useForm({
+  const { control, reset, trigger, setValue } = useForm({
     defaultValues: defaultValues,
   });
   const navigate = useNavigate();
@@ -74,16 +72,10 @@ const ViewOperationMembers = () => {
   const [countries, setCountries] = useState([]);
   const [memberCompanies, setMemberCompanies] = useState();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [value, setValue] = useState({
-    name: "India",
-    countryCode: "+91",
-    department: "",
-  });
+
   const [fetchOperationMemberDetaills, setFetchOperationMemberDetaills] =
     useState({});
-  const [open, setOpen] = React.useState(false);
   const privilege = useSelector((state) => state.user?.privilege);
-  const user = useSelector((state) => state.user);
   const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
   let viewOperationMemberPrivilegeArray = privilege
     ? Object.values(privilege?.privileges)
@@ -103,15 +95,7 @@ const ViewOperationMembers = () => {
     "member operation privilege",
     moduleAccessForOperationMember[0]?.operationMember
   );
-  const fetchRole = async (id) => {
-    try {
-      const response = await privateAxios.get(ROLE_BY_ID + id);
-      Logger.debug("response for fetch role", response);
-      reset({ role: response?.data?.name });
-    } catch (error) {
-      Logger.debug("error in fetchRole", error);
-    }
-  };
+
   const fetchMemberComapany = async (controller, isMounted) => {
     try {
       const response = await privateAxios.get(MEMBER + "/list", {
@@ -124,7 +108,7 @@ const ViewOperationMembers = () => {
         })
       );
 
-      if ((response.status = 200)) {
+      if (response.status == 200) {
         isMounted &&
           setMemberCompanies(
             response.data.map((data) => ({
@@ -206,35 +190,6 @@ const ViewOperationMembers = () => {
         navigate,
         "/users/operation-members"
       );
-
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // }
     }
   };
   const callGetOpeationMember = async () => {
@@ -278,43 +233,6 @@ const ViewOperationMembers = () => {
     } catch (error) {
       Logger.debug("error from handle delete operation member", error);
       catchError(error, setToasterDetails, toasterRef, navigate);
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message,
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
     }
   };
 
@@ -322,19 +240,15 @@ const ViewOperationMembers = () => {
     setActive(!isActive);
   };
   const handleOpen = (index) => {
-    setOpen(true);
     Logger.debug("clicked", index);
     Logger.debug(index);
     if (index === 0) {
-      setOpen(false);
       navigate(`/users/operation-member/edit-operation-member/${params.id}`);
     }
     if (index === 1) {
-      setOpen(false);
       navigate(`/users/operation-member/replace-operation-member/${params.id}`);
     }
     if (index === 2) {
-      setOpen(false);
       setOpenDeleteDialog(true);
     }
   };
@@ -362,7 +276,6 @@ const ViewOperationMembers = () => {
           : !moduleAccessForOperationMember[0]?.operationMember.delete,
     },
   ];
-  //  Logger.debug("operation member:- ",fetchOperationMemberDetaills)
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
       <Toaster
@@ -426,10 +339,8 @@ const ViewOperationMembers = () => {
 
             <span className="form-header-right-txt" onClick={handleToggle}>
               {(SUPER_ADMIN === true ||
-                moduleAccessForOperationMember[0].operationMember.edit ==
-                  true ||
-                moduleAccessForOperationMember[0].operationMember.delete ==
-                  true) && (
+                moduleAccessForOperationMember[0].operationMember.edit ||
+                moduleAccessForOperationMember[0].operationMember.delete) && (
                 <span
                   className={`crud-operation ${
                     isActive && "crud-operation-active"
@@ -446,7 +357,7 @@ const ViewOperationMembers = () => {
                   {data.map((d, index) => (
                     <li
                       onClick={() => handleOpen(index)}
-                      key={index}
+                      key={d.id}
                       hidden={d.hide}
                     >
                       {d.action}

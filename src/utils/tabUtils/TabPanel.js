@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 

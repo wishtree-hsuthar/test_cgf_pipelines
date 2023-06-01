@@ -61,7 +61,6 @@ const AssignAssessmentToOperationMember = () => {
   });
 
   let memberId;
-  let operationMemberId;
   // search function
   const onSearchChangeHandler = (e) => {
     e.preventDefault();
@@ -154,9 +153,6 @@ const AssignAssessmentToOperationMember = () => {
         signal: controller.signal,
       });
       Logger.debug("Response from  api get operation member api", response);
-      //   let filteredMembers = response?.data.filter(
-      //     (member) => member?._id !== operationMemberId
-      //   );
       setTotalRecords(parseInt(response.headers["x-total-count"]));
 
       updateRecords(response?.data);
@@ -214,7 +210,7 @@ const AssignAssessmentToOperationMember = () => {
       });
       isMounted && setAssessment(response.data);
       memberId = response?.data?.assignedMember?._id;
-      operationMemberId = response?.data?.assignedOperationMember?._id;
+      
 
       Logger.debug(
         "response from fetch assessment in assign assessment page",
