@@ -22,7 +22,6 @@ import { Logger } from "../../Logger/Logger";
 import Toaster from "../../components/Toaster";
 import "../../components/TableComponent.css";
 import useCallbackState from "../../utils/useCallBackState";
-import Loader2 from "../../assets/Loader/Loader2.svg";
 import { REACT_APP_API_ENDPOINT } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import CommonTableHead from "./CommonTableHead";
@@ -47,21 +46,6 @@ const EditRole = () => {
     messageType,
   });
   //method to call all error toaster from this method
-  const setErrorToaster = (error) => {
-    Logger.debug("error", error);
-    setToasterDetails2(
-      {
-        titleMessage: "Error",
-        descriptionMessage:
-          error?.response?.data?.message &&
-          typeof error.response.data.message === "string"
-            ? error.response.data.message
-            : "Oops! Something went wrong. Please try again later.",
-        messageType: "error",
-      },
-      () => myRef2.current()
-    );
-  };
 
   // let temp = {};
   //Ref for Toaster
@@ -76,8 +60,7 @@ const EditRole = () => {
   let temp = {};
   const [previleges, setPrevileges] = useState({ ...temp });
   const [disableButton, setDisableButton] = useState(false);
-  const [disableEditRoleUpdateButton, setDisableEditRoleUpdateButton] =
-    useState(false);
+
   const { control, reset, setValue, handleSubmit } = useForm({
     defaultValues: editDefault,
   });
@@ -150,36 +133,6 @@ const EditRole = () => {
       Logger.debug("error", error);
       setDisableButton(false);
       catchError(error, setToasterDetails2, myRef2, navigate2);
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails2(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef2.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate2("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails2(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef2.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate2("/home");
-      //     }, 3000);
-      // } else {
-      //     setErrorToaster(error);
-      // }
     }
   };
   const onClickCancelHandler2 = () => {
@@ -239,36 +192,6 @@ const EditRole = () => {
       if (error?.code === "ERR_CANCELED") return;
       setIsLoading1(false);
       catchError(error, setToasterDetails2, myRef2, navigate2);
-      // if (error?.response?.status === 401) {
-      //     setToasterDetails2(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef2.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate2("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails2(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef2.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate2("/home");
-      //     }, 3000);
-      // } else {
-      //     setErrorToaster(error);
-      // }
     }
   };
   useEffect(() => {
@@ -629,22 +552,7 @@ const EditRole = () => {
                                     }
                                   />
                                 </TableCell>
-                                {/* <TableCell align="center" padding="checkbox">
-                                  <Checkbox
-                                    className="table-checkbox"
-                                    checked={previleges[editPrevileg]["assign"]}
-                                    onChange={() =>
-                                      setPrevileges((previous) => ({
-                                        ...previous,
-                                        [editPrevileg]: {
-                                          ...previous[editPrevileg],
-                                          assign: !previous[editPrevileg]["assign"],
-                                          all: false,
-                                        },
-                                      }))
-                                    }
-                                  />
-                                </TableCell> */}
+
                                 <TableCell align="center" padding="checkbox">
                                   <Checkbox
                                     className="table-checkbox"
@@ -678,14 +586,12 @@ const EditRole = () => {
                     </TableContainer>
                   </Paper>
                 </Box>
-                {/* </div> */}
                 <div className="form-btn flex-between add-members-btn">
                   <button
                     type="reset"
                     style={{ marginTop: "20px" }}
                     className="secondary-button mr-10"
                     onClick={onClickCancelHandler2}
-                    // disabled={disableButton}
                   >
                     Cancel
                   </button>

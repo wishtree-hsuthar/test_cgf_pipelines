@@ -10,7 +10,6 @@ import {
   Autocomplete,
 } from "@mui/material";
 import Loader from "../../utils/Loader";
-// import "react-phone-number-input/style.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { privateAxios } from "../../api/axios";
 import { DELETE_SUB_ADMIN, FETCH_SUB_ADMIN_BY_ADMIN } from "../../api/Url";
@@ -36,20 +35,17 @@ const ViewSubAdmin = () => {
     descriptionMessage: "",
     messageType: "",
   });
-  // const [modalData, setData] = useState();
 
   const [isActive, setActive] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const [fetchedSubAdminDetails, setFetchedSubAdminDetails] = useState({});
 
-  // const [open, setOpen] = React.useState(false);
-
   useEffect(() => {
     let isMounted = true;
     let controller = new AbortController();
 
-    (async () => {
+    const getCGFAdmin = async () => {
       try {
         setIsCgfLoading(true);
         const response = await privateAxios.get(
@@ -60,7 +56,7 @@ const ViewSubAdmin = () => {
         );
         Logger.debug("response from sub admin view page fetch api", response);
         if (response.status === 200) {
-          setFetchedSubAdminDetails(response.data);
+          isMounted && setFetchedSubAdminDetails(response.data);
         }
         setIsCgfLoading(false);
       } catch (error) {
@@ -74,49 +70,9 @@ const ViewSubAdmin = () => {
           navigate,
           "/users/cgf-admin"
         );
-        // if (error?.response?.status === 500) {
-        //     navigate("/users/cgf-admin/");
-        // } else if (error?.response?.status === 401) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops",
-        //             descriptionMessage:
-        //                 "Session Timeout: Please login again",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // } else if (error?.response?.status === 403) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/home");
-        //     }, 3000);
-        // } else {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        // }
       }
-    })();
+    };
+    getCGFAdmin();
     return () => {
       isMounted = false;
       controller.abort();
@@ -143,43 +99,6 @@ const ViewSubAdmin = () => {
     } catch (error) {
       Logger.debug("error from delete API", error);
       catchError(error, setToasterDetails, toasterRef, navigate);
-      // if (error?.response?.status === 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message,
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
     }
   };
   Logger.debug("fetchedSubAdminDetails---", fetchedSubAdminDetails?.isActive);
@@ -187,20 +106,15 @@ const ViewSubAdmin = () => {
     setActive(!isActive);
   };
   const handleOpen = (index) => {
-    // setOpen(true);
-    // setData(data[index]);
     Logger.debug("clicked", index);
     Logger.debug(index);
     if (index === 0) {
-      // setOpen(false);
       history(`/users/cgf-admin/edit-cgf-admin/${params.id}`);
     }
     if (index === 1) {
-      // setOpen(false);
       history(`/users/cgf-admin/replace-cgf-admin/${params.id}`);
     }
     if (index === 2) {
-      // setOpen(false);
       setOpenDeleteDialog(true);
     }
   };
@@ -231,17 +145,6 @@ const ViewSubAdmin = () => {
       primarybtn: "Delete Anyway",
     },
   ];
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
 
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
@@ -309,15 +212,13 @@ const ViewSubAdmin = () => {
                         d.action == "Replace"
                       }
                       onClick={() => handleOpen(index)}
-                      key={index}
+                      key={d.id}
                     >
                       {d.action}
                     </li>
                   ))}
                 </ul>
               </div>
-              {/* <CustomModal /> */}
-              {/* <ReplaceSubAdminModal /> */}
             </span>
           </div>
           {isCgfLoading ? (
@@ -368,9 +269,6 @@ const ViewSubAdmin = () => {
                           className="phone-number-disable"
                           options={[]}
                           autoHighlight
-                          // getOptionLabel={(country) =>
-                          //     country?.countryCode
-                          // }
                           readOnly
                           value={fetchedSubAdminDetails?.countryCode}
                           renderOption={(props, option) => (
@@ -396,31 +294,14 @@ const ViewSubAdmin = () => {
                                 ...params.inputProps,
                                 autoComplete: "", // disable autocomplete and autofill
                               }}
-
-                              // value={value}
-                              // onChange={(e) =>
-                              //     setValue(e.target.value)
-                              // }
-                              // onSelect={(e) =>
-                              //     setValue(e.target.value)
-                              // }
-                              // {...register("countryCode")}
-                              // helperText={
-                              //     errors?.countryCode?.message
-                              // }
-                              // helperText={" "}
                             />
                           )}
                         />
                       </div>
                       <TextField
-                        // className={`input-field ${
-                        //     errors.email && "input-error"
-                        // }`}
                         id="outlined-basic"
                         placeholder="N/A"
                         variant="outlined"
-                        // {...register("phoneNumber")}
                         disabled
                         value={fetchedSubAdminDetails?.phoneNumber}
                         helperText={" "}
@@ -435,34 +316,12 @@ const ViewSubAdmin = () => {
                     </label>
 
                     <div className="select-field">
-                      {/* <Select
-                                            disabled="true"
-                                            className={`input-field `}
-                                            value={""}
-                                        >
-                                            <MenuItem value={"manager"}>
-                                                {"Manager"}
-                                            </MenuItem>
-                                            <MenuItem
-                                                value={"Assistent manager"}
-                                            >
-                                                {"Assistent manager"}
-                                            </MenuItem>
-                                            <MenuItem value={"Supervisor"}>
-                                                {"Supervisor"}
-                                            </MenuItem>
-                                        </Select> */}
                       <TextField
-                        // className={`input-field ${
-                        //     errors.email && "input-error"
-                        // }`}
                         id="outlined-basic"
                         placeholder="Enter phone number"
                         variant="outlined"
-                        // {...register("phoneNumber")}
                         disabled
                         value={fetchedSubAdminDetails?.subRoleId?.name ?? "N/A"}
-                        // helperText={" "}
                       />
                     </div>
                   </div>

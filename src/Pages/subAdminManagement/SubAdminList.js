@@ -2,9 +2,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logger } from "../../Logger/Logger";
-import {
-    DOWNLOAD_CGF_ADMIN
-} from "../../api/Url";
+import { DOWNLOAD_CGF_ADMIN } from "../../api/Url";
 import Toaster from "../../components/Toaster";
 import { downloadFunction } from "../../utils/downloadFunction";
 import TabHeader from "../../utils/tabUtils/TabHeader";
@@ -34,11 +32,8 @@ const SubAdminList = () => {
     descriptionMessage: "",
     messageType: "success",
   });
-  // const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
-  const [withdrawInviteid, setWithdrawInviteid] = useState("");
 
   // state to manage loader
-  const [isLoading, setIsLoading] = useState(false);
 
   //state to hold search timeout delay
   const [searchTimeout, setSearchTimeout] = useState(null);
@@ -48,32 +43,8 @@ const SubAdminList = () => {
   const navigate = useNavigate();
   //(onboarded users/cgf-admin/ table) order in which records needs to show
 
-  // const [page, setPage] = React.useState(1);
-
-  const pendingKeysOrder = [
-    "_id",
-    "name",
-    "email",
-    "role",
-    "createdAt",
-    // "token",
-  ];
-
   const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState({
-    status: "all",
-    role: "",
-  });
-  const onFilterChangeHandler = (e) => {
-    Logger.debug("filter value: ", e.target.value);
-    // Logger.debug("type of time out func",typeof(timoutFunc))
-    setPage(1);
-    setFilters({
-      ...filters,
-      [e.target.name]: e.target.value,
-    });
-    Logger.debug("filters in parent component", filters);
-  };
+
   const onSearchChangeHandler = (e) => {
     Logger.debug("event", e.key);
     if (searchTimeout) clearTimeout(searchTimeout);
@@ -92,26 +63,15 @@ const SubAdminList = () => {
   //code of tablecomponent onboarded tab
 
   //code of tablecomponent pending tab
-  const [pageForPendingTab, setPageForPendingTab] = React.useState(1);
   const [pageForPendingTabCGFAdmin, setPageForPendingTabCGFAdmin] =
     React.useState(1);
   const [page, setPage] = React.useState(1);
-  const [rowsPerPageForPendingTab, setRowsPerPageForPendingTab] =
-    React.useState(10);
-  const [orderForPendingTab, setOrderForPendingTab] = React.useState("desc");
-  const [orderByForPending, setOrderByForPendingTab] =
-    React.useState("createdAt");
-  const [recordsForPendingTab, setRecordsForPendingTab] = React.useState([]);
-  const [totalRecordsForPendingTab, setTotalRecordsForPendingTab] =
-    React.useState(0);
 
   useEffect(() => {
-    let isMounted = true;
     const controller = new AbortController();
     Logger.debug("makeApiCall", makeApiCall);
     Logger.debug("inside use Effect");
     return () => {
-      isMounted = false;
       clearTimeout(searchTimeout);
       controller.abort();
     };
@@ -120,23 +80,13 @@ const SubAdminList = () => {
     Logger.debug("makeApiCall outside UseEffect ", makeApiCall);
   }
 
-  const [selectedRoles, setSelectedRoles] = useState([]);
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState("");
-
-  const [searchText, setSearchText] = useState("");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  Logger.debug("selected roles---", selectedRoles);
-
-  Logger.debug("Selected status filter---", selectedStatusFilter);
-
-  Logger.debug("Search text---", searchText);
   const onKeyDownChangeHandler = (e) => {
     if (e.key === "Enter") {
       setMakeApiCall(true);
-      // setPageForPendingTab(1)
       setPageForPendingTabCGFAdmin(1);
       setPage(1);
     }
@@ -194,30 +144,6 @@ const SubAdminList = () => {
           <div className="member-filter-wrap flex-between">
             <div className="member-tab-left">
               <TabHeader value={value} handleChange={handleChange} />
-              {/* <div className="member-tab-wrapper">
-                                <Box
-                                    sx={{
-                                        borderBottom: 1,
-                                        borderColor: "divider",
-                                    }}
-                                    className="tabs-sect"
-                                >
-                                    <Tabs
-                                        value={value}
-                                        onChange={handleChange}
-                                        aria-label="basic tabs example"
-                                    >
-                                        <Tab
-                                            label="Onboarded"
-                                            {...a11yProps(0)}
-                                        />
-                                        <Tab
-                                            label="Pending"
-                                            {...a11yProps(1)}
-                                        />
-                                    </Tabs>
-                                </Box>
-                            </div> */}
             </div>
             <div className="member-filter-left">
               <div className="searchbar">
@@ -233,56 +159,7 @@ const SubAdminList = () => {
                 </button>
               </div>
             </div>
-            <div className="member-filter-right">
-              {/* <div className="filter-select-wrap flex-between">
-                                <div className="filter-select-field">
-                                    <div className="dropdown-field">
-                                        <Select
-                                            value={selectedRoles}
-                                           
-                                            onChange={(e) =>
-                                                setSelectedRoles(e.target.value)
-                                            }
-                                          
-                                            name="role"
-                                        >
-                                       
-
-                                            {roles.map((role) => (
-                                                <MenuItem
-                                                    key={role._id}
-                                                    value={role._id}
-                                                >
-                                                    {role.name}
-                                                </MenuItem>
-                                            ))}
-
-                                       
-                                        </Select>
-                                    </div>
-                                </div>
-
-                                <div className="filter-select-field">
-                                    <div className="dropdown-field">
-                                        <Select
-                                            value={filters.status}
-                                            onChange={(e) =>
-                                                onFilterChangeHandler(e)
-                                            }
-                                            name="status"
-                                        >
-                                            <MenuItem value="inactive" selected>
-                                                In-active
-                                            </MenuItem>
-                                            <MenuItem value="active">
-                                                Active
-                                            </MenuItem>
-                                            <MenuItem value="all">All</MenuItem>
-                                        </Select>
-                                    </div>
-                                </div>
-                            </div> */}
-            </div>
+            <div className="member-filter-right"></div>
           </div>
           <div className="member-info-wrapper table-content-wrap table-footer-btm-space">
             <TabPanel value={value} index={0}>
@@ -293,8 +170,6 @@ const SubAdminList = () => {
                   makeApiCall={makeApiCall}
                   setMakeApiCall={setMakeApiCall}
                   search={search}
-                  filters={filters}
-                  selectedRoles={selectedRoles}
                 />
               )}
             </TabPanel>
@@ -305,9 +180,7 @@ const SubAdminList = () => {
                 makeApiCall={makeApiCall}
                 setMakeApiCall={setMakeApiCall}
                 search={search}
-                filters={filters}
                 myRef={cgfAdminRef}
-                selectedRoles={selectedRoles}
                 pageForPendingTabCGFAdmin={pageForPendingTabCGFAdmin}
                 setPageForPendingTabCGFAdmin={setPageForPendingTabCGFAdmin}
                 pendingCgftoasterDetails={toasterDetails}

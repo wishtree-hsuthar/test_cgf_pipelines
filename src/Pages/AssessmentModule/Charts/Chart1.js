@@ -22,7 +22,7 @@ const Chart1 = ({
   setChartImages,
 }) => {
   const chartRef = useRef(null);
-  // console.log("graph result:- ", graphResult);
+  
   const labels = [
     "Not Initiated",
     "Launched",

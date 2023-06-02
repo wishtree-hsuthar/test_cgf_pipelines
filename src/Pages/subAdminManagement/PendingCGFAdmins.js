@@ -45,7 +45,7 @@ function PendingCGFAdmins({
   makeApiCall,
   setMakeApiCall,
   search,
-  filters,
+
   pageForPendingTabCGFAdmin,
   setPageForPendingTabCGFAdmin,
   myRef,
@@ -65,10 +65,8 @@ function PendingCGFAdmins({
 
   // state to manage loader
   const [isPendingCgfAdmin, setIsPendingCgfAdmin] = useState(true);
-  const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
   //state to hold search timeout delay
-  const [searchTimeoutPendingCGFAdmin, setSearchTimeoutPendingCGFAdmin] =
-    useState(null);
+
   //state to hold wheather to make api call or not
 
   const navigate = useNavigate();
@@ -234,7 +232,6 @@ function PendingCGFAdmins({
 
   // url for pending tab
   const generateUrlForPendingTabCGFAdmin = () => {
-    Logger.debug("filters", filters);
     Logger.debug("Search", search);
     let url = `${ADD_SUB_ADMIN}/pending/list?page=${pageForPendingTabCGFAdmin}&size=${rowsPerPageForPendingTabCGFAdmin}&orderBy=${orderByForPending}&order=${orderForPendingTabCGFAdmin}`;
 
@@ -267,50 +264,6 @@ function PendingCGFAdmins({
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       catchError(error, setPendingCgfToasterDetails, myRef, navigate);
-      // if (error?.response?.status == 401) {
-      //     setPendingCgfToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setPendingCgfToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     isMounted &&
-      //         setPendingCgfToasterDetails(
-      //             {
-      //                 titleMessage: "Error",
-      //                 descriptionMessage:
-      //                     error?.response?.data?.message &&
-      //                     typeof error.response.data.message === "string"
-      //                         ? error.response.data.message
-      //                         : "Oops! Something went wrong. Please try again later.",
-
-      //                 messageType: "error",
-      //             },
-      //             () => myRef.current()
-      //         );
-      //     setIsPendingCgfAdmin(false);
-      // }
 
       Logger.debug("Error from getSubAdmin pending tab table-------", error);
     }
@@ -324,15 +277,11 @@ function PendingCGFAdmins({
     Logger.debug("inside use Effect");
     return () => {
       isMounted = false;
-      clearTimeout(searchTimeoutPendingCGFAdmin);
       controller.abort();
     };
   }, [
-    filters,
     makeApiCall,
-
     setMakeApiCall,
-    searchTimeoutPendingCGFAdmin,
     pageForPendingTabCGFAdmin,
     rowsPerPageForPendingTabCGFAdmin,
     orderByForPending,

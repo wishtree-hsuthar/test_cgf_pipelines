@@ -1,22 +1,22 @@
-import React from "react";
 import {
-    TextField,
-    Select,
-    MenuItem,
     Checkbox,
-    Radio,
-    FormControlLabel,
-    RadioGroup,
     FormControl,
-    FormHelperText,
+    FormControlLabel,
     FormGroup,
+    FormHelperText,
+    MenuItem,
+    Radio,
+    RadioGroup,
+    Select,
+    TextField,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import React from "react";
 
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { useParams } from "react-router-dom";
 import { Logger } from "../../Logger/Logger";
 export const AlphaRegEx = /^[a-zA-Z ]*$/;
@@ -42,10 +42,7 @@ const FillAssessmentQuestion = ({
     setEditMode,
 }) => {
     let questionLabel = question.questionTitle;
-    let errorObject = {
-        isRequired: question?.isRequired,
-        validation: question?.validation,
-    };
+   
 
     let questionUUID = question?.uuid;
     const handleOnKeyDownChange = (e) => {
@@ -238,9 +235,10 @@ const FillAssessmentQuestion = ({
                             handleAnswersChange(e.target.name, e.target.value)
                         }
                     >
+                        
                         {question.options.map((option, idx) => (
                             <FormControlLabel
-                                key={idx}
+                                key={option}
                                 disabled={
                                     (editMode &&
                                         params["*"].includes("view")) ||
@@ -274,7 +272,7 @@ const FillAssessmentQuestion = ({
                     <FormGroup>
                         {question.options.map((option, idx) => (
                             <FormControlLabel
-                                key={idx}
+                                key={option}
                                 type={"checkbox"}
                                 name={questionUUID}
                                 className="checkbox-with-label checkbox-flex"
