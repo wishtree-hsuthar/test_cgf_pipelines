@@ -692,7 +692,7 @@ const AddMember = () => {
                     </div>
                   </div>
                 </div>
-                <div className="card-inner-wrap">
+                {/* <div className="card-inner-wrap">
                   <h2 className="sub-heading1">Contact Detail</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
@@ -844,7 +844,7 @@ const AddMember = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">Company Address Detail</h2>
                   <div className="flex-between card-blk">
@@ -987,7 +987,7 @@ const AddMember = () => {
                     </div>
                   </div>
                 </div>
-                <div className="card-inner-wrap">
+                {/* <div className="card-inner-wrap">
                   <h2 className="sub-heading1">CGF Office Detail</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
@@ -1029,7 +1029,7 @@ const AddMember = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">
                     Representative Contact Detail

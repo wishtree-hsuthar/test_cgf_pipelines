@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DownloadIcon from "@mui/icons-material/Download";
-import { Logger } from "../../Logger/Logger";
-import DialogBox from "../../components/DialogBox";
-import Toaster from "../../components/Toaster";
-import useCallbackState from "../../utils/useCallBackState";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   Autocomplete,
   Checkbox,
@@ -16,30 +11,37 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import Dropdown from "../../components/Dropdown";
-import { useForm } from "react-hook-form";
-import Input from "../../components/Input";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Logger } from "../../Logger/Logger";
 import {
   COUNTRIES,
   MEMBER,
   MEMBER_OPERATION_MEMBERS,
+  PENDING_MEMBER,
   REGIONCOUNTRIES,
   REGIONS,
   STATES,
   VIEW_ROLE,
+  WITHDRAW_MEMBER_INVITE,
 } from "../../api/Url";
-import TableComponent from "../../components/TableComponent";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
-import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import DialogBox from "../../components/DialogBox";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
+import TableComponent from "../../components/TableComponent";
+import Toaster from "../../components/Toaster";
+import Loader from "../../utils/Loader";
 import {
   defaultValues,
-  getCategories,
   getCGFOffices,
+  getCategories,
 } from "../../utils/MemberModuleUtil";
-import Loader from "../../utils/Loader";
+import useCallbackState from "../../utils/useCallBackState";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -291,6 +293,7 @@ const ViewMember = () => {
   };
 
   //code to View Member Fields
+  let resetObj = {};
   const myHelper = {};
   //Refr for Toaster
   const myRef = React.useRef();
@@ -319,6 +322,7 @@ const ViewMember = () => {
 
   //code to get id from url
   const param = useParams();
+  const isPendingMember = param["*"].includes("pending");
   //code form View Member
   const navigate = useNavigate();
   const [isActive, setActive] = useState(false);
@@ -328,7 +332,11 @@ const ViewMember = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const onDialogPrimaryButtonClickHandler = async () => {
     try {
-      await axios.delete(MEMBER + `/${param.id}`);
+      if (isPendingMember) {
+        await axios.delete(WITHDRAW_MEMBER_INVITE + `${param.id}`);
+      } else {
+        await axios.delete(MEMBER + `/${param.id}`);
+      }
       setToasterDetailsViewMember(
         {
           titleMessage: "Success",
@@ -414,6 +422,7 @@ const ViewMember = () => {
       }
       return [];
     } catch (error) {
+      console.log("error in get Countries");
       if (error?.code === "ERR_CANCELED") return;
 
       return [];
@@ -428,6 +437,7 @@ const ViewMember = () => {
         signal: controller.signal,
       });
       setArrOfRegions(regions?.data ?? []);
+      console.log("region value:- ", watch("region"));
       const countriesOnRegion1 = await getCountries(watch("region"));
       const arrOfCountryRegionsTemp1 = formatRegionCountries(
         countriesOnRegion1?.data
@@ -482,20 +492,44 @@ const ViewMember = () => {
       }
     }
   };
+  const getMemberAPICall = async () => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    try {
+      setIsViewMemberLoading(true);
+      if (isPendingMember) {
+        const response = await axios.get(PENDING_MEMBER + `/${param.id}`, {
+          signal: controller.signal,
+        });
+        console.log("response for pending member:- ", response?.data);
+        return response.data;
+      } else {
+        const response = await axios.get(MEMBER + `/${param.id}`, {
+          signal: controller.signal,
+        });
+        return response?.data;
+      }
+    } catch (error) {
+    } finally {
+      setIsViewMemberLoading(false);
+    }
+  };
   const getMemberByID = async (
     isMounted = true,
     controller = new AbortController()
   ) => {
     try {
-      setIsViewMemberLoading(true);
-      const response = await axios.get(MEMBER + `/${param.id}`, {
-        signal: controller.signal,
-      });
-      const data = response.data;
+      const data = await getMemberAPICall();
+      // const response = await axios.get(MEMBER + `/${param.id}`, {
+      //   signal: controller.signal,
+      // });
+      // const data = response?.data
+      console.log("data", data);
       const roleName = await getRoleNameByRoleId(isMounted, controller, data);
       Logger.debug("data: ", data);
       setMember({ ...data });
-      reset({
+      resetObj = {
         memberCompany: data?.companyName ?? "N/A",
         companyType: data?.companyType ?? "N/A",
         parentCompany: data?.parentCompany ?? "N/A",
@@ -526,11 +560,11 @@ const ViewMember = () => {
         status: data?.memberRepresentativeId[0]?.isActive
           ? "active"
           : "inactive",
-        // totalOperationMembers: data?.totalOperationMembers ?? "N/A",
         createdBy: data?.createdBy["name"] ?? "N/A",
         roleId: roleName,
         // roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
-      });
+      };
+      reset({ ...resetObj });
       setIsViewMemberLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
@@ -579,6 +613,7 @@ const ViewMember = () => {
       });
       setTotalRecordsInViewMember(parseInt(response.headers["x-total-count"]));
       reset({
+        ...resetObj,
         totalOperationMembers: parseInt(response.headers["x-total-count"]),
       });
       updateRecords(response?.data);
@@ -661,6 +696,10 @@ const ViewMember = () => {
       // setPage(1)
     }
   };
+  const onEditClick =  () =>{
+    if(isPendingMember) navigate(`/users/members/edit-member/pending/${param.id}`)
+    else navigate(`/users/members/edit-member/${param.id}`)
+  }
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -701,12 +740,7 @@ const ViewMember = () => {
         messageType={toasterDetailsViewMember.messageType}
       />
       <DialogBox
-        title={
-          <p>
-            Delete Member "{member?.companyName ? member.companyName : "Member"}
-            "
-          </p>
-        }
+        title={<p>Delete Member "{member?.companyName}"</p>}
         info1={<p>Deleting all the details will be an irreversible action.</p>}
         info2={
           <p>
@@ -768,9 +802,7 @@ const ViewMember = () => {
                           ? false
                           : !moduleAccesForMember[0]?.member.edit
                       }
-                      onClick={() =>
-                        navigate(`/users/members/edit-member/${param.id}`)
-                      }
+                      onClick={onEditClick}
                     >
                       Edit
                     </li>
@@ -920,7 +952,7 @@ const ViewMember = () => {
                   </div>
                 </div>
               </div>
-              <div className="card-inner-wrap">
+              {/* <div className="card-inner-wrap">
                 <h2 className="sub-heading1">Contact Details</h2>
                 <div className="flex-between card-blk">
                   <div className="card-form-field">
@@ -986,7 +1018,7 @@ const ViewMember = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="card-inner-wrap">
                 <h2 className="sub-heading1">Company Address Details</h2>
                 <div className="flex-between card-blk">
@@ -1092,7 +1124,7 @@ const ViewMember = () => {
                   </div>
                 </div>
               </div>
-              <div className="card-inner-wrap">
+              {/* <div className="card-inner-wrap">
                 <h2 className="sub-heading1">CGF Office Details</h2>
                 <div className="flex-between card-blk">
                   <div className="card-form-field">
@@ -1136,7 +1168,7 @@ const ViewMember = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="card-inner-wrap">
                 <h2 className="sub-heading1">Representative Contact Details</h2>
                 <div className="flex-between card-blk">
@@ -1294,7 +1326,7 @@ const ViewMember = () => {
                         isDisabled
                         control={control}
                         name="totalOperationMembers"
-                        placeholder="N/A"
+                        placeholder="0"
                       />
                     </div>
                   </div>

@@ -22,7 +22,7 @@ const Input = ({
         rules: rules,
         defaultValue: "",
     });
-    Logger.debug("error on text inputs: ", myHelper);
+    // Logger.debug("error on text inputs: ", myHelper);
     return (
         <TextField
             disabled={isDisabled}

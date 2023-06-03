@@ -90,7 +90,9 @@ const PendingMember = ({
         day: "2-digit",
         year: "numeric",
       });
+      pendingMember["_id"] = pendingMember?.invite?._id ?? "";
       delete pendingMember["invite"];
+      // delete pendingMember["_id"]
       keysOrder.forEach((k) => {
         const v = pendingMember[k];
         delete pendingMember[k];

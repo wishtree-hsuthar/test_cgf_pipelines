@@ -184,6 +184,14 @@ const ProtectedPages = () => {
           }
         ></Route>
         <Route
+          path={"/users/members/edit-member/pending/:id"}
+          element={
+            <RequireAuth page={"edit"} moduleName={"Members"}>
+              <EditMember />
+            </RequireAuth>
+          }
+        ></Route>
+        <Route
           path={"/users/members/view-member/:id"}
           element={
             <RequireAuth page={"view"} moduleName={"Members"}>

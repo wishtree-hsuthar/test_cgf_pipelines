@@ -24,8 +24,11 @@ export const MASTER_LINK = `${REACT_APP_API_ENDPOINT}master/link`;
 
 //Member
 export const MEMBER = `${REACT_APP_API_ENDPOINT}members`;
+export const PENDING_MEMBER = `${REACT_APP_API_ENDPOINT}members/pending`;
+
 export const MEMBER_DROPDOWN = `${REACT_APP_API_ENDPOINT}members/master`;
 export const PARENT_COMPINES = `${REACT_APP_API_ENDPOINT}members/parentCompanies/master`;
+export const WITHDRAW_MEMBER_INVITE = `${REACT_APP_API_ENDPOINT}auth/invite/`;
 export const CITES = `${REACT_APP_API_ENDPOINT}members/cities/master`;
 
 //Operation member

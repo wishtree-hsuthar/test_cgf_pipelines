@@ -15,6 +15,7 @@ import {
   COUNTRIES,
   FETCH_ROLES,
   MEMBER,
+  PENDING_MEMBER,
   REGIONCOUNTRIES,
   REGIONS,
   STATES,
@@ -43,6 +44,7 @@ const EditMember = () => {
   useDocumentTitle("Edit Member");
 
   const param = useParams();
+  const isPendingMember = param["*"].includes("pending");
   const navigate = useNavigate();
   const [disableEditMemberUpdateButton, setDisableEditMemberUpdateButton] =
     useState(false);
@@ -95,73 +97,85 @@ const EditMember = () => {
     reValidateMode: "onChange",
     defaultValues: defaultValues,
   });
-  const onSubmitFunctionCall = async (data) => {
-    Logger.debug("data", data);
-    setIsEditMemberLoading(true);
+  const updateAPICall = async (backendObject) => {
     try {
-      let backendObject = {
-        parentCompany: data.parentCompany,
-        countryCode: data.countryCode,
-        phoneNumber: data.phoneNumber,
-        website: data.websiteUrl,
-        state: data.state,
-        city: data.city,
-        companyName: data.memberCompany,
-        companyType: data.companyType,
-        cgfCategory: data.cgfCategory,
-        cgfActivity: data?.cgfActivity ? data.cgfActivity : "N/A",
-        corporateEmail: data.corporateEmail,
-        region: data.region,
-        country: data.country,
-        address: data.address,
-        cgfOfficeRegion: data.cgfOfficeRegion,
-        cgfOfficeCountry: data.cgfOfficeCountry,
-        cgfOffice: data.cgfOffice,
-        memberRepresentative: {
-          id: member?.memberRepresentativeId[0]?._id,
-          title: data.title,
-          department: data.department,
-          salutation: data.memberContactSalutation,
-          name: data.memberContactFullName,
-          email: data.memberContactEmail,
-          countryCode: data.memberContactCountryCode,
-          phoneNumber: data?.memberContactPhoneNuber,
-          isActive: data.status === "active" ? true : false,
-          roleId: data.roleId,
-        },
-      };
-
-      Logger.debug("Member Representative Id", member.createdBy);
-      const response = await axios.put(MEMBER + `/${param.id}`, {
-        ...backendObject,
-      });
-      if (response.status === 200) {
-        setIsEditMemberLoading(false);
-
-        
-        reset({
-          ...defaultValues,
-          isActive: data.status === "active" ? "active" : "inactive",
-          companyType: data.companyType,
+      setIsEditMemberLoading(true);
+      if (isPendingMember) {
+        const response = await axios.put(PENDING_MEMBER + `/${param.id}`, {
+          ...backendObject,
         });
-
-        setToasterDetailsEditMember(
-          {
-            titleMessage: "Success!",
-            descriptionMessage: response.data.message,
-            messageType: "success",
-          },
-          () => myRef.current()
-        );
+        return response;
+      } else {
+        const response = await axios.put(MEMBER + `/${param.id}`, {
+          ...backendObject,
+        });
+        return response;
       }
-
-      Logger.debug("Default values: ", defaultValues);
     } catch (error) {
-      setIsEditMemberLoading(false);
       setDisableEditMemberUpdateButton(false);
       catchError(error, setToasterDetailsEditMember, myRef, navigate);
-      
+    } finally {
+      setIsEditMemberLoading(false);
     }
+  };
+  const onSubmitFunctionCall = async (data) => {
+    Logger.debug("data", data);
+
+    let backendObject = {
+      parentCompany: data.parentCompany,
+      countryCode: data.countryCode,
+      phoneNumber: data.phoneNumber,
+      website: data.websiteUrl,
+      state: data.state,
+      city: data.city,
+      companyName: data.memberCompany,
+      companyType: data.companyType,
+      cgfCategory: data.cgfCategory,
+      cgfActivity: data?.cgfActivity ? data.cgfActivity : "N/A",
+      corporateEmail: data.corporateEmail,
+      region: data.region,
+      country: data.country,
+      address: data.address,
+      cgfOfficeRegion: data.cgfOfficeRegion,
+      cgfOfficeCountry: data.cgfOfficeCountry,
+      cgfOffice: data.cgfOffice,
+      memberRepresentative: {
+        id: member?.memberRepresentativeId[0]?._id,
+        title: data.title,
+        department: data.department,
+        salutation: data.memberContactSalutation,
+        name: data.memberContactFullName,
+        email: data.memberContactEmail,
+        countryCode: data.memberContactCountryCode,
+        phoneNumber: data?.memberContactPhoneNuber,
+        isActive: data.status === "active" ? true : false,
+        roleId: data.roleId,
+      },
+    };
+
+    Logger.debug("Member Representative Id", member.createdBy);
+    const response = await updateAPICall(backendObject);
+
+    if (response.status === 200) {
+      setIsEditMemberLoading(false);
+
+      reset({
+        ...defaultValues,
+        isActive: data.status === "active" ? "active" : "inactive",
+        companyType: data.companyType,
+      });
+
+      setToasterDetailsEditMember(
+        {
+          titleMessage: "Success!",
+          descriptionMessage: response.data.message,
+          messageType: "success",
+        },
+        () => myRef.current()
+      );
+    }
+
+    Logger.debug("Default values: ", defaultValues);
   };
   // On Click cancel handler
   const onClickCancelHandler = () => {
@@ -316,7 +330,7 @@ const EditMember = () => {
       return [];
     }
   };
-  
+
   // Fetch roles
   let fetchRoles = async () => {
     try {
@@ -327,55 +341,67 @@ const EditMember = () => {
       Logger.debug("Error from fetch roles", error);
     }
   };
-  const getMemberByID1 = async (isMounted) => {
+  const getMemberAPICall = async () => {
+    let isMounted = true;
+    const controller = new AbortController();
+
     try {
       setIsEditMemberLoading(true);
-      const response = await axios.get(MEMBER + `/${param.id}`);
-      const data = response.data;
-      setIsEditMemberLoading(false);
-      reset({
-        memberCompany: data?.companyName,
-        companyType: data?.companyType,
-        parentCompany: data?.parentCompany,
-        cgfCategory: data?.cgfCategory,
-        cgfActivity: data?.cgfActivity ?? "N/A",
-        corporateEmail: data?.corporateEmail,
-        countryCode: data?.countryCode,
-        phoneNumber: data?.phoneNumber?.toString(),
-        websiteUrl: data?.website,
-        region: data?.region,
-        country: data?.country,
-        state: data?.state,
-        city: data?.city,
-        address: data?.address,
-        cgfOfficeRegion: data?.cgfOfficeRegion,
-        cgfOfficeCountry: data?.cgfOfficeCountry,
-        cgfOffice: data?.cgfOffice,
-        memberContactSalutation: data?.memberRepresentativeId[0]?.salutation,
-        memberContactFullName: data?.memberRepresentativeId[0]?.name,
-        title: data?.memberRepresentativeId[0]?.title,
-        department: data?.memberRepresentativeId[0]?.department,
-        memberContactCountryCode: data?.memberRepresentativeId[0]?.countryCode,
-        memberContactEmail: data?.memberRepresentativeId[0]?.email,
-        memberContactPhoneNuber:
-          data?.memberRepresentativeId[0]?.phoneNumber?.toString(),
-        status: data?.memberRepresentativeId[0]?.isActive
-          ? "active"
-          : "inactive",
-        roleId: data?.memberRepresentativeId[0]?.roleId,
-      });
-      setMember(response.data);
-      getCites();
-      setDisableMember(
-        response?.data?.memberRepresentativeId?.length > 0 ? false : true
-      );
+      if (isPendingMember) {
+        const response = await axios.get(PENDING_MEMBER + `/${param.id}`, {
+          signal: controller.signal,
+        });
+        console.log("response for pending member:- ", response?.data);
+        return response.data;
+      } else {
+        const response = await axios.get(MEMBER + `/${param.id}`, {
+          signal: controller.signal,
+        });
+        return response?.data;
+      }
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       Logger.debug("error", error);
       setIsEditMemberLoading(false);
       catchError(error, setToasterDetailsEditMember, myRef, navigate);
-     
+    } finally {
+      setIsEditMemberLoading(false);
     }
+  };
+  const getMemberByID1 = async (isMounted) => {
+    const data = await getMemberAPICall();
+    reset({
+      memberCompany: data?.companyName,
+      companyType: data?.companyType,
+      parentCompany: data?.parentCompany,
+      cgfCategory: data?.cgfCategory,
+      cgfActivity: data?.cgfActivity ?? "N/A",
+      corporateEmail: data?.corporateEmail,
+      countryCode: data?.countryCode,
+      phoneNumber: data?.phoneNumber?.toString(),
+      websiteUrl: data?.website,
+      region: data?.region,
+      country: data?.country,
+      state: data?.state,
+      city: data?.city,
+      address: data?.address,
+      cgfOfficeRegion: data?.cgfOfficeRegion,
+      cgfOfficeCountry: data?.cgfOfficeCountry,
+      cgfOffice: data?.cgfOffice,
+      memberContactSalutation: data?.memberRepresentativeId[0]?.salutation,
+      memberContactFullName: data?.memberRepresentativeId[0]?.name,
+      title: data?.memberRepresentativeId[0]?.title,
+      department: data?.memberRepresentativeId[0]?.department,
+      memberContactCountryCode: data?.memberRepresentativeId[0]?.countryCode,
+      memberContactEmail: data?.memberRepresentativeId[0]?.email,
+      memberContactPhoneNuber:
+        data?.memberRepresentativeId[0]?.phoneNumber?.toString(),
+      status: data?.memberRepresentativeId[0]?.isActive ? "active" : "inactive",
+      roleId: data?.memberRepresentativeId[0]?.roleId,
+    });
+    setMember(data);
+    getCites();
+    setDisableMember(data?.memberRepresentativeId?.length > 0 ? false : true);
   };
   //prevent form submission on press of enter key
   const checkKeyDown = (e) => {
@@ -403,6 +429,7 @@ const EditMember = () => {
   const callGetOffices = async () => {
     CGF_OFFICES = await getCGFOffices();
   };
+  const getViewMemberLink = isPendingMember ? `/users/members/view-member/pending/${param.id}` : `/users/members/view-member/${param.id}`
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -438,9 +465,7 @@ const EditMember = () => {
               <Link to="/users/members">Members</Link>
             </li>
             <li>
-              <Link to={`/users/members/view-member/${param.id}`}>
-                View Member
-              </Link>
+              <Link to={getViewMemberLink}>View Member</Link>
             </li>
             <li>Edit Member</li>
           </ul>
@@ -635,7 +660,7 @@ const EditMember = () => {
                     </div>
                   </div>
                 </div>
-                <div className="card-inner-wrap">
+                {/* <div className="card-inner-wrap">
                   <h2 className="sub-heading1">Contact Detail</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
@@ -794,7 +819,7 @@ const EditMember = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">Company Address Detail</h2>
                   <div className="flex-between card-blk">
@@ -946,7 +971,7 @@ const EditMember = () => {
                     </div>
                   </div>
                 </div>
-                <div className="card-inner-wrap">
+                {/* <div className="card-inner-wrap">
                   <h2 className="sub-heading1">CGF Office Detail</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
@@ -994,7 +1019,7 @@ const EditMember = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">
                     Representative Contact Detail
@@ -1088,7 +1113,7 @@ const EditMember = () => {
                           Email <span className="mandatory">*</span>
                         </label>
                         <Input
-                          isDisabled
+                          isDisabled={!isPendingMember}
                           control={control}
                           myHelper={memberHelper}
                           rules={{
@@ -1265,11 +1290,13 @@ const EditMember = () => {
                                 className="radio-btn"
                               >
                                 <FormControlLabel
+                                  disabled={isPendingMember}
                                   value="active"
                                   control={<Radio />}
                                   label="Active"
                                 />
                                 <FormControlLabel
+                                  disabled={isPendingMember}
                                   value="inactive"
                                   control={<Radio />}
                                   label="Inactive"
