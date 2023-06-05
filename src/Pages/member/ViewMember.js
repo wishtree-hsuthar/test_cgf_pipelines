@@ -696,10 +696,12 @@ const ViewMember = () => {
       // setPage(1)
     }
   };
-  const onEditClick =  () =>{
-    if(isPendingMember) navigate(`/users/members/edit-member/pending/${param.id}`)
-    else navigate(`/users/members/edit-member/${param.id}`)
-  }
+  const onEditClick = () => {
+    if (isPendingMember)
+      navigate(`/users/members/edit-member/pending/${param.id}`);
+    else navigate(`/users/members/edit-member/${param.id}`);
+  };
+  const onReInviteClick = () => {};
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -807,7 +809,9 @@ const ViewMember = () => {
                       Edit
                     </li>
                   )}
-
+                  {isPendingMember && (
+                    <li onClick={onReInviteClick}>Re-Invite</li>
+                  )}
                   <li
                     hidden={
                       SUPER_ADMIN
@@ -1169,7 +1173,11 @@ const ViewMember = () => {
                   </div>
                 </div>
               </div> */}
-              <div className="card-inner-wrap">
+              <div
+                className={`card-inner-wrap ${
+                  isPendingMember || "pening-margin-bottom"
+                }`}
+              >
                 <h2 className="sub-heading1">Representative Contact Details</h2>
                 <div className="flex-between card-blk">
                   <div className="card-form-field">
@@ -1316,20 +1324,23 @@ const ViewMember = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="totalOperationMembers">
-                        Total Operation Member{" "}
-                        <span className="mandatory">*</span>
-                      </label>
-                      <Input
-                        isDisabled
-                        control={control}
-                        name="totalOperationMembers"
-                        placeholder="0"
-                      />
+                  {isPendingMember || (
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="totalOperationMembers">
+                          Total Operation Member{" "}
+                          <span className="mandatory">*</span>
+                        </label>
+                        <Input
+                          isDisabled
+                          control={control}
+                          name="totalOperationMembers"
+                          placeholder="0"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
+
                   <div className="card-form-field">
                     <div className="form-group">
                       <label htmlFor="createdBy">
@@ -1373,162 +1384,168 @@ const ViewMember = () => {
                   </div>
                 </div>
               </div>
-
-              <div className="form-header member-form-header flex-between mb-10">
-                <div className="operation-member-left-blk">
-                  {/* <h2 className="heading2 mr-40">Members</h2> */}
-                  <div className="searchbar">
-                    <input
-                      type="text"
-                      value={search}
-                      name="search"
-                      placeholder="Search"
-                      onKeyDown={onKeyDownChangeHandler}
-                      onChange={onSearchChangeHandler}
-                    />
-                    <button type="submit">
-                      <i className="fa fa-search"></i>
-                    </button>
+              {isPendingMember || (
+                <div className="form-header member-form-header flex-between mb-10">
+                  <div className="operation-member-left-blk">
+                    {/* <h2 className="heading2 mr-40">Members</h2> */}
+                    <div className="searchbar">
+                      <input
+                        type="text"
+                        value={search}
+                        name="search"
+                        placeholder="Search"
+                        onKeyDown={onKeyDownChangeHandler}
+                        onChange={onSearchChangeHandler}
+                      />
+                      <button type="submit">
+                        <i className="fa fa-search"></i>
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="form-header-right-txt">
-                  <div
-                    className="tertiary-btn-blk mr-20"
-                    onClick={() => downloadOperationMembers()}
-                  >
-                    <span className="download-icon">
-                      <DownloadIcon />
-                    </span>
-                    Download
-                  </div>
-                  <div
-                    className="form-btn"
-                    hidden={
-                      SUPER_ADMIN === true
-                        ? false
-                        : !moduleAccesForMember[1]?.operationMember?.add
-                      // true
-                    }
-                  >
-                    <button
-                      type="submit"
-                      className="primary-button add-button"
-                      onClick={() =>
-                        navigate(
-                          "/users/operation-members/add-operation-member"
-                        )
+                  <div className="form-header-right-txt">
+                    <div
+                      className="tertiary-btn-blk mr-20"
+                      onClick={() => downloadOperationMembers()}
+                    >
+                      <span className="download-icon">
+                        <DownloadIcon />
+                      </span>
+                      Download
+                    </div>
+                    <div
+                      className="form-btn"
+                      hidden={
+                        SUPER_ADMIN === true
+                          ? false
+                          : !moduleAccesForMember[1]?.operationMember?.add
+                        // true
                       }
                     >
-                      Add Operation Member
-                    </button>
+                      <button
+                        type="submit"
+                        className="primary-button add-button"
+                        onClick={() =>
+                          navigate(
+                            "/users/operation-members/add-operation-member"
+                          )
+                        }
+                      >
+                        Add Operation Member
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="member-filter-sect">
-                <div className="member-filter-wrap flex-between">
-                  <div className="member-filter-left"></div>
-                  <div className="member-filter-right">
-                    <div className="filter-select-wrap flex-between">
-                      <div className="filter-select-field">
-                        <div className="dropdown-field">
-                          <Select
-                            sx={{ display: "none" }}
-                            name="createdBy"
-                            multiple
-                            value={selectedCreatedBy}
-                            onChange={handleCreatedByFilter}
-                            onFocus={(e) => onFilterFocusHandler("createdBy")}
-                            renderValue={(val) =>
-                              selectedCreatedBy.length > 1
-                                ? val.slice(1).join(", ")
-                                : "Created By"
-                            }
-                          >
-                            <MenuItem
-                              value="none"
-                              sx={{
-                                display:
-                                  showFilterPlaceholder === "createdBy" &&
-                                  "none",
-                              }}
+              )}
+              {isPendingMember || (
+                <div className="member-filter-sect">
+                  <div className="member-filter-wrap flex-between">
+                    <div className="member-filter-left"></div>
+                    <div className="member-filter-right">
+                      <div className="filter-select-wrap flex-between">
+                        <div className="filter-select-field">
+                          <div className="dropdown-field">
+                            <Select
+                              sx={{ display: "none" }}
+                              name="createdBy"
+                              multiple
+                              value={selectedCreatedBy}
+                              onChange={handleCreatedByFilter}
+                              onFocus={(e) => onFilterFocusHandler("createdBy")}
+                              renderValue={(val) =>
+                                selectedCreatedBy.length > 1
+                                  ? val.slice(1).join(", ")
+                                  : "Created By"
+                              }
                             >
-                              Created By
-                            </MenuItem>
+                              <MenuItem
+                                value="none"
+                                sx={{
+                                  display:
+                                    showFilterPlaceholder === "createdBy" &&
+                                    "none",
+                                }}
+                              >
+                                Created By
+                              </MenuItem>
 
-                            <MenuItem value="">
-                              <Checkbox
-                                className="table-checkbox"
-                                checked={isAllCreatedByMemberSelected}
-                                indeterminate={
-                                  selectedCreatedBy.length > 1 &&
-                                  selectedCreatedBy.length - 1 <
-                                    allMembers.length
-                                }
-                              />
-                              Select All
-                            </MenuItem>
-                            {allMembers.map((member) => (
-                              <MenuItem key={member} value={member}>
+                              <MenuItem value="">
                                 <Checkbox
                                   className="table-checkbox"
-                                  checked={
-                                    selectedCreatedBy.indexOf(member) > -1
+                                  checked={isAllCreatedByMemberSelected}
+                                  indeterminate={
+                                    selectedCreatedBy.length > 1 &&
+                                    selectedCreatedBy.length - 1 <
+                                      allMembers.length
                                   }
                                 />
-                                {member}
+                                Select All
                               </MenuItem>
-                            ))}
-                          </Select>
+                              {allMembers.map((member) => (
+                                <MenuItem key={member} value={member}>
+                                  <Checkbox
+                                    className="table-checkbox"
+                                    checked={
+                                      selectedCreatedBy.indexOf(member) > -1
+                                    }
+                                  />
+                                  {member}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </div>
                         </div>
-                      </div>
-                      <div className="filter-select-field">
-                        <div className="dropdown-field">
-                          <Select
-                            sx={{ display: "none" }}
-                            name="status"
-                            value={filters.status}
-                            onChange={onFilterChangehandler}
-                            onFocus={(e) => onFilterFocusHandler("status")}
-                          >
-                            <MenuItem
-                              value="none"
-                              sx={{
-                                display:
-                                  showFilterPlaceholder === "status" && "none",
-                              }}
+                        <div className="filter-select-field">
+                          <div className="dropdown-field">
+                            <Select
+                              sx={{ display: "none" }}
+                              name="status"
+                              value={filters.status}
+                              onChange={onFilterChangehandler}
+                              onFocus={(e) => onFilterFocusHandler("status")}
                             >
-                              Status
-                            </MenuItem>
-                            <MenuItem value="active">Active</MenuItem>
-                            <MenuItem value="inactive">Inactive</MenuItem>
-                          </Select>
+                              <MenuItem
+                                value="none"
+                                sx={{
+                                  display:
+                                    showFilterPlaceholder === "status" &&
+                                    "none",
+                                }}
+                              >
+                                Status
+                              </MenuItem>
+                              <MenuItem value="active">Active</MenuItem>
+                              <MenuItem value="inactive">Inactive</MenuItem>
+                            </Select>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="member-info-wrapper table-content-wrap">
-                <TableComponent
-                  tableHead={tableHead}
-                  records={recordsInViewMember}
-                  handleChangePage1={handleTablePageChange}
-                  handleChangeRowsPerPage1={handleRowsPerPageChange}
-                  page={pageInViewMember}
-                  rowsPerPage={rowsPerPageInViewMember}
-                  selected={selected}
-                  setSelected={setSelected}
-                  totalRecords={totalRecordsInViewMember}
-                  orderBy={orderByInViewMember}
-                  // icons={["visibility"]}
-                  onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
-                  order={orderInViewMember}
-                  setOrder={setOrderInViewMember}
-                  setOrderBy={setOrderByInViewMember}
-                  setCheckBoxes={false}
-                  onRowClick
-                />
-              </div>
+              )}
+              {isPendingMember || (
+                <div className="member-info-wrapper table-content-wrap">
+                  <TableComponent
+                    tableHead={tableHead}
+                    records={recordsInViewMember}
+                    handleChangePage1={handleTablePageChange}
+                    handleChangeRowsPerPage1={handleRowsPerPageChange}
+                    page={pageInViewMember}
+                    rowsPerPage={rowsPerPageInViewMember}
+                    selected={selected}
+                    setSelected={setSelected}
+                    totalRecords={totalRecordsInViewMember}
+                    orderBy={orderByInViewMember}
+                    // icons={["visibility"]}
+                    onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
+                    order={orderInViewMember}
+                    setOrder={setOrderInViewMember}
+                    setOrderBy={setOrderByInViewMember}
+                    setCheckBoxes={false}
+                    onRowClick
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
