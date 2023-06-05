@@ -44,27 +44,14 @@ const replaceOperationMemberTableHead = [
 const ReplaceOperationMember = () => {
   //custom hook to set title of page
   useDocumentTitle("Replace Operation Member");
-  const setErrorToaster = (error) => {
-    Logger.debug("error", error);
-    setToasterDetails(
-      {
-        titleMessage: "Error",
-        descriptionMessage:
-          error?.response?.data?.message &&
-          typeof error.response.data.message === "string"
-            ? error.response.data.message
-            : "Oops! Something went wrong. Please try again later.",
-        messageType: "error",
-      },
-      () => myRef.current()
-    );
-  };
+
   const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
   const [opListPage, setOPPage] = React.useState(1);
   const [rowsPerPageReplaceOP, setRowsPerPageReplaceOP] = React.useState(10);
   const [operationMemberReplaceOP, setOperationMemberReplaceOP] = useState({});
 
   const { id } = useParams();
+  const params = useParams();
   //state to hold search timeout delay
   const [disableSubmit, setdisableSubmit] = useState(false);
   const [selectedOperationMember, setSelectedOperationMember] = useState({});
@@ -192,50 +179,6 @@ const ReplaceOperationMember = () => {
         navigate,
         "/users/operation-members"
       );
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status == 500) {
-      //     Logger.debug(
-      //         "Error status 500 while fetchiing subadmin from replace sub-admin"
-      //     );
-      //     navigate("/sub-admins");
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      // }
     }
   };
   useEffect(() => {
@@ -309,20 +252,7 @@ const ReplaceOperationMember = () => {
     } catch (error) {
       setdisableSubmit(false);
       Logger.debug("error from replace user");
-      // if (error.response.status == 400) {
-      //     setErrorToaster(error);
-      //     setOpen(false);
-      // }
-      // if (error.response.status == 401) {
-      //     setErrorToaster(error);
-      //     setOpen(false);
-      // }
-      // if (error?.response?.status == 500) {
-      //     Logger.debug(
-      //         "Error status 500 while fetchiing subadmin from replace sub-admin"
-      //     );
-      //     navigate("/sub-admins");
-      // }
+
       catchError(
         error,
         setToasterDetails,
@@ -332,10 +262,7 @@ const ReplaceOperationMember = () => {
       );
     }
   };
-  const [searchTextReplaceOP, setSearchTextReplaceOP] = useState("");
   const [open, setOpen] = useState(false);
-
-  Logger.debug("Search text---", searchTextReplaceOP);
 
   const handleYes = () => {
     Logger.debug(
@@ -401,7 +328,13 @@ const ReplaceOperationMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/operation-members">Operation Member</Link>
+              <Link
+                to="/users/operation-members"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                Operation Member{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>
               <Link to={`/users/operation-member/view-operation-member/${id}`}>

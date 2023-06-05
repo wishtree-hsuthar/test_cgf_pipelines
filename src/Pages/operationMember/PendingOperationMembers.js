@@ -9,11 +9,11 @@ import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
 import { catchError } from "../../utils/CatchError";
 let tempTableHead = JSON.parse(JSON.stringify(tableHead));
-tempTableHead.push({
-  id: "action",
-  disablePadding: false,
-  label: "Action",
-});
+// tempTableHead.push({
+//   id: "action",
+//   disablePadding: false,
+//   label: "Action",
+// });
 
 function PendingOperationMembers({
   makeApiCall,
@@ -143,6 +143,14 @@ function PendingOperationMembers({
     setWithdrawInviteidOfOperationMember(id);
   };
 
+  // on row click redirect ro view details page
+  const onClickVisibilityIconHandler = (id) => {
+    Logger.debug("id", id);
+    return navigate(
+      `/users/operation-member/pending/view-operation-member/${id}`
+    );
+  };
+
   const withdrawInviteById = async () => {
     try {
       const response = await privateAxios.delete(
@@ -165,45 +173,6 @@ function PendingOperationMembers({
     } catch (error) {
       Logger.debug("error from withdrawInvite id operation member", error);
       catchError(error, setToasterDetails, myRef, navigate);
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      // }
     }
   };
 
@@ -353,7 +322,9 @@ function PendingOperationMembers({
           rowsPerPage={rowsPerPageForPendingOperationMemberTab}
           totalRecords={totalRecordsForPendingOperationMemberTab}
           orderBy={orderByForPendingOperationMember}
-          icons={["delete"]}
+          // icons={["delete"]}
+          onRowClick
+          onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
           onClickDeleteIconHandler1={onClickDeleteIconHandler}
           order={orderForPendingOperationMemberTab}
           setOrder={setOrderForPendingOperationMemberTab}

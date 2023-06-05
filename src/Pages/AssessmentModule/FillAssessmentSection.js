@@ -47,11 +47,7 @@ function FillAssesmentSection({
   const showSubmitOnFinalSection = () => {
     console.log("total sections = ", totalSections);
     console.log("current index = ", index);
-    if (totalSections === index + 1) {
-      return false;
-    } else {
-      return true;
-    }
+    return totalSections === index + 1 ? false : true;
   };
 
   // cancel dailog box open/close state

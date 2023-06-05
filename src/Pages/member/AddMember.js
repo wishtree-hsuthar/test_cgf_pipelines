@@ -1,20 +1,18 @@
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import {
   Autocomplete,
   FormControlLabel,
+  RadioGroup as MemberRadio,
   Paper,
   Radio,
-  RadioGroup as MemberRadio,
   TextField,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import Input from "../../components/Input";
-import Dropdown from "../../components/Dropdown";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { Logger } from "../../Logger/Logger";
 import {
-  CATEGORIES,
   CITES,
   COUNTRIES,
   FETCH_ROLES,
@@ -22,20 +20,21 @@ import {
   PARENT_COMPINES,
   REGIONCOUNTRIES,
   REGIONS,
-  STATES,
+  STATES
 } from "../../api/Url";
-import axios from "axios";
-import useCallbackState from "../../utils/useCallBackState";
-import Toaster from "../../components/Toaster";
-import { memberHelper } from "../../utils/helpertext";
 import { privateAxios } from "../../api/axios";
-import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
+import Toaster from "../../components/Toaster";
+import Loader from "../../utils/Loader";
 import {
   defaultValues,
-  getCategories,
   getCGFOffices,
+  getCategories,
 } from "../../utils/MemberModuleUtil";
-import Loader from "../../utils/Loader";
+import { memberHelper } from "../../utils/helpertext";
+import useCallbackState from "../../utils/useCallBackState";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
 
 //Parent company (Ideally get from backend)
 //CGF Categories (Ideally get from backend)
@@ -700,19 +699,19 @@ const AddMember = () => {
                       <div className="form-group">
                         <label htmlFor="corporateEmail">Corporate Email</label>
                         <Input
-                          control={control}
                           name="corporateEmail"
+                          control={control}
                           onBlur={(e) =>
                             setValue("corporateEmail", e.target.value?.trim())
                           }
-                          placeholder="example@domain.com"
-                          myHelper={memberHelper}
                           rules={{
                             maxLength: 50,
                             minLength: 3,
                             pattern:
                               /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                           }}
+                          myHelper={memberHelper}
+                          placeholder="example@domain.com"
                         />
                       </div>
                     </div>
@@ -722,8 +721,8 @@ const AddMember = () => {
                         <div className="phone-number-field">
                           <div className="select-field country-code">
                             <Controller
-                              control={control}
                               name="countryCode"
+                              control={control}
                               rules={{
                                 validate: () => {
                                   if (
@@ -732,10 +731,6 @@ const AddMember = () => {
                                   )
                                     return "Invalid input";
                                 },
-                                // validate: () => {
-                                //   if (watch("phoneNumber") && !watch("countryCode"))
-                                //     return "Invalid Input";
-                                // },
                               }}
                               render={({ field, fieldState: { error } }) => (
                                 <Autocomplete
@@ -764,8 +759,8 @@ const AddMember = () => {
                                       {children}
                                     </Paper>
                                   )}
-                                  options={arrOfCountryCodeAddMember}
                                   autoHighlight
+                                  options={arrOfCountryCodeAddMember}
                                   // placeholder="Select country code"
                                   // getOptionLabel={(country) => country.name + " " + country}
                                   renderOption={(props, option) => (
@@ -917,10 +912,9 @@ const AddMember = () => {
                                   </Paper>
                                 )
                               }
-                              disabled={!watch("country")}
                               onSubmit={() => setValue("city", "")}
+                              disabled={!watch("country")}
                               onChange={(event, newValue) => {
-                                Logger.debug("new Value ", newValue);
                                 if (newValue) {
                                   typeof newValue === "object"
                                     ? setValue("city", newValue.name)
@@ -930,18 +924,10 @@ const AddMember = () => {
                               onBlur={(e) =>
                                 setValue("city", e.target.value?.trim())
                               }
-                              selectOnFocus
                               handleHomeEndKeys
                               id="free-solo-with-text-demo"
                               options={arrOfCitesAddMember}
-                              // getOptionLabel={(option) => {
-                              //   // Value selected with enter, right from the input
-                              //   if (typeof option === "string") {
-                              //     // Logger.debug("option inside type string",option)
-                              //     return option;
-                              //   }
-                              //   return option;
-                              // }}
+                              selectOnFocus
                               renderOption={(props, option) => (
                                 <li {...props}>{option}</li>
                               )}
@@ -953,8 +939,8 @@ const AddMember = () => {
                                   onChange={(e) =>
                                     setValue("city", e.target.value)
                                   }
-                                  onSubmit={() => setValue("city", "")}
                                   placeholder="Enter city"
+                                  onSubmit={() => setValue("city", "")}
                                 />
                               )}
                             />
@@ -967,8 +953,8 @@ const AddMember = () => {
                       <div className="form-group">
                         <label htmlFor="address">Address</label>
                         <Controller
-                          name="address"
                           control={control}
+                          name="address"
                           rules={{
                             minLength: 3,
                             maxLength: 250,
@@ -986,8 +972,8 @@ const AddMember = () => {
                               className={`input-textarea ${
                                 error && "input-textarea-error"
                               }`}
-                              id="outlined-basic"
                               placeholder="Enter address"
+                              id="outlined-basic"
                               helperText={
                                 error ? memberHelper.address[error.type] : " "
                               }
@@ -1035,10 +1021,10 @@ const AddMember = () => {
                         <label htmlFor="cgfOffice">Office</label>
                         <Dropdown
                           control={control}
-                          name="cgfOffice"
                           placeholder="Select office"
-                          myHelper={memberHelper}
+                          name="cgfOffice"
                           options={CGF_OFFICES}
+                          myHelper={memberHelper}
                         />
                       </div>
                     </div>
@@ -1057,8 +1043,8 @@ const AddMember = () => {
                               Salutation <span className="mandatory">*</span>
                             </label>
                             <Dropdown
-                              control={control}
                               name="memberContactSalutation"
+                              control={control}
                               // placeholder="Mr."
                               myHelper={memberHelper}
                               rules={{
@@ -1072,8 +1058,8 @@ const AddMember = () => {
                               Full Name <span className="mandatory">*</span>
                             </label>
                             <Input
-                              control={control}
                               myHelper={memberHelper}
+                              control={control}
                               rules={{
                                 required: true,
                                 maxLength: 50,
@@ -1097,17 +1083,17 @@ const AddMember = () => {
                       <div className="form-group">
                         <label htmlFor="title">Job Title</label>
                         <Input
-                          control={control}
                           myHelper={memberHelper}
+                          control={control}
                           rules={{
                             maxLength: 50,
                             minLength: 3,
                           }}
                           name="title"
+                          placeholder="Enter job title"
                           onBlur={(e) =>
                             setValue("title", e.target.value?.trim())
                           }
-                          placeholder="Enter job title"
                         />
                       </div>
                     </div>
@@ -1163,8 +1149,8 @@ const AddMember = () => {
                         <div className="phone-number-field">
                           <div className="select-field country-code">
                             <Controller
-                              control={control}
                               name="memberContactCountryCode"
+                              control={control}
                               rules={{
                                 validate: () => {
                                   if (
@@ -1254,12 +1240,12 @@ const AddMember = () => {
                             }
                             myHelper={memberHelper}
                             rules={{
-                              maxLength: 15,
                               minLength: 7,
+                              maxLength: 15,
                               validate: (value) => {
                                 if (
-                                  !watch("memberContactPhoneNuber") &&
-                                  watch("memberContactCountryCode")
+                                  watch("memberContactCountryCode") &&
+                                  !watch("memberContactPhoneNuber")
                                 )
                                   return "invalid input";
                                 if (value && !Number(value))

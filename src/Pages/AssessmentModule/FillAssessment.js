@@ -1,12 +1,13 @@
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Box, Button, Tab, Tabs, TextField, Tooltip } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import { Box, Button, Tab, Tabs, TextField, Tooltip } from "@mui/material";
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { privateAxios } from "../../api/axios";
+import { Logger } from "../../Logger/Logger";
 import {
   ACCEPT_ASSESSMENT,
   ADD_QUESTIONNAIRE,
@@ -17,17 +18,15 @@ import {
   REACT_APP_FILE_ENCRYPT_SECRET,
   SUBMIT_ASSESSMENT_AS_DRAFT,
 } from "../../api/Url";
+import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
 import Toaster from "../../components/Toaster";
+import { catchError } from "../../utils/CatchError";
+import Loader from "../../utils/Loader";
 import { downloadFunction } from "../../utils/downloadFunction";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { Logger } from "../../Logger/Logger";
-import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
-import Loader from "../../utils/Loader";
 import Charts from "./Charts/Charts";
-import { catchError } from "../../utils/CatchError";
-import axios from "axios";
 const FillAssesmentSection = React.lazy(() =>
   import("./FillAssessmentSection")
 );
@@ -141,46 +140,6 @@ function FillAssessment() {
   const handleCatchError = (error, functionName) => {
     Logger.debug("error occured in ", functionName);
     catchError(error, setToasterDetails, myRef, navigate, "/assessment-list");
-    // if (error?.response?.status === 401) {
-    //   setToasterDetails(
-    //     {
-    //       titleMessage: "Oops!",
-    //       descriptionMessage: "Session Timeout: Please login again",
-    //       messageType: "error",
-    //     },
-    //     () => myRef.current()
-    //   );
-    //   setTimeout(() => {
-    //     navigate("/login");
-    //   }, 3000);
-    // } else if (error?.response?.status === 403) {
-    //   setToasterDetails(
-    //     {
-    //       titleMessage: "Oops!",
-    //       descriptionMessage: error?.response?.data?.message
-    //         ? error?.response?.data?.message
-    //         : "Oops! Something went wrong. Please try again later.",
-    //       messageType: "error",
-    //     },
-    //     () => myRef.current()
-    //   );
-    //   setTimeout(() => {
-    //     navigate("/home");
-    //   }, 3000);
-    // } else {
-    //   setToasterDetails(
-    //     {
-    //       titleMessage: "Error",
-    //       descriptionMessage:
-    //         error?.response?.data?.message &&
-    //         typeof error.response.data.message === "string"
-    //           ? error.response.data.message
-    //           : "Oops! Something went wrong. Please try again later.",
-    //       messageType: "error",
-    //     },
-    //     () => myRef.current()
-    //   );
-    // }
   };
 
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
@@ -202,46 +161,6 @@ function FillAssessment() {
 
         Logger.debug("error from fetch questionnaire", error);
         catchError(error, setToasterDetails, myRef, navigate);
-        // if (error?.response?.status === 401) {
-        //     isMounted &&
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage:
-        //                     "Session Timeout: Please login again",
-        //                 messageType: "error",
-        //             },
-        //             () => myRef.current()
-        //         );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // } else if (error?.response?.status === 403) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => myRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/home");
-        //     }, 3000);
-        // } else {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => myRef.current()
-        //     );
-        // }
       }
     };
 
@@ -272,9 +191,7 @@ function FillAssessment() {
           setGraphLevelBreakdown({
             ...response?.data?.graphLevelBreakdown,
           });
-        // response?.data?.graphResult &&
-        //   response?.data?.graphLevelBreakdown &&
-        //   setTabValue(4);
+
         fetchQuestionnaire(
           response?.data?.questionnaireId,
           response?.data?.graphResult,
@@ -412,9 +329,6 @@ function FillAssessment() {
         Object.keys(currentSectionAnswers).forEach((answersKeys) => {
           let tempRowId = answersKeys?.split("_")[1];
           section?.columnValues?.forEach((column) => {
-            // let caseInsensitiveOptions = column?.options?.map((option) =>
-            //   option.toLowerCase()
-            // );
             if (
               column.columnType !== "prefilled" &&
               saveAsDraft === false &&
@@ -548,35 +462,7 @@ function FillAssessment() {
             );
             sectionErrors[question?.uuid] = "This is required field";
             sections.push(index);
-          }
-          // else if (
-          //     question.inputType == "dropdown" &&
-          //     currentSectionAnswers[question?.uuid] &&
-          //     !question.options.includes(
-          //         currentSectionAnswers[question?.uuid]
-          //     )
-          // ) {
-          //     Logger.debug("error from dropdown question");
-          //     Logger.debug("section no", index);
-          //     Logger.debug("section no", sections);
-
-          //     sectionErrors[question?.uuid] = `
-
-          //     Entered value
-          //     "${
-          //         currentSectionAnswers[question?.uuid]
-          //     }" is not part of above list. Please select valid option among listed values from list.
-          //     `;
-          //     tempAsssessmentQuestionnaire = {
-          //         ...tempAsssessmentQuestionnaire,
-          //         [section?.uuid]: {
-          //             ...tempAsssessmentQuestionnaire[section?.uuid],
-          //             [question?.uuid]: "",
-          //         },
-          //     };
-          //     sections.push(index);
-          // }
-          else if (
+          } else if (
             (question.inputType == "radioGroup" ||
               question.inputType == "dropdown") &&
             currentSectionAnswers[question?.uuid] &&
@@ -791,14 +677,6 @@ function FillAssessment() {
     setSelectedFileName(e.target.files[0].name);
     setFile(e.target.files[0]);
   };
-
-  //   const getFormData = () => {
-  //     const formData = new FormData();
-  //     formData.append("dummy", "dummy content");
-  //     formData.append("files[]", chartImages.chart1);
-  //     formData.append("files[]", chartImages.chart2);
-  //     return formData;
-  //   };
   const handleDownloadAssessment = async () => {
     try {
       if (graphLevelBreakdown && graphResult) {
@@ -807,23 +685,23 @@ function FillAssessment() {
           { ...chartImages },
           { responseType: "blob" }
         );
-        // console.log("response:- ", response);
+
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement(`a`);
         link.href = url;
-        let date =
-          new Date().getDate() < 10
-            ? "0" + new Date().getDate().toString()
-            : new Date().getDate().toString();
         let month =
           new Date().getMonth() < 10
             ? "0" + (new Date().getMonth() + 1).toString()
             : new Date().getMonth().toString();
-        let year = new Date().getFullYear().toString();
+        let date =
+          new Date().getDate() < 10
+            ? "0" + new Date().getDate().toString()
+            : new Date().getDate().toString();
         let hours = new Date().getHours();
+        let year = new Date().getFullYear().toString();
         let minutes = new Date().getMinutes();
-        let seconds = new Date().getSeconds();
         let timeStamp = month + date + year + "_" + hours + minutes + seconds;
+        let seconds = new Date().getSeconds();
         link.setAttribute(`download`, `Assessment - ${timeStamp}.xlsx`);
         document.body.appendChild(link);
         link.click();
@@ -837,14 +715,6 @@ function FillAssessment() {
           navigate
         );
       }
-
-      //   setTabValue(4);
-
-      //  Object.values(chartImages).forEach((v) => {
-      //     formData.append("files[]", v);
-      //     console.log('V', v)
-      //   })
-      //   const formData = getFormData();
       // API Call
       // method call
     } catch (error) {
@@ -919,7 +789,7 @@ function FillAssessment() {
                   },
                   () => myRef.current()
                 );
-                // console.log("Answers:- ", response.data.answers);
+
                 setAssessmentQuestionnaire(response.data.answers);
                 addTableAssessmentValues();
                 if (response.data.containsErrors) {
@@ -981,12 +851,8 @@ function FillAssessment() {
                   },
                   () => myRef.current()
                 );
-                // setTimeout(() => {
-                //   navigate("/assessment-list");
-                // }, 3000);
               } else {
                 catchError(error, setToasterDetails, myRef, navigate);
-                // handleCatchError(error, "reuploadAssessment");
               }
             } finally {
               setIsFillAssessmentLoading(false);
@@ -1374,14 +1240,12 @@ function FillAssessment() {
                     />
                   </TabPanel>
                 ))}
-                {/* {console.log("questionnaireTitle", questionnaire?.title)} */}
 
                 {graphLevelBreakdown && graphResult && (
                   <TabPanel
                     value={value}
                     index={questionnaire?.sections?.length}
                   >
-                    {/* {console.log("value", value)} */}
                     <Charts
                       chartImages={chartImages}
                       setChartImages={setChartImages}

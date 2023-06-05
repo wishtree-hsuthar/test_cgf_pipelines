@@ -1,4 +1,3 @@
-//Third party imports
 import React, { useEffect, useState } from "react";
 import {
   TextField,
@@ -116,47 +115,6 @@ const ViewRole = () => {
       Logger.debug("error on delete", error);
       if (error?.code === "ERR_CANCELED") return;
       catchError(error, setToasterDetails4, myRef4, navigate4);
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails4(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef4.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate4("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails4(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef4.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate4("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails4(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage:
-      //                 error?.response?.data?.message &&
-      //                 typeof error.response.data.message === "string"
-      //                     ? error.response.data.message
-      //                     : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef4.current()
-      //     );
-      // }
     } finally {
       setOpenDialog(false);
     }
@@ -301,51 +259,6 @@ const ViewRole = () => {
       if (error?.code === "ERR_CANCELED") return;
       catchError(error, setToasterDetails4, myRef4, navigate4, "/roles");
       setIsLoading3(false);
-
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails4(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef4.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate4("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails4(
-      //         {
-      //             titleMessage: "Error",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef4.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate4("/home");
-      //     }, 3000);
-      // } else {
-      //     setIsLoading3(false);
-
-      //     isMounted &&
-      //         setToasterDetails4(
-      //             {
-      //                 titleMessage: "Error",
-      //                 descriptionMessage:
-      //                     error?.response?.data?.message &&
-      //                     typeof error.response.data.message === "string"
-      //                         ? error.response.data.message
-      //                         : "Oops! Something went wrong. Please try again later.",
-      //                 messageType: "error",
-      //             },
-      //             () => myRef4.current()
-      //         );
-      // }
     }
   };
   const getUsersByRole = async () => {
@@ -577,8 +490,8 @@ const ViewRole = () => {
                                     {temp[previleg]["name"] ===
                                       "Assessment" && (
                                       <Checkbox
+                                      className="table-checkbox"
                                         disabled
-                                        className="table-checkbox"
                                         checked={temp[previleg]["fill"]}
                                       />
                                     )}
@@ -586,36 +499,36 @@ const ViewRole = () => {
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
-                                      className="table-checkbox"
                                       checked={temp[previleg]["list"]}
+                                      className="table-checkbox"
                                     />
                                   </TableCell>
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
-                                      disabled
                                       className="table-checkbox"
+                                      disabled
                                       checked={temp[previleg]["add"]}
                                     />
                                   </TableCell>
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
-                                      className="table-checkbox"
                                       checked={temp[previleg]["edit"]}
+                                      className="table-checkbox"
                                     />
                                   </TableCell>
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
-                                      className="table-checkbox"
                                       checked={temp[previleg]["view"]}
+                                      className="table-checkbox"
                                     />
                                   </TableCell>
                                   <TableCell align="center" padding="checkbox">
                                     <Checkbox
                                       disabled
-                                      className="table-checkbox"
                                       checked={temp[previleg]["delete"]}
+                                      className="table-checkbox"
                                     />
                                   </TableCell>
                                   {/* <TableCell align="center" padding="checkbox">

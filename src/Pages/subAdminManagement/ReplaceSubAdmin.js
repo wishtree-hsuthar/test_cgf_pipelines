@@ -14,6 +14,7 @@ import {
 import Toaster from "../../components/Toaster";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { Logger } from "../../Logger/Logger";
+import Loader from "../../utils/Loader";
 const tableHead = [
   {
     id: "",
@@ -60,6 +61,7 @@ const ReplaceSubAdmin = () => {
   const [cgfAdmin, setCgfAdmin] = useState({});
   const [selectedCGFAdmin, setSelectedCGFAdmin] = useState({});
   const { id } = useParams();
+  const params = useParams();
   //state to hold search timeout delay
   const [searchTimeout, setSearchTimeout] = useState(null);
 
@@ -341,12 +343,7 @@ const ReplaceSubAdmin = () => {
       }
     }
   };
-  const [searchText, setSearchText] = useState("");
   const [open, setOpen] = useState(false);
-  const handleSearchText = (e) => {
-    setSearchText(e.target.value);
-  };
-  Logger.debug("Search text---", searchText);
 
   const handleYes = () => {
     Logger.debug(
@@ -413,7 +410,13 @@ const ReplaceSubAdmin = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/cgf-admin/">CGF Admin</Link>
+              <Link
+                to="/users/cgf-admin/"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                CGF Admins{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>
               <Link to={`/users/cgf-admin/view-cgf-admin/${id}`}>
@@ -449,25 +452,29 @@ const ReplaceSubAdmin = () => {
 
           <div className="member-info-wrapper table-content-wrap">
             <div className="member-data-sect replace-admin-table">
-              <TableComponent
-                tableHead={tableHead}
-                records={replaceCGFAdminRecords}
-                handleChangePage1={handleTableTesterPageChange}
-                handleChangeRowsPerPage1={handleTableTesterRowsPerPageChange}
-                page={replaceCGFAdminPage}
-                rowsPerPage={replaceCGFAdminRowsPerPage}
-                totalRecords={totalReplaceCGFAdminRecords}
-                orderBy={replaceCGFAdminOrderBy}
-                order={replaceCGFAdminOrder}
-                setOrder={setReplaceCGFAdminOrder}
-                setOrderBy={setOrderBy}
-                selected={selectedCGFAdminsArray}
-                setSelected={setSelectedCGFAdminsArray}
-                setCheckBoxes={false}
-                setSingleSelect={true}
-                handleSingleUserSelect={selectSingleUser}
-                selectedUser={selectedReplacedCGFAdminUser}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TableComponent
+                  tableHead={tableHead}
+                  records={replaceCGFAdminRecords}
+                  handleChangePage1={handleTableTesterPageChange}
+                  handleChangeRowsPerPage1={handleTableTesterRowsPerPageChange}
+                  page={replaceCGFAdminPage}
+                  rowsPerPage={replaceCGFAdminRowsPerPage}
+                  totalRecords={totalReplaceCGFAdminRecords}
+                  orderBy={replaceCGFAdminOrderBy}
+                  order={replaceCGFAdminOrder}
+                  setOrder={setReplaceCGFAdminOrder}
+                  setOrderBy={setOrderBy}
+                  selected={selectedCGFAdminsArray}
+                  setSelected={setSelectedCGFAdminsArray}
+                  setCheckBoxes={false}
+                  setSingleSelect={true}
+                  handleSingleUserSelect={selectSingleUser}
+                  selectedUser={selectedReplacedCGFAdminUser}
+                />
+              )}
             </div>
           </div>
           <div className="form-btn flex-between add-members-btn mb-20 pb-20 replace-cgf-admin-btnblk">

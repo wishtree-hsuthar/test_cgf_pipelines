@@ -1,38 +1,39 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import {
-  TextField,
+  Autocomplete,
+  FormControlLabel,
   Radio,
   RadioGroup,
-  FormControlLabel,
-  Autocomplete,
+  TextField,
 } from "@mui/material";
 
-// import "react-phone-number-input/style.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { privateAxios } from "../../api/axios";
 import {
-  GET_OPERATION_MEMBER_BY_ID,
   DELETE_OPERATION_MEMBER,
+  GET_OPERATION_MEMBER_BY_ID,
   MEMBER,
   COUNTRIES,
-  ROLE_BY_ID,
+  FETCH_PENDING_OPERATION_MEMBER,
+  WITHDRAW_OPERATION_MEMBER,
 } from "../../api/Url";
+import { privateAxios } from "../../api/axios";
 
-import useCallbackState from "../../utils/useCallBackState";
-import Toaster from "../../components/Toaster";
-import DialogBox from "../../components/DialogBox";
-import { Controller, useForm } from "react-hook-form";
-import Input from "../../components/Input";
-import Dropdown from "../../components/Dropdown";
-import { useSelector } from "react-redux";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import Loader from "../../utils/Loader";
+import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { Logger } from "../../Logger/Logger";
-import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
+import DialogBox from "../../components/DialogBox";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
+import Toaster from "../../components/Toaster";
 import { catchError } from "../../utils/CatchError";
+import Loader from "../../utils/Loader";
+import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
+import useCallbackState from "../../utils/useCallBackState";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { ResendEmail } from "../../utils/ResendEmail";
 
 const defaultValues = {
   memberCompany: "",
@@ -55,10 +56,15 @@ let OPERATION_TYPES = [];
 const ViewOperationMembers = () => {
   //custom hook to set title of page
   useDocumentTitle("View Operation Member");
+
   // state to manage to loaders
   const [isViewOperationMemberLoading, setIsViewOperationMemberLoading] =
     useState(true);
-  const { control, reset, trigger } = useForm({
+  const [
+    openDeleteDialogBoxPendingOperationMember,
+    setOpenDeleteDialogBoxPendingOperationMember,
+  ] = useState(false);
+  const { control, reset, trigger, setValue } = useForm({
     defaultValues: defaultValues,
   });
   const navigate = useNavigate();
@@ -74,16 +80,10 @@ const ViewOperationMembers = () => {
   const [countries, setCountries] = useState([]);
   const [memberCompanies, setMemberCompanies] = useState();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [value, setValue] = useState({
-    name: "India",
-    countryCode: "+91",
-    department: "",
-  });
+
   const [fetchOperationMemberDetaills, setFetchOperationMemberDetaills] =
     useState({});
-  const [open, setOpen] = React.useState(false);
   const privilege = useSelector((state) => state.user?.privilege);
-  const user = useSelector((state) => state.user);
   const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
   let viewOperationMemberPrivilegeArray = privilege
     ? Object.values(privilege?.privileges)
@@ -103,15 +103,7 @@ const ViewOperationMembers = () => {
     "member operation privilege",
     moduleAccessForOperationMember[0]?.operationMember
   );
-  const fetchRole = async (id) => {
-    try {
-      const response = await privateAxios.get(ROLE_BY_ID + id);
-      Logger.debug("response for fetch role", response);
-      reset({ role: response?.data?.name });
-    } catch (error) {
-      Logger.debug("error in fetchRole", error);
-    }
-  };
+
   const fetchMemberComapany = async (controller, isMounted) => {
     try {
       const response = await privateAxios.get(MEMBER + "/list", {
@@ -124,7 +116,7 @@ const ViewOperationMembers = () => {
         })
       );
 
-      if ((response.status = 200)) {
+      if (response.status == 200) {
         isMounted &&
           setMemberCompanies(
             response.data.map((data) => ({
@@ -156,7 +148,9 @@ const ViewOperationMembers = () => {
     try {
       setIsViewOperationMemberLoading(true);
       const response = await privateAxios.get(
-        GET_OPERATION_MEMBER_BY_ID + params.id,
+        params["*"].includes("pending")
+          ? FETCH_PENDING_OPERATION_MEMBER + params.id
+          : GET_OPERATION_MEMBER_BY_ID + params.id,
         {
           signal: controller.signal,
         }
@@ -187,7 +181,9 @@ const ViewOperationMembers = () => {
         isCGFStaff: response?.data?.isCGFStaff === true ? "true" : "false",
         role: response?.data?.role?.name,
         replacedOperationMember:
-          response?.data?.replacedUsers[0]?.name ?? "N/A",
+          response?.data?.replacedUsers !== undefined
+            ? response?.data?.replacedUsers[0]?.name
+            : "N/A",
       });
 
       setIsViewOperationMemberLoading(false);
@@ -206,35 +202,6 @@ const ViewOperationMembers = () => {
         navigate,
         "/users/operation-members"
       );
-
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // }
     }
   };
   const callGetOpeationMember = async () => {
@@ -278,43 +245,33 @@ const ViewOperationMembers = () => {
     } catch (error) {
       Logger.debug("error from handle delete operation member", error);
       catchError(error, setToasterDetails, toasterRef, navigate);
-      // if (error?.response?.status == 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message,
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
+    }
+  };
+
+  const withdrawInviteById = async () => {
+    try {
+      const response = await privateAxios.delete(
+        WITHDRAW_OPERATION_MEMBER + params?.id
+      );
+      if (response.status == 200) {
+        Logger.debug("operation member  invite withdrawn successfully");
+        setToasterDetails(
+          {
+            titleMessage: "Success",
+            descriptionMessage: response?.data?.message,
+            messageType: "success",
+          },
+          () => toasterRef.current()
+        );
+        // call getPendingOperationMember below
+        setOpenDeleteDialogBoxPendingOperationMember(false);
+        setTimeout(() => {
+          navigate("/users/operation-members");
+        }, 2000);
+      }
+    } catch (error) {
+      Logger.debug("error from withdrawInvite id operation member", error);
+      catchError(error, setToasterDetails, toasterRef, navigate);
     }
   };
 
@@ -322,20 +279,36 @@ const ViewOperationMembers = () => {
     setActive(!isActive);
   };
   const handleOpen = (index) => {
-    setOpen(true);
     Logger.debug("clicked", index);
     Logger.debug(index);
     if (index === 0) {
-      setOpen(false);
-      navigate(`/users/operation-member/edit-operation-member/${params.id}`);
+      params["*"].includes("pending")
+        ? navigate(
+            `/users/operation-member/pending/edit-operation-member/${params.id}`
+          )
+        : navigate(
+            `/users/operation-member/edit-operation-member/${params.id}`
+          );
     }
     if (index === 1) {
-      setOpen(false);
       navigate(`/users/operation-member/replace-operation-member/${params.id}`);
     }
     if (index === 2) {
-      setOpen(false);
-      setOpenDeleteDialog(true);
+      ResendEmail(params.id, setToasterDetails, toasterRef, navigate);
+    }
+    if (index === 3) {
+      params["*"].includes("pending")
+        ? setOpenDeleteDialogBoxPendingOperationMember(true)
+        : setOpenDeleteDialog(true);
+    }
+  };
+  const hideOption = () => {
+    if (params["*"].includes("pending")) {
+      return true;
+    } else {
+      return SUPER_ADMIN
+        ? false
+        : !moduleAccessForOperationMember[0]?.operationMember.delete;
     }
   };
 
@@ -351,7 +324,12 @@ const ViewOperationMembers = () => {
     {
       id: 2,
       action: "Replace",
-      hide: !SUPER_ADMIN,
+      hide: hideOption(),
+    },
+    {
+      id: 4,
+      action: "Re-Invite",
+      hide: !params["*"].includes("pending"),
     },
     {
       id: 3,
@@ -362,7 +340,6 @@ const ViewOperationMembers = () => {
           : !moduleAccessForOperationMember[0]?.operationMember.delete,
     },
   ];
-  //  Logger.debug("operation member:- ",fetchOperationMemberDetaills)
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
       <Toaster
@@ -409,11 +386,38 @@ const ViewOperationMembers = () => {
         openModal={openDeleteDialog}
         setOpenModal={setOpenDeleteDialog}
       />
+      <DialogBox
+        title={<p>Withdraw Operation Member Invitation</p>}
+        info1={
+          <p>
+            On withdrawal, operation member will not be able to verify their
+            account.
+          </p>
+        }
+        info2={<p>Do you want to withdraw the invitation?</p>}
+        primaryButtonText={"Yes"}
+        secondaryButtonText={"No"}
+        onPrimaryModalButtonClickHandler={() => {
+          withdrawInviteById();
+        }}
+        onSecondaryModalButtonClickHandler={() => {
+          setOpenDeleteDialogBoxPendingOperationMember(false);
+        }}
+        openModal={openDeleteDialogBoxPendingOperationMember}
+        setOpenModal={setOpenDeleteDialogBoxPendingOperationMember}
+        isModalForm={false}
+      />
       <div className="breadcrumb-wrapper">
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/operation-members">Operation Member</Link>
+              <Link
+                to="/users/operation-members"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                Operation Member{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>View Operation Member</li>
           </ul>
@@ -426,10 +430,8 @@ const ViewOperationMembers = () => {
 
             <span className="form-header-right-txt" onClick={handleToggle}>
               {(SUPER_ADMIN === true ||
-                moduleAccessForOperationMember[0].operationMember.edit ==
-                  true ||
-                moduleAccessForOperationMember[0].operationMember.delete ==
-                  true) && (
+                moduleAccessForOperationMember[0].operationMember.edit ||
+                moduleAccessForOperationMember[0].operationMember.delete) && (
                 <span
                   className={`crud-operation ${
                     isActive && "crud-operation-active"
@@ -446,7 +448,7 @@ const ViewOperationMembers = () => {
                   {data.map((d, index) => (
                     <li
                       onClick={() => handleOpen(index)}
-                      key={index}
+                      key={d.id}
                       hidden={d.hide}
                     >
                       {d.action}
@@ -729,7 +731,10 @@ const ViewOperationMembers = () => {
                       />
                     </div>
                   </div>
-                  <div className="card-form-field">
+                  <div
+                    className="card-form-field"
+                    hidden={params["*"].includes("pending")}
+                  >
                     <div className="form-group">
                       <label htmlFor="">
                         Replaced Operation Member{" "}
@@ -758,7 +763,10 @@ const ViewOperationMembers = () => {
                       />
                     </div>
                   </div>
-                  <div className="card-form-field">
+                  <div
+                    className="card-form-field"
+                    hidden={params["*"].includes("pending")}
+                  >
                     <div className="form-group">
                       <label htmlFor="status">Status</label>
                       <div className="radio-btn-field">

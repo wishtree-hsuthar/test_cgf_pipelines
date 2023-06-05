@@ -105,9 +105,25 @@ const ProtectedPages = () => {
             </RequireAuth>
           }
         />
+        <Route
+          path="/users/cgf-admin/pending/view-cgf-admin/:id"
+          element={
+            <RequireAuth moduleName={""} page={""}>
+              <ViewSubAdmin />
+            </RequireAuth>
+          }
+        />
 
         <Route
           path="/users/cgf-admin/edit-cgf-admin/:id"
+          element={
+            <RequireAuth>
+              <EditSubAdmin />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/users/cgf-admin/pending/edit-cgf-admin/:id"
           element={
             <RequireAuth>
               <EditSubAdmin />
@@ -220,7 +236,23 @@ const ProtectedPages = () => {
           }
         />
         <Route
+          path="/users/operation-member/pending/view-operation-member/:id"
+          element={
+            <RequireAuth page={"view"} moduleName={"Operation Members"}>
+              <ViewOperationMembers />
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/users/operation-member/edit-operation-member/:id"
+          element={
+            <RequireAuth page={"edit"} moduleName={"Operation Members"}>
+              <EditOperationMember />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/users/operation-member/pending/edit-operation-member/:id"
           element={
             <RequireAuth page={"edit"} moduleName={"Operation Members"}>
               <EditOperationMember />

@@ -180,46 +180,6 @@ function EditAssessment() {
           navigate,
           "/assessment-list"
         );
-        // if (error?.response?.status === 401) {
-        //     isMounted &&
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage:
-        //                     "Session Timeout: Please login again",
-        //                 messageType: "error",
-        //             },
-        //             () => toasterRef.current()
-        //         );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // } else if (error?.response?.status === 403) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/home");
-        //     }, 3000);
-        // } else {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        // }
         setIsEditAssessmentLoading(false);
         Logger.debug("Error from fetch assessment", error);
       }
@@ -350,45 +310,7 @@ function EditAssessment() {
       setDisableEditAssessmentButton(false);
       setIsEditAssessmentLoading(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
-      // if (error.responseEditMember.status === 401) {
-      //     Logger.debug("Unauthorized user access");
-      //     // Add error toaster here
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 error?.responseEditMember?.data?.message,
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     navigate("/login");
-      // }
-      // if (error.responseEditMember.status === 400) {
-      //     Logger.debug("Oops! Something went wrong. Please try again later.");
-      //     // Add error toaster here
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 error?.responseEditMember?.data?.message,
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
-      // if (error.responseEditMember.status === 403) {
-      //     Logger.debug("Oops! Something went wrong. Please try again later.");
-      //     // Add error toaster here
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
+      
     }
   };
 

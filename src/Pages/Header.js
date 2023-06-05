@@ -9,7 +9,6 @@ import { privateAxios } from "../api/axios";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 import { Logger } from "../Logger/Logger";
 import "./Header.css";
 import axios from "axios";
@@ -136,20 +135,7 @@ const Header = () => {
     },
     []
   );
-  const replaceSpecialCharcters = (tempReportIssueLink) => {
-    let tempLink = tempReportIssueLink;
-    // console.log("link after slice:- ", tempLink);
 
-    tempLink = tempLink.replaceAll("?", "%3F");
-    tempLink = tempLink.replaceAll("&", "%26");
-    // tempLink = tempLink.replaceAll("/", "%2F");
-    tempLink = tempLink.replaceAll("<", "%3C");
-    tempLink = tempLink.replaceAll(">", "%3E");
-    tempLink = tempLink.replaceAll(" ", "%20");
-    // tempLink = tempLink.replaceAll("-", "%2D");
-
-    return tempLink;
-  };
   const getReportIssueLink = async () => {
     try {
       const response = await axios.get(MASTER_LINK + "/reportIssueOnZoho");
@@ -158,9 +144,6 @@ const Header = () => {
       const url = new URL(response.data);
 
       REPORT_ISSUE_LINK = url;
-      //   console.log("url:- ",url)
-      //   REPORT_ISSUE_LINK = replaceSpecialCharcters(response?.data);
-      //   console.log("REPORT AN ISSUE", REPORT_ISSUE_LINK);
     } catch (error) {
       if (
         error?.response?.status === 403 &&
@@ -176,13 +159,18 @@ const Header = () => {
     }
   };
 
-  let profileRole =
-    userAuth?.role?.name === "Super Admin"
-      ? userAuth?.role?.name
-      : Object.keys(userAuth.role).length > 0 &&
-        Object.keys(userAuth?.role?.privileges).length > 0
-      ? userAuth?.role?.name
-      : "N/A";
+  let profileRole = () => {
+    if (
+      userAuth?.role?.name === "Super Admin" ||
+      (Object.keys(userAuth.role).length > 0 &&
+        Object.keys(userAuth?.role?.privileges).length > 0)
+    ) {
+      return userAuth?.role?.name;
+    } else {
+      return "N/A";
+    }
+  };
+
   useEffect(() => {
     REPORT_ISSUE_LINK?.length === 0 && getReportIssueLink();
   }, []);
@@ -431,7 +419,7 @@ const Header = () => {
                           style={{ fontSize: "14px" }}
                         >
                           <span ref={textElementRef} className="user-type">
-                            {profileRole}
+                            {profileRole()}
                           </span>
                         </Tooltip>
                       </div>
