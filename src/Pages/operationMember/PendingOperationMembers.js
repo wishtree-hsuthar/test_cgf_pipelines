@@ -9,11 +9,11 @@ import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
 import { catchError } from "../../utils/CatchError";
 let tempTableHead = JSON.parse(JSON.stringify(tableHead));
-tempTableHead.push({
-  id: "action",
-  disablePadding: false,
-  label: "Action",
-});
+// tempTableHead.push({
+//   id: "action",
+//   disablePadding: false,
+//   label: "Action",
+// });
 
 function PendingOperationMembers({
   makeApiCall,
@@ -141,6 +141,14 @@ function PendingOperationMembers({
     Logger.debug("id for delete", id);
     setOpenDeleteDialogBoxPendingOperationMember(true);
     setWithdrawInviteidOfOperationMember(id);
+  };
+
+  // on row click redirect ro view details page
+  const onClickVisibilityIconHandler = (id) => {
+    Logger.debug("id", id);
+    return navigate(
+      `/users/operation-member/pending/view-operation-member/${id}`
+    );
   };
 
   const withdrawInviteById = async () => {
@@ -314,7 +322,9 @@ function PendingOperationMembers({
           rowsPerPage={rowsPerPageForPendingOperationMemberTab}
           totalRecords={totalRecordsForPendingOperationMemberTab}
           orderBy={orderByForPendingOperationMember}
-          icons={["delete"]}
+          // icons={["delete"]}
+          onRowClick
+          onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
           onClickDeleteIconHandler1={onClickDeleteIconHandler}
           order={orderForPendingOperationMemberTab}
           setOrder={setOrderForPendingOperationMemberTab}

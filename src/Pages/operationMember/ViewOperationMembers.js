@@ -15,6 +15,8 @@ import {
   GET_OPERATION_MEMBER_BY_ID,
   MEMBER,
   COUNTRIES,
+  FETCH_PENDING_OPERATION_MEMBER,
+  WITHDRAW_OPERATION_MEMBER,
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
 
@@ -31,6 +33,7 @@ import Loader from "../../utils/Loader";
 import { getOperationTypes } from "../../utils/OperationMemberModuleUtil";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { ResendEmail } from "../../utils/ResendEmail";
 
 const defaultValues = {
   memberCompany: "",
@@ -53,9 +56,14 @@ let OPERATION_TYPES = [];
 const ViewOperationMembers = () => {
   //custom hook to set title of page
   useDocumentTitle("View Operation Member");
+
   // state to manage to loaders
   const [isViewOperationMemberLoading, setIsViewOperationMemberLoading] =
     useState(true);
+  const [
+    openDeleteDialogBoxPendingOperationMember,
+    setOpenDeleteDialogBoxPendingOperationMember,
+  ] = useState(false);
   const { control, reset, trigger, setValue } = useForm({
     defaultValues: defaultValues,
   });
@@ -140,7 +148,9 @@ const ViewOperationMembers = () => {
     try {
       setIsViewOperationMemberLoading(true);
       const response = await privateAxios.get(
-        GET_OPERATION_MEMBER_BY_ID + params.id,
+        params["*"].includes("pending")
+          ? FETCH_PENDING_OPERATION_MEMBER + params.id
+          : GET_OPERATION_MEMBER_BY_ID + params.id,
         {
           signal: controller.signal,
         }
@@ -171,7 +181,9 @@ const ViewOperationMembers = () => {
         isCGFStaff: response?.data?.isCGFStaff === true ? "true" : "false",
         role: response?.data?.role?.name,
         replacedOperationMember:
-          response?.data?.replacedUsers[0]?.name ?? "N/A",
+          response?.data?.replacedUsers !== undefined
+            ? response?.data?.replacedUsers[0]?.name
+            : "N/A",
       });
 
       setIsViewOperationMemberLoading(false);
@@ -236,6 +248,33 @@ const ViewOperationMembers = () => {
     }
   };
 
+  const withdrawInviteById = async () => {
+    try {
+      const response = await privateAxios.delete(
+        WITHDRAW_OPERATION_MEMBER + params?.id
+      );
+      if (response.status == 200) {
+        Logger.debug("operation member  invite withdrawn successfully");
+        setToasterDetails(
+          {
+            titleMessage: "Success",
+            descriptionMessage: response?.data?.message,
+            messageType: "success",
+          },
+          () => toasterRef.current()
+        );
+        // call getPendingOperationMember below
+        setOpenDeleteDialogBoxPendingOperationMember(false);
+        setTimeout(() => {
+          navigate("/users/operation-members");
+        }, 2000);
+      }
+    } catch (error) {
+      Logger.debug("error from withdrawInvite id operation member", error);
+      catchError(error, setToasterDetails, toasterRef, navigate);
+    }
+  };
+
   const handleToggle = () => {
     setActive(!isActive);
   };
@@ -243,13 +282,33 @@ const ViewOperationMembers = () => {
     Logger.debug("clicked", index);
     Logger.debug(index);
     if (index === 0) {
-      navigate(`/users/operation-member/edit-operation-member/${params.id}`);
+      params["*"].includes("pending")
+        ? navigate(
+            `/users/operation-member/pending/edit-operation-member/${params.id}`
+          )
+        : navigate(
+            `/users/operation-member/edit-operation-member/${params.id}`
+          );
     }
     if (index === 1) {
       navigate(`/users/operation-member/replace-operation-member/${params.id}`);
     }
     if (index === 2) {
-      setOpenDeleteDialog(true);
+      ResendEmail(params.id, setToasterDetails, toasterRef, navigate);
+    }
+    if (index === 3) {
+      params["*"].includes("pending")
+        ? setOpenDeleteDialogBoxPendingOperationMember(true)
+        : setOpenDeleteDialog(true);
+    }
+  };
+  const hideOption = () => {
+    if (params["*"].includes("pending")) {
+      return true;
+    } else {
+      return SUPER_ADMIN
+        ? false
+        : !moduleAccessForOperationMember[0]?.operationMember.delete;
     }
   };
 
@@ -265,7 +324,12 @@ const ViewOperationMembers = () => {
     {
       id: 2,
       action: "Replace",
-      hide: !SUPER_ADMIN,
+      hide: hideOption(),
+    },
+    {
+      id: 4,
+      action: "Re-Invite",
+      hide: !params["*"].includes("pending"),
     },
     {
       id: 3,
@@ -322,11 +386,38 @@ const ViewOperationMembers = () => {
         openModal={openDeleteDialog}
         setOpenModal={setOpenDeleteDialog}
       />
+      <DialogBox
+        title={<p>Withdraw Operation Member Invitation</p>}
+        info1={
+          <p>
+            On withdrawal, operation member will not be able to verify their
+            account.
+          </p>
+        }
+        info2={<p>Do you want to withdraw the invitation?</p>}
+        primaryButtonText={"Yes"}
+        secondaryButtonText={"No"}
+        onPrimaryModalButtonClickHandler={() => {
+          withdrawInviteById();
+        }}
+        onSecondaryModalButtonClickHandler={() => {
+          setOpenDeleteDialogBoxPendingOperationMember(false);
+        }}
+        openModal={openDeleteDialogBoxPendingOperationMember}
+        setOpenModal={setOpenDeleteDialogBoxPendingOperationMember}
+        isModalForm={false}
+      />
       <div className="breadcrumb-wrapper">
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/operation-members">Operation Member</Link>
+              <Link
+                to="/users/operation-members"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                Operation Member{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>View Operation Member</li>
           </ul>
@@ -640,7 +731,10 @@ const ViewOperationMembers = () => {
                       />
                     </div>
                   </div>
-                  <div className="card-form-field">
+                  <div
+                    className="card-form-field"
+                    hidden={params["*"].includes("pending")}
+                  >
                     <div className="form-group">
                       <label htmlFor="">
                         Replaced Operation Member{" "}
@@ -669,7 +763,10 @@ const ViewOperationMembers = () => {
                       />
                     </div>
                   </div>
-                  <div className="card-form-field">
+                  <div
+                    className="card-form-field"
+                    hidden={params["*"].includes("pending")}
+                  >
                     <div className="form-group">
                       <label htmlFor="status">Status</label>
                       <div className="radio-btn-field">

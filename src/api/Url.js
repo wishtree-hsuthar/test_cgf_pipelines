@@ -1,5 +1,5 @@
 export const { REACT_APP_API_ENDPOINT, REACT_APP_FILE_ENCRYPT_SECRET } =
-    process.env;
+  process.env;
 //login
 export const LOGIN_URL = `${REACT_APP_API_ENDPOINT}auth/login`;
 export const LOGOUT_URL = `${REACT_APP_API_ENDPOINT}auth/logout`;
@@ -38,7 +38,9 @@ export const MEMBER_OPERATION_MEMBERS = `${REACT_APP_API_ENDPOINT}operation-memb
 export const FETCH_ROLES = `${REACT_APP_API_ENDPOINT}roles/master`;
 export const ADD_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin`;
 export const FETCH_SUB_ADMIN_BY_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/`;
+export const FETCH_PENDING_CGF_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/pending/`;
 export const UPDATE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/`;
+export const UPDATE_PENDING_CGF_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/pending/`;
 export const WITHDRAW_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}auth/invite/`;
 export const DELETE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}users/cgfadmin/`;
 export const REPLACE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}positions/mappings/`;
@@ -46,16 +48,18 @@ export const REPLACE_SUB_ADMIN = `${REACT_APP_API_ENDPOINT}positions/mappings/`;
 // add operationn member
 export const ADD_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member`;
 export const FETCH_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/member/`;
+export const FETCH_PENDING_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/pending/`;
 export const WITHDRAW_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}auth/invite/`;
 export const DELETE_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/`;
 export const GET_OPERATION_MEMBER_BY_ID = `${REACT_APP_API_ENDPOINT}operation-member/`;
 export const UPDATE_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/`;
+export const UPDATE_PENDING_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}operation-member/pending/`;
 export const FETCH_REPORTING_MANAGER = `${REACT_APP_API_ENDPOINT}operation-member/member/`;
 export const REPLACE_OPERATION_MEMBER = `${REACT_APP_API_ENDPOINT}positions/mappings/`;
 
 // add questionnaire
 export const ADD_QUESTIONNAIRE = `${REACT_APP_API_ENDPOINT}questionnaires`;
-export const DELETE_QUESTIONNAIRE_DRAFT = `${REACT_APP_API_ENDPOINT}questionnaires/delete`
+export const DELETE_QUESTIONNAIRE_DRAFT = `${REACT_APP_API_ENDPOINT}questionnaires/delete`;
 
 // assessments
 export const FETCH_ASSESSMENT_BY_ID = `${REACT_APP_API_ENDPOINT}assessments/`;
@@ -87,3 +91,6 @@ export const GET_USER_BY_ROLE = `${REACT_APP_API_ENDPOINT}roles/`;
 
 // show Downloaded Files
 export const DOWNlOAD_FILE = `${REACT_APP_API_ENDPOINT}assessments/`;
+
+// Resend invite
+export const RESEND_INVITE = `${REACT_APP_API_ENDPOINT}auth/invite/resend/`;

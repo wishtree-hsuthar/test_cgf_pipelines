@@ -18,10 +18,12 @@ import { privateAxios } from "../../api/axios";
 import {
   COUNTRIES,
   FETCH_OPERATION_MEMBER,
+  FETCH_PENDING_OPERATION_MEMBER,
   FETCH_ROLES,
   GET_OPERATION_MEMBER_BY_ID,
   MEMBER,
   UPDATE_OPERATION_MEMBER,
+  UPDATE_PENDING_OPERATION_MEMBER,
 } from "../../api/Url";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
@@ -195,7 +197,9 @@ function EditOperationMember() {
     try {
       setIsEditOperationMemberLoading(true);
       const response = await privateAxios.get(
-        GET_OPERATION_MEMBER_BY_ID + params.id,
+        params["*"].includes("pending")
+          ? FETCH_PENDING_OPERATION_MEMBER + params.id
+          : GET_OPERATION_MEMBER_BY_ID + params.id,
         {
           signal: controller.signal,
         }
@@ -305,7 +309,9 @@ function EditOperationMember() {
     };
     try {
       const response = await privateAxios.put(
-        UPDATE_OPERATION_MEMBER + params.id,
+        params["*"].includes("pending")
+          ? UPDATE_PENDING_OPERATION_MEMBER + params.id
+          : UPDATE_OPERATION_MEMBER + params.id,
         data
       );
       if (response.status == 200) {
@@ -360,11 +366,21 @@ function EditOperationMember() {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/operation-members">Operation Members</Link>
+              <Link
+                to="/users/operation-members"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                Operation Member{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>
               <Link
-                to={`/users/operation-member/view-operation-member/${params.id}`}
+                to={
+                  params["*"].includes("pending")
+                    ? `/users/operation-member/pending/view-operation-member/${params.id}`
+                    : `/users/operation-member/view-operation-member/${params.id}`
+                }
               >
                 View Operation Members
               </Link>
@@ -475,7 +491,7 @@ function EditOperationMember() {
                           setValue("email", e.target.value?.trim())
                         }
                         placeholder="NA"
-                        isDisabled
+                        isDisabled={!params["*"].includes("pending")}
                         myHelper={helperText}
                         rules={{ required: true }}
                       />
@@ -803,7 +819,10 @@ function EditOperationMember() {
                     </div>
                   </div>
 
-                  <div className="card-form-field">
+                  <div
+                    className="card-form-field"
+                    hidden={params["*"].includes("pending")}
+                  >
                     <div className="form-group">
                       <label htmlFor="status">Status</label>
                       <div className="radio-btn-field">
