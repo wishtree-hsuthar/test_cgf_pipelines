@@ -1,6 +1,6 @@
 import DownloadIcon from "@mui/icons-material/Download";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Logger } from "../../Logger/Logger";
 import { DOWNLOAD_CGF_ADMIN } from "../../api/Url";
 import Toaster from "../../components/Toaster";
@@ -23,6 +23,7 @@ const SubAdminList = () => {
   useDocumentTitle("CGF Admins");
 
   const [value, setValue] = React.useState(0);
+  const { state } = useLocation();
 
   //Refr for Toaster
   const cgfAdminRef = React.useRef();
@@ -71,6 +72,8 @@ const SubAdminList = () => {
     const controller = new AbortController();
     Logger.debug("makeApiCall", makeApiCall);
     Logger.debug("inside use Effect");
+    Logger.debug("page-", state);
+    setValue(state ? state : 0);
     return () => {
       clearTimeout(searchTimeout);
       controller.abort();

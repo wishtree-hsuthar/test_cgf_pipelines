@@ -51,6 +51,7 @@ const ReplaceOperationMember = () => {
   const [operationMemberReplaceOP, setOperationMemberReplaceOP] = useState({});
 
   const { id } = useParams();
+  const params = useParams();
   //state to hold search timeout delay
   const [disableSubmit, setdisableSubmit] = useState(false);
   const [selectedOperationMember, setSelectedOperationMember] = useState({});
@@ -327,7 +328,13 @@ const ReplaceOperationMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/operation-members">Operation Member</Link>
+              <Link
+                to="/users/operation-members"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                Operation Member{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>
               <Link to={`/users/operation-member/view-operation-member/${id}`}>

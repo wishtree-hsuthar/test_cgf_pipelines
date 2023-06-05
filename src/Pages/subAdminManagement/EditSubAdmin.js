@@ -15,8 +15,10 @@ import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import {
   COUNTRIES,
+  FETCH_PENDING_CGF_ADMIN,
   FETCH_ROLES,
   FETCH_SUB_ADMIN_BY_ADMIN,
+  UPDATE_PENDING_CGF_ADMIN,
   UPDATE_SUB_ADMIN,
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
@@ -130,7 +132,9 @@ const EditSubAdmin = () => {
       try {
         setIsEditCgfAdminLoading(true);
         const response = await privateAxios.get(
-          FETCH_SUB_ADMIN_BY_ADMIN + params.id,
+          params["*"].includes("pending")
+            ? FETCH_PENDING_CGF_ADMIN + params.id
+            : FETCH_SUB_ADMIN_BY_ADMIN + params.id,
           {
             signal: controller.signal,
           }
@@ -187,13 +191,19 @@ const EditSubAdmin = () => {
     setDisableEditCgfAdminButton(true);
     setIsEditCgfAdminLoading(true);
     try {
-      const response = await privateAxios.put(UPDATE_SUB_ADMIN + params.id, {
-        name: data.name,
-        subRoleId: data.subRoleId,
-        phoneNumber: data.phoneNumber,
-        countryCode: data.countryCode,
-        isActive: data.status === "active" ? true : false,
-      });
+      const response = await privateAxios.put(
+        params["*"].includes("pending")
+          ? UPDATE_PENDING_CGF_ADMIN + params?.id
+          : UPDATE_SUB_ADMIN + params.id,
+        {
+          name: data.name,
+          email: data.email,
+          subRoleId: data.subRoleId,
+          phoneNumber: data.phoneNumber,
+          countryCode: data.countryCode,
+          isActive: data.status === "active" ? true : false,
+        }
+      );
       Logger.debug("response from edit sub admin method", response);
       if (response.status == 200) {
         setIsEditCgfAdminLoading(false);
@@ -215,7 +225,7 @@ const EditSubAdmin = () => {
       Logger.debug("error from edit sub admin submit method");
       setIsEditCgfAdminLoading(false);
       setDisableEditCgfAdminButton(false);
-      catchError(error, toasterDetails, toasterRef, navigate);
+      catchError(error, setToasterDetails, toasterRef, navigate);
     }
   };
 
@@ -234,10 +244,22 @@ const EditSubAdmin = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/cgf-admin">CGF Admins</Link>
+              <Link
+                to="/users/cgf-admin/"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                CGF Admins{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>
-              <Link to={`/users/cgf-admin/view-cgf-admin/${params.id}`}>
+              <Link
+                to={
+                  params["*"].includes("pending")
+                    ? `/users/cgf-admin/pending/view-cgf-admin/${params.id}`
+                    : `/users/cgf-admin/view-cgf-admin/${params.id}`
+                }
+              >
                 View CGF Admin
               </Link>
             </li>
@@ -288,7 +310,7 @@ const EditSubAdmin = () => {
                         onBlur={(e) =>
                           setValue("email", e.target.value?.trim())
                         }
-                        isDisabled
+                        isDisabled={!params["*"].includes("pending")}
                         control={control}
                         placeholder={"Enter email address"}
                         myHelper={helperTextForCGFAdmin}
@@ -430,7 +452,10 @@ const EditSubAdmin = () => {
                     </div>
                   </div>
                   <div className="card-form-field">
-                    <div className="form-group">
+                    <div
+                      className="form-group"
+                      hidden={params["*"].includes("pending")}
+                    >
                       <label htmlFor="cgfAdmin-status">Status</label>
                       <div className="radio-btn-field">
                         <EditSubAdminController

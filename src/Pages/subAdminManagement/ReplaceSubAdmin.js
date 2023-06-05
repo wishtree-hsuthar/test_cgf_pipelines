@@ -61,6 +61,7 @@ const ReplaceSubAdmin = () => {
   const [cgfAdmin, setCgfAdmin] = useState({});
   const [selectedCGFAdmin, setSelectedCGFAdmin] = useState({});
   const { id } = useParams();
+  const params = useParams();
   //state to hold search timeout delay
   const [searchTimeout, setSearchTimeout] = useState(null);
 
@@ -409,7 +410,13 @@ const ReplaceSubAdmin = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/cgf-admin/">CGF Admin</Link>
+              <Link
+                to="/users/cgf-admin/"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                CGF Admins{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>
               <Link to={`/users/cgf-admin/view-cgf-admin/${id}`}>

@@ -12,7 +12,12 @@ import {
 import Loader from "../../utils/Loader";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { privateAxios } from "../../api/axios";
-import { DELETE_SUB_ADMIN, FETCH_SUB_ADMIN_BY_ADMIN } from "../../api/Url";
+import {
+  DELETE_SUB_ADMIN,
+  FETCH_PENDING_CGF_ADMIN,
+  FETCH_SUB_ADMIN_BY_ADMIN,
+  WITHDRAW_SUB_ADMIN,
+} from "../../api/Url";
 
 import useCallbackState from "../../utils/useCallBackState";
 import Toaster from "../../components/Toaster";
@@ -21,10 +26,15 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import { Logger } from "../../Logger/Logger";
 import { catchError } from "../../utils/CatchError";
+import { ResendEmail } from "../../utils/ResendEmail";
 const ViewSubAdmin = () => {
   //custom hook to set title of page
   useDocumentTitle("View CGF Admin");
   // state to manage loader
+  const [
+    openDeleteDialogBoxPendingCGFAdmin,
+    setOpenDeleteDialogBoxPendingCGFAdmin,
+  ] = useState(false);
   const [isCgfLoading, setIsCgfLoading] = useState(true);
   const history = useNavigate();
   const params = useParams();
@@ -40,7 +50,7 @@ const ViewSubAdmin = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const [fetchedSubAdminDetails, setFetchedSubAdminDetails] = useState({});
-
+  Logger.debug("params = ", params);
   useEffect(() => {
     let isMounted = true;
     let controller = new AbortController();
@@ -49,7 +59,9 @@ const ViewSubAdmin = () => {
       try {
         setIsCgfLoading(true);
         const response = await privateAxios.get(
-          FETCH_SUB_ADMIN_BY_ADMIN + params.id,
+          params["*"].includes("pending")
+            ? FETCH_PENDING_CGF_ADMIN + params?.id
+            : FETCH_SUB_ADMIN_BY_ADMIN + params?.id,
           {
             signal: controller.signal,
           }
@@ -79,9 +91,6 @@ const ViewSubAdmin = () => {
     };
   }, []);
 
-  const getParams = useParams();
-  Logger.debug("page params", getParams["*"].includes("pending"));
-
   const handleDeleteSubAdmin = async () => {
     try {
       const response = await privateAxios.delete(DELETE_SUB_ADMIN + params.id);
@@ -104,6 +113,33 @@ const ViewSubAdmin = () => {
       catchError(error, setToasterDetails, toasterRef, navigate);
     }
   };
+
+  const withdrawInviteByIdCGFAdmin = async () => {
+    try {
+      const response = await privateAxios.delete(
+        WITHDRAW_SUB_ADMIN + params.id
+      );
+      if (response.status == 200) {
+        Logger.debug("user invite withdrawn successfully");
+        setToasterDetails(
+          {
+            titleMessage: "Success",
+            descriptionMessage: response.data.message,
+            messageType: "success",
+          },
+          () => toasterRef.current()
+        );
+        navigate("/users/cgf-admin/", { state: 1 });
+        // setOpenDeleteDialog(false);
+        setOpenDeleteDialogBoxPendingCGFAdmin(false);
+      }
+    } catch (error) {
+      catchError(error, setToasterDetails, toasterRef, navigate);
+
+      Logger.debug("error from withdrawInvite id", error);
+    }
+  };
+
   Logger.debug("fetchedSubAdminDetails---", fetchedSubAdminDetails?.isActive);
   const handleToggle = () => {
     setActive(!isActive);
@@ -112,13 +148,21 @@ const ViewSubAdmin = () => {
     Logger.debug("clicked", index);
     Logger.debug(index);
     if (index === 0) {
-      history(`/users/cgf-admin/edit-cgf-admin/${params.id}`);
+      params["*"].includes("pending")
+        ? history(`/users/cgf-admin/pending/edit-cgf-admin/${params.id}`)
+        : history(`/users/cgf-admin/edit-cgf-admin/${params.id}`);
     }
     if (index === 1) {
       history(`/users/cgf-admin/replace-cgf-admin/${params.id}`);
     }
-    if (index === 2) {
-      setOpenDeleteDialog(true);
+    if (index == 2) {
+      Logger.debug("resend email");
+      ResendEmail(params.id, setToasterDetails, toasterRef, navigate);
+    }
+    if (index === 3) {
+      params["*"].includes("pending")
+        ? setOpenDeleteDialogBoxPendingCGFAdmin(true)
+        : setOpenDeleteDialog(true);
     }
   };
 
@@ -126,30 +170,18 @@ const ViewSubAdmin = () => {
     {
       id: 1,
       action: "Edit",
-      title: 'Edit Member "KitKat"!',
-      info: "On replacing a member, all the statistics and record would get transfer to the new member. Are you sure you want to replace KitKat?",
-      secondarybtn: "No",
-      primarybtn: "Yes",
     },
     {
       id: 2,
       action: "Replace",
-      title: 'Replace Member "KitKat"!',
-      info: "On replacing a member, all the statistics and record would get transfer to the new member. Are you sure you want to replace KitKat?",
-      secondarybtn: "No",
-      primarybtn: "Yes",
+    },
+    {
+      id: 4,
+      action: "Re-Invite",
     },
     {
       id: 3,
       action: "Delete",
-      title: 'Delete Sub-admin "KitKat"!',
-      info: "We recommend you to replace this sub admin with the new one because deleting all the details which sub admin has added will get deleted and this will be an irreversible action, Are you sure want to delete (sub admin name) !",
-      secondarybtn: "Replace Sub-admin",
-      primarybtn: "Delete Anyway",
-    },
-    {
-      id: 4,
-      action: "Resend",
     },
   ];
 
@@ -160,6 +192,31 @@ const ViewSubAdmin = () => {
         descriptionMessage={toasterDetails.descriptionMessage}
         myRef={toasterRef}
         titleMessage={toasterDetails.titleMessage}
+      />
+      <DialogBox
+        title={
+          <p>
+            Withdraw "
+            {fetchedSubAdminDetails && `${fetchedSubAdminDetails?.name}`}
+            's" Invitation
+          </p>
+        }
+        info1={
+          <p>
+            On withdrawal, CGF admin will not be able to verify their account.
+          </p>
+        }
+        info2={<p>Do you want to withdraw the invitation?</p>}
+        primaryButtonText={"Yes"}
+        secondaryButtonText={"No"}
+        onPrimaryModalButtonClickHandler={() => {
+          withdrawInviteByIdCGFAdmin();
+        }}
+        onSecondaryModalButtonClickHandler={() => {
+          setOpenDeleteDialogBoxPendingCGFAdmin(false);
+        }}
+        openModal={openDeleteDialogBoxPendingCGFAdmin}
+        setOpenModal={setOpenDeleteDialogBoxPendingCGFAdmin}
       />
       <DialogBox
         title={<p> Delete CGF Admin "{fetchedSubAdminDetails?.name}" </p>}
@@ -188,7 +245,13 @@ const ViewSubAdmin = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/cgf-admin/">CGF Admins</Link>
+              <Link
+                to="/users/cgf-admin/"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                CGF Admins{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>View CGF Admin</li>
           </ul>
@@ -215,10 +278,10 @@ const ViewSubAdmin = () => {
                   {data.map((d, index) => (
                     <li
                       hidden={
-                        (!fetchedSubAdminDetails.hasOwnProperty("subRoleId") &&
+                        (params["*"].includes("pending") &&
                           d.action == "Replace") ||
-                        (!getParams["*"].includes("/pending") &&
-                          d.action == "Resend")
+                        (!params["*"].includes("pending") &&
+                          d.action == "Re-invite")
                       }
                       onClick={() => handleOpen(index)}
                       key={d.id}
@@ -335,7 +398,10 @@ const ViewSubAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <div className="card-form-field">
+                <div
+                  className="card-form-field"
+                  hidden={params["*"].includes("pending")}
+                >
                   <div className="form-group">
                     <label htmlFor="email">Replaced CGF Admin </label>
                     <TextField
@@ -353,7 +419,10 @@ const ViewSubAdmin = () => {
                     />
                   </div>
                 </div>
-                <div className="card-form-field">
+                <div
+                  className="card-form-field"
+                  hidden={params["*"].includes("pending")}
+                >
                   <div className="form-group">
                     <label htmlFor="status">Status</label>
                     <div className="radio-btn-field">
