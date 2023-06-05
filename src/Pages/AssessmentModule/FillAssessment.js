@@ -343,10 +343,8 @@ function FillAssessment() {
             } else if (
               column.columnType === "dropdown" &&
               currentSectionAnswers[`${column?.uuid}_${tempRowId}`] &&
-              column.options?.includes(
-                currentSectionAnswers[
-                  `${column?.uuid}_${tempRowId}`
-                ].toLowerCase()
+              !column.options?.includes(
+                currentSectionAnswers[`${column?.uuid}_${tempRowId}`]
               )
             ) {
               Logger.debug(
