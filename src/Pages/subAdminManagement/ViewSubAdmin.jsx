@@ -281,7 +281,7 @@ const ViewSubAdmin = () => {
                         (params["*"].includes("pending") &&
                           d.action == "Replace") ||
                         (!params["*"].includes("pending") &&
-                          d.action == "Re-invite")
+                          d.action == "Re-Invite")
                       }
                       onClick={() => handleOpen(index)}
                       key={d.id}
