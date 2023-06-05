@@ -777,7 +777,7 @@ const AddMember = () => {
                                       }}
                                       // onChange={() => trigger("phoneNumber")}
                                       // onSubmit={() => setValue("countryCode", "")}
-                                      placeholder={"+91"}
+                                      placeholder={"+00"}
                                       helperText={
                                         error
                                           ? memberHelper.countryCode[
@@ -1192,7 +1192,7 @@ const AddMember = () => {
                                   // sx={{ width: 200 }}
                                   options={arrOfCountryCodeAddMember}
                                   autoHighlight
-                                  placeholder="+91"
+                                  placeholder="+00"
                                   // getOptionLabel={(country) => country.name + " " + country}
                                   renderOption={(props, option) => (
                                     <li {...props}>{option}</li>
@@ -1207,7 +1207,7 @@ const AddMember = () => {
                                       // onSubmit={() =>
                                       //   setValue("memberContactCountryCode", "")
                                       // }
-                                      placeholder={"+91"}
+                                      placeholder={"+00"}
                                       helperText={
                                         error
                                           ? memberHelper
@@ -1247,7 +1247,7 @@ const AddMember = () => {
                                   watch("memberContactCountryCode") &&
                                   !watch("memberContactPhoneNuber")
                                 )
-                                  return "invalid input";
+                                  return "Invalid input";
                                 if (value && !Number(value))
                                   return "Invalid input";
                               },

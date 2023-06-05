@@ -42,6 +42,7 @@ import {
 } from "../../utils/MemberModuleUtil";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { ResendEmail } from "../../utils/ResendEmail";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -701,7 +702,9 @@ const ViewMember = () => {
       navigate(`/users/members/edit-member/pending/${param.id}`);
     else navigate(`/users/members/edit-member/${param.id}`);
   };
-  const onReInviteClick = () => {};
+  const onReInviteClick = () => {
+    ResendEmail(param.id, setToasterDetailsViewMember,myRef,navigate )
+  };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();

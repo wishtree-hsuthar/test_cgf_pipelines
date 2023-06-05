@@ -21,11 +21,11 @@ export const memberHelper = {
     validate: "Select country code",
   },
   phoneNumber: {
-    required: "Enter the phone number",
+    // required: "Enter the phone number",
     maxLength: "Max char limit exceed",
-    minLength: "Enter valid number",
+    minLength: "Enter the valid phone number (Eg: 1234567890)",
     pattern: "Invalid Input",
-    validate: "Enter the phone number",
+    validate: "Enter the valid phone number (Eg: 1234567890)",
   },
   websiteUrl: {
     maxLength: "Max char limit exceed",
@@ -73,8 +73,8 @@ export const memberHelper = {
   memberContactPhoneNuber: {
     required: "Enter country code",
     maxLength: "Max char limit exceed",
-    minLength: "Enter valid number",
-    validate: "Enter the phone number",
+    minLength: "Enter the valid phone number (Eg: 1234567890)",
+    validate: "Enter the valid phone number (Eg: 1234567890)",
   },
   roleId: {
     required: "Select the role",

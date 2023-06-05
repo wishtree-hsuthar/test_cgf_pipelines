@@ -36,8 +36,8 @@ const helperTextForCGFAdmin = {
   },
   phoneNumber: {
     maxLength: "Max digits limit exceed",
-    minLength: "Enter valid number",
-    validate: "Enter the phone number",
+    minLength: "Enter the valid phone number (Eg: 1234567890)",
+    validate: "Enter the valid phone number (Eg: 1234567890)",
     pattern: "Invalid format",
   },
   name: {
@@ -92,7 +92,7 @@ const EditSubAdmin = () => {
       phoneNumber: "",
       countryCode: {
         name: "India",
-        countryCode: "+91",
+        countryCode: "",
       },
       status: "",
       role: "",
@@ -384,7 +384,7 @@ const EditSubAdmin = () => {
                                     }}
                                     onChange={() => trigger("countryCode")}
                                     // onSubmit={() => setValue("countryCode", "")}
-                                    placeholder={"+91"}
+                                    placeholder={"+00"}
                                     helperText={
                                       error
                                         ? helperTextForCGFAdmin.countryCode[

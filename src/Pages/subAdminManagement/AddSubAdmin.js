@@ -20,8 +20,8 @@ const helperTextForCGFAdmin = {
   },
   phoneNumber: {
     maxLength: "Max digits limit exceed",
-    minLength: "Enter valid number",
-    validate: "Enter the phone number",
+    minLength: "Enter the valid phone number (Eg: 1234567890)",
+    validate: "Enter the valid phone number (Eg: 1234567890)",
     pattern: "Invalid format",
   },
   name: {
@@ -310,7 +310,7 @@ const AddSubAdmin = () => {
                                     inputProps={{
                                       ...params.inputProps,
                                     }}
-                                    placeholder={"+91"}
+                                    placeholder={"+00"}
                                     onChange={() => trigger("countryCode")}
                                     helperText={
                                       error

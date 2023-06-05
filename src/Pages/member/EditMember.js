@@ -752,7 +752,7 @@ const EditMember = () => {
                                       }}
                                       onChange={() => trigger("countryCode")}
                                       // onSubmit={() => setValue("countryCode", "")}
-                                      placeholder={"+91"}
+                                      placeholder={"+00"}
                                       helperText={
                                         error
                                           ? memberHelper.countryCode[
@@ -1203,7 +1203,7 @@ const EditMember = () => {
                                       // onSubmit={() =>
                                       //   setValue("memberContactCountryCode", "")
                                       // }
-                                      placeholder={"+91"}
+                                      placeholder={"+00"}
                                       disabled={disableMember}
                                       helperText={
                                         error
