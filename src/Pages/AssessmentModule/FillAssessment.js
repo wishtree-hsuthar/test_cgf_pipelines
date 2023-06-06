@@ -118,7 +118,7 @@ function FillAssessment() {
   const [editMode, setEditMode] = useState(false);
   const [disableFillAssessment, setDisableFillAssessment] = useState(false);
   const [disableImport, setDisableImport] = useState(false);
-
+  const [saveAsDraftDependency, setSaveAsDraftDependency] = useState(false);
   const [errors, setErrors] = useState({});
   const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
     useState(false);
@@ -184,154 +184,119 @@ function FillAssessment() {
   };
 
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
+  const fetchQuestionnaire = async (
+    id,
+    graphResult,
+    graphLevelBreakdown,
+    isMounted,
+    controller
+  ) => {
+    try {
+      const response = await privateAxios.get(`${ADD_QUESTIONNAIRE}/${id}`, {
+        signal: controller.signal,
+      });
+      isMounted && setQuestionnaire({ ...response.data });
+      graphResult &&
+        graphLevelBreakdown &&
+        setTabValue(response?.data?.sections?.length);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+
+      Logger.debug("error from fetch questionnaire", error);
+      catchError(error, setToasterDetails, myRef, navigate);
+    }
+  };
+  const fetchAssessments = async (isMounted, controller) => {
+    try {
+      setIsFillAssessmentLoading(true);
+      const response = await privateAxios.get(
+        `${FETCH_ASSESSMENT_BY_ID}${params.id}`,
+        {
+          signal: controller.signal,
+        }
+      );
+      setIsFillAssessmentLoading(false);
+      Logger.debug("response from fetch assessment", response);
+      setEditMode(
+        userAuth?._id === response?.data?.assignedOperationMember?._id
+      );
+      isMounted && setAssessments({ ...response.data });
+      isMounted &&
+        setAssessmentQuestionnaire({
+          ...response.data.answers,
+        });
+      isMounted &&
+        response?.data?.graphResult &&
+        setGraphResult({ ...response?.data?.graphResult });
+      isMounted &&
+        response?.data?.graphLevelBreakdown &&
+        setGraphLevelBreakdown({
+          ...response?.data?.graphLevelBreakdown,
+        });
+
+      fetchQuestionnaire(
+        response?.data?.questionnaireId,
+        response?.data?.graphResult,
+        response?.data?.graphLevelBreakdown,
+        isMounted,
+        controller
+      );
+      setReOpenAssessmentDialogBox(
+        response?.data?.isSubmitted && !params["*"].includes("view")
+      );
+      setOpenDeleteDialogBox(
+        userAuth._id === response?.data?.assignedOperationMember?._id &&
+          !params["*"].includes("view") &&
+          response?.data?.assessmentStatus == "Pending"
+      );
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      if (error?.response?.status === 401) {
+        isMounted &&
+          setToasterDetails(
+            {
+              titleMessage: "Oops!",
+              descriptionMessage: "Session Timeout: Please login again",
+              messageType: "error",
+            },
+            () => myRef.current()
+          );
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
+      if (
+        error?.response?.status === 400 &&
+        error?.response?.data?.message === "Invalid assessment!"
+      ) {
+        isMounted &&
+          setToasterDetails(
+            {
+              titleMessage: "Oops!",
+              descriptionMessage:
+                "Oops!! There is some error while saving assessment details. Either someone has removed this assessment or looks like invalid assessment getting submitted. For more details please contact system / CGF admin",
+              messageType: "error",
+            },
+            () => myRef.current()
+          );
+        setTimeout(() => {
+          navigate("/assessment-list");
+        }, 3000);
+      }
+      setIsFillAssessmentLoading(false);
+      Logger.debug("error from fetch assessment", error);
+    }
+  };
   useEffect(() => {
     let isMounted = true;
     let controller = new AbortController();
 
-    const fetchQuestionnaire = async (id, graphResult, graphLevelBreakdown) => {
-      try {
-        const response = await privateAxios.get(`${ADD_QUESTIONNAIRE}/${id}`, {
-          signal: controller.signal,
-        });
-        isMounted && setQuestionnaire({ ...response.data });
-        graphResult &&
-          graphLevelBreakdown &&
-          setTabValue(response?.data?.sections?.length);
-      } catch (error) {
-        if (error?.code === "ERR_CANCELED") return;
-
-        Logger.debug("error from fetch questionnaire", error);
-        catchError(error, setToasterDetails, myRef, navigate);
-        // if (error?.response?.status === 401) {
-        //     isMounted &&
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage:
-        //                     "Session Timeout: Please login again",
-        //                 messageType: "error",
-        //             },
-        //             () => myRef.current()
-        //         );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // } else if (error?.response?.status === 403) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => myRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/home");
-        //     }, 3000);
-        // } else {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => myRef.current()
-        //     );
-        // }
-      }
-    };
-
-    const fetchAssessments = async () => {
-      try {
-        setIsFillAssessmentLoading(true);
-        const response = await privateAxios.get(
-          `${FETCH_ASSESSMENT_BY_ID}${params.id}`,
-          {
-            signal: controller.signal,
-          }
-        );
-        setIsFillAssessmentLoading(false);
-        Logger.debug("response from fetch assessment", response);
-        setEditMode(
-          userAuth?._id === response?.data?.assignedOperationMember?._id
-        );
-        isMounted && setAssessments({ ...response.data });
-        isMounted &&
-          setAssessmentQuestionnaire({
-            ...response.data.answers,
-          });
-        isMounted &&
-          response?.data?.graphResult &&
-          setGraphResult({ ...response?.data?.graphResult });
-        isMounted &&
-          response?.data?.graphLevelBreakdown &&
-          setGraphLevelBreakdown({
-            ...response?.data?.graphLevelBreakdown,
-          });
-        // response?.data?.graphResult &&
-        //   response?.data?.graphLevelBreakdown &&
-        //   setTabValue(4);
-        fetchQuestionnaire(
-          response?.data?.questionnaireId,
-          response?.data?.graphResult,
-          response?.data?.graphLevelBreakdown
-        );
-        setReOpenAssessmentDialogBox(
-          response?.data?.isSubmitted && !params["*"].includes("view")
-        );
-        setOpenDeleteDialogBox(
-          userAuth._id === response?.data?.assignedOperationMember?._id &&
-            !params["*"].includes("view") &&
-            response?.data?.assessmentStatus == "Pending"
-        );
-      } catch (error) {
-        if (error?.code === "ERR_CANCELED") return;
-        if (error?.response?.status === 401) {
-          isMounted &&
-            setToasterDetails(
-              {
-                titleMessage: "Oops!",
-                descriptionMessage: "Session Timeout: Please login again",
-                messageType: "error",
-              },
-              () => myRef.current()
-            );
-          setTimeout(() => {
-            navigate("/login");
-          }, 3000);
-        }
-        if (
-          error?.response?.status === 400 &&
-          error?.response?.data?.message === "Invalid assessment!"
-        ) {
-          isMounted &&
-            setToasterDetails(
-              {
-                titleMessage: "Oops!",
-                descriptionMessage:
-                  "Oops!! There is some error while saving assessment details. Either someone has removed this assessment or looks like invalid assessment getting submitted. For more details please contact system / CGF admin",
-                messageType: "error",
-              },
-              () => myRef.current()
-            );
-          setTimeout(() => {
-            navigate("/assessment-list");
-          }, 3000);
-        }
-        setIsFillAssessmentLoading(false);
-        Logger.debug("error from fetch assessment", error);
-      }
-    };
-    fetchAssessments();
+    fetchAssessments(isMounted, controller);
     return () => {
       isMounted = false;
       controller.abort();
     };
-  }, []);
+  }, [saveAsDraftDependency]);
 
   const myRef = useRef();
 
@@ -350,6 +315,8 @@ function FillAssessment() {
         }
       );
       if (response.status == 201) {
+        graphResult && setSaveAsDraftDependency(!saveAsDraftDependency);
+
         !reOpen &&
           setToasterDetails(
             {
@@ -824,9 +791,21 @@ function FillAssessment() {
         let minutes = new Date().getMinutes();
         let seconds = new Date().getSeconds();
         let timeStamp = month + date + year + "_" + hours + minutes + seconds;
+
         link.setAttribute(`download`, `Assessment - ${timeStamp}.xlsx`);
         document.body.appendChild(link);
         link.click();
+        if (response.status == 201) {
+          setToasterDetails(
+            {
+              titleMessage: `Success!`,
+              descriptionMessage: "Downloaded Successfully!",
+
+              messageType: `success`,
+            },
+            () => myRef.current()
+          );
+        }
       } else {
         await downloadFunction(
           "Assessment",
@@ -864,6 +843,8 @@ function FillAssessment() {
         setTimeout(() => {
           navigate("/assessment-list");
         }, 3000);
+      } else {
+        catchError(error, setToasterDetails, myRef, navigate);
       }
     }
   };
