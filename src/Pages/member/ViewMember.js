@@ -773,7 +773,7 @@ const ViewMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/members">Members</Link>
+              <Link to="/users/members" state={param["*"].includes("pending") ? 1 : 0}>Members  {param["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}</Link>
             </li>
             <li>View Member</li>
           </ul>
@@ -800,7 +800,7 @@ const ViewMember = () => {
                 style={{ display: isActive ? "block" : "none" }}
               >
                 <ul className="crud-toggle-list">
-                  {member?.memberRepresentativeId?.length > 0 && (
+                  { (
                     <li
                       hidden={
                         SUPER_ADMIN

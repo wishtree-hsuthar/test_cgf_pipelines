@@ -15,6 +15,7 @@ import {
   COUNTRIES,
   FETCH_ROLES,
   MEMBER,
+  PARENT_COMPINES,
   PENDING_MEMBER,
   REGIONCOUNTRIES,
   REGIONS,
@@ -83,7 +84,8 @@ const EditMember = () => {
   const [arrOfCgfOfficeCountryRegions, setArrOfCgfOfficeCountryRegions] =
     useState([]);
   const [arrOfCites, setArrOfCites] = useState([]);
-
+  const [arrOfParentCompanyEditMember, setArrOfParentCompanyEditMember] =
+    useState([]);
   // state to manage loader
   const [isEditMemberLoading, setIsEditMemberLoading] = useState(true);
   const [arrOfCountryCode, setArrOfCountryCode] = useState([]);
@@ -420,7 +422,19 @@ const EditMember = () => {
     trigger(name);
     trigger(code);
   };
-
+  const getParentCompanyEditMember = async (
+    controller = new AbortController()
+  ) => {
+    try {
+      const response = await axios.get(PARENT_COMPINES, {
+        signal: controller.signal,
+      });
+      setArrOfParentCompanyEditMember(response?.data);
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      Logger.debug("error from getParentCompanyAddMember");
+    }
+  };
   const callGetCategories = async () => {
     MEMBER_LOOKUP = await getCategories();
 
@@ -429,13 +443,16 @@ const EditMember = () => {
   const callGetOffices = async () => {
     CGF_OFFICES = await getCGFOffices();
   };
-  const getViewMemberLink = isPendingMember ? `/users/members/view-member/pending/${param.id}` : `/users/members/view-member/${param.id}`
+  const getViewMemberLink = isPendingMember
+    ? `/users/members/view-member/pending/${param.id}`
+    : `/users/members/view-member/${param.id}`;
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
     (async () => {
       Object.keys(MEMBER_LOOKUP)?.length === 0 && callGetCategories();
       CGF_OFFICES?.length === 0 && callGetOffices();
+      arrOfParentCompanyEditMember.length === 0 && getParentCompanyEditMember(controller);
       isMounted && (await getMemberByID1(isMounted));
       isMounted && (await getRegions1(controller));
       isMounted && (await getCountryCode1(controller));
@@ -462,7 +479,7 @@ const EditMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/members">Members</Link>
+              <Link to="/users/members" state={param["*"].includes("pending") ? 1 : 0}>Members {param["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}</Link>
             </li>
             <li>
               <Link to={getViewMemberLink}>View Member</Link>
@@ -526,13 +543,13 @@ const EditMember = () => {
                                 className="radio-btn"
                               >
                                 <FormControlLabel
-                                  disabled
+                                  disabled={!isPendingMember}
                                   value="Partner"
                                   control={<Radio />}
                                   label="Partner"
                                 />
                                 <FormControlLabel
-                                  disabled
+                                  disabled={!isPendingMember}
                                   value="Member"
                                   control={<Radio />}
                                   label="Member"
@@ -551,10 +568,13 @@ const EditMember = () => {
                           control={control}
                           render={({ field, fieldState: { error } }) => (
                             <EditMemberAutoComplete
-                              disabled
+                              disableClearable
+                              disabled={!isPendingMember}
                               className="searchable-input"
                               PaperComponent={({ children }) => (
-                                <Paper className={"autocomplete-option-txt"}>
+                                <Paper className={  arrOfParentCompanyEditMember?.length > 5
+                                  ? "autocomplete-option-txt autocomplete-option-limit"
+                                  : "autocomplete-option-txt"}>
                                   {children}
                                 </Paper>
                               )}
@@ -577,7 +597,7 @@ const EditMember = () => {
                               selectOnFocus
                               handleHomeEndKeys
                               id="free-solo-with-text-demo"
-                              // options={parentCompany}
+                              options={arrOfParentCompanyEditMember}
                               // getOptionLabel={(option) => {
                               //   // Value selected with enter, right from the input
                               //   if (typeof option === "string") {
@@ -1273,40 +1293,42 @@ const EditMember = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="status">
-                          Status <span className="mandatory">*</span>
-                        </label>
-                        <div className="radio-btn-field">
-                          <Controller
-                            name="status"
-                            control={control}
-                            render={({ field }) => (
-                              <RadioGroup
-                                {...field}
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="radio-buttons-group"
-                                className="radio-btn"
-                              >
-                                <FormControlLabel
-                                  disabled={isPendingMember}
-                                  value="active"
-                                  control={<Radio />}
-                                  label="Active"
-                                />
-                                <FormControlLabel
-                                  disabled={isPendingMember}
-                                  value="inactive"
-                                  control={<Radio />}
-                                  label="Inactive"
-                                />
-                              </RadioGroup>
-                            )}
-                          />
+                    {isPendingMember || (
+                      <div className="card-form-field">
+                        <div className="form-group">
+                          <label htmlFor="status">
+                            Status <span className="mandatory">*</span>
+                          </label>
+                          <div className="radio-btn-field">
+                            <Controller
+                              name="status"
+                              control={control}
+                              render={({ field }) => (
+                                <RadioGroup
+                                  {...field}
+                                  aria-labelledby="demo-radio-buttons-group-label"
+                                  name="radio-buttons-group"
+                                  className="radio-btn"
+                                >
+                                  <FormControlLabel
+                                    disabled={isPendingMember}
+                                    value="active"
+                                    control={<Radio />}
+                                    label="Active"
+                                  />
+                                  <FormControlLabel
+                                    disabled={isPendingMember}
+                                    value="inactive"
+                                    control={<Radio />}
+                                    label="Inactive"
+                                  />
+                                </RadioGroup>
+                              )}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
                 <div className="form-btn flex-between add-members-btn">

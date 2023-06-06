@@ -81,10 +81,10 @@ const PendingMember = ({
 
     let staleData = data;
     staleData.forEach((pendingMember) => {
-      pendingMember["email"] = pendingMember?.invite?.data?.email ?? "";
-      pendingMember["name"] = pendingMember?.invite?.data?.name ?? "";
+      pendingMember["email"] = pendingMember?.invite?.data?.email ?? "N/A";
+      pendingMember["name"] = pendingMember?.invite?.data?.name ?? "N/A";
       pendingMember["createdAt"] = new Date(
-        pendingMember["invite"]["createdAt"]
+        pendingMember["createdAt"]
       ).toLocaleDateString("en-US", {
         month: "2-digit",
         day: "2-digit",
@@ -92,6 +92,7 @@ const PendingMember = ({
       });
       pendingMember["_id"] = pendingMember?.invite?._id ?? "";
       delete pendingMember["invite"];
+      delete pendingMember["updatedAt"]
       // delete pendingMember["_id"]
       keysOrder.forEach((k) => {
         const v = pendingMember[k];

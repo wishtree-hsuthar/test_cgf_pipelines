@@ -2,7 +2,7 @@
 import DownloadIcon from "@mui/icons-material/Download";
 import { Checkbox, MenuItem, Select } from "@mui/material";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 //Internal Imports
 import { useSelector } from "react-redux";
@@ -22,8 +22,9 @@ const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 const MemberList = () => {
   //custom hook to set title of page
   useDocumentTitle("Members");
+  const { state } = useLocation();
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(state ? state : 0);
 
   const navigate = useNavigate();
   //Refr for Toaster
@@ -39,10 +40,7 @@ const MemberList = () => {
   const privilege = useSelector((state) => state?.user?.privilege);
   const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
   let privilegeArray = privilege ? Object.values(privilege?.privileges) : [];
-  const checkViewAccess = SUPER_ADMIN
-    ? true
-    : moduleAccesForMember[0]?.member?.view;
-  console.log("check View Access:- ", checkViewAccess);
+
   let moduleAccesForMember = privilegeArray
     .filter((data) => data?.moduleId?.name === "Members")
     .map((data) => ({
@@ -54,6 +52,11 @@ const MemberList = () => {
         add: data?.add,
       },
     }));
+  const checkViewAccess = SUPER_ADMIN
+    ? true
+    : moduleAccesForMember[0]?.member?.view;
+  console.log("check View Access:- ", checkViewAccess);
+  
   Logger.debug(
     "module access member in view member",
     moduleAccesForMember[0]?.member
