@@ -46,6 +46,7 @@ const EditMember = () => {
 
   const param = useParams();
   const isPendingMember = param["*"].includes("pending");
+  const state = param["*"].includes("pending") ? 1 : 0
   const navigate = useNavigate();
   const [disableEditMemberUpdateButton, setDisableEditMemberUpdateButton] =
     useState(false);
@@ -182,14 +183,14 @@ const EditMember = () => {
   // On Click cancel handler
   const onClickCancelHandler = () => {
     reset({ defaultValues });
-    navigate("/users/members");
+    navigate("/users/members",{state});
   };
   const onSubmit = (data) => {
     Logger.debug("data", data);
     setDisableEditMemberUpdateButton(true);
 
     onSubmitFunctionCall(data);
-    setTimeout(() => navigate("/users/members"), 3000);
+    setTimeout(() => navigate("/users/members",{state}), 3000);
   };
   const formatRegionCountries1 = (regionCountries) => {
     regionCountries &&
@@ -452,7 +453,8 @@ const EditMember = () => {
     (async () => {
       Object.keys(MEMBER_LOOKUP)?.length === 0 && callGetCategories();
       CGF_OFFICES?.length === 0 && callGetOffices();
-      arrOfParentCompanyEditMember.length === 0 && getParentCompanyEditMember(controller);
+      arrOfParentCompanyEditMember.length === 0 &&
+        getParentCompanyEditMember(controller);
       isMounted && (await getMemberByID1(isMounted));
       isMounted && (await getRegions1(controller));
       isMounted && (await getCountryCode1(controller));
@@ -479,7 +481,13 @@ const EditMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/members" state={param["*"].includes("pending") ? 1 : 0}>Members {param["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}</Link>
+              <Link
+                to="/users/members"
+                state={param["*"].includes("pending") ? 1 : 0}
+              >
+                Members{" "}
+                {param["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>
               <Link to={getViewMemberLink}>View Member</Link>
@@ -571,13 +579,19 @@ const EditMember = () => {
                               disableClearable
                               disabled={!isPendingMember}
                               className="searchable-input"
-                              PaperComponent={({ children }) => (
-                                <Paper className={  arrOfParentCompanyEditMember?.length > 5
-                                  ? "autocomplete-option-txt autocomplete-option-limit"
-                                  : "autocomplete-option-txt"}>
-                                  {children}
-                                </Paper>
-                              )}
+                              PaperComponent={({ children }) =>
+                                watch("parentCompany").length > 0 && (
+                                  <Paper
+                                    className={
+                                      arrOfParentCompanyEditMember?.length > 5
+                                        ? "autocomplete-option-txt autocomplete-option-limit"
+                                        : "autocomplete-option-txt"
+                                    }
+                                  >
+                                    {children}
+                                  </Paper>
+                                )
+                              }
                               {...field}
                               onSubmit={() => setValue("parentCompany", "")}
                               onChange={(event, newValue) => {
@@ -618,7 +632,7 @@ const EditMember = () => {
                                     setValue("parentCompany", e.target.value)
                                   }
                                   onSubmit={() => setValue("parentCompany", "")}
-                                  placeholder="N/A"
+                                  placeholder="Enter parent company"
                                 />
                               )}
                             />
@@ -1150,7 +1164,7 @@ const EditMember = () => {
                               e.target.value?.trim()
                             )
                           }
-                          placeholder="N/A"
+                          placeholder="example@domain.com"
                         />
                       </div>
                     </div>

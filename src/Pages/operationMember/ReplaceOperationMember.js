@@ -246,7 +246,7 @@ const ReplaceOperationMember = () => {
         );
         setOpen(false);
         setTimeout(() => {
-          navigate("/users/operation-members");
+          navigate("/users/operation-members",{state:0});
         }, 3000);
       }
     } catch (error) {
@@ -258,7 +258,8 @@ const ReplaceOperationMember = () => {
         setToasterDetails,
         myRef,
         navigate,
-        "/users/operation-members"
+        "/users/operation-members",
+        0
       );
     }
   };
@@ -273,7 +274,7 @@ const ReplaceOperationMember = () => {
   };
   const handleNo = () => {
     Logger.debug("No replcae");
-    navigate("/users/operation-members");
+    navigate("/users/operation-members",{state:0});
   };
   const openReplaceDailogBox = () => {
     setOpen(true);
@@ -393,7 +394,7 @@ const ReplaceOperationMember = () => {
           </div>
           <div className="form-btn flex-between add-members-btn replace-cgf-admin-btnblk">
             <button
-              onClick={() => navigate("/users/operation-members")}
+              onClick={() => navigate("/users/operation-members",{state:0})}
               className="secondary-button mr-10"
             >
               Cancel

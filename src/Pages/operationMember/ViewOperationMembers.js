@@ -69,6 +69,7 @@ const ViewOperationMembers = () => {
   });
   const navigate = useNavigate();
   const params = useParams();
+  const state = params["*"].includes("pending") ? 1 : 0
   const toasterRef = useRef();
   const [toasterDetails, setToasterDetails] = useCallbackState({
     titleMessage: "",
@@ -239,7 +240,7 @@ const ViewOperationMembers = () => {
         );
         setOpenDeleteDialog(false);
         setTimeout(() => {
-          navigate("/users/operation-members");
+          navigate("/users/operation-members",{state});
         }, 2000);
       }
     } catch (error) {
@@ -251,7 +252,7 @@ const ViewOperationMembers = () => {
   const withdrawInviteById = async () => {
     try {
       const response = await privateAxios.delete(
-        WITHDRAW_OPERATION_MEMBER + params?.id
+        WITHDRAW_OPERATION_MEMBER + params?.id 
       );
       if (response.status == 200) {
         Logger.debug("operation member  invite withdrawn successfully");
@@ -266,7 +267,7 @@ const ViewOperationMembers = () => {
         // call getPendingOperationMember below
         setOpenDeleteDialogBoxPendingOperationMember(false);
         setTimeout(() => {
-          navigate("/users/operation-members");
+          navigate("/users/operation-members",{state});
         }, 2000);
       }
     } catch (error) {

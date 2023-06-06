@@ -210,13 +210,13 @@ const AddMember = () => {
   // On Click cancel handler
   const onClickCancelHandlerAddMember = () => {
     reset({ tempDefaultValues });
-    navigate("/users/members");
+    navigate("/users/members",{state:0});
   };
   const onSubmitAddMember = async (data) => {
     Logger.debug("data", data);
     const isSubmited = await onSubmitFunctionCallAddMember(data);
     Logger.debug("is Submited", isSubmited);
-    isSubmited && setTimeout(() => navigate("/users/members"), 3000);
+    isSubmited && setTimeout(() => navigate("/users/members",{state:1}), 3000);
   };
   //method to handle on add more button click handler
   const onAddMoreButtonClickHandlerAddMember = async (data) => {

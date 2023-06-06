@@ -74,6 +74,10 @@ const ViewMember = () => {
   //custom hook to set title of page
   useDocumentTitle("View Member");
 
+  //code to get id from url
+  const param = useParams();
+
+
   const tableHead = [
     {
       id: "name",
@@ -154,6 +158,7 @@ const ViewMember = () => {
   });
   // state to hold roles
   const privilege = useSelector((state) => state?.user?.privilege);
+  const state = param["*"].includes("pending") ? 1 : 0
   const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
   let viewMemberPrivilegeArray = privilege
     ? Object.values(privilege?.privileges)
@@ -320,9 +325,6 @@ const ViewMember = () => {
       () => myRef.current()
     );
   };
-
-  //code to get id from url
-  const param = useParams();
   const isPendingMember = param["*"].includes("pending");
   //code form View Member
   const navigate = useNavigate();
@@ -346,7 +348,7 @@ const ViewMember = () => {
         },
         () => myRef.current()
       );
-      return setTimeout(() => navigate("/users/members"), 3000);
+      return setTimeout(() => navigate("/users/members",{state}), 3000);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       if (error?.response?.data?.hasOwnProperty("activeSessionsCount")) {
@@ -361,7 +363,7 @@ const ViewMember = () => {
     }
   };
   const onDialogSecondaryButtonClickHandler = () => {
-    navigate("/users/members");
+    navigate("/users/members",{state});
   };
   //state to hold member data send by back end
   const [member, setMember] = useState({});

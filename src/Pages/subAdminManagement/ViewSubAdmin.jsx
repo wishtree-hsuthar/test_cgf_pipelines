@@ -30,6 +30,8 @@ import { ResendEmail } from "../../utils/ResendEmail";
 const ViewSubAdmin = () => {
   //custom hook to set title of page
   useDocumentTitle("View CGF Admin");
+  const params = useParams();
+  const state = params["*"].includes("pending") ? 1 : 0
   // state to manage loader
   const [
     openDeleteDialogBoxPendingCGFAdmin,
@@ -37,7 +39,7 @@ const ViewSubAdmin = () => {
   ] = useState(false);
   const [isCgfLoading, setIsCgfLoading] = useState(true);
   const history = useNavigate();
-  const params = useParams();
+  
   const toasterRef = useRef();
   const navigate = useNavigate();
   const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -105,7 +107,7 @@ const ViewSubAdmin = () => {
         );
         setOpenDeleteDialog(false);
         setTimeout(() => {
-          navigate("/users/cgf-admin/");
+          navigate("/users/cgf-admin/",{state});
         }, 2000);
       }
     } catch (error) {

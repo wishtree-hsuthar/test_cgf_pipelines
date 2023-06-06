@@ -265,7 +265,7 @@ function AddOperationMember() {
         );
         navigateToListPage === false &&
           setTimeout(() => {
-            navigate("/users/operation-members");
+            navigate("/users/operation-members",{state : 1});
           }, 3000);
       }
     } catch (error) {
@@ -843,7 +843,7 @@ function AddOperationMember() {
                   <div className="form-btn flex-between add-members-btn">
                     <button
                       type={"reset"}
-                      onClick={() => navigate("/users/operation-members")}
+                      onClick={() => navigate("/users/operation-members",{state:0})}
                       className="secondary-button mr-10"
                     >
                       Cancel

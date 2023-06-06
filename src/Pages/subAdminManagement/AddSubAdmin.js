@@ -154,7 +154,7 @@ const AddSubAdmin = () => {
     Logger.debug("new phone number", data);
     addSubAdminData(data);
     setTimeout(() => {
-      navigate("/users/cgf-admin/");
+      navigate("/users/cgf-admin/",{state:1});
     }, 3000);
   };
 
@@ -165,7 +165,7 @@ const AddSubAdmin = () => {
     setValue("");
   };
   const handleCancel = () => {
-    navigate("/users/cgf-admin/");
+    navigate("/users/cgf-admin/",{state:0});
   };
 
   return (
