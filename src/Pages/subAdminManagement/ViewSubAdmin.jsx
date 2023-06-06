@@ -173,7 +173,7 @@ const ViewSubAdmin = () => {
     },
     {
       id: 2,
-      action: "Replace",
+      action: "Replace & Delete",
     },
     {
       id: 4,
@@ -181,7 +181,7 @@ const ViewSubAdmin = () => {
     },
     {
       id: 3,
-      action: "Delete",
+      action: params["*"].includes("pending") ? "Revoke" : "Delete",
     },
   ];
 
@@ -237,7 +237,7 @@ const ViewSubAdmin = () => {
           navigate(`/users/cgf-admin/replace-cgf-admin/${params.id}`);
         }}
         primaryButtonText={"Delete anyway"}
-        secondaryButtonText={"Replace"}
+        secondaryButtonText={"Replace & Delete"}
         openModal={openDeleteDialog}
         setOpenModal={setOpenDeleteDialog}
       />
@@ -279,7 +279,7 @@ const ViewSubAdmin = () => {
                     <li
                       hidden={
                         (params["*"].includes("pending") &&
-                          d.action == "Replace") ||
+                          d.action == "Replace & Delete") ||
                         (!params["*"].includes("pending") &&
                           d.action == "Re-Invite")
                       }
