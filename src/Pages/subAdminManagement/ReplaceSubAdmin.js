@@ -386,7 +386,7 @@ const ReplaceSubAdmin = () => {
         titleMessage={toasterDetails.titleMessage}
       />
       <DialogBox
-        title={<p> Replace CGF admin "{cgfAdmin?.name}" </p>}
+        title={<p> Replace & Delete CGF admin "{cgfAdmin?.name}" </p>}
         info1={
           <p>
             On replacing, all the existing management will be shifted to the new
@@ -423,14 +423,14 @@ const ReplaceSubAdmin = () => {
                 View CGF Admin
               </Link>
             </li>
-            <li>Replace CGF Admin</li>
+            <li>Replace & Delete CGF Admin</li>
           </ul>
         </div>
       </div>
       <section>
         <div className="container">
           <div className="form-header flex-between ">
-            <h2 className="heading2">Replace</h2>
+            <h2 className="heading2">Replace & Delete</h2>
 
             <div className="member-filter-left">
               {/* <div className="tertiary-btn-blk"> */}
@@ -489,7 +489,7 @@ const ReplaceSubAdmin = () => {
               onClick={openReplaceDailogBox}
               className="primary-button add-button replace-assign-btn"
             >
-              Replace
+              Replace & Delete
             </button>
           </div>
         </div>

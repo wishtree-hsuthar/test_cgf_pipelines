@@ -90,6 +90,7 @@ function OperationMemberList() {
   const navigate = useNavigate();
   useEffect(() => {
     setValue(state ? state : 0);
+    navigate("", { state: 0 });
   }, []);
 
   return (

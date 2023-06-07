@@ -303,7 +303,9 @@ const ReplaceOperationMember = () => {
       />
       <DialogBox
         title={
-          <p>Replace Operation Member "{operationMemberReplaceOP?.name}"</p>
+          <p>
+            Replace & Delete Operation Member "{operationMemberReplaceOP?.name}"
+          </p>
         }
         info1={
           <p>
@@ -341,14 +343,14 @@ const ReplaceOperationMember = () => {
                 View Operation Member
               </Link>
             </li>
-            <li>Replace Operation Member</li>
+            <li>Replace & Delete Operation Member</li>
           </ul>
         </div>
       </div>
       <section>
         <div className="container">
           <div className="form-header flex-between ">
-            <h2 className="heading2">Replace</h2>
+            <h2 className="heading2">Replace & Delete</h2>
 
             <div className="member-filter-left">
               {/* <div className="tertiary-btn-blk"> */}
@@ -403,7 +405,7 @@ const ReplaceOperationMember = () => {
               onClick={openReplaceDailogBox}
               className="primary-button add-button replace-assign-btn"
             >
-              Replace
+              Replace & Delete
             </button>
           </div>
         </div>
