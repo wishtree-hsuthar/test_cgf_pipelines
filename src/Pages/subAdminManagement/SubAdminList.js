@@ -74,6 +74,7 @@ const SubAdminList = () => {
     Logger.debug("inside use Effect");
     Logger.debug("page-", state);
     setValue(state ? state : 0);
+    navigate("", { state: 0 });
     return () => {
       clearTimeout(searchTimeout);
       controller.abort();

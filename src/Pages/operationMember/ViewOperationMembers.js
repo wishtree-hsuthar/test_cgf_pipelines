@@ -311,13 +311,7 @@ const ViewOperationMembers = () => {
         : !moduleAccessForOperationMember[0]?.operationMember.delete;
     }
   };
-  const showOptionName = () => {
-    if (params["*"].includes("pending")) {
-      return "Revoke";
-    } else {
-      return "Delete";
-    }
-  };
+
   const hideDeleteOption = () => {
     if (fetchOperationMemberDetaills.isMemberRepresentative) {
       return true;
@@ -349,7 +343,7 @@ const ViewOperationMembers = () => {
     },
     {
       id: 3,
-      action: showOptionName(),
+      action: "Delete",
       hide: hideDeleteOption(),
     },
   ];

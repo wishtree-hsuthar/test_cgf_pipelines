@@ -129,7 +129,9 @@ const ViewSubAdmin = () => {
           },
           () => toasterRef.current()
         );
-        navigate("/users/cgf-admin/", { state: 1 });
+        setTimeout(() => {
+          navigate("/users/cgf-admin/", { state: 1 });
+        }, 3000);
         // setOpenDeleteDialog(false);
         setOpenDeleteDialogBoxPendingCGFAdmin(false);
       }
@@ -181,7 +183,7 @@ const ViewSubAdmin = () => {
     },
     {
       id: 3,
-      action: params["*"].includes("pending") ? "Revoke" : "Delete",
+      action: "Delete",
     },
   ];
 
