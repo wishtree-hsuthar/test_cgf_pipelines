@@ -313,6 +313,16 @@ const ViewOperationMembers = () => {
     }
   };
 
+  const hideDeleteOption = () => {
+    if (fetchOperationMemberDetaills.isMemberRepresentative) {
+      return true;
+    } else {
+      return SUPER_ADMIN
+        ? false
+        : !moduleAccessForOperationMember[0]?.operationMember.delete;
+    }
+  };
+
   const data = [
     {
       id: 1,
@@ -324,7 +334,7 @@ const ViewOperationMembers = () => {
     },
     {
       id: 2,
-      action: "Replace",
+      action: "Replace & Delete",
       hide: hideOption(),
     },
     {
@@ -335,10 +345,7 @@ const ViewOperationMembers = () => {
     {
       id: 3,
       action: "Delete",
-      hide:
-        SUPER_ADMIN === true
-          ? false
-          : !moduleAccessForOperationMember[0]?.operationMember.delete,
+      hide: hideDeleteOption(),
     },
   ];
   return (
@@ -351,7 +358,13 @@ const ViewOperationMembers = () => {
       />
       <DialogBox
         title={
-          <p>Delete Operation Member "{fetchOperationMemberDetaills?.name}"</p>
+          <p>
+            Delete{" "}
+            {fetchOperationMemberDetaills.isMemberRepresentative
+              ? "Member Representative"
+              : "Operation Member"}{" "}
+            "{fetchOperationMemberDetaills?.name}"
+          </p>
         }
         info1={
           fetchOperationMemberDetaills.isMemberRepresentative ? (
@@ -383,12 +396,14 @@ const ViewOperationMembers = () => {
           );
         }}
         primaryButtonText={"Delete anyway"}
-        secondaryButtonText={"Replace"}
+        secondaryButtonText={"Replace & Delete"}
         openModal={openDeleteDialog}
         setOpenModal={setOpenDeleteDialog}
       />
       <DialogBox
-        title={<p>Withdraw Operation Member Invitation</p>}
+        title={
+          <p>Withdraw {fetchOperationMemberDetaills?.name}'s Invitation</p>
+        }
         info1={
           <p>
             On withdrawal, operation member will not be able to verify their

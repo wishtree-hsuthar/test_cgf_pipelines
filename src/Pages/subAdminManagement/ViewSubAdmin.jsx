@@ -131,7 +131,9 @@ const ViewSubAdmin = () => {
           },
           () => toasterRef.current()
         );
-        navigate("/users/cgf-admin/", { state: 1 });
+        setTimeout(() => {
+          navigate("/users/cgf-admin/", { state: 1 });
+        }, 3000);
         // setOpenDeleteDialog(false);
         setOpenDeleteDialogBoxPendingCGFAdmin(false);
       }
@@ -175,7 +177,7 @@ const ViewSubAdmin = () => {
     },
     {
       id: 2,
-      action: "Replace",
+      action: "Replace & Delete",
     },
     {
       id: 4,
@@ -239,7 +241,7 @@ const ViewSubAdmin = () => {
           navigate(`/users/cgf-admin/replace-cgf-admin/${params.id}`);
         }}
         primaryButtonText={"Delete anyway"}
-        secondaryButtonText={"Replace"}
+        secondaryButtonText={"Replace & Delete"}
         openModal={openDeleteDialog}
         setOpenModal={setOpenDeleteDialog}
       />
@@ -281,7 +283,7 @@ const ViewSubAdmin = () => {
                     <li
                       hidden={
                         (params["*"].includes("pending") &&
-                          d.action == "Replace") ||
+                          d.action == "Replace & Delete") ||
                         (!params["*"].includes("pending") &&
                           d.action == "Re-Invite")
                       }
