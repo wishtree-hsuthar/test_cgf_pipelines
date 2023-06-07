@@ -335,11 +335,8 @@ const ViewMember = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const onDialogPrimaryButtonClickHandler = async () => {
     try {
-      if (isPendingMember) {
-        await axios.delete(WITHDRAW_MEMBER_INVITE + `${param.id}`);
-      } else {
-        await axios.delete(MEMBER + `/${param.id}`);
-      }
+      
+      await axios.delete(MEMBER + `/${param.id}`);
       setToasterDetailsViewMember(
         {
           titleMessage: "Success",
