@@ -95,7 +95,7 @@ const EditMember = () => {
   // state to hold roles
   const [roles, setRoles] = useState([]);
 
-  const [disableMember, setDisableMember] = useState(false);
+  // const [disableMember, setDisableMember] = useState(false);
   const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
     reValidateMode: "onChange",
     defaultValues: defaultValues,
@@ -391,7 +391,7 @@ const EditMember = () => {
       cgfOfficeRegion: data?.cgfOfficeRegion,
       cgfOfficeCountry: data?.cgfOfficeCountry,
       cgfOffice: data?.cgfOffice,
-      memberContactSalutation: data?.memberRepresentativeId[0]?.salutation,
+      memberContactSalutation: data?.memberRepresentativeId[0]?.salutation ?? "Mr.",
       memberContactFullName: data?.memberRepresentativeId[0]?.name,
       title: data?.memberRepresentativeId[0]?.title,
       department: data?.memberRepresentativeId[0]?.department,
@@ -404,7 +404,7 @@ const EditMember = () => {
     });
     setMember(data);
     getCites();
-    setDisableMember(data?.memberRepresentativeId?.length > 0 ? false : true);
+    // setDisableMember(data?.memberRepresentativeId?.length > 0 ? false : true);
   };
   //prevent form submission on press of enter key
   const checkKeyDown = (e) => {
@@ -468,7 +468,7 @@ const EditMember = () => {
     };
   }, [watch]);
   Logger.debug("member: ", member);
-  Logger.debug("disable: ", disableMember);
+  // Logger.debug("disable: ", disableMember);
   return (
     <div className="page-wrapper">
       <Toaster
@@ -1109,7 +1109,7 @@ const EditMember = () => {
                         <Input
                           control={control}
                           myHelper={memberHelper}
-                          isDisabled={disableMember}
+                          // isDisabled={disableMember}
                           rules={{
                             maxLength: 50,
                             minLength: 3,
@@ -1132,7 +1132,7 @@ const EditMember = () => {
                             maxLength: 50,
                             minLength: 3,
                           }}
-                          isDisabled={disableMember}
+                          // isDisabled={disableMember}
                           name="department"
                           onBlur={(e) =>
                             setValue("department", e.target.value?.trim())
@@ -1230,7 +1230,7 @@ const EditMember = () => {
                                       inputProps={{
                                         ...params.inputProps,
                                       }}
-                                      isDisabled={disableMember}
+                                      // isDisabled={disableMember}
                                       onChange={() =>
                                         trigger("memberContactPhoneNuber")
                                       }
@@ -1238,7 +1238,7 @@ const EditMember = () => {
                                       //   setValue("memberContactCountryCode", "")
                                       // }
                                       placeholder={"+00"}
-                                      disabled={disableMember}
+                                      // disabled={disableMember}
                                       helperText={
                                         error
                                           ? memberHelper.countryCode[

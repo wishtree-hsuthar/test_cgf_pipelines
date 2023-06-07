@@ -284,7 +284,7 @@ function PreviewQuestionnaire(props) {
         },
         () => questionnairePreviewRef.current()
       );
-      return setTimeout(() => navigate("/questionnaires"), 3000);
+      return setTimeout(() => navigate("/questionnaires",{state: 0}), 3000);
     } catch (error) {
       handleError(error);
     } finally {
@@ -304,7 +304,7 @@ function PreviewQuestionnaire(props) {
         },
         () => questionnairePreviewRef.current()
       );
-      return setTimeout(() => navigate("/questionnaires"), 3000);
+      return setTimeout(() => navigate("/questionnaires",{state: 1}), 3000);
     } catch (error) {
       handleError(error);
     } finally {
@@ -372,8 +372,9 @@ function PreviewQuestionnaire(props) {
                 // onClick={() => navigate(`/questionnaires`)}
                 to="/questionnaires"
                 style={{ cursor: "pointer" }}
+                state={questionnaire?.isPublished ? 0 : 1}
               >
-                Questionnaire
+                Questionnaire  {questionnaire?.isPublished ? "(Published)" : "(Drafted)"}
               </Link>
             </li>
 

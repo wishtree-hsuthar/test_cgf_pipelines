@@ -814,7 +814,7 @@ const ViewMember = () => {
                       Edit
                     </li>
                   )}
-                  {isPendingMember && (
+                  {isPendingMember && member?.memberRepresentativeId?.length > 0 && (
                     <li onClick={onReInviteClick}>Re-Invite</li>
                   )}
                   <li
