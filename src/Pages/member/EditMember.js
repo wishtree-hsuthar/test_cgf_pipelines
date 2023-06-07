@@ -143,7 +143,7 @@ const EditMember = () => {
       cgfOfficeCountry: data.cgfOfficeCountry,
       cgfOffice: data.cgfOffice,
       memberRepresentative: {
-        id: member?.memberRepresentativeId[0]?._id,
+        id: member?.memberRepresentativeId?._id,
         title: data.title,
         department: data.department,
         salutation: data.memberContactSalutation,
@@ -391,16 +391,16 @@ const EditMember = () => {
       cgfOfficeRegion: data?.cgfOfficeRegion,
       cgfOfficeCountry: data?.cgfOfficeCountry,
       cgfOffice: data?.cgfOffice,
-      memberContactSalutation: data?.memberRepresentativeId[0]?.salutation ?? "Mr.",
-      memberContactFullName: data?.memberRepresentativeId[0]?.name,
-      title: data?.memberRepresentativeId[0]?.title,
-      department: data?.memberRepresentativeId[0]?.department,
-      memberContactCountryCode: data?.memberRepresentativeId[0]?.countryCode,
-      memberContactEmail: data?.memberRepresentativeId[0]?.email,
+      memberContactSalutation: data?.memberRepresentativeId?.salutation ?? "Mr.",
+      memberContactFullName: data?.memberRepresentativeId?.name,
+      title: data?.memberRepresentativeId?.title,
+      department: data?.memberRepresentativeId?.department,
+      memberContactCountryCode: data?.memberRepresentativeId?.countryCode,
+      memberContactEmail: data?.memberRepresentativeId?.email,
       memberContactPhoneNuber:
-        data?.memberRepresentativeId[0]?.phoneNumber?.toString(),
-      status: data?.memberRepresentativeId[0]?.isActive ? "active" : "inactive",
-      roleId: data?.memberRepresentativeId[0]?.roleId,
+        data?.memberRepresentativeId?.phoneNumber?.toString(),
+      status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
+      roleId: data?.memberRepresentativeId?.role?._id ?? "N/A",
     });
     setMember(data);
     getCites();
@@ -510,7 +510,7 @@ const EditMember = () => {
             ) : (
               <div className="card-wrapper">
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Company Detail</h2>
+                  <h2 className="sub-heading1">Company Details</h2>
                   <div className="card-blk flex-between">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -855,7 +855,7 @@ const EditMember = () => {
                   </div>
                 </div> */}
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Company Address Detail</h2>
+                  <h2 className="sub-heading1">Company Address Details</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -1056,7 +1056,7 @@ const EditMember = () => {
                 </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">
-                    Representative Contact Detail
+                    Representative Contact Details
                   </h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">

@@ -526,7 +526,7 @@ const ViewMember = () => {
       // });
       // const data = response?.data
       console.log("data", data);
-      const roleName = await getRoleNameByRoleId(isMounted, controller, data);
+      // const roleName = await getRoleNameByRoleId(isMounted, controller, data);
       Logger.debug("data: ", data);
       setMember({ ...data });
       resetObj = {
@@ -548,20 +548,20 @@ const ViewMember = () => {
         cgfOfficeRegion: data?.cgfOfficeRegion ?? "N/A",
         cgfOfficeCountry: data?.cgfOfficeCountry ?? "N/A",
         cgfOffice: data?.cgfOffice ?? "N/A",
-        memberContactSalutation: data?.memberRepresentativeId[0]?.salutation,
-        memberContactFullName: data?.memberRepresentativeId[0]?.name ?? "N/A",
-        title: data?.memberRepresentativeId[0]?.title ?? "N/A",
-        department: data?.memberRepresentativeId[0]?.department ?? "N/A",
+        memberContactSalutation: data?.memberRepresentativeId?.salutation,
+        memberContactFullName: data?.memberRepresentativeId?.name ?? "N/A",
+        title: data?.memberRepresentativeId?.title ?? "N/A",
+        department: data?.memberRepresentativeId?.department ?? "N/A",
         memberContactCountryCode:
-          data?.memberRepresentativeId[0]?.countryCode ?? "N/A",
-        memberContactEmail: data?.memberRepresentativeId[0]?.email ?? "N/A",
+          data?.memberRepresentativeId?.countryCode ?? "N/A",
+        memberContactEmail: data?.memberRepresentativeId?.email ?? "N/A",
         memberContactPhoneNuber:
-          data?.memberRepresentativeId[0]?.phoneNumber?.toString() ?? "N/A",
-        status: data?.memberRepresentativeId[0]?.isActive
+          data?.memberRepresentativeId?.phoneNumber?.toString() ?? "N/A",
+        status: data?.memberRepresentativeId?.isActive
           ? "active"
           : "inactive",
         createdBy: data?.createdBy["name"] ?? "N/A",
-        roleId: roleName,
+        roleId: data?.memberRepresentativeId?.role?.name ?? "N/A",
         // roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
       };
       reset({ ...resetObj });
@@ -669,18 +669,7 @@ const ViewMember = () => {
       }
     } catch (error) {}
   };
-  const getRoleNameByRoleId = async (isMounted, controller, data) => {
-    try {
-      const roleId = data?.memberRepresentativeId?.[0]?.roleId;
-      if (!roleId) return "";
-      const response = await axios.get(VIEW_ROLE + roleId);
-      Logger.debug("response", response?.data?.name);
-      return response?.data?.name;
-    } catch (error) {
-      Logger.debug("error in get role", error);
-      if (error?.code === "ERR_CANCELED") return;
-    }
-  };
+ 
   const callGetCategories = async () => {
     MEMBER_LOOKUP = await getCategories();
     Logger.debug("MEMBER LOOKUP", MEMBER_LOOKUP);
@@ -811,7 +800,7 @@ const ViewMember = () => {
                       Edit
                     </li>
                   )}
-                  {isPendingMember && member?.memberRepresentativeId?.length > 0 && (
+                  {isPendingMember && Object.keys(member?.memberRepresentativeId ?? {}).length > 0 && (
                     <li onClick={onReInviteClick}>Re-Invite</li>
                   )}
                   <li
@@ -1260,7 +1249,7 @@ const ViewMember = () => {
                             readOnly
                             value={
                               member?.memberRepresentativeId
-                                ? member?.memberRepresentativeId[0]?.countryCode
+                                ? member?.memberRepresentativeId?.countryCode
                                 : ""
                             }
                             options={arrOfCountryCode}
@@ -1302,7 +1291,7 @@ const ViewMember = () => {
                           // {...field}
                           value={
                             member?.memberRepresentativeId &&
-                            member?.memberRepresentativeId[0]?.isActive
+                            member?.memberRepresentativeId?.isActive
                               ? "active"
                               : "inactive"
                           }
