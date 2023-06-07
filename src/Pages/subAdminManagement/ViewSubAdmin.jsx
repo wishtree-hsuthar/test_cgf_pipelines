@@ -31,7 +31,7 @@ const ViewSubAdmin = () => {
   //custom hook to set title of page
   useDocumentTitle("View CGF Admin");
   const params = useParams();
-  const state = params["*"].includes("pending") ? 1 : 0
+  const state = params["*"].includes("pending") ? 1 : 0;
   // state to manage loader
   const [
     openDeleteDialogBoxPendingCGFAdmin,
@@ -39,7 +39,7 @@ const ViewSubAdmin = () => {
   ] = useState(false);
   const [isCgfLoading, setIsCgfLoading] = useState(true);
   const history = useNavigate();
-  
+
   const toasterRef = useRef();
   const navigate = useNavigate();
   const [toasterDetails, setToasterDetails] = useCallbackState({
@@ -100,14 +100,14 @@ const ViewSubAdmin = () => {
         setToasterDetails(
           {
             titleMessage: "Success",
-            descriptionMessage: response.data.message,
+            descriptionMessage: `${fetchedSubAdminDetails.name} deleted!`,
             messageType: "success",
           },
           () => toasterRef.current()
         );
         setOpenDeleteDialog(false);
         setTimeout(() => {
-          navigate("/users/cgf-admin/",{state});
+          navigate("/users/cgf-admin/", { state });
         }, 2000);
       }
     } catch (error) {

@@ -1,7 +1,7 @@
 //Third party imports
 import DownloadIcon from "@mui/icons-material/Download";
 import { Checkbox, MenuItem, Select } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 //Internal Imports
@@ -56,7 +56,7 @@ const MemberList = () => {
     ? true
     : moduleAccesForMember[0]?.member?.view;
   console.log("check View Access:- ", checkViewAccess);
-  
+
   Logger.debug(
     "module access member in view member",
     moduleAccesForMember[0]?.member
@@ -160,6 +160,11 @@ const MemberList = () => {
       setOnboardedPage(1);
     }
   };
+  useEffect(() => {
+    setValue(state ? state : 0);
+    navigate("", { state: 0 });
+  }, []);
+
   return (
     <div className="page-wrapper">
       <Toaster
@@ -345,15 +350,15 @@ const MemberList = () => {
               />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <PendingMember 
-               pendingPage={pendingPage}
-               setPendingPage={setPendingPage}
-               makeApiCallMemberList={makeApiCallMemberList}
-               searchMember={searchMember}
-               searchTimeoutMemberList={searchTimeoutMemberList}
-               setToasterDetailsMemberList={setToasterDetailsMemberList}
-               memberRef={memberRef}
-               checkViewAccess={checkViewAccess}
+              <PendingMember
+                pendingPage={pendingPage}
+                setPendingPage={setPendingPage}
+                makeApiCallMemberList={makeApiCallMemberList}
+                searchMember={searchMember}
+                searchTimeoutMemberList={searchTimeoutMemberList}
+                setToasterDetailsMemberList={setToasterDetailsMemberList}
+                memberRef={memberRef}
+                checkViewAccess={checkViewAccess}
               />
             </TabPanel>
           </div>
