@@ -510,7 +510,7 @@ const EditMember = () => {
             ) : (
               <div className="card-wrapper">
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Company Detail</h2>
+                  <h2 className="sub-heading1">Company Details</h2>
                   <div className="card-blk flex-between">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -855,7 +855,7 @@ const EditMember = () => {
                   </div>
                 </div> */}
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Company Address Detail</h2>
+                  <h2 className="sub-heading1">Company Address Details</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -1056,7 +1056,7 @@ const EditMember = () => {
                 </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">
-                    Representative Contact Detail
+                    Representative Contact Details
                   </h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
