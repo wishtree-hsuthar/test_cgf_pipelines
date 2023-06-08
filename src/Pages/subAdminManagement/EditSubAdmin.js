@@ -63,7 +63,7 @@ const EditSubAdmin = () => {
 
   const navigate = useNavigate();
   const params = useParams();
-  const state = params["*"].includes("pending") ? 1 : 0
+  const state = params["*"].includes("pending") ? 1 : 0;
   const toasterRef = useRef();
 
   const [countries, setCountries] = useState([]);
@@ -220,7 +220,7 @@ const EditSubAdmin = () => {
         );
 
         setTimeout(() => {
-          navigate(`/users/cgf-admin/`,{state});
+          navigate(`/users/cgf-admin/`, { state });
         }, 2000);
       }
     } catch (error) {
@@ -232,7 +232,7 @@ const EditSubAdmin = () => {
   };
 
   const handleCancel = () => {
-    navigate("/users/cgf-admin/",{state});
+    navigate("/users/cgf-admin/", { state });
   };
   return (
     <div className="page-wrapper">
