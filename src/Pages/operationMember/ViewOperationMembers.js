@@ -69,7 +69,7 @@ const ViewOperationMembers = () => {
   });
   const navigate = useNavigate();
   const params = useParams();
-  const state = params["*"].includes("pending") ? 1 : 0
+  const state = params["*"].includes("pending") ? 1 : 0;
   const toasterRef = useRef();
   const [toasterDetails, setToasterDetails] = useCallbackState({
     titleMessage: "",
@@ -81,6 +81,7 @@ const ViewOperationMembers = () => {
   const [countries, setCountries] = useState([]);
   const [memberCompanies, setMemberCompanies] = useState();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [preventEditDialogBox, setPreventEditDialogBox] = useState(false);
 
   const [fetchOperationMemberDetaills, setFetchOperationMemberDetaills] =
     useState({});
@@ -240,7 +241,7 @@ const ViewOperationMembers = () => {
         );
         setOpenDeleteDialog(false);
         setTimeout(() => {
-          navigate("/users/operation-members",{state});
+          navigate("/users/operation-members", { state });
         }, 2000);
       }
     } catch (error) {
@@ -252,7 +253,7 @@ const ViewOperationMembers = () => {
   const withdrawInviteById = async () => {
     try {
       const response = await privateAxios.delete(
-        WITHDRAW_OPERATION_MEMBER + params?.id 
+        WITHDRAW_OPERATION_MEMBER + params?.id
       );
       if (response.status == 200) {
         Logger.debug("operation member  invite withdrawn successfully");
@@ -267,7 +268,7 @@ const ViewOperationMembers = () => {
         // call getPendingOperationMember below
         setOpenDeleteDialogBoxPendingOperationMember(false);
         setTimeout(() => {
-          navigate("/users/operation-members",{state});
+          navigate("/users/operation-members", { state });
         }, 2000);
       }
     } catch (error) {
@@ -283,13 +284,26 @@ const ViewOperationMembers = () => {
     Logger.debug("clicked", index);
     Logger.debug(index);
     if (index === 0) {
-      params["*"].includes("pending")
-        ? navigate(
-            `/users/operation-member/pending/edit-operation-member/${params.id}`
-          )
-        : navigate(
-            `/users/operation-member/edit-operation-member/${params.id}`
-          );
+      if (fetchOperationMemberDetaills?.memberId?.isActive) {
+        Logger.debug(
+          "member company is active",
+          fetchOperationMemberDetaills?.isActive
+        );
+
+        params["*"].includes("pending")
+          ? navigate(
+              `/users/operation-member/pending/edit-operation-member/${params.id}`
+            )
+          : navigate(
+              `/users/operation-member/edit-operation-member/${params.id}`
+            );
+      } else {
+        Logger.debug(
+          "member company is active",
+          fetchOperationMemberDetaills?.isActive
+        );
+        setPreventEditDialogBox(true);
+      }
     }
     if (index === 1) {
       navigate(`/users/operation-member/replace-operation-member/${params.id}`);
@@ -314,7 +328,10 @@ const ViewOperationMembers = () => {
   };
 
   const hideDeleteOption = () => {
-    if (fetchOperationMemberDetaills.isMemberRepresentative) {
+    if (
+      fetchOperationMemberDetaills.isMemberRepresentative &&
+      !params["*"].includes("pending")
+    ) {
       return true;
     } else {
       return SUPER_ADMIN
@@ -421,6 +438,23 @@ const ViewOperationMembers = () => {
         }}
         openModal={openDeleteDialogBoxPendingOperationMember}
         setOpenModal={setOpenDeleteDialogBoxPendingOperationMember}
+        isModalForm={false}
+      />
+      <DialogBox
+        title={<p>Alert</p>}
+        info1={
+          <p>
+            Edit operation is not allowed on <b>Operation Member</b> as Member
+            company is Inactive.
+          </p>
+        }
+        // info2={<p>Do you want to withdraw the invitation?</p>}
+        primaryButtonText={"Okay"}
+        onPrimaryModalButtonClickHandler={() => {
+          setPreventEditDialogBox(false);
+        }}
+        openModal={preventEditDialogBox}
+        setOpenModal={setPreventEditDialogBox}
         isModalForm={false}
       />
       <div className="breadcrumb-wrapper">

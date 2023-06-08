@@ -77,7 +77,6 @@ const ViewMember = () => {
   //code to get id from url
   const param = useParams();
 
-
   const tableHead = [
     {
       id: "name",
@@ -158,7 +157,7 @@ const ViewMember = () => {
   });
   // state to hold roles
   const privilege = useSelector((state) => state?.user?.privilege);
-  const state = param["*"].includes("pending") ? 1 : 0
+  const state = param["*"].includes("pending") ? 1 : 0;
   const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
   let viewMemberPrivilegeArray = privilege
     ? Object.values(privilege?.privileges)
@@ -335,7 +334,6 @@ const ViewMember = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const onDialogPrimaryButtonClickHandler = async () => {
     try {
-      
       await axios.delete(MEMBER + `/${param.id}`);
       setToasterDetailsViewMember(
         {
@@ -345,7 +343,7 @@ const ViewMember = () => {
         },
         () => myRef.current()
       );
-      return setTimeout(() => navigate("/users/members",{state}), 3000);
+      return setTimeout(() => navigate("/users/members", { state }), 3000);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       if (error?.response?.data?.hasOwnProperty("activeSessionsCount")) {
@@ -360,7 +358,7 @@ const ViewMember = () => {
     }
   };
   const onDialogSecondaryButtonClickHandler = () => {
-    navigate("/users/members",{state});
+    navigate("/users/members", { state });
   };
   //state to hold member data send by back end
   const [member, setMember] = useState({});
@@ -557,9 +555,7 @@ const ViewMember = () => {
         memberContactEmail: data?.memberRepresentativeId?.email ?? "N/A",
         memberContactPhoneNuber:
           data?.memberRepresentativeId?.phoneNumber?.toString() ?? "N/A",
-        status: data?.memberRepresentativeId?.isActive
-          ? "active"
-          : "inactive",
+        status: data?.isActive ? "active" : "inactive",
         createdBy: data?.createdBy["name"] ?? "N/A",
         roleId: data?.memberRepresentativeId?.role?.name ?? "N/A",
         // roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
@@ -669,7 +665,7 @@ const ViewMember = () => {
       }
     } catch (error) {}
   };
- 
+
   const callGetCategories = async () => {
     MEMBER_LOOKUP = await getCategories();
     Logger.debug("MEMBER LOOKUP", MEMBER_LOOKUP);
@@ -691,8 +687,12 @@ const ViewMember = () => {
     else navigate(`/users/members/edit-member/${param.id}`);
   };
   const onReInviteClick = () => {
-    
-    ResendEmail(member?.memberRepresentativeId?.inviteId ?? "", setToasterDetailsViewMember,myRef,navigate )
+    ResendEmail(
+      member?.memberRepresentativeId?.inviteId ?? "",
+      setToasterDetailsViewMember,
+      myRef,
+      navigate
+    );
   };
   useEffect(() => {
     let isMounted = true;
@@ -706,7 +706,7 @@ const ViewMember = () => {
       // getRegions(controller)
       isMounted &&
         makeApiCall &&
-        (isPendingMember || await getOperationMemberByMemberId(controller));
+        (isPendingMember || (await getOperationMemberByMemberId(controller)));
     })();
 
     return () => {
@@ -762,7 +762,13 @@ const ViewMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/members" state={param["*"].includes("pending") ? 1 : 0}>Members  {param["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}</Link>
+              <Link
+                to="/users/members"
+                state={param["*"].includes("pending") ? 1 : 0}
+              >
+                Members{" "}
+                {param["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>View Member</li>
           </ul>
@@ -789,7 +795,7 @@ const ViewMember = () => {
                 style={{ display: isActive ? "block" : "none" }}
               >
                 <ul className="crud-toggle-list">
-                  { (
+                  {
                     <li
                       hidden={
                         SUPER_ADMIN
@@ -800,10 +806,10 @@ const ViewMember = () => {
                     >
                       Edit
                     </li>
-                  )}
-                  {isPendingMember && Object.keys(member?.memberRepresentativeId ?? {}).length > 0 && (
-                    <li onClick={onReInviteClick}>Re-Invite</li>
-                  )}
+                  }
+                  {isPendingMember &&
+                    Object.keys(member?.memberRepresentativeId ?? {}).length >
+                      0 && <li onClick={onReInviteClick}>Re-Invite</li>}
                   <li
                     hidden={
                       SUPER_ADMIN
@@ -930,6 +936,39 @@ const ViewMember = () => {
                       />
                     </div>
                     {/* </div> */}
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="status">
+                        Status <span className="mandatory">*</span>
+                      </label>
+                      <div className="radio-btn-field">
+                        <RadioGroup
+                          // {...field}
+                          value={
+                            member?.isActive && member?.isActive
+                              ? "active"
+                              : "inactive"
+                          }
+                          aria-labelledby="demo-radio-buttons-group-label"
+                          name="radio-buttons-group"
+                          className="radio-btn"
+                        >
+                          <FormControlLabel
+                            disabled
+                            value="active"
+                            control={<Radio />}
+                            label="Active"
+                          />
+                          <FormControlLabel
+                            disabled
+                            value="inactive"
+                            control={<Radio />}
+                            label="Inactive"
+                          />
+                        </RadioGroup>
+                      </div>
+                    </div>
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
@@ -1282,40 +1321,7 @@ const ViewMember = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="status">
-                        Status <span className="mandatory">*</span>
-                      </label>
-                      <div className="radio-btn-field">
-                        <RadioGroup
-                          // {...field}
-                          value={
-                            member?.memberRepresentativeId &&
-                            member?.memberRepresentativeId?.isActive
-                              ? "active"
-                              : "inactive"
-                          }
-                          aria-labelledby="demo-radio-buttons-group-label"
-                          name="radio-buttons-group"
-                          className="radio-btn"
-                        >
-                          <FormControlLabel
-                            disabled
-                            value="active"
-                            control={<Radio />}
-                            label="Active"
-                          />
-                          <FormControlLabel
-                            disabled
-                            value="inactive"
-                            control={<Radio />}
-                            label="Inactive"
-                          />
-                        </RadioGroup>
-                      </div>
-                    </div>
-                  </div>
+
                   {isPendingMember || (
                     <div className="card-form-field">
                       <div className="form-group">

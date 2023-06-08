@@ -46,7 +46,7 @@ const EditMember = () => {
 
   const param = useParams();
   const isPendingMember = param["*"].includes("pending");
-  const state = param["*"].includes("pending") ? 1 : 0
+  const state = param["*"].includes("pending") ? 1 : 0;
   const navigate = useNavigate();
   const [disableEditMemberUpdateButton, setDisableEditMemberUpdateButton] =
     useState(false);
@@ -142,6 +142,7 @@ const EditMember = () => {
       cgfOfficeRegion: data.cgfOfficeRegion,
       cgfOfficeCountry: data.cgfOfficeCountry,
       cgfOffice: data.cgfOffice,
+      isActive: data.status === "active" ? true : false,
       memberRepresentative: {
         id: member?.memberRepresentativeId?._id,
         title: data.title,
@@ -151,7 +152,7 @@ const EditMember = () => {
         email: data.memberContactEmail,
         countryCode: data.memberContactCountryCode,
         phoneNumber: data?.memberContactPhoneNuber,
-        isActive: data.status === "active" ? true : false,
+        // isActive: data.status === "active" ? true : false,
         roleId: data.roleId,
       },
     };
@@ -183,14 +184,14 @@ const EditMember = () => {
   // On Click cancel handler
   const onClickCancelHandler = () => {
     reset({ defaultValues });
-    navigate("/users/members",{state});
+    navigate("/users/members", { state });
   };
   const onSubmit = (data) => {
     Logger.debug("data", data);
     setDisableEditMemberUpdateButton(true);
 
     onSubmitFunctionCall(data);
-    setTimeout(() => navigate("/users/members",{state}), 3000);
+    setTimeout(() => navigate("/users/members", { state }), 3000);
   };
   const formatRegionCountries1 = (regionCountries) => {
     regionCountries &&
@@ -391,7 +392,8 @@ const EditMember = () => {
       cgfOfficeRegion: data?.cgfOfficeRegion,
       cgfOfficeCountry: data?.cgfOfficeCountry,
       cgfOffice: data?.cgfOffice,
-      memberContactSalutation: data?.memberRepresentativeId?.salutation ?? "Mr.",
+      memberContactSalutation:
+        data?.memberRepresentativeId?.salutation ?? "Mr.",
       memberContactFullName: data?.memberRepresentativeId?.name,
       title: data?.memberRepresentativeId?.title,
       department: data?.memberRepresentativeId?.department,
@@ -399,7 +401,7 @@ const EditMember = () => {
       memberContactEmail: data?.memberRepresentativeId?.email,
       memberContactPhoneNuber:
         data?.memberRepresentativeId?.phoneNumber?.toString(),
-      status: data?.memberRepresentativeId?.isActive ? "active" : "inactive",
+      status: data?.isActive ? "active" : "inactive",
       roleId: data?.memberRepresentativeId?.role?._id ?? "N/A",
     });
     setMember(data);
@@ -661,6 +663,42 @@ const EditMember = () => {
                       </div>
                       {/* </div> */}
                     </div>
+                    {isPendingMember || (
+                      <div className="card-form-field">
+                        <div className="form-group">
+                          <label htmlFor="status">
+                            Status <span className="mandatory">*</span>
+                          </label>
+                          <div className="radio-btn-field">
+                            <Controller
+                              name="status"
+                              control={control}
+                              render={({ field }) => (
+                                <RadioGroup
+                                  {...field}
+                                  aria-labelledby="demo-radio-buttons-group-label"
+                                  name="radio-buttons-group"
+                                  className="radio-btn"
+                                >
+                                  <FormControlLabel
+                                    disabled={isPendingMember}
+                                    value="active"
+                                    control={<Radio />}
+                                    label="Active"
+                                  />
+                                  <FormControlLabel
+                                    disabled={isPendingMember}
+                                    value="inactive"
+                                    control={<Radio />}
+                                    label="Inactive"
+                                  />
+                                </RadioGroup>
+                              )}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <div className="card-form-field">
                       <div className="form-group">
                         {/* <div className="select-field"> */}
@@ -694,6 +732,7 @@ const EditMember = () => {
                     </div>
                   </div>
                 </div>
+
                 {/* <div className="card-inner-wrap">
                   <h2 className="sub-heading1">Contact Detail</h2>
                   <div className="flex-between card-blk">
@@ -1307,42 +1346,6 @@ const EditMember = () => {
                         </div>
                       </div>
                     </div>
-                    {isPendingMember || (
-                      <div className="card-form-field">
-                        <div className="form-group">
-                          <label htmlFor="status">
-                            Status <span className="mandatory">*</span>
-                          </label>
-                          <div className="radio-btn-field">
-                            <Controller
-                              name="status"
-                              control={control}
-                              render={({ field }) => (
-                                <RadioGroup
-                                  {...field}
-                                  aria-labelledby="demo-radio-buttons-group-label"
-                                  name="radio-buttons-group"
-                                  className="radio-btn"
-                                >
-                                  <FormControlLabel
-                                    disabled={isPendingMember}
-                                    value="active"
-                                    control={<Radio />}
-                                    label="Active"
-                                  />
-                                  <FormControlLabel
-                                    disabled={isPendingMember}
-                                    value="inactive"
-                                    control={<Radio />}
-                                    label="Inactive"
-                                  />
-                                </RadioGroup>
-                              )}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
                 <div className="form-btn flex-between add-members-btn">
