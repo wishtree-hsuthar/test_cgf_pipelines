@@ -442,14 +442,14 @@ const ViewOperationMembers = () => {
       />
       <DialogBox
         title={<p>Alert</p>}
-        info1={
-          <p>
+        info1={" "}
+        info2={
+          <p className="mb-30">
             Editing the <b>Operation Member</b> is not allowed on as Member
-            company is Inactive.
+            Company is Inactive.
           </p>
         }
-        // info2={<p>Do you want to withdraw the invitation?</p>}
-        primaryButtonText={"Okay"}
+        primaryButtonText={"OK"}
         onPrimaryModalButtonClickHandler={() => {
           setPreventEditDialogBox(false);
         }}
