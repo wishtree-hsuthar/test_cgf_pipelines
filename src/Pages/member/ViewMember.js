@@ -691,7 +691,8 @@ const ViewMember = () => {
     else navigate(`/users/members/edit-member/${param.id}`);
   };
   const onReInviteClick = () => {
-    ResendEmail(param.id, setToasterDetailsViewMember,myRef,navigate )
+    
+    ResendEmail(member?.memberRepresentativeId?.inviteId ?? "", setToasterDetailsViewMember,myRef,navigate )
   };
   useEffect(() => {
     let isMounted = true;
@@ -705,7 +706,7 @@ const ViewMember = () => {
       // getRegions(controller)
       isMounted &&
         makeApiCall &&
-        (await getOperationMemberByMemberId(controller));
+        (isPendingMember || await getOperationMemberByMemberId(controller));
     })();
 
     return () => {

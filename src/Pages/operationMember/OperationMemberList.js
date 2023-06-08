@@ -78,6 +78,8 @@ function OperationMemberList() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    setPageForOnboardedOperationMemberTab(1)
+    setPageForPendingOperationMemberTab(1)
   };
   const onKeyDownChangeHandler = (e) => {
     if (e.key === "Enter") {

@@ -89,6 +89,8 @@ const MemberList = () => {
   };
 
   const handleChange = (event, newValue) => {
+    setPendingPage(1)
+    setOnboardedPage(1)
     setValue(newValue);
   };
   //method for time based searching
@@ -102,6 +104,7 @@ const MemberList = () => {
       setTimeout(() => {
         setMakeApiCallMemberList(true);
         setOnboardedPage(1);
+        setPendingPage(1);
       }, 1000)
     );
   };

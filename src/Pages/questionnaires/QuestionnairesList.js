@@ -69,6 +69,8 @@ function QuestionnairesList() {
 
   const handleChange = (event, newValue) => {
     setQuestionnaireValue(newValue);
+    setPagePublishedQuestionnaire(1)
+    setPageDraftedQuestionnaire(1)
   };
   const onKeyDownChangeHandler = (e) => {
     if (e.key === "Enter") {
