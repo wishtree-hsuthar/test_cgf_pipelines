@@ -217,9 +217,10 @@ const VersionHistory = () => {
               <Link
                 // onClick={() => navigate(`/questionnaires`)}
                 to="/questionnaires"
+                state={0}
                 style={{ cursor: "pointer" }}
               >
-                Questionnaire
+                Questionnaire (Published)
               </Link>
             </li>
 

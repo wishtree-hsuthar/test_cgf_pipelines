@@ -111,17 +111,23 @@ const SetPassword = () => {
       }
     } catch (error) {
       Logger.debug("error from confirm password", error);
-      setPasswordToasterDetails(
-        {
-          titleMessage: "Oops!",
-          descriptionMessage: error?.response?.data?.message,
-          messageType: "error",
-        },
-        () => setPasswordToasterRef.current()
-      );
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
+      if (error?.response?.status == 400) {
+        Logger.debug("Invalid Token");
+
+        setShowExpiredLinkMessage(true);
+      } else {
+        setPasswordToasterDetails(
+          {
+            titleMessage: "Oops!",
+            descriptionMessage: error?.response?.data?.message,
+            messageType: "error",
+          },
+          () => setPasswordToasterRef.current()
+        );
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
     }
   };
   const handleClickShowConfirmPassword = () => {

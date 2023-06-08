@@ -82,7 +82,7 @@ const SectionContent = ({
   };
   const onDialogPrimaryButtonClickHandler1 = () => {
     setOpenDialog1(false);
-    navigate("/questionnaires");
+    navigate("/questionnaires",{state: questionnaire?.isPublished ? 0 : 1});
   };
   const onDialogSecondaryButtonClickHandler = () => {
     setOpenDialog(false);
@@ -525,7 +525,7 @@ const SectionContent = ({
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialog1, setOpenDialog1] = useState(false);
 
-  const saveSection = async (questionnaireObj, isPublished) => {
+  const saveSection = async (questionnaireObj, isPublished ) => {
     try {
       const response = await privateAxios.post(
         ADD_QUESTIONNAIRE,
@@ -556,8 +556,8 @@ const SectionContent = ({
               },
               () => myRef.current()
             );
-            Logger.debug("index after save section ", index);
-            setTimeout(() => navigate("/questionnaires"), 3000);
+            Logger.debug("isPublished", isPublished);
+            setTimeout(() => navigate("/questionnaires",{state: isPublished ? 0 : 1}), 3000);
             return true;
           } catch (error) {
             Logger.debug("error from fetch questionnaire", error);

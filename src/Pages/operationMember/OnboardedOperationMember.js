@@ -114,9 +114,9 @@ function OnboardedOperationMember({
       delete opMember["isCGFStaff"];
       delete opMember["isOperationMember"];
 
-      opMember["memberCompany"] = opMember["memberData"]["companyName"];
-      opMember["companyType"] = opMember["memberData"]["companyType"];
-      opMember["createdByName"] = opMember["createdBy"]["name"];
+      opMember["memberCompany"] = opMember?.memberData?.companyName ?? "N/A";
+      opMember["companyType"] = opMember?.memberData?.companyType ?? "N/A";
+      opMember["createdByName"] = opMember?.createdBy?.name ?? "N/A";
       opMember["createdAt"] = new Date(
         opMember["createdAt"]
       ).toLocaleDateString("en-US", {

@@ -36,8 +36,8 @@ const helperTextForCGFAdmin = {
   },
   phoneNumber: {
     maxLength: "Max digits limit exceed",
-    minLength: "Enter valid number",
-    validate: "Enter the phone number",
+    minLength: "Enter the valid phone number (Eg: 1234567890)",
+    validate: "Enter the valid phone number (Eg: 1234567890)",
     pattern: "Invalid format",
   },
   name: {
@@ -63,6 +63,7 @@ const EditSubAdmin = () => {
 
   const navigate = useNavigate();
   const params = useParams();
+  const state = params["*"].includes("pending") ? 1 : 0;
   const toasterRef = useRef();
 
   const [countries, setCountries] = useState([]);
@@ -92,7 +93,7 @@ const EditSubAdmin = () => {
       phoneNumber: "",
       countryCode: {
         name: "India",
-        countryCode: "+91",
+        countryCode: "",
       },
       status: "",
       role: "",
@@ -159,7 +160,8 @@ const EditSubAdmin = () => {
           setToasterDetails,
           toasterRef,
           navigate,
-          "/users/cgf-admin"
+          "/users/cgf-admin",
+          state
         );
       }
     };
@@ -218,7 +220,7 @@ const EditSubAdmin = () => {
         );
 
         setTimeout(() => {
-          navigate(`/users/cgf-admin/`);
+          navigate(`/users/cgf-admin/`, { state });
         }, 2000);
       }
     } catch (error) {
@@ -230,7 +232,7 @@ const EditSubAdmin = () => {
   };
 
   const handleCancel = () => {
-    navigate("/users/cgf-admin/");
+    navigate("/users/cgf-admin/", { state });
   };
   return (
     <div className="page-wrapper">
@@ -384,7 +386,7 @@ const EditSubAdmin = () => {
                                     }}
                                     onChange={() => trigger("countryCode")}
                                     // onSubmit={() => setValue("countryCode", "")}
-                                    placeholder={"+91"}
+                                    placeholder={"+00"}
                                     helperText={
                                       error
                                         ? helperTextForCGFAdmin.countryCode[

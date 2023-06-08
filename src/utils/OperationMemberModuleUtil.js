@@ -36,8 +36,8 @@ export const helperText = {
     phoneNumber: {
         required: "Enter the phone number",
         maxLength: "Max digits limit exceed",
-        minLength: "Enter valid number",
-        validate: "Enter phone number",
+        minLength: "Enter the valid phone number (Eg: 1234567890)",
+        validate: "Enter the valid phone number (Eg: 1234567890)",
         // pattern: "Invalid format",
     },
     memberCompany: {

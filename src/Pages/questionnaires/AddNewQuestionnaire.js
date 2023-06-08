@@ -13,7 +13,7 @@ import {
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import SectionContent from "./SectionContent";
 import { v4 as uuidv4 } from "uuid";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import { ADD_QUESTIONNAIRE } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
@@ -41,18 +41,21 @@ const MenuProps = {
 };
 function AddNewQuestionnaire() {
   //custom hook to set title of page
-  useDocumentTitle("Add Questionnaire");
   // state to manage to loader
   const [isQuestionnaireLoading, setIsQuestionnaireLoading] = useState(false);
   const [sameSectionsNames, setSameSectionsNames] = useState([]);
-
+  
   const [value, setValue] = React.useState(0);
   // questionnaire id
   const [err, setErr] = useState({ questionTitle: "", option: "" });
   const [tableErr, setTableErr] = useState("");
   const [questionTitleList, setQuestionTitleList] = useState([]);
-
+  
   const { id } = useParams();
+  const location = useLocation();
+  const { pathname } = location;
+  useDocumentTitle(pathname.includes("edit") ? "Edit Questionnaire" : "Add Questionnaire");
+  console.log("pathname",pathname)
 
   const [globalSectionTitleError, setGlobalSectionTitleError] = useState({
     errMsg: "",
@@ -228,7 +231,7 @@ function AddNewQuestionnaire() {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/questionnaires">Questionnaire</Link>
+              <Link to="/questionnaires" state={questionnaire?.isPublished ? 0 : 1}>Questionnaire {questionnaire?.isPublished ? "(Published)" : "(Drafted)"}</Link>
             </li>
             {(questionnaire?.isDraft || questionnaire?.isPublished) && (
               <li>

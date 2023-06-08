@@ -279,8 +279,8 @@ export default function TableComponent({
                               typeof row[cell] === "undefined" ? (
                               <TableCell key={cell}>
                                 {" "}
-                                {typeof row[cell] === "undefined" && "N/A"}
-                                {typeof row[cell] === "string" &&
+                                {(typeof row[cell] === "undefined" || row[cell] === "") && "N/A"}
+                                {typeof row[cell] === "string" && row[cell]?.length > 0 &&
                                 cell !== "email"
                                   ? row[cell][0].toUpperCase() +
                                     row[cell]?.slice(1)

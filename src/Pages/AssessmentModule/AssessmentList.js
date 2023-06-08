@@ -216,9 +216,9 @@ const AssessmentList = () => {
       delete object["createdAt"];
       delete object["remarks"];
 
-      object["assignedMember.name"] = object["assignedMember"]["name"];
+      object["assignedMember.name"] = object?.assignedMember?.name ?? "N/A";
       object["assignedOperationMember.name"] =
-        object["assignedOperationMember"]["name"];
+        object?.assignedOperationMember?.name ?? "N/A";
       object["isUserAuthorizedToFillAssessment"] =
         userAuth._id === object["assignedOperationMember"]["_id"]
           ? true

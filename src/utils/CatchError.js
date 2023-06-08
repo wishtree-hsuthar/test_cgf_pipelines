@@ -3,7 +3,8 @@ export const catchError = async (
   setToasterDetails,
   myRef,
   navigate,
-  route
+  route,
+  state = 0
 ) => {
   if (error.response.status == 401) {
     setToasterDetails(
@@ -50,7 +51,7 @@ export const catchError = async (
     );
     if (route) {
       setTimeout(() => {
-        navigate(route);
+        navigate(route,{state});
       }, 3000);
     }
   }

@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DownloadIcon from "@mui/icons-material/Download";
-import { Logger } from "../../Logger/Logger";
-import DialogBox from "../../components/DialogBox";
-import Toaster from "../../components/Toaster";
-import useCallbackState from "../../utils/useCallBackState";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   Autocomplete,
   Checkbox,
@@ -16,30 +11,38 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import Dropdown from "../../components/Dropdown";
-import { useForm } from "react-hook-form";
-import Input from "../../components/Input";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Logger } from "../../Logger/Logger";
 import {
   COUNTRIES,
   MEMBER,
   MEMBER_OPERATION_MEMBERS,
+  PENDING_MEMBER,
   REGIONCOUNTRIES,
   REGIONS,
   STATES,
   VIEW_ROLE,
+  WITHDRAW_MEMBER_INVITE,
 } from "../../api/Url";
-import TableComponent from "../../components/TableComponent";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
-import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import DialogBox from "../../components/DialogBox";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
+import TableComponent from "../../components/TableComponent";
+import Toaster from "../../components/Toaster";
+import Loader from "../../utils/Loader";
 import {
   defaultValues,
-  getCategories,
   getCGFOffices,
+  getCategories,
 } from "../../utils/MemberModuleUtil";
-import Loader from "../../utils/Loader";
+import useCallbackState from "../../utils/useCallBackState";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import { ResendEmail } from "../../utils/ResendEmail";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -70,6 +73,9 @@ const ViewMember = () => {
   //Code for Operatiom Member List
   //custom hook to set title of page
   useDocumentTitle("View Member");
+
+  //code to get id from url
+  const param = useParams();
 
   const tableHead = [
     {
@@ -151,6 +157,7 @@ const ViewMember = () => {
   });
   // state to hold roles
   const privilege = useSelector((state) => state?.user?.privilege);
+  const state = param["*"].includes("pending") ? 1 : 0;
   const SUPER_ADMIN = privilege?.name === "Super Admin" ? true : false;
   let viewMemberPrivilegeArray = privilege
     ? Object.values(privilege?.privileges)
@@ -291,6 +298,7 @@ const ViewMember = () => {
   };
 
   //code to View Member Fields
+  let resetObj = {};
   const myHelper = {};
   //Refr for Toaster
   const myRef = React.useRef();
@@ -316,9 +324,7 @@ const ViewMember = () => {
       () => myRef.current()
     );
   };
-
-  //code to get id from url
-  const param = useParams();
+  const isPendingMember = param["*"].includes("pending");
   //code form View Member
   const navigate = useNavigate();
   const [isActive, setActive] = useState(false);
@@ -337,7 +343,7 @@ const ViewMember = () => {
         },
         () => myRef.current()
       );
-      return setTimeout(() => navigate("/users/members"), 3000);
+      return setTimeout(() => navigate("/users/members", { state }), 3000);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       if (error?.response?.data?.hasOwnProperty("activeSessionsCount")) {
@@ -352,7 +358,7 @@ const ViewMember = () => {
     }
   };
   const onDialogSecondaryButtonClickHandler = () => {
-    navigate("/users/members");
+    navigate("/users/members", { state });
   };
   //state to hold member data send by back end
   const [member, setMember] = useState({});
@@ -414,6 +420,7 @@ const ViewMember = () => {
       }
       return [];
     } catch (error) {
+      console.log("error in get Countries");
       if (error?.code === "ERR_CANCELED") return;
 
       return [];
@@ -428,6 +435,7 @@ const ViewMember = () => {
         signal: controller.signal,
       });
       setArrOfRegions(regions?.data ?? []);
+      console.log("region value:- ", watch("region"));
       const countriesOnRegion1 = await getCountries(watch("region"));
       const arrOfCountryRegionsTemp1 = formatRegionCountries(
         countriesOnRegion1?.data
@@ -482,20 +490,44 @@ const ViewMember = () => {
       }
     }
   };
+  const getMemberAPICall = async () => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    try {
+      setIsViewMemberLoading(true);
+      if (isPendingMember) {
+        const response = await axios.get(PENDING_MEMBER + `/${param.id}`, {
+          signal: controller.signal,
+        });
+        console.log("response for pending member:- ", response?.data);
+        return response.data;
+      } else {
+        const response = await axios.get(MEMBER + `/${param.id}`, {
+          signal: controller.signal,
+        });
+        return response?.data;
+      }
+    } catch (error) {
+    } finally {
+      setIsViewMemberLoading(false);
+    }
+  };
   const getMemberByID = async (
     isMounted = true,
     controller = new AbortController()
   ) => {
     try {
-      setIsViewMemberLoading(true);
-      const response = await axios.get(MEMBER + `/${param.id}`, {
-        signal: controller.signal,
-      });
-      const data = response.data;
-      const roleName = await getRoleNameByRoleId(isMounted, controller, data);
+      const data = await getMemberAPICall();
+      // const response = await axios.get(MEMBER + `/${param.id}`, {
+      //   signal: controller.signal,
+      // });
+      // const data = response?.data
+      console.log("data", data);
+      // const roleName = await getRoleNameByRoleId(isMounted, controller, data);
       Logger.debug("data: ", data);
       setMember({ ...data });
-      reset({
+      resetObj = {
         memberCompany: data?.companyName ?? "N/A",
         companyType: data?.companyType ?? "N/A",
         parentCompany: data?.parentCompany ?? "N/A",
@@ -514,23 +546,21 @@ const ViewMember = () => {
         cgfOfficeRegion: data?.cgfOfficeRegion ?? "N/A",
         cgfOfficeCountry: data?.cgfOfficeCountry ?? "N/A",
         cgfOffice: data?.cgfOffice ?? "N/A",
-        memberContactSalutation: data?.memberRepresentativeId[0]?.salutation,
-        memberContactFullName: data?.memberRepresentativeId[0]?.name ?? "N/A",
-        title: data?.memberRepresentativeId[0]?.title ?? "N/A",
-        department: data?.memberRepresentativeId[0]?.department ?? "N/A",
+        memberContactSalutation: data?.memberRepresentativeId?.salutation,
+        memberContactFullName: data?.memberRepresentativeId?.name ?? "N/A",
+        title: data?.memberRepresentativeId?.title ?? "N/A",
+        department: data?.memberRepresentativeId?.department ?? "N/A",
         memberContactCountryCode:
-          data?.memberRepresentativeId[0]?.countryCode ?? "N/A",
-        memberContactEmail: data?.memberRepresentativeId[0]?.email ?? "N/A",
+          data?.memberRepresentativeId?.countryCode ?? "N/A",
+        memberContactEmail: data?.memberRepresentativeId?.email ?? "N/A",
         memberContactPhoneNuber:
-          data?.memberRepresentativeId[0]?.phoneNumber?.toString() ?? "N/A",
-        status: data?.memberRepresentativeId[0]?.isActive
-          ? "active"
-          : "inactive",
-        // totalOperationMembers: data?.totalOperationMembers ?? "N/A",
+          data?.memberRepresentativeId?.phoneNumber?.toString() ?? "N/A",
+        status: data?.isActive ? "active" : "inactive",
         createdBy: data?.createdBy["name"] ?? "N/A",
-        roleId: roleName,
+        roleId: data?.memberRepresentativeId?.role?.name ?? "N/A",
         // roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
-      });
+      };
+      reset({ ...resetObj });
       setIsViewMemberLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
@@ -579,6 +609,7 @@ const ViewMember = () => {
       });
       setTotalRecordsInViewMember(parseInt(response.headers["x-total-count"]));
       reset({
+        ...resetObj,
         totalOperationMembers: parseInt(response.headers["x-total-count"]),
       });
       updateRecords(response?.data);
@@ -634,18 +665,7 @@ const ViewMember = () => {
       }
     } catch (error) {}
   };
-  const getRoleNameByRoleId = async (isMounted, controller, data) => {
-    try {
-      const roleId = data?.memberRepresentativeId?.[0]?.roleId;
-      if (!roleId) return "";
-      const response = await axios.get(VIEW_ROLE + roleId);
-      Logger.debug("response", response?.data?.name);
-      return response?.data?.name;
-    } catch (error) {
-      Logger.debug("error in get role", error);
-      if (error?.code === "ERR_CANCELED") return;
-    }
-  };
+
   const callGetCategories = async () => {
     MEMBER_LOOKUP = await getCategories();
     Logger.debug("MEMBER LOOKUP", MEMBER_LOOKUP);
@@ -661,6 +681,19 @@ const ViewMember = () => {
       // setPage(1)
     }
   };
+  const onEditClick = () => {
+    if (isPendingMember)
+      navigate(`/users/members/edit-member/pending/${param.id}`);
+    else navigate(`/users/members/edit-member/${param.id}`);
+  };
+  const onReInviteClick = () => {
+    ResendEmail(
+      member?.memberRepresentativeId?.inviteId ?? "",
+      setToasterDetailsViewMember,
+      myRef,
+      navigate
+    );
+  };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -673,7 +706,7 @@ const ViewMember = () => {
       // getRegions(controller)
       isMounted &&
         makeApiCall &&
-        (await getOperationMemberByMemberId(controller));
+        (isPendingMember || (await getOperationMemberByMemberId(controller)));
     })();
 
     return () => {
@@ -701,12 +734,7 @@ const ViewMember = () => {
         messageType={toasterDetailsViewMember.messageType}
       />
       <DialogBox
-        title={
-          <p>
-            Delete Member "{member?.companyName ? member.companyName : "Member"}
-            "
-          </p>
-        }
+        title={<p>Delete Member "{member?.companyName}"</p>}
         info1={<p>Deleting all the details will be an irreversible action.</p>}
         info2={
           <p>
@@ -734,7 +762,13 @@ const ViewMember = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/members">Members</Link>
+              <Link
+                to="/users/members"
+                state={param["*"].includes("pending") ? 1 : 0}
+              >
+                Members{" "}
+                {param["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>View Member</li>
           </ul>
@@ -761,21 +795,21 @@ const ViewMember = () => {
                 style={{ display: isActive ? "block" : "none" }}
               >
                 <ul className="crud-toggle-list">
-                  {member?.memberRepresentativeId?.length > 0 && (
+                  {
                     <li
                       hidden={
                         SUPER_ADMIN
                           ? false
                           : !moduleAccesForMember[0]?.member.edit
                       }
-                      onClick={() =>
-                        navigate(`/users/members/edit-member/${param.id}`)
-                      }
+                      onClick={onEditClick}
                     >
                       Edit
                     </li>
-                  )}
-
+                  }
+                  {isPendingMember &&
+                    Object.keys(member?.memberRepresentativeId ?? {}).length >
+                      0 && <li onClick={onReInviteClick}>Re-Invite</li>}
                   <li
                     hidden={
                       SUPER_ADMIN
@@ -905,6 +939,39 @@ const ViewMember = () => {
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
+                      <label htmlFor="status">
+                        Status <span className="mandatory">*</span>
+                      </label>
+                      <div className="radio-btn-field">
+                        <RadioGroup
+                          // {...field}
+                          value={
+                            member?.isActive && member?.isActive
+                              ? "active"
+                              : "inactive"
+                          }
+                          aria-labelledby="demo-radio-buttons-group-label"
+                          name="radio-buttons-group"
+                          className="radio-btn"
+                        >
+                          <FormControlLabel
+                            disabled
+                            value="active"
+                            control={<Radio />}
+                            label="Active"
+                          />
+                          <FormControlLabel
+                            disabled
+                            value="inactive"
+                            control={<Radio />}
+                            label="Inactive"
+                          />
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
                       {/* <div className="select-field"> */}
                       <label htmlFor="cgfActivity">
                         CGF Activity <span className="mandatory">*</span>
@@ -920,7 +987,7 @@ const ViewMember = () => {
                   </div>
                 </div>
               </div>
-              <div className="card-inner-wrap">
+              {/* <div className="card-inner-wrap">
                 <h2 className="sub-heading1">Contact Details</h2>
                 <div className="flex-between card-blk">
                   <div className="card-form-field">
@@ -986,7 +1053,7 @@ const ViewMember = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="card-inner-wrap">
                 <h2 className="sub-heading1">Company Address Details</h2>
                 <div className="flex-between card-blk">
@@ -1092,7 +1159,7 @@ const ViewMember = () => {
                   </div>
                 </div>
               </div>
-              <div className="card-inner-wrap">
+              {/* <div className="card-inner-wrap">
                 <h2 className="sub-heading1">CGF Office Details</h2>
                 <div className="flex-between card-blk">
                   <div className="card-form-field">
@@ -1136,8 +1203,12 @@ const ViewMember = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="card-inner-wrap">
+              </div> */}
+              <div
+                className={`card-inner-wrap ${
+                  isPendingMember || "pening-margin-bottom"
+                }`}
+              >
                 <h2 className="sub-heading1">Representative Contact Details</h2>
                 <div className="flex-between card-blk">
                   <div className="card-form-field">
@@ -1218,7 +1289,7 @@ const ViewMember = () => {
                             readOnly
                             value={
                               member?.memberRepresentativeId
-                                ? member?.memberRepresentativeId[0]?.countryCode
+                                ? member?.memberRepresentativeId?.countryCode
                                 : ""
                             }
                             options={arrOfCountryCode}
@@ -1250,54 +1321,24 @@ const ViewMember = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="status">
-                        Status <span className="mandatory">*</span>
-                      </label>
-                      <div className="radio-btn-field">
-                        <RadioGroup
-                          // {...field}
-                          value={
-                            member?.memberRepresentativeId &&
-                            member?.memberRepresentativeId[0]?.isActive
-                              ? "active"
-                              : "inactive"
-                          }
-                          aria-labelledby="demo-radio-buttons-group-label"
-                          name="radio-buttons-group"
-                          className="radio-btn"
-                        >
-                          <FormControlLabel
-                            disabled
-                            value="active"
-                            control={<Radio />}
-                            label="Active"
-                          />
-                          <FormControlLabel
-                            disabled
-                            value="inactive"
-                            control={<Radio />}
-                            label="Inactive"
-                          />
-                        </RadioGroup>
+
+                  {isPendingMember || (
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="totalOperationMembers">
+                          Total Operation Member{" "}
+                          <span className="mandatory">*</span>
+                        </label>
+                        <Input
+                          isDisabled
+                          control={control}
+                          name="totalOperationMembers"
+                          placeholder="0"
+                        />
                       </div>
                     </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
-                      <label htmlFor="totalOperationMembers">
-                        Total Operation Member{" "}
-                        <span className="mandatory">*</span>
-                      </label>
-                      <Input
-                        isDisabled
-                        control={control}
-                        name="totalOperationMembers"
-                        placeholder="N/A"
-                      />
-                    </div>
-                  </div>
+                  )}
+
                   <div className="card-form-field">
                     <div className="form-group">
                       <label htmlFor="createdBy">
@@ -1341,162 +1382,168 @@ const ViewMember = () => {
                   </div>
                 </div>
               </div>
-
-              <div className="form-header member-form-header flex-between mb-10">
-                <div className="operation-member-left-blk">
-                  {/* <h2 className="heading2 mr-40">Members</h2> */}
-                  <div className="searchbar">
-                    <input
-                      type="text"
-                      value={search}
-                      name="search"
-                      placeholder="Search"
-                      onKeyDown={onKeyDownChangeHandler}
-                      onChange={onSearchChangeHandler}
-                    />
-                    <button type="submit">
-                      <i className="fa fa-search"></i>
-                    </button>
+              {isPendingMember || (
+                <div className="form-header member-form-header flex-between mb-10">
+                  <div className="operation-member-left-blk">
+                    {/* <h2 className="heading2 mr-40">Members</h2> */}
+                    <div className="searchbar">
+                      <input
+                        type="text"
+                        value={search}
+                        name="search"
+                        placeholder="Search"
+                        onKeyDown={onKeyDownChangeHandler}
+                        onChange={onSearchChangeHandler}
+                      />
+                      <button type="submit">
+                        <i className="fa fa-search"></i>
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="form-header-right-txt">
-                  <div
-                    className="tertiary-btn-blk mr-20"
-                    onClick={() => downloadOperationMembers()}
-                  >
-                    <span className="download-icon">
-                      <DownloadIcon />
-                    </span>
-                    Download
-                  </div>
-                  <div
-                    className="form-btn"
-                    hidden={
-                      SUPER_ADMIN === true
-                        ? false
-                        : !moduleAccesForMember[1]?.operationMember?.add
-                      // true
-                    }
-                  >
-                    <button
-                      type="submit"
-                      className="primary-button add-button"
-                      onClick={() =>
-                        navigate(
-                          "/users/operation-members/add-operation-member"
-                        )
+                  <div className="form-header-right-txt">
+                    <div
+                      className="tertiary-btn-blk mr-20"
+                      onClick={() => downloadOperationMembers()}
+                    >
+                      <span className="download-icon">
+                        <DownloadIcon />
+                      </span>
+                      Download
+                    </div>
+                    <div
+                      className="form-btn"
+                      hidden={
+                        SUPER_ADMIN === true
+                          ? false
+                          : !moduleAccesForMember[1]?.operationMember?.add
+                        // true
                       }
                     >
-                      Add Operation Member
-                    </button>
+                      <button
+                        type="submit"
+                        className="primary-button add-button"
+                        onClick={() =>
+                          navigate(
+                            "/users/operation-members/add-operation-member"
+                          )
+                        }
+                      >
+                        Add Operation Member
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="member-filter-sect">
-                <div className="member-filter-wrap flex-between">
-                  <div className="member-filter-left"></div>
-                  <div className="member-filter-right">
-                    <div className="filter-select-wrap flex-between">
-                      <div className="filter-select-field">
-                        <div className="dropdown-field">
-                          <Select
-                            sx={{ display: "none" }}
-                            name="createdBy"
-                            multiple
-                            value={selectedCreatedBy}
-                            onChange={handleCreatedByFilter}
-                            onFocus={(e) => onFilterFocusHandler("createdBy")}
-                            renderValue={(val) =>
-                              selectedCreatedBy.length > 1
-                                ? val.slice(1).join(", ")
-                                : "Created By"
-                            }
-                          >
-                            <MenuItem
-                              value="none"
-                              sx={{
-                                display:
-                                  showFilterPlaceholder === "createdBy" &&
-                                  "none",
-                              }}
+              )}
+              {isPendingMember || (
+                <div className="member-filter-sect">
+                  <div className="member-filter-wrap flex-between">
+                    <div className="member-filter-left"></div>
+                    <div className="member-filter-right">
+                      <div className="filter-select-wrap flex-between">
+                        <div className="filter-select-field">
+                          <div className="dropdown-field">
+                            <Select
+                              sx={{ display: "none" }}
+                              name="createdBy"
+                              multiple
+                              value={selectedCreatedBy}
+                              onChange={handleCreatedByFilter}
+                              onFocus={(e) => onFilterFocusHandler("createdBy")}
+                              renderValue={(val) =>
+                                selectedCreatedBy.length > 1
+                                  ? val.slice(1).join(", ")
+                                  : "Created By"
+                              }
                             >
-                              Created By
-                            </MenuItem>
+                              <MenuItem
+                                value="none"
+                                sx={{
+                                  display:
+                                    showFilterPlaceholder === "createdBy" &&
+                                    "none",
+                                }}
+                              >
+                                Created By
+                              </MenuItem>
 
-                            <MenuItem value="">
-                              <Checkbox
-                                className="table-checkbox"
-                                checked={isAllCreatedByMemberSelected}
-                                indeterminate={
-                                  selectedCreatedBy.length > 1 &&
-                                  selectedCreatedBy.length - 1 <
-                                    allMembers.length
-                                }
-                              />
-                              Select All
-                            </MenuItem>
-                            {allMembers.map((member) => (
-                              <MenuItem key={member} value={member}>
+                              <MenuItem value="">
                                 <Checkbox
                                   className="table-checkbox"
-                                  checked={
-                                    selectedCreatedBy.indexOf(member) > -1
+                                  checked={isAllCreatedByMemberSelected}
+                                  indeterminate={
+                                    selectedCreatedBy.length > 1 &&
+                                    selectedCreatedBy.length - 1 <
+                                      allMembers.length
                                   }
                                 />
-                                {member}
+                                Select All
                               </MenuItem>
-                            ))}
-                          </Select>
+                              {allMembers.map((member) => (
+                                <MenuItem key={member} value={member}>
+                                  <Checkbox
+                                    className="table-checkbox"
+                                    checked={
+                                      selectedCreatedBy.indexOf(member) > -1
+                                    }
+                                  />
+                                  {member}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </div>
                         </div>
-                      </div>
-                      <div className="filter-select-field">
-                        <div className="dropdown-field">
-                          <Select
-                            sx={{ display: "none" }}
-                            name="status"
-                            value={filters.status}
-                            onChange={onFilterChangehandler}
-                            onFocus={(e) => onFilterFocusHandler("status")}
-                          >
-                            <MenuItem
-                              value="none"
-                              sx={{
-                                display:
-                                  showFilterPlaceholder === "status" && "none",
-                              }}
+                        <div className="filter-select-field">
+                          <div className="dropdown-field">
+                            <Select
+                              sx={{ display: "none" }}
+                              name="status"
+                              value={filters.status}
+                              onChange={onFilterChangehandler}
+                              onFocus={(e) => onFilterFocusHandler("status")}
                             >
-                              Status
-                            </MenuItem>
-                            <MenuItem value="active">Active</MenuItem>
-                            <MenuItem value="inactive">Inactive</MenuItem>
-                          </Select>
+                              <MenuItem
+                                value="none"
+                                sx={{
+                                  display:
+                                    showFilterPlaceholder === "status" &&
+                                    "none",
+                                }}
+                              >
+                                Status
+                              </MenuItem>
+                              <MenuItem value="active">Active</MenuItem>
+                              <MenuItem value="inactive">Inactive</MenuItem>
+                            </Select>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="member-info-wrapper table-content-wrap">
-                <TableComponent
-                  tableHead={tableHead}
-                  records={recordsInViewMember}
-                  handleChangePage1={handleTablePageChange}
-                  handleChangeRowsPerPage1={handleRowsPerPageChange}
-                  page={pageInViewMember}
-                  rowsPerPage={rowsPerPageInViewMember}
-                  selected={selected}
-                  setSelected={setSelected}
-                  totalRecords={totalRecordsInViewMember}
-                  orderBy={orderByInViewMember}
-                  // icons={["visibility"]}
-                  onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
-                  order={orderInViewMember}
-                  setOrder={setOrderInViewMember}
-                  setOrderBy={setOrderByInViewMember}
-                  setCheckBoxes={false}
-                  onRowClick
-                />
-              </div>
+              )}
+              {isPendingMember || (
+                <div className="member-info-wrapper table-content-wrap">
+                  <TableComponent
+                    tableHead={tableHead}
+                    records={recordsInViewMember}
+                    handleChangePage1={handleTablePageChange}
+                    handleChangeRowsPerPage1={handleRowsPerPageChange}
+                    page={pageInViewMember}
+                    rowsPerPage={rowsPerPageInViewMember}
+                    selected={selected}
+                    setSelected={setSelected}
+                    totalRecords={totalRecordsInViewMember}
+                    orderBy={orderByInViewMember}
+                    // icons={["visibility"]}
+                    onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
+                    order={orderInViewMember}
+                    setOrder={setOrderInViewMember}
+                    setOrderBy={setOrderByInViewMember}
+                    setCheckBoxes={false}
+                    onRowClick
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>

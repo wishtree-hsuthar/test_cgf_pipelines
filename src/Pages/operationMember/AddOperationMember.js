@@ -20,6 +20,7 @@ import {
   FETCH_OPERATION_MEMBER,
   FETCH_ROLES,
   MEMBER_DROPDOWN,
+  SPECIFIC_MEMBER_DROPDOWN,
 } from "../../api/Url";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
@@ -34,6 +35,7 @@ import Loader from "../../utils/Loader";
 
 import { Logger } from "../../Logger/Logger";
 import { catchError } from "../../utils/CatchError";
+import { useSelector } from "react-redux";
 let OPERATION_TYPES = [];
 function AddOperationMember() {
   //custom hook to set title of page
@@ -61,6 +63,21 @@ function AddOperationMember() {
     defaultValues: defaultValues,
   });
 
+  const userAuth = useSelector((state) => state?.user?.userObj);
+  const { isMemberRepresentative, isOperationMember, memberId } = userAuth;
+  const [hideCgfStaff, setHideCgfStaff] = useState(false);
+
+  const handlememberDropdownAPI = () => {
+    if (isMemberRepresentative || isOperationMember) {
+      console.log("specific url", `${SPECIFIC_MEMBER_DROPDOWN}`);
+      setHideCgfStaff(isMemberRepresentative || isOperationMember);
+      return `${SPECIFIC_MEMBER_DROPDOWN}${memberId}`;
+    } else {
+      console.log("master url", `${SPECIFIC_MEMBER_DROPDOWN}$`);
+
+      return MEMBER_DROPDOWN;
+    }
+  };
   const navigate = useNavigate();
   const [memberComapniesLabelsOnly, setMemberComapniesLabelsOnly] = useState(
     []
@@ -128,7 +145,7 @@ function AddOperationMember() {
     OPERATION_TYPES?.length === 0 && callGetOperationType();
     const fetchMemberComapany = async () => {
       try {
-        const response = await privateAxios.get(MEMBER_DROPDOWN, {
+        const response = await privateAxios.get(handlememberDropdownAPI(), {
           signal: controller.signal,
         });
         Logger.debug(
@@ -174,7 +191,6 @@ function AddOperationMember() {
       } catch (error) {
         Logger.debug("error from fetch member company", error);
         catchError(error, setToasterDetails, toasterRef, navigate);
-       
       }
     };
     let fetchCountries = async () => {
@@ -221,7 +237,6 @@ function AddOperationMember() {
     } catch (error) {
       Logger.debug("error from fetching reporting managers", error);
       catchError(error, setToasterDetails, toasterRef, navigate);
-     
     }
   };
   const addOperationMember = async (data, navigateToListPage) => {
@@ -265,7 +280,7 @@ function AddOperationMember() {
         );
         navigateToListPage === false &&
           setTimeout(() => {
-            navigate("/users/operation-members");
+            navigate("/users/operation-members", { state: 1 });
           }, 3000);
       }
     } catch (error) {
@@ -277,7 +292,6 @@ function AddOperationMember() {
       setDisableAddOperationMemberButton(false);
       setIsAddOperationMemberLoading(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
-     
     }
   };
 
@@ -519,7 +533,7 @@ function AddOperationMember() {
                                 getOptionLabel={(country) => country}
                                 renderInput={(params) => (
                                   <TextField
-                                    placeholder={"+91"}
+                                    placeholder={"+00"}
                                     {...params}
                                     inputProps={{
                                       ...params.inputProps,
@@ -622,11 +636,13 @@ function AddOperationMember() {
                                 value="true"
                                 control={<Radio />}
                                 label="Yes"
+                                disabled={hideCgfStaff}
                               />
                               <FormControlLabel
                                 value="false"
                                 control={<Radio />}
                                 label="No"
+                                disabled={hideCgfStaff}
                               />
                             </RadioGroup>
                           )}
@@ -843,7 +859,9 @@ function AddOperationMember() {
                   <div className="form-btn flex-between add-members-btn">
                     <button
                       type={"reset"}
-                      onClick={() => navigate("/users/operation-members")}
+                      onClick={() =>
+                        navigate("/users/operation-members", { state: 0 })
+                      }
                       className="secondary-button mr-10"
                     >
                       Cancel

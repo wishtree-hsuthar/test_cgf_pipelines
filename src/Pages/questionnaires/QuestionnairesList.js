@@ -1,7 +1,7 @@
 import { Box, Tab, Tabs } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { TabPanel } from "../../utils/tabUtils/TabPanel";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
@@ -18,6 +18,7 @@ function QuestionnairesList() {
   //custom hook to set title of page
   useDocumentTitle("Questionnaires");
   const navigateQuestionnaire = useNavigate();
+  const { state } = useLocation();
   const addQuestionnaire = () => {
     navigateQuestionnaire(`/questionnaires/add-questionnaire/${uuidv4()}`);
   };
@@ -68,6 +69,8 @@ function QuestionnairesList() {
 
   const handleChange = (event, newValue) => {
     setQuestionnaireValue(newValue);
+    setPagePublishedQuestionnaire(1)
+    setPageDraftedQuestionnaire(1)
   };
   const onKeyDownChangeHandler = (e) => {
     if (e.key === "Enter") {
@@ -76,7 +79,9 @@ function QuestionnairesList() {
       setMakeApiCallQuestionnaire(true);
     }
   };
-
+  useEffect(()=>{
+    setQuestionnaireValue(state ? state : 0);
+  },[])
   return (
     <div className="page-wrapper">
       <section>

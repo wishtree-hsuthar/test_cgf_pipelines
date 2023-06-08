@@ -210,13 +210,13 @@ const AddMember = () => {
   // On Click cancel handler
   const onClickCancelHandlerAddMember = () => {
     reset({ tempDefaultValues });
-    navigate("/users/members");
+    navigate("/users/members",{state:0});
   };
   const onSubmitAddMember = async (data) => {
     Logger.debug("data", data);
     const isSubmited = await onSubmitFunctionCallAddMember(data);
     Logger.debug("is Submited", isSubmited);
-    isSubmited && setTimeout(() => navigate("/users/members"), 3000);
+    isSubmited && setTimeout(() => navigate("/users/members",{state:1}), 3000);
   };
   //method to handle on add more button click handler
   const onAddMoreButtonClickHandlerAddMember = async (data) => {
@@ -512,7 +512,7 @@ const AddMember = () => {
             ) : (
               <div className="card-wrapper">
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Company Detail</h2>
+                  <h2 className="sub-heading1">Company Details</h2>
                   <div className="card-blk flex-between">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -692,7 +692,7 @@ const AddMember = () => {
                     </div>
                   </div>
                 </div>
-                <div className="card-inner-wrap">
+                {/* <div className="card-inner-wrap">
                   <h2 className="sub-heading1">Contact Detail</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
@@ -777,7 +777,7 @@ const AddMember = () => {
                                       }}
                                       // onChange={() => trigger("phoneNumber")}
                                       // onSubmit={() => setValue("countryCode", "")}
-                                      placeholder={"+91"}
+                                      placeholder={"+00"}
                                       helperText={
                                         error
                                           ? memberHelper.countryCode[
@@ -844,9 +844,9 @@ const AddMember = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Company Address Detail</h2>
+                  <h2 className="sub-heading1">Company Address Details</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
                       <div className="form-group">
@@ -987,7 +987,7 @@ const AddMember = () => {
                     </div>
                   </div>
                 </div>
-                <div className="card-inner-wrap">
+                {/* <div className="card-inner-wrap">
                   <h2 className="sub-heading1">CGF Office Detail</h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
@@ -1029,10 +1029,10 @@ const AddMember = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">
-                    Representative Contact Detail
+                    Representative Contact Details
                   </h2>
                   <div className="flex-between card-blk">
                     <div className="card-form-field">
@@ -1192,7 +1192,7 @@ const AddMember = () => {
                                   // sx={{ width: 200 }}
                                   options={arrOfCountryCodeAddMember}
                                   autoHighlight
-                                  placeholder="+91"
+                                  placeholder="+00"
                                   // getOptionLabel={(country) => country.name + " " + country}
                                   renderOption={(props, option) => (
                                     <li {...props}>{option}</li>
@@ -1207,7 +1207,7 @@ const AddMember = () => {
                                       // onSubmit={() =>
                                       //   setValue("memberContactCountryCode", "")
                                       // }
-                                      placeholder={"+91"}
+                                      placeholder={"+00"}
                                       helperText={
                                         error
                                           ? memberHelper
@@ -1247,7 +1247,7 @@ const AddMember = () => {
                                   watch("memberContactCountryCode") &&
                                   !watch("memberContactPhoneNuber")
                                 )
-                                  return "invalid input";
+                                  return "Invalid input";
                                 if (value && !Number(value))
                                   return "Invalid input";
                               },
