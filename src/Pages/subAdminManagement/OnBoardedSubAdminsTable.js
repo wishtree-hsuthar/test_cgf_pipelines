@@ -52,11 +52,8 @@ function OnBoardedSubAdminsTable({
   makeApiCall,
   setMakeApiCall,
   search,
-  filters,
-  selectedRoles,
 }) {
   const navigate = useNavigate();
-  // const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("");
@@ -67,7 +64,6 @@ function OnBoardedSubAdminsTable({
     useState(true);
 
   //state to hold search timeout delay
-  const [searchTimeout, setSearchTimeout] = useState(null);
   //state to hold wheather to make api call or not
   // const [makeApiCall, setMakeApiCall] = useState(true);
   //Refr for Toaster
@@ -94,7 +90,6 @@ function OnBoardedSubAdminsTable({
 
     let staleData = data;
     staleData.forEach((onboardedCGFAdmin) => {
-      // Logger.debug("subRole-------", onboardedCGFAdmin["subRoleId"].name);
       delete onboardedCGFAdmin["updatedAt"];
       delete onboardedCGFAdmin["updatedBy"];
       delete onboardedCGFAdmin["createdBy"];
@@ -132,7 +127,6 @@ function OnBoardedSubAdminsTable({
   };
 
   const generateUrl = () => {
-    Logger.debug("filters in onboarded table----", filters);
     Logger.debug("Search", search);
     let url = `${ADD_SUB_ADMIN}/list/?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
 
@@ -221,19 +215,9 @@ function OnBoardedSubAdminsTable({
     Logger.debug("inside use Effect");
     return () => {
       isMounted = false;
-      clearTimeout(searchTimeout);
       controller.abort();
     };
-  }, [
-    page,
-    rowsPerPage,
-    orderBy,
-    order,
-    filters,
-    makeApiCall,
-    setMakeApiCall,
-    searchTimeout,
-  ]);
+  }, [page, rowsPerPage, orderBy, order, makeApiCall, setMakeApiCall]);
   return (
     <>
       <Toaster

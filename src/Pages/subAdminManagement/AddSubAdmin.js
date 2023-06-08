@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TextField, Autocomplete, Paper } from "@mui/material";
-// import "react-phone-number-input/style.css";
 import { useForm, Controller as AddSubAdminController } from "react-hook-form";
 import axios from "axios";
 import { privateAxios } from "../../api/axios";
 import { ADD_SUB_ADMIN, COUNTRIES, FETCH_ROLES } from "../../api/Url";
-import { useSelector } from "react-redux";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
@@ -47,7 +45,6 @@ const AddSubAdmin = () => {
   useDocumentTitle("Add CGF Admin");
   const [disableSubmit, setDisableSubmit] = useState(false);
 
-  const authUser = useSelector((state) => state.user.userObj);
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -68,7 +65,6 @@ const AddSubAdmin = () => {
   });
   const location = useLocation();
   Logger.debug(location);
-  const [roleSelected, setRoleSelected] = useState("");
   const [countriesAddCGFAdmin, setCountriesAddCGFAdmin] = useState([]);
   const [rolesAddCGFAdmin, setRolesAddCGFAdmin] = useState([]);
   const [isCgfAdminLoading, setIsCgfAdminLoading] = useState(false);
@@ -102,51 +98,6 @@ const AddSubAdmin = () => {
         if (error?.code === "ERR_CANCELED") return;
         Logger.debug("Error from fetch rolesAddCGFAdmin", error);
         catchError(error, setToasterDetails, toasterRef, navigate);
-        // if (error?.response?.status === 401) {
-        //     isMounted &&
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage:
-        //                     "Session Timeout: Please login again",
-        //                 messageType: "error",
-        //             },
-        //             () => toasterRef.current()
-        //         );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // } else if (error?.response?.status === 403) {
-        //     isMounted &&
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage: error?.response?.data
-        //                     ?.message
-        //                     ? error?.response?.data?.message
-        //                     : "Oops! Something went wrong. Please try again later.",
-        //                 messageType: "error",
-        //             },
-        //             () => toasterRef.current()
-        //         );
-        //     setTimeout(() => {
-        //         navigate("/home");
-        //     }, 3000);
-        // } else {
-        //     isMounted &&
-        //         setToasterDetails(
-        //             {
-        //                 titleMessage: "Oops!",
-        //                 descriptionMessage:
-        //                     error?.response?.data?.message,
-        //                 messageType: "error",
-        //             },
-        //             () => toasterRef.current()
-        //         );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // }
       }
     };
     let addCGFAdminFetchCountries = async () => {
@@ -165,28 +116,12 @@ const AddSubAdmin = () => {
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
         Logger.debug("error from countries api", error);
-
-        // isMounted &&
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message,
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        // navigate("/login");
-        // }
       }
     };
     fetchRoles();
     addCGFAdminFetchCountries();
   }, []);
   Logger.debug("countriess----", countriesAddCGFAdmin);
-
-  const handleRoleSelection = (e) => {
-    setRoleSelected(e.target.value);
-  };
 
   const addSubAdminData = async (data) => {
     setIsCgfAdminLoading(true);
@@ -213,50 +148,9 @@ const AddSubAdmin = () => {
       setIsCgfAdminLoading(false);
       setDisableSubmit(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
-      // if (error?.response?.status === 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message,
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
     }
   };
   const handleOnsubmitAddCGFAdmin = async (data) => {
-    // data.countryCode = data.countryCode.slice(
-    //     data.countryCode.indexOf("+")
-    // );
-
     Logger.debug("new phone number", data);
     addSubAdminData(data);
     setTimeout(() => {
@@ -265,15 +159,10 @@ const AddSubAdmin = () => {
   };
 
   const handleSaveAndMoreAddCGFAdmin = (data) => {
-    // data.countryCode = data.countryCode.slice(
-    //     data.countryCode.indexOf("+")
-    // );
-
     addSubAdminData(data);
     Logger.debug(data);
     reset();
     setValue("");
-    setRoleSelected("");
   };
   const handleCancel = () => {
     navigate("/users/cgf-admin/");
@@ -299,10 +188,7 @@ const AddSubAdmin = () => {
       </div>
       <section>
         <div className="container">
-          <form
-            onSubmit={handleSubmit(handleOnsubmitAddCGFAdmin)}
-            // onKeyDown={handleSubmit(handleOnsubmitAddCGFAdmin)}
-          >
+          <form onSubmit={handleSubmit(handleOnsubmitAddCGFAdmin)}>
             <div className="form-header flex-between">
               <h2 className="heading2">Add CGF Admin</h2>
               <div className="form-header-right-txt">
@@ -328,36 +214,18 @@ const AddSubAdmin = () => {
                         CGF Admin Name <span className="mandatory">*</span>
                       </label>
                       <Input
-                        name={"name"}
-                        onBlur={(e) => setValue("name", e.target.value?.trim())}
                         control={control}
+                        onBlur={(e) => setValue("name", e.target.value?.trim())}
+                        name={"name"}
                         placeholder={"Enter CGF admin name"}
                         myHelper={helperTextForCGFAdmin}
                         rules={{
-                          required: true,
                           maxLength: 50,
                           minLength: 3,
+                          required: true,
                           pattern: /^[a-zA-Z][a-zA-Z ]*$/,
                         }}
                       />
-
-                      {/* <TextField
-                                            id="outlined-basic"
-                                            placeholder="Enter sub admin name"
-                                            variant="outlined"
-                                            className={`input-field ${
-                                                errors.name && "input-error"
-                                            }`}
-                                            inputProps={{
-                                                maxLength: 50,
-                                            }}
-                                            {...register("name")}
-                                            helperText={
-                                                errors.name
-                                                    ? errors.name?.message
-                                                    : " "
-                                            }
-                                        /> */}
                     </div>
                   </div>
                   <div className="card-form-field">
@@ -378,7 +246,7 @@ const AddSubAdmin = () => {
                           maxLength: 50,
                           minLength: 3,
                           pattern:
-                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                         }}
                       />
                     </div>
@@ -432,24 +300,18 @@ const AddSubAdmin = () => {
                                     ? countriesAddCGFAdmin
                                     : []
                                 }
-                                // placeholder="Select country code"
                                 getOptionLabel={(country) => country}
                                 renderOption={(props, option) => (
                                   <li {...props}>{option}</li>
                                 )}
                                 renderInput={(params) => (
                                   <TextField
-                                    // className={`input-field ${
-                                    //   error && "input-error"
-                                    // }`}
                                     {...params}
                                     inputProps={{
                                       ...params.inputProps,
                                     }}
                                     placeholder={"+91"}
                                     onChange={() => trigger("countryCode")}
-                                    // onSubmit={() => setValue("countryCode", "")}
-
                                     helperText={
                                       error
                                         ? helperTextForCGFAdmin.countryCode[
@@ -479,8 +341,8 @@ const AddSubAdmin = () => {
                           }
                           myHelper={helperTextForCGFAdmin}
                           rules={{
-                            maxLength: 15,
                             minLength: 7,
+                            maxLength: 15,
                             validate: (value) => {
                               if (!watch("phoneNumber") && watch("countryCode"))
                                 return "invalid input";

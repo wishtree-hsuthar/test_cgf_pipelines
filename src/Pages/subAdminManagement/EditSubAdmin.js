@@ -9,15 +9,16 @@ import {
   Paper,
 } from "@mui/material";
 
-// import "react-phone-number-input/style.css";
 import axios from "axios";
 import { Controller as EditSubAdminController, useForm } from "react-hook-form";
 import Toaster from "../../components/Toaster";
 import useCallbackState from "../../utils/useCallBackState";
 import {
   COUNTRIES,
+  FETCH_PENDING_CGF_ADMIN,
   FETCH_ROLES,
   FETCH_SUB_ADMIN_BY_ADMIN,
+  UPDATE_PENDING_CGF_ADMIN,
   UPDATE_SUB_ADMIN,
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
@@ -96,7 +97,6 @@ const EditSubAdmin = () => {
       status: "",
       role: "",
     },
-    // resolver: yupResolver(editSubAdminSchema),
   });
 
   const phoneNumberChangeHandler = (e, name, code) => {
@@ -125,53 +125,6 @@ const EditSubAdmin = () => {
         Logger.debug("error from countries api of edit sub-admin", error);
         if (error?.code === "ERR_CANCELED") return;
         catchError(error, setToasterDetails, toasterRef, navigate);
-        // setToasterDetails(
-        //     {
-        //         titleMessage: "Oops!",
-        //         descriptionMessage: error?.response?.data?.message,
-        //         messageType: "error",
-        //     },
-        //     () => toasterRef.current()
-        // );
-        // if (error?.response?.status === 401) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage:
-        //                 "Session Timeout: Please login again",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // } else if (error?.response?.status === 403) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/home");
-        //     }, 3000);
-        // } else {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        // }
       }
     };
     fetchCountries();
@@ -179,7 +132,9 @@ const EditSubAdmin = () => {
       try {
         setIsEditCgfAdminLoading(true);
         const response = await privateAxios.get(
-          FETCH_SUB_ADMIN_BY_ADMIN + params.id,
+          params["*"].includes("pending")
+            ? FETCH_PENDING_CGF_ADMIN + params.id
+            : FETCH_SUB_ADMIN_BY_ADMIN + params.id,
           {
             signal: controller.signal,
           }
@@ -206,46 +161,6 @@ const EditSubAdmin = () => {
           navigate,
           "/users/cgf-admin"
         );
-        // setToasterDetails(
-        //     {
-        //         titleMessage: "Oops!",
-        //         descriptionMessage: "Oops! Something went wrong. Please try again later.",
-        //         messageType: "error",
-        //     },
-        //     () => toasterRef.current()
-        // );
-
-        // if (error?.response?.status === 401) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage:
-        //                 "Session Timeout: Please login again",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // } else if (error?.response?.status === 403) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/home");
-        //     }, 3000);
-        // }
-        // setTimeout(() => {
-        //     navigate("/users/cgf-admin/");
-        // }, 3000);
       }
     };
     fetchSubAdmin();
@@ -257,42 +172,6 @@ const EditSubAdmin = () => {
       } catch (error) {
         Logger.debug("Error from fetch roles", error);
         catchError(error, setToasterDetails, toasterRef, navigate);
-        // setToasterDetails(
-        //     {
-        //         titleMessage: "Oops!",
-        //         descriptionMessage: error?.response?.data?.message,
-        //         messageType: "error",
-        //     },
-        //     () => toasterRef.current()
-        // );
-        // if (error?.response?.status === 401) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage:
-        //                 "Session Timeout: Please login again",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // } else if (error?.response?.status === 403) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Oops!",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => toasterRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/home");
-        //     }, 3000);
-        // }
       }
     };
     fetchRoles();
@@ -312,13 +191,19 @@ const EditSubAdmin = () => {
     setDisableEditCgfAdminButton(true);
     setIsEditCgfAdminLoading(true);
     try {
-      const response = await privateAxios.put(UPDATE_SUB_ADMIN + params.id, {
-        name: data.name,
-        subRoleId: data.subRoleId,
-        phoneNumber: data.phoneNumber,
-        countryCode: data.countryCode,
-        isActive: data.status === "active" ? true : false,
-      });
+      const response = await privateAxios.put(
+        params["*"].includes("pending")
+          ? UPDATE_PENDING_CGF_ADMIN + params?.id
+          : UPDATE_SUB_ADMIN + params.id,
+        {
+          name: data.name,
+          email: data.email,
+          subRoleId: data.subRoleId,
+          phoneNumber: data.phoneNumber,
+          countryCode: data.countryCode,
+          isActive: data.status === "active" ? true : false,
+        }
+      );
       Logger.debug("response from edit sub admin method", response);
       if (response.status == 200) {
         setIsEditCgfAdminLoading(false);
@@ -331,7 +216,6 @@ const EditSubAdmin = () => {
           },
           () => toasterRef.current()
         );
-        // setDisableEditCgfAdminButton(false);
 
         setTimeout(() => {
           navigate(`/users/cgf-admin/`);
@@ -341,55 +225,7 @@ const EditSubAdmin = () => {
       Logger.debug("error from edit sub admin submit method");
       setIsEditCgfAdminLoading(false);
       setDisableEditCgfAdminButton(false);
-      catchError(error, toasterDetails, toasterRef, navigate);
-      // if (error?.response?.status == 400) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message,
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // } else if (error?.response?.status === 401) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
+      catchError(error, setToasterDetails, toasterRef, navigate);
     }
   };
 
@@ -408,10 +244,22 @@ const EditSubAdmin = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/cgf-admin">CGF Admins</Link>
+              <Link
+                to="/users/cgf-admin/"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                CGF Admins{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>
-              <Link to={`/users/cgf-admin/view-cgf-admin/${params.id}`}>
+              <Link
+                to={
+                  params["*"].includes("pending")
+                    ? `/users/cgf-admin/pending/view-cgf-admin/${params.id}`
+                    : `/users/cgf-admin/view-cgf-admin/${params.id}`
+                }
+              >
                 View CGF Admin
               </Link>
             </li>
@@ -423,12 +271,6 @@ const EditSubAdmin = () => {
         <div className="container">
           <div className="form-header flex-between">
             <h2 className="heading2">Edit CGF Admin</h2>
-            {/* <div className="form-header-right-txt">
-                    <div className="tertiary-btn-blk">
-                        <span className="addmore-icon"><i className='fa fa-plus'></i></span>
-                        <span className="addmore-txt">Save & Add More</span>
-                    </div>
-                </div> */}
           </div>
           {isEditCgfAdminLoading ? (
             <Loader />
@@ -441,25 +283,7 @@ const EditSubAdmin = () => {
                       <label htmlFor="subAdminName">
                         CGF Admin Name <span className="mandatory">*</span>
                       </label>
-                      {/* <TextField
-                                            id="outlined-basic"
-                                            placeholder="Enter sub admin name"
-                                            variant="outlined"
-                                            className={`input-field ${
-                                                errors.subAdminName &&
-                                                "input-error"
-                                            }`}
-                                            inputProps={{
-                                                maxLength: 50,
-                                            }}
-                                            {...register("subAdminName")}
-                                            helperText={
-                                                errors.subAdminName
-                                                    ? errors.subAdminName
-                                                          ?.message
-                                                    : " "
-                                            }
-                                        /> */}
+
                       <Input
                         name={"name"}
                         onBlur={(e) => setValue("name", e.target.value?.trim())}
@@ -473,7 +297,6 @@ const EditSubAdmin = () => {
                           pattern: /^[a-zA-Z][a-zA-Z ]*$/,
                         }}
                       />
-                      {/* <p className={`input-error-msg`}>{errors.subAdminName?.message}</p> */}
                     </div>
                   </div>
                   <div className="card-form-field">
@@ -481,27 +304,13 @@ const EditSubAdmin = () => {
                       <label htmlFor="email">
                         Email <span className="mandatory">*</span>
                       </label>
-                      {/* <TextField
-                                            className={`input-field ${
-                                                errors.email && "input-error"
-                                            }`}
-                                            id="outlined-basic"
-                                            placeholder="Enter email address"
-                                            variant="outlined"
-                                            {...register("email")}
-                                            disabled={true}
-                                            helperText={
-                                                errors.email
-                                                    ? errors.email?.message
-                                                    : " "
-                                            }
-                                        /> */}
+
                       <Input
                         name={"email"}
                         onBlur={(e) =>
                           setValue("email", e.target.value?.trim())
                         }
-                        isDisabled
+                        isDisabled={!params["*"].includes("pending")}
                         control={control}
                         placeholder={"Enter email address"}
                         myHelper={helperTextForCGFAdmin}
@@ -510,10 +319,9 @@ const EditSubAdmin = () => {
                           maxLength: 50,
                           minLength: 3,
                           pattern:
-                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                         }}
                       />
-                      {/* <p className={`input-error-msg`}>{errors.email?.message}</p> */}
                     </div>
                   </div>
                   <div className="card-form-field">
@@ -614,22 +422,6 @@ const EditSubAdmin = () => {
                               if (value && !Number(value))
                                 return "Invalid input";
                             },
-                            // validate: (value) => {
-                            //     if (
-                            //         watch(
-                            //             "phoneNumber"
-                            //         ) &&
-                            //         !watch(
-                            //             "countryCode"
-                            //         )
-                            //     )
-                            //         return "Enter Country code";
-                            // else if (
-                            //     value &&
-                            //     !Number(value)
-                            // )
-                            //     return "Please enter valid phone number";
-                            // },
                           }}
                         />
                       </div>
@@ -660,7 +452,10 @@ const EditSubAdmin = () => {
                     </div>
                   </div>
                   <div className="card-form-field">
-                    <div className="form-group">
+                    <div
+                      className="form-group"
+                      hidden={params["*"].includes("pending")}
+                    >
                       <label htmlFor="cgfAdmin-status">Status</label>
                       <div className="radio-btn-field">
                         <EditSubAdminController

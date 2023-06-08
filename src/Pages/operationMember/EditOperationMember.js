@@ -5,11 +5,6 @@ import {
   Paper,
   Radio,
   RadioGroup as EditOPRadioGroup,
-  // FormControlLabel,
-  // MenuItem,
-  // Radio,
-  // RadioGroup,
-  // Select,
   TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
@@ -23,10 +18,12 @@ import { privateAxios } from "../../api/axios";
 import {
   COUNTRIES,
   FETCH_OPERATION_MEMBER,
+  FETCH_PENDING_OPERATION_MEMBER,
   FETCH_ROLES,
   GET_OPERATION_MEMBER_BY_ID,
   MEMBER,
   UPDATE_OPERATION_MEMBER,
+  UPDATE_PENDING_OPERATION_MEMBER,
 } from "../../api/Url";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
@@ -86,7 +83,6 @@ function EditOperationMember() {
   const [memberCompanies, setMemberCompanies] = useState([]);
   const [disableEditMemberUpdateButton, setDisableEditMemberUpdateButton] =
     useState(false);
-  const [disableReportingManager, setDisableReportingManager] = useState(true);
   const [countries, setCountries] = useState([]);
   const [reportingManagers, setReportingManagers] = useState([]);
   const [operationMember, setOperationMember] = useState({});
@@ -201,7 +197,9 @@ function EditOperationMember() {
     try {
       setIsEditOperationMemberLoading(true);
       const response = await privateAxios.get(
-        GET_OPERATION_MEMBER_BY_ID + params.id,
+        params["*"].includes("pending")
+          ? FETCH_PENDING_OPERATION_MEMBER + params.id
+          : GET_OPERATION_MEMBER_BY_ID + params.id,
         {
           signal: controller.signal,
         }
@@ -250,47 +248,6 @@ function EditOperationMember() {
         navigate,
         "/users/operation-members"
       );
-      // if (error?.response?.status === 401) {
-      //     isMounted &&
-      //         setToasterDetails(
-      //             {
-      //                 titleMessage: "Oops!",
-      //                 descriptionMessage:
-      //                     "Session Timeout: Please login again",
-      //                 messageType: "error",
-      //             },
-      //             () => toasterRef.current()
-      //         );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     isMounted &&
-      //         setToasterDetails(
-      //             {
-      //                 titleMessage: "Oops!",
-      //                 descriptionMessage: error?.response?.data?.message
-      //                     ? error?.response?.data?.message
-      //                     : "Oops! Something went wrong. Please try again later.",
-      //                 messageType: "error",
-      //             },
-      //             () => toasterRef.current()
-      //         );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => toasterRef.current()
-      //     );
-      // }
     }
   };
 
@@ -352,13 +309,14 @@ function EditOperationMember() {
     };
     try {
       const response = await privateAxios.put(
-        UPDATE_OPERATION_MEMBER + params.id,
+        params["*"].includes("pending")
+          ? UPDATE_PENDING_OPERATION_MEMBER + params.id
+          : UPDATE_OPERATION_MEMBER + params.id,
         data
       );
       if (response.status == 200) {
         setIsEditOperationMemberLoading(false);
 
-        // setDisableEditMemberUpdateButton(false);
         setToasterDetails(
           {
             titleMessage: "Hurray!",
@@ -408,11 +366,21 @@ function EditOperationMember() {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/operation-members">Operation Members</Link>
+              <Link
+                to="/users/operation-members"
+                state={params["*"].includes("pending") ? 1 : 0}
+              >
+                Operation Member{" "}
+                {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
+              </Link>
             </li>
             <li>
               <Link
-                to={`/users/operation-member/view-operation-member/${params.id}`}
+                to={
+                  params["*"].includes("pending")
+                    ? `/users/operation-member/pending/view-operation-member/${params.id}`
+                    : `/users/operation-member/view-operation-member/${params.id}`
+                }
               >
                 View Operation Members
               </Link>
@@ -426,19 +394,7 @@ function EditOperationMember() {
           <form onSubmit={handleSubmit(handleOnSubmit)}>
             <div className="form-header flex-between">
               <h2 className="heading2">Edit Operation Member</h2>
-              <div className="form-header-right-txt">
-                {/* <div
-                                    className="tertiary-btn-blk"
-                                    onClick={handleSubmit(handleSaveAndMore)}
-                                >
-                                    <span className="addmore-icon">
-                                        <i className="fa fa-plus"></i>
-                                    </span>
-                                    <span className="addmore-txt">
-                                        Save & Add More
-                                    </span>
-                                </div> */}
-              </div>
+              <div className="form-header-right-txt"></div>
             </div>
             {isEditOperationMemberLoading ? (
               <Loader />
@@ -535,7 +491,7 @@ function EditOperationMember() {
                           setValue("email", e.target.value?.trim())
                         }
                         placeholder="NA"
-                        isDisabled
+                        isDisabled={!params["*"].includes("pending")}
                         myHelper={helperText}
                         rules={{ required: true }}
                       />
@@ -677,8 +633,6 @@ function EditOperationMember() {
                                   ? setValue("companyType", "Internal")
                                   : setValue("companyType", "External");
                               }}
-                              // value={field.name}
-                              // value={field.isCGFStaff}
                               aria-labelledby="demo-radio-buttons-group-label"
                               name="radio-buttons-group"
                               className="radio-btn"
@@ -740,7 +694,6 @@ function EditOperationMember() {
                                 Logger.debug("new Value ", newValue);
                                 setValue("reportingManager", "");
                                 trigger("memberId");
-                                setDisableReportingManager(false);
                                 // call fetch Reporting managers here
                                 fetchReportingManagers(newValue._id);
                                 setValue("companyType", newValue.companyType);
@@ -866,7 +819,10 @@ function EditOperationMember() {
                     </div>
                   </div>
 
-                  <div className="card-form-field">
+                  <div
+                    className="card-form-field"
+                    hidden={params["*"].includes("pending")}
+                  >
                     <div className="form-group">
                       <label htmlFor="status">Status</label>
                       <div className="radio-btn-field">

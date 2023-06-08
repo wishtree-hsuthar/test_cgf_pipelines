@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
-import { ADD_SUB_ADMIN, WITHDRAW_SUB_ADMIN } from "../../api/Url";
-import DialogBox from "../../components/DialogBox";
+import { ADD_SUB_ADMIN } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
@@ -32,43 +31,22 @@ const pendingTableColumnHead = [
     disablePadding: false,
     label: "Created At",
   },
-
-  {
-    id: "action",
-
-    disablePadding: false,
-    label: "Actions",
-  },
 ];
 
 function PendingCGFAdmins({
   makeApiCall,
   setMakeApiCall,
   search,
-  filters,
+
   pageForPendingTabCGFAdmin,
   setPageForPendingTabCGFAdmin,
   myRef,
-  pendingCgftoasterDetails,
   setPendingCgfToasterDetails,
 }) {
-  const [
-    openDeleteDialogBoxPendingCGFAdmin,
-    setOpenDeleteDialogBoxPendingCGFAdmin,
-  ] = useState(false);
-  const [withdrawInviteidPendingCGFAdmin, setWithdrawInviteidPendingCGFAdmin] =
-    useState("");
-  const [
-    withdrawInviteUserPendingCGFAdmin,
-    setWithdrawInviteUserPendingCGFAdmin,
-  ] = useState([]);
-
   // state to manage loader
   const [isPendingCgfAdmin, setIsPendingCgfAdmin] = useState(true);
-  const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
   //state to hold search timeout delay
-  const [searchTimeoutPendingCGFAdmin, setSearchTimeoutPendingCGFAdmin] =
-    useState(null);
+
   //state to hold wheather to make api call or not
 
   const navigate = useNavigate();
@@ -156,91 +134,19 @@ function PendingCGFAdmins({
     setPageForPendingTabCGFAdmin(1);
   };
 
-  //  on click delete icon open delete modal
-  const onClickDeleteIconHandlerCGFAdmin = async (id) => {
-    Logger.debug("id for delete", id);
-    setOpenDeleteDialogBoxPendingCGFAdmin(true);
-    setWithdrawInviteidPendingCGFAdmin(id);
-    Logger.debug("records: ", recordsForPendingTabCGFAdmin);
-    const withdrawCgfAdmin = recordsForPendingTabCGFAdmin.filter(
-      (user) => user?._id === id
-    );
-    Logger.debug("Withdraw user", withdrawCgfAdmin);
-    setWithdrawInviteUserPendingCGFAdmin([...withdrawCgfAdmin]);
-  };
-
-  const withdrawInviteByIdCGFAdmin = async () => {
-    try {
-      const response = await privateAxios.delete(
-        WITHDRAW_SUB_ADMIN + withdrawInviteidPendingCGFAdmin
-      );
-      if (response.status == 200) {
-        Logger.debug("user invite withdrawn successfully");
-        setPendingCgfToasterDetails(
-          {
-            titleMessage: "Success",
-            descriptionMessage: response?.data?.message,
-            messageType: "success",
-          },
-          () => myRef.current()
-        );
-        getSubAdminPendingCGFAdmin();
-        setOpenDeleteDialogBoxPendingCGFAdmin(false);
-      }
-    } catch (error) {
-      catchError(error, setPendingCgfToasterDetails, myRef, navigate);
-      // if (error?.response?.status == 401) {
-      //     setPendingCgfToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setPendingCgfToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     setPendingCgfToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      // }
-      Logger.debug("error from withdrawInvite id", error);
-    }
-  };
-
   // url for pending tab
   const generateUrlForPendingTabCGFAdmin = () => {
-    Logger.debug("filters", filters);
     Logger.debug("Search", search);
     let url = `${ADD_SUB_ADMIN}/pending/list?page=${pageForPendingTabCGFAdmin}&size=${rowsPerPageForPendingTabCGFAdmin}&orderBy=${orderByForPending}&order=${orderForPendingTabCGFAdmin}`;
 
     if (search) url += `&search=${search}`;
 
     return url;
+  };
+
+  const onClickVisibilityIconHandler = (id) => {
+    Logger.debug("id", id);
+    return navigate(`/users/cgf-admin/pending/view-cgf-admin/${id}`);
   };
 
   const getSubAdminPendingCGFAdmin = async (
@@ -267,50 +173,6 @@ function PendingCGFAdmins({
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       catchError(error, setPendingCgfToasterDetails, myRef, navigate);
-      // if (error?.response?.status == 401) {
-      //     setPendingCgfToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage:
-      //                 "Session Timeout: Please login again",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/login");
-      //     }, 3000);
-      // } else if (error?.response?.status === 403) {
-      //     setPendingCgfToasterDetails(
-      //         {
-      //             titleMessage: "Oops!",
-      //             descriptionMessage: error?.response?.data?.message
-      //                 ? error?.response?.data?.message
-      //                 : "Oops! Something went wrong. Please try again later.",
-      //             messageType: "error",
-      //         },
-      //         () => myRef.current()
-      //     );
-      //     setTimeout(() => {
-      //         navigate("/home");
-      //     }, 3000);
-      // } else {
-      //     isMounted &&
-      //         setPendingCgfToasterDetails(
-      //             {
-      //                 titleMessage: "Error",
-      //                 descriptionMessage:
-      //                     error?.response?.data?.message &&
-      //                     typeof error.response.data.message === "string"
-      //                         ? error.response.data.message
-      //                         : "Oops! Something went wrong. Please try again later.",
-
-      //                 messageType: "error",
-      //             },
-      //             () => myRef.current()
-      //         );
-      //     setIsPendingCgfAdmin(false);
-      // }
 
       Logger.debug("Error from getSubAdmin pending tab table-------", error);
     }
@@ -324,15 +186,11 @@ function PendingCGFAdmins({
     Logger.debug("inside use Effect");
     return () => {
       isMounted = false;
-      clearTimeout(searchTimeoutPendingCGFAdmin);
       controller.abort();
     };
   }, [
-    filters,
     makeApiCall,
-
     setMakeApiCall,
-    searchTimeoutPendingCGFAdmin,
     pageForPendingTabCGFAdmin,
     rowsPerPageForPendingTabCGFAdmin,
     orderByForPending,
@@ -343,32 +201,6 @@ function PendingCGFAdmins({
   }
   return (
     <>
-      <DialogBox
-        title={
-          <p>
-            Withdraw "
-            {withdrawInviteUserPendingCGFAdmin &&
-              `${withdrawInviteUserPendingCGFAdmin[0]?.name}`}
-            's" Invitation
-          </p>
-        }
-        info1={
-          <p>
-            On withdrawal, CGF admin will not be able to verify their account.
-          </p>
-        }
-        info2={<p>Do you want to withdraw the invitation?</p>}
-        primaryButtonText={"Yes"}
-        secondaryButtonText={"No"}
-        onPrimaryModalButtonClickHandler={() => {
-          withdrawInviteByIdCGFAdmin();
-        }}
-        onSecondaryModalButtonClickHandler={() => {
-          setOpenDeleteDialogBoxPendingCGFAdmin(false);
-        }}
-        openModal={openDeleteDialogBoxPendingCGFAdmin}
-        setOpenModal={setOpenDeleteDialogBoxPendingCGFAdmin}
-      />
       {isPendingCgfAdmin ? (
         <Loader />
       ) : (
@@ -383,16 +215,12 @@ function PendingCGFAdmins({
           rowsPerPage={rowsPerPageForPendingTabCGFAdmin}
           totalRecords={totalRecordsForPendingTabCGFAdmin}
           orderBy={orderByForPending}
-          icons={["delete"]}
-          // onClickVisibilityIconHandler1={
-          //     onClickDeleteIconHandlerCGFAdmin
-          // }
-          onClickDeleteIconHandler1={onClickDeleteIconHandlerCGFAdmin}
+          onClickVisibilityIconHandler1={onClickVisibilityIconHandler}
           order={orderForPendingTabCGFAdmin}
           setOrder={setOrderForPendingTabCGFAdmin}
           setOrderBy={setOrderByForPendingTab}
           setCheckBoxes={false}
-          onRowClick={false}
+          onRowClick={true}
         />
       )}
     </>
