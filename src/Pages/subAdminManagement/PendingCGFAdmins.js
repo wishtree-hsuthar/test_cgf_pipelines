@@ -104,9 +104,9 @@ function PendingCGFAdmins({
         }
       );
 
-      object["role"] = object["subRole"][0]?.name;
-      object["name"] = object["data"]["name"];
-      object["email"] = object["data"].email;
+      object["role"] = object?.subRole?.[0]?.name ?? "N/A";
+      object["name"] = object?.data?.name ?? "N/A";
+      object["email"] = object?.data?.email ?? "N/A";
       delete object["createdBy"];
       delete object["subRole"];
       delete object["data"];

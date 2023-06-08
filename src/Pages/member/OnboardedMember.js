@@ -117,7 +117,7 @@ const OnboardedMember = ({
         }
       );
       if (typeof object["createdBy"] === "object") {
-        object.createdBy = object["createdBy"]["name"];
+        object.createdBy = object?.createdBy?.name ?? "N/A";
       } else {
         object.createdBy = "N/A";
       }

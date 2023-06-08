@@ -110,7 +110,7 @@ const RolesList = () => {
       delete object["isDeleted"];
       delete object["__v"];
       delete object["cgfAdmins"];
-      object.totalCgfAdmins = object["totalCgfAdmins"].toString();
+      object.totalCgfAdmins = object?.totalCgfAdmins?.toString() ?? "0";
       object["createdAt"] = new Date(object["createdAt"]).toLocaleDateString(
         "en-US",
         {

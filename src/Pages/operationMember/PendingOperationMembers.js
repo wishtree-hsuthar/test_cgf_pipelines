@@ -91,20 +91,20 @@ function PendingOperationMembers({
       delete pendingOPMember["tokenExpiry"];
       delete pendingOPMember["tokenType"];
 
-      pendingOPMember["name"] = pendingOPMember["data"].name;
-      pendingOPMember["email"] = pendingOPMember["data"].email;
+      pendingOPMember["name"] = pendingOPMember["data"]?.name;
+      pendingOPMember["email"] = pendingOPMember["data"]?.email;
       pendingOPMember["memberCompany"] =
-        pendingOPMember["memberData"]["companyName"];
+        pendingOPMember?.memberData?.companyName;
       pendingOPMember["companyType"] =
-        pendingOPMember["memberData"]["companyType"];
+        pendingOPMember?.memberData?.companyType ?? "N/A";
       pendingOPMember["createdAt"] = new Date(
-        pendingOPMember["createdAt"]
+        pendingOPMember?.createdAt
       ).toLocaleDateString("en-US", {
         month: "2-digit",
         day: "2-digit",
         year: "numeric",
       });
-      pendingOPMember["createdByName"] = pendingOPMember["createdBy"].name;
+      pendingOPMember["createdByName"] = pendingOPMember["createdBy"]?.name;
 
       delete pendingOPMember["createdBy"];
 
