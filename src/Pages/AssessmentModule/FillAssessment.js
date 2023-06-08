@@ -121,6 +121,7 @@ function FillAssessment() {
   const [errors, setErrors] = useState({});
   const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
     useState(false);
+  const [invalidAssessmentDialogBox, setInvalidAssessmentDialogBox] = useState(false)
 
   const viewInstruction = () => {
     navigate("/assessment-list/instructions");
@@ -811,6 +812,7 @@ function FillAssessment() {
                     );
                     document.body.appendChild(link);
                     link.click();
+                    setInvalidAssessmentDialogBox(true)
                     setToasterDetails(
                       {
                         titleMessage: "error",
@@ -1107,8 +1109,20 @@ function FillAssessment() {
         onSecondaryModalButtonClickHandler={() => cancelImport()}
         openModal={importOpenDialog}
         setOpenModal={setImportOpenDialog}
+
         isModalForm={true}
         handleCloseRedirect={cancelImport}
+      />
+      <DialogBox
+       title={<p>Alert</p>}
+       info1={" "}
+       info2={<p className="mb-30">Please open the correction sheet, make necessary changes in the imported excel sheet and import again.</p>}
+       openModal={invalidAssessmentDialogBox}
+       setOpenModal={setInvalidAssessmentDialogBox}
+       isModalForm={true}
+       primaryButtonText={"OK"}
+       onPrimaryModalButtonClickHandler={() => setInvalidAssessmentDialogBox(false)}
+       handleCloseRedirect={() => setInvalidAssessmentDialogBox(false)}
       />
       <Toaster
         myRef={myRef}
