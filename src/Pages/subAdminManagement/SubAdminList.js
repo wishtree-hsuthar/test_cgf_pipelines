@@ -86,6 +86,8 @@ const SubAdminList = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    setPageForPendingTabCGFAdmin(1);
+    setPage(1)
   };
 
   const onKeyDownChangeHandler = (e) => {
