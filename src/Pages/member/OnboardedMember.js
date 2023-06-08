@@ -117,12 +117,12 @@ const OnboardedMember = ({
         }
       );
       if (typeof object["createdBy"] === "object") {
-        object.createdBy = object["createdBy"]["name"];
+        object.createdBy = object?.createdBy?.name ?? "N/A";
       } else {
         object.createdBy = "N/A";
       }
       if (object["representative"]) {
-        object["isActive"] = object["representative"]?.isActive;
+        object["isActive"] = object["representative"]?.isActive ?? false;
         object.email = object["representative"]?.email ?? "N/A";
         object.name = object["representative"]?.name ?? "N/A";
       } else {
