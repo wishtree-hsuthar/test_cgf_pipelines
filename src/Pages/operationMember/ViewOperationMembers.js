@@ -444,7 +444,7 @@ const ViewOperationMembers = () => {
         title={<p>Alert</p>}
         info1={
           <p>
-            Edit operation is not allowed on <b>Operation Member</b> as Member
+            Editing the <b>Operation Member</b> is not allowed on as Member
             company is Inactive.
           </p>
         }
