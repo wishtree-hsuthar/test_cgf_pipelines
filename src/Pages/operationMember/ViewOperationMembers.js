@@ -161,27 +161,27 @@ const ViewOperationMembers = () => {
 
       isMounted && setFetchOperationMemberDetaills(response.data);
       reset({
-        memberId: response?.data?.memberId?.companyName,
-        companyType: response?.data?.memberId?.companyType,
-        countryCode: response?.data?.countryCode,
-        phoneNumber: response?.data?.phoneNumber,
+        memberId: response?.data?.memberId?.companyName ?? "N/A",
+        companyType: response?.data?.memberId?.companyType ?? "N/A",
+        countryCode: response?.data?.countryCode ?? "N/A",
+        phoneNumber: response?.data?.phoneNumber ?? "N/A",
         address: response?.data?.address,
         title: response.data.title ? response.data.title : "N/A",
         department: response?.data?.department
           ? response?.data?.department
           : "N/A",
-        email: response?.data?.email,
+        email: response?.data?.email ?? "N/A",
         operationType: response?.data?.operationType
           ? response?.data?.operationType
           : "",
         reportingManager: response?.data?.reportingManager[0]?.name
           ? response?.data?.reportingManager[0]?.name
           : "N/A",
-        name: response?.data?.name,
-        salutation: response?.data?.salutation,
+        name: response?.data?.name ?? "N/A",
+        salutation: response?.data?.salutation ?? "N/A",
         isActive: response?.data?.isActive,
         isCGFStaff: response?.data?.isCGFStaff === true ? "true" : "false",
-        role: response?.data?.role?.name,
+        role: response?.data?.role?.name ?? "N/A",
         replacedOperationMember:
           response?.data?.replacedUsers !== undefined
             ? response?.data?.replacedUsers[0]?.name
