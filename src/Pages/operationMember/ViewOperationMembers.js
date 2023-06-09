@@ -423,11 +423,11 @@ const ViewOperationMembers = () => {
         }
         info1={
           <p>
-            On withdrawal, operation member will not be able to verify their
+            On withdrawal, Operation Member will not be able to verify their
             account.
           </p>
         }
-        info2={<p>Do you want to withdraw the invitation?</p>}
+        info2={<p>Do you still want to withdraw the invitation?</p>}
         primaryButtonText={"Yes"}
         secondaryButtonText={"No"}
         onPrimaryModalButtonClickHandler={() => {
