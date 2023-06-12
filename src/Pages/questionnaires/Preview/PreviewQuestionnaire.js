@@ -284,7 +284,7 @@ function PreviewQuestionnaire(props) {
         },
         () => questionnairePreviewRef.current()
       );
-      return setTimeout(() => navigate("/questionnaires",{state: 0}), 3000);
+      return setTimeout(() => navigate("/questionnaires", { state: 0 }), 3000);
     } catch (error) {
       handleError(error);
     } finally {
@@ -304,7 +304,7 @@ function PreviewQuestionnaire(props) {
         },
         () => questionnairePreviewRef.current()
       );
-      return setTimeout(() => navigate("/questionnaires",{state: 1}), 3000);
+      return setTimeout(() => navigate("/questionnaires", { state: 1 }), 3000);
     } catch (error) {
       handleError(error);
     } finally {
@@ -328,21 +328,22 @@ function PreviewQuestionnaire(props) {
         title={
           <p>
             {" "}
-            Delete Questionnaire{" "}
-            {questionnaire && !questionnaire?.isPublished && "Draft"}
+            Delete {questionnaire && !questionnaire?.isPublished && " Drafted "}
+            Questionnaire
           </p>
         }
         info1={
           <p>
             {questionnaire && questionnaire?.isPublished
-              ? "Deleting the questionnaire will also delete the related assessments. we recommend you make the questionnaire inactive"
-              : "You can not access this draft version of questionnaire any more once delete."}
+              ? "Deleting the questionnaire will also delete the related assessments. Instead we recommend you make the questionnaire inactive."
+              : "Deleting the drafted questionnaire will be an irreversible action. All the related details would be lost."}
           </p>
         }
         info2={
           <p>
-            Are you sure you want to delete the questionnaire{" "}
-            {questionnaire && !questionnaire?.isPublished && "draft"}?
+            Are you sure you want to delete
+            {questionnaire && !questionnaire?.isPublished && " drafted"} the
+            questionnaire?
           </p>
         }
         primaryButtonText={
@@ -374,7 +375,8 @@ function PreviewQuestionnaire(props) {
                 style={{ cursor: "pointer" }}
                 state={questionnaire?.isPublished ? 0 : 1}
               >
-                Questionnaire  {questionnaire?.isPublished ? "(Published)" : "(Drafted)"}
+                Questionnaire{" "}
+                {questionnaire?.isPublished ? "(Published)" : "(Drafted)"}
               </Link>
             </li>
 

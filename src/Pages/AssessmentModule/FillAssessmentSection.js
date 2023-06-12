@@ -82,7 +82,7 @@ function FillAssesmentSection({
         title={<p>Cancel Assessment</p>}
         info1={
           <p>
-            On canceling, all the entered details of the section will be
+            On canceling, all the unsaved details of the sections will be
             removed.
           </p>
         }

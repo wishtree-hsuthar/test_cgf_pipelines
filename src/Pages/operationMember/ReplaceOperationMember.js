@@ -351,7 +351,7 @@ const ReplaceOperationMember = () => {
       <section>
         <div className="container">
           <div className="form-header flex-between ">
-            <h2 className="heading2">Replace & Delete</h2>
+            <h2 className="heading2">Replace & Delete Operation Member</h2>
 
             <div className="member-filter-left">
               {/* <div className="tertiary-btn-blk"> */}

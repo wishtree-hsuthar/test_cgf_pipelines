@@ -556,7 +556,7 @@ const ViewMember = () => {
         memberContactPhoneNuber:
           data?.memberRepresentativeId?.phoneNumber?.toString() ?? "N/A",
         status: data?.isActive ? "active" : "inactive",
-        createdBy: data?.createdBy["name"] ?? "N/A",
+        createdBy: data?.createdBy?.["name"] ?? "N/A",
         roleId: data?.memberRepresentativeId?.role?.name ?? "N/A",
         // roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
       };
@@ -564,6 +564,7 @@ const ViewMember = () => {
       setIsViewMemberLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
+      console.log("error:", error);
       if (error?.response?.status == 401) {
         isMounted &&
           setToasterDetailsViewMember(
@@ -735,7 +736,12 @@ const ViewMember = () => {
       />
       <DialogBox
         title={<p>Delete Member "{member?.companyName}"</p>}
-        info1={<p>Deleting all the details will be an irreversible action.</p>}
+        info1={
+          <p>
+            Deleting the member will be an irreversible action. All the related
+            details would be lost.
+          </p>
+        }
         info2={
           <p>
             Do you still want to delete <b>{member.companyName}</b>?
@@ -939,39 +945,6 @@ const ViewMember = () => {
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
-                      <label htmlFor="status">
-                        Status <span className="mandatory">*</span>
-                      </label>
-                      <div className="radio-btn-field">
-                        <RadioGroup
-                          // {...field}
-                          value={
-                            member?.isActive && member?.isActive
-                              ? "active"
-                              : "inactive"
-                          }
-                          aria-labelledby="demo-radio-buttons-group-label"
-                          name="radio-buttons-group"
-                          className="radio-btn"
-                        >
-                          <FormControlLabel
-                            disabled
-                            value="active"
-                            control={<Radio />}
-                            label="Active"
-                          />
-                          <FormControlLabel
-                            disabled
-                            value="inactive"
-                            control={<Radio />}
-                            label="Inactive"
-                          />
-                        </RadioGroup>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-form-field">
-                    <div className="form-group">
                       {/* <div className="select-field"> */}
                       <label htmlFor="cgfActivity">
                         CGF Activity <span className="mandatory">*</span>
@@ -985,6 +958,41 @@ const ViewMember = () => {
                     </div>
                     {/* </div> */}
                   </div>
+                  {isPendingMember || (
+                    <div className="card-form-field">
+                      <div className="form-group">
+                        <label htmlFor="status">
+                          Status <span className="mandatory">*</span>
+                        </label>
+                        <div className="radio-btn-field">
+                          <RadioGroup
+                            // {...field}
+                            value={
+                              member?.isActive && member?.isActive
+                                ? "active"
+                                : "inactive"
+                            }
+                            aria-labelledby="demo-radio-buttons-group-label"
+                            name="radio-buttons-group"
+                            className="radio-btn"
+                          >
+                            <FormControlLabel
+                              disabled
+                              value="active"
+                              control={<Radio />}
+                              label="Active"
+                            />
+                            <FormControlLabel
+                              disabled
+                              value="inactive"
+                              control={<Radio />}
+                              label="Inactive"
+                            />
+                          </RadioGroup>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               {/* <div className="card-inner-wrap">
