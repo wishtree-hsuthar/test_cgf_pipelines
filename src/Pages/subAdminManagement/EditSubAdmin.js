@@ -144,11 +144,11 @@ const EditSubAdmin = () => {
         Logger.debug("response from sub admin view page fetch api", response);
         isMounted && setFetchSubAdminDetailsForEdit(response.data);
         reset({
-          name: response.data.name,
-          email: response.data.email,
-          countryCode: response.data.countryCode,
-          phoneNumber: response.data.phoneNumber,
-          status: response.data.isActive ? "active" : "inactive",
+          name: response?.data?.name ,
+          email: response?.data?.email,
+          countryCode: response?.data?.countryCode,
+          phoneNumber: response?.data?.phoneNumber,
+          status: response?.data?.isActive ? "active" : "inactive",
           subRoleId: response?.data?.subRoleId?._id ?? "",
         });
       } catch (error) {
@@ -198,12 +198,12 @@ const EditSubAdmin = () => {
           ? UPDATE_PENDING_CGF_ADMIN + params?.id
           : UPDATE_SUB_ADMIN + params.id,
         {
-          name: data.name,
-          email: data.email,
-          subRoleId: data.subRoleId,
-          phoneNumber: data.phoneNumber,
-          countryCode: data.countryCode,
-          isActive: data.status === "active" ? true : false,
+          name: data?.name ?? "",
+          email: data?.email ?? "",
+          subRoleId: data?.subRoleId ?? "",
+          phoneNumber: data?.phoneNumber ?? "",
+          countryCode: data?.countryCode ?? "",
+          isActive: data?.status === "active" ? true : false,
         }
       );
       Logger.debug("response from edit sub admin method", response);
