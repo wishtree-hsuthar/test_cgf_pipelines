@@ -556,7 +556,7 @@ const ViewMember = () => {
         memberContactPhoneNuber:
           data?.memberRepresentativeId?.phoneNumber?.toString() ?? "N/A",
         status: data?.isActive ? "active" : "inactive",
-        createdBy: data?.createdBy["name"] ?? "N/A",
+        createdBy: data?.createdBy?.["name"] ?? "N/A",
         roleId: data?.memberRepresentativeId?.role?.name ?? "N/A",
         // roleId: data?.memberRepresentativeId[0]?.roleId ?? "N/A",
       };
