@@ -276,7 +276,7 @@ function FillAssessment() {
       );
       if (response.status == 201) {
         graphResult && setSaveAsDraftDependency(!saveAsDraftDependency);
-
+        setChartImages({})
         !reOpen &&
           setToasterDetails(
             {
