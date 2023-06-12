@@ -217,7 +217,7 @@ function EditOperationMember() {
           countryCode: response?.data?.countryCode,
           phoneNumber: response?.data?.phoneNumber,
           address: response?.data?.address,
-          title: response?.data?.title ? response.data.title : "",
+          title: response?.data?.title ?? "N/A",
           department: response?.data?.department
             ? response?.data?.department
             : "",

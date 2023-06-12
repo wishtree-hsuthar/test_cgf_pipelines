@@ -45,6 +45,7 @@ const EditMember = () => {
   useDocumentTitle("Edit Member");
 
   const param = useParams();
+  let resetObj;
   const isPendingMember = param["*"].includes("pending");
   const state = param["*"].includes("pending") ? 1 : 0;
   const navigate = useNavigate();
@@ -374,7 +375,7 @@ const EditMember = () => {
   };
   const getMemberByID1 = async (isMounted) => {
     const data = await getMemberAPICall();
-    reset({
+     resetObj = {
       memberCompany: data?.companyName,
       companyType: data?.companyType,
       parentCompany: data?.parentCompany,
@@ -402,8 +403,9 @@ const EditMember = () => {
       memberContactPhoneNuber:
         data?.memberRepresentativeId?.phoneNumber?.toString(),
       status: data?.isActive ? "active" : "inactive",
-      roleId: data?.memberRepresentativeId?.role?._id ?? "N/A",
-    });
+      roleId: data?.memberRepresentativeId?.role?._id ?? "",
+    }
+    reset({...resetObj});
     setMember(data);
     getCites();
     // setDisableMember(data?.memberRepresentativeId?.length > 0 ? false : true);
