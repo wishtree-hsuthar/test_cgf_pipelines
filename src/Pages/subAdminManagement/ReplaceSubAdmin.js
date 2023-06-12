@@ -239,7 +239,7 @@ const ReplaceSubAdmin = () => {
         Logger.debug(
           "Error status 500 while fetchiing subadmin from replace sub-admin"
         );
-        navigate("/users/cgf-admin/",{state:0});
+        navigate("/users/cgf-admin/", { state: 0 });
       }
     }
   };
@@ -303,7 +303,7 @@ const ReplaceSubAdmin = () => {
         );
         setOpen(false);
         setTimeout(() => {
-          navigate("/users/cgf-admin/",{state:0});
+          navigate("/users/cgf-admin/", { state: 0 });
         }, 3000);
       }
     } catch (error) {
@@ -339,7 +339,7 @@ const ReplaceSubAdmin = () => {
         Logger.debug(
           "Error status 500 while fetchiing subadmin from replace sub-admin"
         );
-        navigate("/users/cgf-admin/",{state:0});
+        navigate("/users/cgf-admin/", { state: 0 });
       }
     }
   };
@@ -430,7 +430,7 @@ const ReplaceSubAdmin = () => {
       <section>
         <div className="container">
           <div className="form-header flex-between ">
-            <h2 className="heading2">Replace & Delete</h2>
+            <h2 className="heading2">Replace & Delete CGF Admin</h2>
 
             <div className="member-filter-left">
               {/* <div className="tertiary-btn-blk"> */}
@@ -479,7 +479,7 @@ const ReplaceSubAdmin = () => {
           </div>
           <div className="form-btn flex-between add-members-btn mb-20 pb-20 replace-cgf-admin-btnblk">
             <button
-              onClick={() => navigate("/users/cgf-admin/",{state:0})}
+              onClick={() => navigate("/users/cgf-admin/", { state: 0 })}
               className="secondary-button mr-10"
             >
               Cancel
