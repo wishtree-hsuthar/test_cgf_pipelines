@@ -310,7 +310,6 @@ function EditAssessment() {
       setDisableEditAssessmentButton(false);
       setIsEditAssessmentLoading(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
-      
     }
   };
 
@@ -413,11 +412,11 @@ function EditAssessment() {
         title={<p>Delete Assessment "{watch("title")}"</p>}
         info1={
           <p>
-            Once the assignment is deleted, all the related information would be
-            lost.
+            Deleting the assessment will be an irreversible action. All the
+            related details would be lost.
           </p>
         }
-        info2={<p>Do you want to continue?</p>}
+        info2={<p>Do you still want to continue?</p>}
         primaryButtonText="Delete"
         secondaryButtonText="Cancel"
         onPrimaryModalButtonClickHandler={onDialogPrimaryButtonClickHandler}

@@ -736,7 +736,12 @@ const ViewMember = () => {
       />
       <DialogBox
         title={<p>Delete Member "{member?.companyName}"</p>}
-        info1={<p>Deleting all the details will be an irreversible action.</p>}
+        info1={
+          <p>
+            Deleting the member will be an irreversible action. All the related
+            details would be lost.
+          </p>
+        }
         info2={
           <p>
             Do you still want to delete <b>{member.companyName}</b>?

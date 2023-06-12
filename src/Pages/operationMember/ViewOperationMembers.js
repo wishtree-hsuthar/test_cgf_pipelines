@@ -445,8 +445,8 @@ const ViewOperationMembers = () => {
         info1={" "}
         info2={
           <p className="mb-30">
-            Editing the <b>Operation Member</b> is not allowed on as Member
-            Company is Inactive.
+            Editing the <b>Operation Member</b> is not allowed as Member Company
+            is Inactive.
           </p>
         }
         primaryButtonText={"OK"}
