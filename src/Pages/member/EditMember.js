@@ -342,6 +342,12 @@ const EditMember = () => {
       const response = await privateAxios.get(FETCH_ROLES);
       Logger.debug("Response from fetch roles - ", response);
       setRoles(response.data);
+      response.data.filter((data) => {
+        if (data.name === "Member Representative") {
+          reset({ ...resetObj, roleId: data._id });
+
+        }
+      });
     } catch (error) {
       Logger.debug("Error from fetch roles", error);
     }
