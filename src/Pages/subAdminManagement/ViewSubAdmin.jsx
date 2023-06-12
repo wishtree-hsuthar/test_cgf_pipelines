@@ -200,17 +200,17 @@ const ViewSubAdmin = () => {
       <DialogBox
         title={
           <p>
-            Withdraw "
+            Withdraw{" "}
             {fetchedSubAdminDetails && `${fetchedSubAdminDetails?.name}`}
-            's" Invitation
+            's Invitation
           </p>
         }
         info1={
           <p>
-            On withdrawal, CGF admin will not be able to verify their account.
+            On withdrawal, CGF Admin will not be able to verify their account.
           </p>
         }
-        info2={<p>Do you want to withdraw the invitation?</p>}
+        info2={<p>Do you still want to withdraw the invitation?</p>}
         primaryButtonText={"Yes"}
         secondaryButtonText={"No"}
         onPrimaryModalButtonClickHandler={() => {

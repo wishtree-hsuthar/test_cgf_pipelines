@@ -20,7 +20,7 @@ const Chart2 = ({ graphLevelBreakdown, chartImages, setChartImages }) => {
   const chartRef = useRef(null);
   const labels = [
     ["Policy", " Commitment", "& Governance"],
-    ["Assess", "Human Rights Potential", " & Actual Impacts"],
+    ["Assess", "Human Rights Potential", " & Actual Impact"],
     ["Integrate", "& Act in Order to Prevent", "& Mitigate"],
     ["Track the", "Effectiveness of Responses"],
     "Report",
@@ -37,7 +37,7 @@ const Chart2 = ({ graphLevelBreakdown, chartImages, setChartImages }) => {
         data: [
           graphLevelBreakdown["Policy Commitment & Governance"] ?? 0,
           graphLevelBreakdown[
-            "Assess Human Rights Potential and Actual Impacts"
+            "Assess Human Rights Potential and Actual Impact"
           ] ?? 0,
           graphLevelBreakdown[
             "Integrate and Act in Order to Prevent and Mitigate"
