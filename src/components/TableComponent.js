@@ -212,7 +212,7 @@ export default function TableComponent({
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                    records.slice().sort(getComparator(order, orderBy)) */}
                   {records.map((row, index) => {
-                    Logger.debug("row", row);
+                    // Logger.debug("row", row);
                     const isItemSelected = isSelected(row._id);
                     const labelId = `enhanced-table-checkbox-${index}`;
 

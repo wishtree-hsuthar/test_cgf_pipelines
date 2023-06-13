@@ -284,9 +284,18 @@ const ViewRole = () => {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
+    
+    
     (async () => {
       await getRoleById(isMounted, controller);
       await getUsersByRole();
+      if (value === 1) {
+        console.log("inside if")
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth",
+        });
+      }
     })();
 
     return () => {
@@ -490,7 +499,7 @@ const ViewRole = () => {
                                     {temp[previleg]["name"] ===
                                       "Assessment" && (
                                       <Checkbox
-                                      className="table-checkbox"
+                                        className="table-checkbox"
                                         disabled
                                         checked={temp[previleg]["fill"]}
                                       />
