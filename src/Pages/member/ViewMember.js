@@ -25,8 +25,6 @@ import {
   REGIONCOUNTRIES,
   REGIONS,
   STATES,
-  VIEW_ROLE,
-  WITHDRAW_MEMBER_INVITE,
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
@@ -40,9 +38,9 @@ import {
   getCGFOffices,
   getCategories,
 } from "../../utils/MemberModuleUtil";
+import { ResendEmail } from "../../utils/ResendEmail";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { ResendEmail } from "../../utils/ResendEmail";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -73,6 +71,7 @@ const ViewMember = () => {
   //Code for Operatiom Member List
   //custom hook to set title of page
   useDocumentTitle("View Member");
+
 
   //code to get id from url
   const param = useParams();
@@ -695,6 +694,12 @@ const ViewMember = () => {
       navigate
     );
   };
+  const scrollToend = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+  };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -708,6 +713,9 @@ const ViewMember = () => {
       isMounted &&
         makeApiCall &&
         (isPendingMember || (await getOperationMemberByMemberId(controller)));
+
+      arrOfRegions.length >0  && scrollToend();
+     
     })();
 
     return () => {
@@ -722,7 +730,6 @@ const ViewMember = () => {
     rowsPerPageInViewMember,
     orderByInViewMember,
     orderInViewMember,
-    filters,
     makeApiCall,
   ]);
   Logger.debug("Member", member);
