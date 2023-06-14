@@ -832,9 +832,23 @@ function FillAssessment() {
                     );
                     const link = document.createElement(`a`);
                     link.href = url;
+                    let date =
+                      new Date().getDate() < 10
+                        ? "0" + new Date().getDate().toString()
+                        : new Date().getDate().toString();
+                    let month =
+                      new Date().getMonth() < 10
+                        ? "0" + (new Date().getMonth() + 1).toString()
+                        : new Date().getMonth().toString();
+                    let year = new Date().getFullYear().toString();
+                    let hours = new Date().getHours();
+                    let minutes = new Date().getMinutes();
+                    let seconds = new Date().getSeconds();
+                    let timeStamp =
+                      month + date + year + "_" + hours + minutes + seconds;
                     link.setAttribute(
                       `download`,
-                      `Corrections - ${new Date().toLocaleString("en")}.xlsx`
+                      `Corrections - ${timeStamp}.xlsx`
                     );
                     document.body.appendChild(link);
                     link.click();
