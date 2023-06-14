@@ -543,15 +543,10 @@ const SectionContent = ({
               setValue(fetchResponse.data.sections.length - 1);
               // setDisableButton(true);
             }, 3000);
-            setToasterDetails(
+            isPublished || setToasterDetails(
               {
                 titleMessage: "Success!",
                 descriptionMessage: response.data.message,
-                // descriptionMessage: `${
-                //     isPublished
-                //         ? "Questionnaire published successfully!"
-                //         : "Section details saved successfully!"
-                // }`,
                 messageType: "success",
               },
               () => myRef.current()
@@ -609,12 +604,21 @@ const SectionContent = ({
     const response = await handleSubmitSection(e, true);
     if (response) {
       try {
-        await privateAxios.put(`${ADD_QUESTIONNAIRE}/publish/${response}`);
+        const res =await  privateAxios.put(`${ADD_QUESTIONNAIRE}/publish/${response}`);
+        setToasterDetails(
+          {
+            titleMessage: "Success!",
+            descriptionMessage: res?.data?.message ,
+            messageType: "success",
+          },
+          () => myRef.current()
+        );
+        
       } catch (error) {
         setDisableButton(false);
         if (error?.code === "ERR_CANCELED") return;
 
-        Logger.debug("in onPublishButtonClickHandler ");
+        Logger.debug("in onPublishButtonClickHandler ",error);
         setErrorToaster(error);
       }
     }
