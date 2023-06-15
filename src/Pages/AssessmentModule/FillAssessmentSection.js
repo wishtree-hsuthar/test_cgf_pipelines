@@ -25,6 +25,8 @@ const getTransformedRows = (rows) => {
 };
 
 function FillAssesmentSection({
+  myRef,
+  setToasterDetails,
   section,
   setAssessmentQuestionnaire,
   assessmentQuestionnaire,
@@ -144,6 +146,8 @@ function FillAssesmentSection({
               handleAnswersBlur={handleAnswersBlur}
               errors={errors ?? {}}
               editMode={editMode}
+              myRef={myRef}
+              setToasterDetails={setToasterDetails}
             />
           )}
         </div>

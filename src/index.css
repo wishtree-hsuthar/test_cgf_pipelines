@@ -600,9 +600,8 @@ ul.breadcrumb li a:hover {
 }
 .card-inner-wrap {
   margin-bottom: 30px;
-  
 }
-.pening-margin-bottom{
+.pening-margin-bottom {
   border-bottom: 2px dotted rgba(30, 30, 30, 0.4);
 }
 .card-inner-wrap:nth-last-child(2) {
@@ -2763,3 +2762,7 @@ input::-ms-reveal {
   margin: 10px 0;
   font-size: 16px;
 }
+
+/* td .Toastify {
+  display: none;
+} */

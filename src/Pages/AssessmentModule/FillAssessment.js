@@ -294,7 +294,7 @@ function FillAssessment() {
           setTimeout(() => {
             !saveAsDraft && navigate("/assessment-list");
             setDisableFillAssessment(false);
-          }, 2000);
+          }, 5000);
       }
     } catch (error) {
       setDisableFillAssessment(false);
@@ -1298,6 +1298,8 @@ function FillAssessment() {
                       setEditMode={setEditMode}
                       index={index}
                       totalSections={questionnaire?.sections?.length}
+                      setToasterDetails={setToasterDetails}
+                      myRef={myRef}
                     />
                   </TabPanel>
                 ))}
