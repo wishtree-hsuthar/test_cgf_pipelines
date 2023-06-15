@@ -351,7 +351,7 @@ const EditMember = () => {
     }
   };
   const getMemberAPICall = async () => {
-    let isMounted = true;
+    
     const controller = new AbortController();
 
     try {

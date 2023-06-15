@@ -107,7 +107,7 @@ const SectionContent = ({
   };
 
   const validateTableQuestions = (tableCountError, tabIndex) => {
-    // let tableCountError = 0;
+    
     Logger.debug("inside table question validator");
     let filteredTableSections = questionnaire?.sections.filter(
       (section) => section.layout === "table" // section.columnValues.map((col) => col.title)
@@ -192,43 +192,13 @@ const SectionContent = ({
                 break;
               }
             }
-            // sectionToCheckColumnValues.columnTitles.map((title) => {
-            //     if (columnTitle === title) {
-            //         sameNameCount++;
-            //     }
-            //     if (sameNameCount > 1) {
-            //         tableCountError++;
-            //         Logger.debug(
-            //             "Same name 1 se zyaada hai",
-            //             columnTitle
-            //         );
-            //         setTableErr("Same name hai");
-            //         // setValue(sectionIndex);
-            //     }
-            // });
+         
           }
         }
       }
     }
 
-    // questionnaire?.sections[index]?.columnValues.forEach(
-    //     (column, columnIdx) => {
-    //         if (column?.title === "") {
-    //             setTableErr("Error hai");
-    //             countError++;
-    //         }
-    //         if (column?.columnType === "prefilled") {
-    //             Logger.debug("inside prefiled");
-    //             questionnaire?.sections[index]?.rowValues?.forEach(
-    //                 (row, rowId) => {
-    //                     if (row?.cells[columnIdx]?.value) return;
-    //                     setTableErr("Error hai");
-    //                     countError++;
-    //                 }
-    //             );
-    //         }
-    //     }
-    // );
+   
     Logger.debug("count Error in table validator: ", tableCountError);
     return tableCountError;
   };
@@ -238,7 +208,7 @@ const SectionContent = ({
     let sectionTitles = questionnaire?.sections.map(
       (section) => section.sectionTitle
     );
-    // let sameTitleSectionIndex = [];
+  
     let tabIndex = [];
     setSameSectionsNames([...sectionTitles]);
 
@@ -256,10 +226,10 @@ const SectionContent = ({
         }
       }
       if (sameNameCount > 1) {
-        // sameTitleSectionIndex.push(index);
+        
         tabIndex.push(index);
 
-        // setValue(index);
+        
         Logger.debug("same name counter exceeds more than once", sameNameCount);
 
         countError++;
@@ -299,7 +269,7 @@ const SectionContent = ({
                   countError++;
                   tabIndex.push(sectionIndex);
 
-                  // setValue(index);
+                  
                 }
                 let filteredSameQuestionList =
                   questionsOfListEachSection.filter(
@@ -318,7 +288,7 @@ const SectionContent = ({
                   countError++;
                   tabIndex.push(sectionIndex);
 
-                  // setValue(index);
+                  
                 }
 
                 if (
@@ -403,9 +373,9 @@ const SectionContent = ({
         });
         tabIndex.push(i);
         Logger.debug("tab sections if section title is empty == ", tabIndex);
-        // setValue(i);
+        
         countError++;
-        // return false;
+        
       }
     }
     if (tabIndex.length > 0) {
@@ -511,14 +481,14 @@ const SectionContent = ({
   };
   const handleSubmitSection = async (e, isPublished) => {
     e?.preventDefault();
-    // setSameSectionsNames([]);
+    
 
     const response = await validateSection();
     if (response) {
       return await saveSection(undefined, isPublished);
     }
     return false;
-    // validateSection() && saveSection()
+    
   };
 
   const params = useParams();
@@ -541,7 +511,7 @@ const SectionContent = ({
             setQuestionnaire({ ...fetchResponse.data });
             setTimeout(() => {
               setValue(fetchResponse.data.sections.length - 1);
-              // setDisableButton(true);
+              
             }, 3000);
             isPublished || setToasterDetails(
               {

@@ -268,22 +268,7 @@ const AddMember = () => {
     setValue("city", "");
     getCitesAddMember();
   };
-  //method to handle office Region Change Handler
-  const cgfOfficeRegionChangeHandlerAddMember = async (e) => {
-    setValue("cgfOfficeRegion", e.target.value);
-    setValue("cgfOfficeCountry", "");
-    trigger("cgfOfficeRegion");
-    const countriesOnRegion = await getCountriesAddMember(
-      watch("cgfOfficeRegion")
-    );
-    const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountriesAddMember(
-      countriesOnRegion.data
-    );
-    setArrOfCgfOfficeCountryRegionsAddMember([
-      ...arrOfCgfOfficeCountryRegionsTemp,
-      ,
-    ]);
-  };
+  
   //method to set region and update other fields accordingly
   const onRegionChangeHandlerAddMember = async (e) => {
     Logger.debug("region: ", e.target.value);

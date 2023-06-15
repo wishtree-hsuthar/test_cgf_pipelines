@@ -91,7 +91,7 @@ function QuestionnairesList() {
               <h2 className="heading2 mr-40">Questionnaires</h2>
             </div>
             <div className="form-header-right-txt">
-              {(SUPER_ADMIN == true ||
+              {(SUPER_ADMIN  ||
                 moduleAccesForMember[0]?.questionnaire?.add) && (
                 <div className="form-btn">
                   <button

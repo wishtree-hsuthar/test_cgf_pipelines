@@ -34,7 +34,7 @@ const MenuProps = {
 
 const PreviewQuestions = ({ question }) => {
     let questionLabel = question.questionTitle;
-
+    console.log("question: ",question)
     Logger.debug("title preview question", questionLabel);
     Logger.debug("title preview question", question.questionTitle);
     let questionComponent =
@@ -100,6 +100,7 @@ const PreviewQuestions = ({ question }) => {
                 >
                     {question.options.map((option) => (
                         <FormControlLabel
+                            key={option}
                             value={option}
                             control={<Radio disabled />}
                             label={option}
@@ -111,6 +112,7 @@ const PreviewQuestions = ({ question }) => {
             <div className="checkbox-with-labelblk checkbox-btn-half-blk">
                 {question.options.map((option) => (
                     <FormControlLabel
+                        key={option}
                         className="checkbox-with-label checkbox-flex"
                         control={<Checkbox disabled />}
                         label={option}

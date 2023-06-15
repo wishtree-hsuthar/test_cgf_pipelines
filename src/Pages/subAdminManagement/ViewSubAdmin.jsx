@@ -134,7 +134,7 @@ const ViewSubAdmin = () => {
         setTimeout(() => {
           navigate("/users/cgf-admin/", { state: 1 });
         }, 3000);
-        // setOpenDeleteDialog(false);
+        
         setOpenDeleteDialogBoxPendingCGFAdmin(false);
       }
     } catch (error) {

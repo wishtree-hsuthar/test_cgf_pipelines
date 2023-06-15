@@ -754,13 +754,6 @@ function FillAssessment() {
 
   const [importOpenDialog, setImportOpenDialog] = useState(false);
 
-  const AssessmentQuestionnairePromise = (answers) => {
-    return new Promise((resolve, reject) => {
-      setAssessmentQuestionnaire(answers);
-      resolve();
-    });
-  };
-
   const reUploadAssessment = () => {
     setIsFillAssessmentLoading(true);
     try {

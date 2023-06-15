@@ -101,7 +101,7 @@ const PendingMember = ({
       });
     });
     Logger.debug("data in updaterecords method in pending method", staleData);
-    // setRecordsForPendingOperationMemberTab([...staleData]);
+    
     setRecordsPending(staleData);
   };
   // rows per page method for pending tab

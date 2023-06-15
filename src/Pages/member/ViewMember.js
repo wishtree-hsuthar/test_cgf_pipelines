@@ -490,7 +490,7 @@ const ViewMember = () => {
     }
   };
   const getMemberAPICall = async () => {
-    let isMounted = true;
+    
     const controller = new AbortController();
 
     try {
@@ -790,8 +790,8 @@ const ViewMember = () => {
             <h2 className="heading2">View Member</h2>
             <span className="form-header-right-txt" onClick={handleToggle}>
               {(SUPER_ADMIN === true ||
-                moduleAccesForMember[0]?.member.edit == true ||
-                moduleAccesForMember[0]?.member.delete == true) && (
+                moduleAccesForMember[0]?.member.edit  ||
+                moduleAccesForMember[0]?.member.delete ) && (
                 <span
                   className={`crud-operation ${
                     isActive && "crud-operation-active"
