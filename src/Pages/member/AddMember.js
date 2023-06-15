@@ -629,8 +629,8 @@ const AddMember = () => {
                                   onChange={(e) =>
                                     setValue("parentCompany", e.target.value)
                                   }
-                                  onSubmit={() => setValue("parentCompany", "")}
                                   placeholder="Enter parent company"
+                                  onSubmit={() => setValue("parentCompany", "")}
                                 />
                               )}
                             />
@@ -987,49 +987,6 @@ const AddMember = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">CGF Office Detail</h2>
-                  <div className="flex-between card-blk">
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="cgfOfficeRegion">Region</label>
-                        <Dropdown
-                          control={control}
-                          name="cgfOfficeRegion"
-                          myOnChange={cgfOfficeRegionChangeHandlerAddMember}
-                          placeholder="Select region"
-                          myHelper={memberHelper}
-                          options={arrOfRegionsAddMember}
-                        />
-                      </div>
-                    </div>
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="cgfOfficeCountry">Country</label>
-                        <Dropdown
-                          isDisabled={!watch("cgfOfficeRegion")}
-                          control={control}
-                          name="cgfOfficeCountry"
-                          placeholder="Select country"
-                          myHelper={memberHelper}
-                          options={arrOfCgfOfficeCountryRegionsAddMember}
-                        />
-                      </div>
-                    </div>
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="cgfOffice">Office</label>
-                        <Dropdown
-                          control={control}
-                          placeholder="Select office"
-                          name="cgfOffice"
-                          options={CGF_OFFICES}
-                          myHelper={memberHelper}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">
                     Representative Contact Details
@@ -1104,8 +1061,8 @@ const AddMember = () => {
                           control={control}
                           myHelper={memberHelper}
                           rules={{
-                            maxLength: 50,
                             minLength: 3,
+                            maxLength: 50,
                           }}
                           name="department"
                           onBlur={(e) =>
@@ -1125,8 +1082,8 @@ const AddMember = () => {
                           myHelper={memberHelper}
                           rules={{
                             required: true,
-                            maxLength: 50,
                             minLength: 3,
+                            maxLength: 50,
                             pattern:
                               /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                           }}

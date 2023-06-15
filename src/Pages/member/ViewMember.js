@@ -975,7 +975,7 @@ const ViewMember = () => {
                           <RadioGroup
                             // {...field}
                             value={
-                              member?.isActive && member?.isActive
+                              member?.isActive 
                                 ? "active"
                                 : "inactive"
                             }

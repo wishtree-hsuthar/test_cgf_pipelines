@@ -6,47 +6,48 @@ import { MEMBER } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../utils/Loader";
 
+const commonObj = {disablePadding: false}
 const tableHead = [
   {
     id: "companyName",
     // width: "30%",
-    disablePadding: false,
+    ...commonObj,
     label: "Company",
   },
   {
     id: "name",
-    disablePadding: false,
+    ...commonObj,
     label: "Representative",
   },
   {
     id: "email",
-    disablePadding: false,
+    ...commonObj,
     label: "Email",
   },
   {
     id: "companyType",
-    disablePadding: false,
+    ...commonObj,
     label: "Company Type",
   },
   {
     id: "totalOperationMembers",
-    disablePadding: false,
+    ...commonObj,
     label: "Ops. Members",
   },
   {
     id: "createdBy",
-    disablePadding: false,
+    ...commonObj,
     // width: "20%",
     label: "Created By",
   },
   {
     id: "createdAt",
-    disablePadding: false,
+    ...commonObj,
     label: "Created At",
   },
   {
     id: "isActive",
-    disablePadding: false,
+    ...commonObj,
     // width: "15%",
     label: "Status",
   },
