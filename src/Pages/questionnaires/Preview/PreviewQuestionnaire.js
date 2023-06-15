@@ -113,45 +113,7 @@ function PreviewQuestionnaire(props) {
         if (error?.code === "ERR_CANCELED") return;
         setIsPreviewQuestionnaireLoading(false);
         handleError(error);
-        // if (error?.response?.status == 401) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Error",
-        //             descriptionMessage:
-        //                 "Session Timeout: Please login again",
-        //             messageType: "error",
-        //         },
-        //         () => questionnairePreviewRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/login");
-        //     }, 3000);
-        // } else if (error?.response?.status === 403) {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Error",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => questionnairePreviewRef.current()
-        //     );
-        //     setTimeout(() => {
-        //         navigate("/home");
-        //     }, 3000);
-        // } else {
-        //     setToasterDetails(
-        //         {
-        //             titleMessage: "Error",
-        //             descriptionMessage: error?.response?.data?.message
-        //                 ? error?.response?.data?.message
-        //                 : "Oops! Something went wrong. Please try again later.",
-        //             messageType: "error",
-        //         },
-        //         () => questionnairePreviewRef.current()
-        //     );
-        // }
+       
         Logger.debug("error from fetch questionnaire", error);
       }
     };
@@ -395,33 +357,7 @@ function PreviewQuestionnaire(props) {
             ) : (
               <li>Preview Questionnaire </li>
             )}
-            {/* {(SUPER_ADMIN === true ||
-              moduleAccesForMember[0]?.questionnaire?.add) &&
-              !params["*"].includes("version") &&
-              !questionnaire?.isDraft &&
-              !questionnaire?.isPublished && (
-                <li>
-                  <Link
-                    to={`/questionnaires/add-questionnaire/${params.id}`}
-                    style={{ cursor: "pointer" }}
-                  >
-                    Add Questionnaire
-                  </Link>
-                </li>
-              )}
-            {(SUPER_ADMIN === true ||
-              moduleAccesForMember[0]?.questionnaire?.edit) &&
-              !params["*"].includes("version") &&
-              (questionnaire?.isDraft || questionnaire?.isPublished) && (
-                <li>
-                  <Link
-                    to={`/questionnaires/edit-questionnaire/${params.id}`}
-                    style={{ cursor: "pointer" }}
-                  >
-                    Edit Questionnaire
-                  </Link>
-                </li>
-              )} */}
+          
           </ul>
         </div>
       </div>
@@ -501,21 +437,7 @@ function PreviewQuestionnaire(props) {
             </div>
           </div>
 
-          {/* <div className="que-ttl-blk">
-                        <div className="form-group mb-0">
-                            <label for="">
-                                Questionnaire Title{" "}
-                                <span className="mandatory">*</span>
-                            </label>
-                            <TextField
-                                className="input-field"
-                                id="outlined-basic"
-                                value={questionnaire.title}
-                                placeholder="Enter questionnaire title"
-                                variant="outlined"
-                            />
-                        </div>
-                    </div> */}
+         
           {isPreviewQuestionnaireLoading ? (
             <Loader />
           ) : (

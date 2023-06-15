@@ -57,10 +57,12 @@ const TableLayoutCellComponent = ({
   editMode,
   handleAnswersChange,
   handleAnswersBlur,
+  myRef,
+  setToasterDetails,
 }) => {
   const [showMore, setShowMore] = useState(false);
   const [showMoreAttachment, setShowMoreAttachment] = useState(false);
-  const myRef = React.useRef();
+  // const myRef = React.useRef();
   const navigate = useNavigate();
   const params = useParams();
   const [openFileAttachmenDialog, setOpenFileAttachmntDialog] = useState(false);
@@ -71,11 +73,11 @@ const TableLayoutCellComponent = ({
     e.preventDefault();
   };
   const [isLoading, setIsLoading] = useState(false);
-  const [toasterDetails, setToasterDetails] = useCallbackState({
-    titleMessage: "",
-    descriptionMessage: "",
-    messageType: "success",
-  });
+  // const [toasterDetails, setToasterDetails] = useCallbackState({
+  //   titleMessage: "",
+  //   descriptionMessage: "",
+  //   messageType: "success",
+  // });
 
   const [currentSelectedFiles, setCurrentSelectedFiles] = useState([]);
   let columnUUID =
@@ -259,7 +261,7 @@ const TableLayoutCellComponent = ({
     setIsFileRemoved(false);
     setOpenFileAttachmntDialog(false);
   };
-  
+
   useEffect(() => {
     if (
       answer &&
@@ -268,7 +270,6 @@ const TableLayoutCellComponent = ({
       currentSelectedFiles?.length === 0 &&
       !isFileRemoved
     ) {
-      
       setOldfilesSelected([...answer]);
     }
     if (
@@ -280,7 +281,7 @@ const TableLayoutCellComponent = ({
       setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
     }
   }, []);
- 
+
   useEffect(() => {
     if (
       answer &&
@@ -289,19 +290,18 @@ const TableLayoutCellComponent = ({
       currentSelectedFiles?.length === 0 &&
       !isFileRemoved
     ) {
-      
       setCurrentSelectedFiles([...answer]);
     }
   }, [currentSelectedFiles]);
-  
+
   return (
     <>
-      <Toaster
+      {/* <Toaster
         myRef={myRef}
         titleMessage={toasterDetails.titleMessage}
         descriptionMessage={toasterDetails.descriptionMessage}
         messageType={toasterDetails.messageType}
-      />
+      /> */}
       <DialogBox
         title={<p>Add Attachments</p>}
         info1={" "}
@@ -451,7 +451,7 @@ const TableLayoutCellComponent = ({
           answer?.length > 0 &&
           Array.isArray(answer) && (
             <>
-            {console.log("answer: ",answer)}
+              {console.log("answer: ", answer)}
               {answer.map((file, fileIdx) =>
                 file?.name?.length <= 30
                   ? (fileIdx <= 1 || showMoreAttachment) && (
@@ -506,7 +506,6 @@ const TableLayoutCellComponent = ({
                 <a
                   href="#"
                   onClick={(e) => {
-                    
                     setShowMoreAttachment(false);
                   }}
                   className="show-more-less-txt"
@@ -521,7 +520,6 @@ const TableLayoutCellComponent = ({
                 <a
                   href="#"
                   onClick={(e) => {
-                    
                     setShowMoreAttachment(true);
                   }}
                   className="show-more-less-txt"

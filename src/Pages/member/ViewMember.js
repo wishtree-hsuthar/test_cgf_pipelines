@@ -25,8 +25,6 @@ import {
   REGIONCOUNTRIES,
   REGIONS,
   STATES,
-  VIEW_ROLE,
-  WITHDRAW_MEMBER_INVITE,
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
 import DialogBox from "../../components/DialogBox";
@@ -40,9 +38,9 @@ import {
   getCGFOffices,
   getCategories,
 } from "../../utils/MemberModuleUtil";
+import { ResendEmail } from "../../utils/ResendEmail";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
-import { ResendEmail } from "../../utils/ResendEmail";
 //Ideally get those from backend
 const allMembers = ["Erin", "John", "Maria", "Rajkumar"];
 
@@ -73,6 +71,7 @@ const ViewMember = () => {
   //Code for Operatiom Member List
   //custom hook to set title of page
   useDocumentTitle("View Member");
+
 
   //code to get id from url
   const param = useParams();
@@ -491,7 +490,7 @@ const ViewMember = () => {
     }
   };
   const getMemberAPICall = async () => {
-    let isMounted = true;
+    
     const controller = new AbortController();
 
     try {
@@ -519,12 +518,9 @@ const ViewMember = () => {
   ) => {
     try {
       const data = await getMemberAPICall();
-      // const response = await axios.get(MEMBER + `/${param.id}`, {
-      //   signal: controller.signal,
-      // });
-      // const data = response?.data
+    
       console.log("data", data);
-      // const roleName = await getRoleNameByRoleId(isMounted, controller, data);
+    
       Logger.debug("data: ", data);
       setMember({ ...data });
       resetObj = {
@@ -695,6 +691,12 @@ const ViewMember = () => {
       navigate
     );
   };
+  const scrollToend = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+  };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -708,6 +710,9 @@ const ViewMember = () => {
       isMounted &&
         makeApiCall &&
         (isPendingMember || (await getOperationMemberByMemberId(controller)));
+
+      arrOfRegions.length >0  && scrollToend();
+     
     })();
 
     return () => {
@@ -722,7 +727,6 @@ const ViewMember = () => {
     rowsPerPageInViewMember,
     orderByInViewMember,
     orderInViewMember,
-    filters,
     makeApiCall,
   ]);
   Logger.debug("Member", member);
@@ -786,8 +790,8 @@ const ViewMember = () => {
             <h2 className="heading2">View Member</h2>
             <span className="form-header-right-txt" onClick={handleToggle}>
               {(SUPER_ADMIN === true ||
-                moduleAccesForMember[0]?.member.edit == true ||
-                moduleAccesForMember[0]?.member.delete == true) && (
+                moduleAccesForMember[0]?.member.edit  ||
+                moduleAccesForMember[0]?.member.delete ) && (
                 <span
                   className={`crud-operation ${
                     isActive && "crud-operation-active"
@@ -968,7 +972,7 @@ const ViewMember = () => {
                           <RadioGroup
                             // {...field}
                             value={
-                              member?.isActive && member?.isActive
+                              member?.isActive 
                                 ? "active"
                                 : "inactive"
                             }

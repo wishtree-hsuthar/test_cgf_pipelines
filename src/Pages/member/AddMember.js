@@ -268,22 +268,7 @@ const AddMember = () => {
     setValue("city", "");
     getCitesAddMember();
   };
-  //method to handle office Region Change Handler
-  const cgfOfficeRegionChangeHandlerAddMember = async (e) => {
-    setValue("cgfOfficeRegion", e.target.value);
-    setValue("cgfOfficeCountry", "");
-    trigger("cgfOfficeRegion");
-    const countriesOnRegion = await getCountriesAddMember(
-      watch("cgfOfficeRegion")
-    );
-    const arrOfCgfOfficeCountryRegionsTemp = formatRegionCountriesAddMember(
-      countriesOnRegion.data
-    );
-    setArrOfCgfOfficeCountryRegionsAddMember([
-      ...arrOfCgfOfficeCountryRegionsTemp,
-      ,
-    ]);
-  };
+  
   //method to set region and update other fields accordingly
   const onRegionChangeHandlerAddMember = async (e) => {
     Logger.debug("region: ", e.target.value);
@@ -629,8 +614,8 @@ const AddMember = () => {
                                   onChange={(e) =>
                                     setValue("parentCompany", e.target.value)
                                   }
-                                  onSubmit={() => setValue("parentCompany", "")}
                                   placeholder="Enter parent company"
+                                  onSubmit={() => setValue("parentCompany", "")}
                                 />
                               )}
                             />
@@ -692,159 +677,6 @@ const AddMember = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Contact Detail</h2>
-                  <div className="flex-between card-blk">
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="corporateEmail">Corporate Email</label>
-                        <Input
-                          name="corporateEmail"
-                          control={control}
-                          onBlur={(e) =>
-                            setValue("corporateEmail", e.target.value?.trim())
-                          }
-                          rules={{
-                            maxLength: 50,
-                            minLength: 3,
-                            pattern:
-                              /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                          }}
-                          myHelper={memberHelper}
-                          placeholder="example@domain.com"
-                        />
-                      </div>
-                    </div>
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="phoneNumber">Phone Number</label>
-                        <div className="phone-number-field">
-                          <div className="select-field country-code">
-                            <Controller
-                              name="countryCode"
-                              control={control}
-                              rules={{
-                                validate: () => {
-                                  if (
-                                    !watch("countryCode") &&
-                                    watch("phoneNumber")
-                                  )
-                                    return "Invalid input";
-                                },
-                              }}
-                              render={({ field, fieldState: { error } }) => (
-                                <Autocomplete
-                                  popupIcon={<KeyboardArrowDownRoundedIcon />}
-                                  {...field}
-                                  className={`${error && "autocomplete-error"}`}
-                                  onChange={(event, newValue) => {
-                                    Logger.debug(
-                                      "inside autocomplete onchange"
-                                    );
-                                    Logger.debug("new Value ", newValue);
-                                    newValue && typeof newValue === "object"
-                                      ? setValue("countryCode", newValue.name)
-                                      : setValue("countryCode", newValue);
-                                    trigger("countryCode");
-                                    trigger("phoneNumber");
-                                  }}
-                                  PaperComponent={({ children }) => (
-                                    <Paper
-                                      className={
-                                        arrOfCountryCodeAddMember?.length > 5
-                                          ? "autocomplete-option-txt autocomplete-option-limit"
-                                          : "autocomplete-option-txt"
-                                      }
-                                    >
-                                      {children}
-                                    </Paper>
-                                  )}
-                                  autoHighlight
-                                  options={arrOfCountryCodeAddMember}
-                                  // placeholder="Select country code"
-                                  // getOptionLabel={(country) => country.name + " " + country}
-                                  renderOption={(props, option) => (
-                                    <li {...props}>{option}</li>
-                                  )}
-                                  renderInput={(params) => (
-                                    <TextField
-                                      // className={`input-field ${
-                                      //   error && "input-error"
-                                      // }`}
-                                      {...params}
-                                      inputProps={{
-                                        ...params.inputProps,
-                                      }}
-                                      // onChange={() => trigger("phoneNumber")}
-                                      // onSubmit={() => setValue("countryCode", "")}
-                                      placeholder={"+00"}
-                                      helperText={
-                                        error
-                                          ? memberHelper.countryCode[
-                                              error?.type
-                                            ]
-                                          : " "
-                                      }
-                                    />
-                                  )}
-                                />
-                              )}
-                            />
-                          </div>
-                          <Input
-                            control={control}
-                            name="phoneNumber"
-                            placeholder="1234567890"
-                            myHelper={memberHelper}
-                            myOnChange={(e) =>
-                              phoneNumberChangeHandlerAddMember(
-                                e,
-                                "phoneNumber",
-                                "countryCode"
-                              )
-                            }
-                            onBlur={(e) =>
-                              setValue("phoneNumber", e.target.value.trim())
-                            }
-                            rules={{
-                              maxLength: 15,
-                              minLength: 7,
-                              validate: (value) => {
-                                if (
-                                  !watch("phoneNumber") &&
-                                  watch("countryCode")
-                                )
-                                  return "invalid input";
-                                if (value && !Number(value))
-                                  return "Invalid input";
-                              },
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="websiteUrl">Website URL</label>
-                        <Input
-                          control={control}
-                          name="websiteUrl"
-                          placeholder="www.google.com"
-                          onBlur={(e) =>
-                            setValue("websiteUrl", e.target.value?.trim())
-                          }
-                          myHelper={memberHelper}
-                          rules={{
-                            maxLength: 50,
-                            minLength: 3,
-                            pattern:
-                              /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">Company Address Details</h2>
                   <div className="flex-between card-blk">
@@ -987,49 +819,6 @@ const AddMember = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">CGF Office Detail</h2>
-                  <div className="flex-between card-blk">
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="cgfOfficeRegion">Region</label>
-                        <Dropdown
-                          control={control}
-                          name="cgfOfficeRegion"
-                          myOnChange={cgfOfficeRegionChangeHandlerAddMember}
-                          placeholder="Select region"
-                          myHelper={memberHelper}
-                          options={arrOfRegionsAddMember}
-                        />
-                      </div>
-                    </div>
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="cgfOfficeCountry">Country</label>
-                        <Dropdown
-                          isDisabled={!watch("cgfOfficeRegion")}
-                          control={control}
-                          name="cgfOfficeCountry"
-                          placeholder="Select country"
-                          myHelper={memberHelper}
-                          options={arrOfCgfOfficeCountryRegionsAddMember}
-                        />
-                      </div>
-                    </div>
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="cgfOffice">Office</label>
-                        <Dropdown
-                          control={control}
-                          placeholder="Select office"
-                          name="cgfOffice"
-                          options={CGF_OFFICES}
-                          myHelper={memberHelper}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">
                     Representative Contact Details
@@ -1104,8 +893,8 @@ const AddMember = () => {
                           control={control}
                           myHelper={memberHelper}
                           rules={{
-                            maxLength: 50,
                             minLength: 3,
+                            maxLength: 50,
                           }}
                           name="department"
                           onBlur={(e) =>
@@ -1125,8 +914,8 @@ const AddMember = () => {
                           myHelper={memberHelper}
                           rules={{
                             required: true,
-                            maxLength: 50,
                             minLength: 3,
+                            maxLength: 50,
                             pattern:
                               /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                           }}
