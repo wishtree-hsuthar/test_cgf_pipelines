@@ -39,13 +39,12 @@ function Dropdown({
     const width = window.innerWidth;
     const charLimit = width > 1000 ? 60 : 45;
 
-    // Logger.debug("Device width:- ", width);
+    
     const Placeholder = ({ children }) => {
         return <div className="select-placeholder">{children}</div>;
     };
 
-    // Logger.debug("options", options);
-    // Logger.debug("name", name, "value", value);
+ 
     return (
         <FormControl className="select-reusable" disabled={isDisabled}>
             <div className={`select-field ${error && "select-field-error"}`}>

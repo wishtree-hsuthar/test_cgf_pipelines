@@ -23,7 +23,7 @@ import DialogBox from "../../components/DialogBox";
 import Toaster from "../../components/Toaster";
 import { catchError } from "../../utils/CatchError";
 import Loader from "../../utils/Loader";
-import { downloadFunction } from "../../utils/downloadFunction";
+import { downloadFunction, getTimeStamp } from "../../utils/downloadFunction";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Charts from "./Charts/Charts";
@@ -145,6 +145,8 @@ function FillAssessment() {
   };
 
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
+
+  
   const fetchQuestionnaire = async (
     id,
     graphResult,
@@ -700,20 +702,7 @@ function FillAssessment() {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement(`a`);
         link.href = url;
-        let month =
-          new Date().getMonth() < 10
-            ? "0" + (new Date().getMonth() + 1).toString()
-            : new Date().getMonth().toString();
-        let date =
-          new Date().getDate() < 10
-            ? "0" + new Date().getDate().toString()
-            : new Date().getDate().toString();
-        let hours = new Date().getHours();
-        let year = new Date().getFullYear().toString();
-        let minutes = new Date().getMinutes();
-        let seconds = new Date().getSeconds();
-        let timeStamp = month + date + year + "_" + hours + minutes + seconds;
-
+        let timeStamp = getTimeStamp()
         link.setAttribute(`download`, `Assessment - ${timeStamp}.xlsx`);
         document.body.appendChild(link);
         link.click();
@@ -764,13 +753,6 @@ function FillAssessment() {
   };
 
   const [importOpenDialog, setImportOpenDialog] = useState(false);
-
-  const AssessmentQuestionnairePromise = (answers) => {
-    return new Promise((resolve, reject) => {
-      setAssessmentQuestionnaire(answers);
-      resolve();
-    });
-  };
 
   const reUploadAssessment = () => {
     setIsFillAssessmentLoading(true);
@@ -832,20 +814,7 @@ function FillAssessment() {
                     );
                     const link = document.createElement(`a`);
                     link.href = url;
-                    let date =
-                      new Date().getDate() < 10
-                        ? "0" + new Date().getDate().toString()
-                        : new Date().getDate().toString();
-                    let month =
-                      new Date().getMonth() < 10
-                        ? "0" + (new Date().getMonth() + 1).toString()
-                        : new Date().getMonth().toString();
-                    let year = new Date().getFullYear().toString();
-                    let hours = new Date().getHours();
-                    let minutes = new Date().getMinutes();
-                    let seconds = new Date().getSeconds();
-                    let timeStamp =
-                      month + date + year + "_" + hours + minutes + seconds;
+                    let timeStamp = getTimeStamp();
                     link.setAttribute(
                       `download`,
                       `Corrections - ${timeStamp}.xlsx`
