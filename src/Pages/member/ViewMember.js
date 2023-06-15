@@ -518,12 +518,9 @@ const ViewMember = () => {
   ) => {
     try {
       const data = await getMemberAPICall();
-      // const response = await axios.get(MEMBER + `/${param.id}`, {
-      //   signal: controller.signal,
-      // });
-      // const data = response?.data
+    
       console.log("data", data);
-      // const roleName = await getRoleNameByRoleId(isMounted, controller, data);
+    
       Logger.debug("data: ", data);
       setMember({ ...data });
       resetObj = {

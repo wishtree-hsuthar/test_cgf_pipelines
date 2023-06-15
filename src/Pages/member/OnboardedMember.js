@@ -123,11 +123,11 @@ const OnboardedMember = ({
         object.createdBy = "N/A";
       }
       if (object["representative"]) {
-        // object["isActive"] = object["representative"]?.isActive;
+        
         object.email = object["representative"]?.email ?? "N/A";
         object.name = object["representative"]?.name ?? "N/A";
       } else {
-        // object["isActive"] = false;
+        
         object.email = "N/A";
         object.name = "N/A";
       }
