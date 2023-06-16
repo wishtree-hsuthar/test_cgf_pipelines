@@ -90,10 +90,10 @@ const PendingMember = ({
         day: "2-digit",
         year: "numeric",
       });
-      // pendingMember["_id"] = pendingMember?.invite?._id ?? "";
+      
       delete pendingMember["invite"];
       delete pendingMember["updatedAt"]
-      // delete pendingMember["_id"]
+      
       keysOrder.forEach((k) => {
         const v = pendingMember[k];
         delete pendingMember[k];
@@ -101,7 +101,7 @@ const PendingMember = ({
       });
     });
     Logger.debug("data in updaterecords method in pending method", staleData);
-    // setRecordsForPendingOperationMemberTab([...staleData]);
+    
     setRecordsPending(staleData);
   };
   // rows per page method for pending tab
@@ -137,10 +137,10 @@ const PendingMember = ({
       setTotalRecordsPending(parseInt(response.headers["x-total-count"]));
       updatePendingRecords(response?.data);
 
-      //   setIsPendingOperationMemberLoading(false);
+
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      //   setIsPendingOperationMemberLoading(false);
+
 
       Logger.debug(
         "Error from get all pending operation member  tab table-------",

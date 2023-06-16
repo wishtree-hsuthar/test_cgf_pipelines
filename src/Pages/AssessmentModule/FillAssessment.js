@@ -23,7 +23,7 @@ import DialogBox from "../../components/DialogBox";
 import Toaster from "../../components/Toaster";
 import { catchError } from "../../utils/CatchError";
 import Loader from "../../utils/Loader";
-import { downloadFunction } from "../../utils/downloadFunction";
+import { downloadFunction, getTimeStamp } from "../../utils/downloadFunction";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Charts from "./Charts/Charts";
@@ -121,7 +121,8 @@ function FillAssessment() {
   const [errors, setErrors] = useState({});
   const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
     useState(false);
-  const [invalidAssessmentDialogBox, setInvalidAssessmentDialogBox] = useState(false)
+  const [invalidAssessmentDialogBox, setInvalidAssessmentDialogBox] =
+    useState(false);
 
   const viewInstruction = () => {
     navigate("/assessment-list/instructions");
@@ -144,6 +145,8 @@ function FillAssessment() {
   };
 
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
+
+  
   const fetchQuestionnaire = async (
     id,
     graphResult,
@@ -275,8 +278,10 @@ function FillAssessment() {
         }
       );
       if (response.status == 201) {
-        graphResult && setSaveAsDraftDependency(!saveAsDraftDependency);
-        setChartImages({})
+        saveAsDraft &&
+          graphResult &&
+          setSaveAsDraftDependency(!saveAsDraftDependency);
+        setChartImages({});
         !reOpen &&
           setToasterDetails(
             {
@@ -291,7 +296,7 @@ function FillAssessment() {
           setTimeout(() => {
             !saveAsDraft && navigate("/assessment-list");
             setDisableFillAssessment(false);
-          }, 2000);
+          }, 5000);
       }
     } catch (error) {
       setDisableFillAssessment(false);
@@ -697,20 +702,7 @@ function FillAssessment() {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement(`a`);
         link.href = url;
-        let month =
-          new Date().getMonth() < 10
-            ? "0" + (new Date().getMonth() + 1).toString()
-            : new Date().getMonth().toString();
-        let date =
-          new Date().getDate() < 10
-            ? "0" + new Date().getDate().toString()
-            : new Date().getDate().toString();
-        let hours = new Date().getHours();
-        let year = new Date().getFullYear().toString();
-        let minutes = new Date().getMinutes();
-        let seconds = new Date().getSeconds();
-        let timeStamp = month + date + year + "_" + hours + minutes + seconds;
-
+        let timeStamp = getTimeStamp()
         link.setAttribute(`download`, `Assessment - ${timeStamp}.xlsx`);
         document.body.appendChild(link);
         link.click();
@@ -761,13 +753,6 @@ function FillAssessment() {
   };
 
   const [importOpenDialog, setImportOpenDialog] = useState(false);
-
-  const AssessmentQuestionnairePromise = (answers) => {
-    return new Promise((resolve, reject) => {
-      setAssessmentQuestionnaire(answers);
-      resolve();
-    });
-  };
 
   const reUploadAssessment = () => {
     setIsFillAssessmentLoading(true);
@@ -829,13 +814,14 @@ function FillAssessment() {
                     );
                     const link = document.createElement(`a`);
                     link.href = url;
+                    let timeStamp = getTimeStamp();
                     link.setAttribute(
                       `download`,
-                      `Corrections - ${new Date().toLocaleString("en")}.xlsx`
+                      `Corrections - ${timeStamp}.xlsx`
                     );
                     document.body.appendChild(link);
                     link.click();
-                    setInvalidAssessmentDialogBox(true)
+                    setInvalidAssessmentDialogBox(true);
                     setToasterDetails(
                       {
                         titleMessage: "error",
@@ -1132,20 +1118,26 @@ function FillAssessment() {
         onSecondaryModalButtonClickHandler={() => cancelImport()}
         openModal={importOpenDialog}
         setOpenModal={setImportOpenDialog}
-
         isModalForm={true}
         handleCloseRedirect={cancelImport}
       />
       <DialogBox
-       title={<p>Alert</p>}
-       info1={" "}
-       info2={<p className="mb-30">Please open the correction sheet, make necessary changes in the imported excel sheet and import again.</p>}
-       openModal={invalidAssessmentDialogBox}
-       setOpenModal={setInvalidAssessmentDialogBox}
-       isModalForm={true}
-       primaryButtonText={"OK"}
-       onPrimaryModalButtonClickHandler={() => setInvalidAssessmentDialogBox(false)}
-       handleCloseRedirect={() => setInvalidAssessmentDialogBox(false)}
+        title={<p>Alert</p>}
+        info1={" "}
+        info2={
+          <p className="mb-30">
+            Please open the correction sheet, make necessary changes in the
+            imported excel sheet and import again.
+          </p>
+        }
+        openModal={invalidAssessmentDialogBox}
+        setOpenModal={setInvalidAssessmentDialogBox}
+        isModalForm={true}
+        primaryButtonText={"OK"}
+        onPrimaryModalButtonClickHandler={() =>
+          setInvalidAssessmentDialogBox(false)
+        }
+        handleCloseRedirect={() => setInvalidAssessmentDialogBox(false)}
       />
       <Toaster
         myRef={myRef}
@@ -1175,7 +1167,7 @@ function FillAssessment() {
       <section>
         <div className="container">
           <div className="form-header flex-between preview-assessment-ttl">
-            <h2 className="heading2">{questionnaire.title}</h2>
+            <h2 className="heading2">{questionnaire?.title}</h2>
             <div className="flex-between">
               <div className="tertiary-btn-blk mr-20" onClick={viewInstruction}>
                 <span className="preview-icon">
@@ -1206,6 +1198,9 @@ function FillAssessment() {
                   </ul>
                 </div>
               </span>
+            </div>
+            <div className="excel-short-name">
+              <p>{questionnaire?.sheetName ?? ""}</p>
             </div>
           </div>
 
@@ -1272,6 +1267,8 @@ function FillAssessment() {
                       setEditMode={setEditMode}
                       index={index}
                       totalSections={questionnaire?.sections?.length}
+                      setToasterDetails={setToasterDetails}
+                      myRef={myRef}
                     />
                   </TabPanel>
                 ))}

@@ -171,7 +171,7 @@ function AddNewQuestionnaire() {
         // }
       }
     };
-    // (moduleAccessForOpMember[0]?.questionnaire?.edit || SUPER_ADMIN) && fetch();
+    
     if (
       (moduleAccessForOpMember[0]?.questionnaire?.edit || SUPER_ADMIN) &&
       urlParams["*"].includes("edit")

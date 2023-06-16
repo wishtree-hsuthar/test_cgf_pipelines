@@ -9,11 +9,7 @@ import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
 import { catchError } from "../../utils/CatchError";
 let tempTableHead = JSON.parse(JSON.stringify(tableHead));
-// tempTableHead.push({
-//   id: "action",
-//   disablePadding: false,
-//   label: "Action",
-// });
+
 
 function PendingOperationMembers({
   makeApiCall,

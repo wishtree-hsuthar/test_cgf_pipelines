@@ -97,49 +97,48 @@ const ReplaceOperationMember = () => {
     return url;
   };
 
-  const updateRecords = (data) => {
+  const updateRecordsReplaceOP = (data) => {
     Logger.debug("data before update----", data);
 
     let staleData = data;
-    staleData.forEach((object) => {
-      delete object["updatedAt"];
-      delete object["description"];
-      delete object["countryCode"];
-      delete object["isDeleted"];
-      delete object["__v"];
-      delete object["password"];
-      delete object["roleId"];
-      delete object["salt"];
-      delete object["uuid"];
-      delete object["phoneNumber"];
-      delete object["createdAt"];
-      object["role"] = object["role"];
-      delete object["subRole"];
-      delete object["subRoleId"];
-      delete object["isActive"];
-      delete object["createdBy"];
-      delete object["updatedBy"];
-      delete object["isReplaced"];
-      delete object["memberData"];
-      delete object["salutation"];
-      delete object["memberId"];
-      delete object["title"];
-      delete object["department"];
-      delete object["address"];
-      delete object["reportingManager"];
-      delete object["operationType"];
-      delete object["isMemberRepresentative"];
-      delete object["isCGFAdmin"];
-      delete object["isCGFStaff"];
-      delete object["isOperationMember"];
+    staleData.forEach((objectRP) => {
+      delete objectRP["description"];
+      delete objectRP["updatedAt"];
+      delete objectRP["isDeleted"];
+      delete objectRP["countryCode"];
+      delete objectRP["__v"];
+      delete objectRP["password"];
+      delete objectRP["roleId"];
+      delete objectRP["salt"];
+      delete objectRP["uuid"];
+      delete objectRP["phoneNumber"];
+      delete objectRP["subRole"];
+      delete objectRP["subRoleId"];
+      delete objectRP["createdAt"];
+      delete objectRP["isActive"];
+      delete objectRP["createdBy"];
+      delete objectRP["updatedBy"];
+      delete objectRP["isReplaced"];
+      delete objectRP["memberData"];
+      delete objectRP["memberId"];
+      delete objectRP["salutation"];
+      delete objectRP["title"];
+      delete objectRP["department"];
+      delete objectRP["address"];
+      delete objectRP["reportingManager"];
+      delete objectRP["operationType"];
+      delete objectRP["isMemberRepresentative"];
+      delete objectRP["isCGFAdmin"];
+      delete objectRP["isCGFStaff"];
+      delete objectRP["isOperationMember"];
 
       replaceHeaderKeyOrder.forEach((k) => {
-        const v = object[k];
-        delete object[k];
-        object[k] = v;
+        const v = objectRP[k];
+        delete objectRP[k];
+        objectRP[k] = v;
       });
     });
-    Logger.debug("data in updaterecords method", staleData);
+    Logger.debug("data in updateRecordsReplaceOP method", staleData);
     setRecordsReplaceOP([...staleData]);
   };
 
@@ -156,7 +155,7 @@ const ReplaceOperationMember = () => {
       setTotalRecordsReplaceOP(parseInt(response.headers["x-total-count"]));
       Logger.debug("Response from operation member api get", response);
 
-      updateRecords(response.data.filter((data) => data._id !== id));
+      updateRecordsReplaceOP(response.data.filter((data) => data._id !== id));
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       Logger.debug("Error from operation member-------", error);

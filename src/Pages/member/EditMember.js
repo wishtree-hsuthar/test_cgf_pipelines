@@ -96,7 +96,6 @@ const EditMember = () => {
   // state to hold roles
   const [roles, setRoles] = useState([]);
 
-  // const [disableMember, setDisableMember] = useState(false);
   const { control, reset, setValue, watch, trigger, handleSubmit } = useForm({
     reValidateMode: "onChange",
     defaultValues: defaultValues,
@@ -345,7 +344,6 @@ const EditMember = () => {
       response.data.filter((data) => {
         if (data.name === "Member Representative") {
           reset({ ...resetObj, roleId: data._id });
-
         }
       });
     } catch (error) {
@@ -353,7 +351,7 @@ const EditMember = () => {
     }
   };
   const getMemberAPICall = async () => {
-    let isMounted = true;
+    
     const controller = new AbortController();
 
     try {
@@ -381,7 +379,7 @@ const EditMember = () => {
   };
   const getMemberByID1 = async (isMounted) => {
     const data = await getMemberAPICall();
-     resetObj = {
+    resetObj = {
       memberCompany: data?.companyName,
       companyType: data?.companyType,
       parentCompany: data?.parentCompany,
@@ -410,11 +408,10 @@ const EditMember = () => {
         data?.memberRepresentativeId?.phoneNumber?.toString(),
       status: data?.isActive ? "active" : "inactive",
       roleId: data?.memberRepresentativeId?.role?._id ?? "",
-    }
-    reset({...resetObj});
+    };
+    reset({ ...resetObj });
     setMember(data);
     getCites();
-    // setDisableMember(data?.memberRepresentativeId?.length > 0 ? false : true);
   };
   //prevent form submission on press of enter key
   const checkKeyDown = (e) => {
@@ -478,7 +475,7 @@ const EditMember = () => {
     };
   }, [watch]);
   Logger.debug("member: ", member);
-  // Logger.debug("disable: ", disableMember);
+
   return (
     <div className="page-wrapper">
       <Toaster
@@ -741,166 +738,6 @@ const EditMember = () => {
                   </div>
                 </div>
 
-                {/* <div className="card-inner-wrap">
-                  <h2 className="sub-heading1">Contact Detail</h2>
-                  <div className="flex-between card-blk">
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="corporateEmail">Corporate Email </label>
-                        <Input
-                          control={control}
-                          name="corporateEmail"
-                          onBlur={(e) =>
-                            setValue("corporateEmail", e.target.value?.trim())
-                          }
-                          placeholder="example@domain.com"
-                          myHelper={memberHelper}
-                          rules={{
-                            maxLength: 50,
-                            minLength: 3,
-                            pattern:
-                              /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="phoneNumber">Phone Number</label>
-                        <div className="phone-number-field">
-                          <div className="select-field country-code">
-                            <Controller
-                              control={control}
-                              name="countryCode"
-                              rules={{
-                                validate: () => {
-                                  if (
-                                    !watch("countryCode") &&
-                                    watch("phoneNumber")
-                                  )
-                                    return "Invalid input";
-                                },
-                              }}
-                              // rules={{
-                              //   validate: () => {
-                              //     if (watch("phoneNumber") && !watch("countryCode"))
-                              //       return "Invalid Input";
-                              //   },
-                              // }}
-                              render={({ field, fieldState: { error } }) => (
-                                <EditMemberAutoComplete
-                                  popupIcon={<KeyboardArrowDownRoundedIcon />}
-                                  PaperComponent={({ children }) => (
-                                    <Paper
-                                      className={
-                                        arrOfCountryCode?.length > 5
-                                          ? "autocomplete-option-txt autocomplete-option-limit"
-                                          : "autocomplete-option-txt"
-                                      }
-                                    >
-                                      {children}
-                                    </Paper>
-                                  )}
-                                  {...field}
-                                  className={`${error && "autocomplete-error"}`}
-                                  onChange={(event, newValue) => {
-                                    Logger.debug(
-                                      "inside autocomplete onchange"
-                                    );
-                                    Logger.debug("new Value ", newValue);
-                                    newValue && typeof newValue === "object"
-                                      ? setValue("countryCode", newValue.name)
-                                      : setValue("countryCode", newValue);
-                                    trigger("countryCode");
-                                    trigger("phoneNumber");
-                                  }}
-                                  // sx={{ width: 200 }}
-                                  options={arrOfCountryCode}
-                                  autoHighlight
-                                  // placeholder="Select country code"
-                                  // getOptionLabel={(country) => country.name + " " + country}
-                                  renderOption={(props, option) => (
-                                    <li {...props}>{option}</li>
-                                  )}
-                                  renderInput={(params) => (
-                                    <TextField
-                                      // className={`input-field ${
-                                      //   error && "input-error"
-                                      // }`}
-                                      {...params}
-                                      inputProps={{
-                                        ...params.inputProps,
-                                      }}
-                                      onChange={() => trigger("countryCode")}
-                                      // onSubmit={() => setValue("countryCode", "")}
-                                      placeholder={"+00"}
-                                      helperText={
-                                        error
-                                          ? memberHelper.countryCode[
-                                              error?.type
-                                            ]
-                                          : " "
-                                      }
-                                    />
-                                  )}
-                                />
-                              )}
-                            />
-                          </div>
-                          <Input
-                            control={control}
-                            name="phoneNumber"
-                            myOnChange={(e) =>
-                              phoneNumberChangeHandler(
-                                e,
-                                "phoneNumber",
-                                "countryCode"
-                              )
-                            }
-                            onBlur={(e) =>
-                              setValue("phoneNumber", e.target.value?.trim())
-                            }
-                            placeholder="1234567890"
-                            myHelper={memberHelper}
-                            rules={{
-                              maxLength: 15,
-                              minLength: 7,
-                              validate: (value) => {
-                                if (
-                                  !watch("phoneNumber") &&
-                                  watch("countryCode")
-                                )
-                                  return "invalid input";
-                                if (value && !Number(value))
-                                  return "Invalid input";
-                              },
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="card-form-field">
-                      <div className="form-group">
-                        <label htmlFor="websiteUrl">Website URL</label>
-                        <Input
-                          control={control}
-                          name="websiteUrl"
-                          onBlur={(e) =>
-                            setValue("websiteUrl", e.target.value?.trim())
-                          }
-                          placeholder="www.google.com"
-                          myHelper={memberHelper}
-                          rules={{
-                            maxLength: 50,
-                            minLength: 3,
-                            pattern:
-                              /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
                 <div className="card-inner-wrap">
                   <h2 className="sub-heading1">Company Address Details</h2>
                   <div className="flex-between card-blk">

@@ -204,7 +204,7 @@ const MemberList = () => {
                 </div>
               )}
 
-              {(SUPER_ADMIN == true || moduleAccesForMember[0]?.member?.add) &&
+              {(SUPER_ADMIN  || moduleAccesForMember[0]?.member?.add) &&
                 value === 0 && (
                   <div className="form-btn">
                     <button
