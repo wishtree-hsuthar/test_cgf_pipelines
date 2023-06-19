@@ -412,7 +412,7 @@ const ViewMember = () => {
   const getCountries = async (region) => {
     let controller = new AbortController();
     try {
-      if (region) {
+      if (region && region !== "N/A") {
         return await axios.get(REGIONCOUNTRIES + `/${region}`, {
           signal: controller.signal,
         });
@@ -441,7 +441,7 @@ const ViewMember = () => {
       );
       arrOfCountryRegionsTemp1 &&
         setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
-      if (watch("country")) {
+      if (watch("country") && watch("country") !== "N/A") {
         const stateCountries = await axios.get(STATES + `/${watch("country")}`);
         setArrOfStateCountry(stateCountries.data);
       }

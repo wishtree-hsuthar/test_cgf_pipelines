@@ -662,7 +662,7 @@ const EditMember = () => {
                           myOnChange={categoryChangeHandler1}
                           options={
                             Object.keys(MEMBER_LOOKUP)?.length > 0 &&
-                            Object.keys(MEMBER_LOOKUP)
+                            Object.keys(MEMBER_LOOKUP ?? [])
                           }
                         />
                       </div>
