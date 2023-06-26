@@ -14,6 +14,7 @@ import {
   FETCH_ASSESSMENT_BY_ID,
   FETCH_OPERATION_MEMBER,
   MEMBER_DROPDOWN,
+  SPECIFIC_MEMBER_DROPDOWN,
   UPDATE_ASSESSMENT_BY_ID,
 } from "../../api/Url";
 import Dropdown from "../../components/Dropdown";
@@ -30,6 +31,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
 import { catchError } from "../../utils/CatchError";
+import { useSelector } from "react-redux";
 const helperTextForAssessment = {
   title: {
     required: "Enter the assessment title",
@@ -136,6 +138,20 @@ function EditAssessment() {
     }
   };
 
+  const userAuth = useSelector((state) => state?.user?.userObj);
+  const { isMemberRepresentative, isOperationMember, memberId } = userAuth;
+
+  const handlememberDropdownAPI = () => {
+    if (isMemberRepresentative || isOperationMember) {
+      console.log("specific url", `${SPECIFIC_MEMBER_DROPDOWN}`);
+      return `${SPECIFIC_MEMBER_DROPDOWN}${memberId}`;
+    } else {
+      console.log("master url", `${SPECIFIC_MEMBER_DROPDOWN}$`);
+
+      return MEMBER_DROPDOWN;
+    }
+  };
+
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -187,9 +203,12 @@ function EditAssessment() {
     fetchAssessment();
     const fetchMemberCompaniesForAddAssesments = async () => {
       try {
-        const responseEditMember = await privateAxios.get(MEMBER_DROPDOWN, {
-          signal: controller.signal,
-        });
+        const responseEditMember = await privateAxios.get(
+          handlememberDropdownAPI(),
+          {
+            signal: controller.signal,
+          }
+        );
 
         Logger.debug(
           "responseEditMember from fetch member companies for add assessments",

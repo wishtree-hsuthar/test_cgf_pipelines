@@ -20,10 +20,12 @@ import {
   ADD_QUESTIONNAIRE,
   FETCH_OPERATION_MEMBER,
   MEMBER_DROPDOWN,
+  SPECIFIC_MEMBER_DROPDOWN,
 } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
 import { catchError } from "../../utils/CatchError";
+import { useSelector } from "react-redux";
 
 const helperTextForAssessment = {
   title: {
@@ -51,6 +53,19 @@ const AddAssessment = () => {
   //custom hook to set title of page
   useDocumentTitle("Add Assessment");
 
+  const userAuth = useSelector((state) => state?.user?.userObj);
+  const { isMemberRepresentative, isOperationMember, memberId } = userAuth;
+
+  const handlememberDropdownAPI = () => {
+    if (isMemberRepresentative || isOperationMember) {
+      console.log("specific url", `${SPECIFIC_MEMBER_DROPDOWN}`);
+      return `${SPECIFIC_MEMBER_DROPDOWN}${memberId}`;
+    } else {
+      console.log("master url", `${SPECIFIC_MEMBER_DROPDOWN}$`);
+
+      return MEMBER_DROPDOWN;
+    }
+  };
   const [datevalue, setDateValue] = useState("");
   const [
     memberCompaniesForAddAssessments,
@@ -99,7 +114,7 @@ const AddAssessment = () => {
 
     const fetchMemberCompaniesForAddAssesments = async () => {
       try {
-        const response = await privateAxios.get(MEMBER_DROPDOWN, {
+        const response = await privateAxios.get(handlememberDropdownAPI(), {
           signal: controller.signal,
         });
 
