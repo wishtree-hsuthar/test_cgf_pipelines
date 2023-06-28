@@ -120,7 +120,8 @@ function AddOperationMember() {
       setRoles(response.data);
       response.data.filter(
         (data) =>
-          data.name === "Operation Member" && reset({ roleId: data._id })
+          data.name === "Operation Member" && setValue("roleId", data._id)
+        // reset({ ...defaultValues, roleId: data._id })
       );
     } catch (error) {
       Logger.debug("Error from fetch roles", error);
@@ -168,15 +169,6 @@ function AddOperationMember() {
           (data) => data.companyName === "The Consumer Goods Forum"
         );
 
-        if (isCGFStaff) {
-          setValue("companyType", "Partner");
-          setValue("memberId", CgfMemberCompany[0].companyName);
-          setShowTextField(true);
-          setDisableReportingManager(false);
-          fetchReportingManagers(CgfMemberCompany[0]._id, true);
-          setValue("reportingManager", "");
-          setValue("isCGFStaff", true);
-        }
         if (response.status == 200) {
           isMounted &&
             setMemberCompanies(
@@ -194,6 +186,18 @@ function AddOperationMember() {
                     : 0
                 )
             );
+          if (isCGFStaff) {
+            setValue("companyType", "Partner");
+            setValue("memberId", CgfMemberCompany[0]?.companyName);
+            // setValue("memberId", "ABCD");
+            console.log("CGF - ", CgfMemberCompany[0]?.companyName);
+
+            setShowTextField(true);
+            setDisableReportingManager(false);
+            fetchReportingManagers(CgfMemberCompany[0]._id, true);
+            setValue("reportingManager", "");
+            setValue("isCGFStaff", true);
+          }
           setMemberComapniesLabelsOnly(
             response?.data.map((data) => data.companyName)
           );
@@ -263,7 +267,7 @@ function AddOperationMember() {
     setDisableAddOperationMemberButton(true);
     data = {
       ...data,
-      isCGFStaff: data.isCGFStaff === "true" ? true : false,
+      isCGFStaff: isCGFStaff ? true : data.isCGFStaff === "true" ? true : false,
       memberId:
         data.isCGFStaff === "true"
           ? cgfMember[0]._id
