@@ -116,7 +116,7 @@ function FillAssessment() {
   const [errorQuestionUUID, setErrorQuestionUUID] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [disableFillAssessment, setDisableFillAssessment] = useState(false);
-  const [disableImport, setDisableImport] = useState(false);
+  const [disableImport, setDisableImport] = useState(true);
   const [saveAsDraftDependency, setSaveAsDraftDependency] = useState(false);
   const [errors, setErrors] = useState({});
   const [reOpenAssessmentDialogBox, setReOpenAssessmentDialogBox] =
@@ -687,6 +687,7 @@ function FillAssessment() {
   };
   const [selectedFileName, setSelectedFileName] = useState("");
   const handleImportExcel = (e) => {
+    setDisableImport(false)
     setSelectedFileName(e.target.files[0].name);
     setFile(e.target.files[0]);
   };
@@ -786,7 +787,7 @@ function FillAssessment() {
 
                 setFile("");
                 setSelectedFileName("");
-                setDisableImport(false);
+                setDisableImport(true);
                 setImportOpenDialog(false);
                 setToasterDetails(
                   {
@@ -844,7 +845,7 @@ function FillAssessment() {
               }
             } catch (error) {
               Logger.debug("Error from UPLOAD api", error);
-              setDisableImport(false);
+              setDisableImport(true);
               setIsFillAssessmentLoading(false);
               setSelectedFileName("");
               if (
@@ -870,6 +871,7 @@ function FillAssessment() {
         } else {
           setFile("");
           setSelectedFileName("");
+          disableImport(true)
           setIsFillAssessmentLoading(false);
 
           return setToasterDetails(
@@ -897,6 +899,7 @@ function FillAssessment() {
     } catch (error) {
       setFile("");
       setSelectedFileName("");
+      setDisableImport(true)
       setIsFillAssessmentLoading(false);
 
       Logger.debug("error in reupload assessment", error);
@@ -907,6 +910,7 @@ function FillAssessment() {
     setFile("");
     setSelectedFileName("");
     setIsFillAssessmentLoading(false);
+    setDisableImport(true)
 
     setImportOpenDialog(false);
   };
