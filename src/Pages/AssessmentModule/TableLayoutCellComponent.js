@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateAxios } from "../../api/axios";
 import { DOWNlOAD_FILE, UPLOAD_ATTACHMENTS_MULTER } from "../../api/Url";
@@ -69,10 +69,12 @@ const TableLayoutCellComponent = ({
   const [isFileRemoved, setIsFileRemoved] = useState(false);
   const [oldfilesSelected, setOldfilesSelected] = useState([]);
   const [isDisabledPrimaryButton, setIsDisabledPrimaryButton] = useState(false);
+  const [fileTypeError, setFileTypeError] = useState(false);
   const handleOnKeyDownChange = (e) => {
     e.preventDefault();
   };
   const [isLoading, setIsLoading] = useState(false);
+  const fileRef = useRef(null);
   // const [toasterDetails, setToasterDetails] = useCallbackState({
   //   titleMessage: "",
   //   descriptionMessage: "",
@@ -117,16 +119,18 @@ const TableLayoutCellComponent = ({
     }
     setCurrentSelectedFiles(tempCurrentSelectedFiles);
     if (isFileSizeExceed) {
-      setToasterDetails(
-        {
-          titleMessage: "Error",
-          descriptionMessage: `${isFileSizeExceed} ${
-            isFileSizeExceed > 1 ? "files" : "file"
-          } couldn't be uploaded`,
-          messageType: "error",
-        },
-        () => myRef.current()
-      );
+      setFileTypeError(true);
+
+      // setToasterDetails(
+      //   {
+      //     titleMessage: "Error",
+      //     descriptionMessage: `${isFileSizeExceed} ${
+      //       isFileSizeExceed > 1 ? "files" : "file"
+      //     } couldn't be uploaded`,
+      //     messageType: "error",
+      //   },
+      //   () => myRef.current()
+      // );
     }
     setIsLoading(false);
   };
@@ -144,6 +148,9 @@ const TableLayoutCellComponent = ({
       return;
     }
     getFiles(files);
+    if (fileRef.current) {
+      fileRef.current.value = "";
+    }
   };
   const getFilesForBackend = () => {
     const filterdFiles = currentSelectedFiles.filter((file) => !file?.location);
@@ -326,6 +333,7 @@ const TableLayoutCellComponent = ({
                 >
                   {/* <input hidden accept="image/*" multiple type="file" /> */}
                   <input
+                    ref={fileRef}
                     type={"file"}
                     hidden
                     accept={
@@ -375,6 +383,30 @@ const TableLayoutCellComponent = ({
         setOpenModal={setOpenFileAttachmntDialog}
         isModalForm={true}
         handleCloseRedirect={cancelAttachmentButtonClickHandler}
+      />
+      <DialogBox
+        title={<p>Alert</p>}
+        info1={" "}
+        info2={
+          <p className="mb-30" style={{ padding: "20px", textAlign: "left" }}>
+            Unable to attach the file due to one of the following reasons:
+            <ul>
+              <li>File size exceeding more than 10 mb</li>
+
+              <li>
+                Allowed file types - jpg, jpeg, png, doc, txt, pdf, docx, xlsx,
+                xls, ppt, pptx, mp4, mp3, zip, rar
+              </li>
+            </ul>
+          </p>
+        }
+        openModal={fileTypeError}
+        setOpenModal={setFileTypeError}
+        isModalForm={true}
+        primaryButtonText={"OK"}
+        hideCloseIcon={true}
+        onPrimaryModalButtonClickHandler={() => setFileTypeError(false)}
+        // handleCloseRedirect={() => setFileTypeError(false)}
       />
       {isPrefilled &&
         transformedColumns[columnUUID] &&
