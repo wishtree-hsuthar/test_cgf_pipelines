@@ -390,8 +390,8 @@ const TableLayoutCellComponent = ({
         info2={
           <p className="mb-30" style={{ padding: "20px", textAlign: "left" }}>
             Unable to attach the file due to one of the following reasons:
-            <ul>
-              <li>File size exceeding more than 10 mb</li>
+            <ul style={{ padding: "20px" }}>
+              <li>File size exceeding more than 10 MB</li>
 
               <li>
                 Allowed file types - jpg, jpeg, png, doc, txt, pdf, docx, xlsx,
