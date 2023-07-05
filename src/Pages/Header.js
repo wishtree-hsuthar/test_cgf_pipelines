@@ -340,7 +340,7 @@ const Header = () => {
                                 navigate("/users/members");
                               }}
                             >
-                              Members
+                              Company Members
                             </a>
                           </li>
                           <li
@@ -361,7 +361,7 @@ const Header = () => {
                                 navigate("/users/operation-members");
                               }}
                             >
-                              Operation Members
+                              Operation Team Members
                             </a>
                           </li>
                         </ul>
