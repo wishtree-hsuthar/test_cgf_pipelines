@@ -123,6 +123,8 @@ function FillAssessment() {
     useState(false);
   const [invalidAssessmentDialogBox, setInvalidAssessmentDialogBox] =
     useState(false);
+    const fileRef = useRef(null);
+
 
   const viewInstruction = () => {
     navigate("/assessment-list/instructions");
@@ -690,6 +692,9 @@ function FillAssessment() {
     setDisableImport(false)
     setSelectedFileName(e.target.files[0].name);
     setFile(e.target.files[0]);
+    if (fileRef.current) {
+      fileRef.current.value = "";
+    }
   };
   const handleDownloadAssessment = async () => {
     try {
@@ -1102,6 +1107,7 @@ function FillAssessment() {
                   type={"file"}
                   hidden
                   accept={".xls, .xlsx"}
+                  ref={fileRef}
                   onChange={handleImportExcel}
                 />
                 <span className="upload-icon">
