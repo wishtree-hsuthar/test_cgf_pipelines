@@ -83,6 +83,16 @@ function AddOperationMember() {
       return MEMBER_DROPDOWN;
     }
   };
+  const handleRoles = (data) => {
+    if (isCGFStaff && isOperationMember) {
+      let role = ["CGF Admin", "Member Representative"];
+      setRoles(data.filter((data) => !role.includes(data.name)));
+    } else if (isMemberRepresentative || isOperationMember) {
+      setRoles(data.filter((data) => data.name !== "CGF Admin"));
+    } else {
+      setRoles(data);
+    }
+  };
   const navigate = useNavigate();
   const [memberComapniesLabelsOnly, setMemberComapniesLabelsOnly] = useState(
     []
@@ -117,7 +127,8 @@ function AddOperationMember() {
     try {
       const response = await privateAxios.get(FETCH_ROLES);
       Logger.debug("Response from fetch roles - ", response);
-      setRoles(response.data);
+      // setRoles(response.data);
+      handleRoles(response.data);
       response.data.filter(
         (data) =>
           data.name === "Operation Member" && setValue("roleId", data._id)
