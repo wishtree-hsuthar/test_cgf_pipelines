@@ -39,7 +39,13 @@ import { useSelector } from "react-redux";
 let OPERATION_TYPES = [];
 function AddOperationMember() {
   //custom hook to set title of page
+
   useDocumentTitle("Add Operation Member");
+  const userAuth = useSelector((state) => state?.user?.userObj);
+
+  const { isMemberRepresentative, isOperationMember, memberId, isCGFStaff } =
+    userAuth;
+
   const defaultValues = {
     salutation: "Mr.",
     memberId: "",
@@ -48,7 +54,7 @@ function AddOperationMember() {
     // companyType: "",
     countryCode: "",
     address: "",
-    isCGFStaff: false,
+    isCGFStaff: isCGFStaff ? isCGFStaff : false,
     roleId: "",
   };
   const {
@@ -63,12 +69,11 @@ function AddOperationMember() {
     defaultValues: defaultValues,
   });
 
-  const userAuth = useSelector((state) => state?.user?.userObj);
-  const { isMemberRepresentative, isOperationMember, memberId } = userAuth;
   const [hideCgfStaff, setHideCgfStaff] = useState(false);
+  const [cgfMember, setCgfMember] = useState([]);
 
   const handlememberDropdownAPI = () => {
-    if (isMemberRepresentative || isOperationMember) {
+    if (isMemberRepresentative || isOperationMember || isCGFStaff) {
       console.log("specific url", `${SPECIFIC_MEMBER_DROPDOWN}`);
       setHideCgfStaff(isMemberRepresentative || isOperationMember);
       return `${SPECIFIC_MEMBER_DROPDOWN}${memberId}`;
@@ -106,7 +111,6 @@ function AddOperationMember() {
   // conditionally render textfield or searchable textfield
   const [showTextField, setShowTextField] = useState(false);
   // cgf as member company
-  const [cgfMember, setCgfMember] = useState([]);
   const [roles, setRoles] = useState([]);
   // Fetch and set roles
   let fetchRoles = async () => {
@@ -116,7 +120,8 @@ function AddOperationMember() {
       setRoles(response.data);
       response.data.filter(
         (data) =>
-          data.name === "Operation Member" && reset({ roleId: data._id })
+          data.name === "Operation Member" && setValue("roleId", data._id)
+        // reset({ ...defaultValues, roleId: data._id })
       );
     } catch (error) {
       Logger.debug("Error from fetch roles", error);
@@ -160,6 +165,9 @@ function AddOperationMember() {
             (data) => data.companyName === "The Consumer Goods Forum"
           )
         );
+        let CgfMemberCompany = response.data.filter(
+          (data) => data.companyName === "The Consumer Goods Forum"
+        );
 
         if (response.status == 200) {
           isMounted &&
@@ -178,6 +186,18 @@ function AddOperationMember() {
                     : 0
                 )
             );
+          if (isCGFStaff) {
+            setValue("companyType", "Partner");
+            setValue("memberId", CgfMemberCompany[0]?.companyName);
+            // setValue("memberId", "ABCD");
+            console.log("CGF - ", CgfMemberCompany[0]?.companyName);
+
+            setShowTextField(true);
+            setDisableReportingManager(false);
+            fetchReportingManagers(CgfMemberCompany[0]._id, true);
+            setValue("reportingManager", "");
+            setValue("isCGFStaff", true);
+          }
           setMemberComapniesLabelsOnly(
             response?.data.map((data) => data.companyName)
           );
@@ -223,7 +243,7 @@ function AddOperationMember() {
     try {
       const response = await privateAxios.get(
         isCGF
-          ? FETCH_OPERATION_MEMBER + cgfMember[0]?._id + "/master/rm"
+          ? FETCH_OPERATION_MEMBER + id + "/master/rm"
           : FETCH_OPERATION_MEMBER + id + "/master/internal"
       );
       if (response.status == 200) {
@@ -247,7 +267,7 @@ function AddOperationMember() {
     setDisableAddOperationMemberButton(true);
     data = {
       ...data,
-      isCGFStaff: data.isCGFStaff === "true" ? true : false,
+      isCGFStaff: isCGFStaff ? true : data.isCGFStaff === "true" ? true : false,
       memberId:
         data.isCGFStaff === "true"
           ? cgfMember[0]._id
@@ -321,7 +341,7 @@ function AddOperationMember() {
       setValue("memberId", cgfCompany[0].companyName);
       setShowTextField(true);
       setDisableReportingManager(false);
-      fetchReportingManagers("", true);
+      fetchReportingManagers(cgfCompany[0]._id, true);
       setValue("reportingManager", "");
     } else {
       setValue("companyType", "N/A");

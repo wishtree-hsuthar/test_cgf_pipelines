@@ -80,7 +80,7 @@ function EditOperationMember() {
   // watch('')
   const navigate = useNavigate();
   const params = useParams();
-  const state = params["*"].includes("pending") ? 1 : 0
+  const state = params["*"].includes("pending") ? 1 : 0;
   const [memberCompanies, setMemberCompanies] = useState([]);
   const [disableEditMemberUpdateButton, setDisableEditMemberUpdateButton] =
     useState(false);
@@ -174,7 +174,7 @@ function EditOperationMember() {
         //     : "/master/internal"
         // // operationMember?.memberId?._id +
         isCGFStaff
-          ? FETCH_OPERATION_MEMBER + id + "/master/external"
+          ? FETCH_OPERATION_MEMBER + id + "/master/rm"
           : FETCH_OPERATION_MEMBER + id + "/master/internal"
       );
       Logger.debug("response from rm", response);
@@ -317,7 +317,7 @@ function EditOperationMember() {
       );
       if (response.status == 200) {
         setIsEditOperationMemberLoading(false);
-       
+
         setToasterDetails(
           {
             titleMessage: "Hurray!",
@@ -328,7 +328,7 @@ function EditOperationMember() {
         );
 
         setTimeout(() => {
-          navigate("/users/operation-members",{state});
+          navigate("/users/operation-members", { state });
         }, 3000);
       }
     } catch (error) {
@@ -858,7 +858,9 @@ function EditOperationMember() {
                   <div className="form-btn flex-between add-members-btn">
                     <button
                       type={"reset"}
-                      onClick={() => navigate("/users/operation-members",{state})}
+                      onClick={() =>
+                        navigate("/users/operation-members", { state })
+                      }
                       className="secondary-button mr-10"
                     >
                       Cancel
