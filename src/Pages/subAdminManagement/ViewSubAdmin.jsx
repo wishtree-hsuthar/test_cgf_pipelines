@@ -143,9 +143,7 @@ const ViewSubAdmin = () => {
     } catch (error) {
       catchError(error, setToasterDetails, toasterRef, navigate);
       Logger.info(
-        Logger.debug(
-          "resend email"
-        )`view subadmin - withdrawInviteByIdCGFAdmin handler catch error - ${error?.response?.data?.message}`
+        `view subadmin - withdrawInviteByIdCGFAdmin handler catch error - ${error?.response?.data?.message}`
       );
     }
   };
