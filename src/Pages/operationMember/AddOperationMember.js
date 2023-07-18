@@ -74,12 +74,9 @@ function AddOperationMember() {
 
   const handlememberDropdownAPI = () => {
     if (isMemberRepresentative || isOperationMember || isCGFStaff) {
-      console.log("specific url", `${SPECIFIC_MEMBER_DROPDOWN}`);
       setHideCgfStaff(isMemberRepresentative || isOperationMember);
       return `${SPECIFIC_MEMBER_DROPDOWN}${memberId}`;
     } else {
-      console.log("master url", `${SPECIFIC_MEMBER_DROPDOWN}$`);
-
       return MEMBER_DROPDOWN;
     }
   };
@@ -125,8 +122,9 @@ function AddOperationMember() {
   // Fetch and set roles
   let fetchRoles = async () => {
     try {
+      Logger.info("Add Operation Member - fetchRoles handler");
       const response = await privateAxios.get(FETCH_ROLES);
-      Logger.debug("Response from fetch roles - ", response);
+
       // setRoles(response.data);
       handleRoles(response.data);
       response.data.filter(
@@ -135,19 +133,13 @@ function AddOperationMember() {
         // reset({ ...defaultValues, roleId: data._id })
       );
     } catch (error) {
-      Logger.debug("Error from fetch roles", error);
+      Logger.info(
+        `Add Operation Member - fetchRoles handler catch error - ${error?.response?.data?.message}`
+      );
     }
   };
 
   const phoneNumberChangeHandler = (e, name, code) => {
-    Logger.debug(
-      "on number change",
-      e.target.value,
-      "name: ",
-      name,
-      "code",
-      code
-    );
     setValue(name, e.target.value);
     trigger(name);
     trigger(code);
@@ -161,15 +153,10 @@ function AddOperationMember() {
     OPERATION_TYPES?.length === 0 && callGetOperationType();
     const fetchMemberComapany = async () => {
       try {
+        Logger.info("Add Operation Member - fetchMemberCompany handler");
         const response = await privateAxios.get(handlememberDropdownAPI(), {
           signal: controller.signal,
         });
-        Logger.debug(
-          "member company---",
-          response.data.map((data) => {
-            Logger.debug("member company=", data?.companyName);
-          })
-        );
 
         setCgfMember(
           response.data.filter(
@@ -201,7 +188,6 @@ function AddOperationMember() {
             setValue("companyType", "Partner");
             setValue("memberId", CgfMemberCompany[0]?.companyName);
             // setValue("memberId", "ABCD");
-            console.log("CGF - ", CgfMemberCompany[0]?.companyName);
 
             setShowTextField(true);
             setDisableReportingManager(false);
@@ -213,23 +199,19 @@ function AddOperationMember() {
             response?.data.map((data) => data.companyName)
           );
         }
-
-        Logger.debug("member company---", memberCompanies);
-        Logger.debug(
-          "member company labels only = ",
-          memberComapniesLabelsOnly
-        );
       } catch (error) {
-        Logger.debug("error from fetch member company", error);
+        Logger.info(
+          `Add Operation Member - fetchMemberCompany handler catch error - ${error?.response?.data?.message}`
+        );
         catchError(error, setToasterDetails, toasterRef, navigate);
       }
     };
     let fetchCountries = async () => {
       try {
+        Logger.info("Add Operation Member - fetchContries");
         const response = await privateAxios.get(COUNTRIES, {
           signal: controller.signal,
         });
-        Logger.debug("response", response);
         if (isMounted) {
           let tempCountryCode = response.data.map(
             (country) => country?.countryCode
@@ -238,7 +220,9 @@ function AddOperationMember() {
           setCountries([...conutryCodeSet]);
         }
       } catch (error) {
-        Logger.debug("error from countries api", error);
+        Logger.info(
+          `Add Operation Member - fetchContries handler catch error ${error?.response?.data?.message}`
+        );
       }
     };
     fetchCountries();
@@ -252,6 +236,7 @@ function AddOperationMember() {
   }, []);
   const fetchReportingManagers = async (id, isCGF) => {
     try {
+      console.log("Add Operation Member - fetchReportingManagers handler");
       const response = await privateAxios.get(
         isCGF
           ? FETCH_OPERATION_MEMBER + id + "/master/rm"
@@ -266,7 +251,9 @@ function AddOperationMember() {
         );
       }
     } catch (error) {
-      Logger.debug("error from fetching reporting managers", error);
+      Logger.info(
+        `Add Operation Member - fetchReportingManage handler catch error - ${error?.response?.data?.message}`
+      );
       catchError(error, setToasterDetails, toasterRef, navigate);
     }
   };
@@ -274,7 +261,6 @@ function AddOperationMember() {
     let selectedMemberCompany = memberCompanies.filter(
       (company) => company.companyName === data.memberId
     );
-    Logger.debug("Selected member company = ", selectedMemberCompany);
     setDisableAddOperationMemberButton(true);
     data = {
       ...data,
@@ -284,9 +270,9 @@ function AddOperationMember() {
           ? cgfMember[0]._id
           : selectedMemberCompany[0]._id,
     };
-    Logger.debug("Data while adding operation member - ", data);
     setIsAddOperationMemberLoading(true);
     try {
+      Logger.info("Add Operation Member - addOperationMember handler");
       const response = await privateAxios.post(ADD_OPERATION_MEMBER, data);
       if (response.status == 201) {
         setIsAddOperationMemberLoading(false);
@@ -315,11 +301,9 @@ function AddOperationMember() {
           }, 3000);
       }
     } catch (error) {
-      Logger.debug(
-        "error in submit data for add operation member method",
-        error
+      Logger.info(
+        `Add Operation Member - addOperationMember handler catch error - ${error?.response?.data?.message}`
       );
-      console.log("error from handle submit", error);
       setDisableAddOperationMemberButton(false);
       setIsAddOperationMemberLoading(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
@@ -327,11 +311,9 @@ function AddOperationMember() {
   };
 
   const handleOnSubmit = async (data) => {
-    Logger.debug("data from onsubmit", data);
     addOperationMember(data, false);
   };
   const handleSaveAndMore = async (data) => {
-    Logger.debug("data from handleSaveAndMore", data);
     await addOperationMember(data, true);
     setShowTextField(false);
     let role = roles.filter((role) => role.name === "Operation Member");
@@ -345,8 +327,6 @@ function AddOperationMember() {
     let cgfCompany = memberCompanies?.filter(
       (company) => company.companyName === "The Consumer Goods Forum"
     );
-    Logger.debug(e);
-    Logger.debug(cgfCompany[0]._id);
     if (e.target.value === "true") {
       setValue("companyType", "Partner");
       setValue("memberId", cgfCompany[0].companyName);
@@ -365,7 +345,7 @@ function AddOperationMember() {
     }
     trigger("memberId");
   };
-  Logger.debug("member Id", memberCompanies?._id);
+
   return (
     <div className="page-wrapper">
       <Toaster
@@ -541,13 +521,6 @@ function AddOperationMember() {
                                 )}
                                 popupIcon={<KeyboardArrowDownRoundedIcon />}
                                 onChange={(event, newValue) => {
-                                  Logger.debug(
-                                    "inside autocomplete onchange of addoperation member"
-                                  );
-                                  Logger.debug(
-                                    "new Value operation member",
-                                    newValue
-                                  );
                                   newValue && typeof newValue === "object"
                                     ? setValue("countryCode", newValue.name)
                                     : setValue("countryCode", newValue);
@@ -730,10 +703,7 @@ function AddOperationMember() {
                                       (company) =>
                                         company.companyName === newValue
                                     );
-                                  Logger.debug(
-                                    "Selected member company = ",
-                                    selectedMemberCompany
-                                  );
+                                 
                                   newValue &&
                                     setValue(
                                       "memberId",
@@ -741,8 +711,6 @@ function AddOperationMember() {
                                       //     ._id
                                       newValue
                                     );
-                                  Logger.debug("inside autocomplete onchange");
-                                  Logger.debug("new Value ", newValue);
                                   setValue("reportingManager", "");
                                   trigger("memberId");
                                   setDisableReportingManager(false);

@@ -47,12 +47,7 @@ function OnboardedOperationMember({
         add: data?.add,
       },
     }));
-  Logger.info(
-    "member operation privilege",
-    moduleAccessForOperationMember[0]?.operationMember
-  );
-  Logger.info("privilege", privilege);
-
+  
   const navigate = useNavigate();
 
   const [
@@ -91,7 +86,6 @@ function OnboardedOperationMember({
       "isActive",
     ];
 
-    Logger.debug("data before update----", data);
 
     let staleData = data;
     staleData.forEach((opMember) => {
@@ -145,13 +139,10 @@ function OnboardedOperationMember({
         opMember[k] = v;
       });
     });
-    Logger.debug("data in updaterecords method", staleData);
     setRecordsForOnboardedOperationMemberTab([...staleData]);
   };
 
   const generateUrl = () => {
-    Logger.debug("filters in onboarded table----", filters);
-    Logger.debug("Search", search);
     let url = `${ADD_OPERATION_MEMBER}/list?page=${pageForOnboardedOperationMemberTab}&size=${rowsPerPageForOnboardedOperationMemberTab}&orderBy=${orderByForOnboardedOperationMember}&order=${orderForOnboardedOperationMemberTab}`;
     if (search) url += `&search=${search}`;
 
@@ -164,6 +155,7 @@ function OnboardedOperationMember({
     try {
       let url = generateUrl();
       setIsOnboardedOperationMemberLoading(true);
+      Logger.info("Onboarded Operation Member - getSubAdmin handler")
       const response = await privateAxios.get(url, {
         signal: controller.signal,
       });
@@ -171,14 +163,14 @@ function OnboardedOperationMember({
       setTotalRecordsForOnboardedOperationMemberTab(
         parseInt(response.headers["x-total-count"])
       );
-      Logger.debug("Response from sub admin api get", response);
+
 
       updateRecords([...response.data]);
       setIsOnboardedOperationMemberLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setIsOnboardedOperationMemberLoading(false);
-      Logger.debug("Error from getSubAdmin-------", error);
+      Logger.info(`Onboarded Operation Member - getSubAdmin handler catch error - ${error?.response?.data?.message}`)
       catchError(error, setToasterDetails, myRef, navigate);
     }
   };
@@ -195,15 +187,13 @@ function OnboardedOperationMember({
   };
   // on click eye icon to  navigate view page
   const onClickVisibilityIconHandler = (id) => {
-    Logger.debug("id", id);
+    
     return navigate(`/users/operation-member/view-operation-member/${id}`);
   };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
     makeApiCall && getSubAdmin(isMounted, controller);
-    Logger.debug("makeApiCall", makeApiCall);
-    Logger.debug("inside use Effect");
     return () => {
       isMounted = false;
       clearTimeout(searchTimeout);

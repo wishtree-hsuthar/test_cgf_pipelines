@@ -97,7 +97,7 @@ const PublishedQuestionnaires = ({
   };
 
   const generateUrl = () => {
-    Logger.debug("Search", search);
+    
     let url = `${ADD_QUESTIONNAIRE}/list?page=${pagePublishedQuestionnaire}&size=${rowsPerPagePublishedQuestionnaire}&orderBy=${orderByPublishedQuestionnaire}&order=${orderPublishedQuestionnaire}`;
     if (search?.length) url += `&search=${search}`;
 
@@ -123,10 +123,7 @@ const PublishedQuestionnaires = ({
         add: data?.add,
       },
     }));
-  Logger.debug(
-    "module access member in view member",
-    moduleAccesForMember[0]?.questionnaire
-  );
+  
 
   const getPublishedQuestionnaire = async (
     isMounted = true,
@@ -135,22 +132,23 @@ const PublishedQuestionnaires = ({
     try {
       let url = generateUrl();
       setIsPublishedQuestionnaireLoading(true);
+      Logger.info("Questionnaire - Published Questionnaire - getPublishedQuestionnaire handler")
       const response = await privateAxios.get(url, {
         signal: controller.signal,
       });
       setTotalRecordsPublishedQuestionnaire(
         parseInt(response.headers["x-total-count"])
       );
-      Logger.debug("Response from sub admin api get", response);
+      
 
       updateRecords([...response.data]);
       setIsPublishedQuestionnaireLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("Error from questionnaire-------", error);
+      Logger.info(`Questionnaire - Published Questionnaire - fetch handler - getPublishedQuestionnaire handler ${error?.response?.data?.message}`)
 
       if (error.response.status === 401) {
-        Logger.debug("Unauthorized user access");
+
         // Add error toaster here
         setToasterDetails(
           {
@@ -204,7 +202,7 @@ const PublishedQuestionnaires = ({
   };
 
   const onClickVisibilityIconHandler = (uuid) => {
-    Logger.debug("id", uuid);
+  
     return navigate(`/questionnaires/preview-questionnaire/${uuid}`);
   };
   const questionnaireToasterRef = useRef();
@@ -217,8 +215,6 @@ const PublishedQuestionnaires = ({
     let isMounted = true;
     const controller = new AbortController();
     makeApiCall && getPublishedQuestionnaire(isMounted, controller);
-    Logger.debug("makeApiCall", makeApiCall);
-    Logger.debug("inside use Effect");
     return () => {
       isMounted = false;
       clearTimeout(searchTimeout);

@@ -68,7 +68,7 @@ function PendingOperationMembers({
 
   // update recordes from backend i.e remove unnecessary values
   const updatePendingRecords = (data) => {
-    Logger.debug("data before update----", data);
+    
 
     let staleData = data;
     staleData.forEach((pendingOPMember) => {
@@ -114,7 +114,7 @@ function PendingOperationMembers({
         pendingOPMember[k] = v;
       });
     });
-    Logger.debug("data in updaterecords method in pending method", staleData);
+    
     setRecordsForPendingOperationMemberTab([...staleData]);
   };
 
@@ -125,7 +125,7 @@ function PendingOperationMembers({
 
   // rows per page method for pending tab
   const handleRowsPerPageChangeForPendingTab = (event) => {
-    Logger.debug("rows per page", event);
+    
     setRowsPerPageForPendingOperationMemberTab(
       parseInt(event.target.value, 10)
     );
@@ -134,14 +134,14 @@ function PendingOperationMembers({
 
   //  on click delete icon open delete modal
   const onClickDeleteIconHandler = (id) => {
-    Logger.debug("id for delete", id);
+    
     setOpenDeleteDialogBoxPendingOperationMember(true);
     setWithdrawInviteidOfOperationMember(id);
   };
 
   // on row click redirect ro view details page
   const onClickVisibilityIconHandler = (id) => {
-    Logger.debug("id", id);
+    
     return navigate(
       `/users/operation-member/pending/view-operation-member/${id}`
     );
@@ -149,11 +149,12 @@ function PendingOperationMembers({
 
   const withdrawInviteById = async () => {
     try {
+      Logger.info("Pending Operation Members - withdrawInviteById handler")
       const response = await privateAxios.delete(
         WITHDRAW_OPERATION_MEMBER + withdrawInviteidOfOperationMember
       );
       if (response.status == 200) {
-        Logger.debug("operation member  invite withdrawn successfully");
+        
         setToasterDetails(
           {
             titleMessage: "Success",
@@ -167,15 +168,13 @@ function PendingOperationMembers({
         setOpenDeleteDialogBoxPendingOperationMember(false);
       }
     } catch (error) {
-      Logger.debug("error from withdrawInvite id operation member", error);
+      Logger.info(`Onboarded Operation Member - getSubAdmin handler - catch error - ${error?.response?.data?.message}`)
       catchError(error, setToasterDetails, myRef, navigate);
     }
   };
 
   const generateUrlForPendingTab = () => {
-    Logger.debug("filters", filters);
-    Logger.debug("Search", search);
-
+    
     let url = `${ADD_OPERATION_MEMBER}/pending/list?page=${pageForPendingOperationMemberTab}&size=${rowsPerPageForPendingOperationMemberTab}&orderBy=${orderByForPendingOperationMember}&order=${orderForPendingOperationMemberTab}`;
     if (search.length > 0) url += `&search=${search}`;
 
@@ -189,6 +188,7 @@ function PendingOperationMembers({
     try {
       let url = generateUrlForPendingTab();
       setIsPendingOperationMemberLoading(true);
+      Logger.info("Pending Operation Member - getPendingOperationMember handler")
       const response = await privateAxios.get(
         url,
 
@@ -200,21 +200,14 @@ function PendingOperationMembers({
       setTotalRecordsForPendingOperationMemberTab(
         parseInt(response.headers["x-total-count"])
       );
-      Logger.debug(
-        "Response from operation member api get for pending tab table",
-        response
-      );
+     
 
       updatePendingRecords(response.data);
       setIsPendingOperationMemberLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setIsPendingOperationMemberLoading(false);
-
-      Logger.debug(
-        "Error from get all pending operation member  tab table-------",
-        error
-      );
+      Logger.info(`Pending Operation Member - getPendingOperationMember handler - catch error - ${error?.response?.data?.message}`)
       if (error?.response?.status == 401) {
         isMounted &&
           setToasterDetails(
@@ -265,8 +258,7 @@ function PendingOperationMembers({
     let isMounted = true;
     const controller = new AbortController();
     makeApiCall && getPendingOperationMember(isMounted, controller);
-    Logger.debug("makeApiCall", makeApiCall);
-    Logger.debug("inside use Effect");
+    
     return () => {
       isMounted = false;
       controller.abort();

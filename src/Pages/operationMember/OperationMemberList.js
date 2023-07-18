@@ -50,16 +50,13 @@ function OperationMemberList() {
         add: data.add,
       },
     }));
-  Logger.debug(
-    "member operation privilege",
-    moduleAccessForOperationMember[0]?.operationMember
-  );
+  
 
   const onSearchChangeHandler = (e) => {
-    Logger.debug("event", e.key);
+   
     if (searchTimeout) clearTimeout(searchTimeout);
     setMakeApiCall(false);
-    Logger.debug("search values", e.target.value);
+   
     setSearch(e.target.value);
     setSearchTimeout(
       setTimeout(() => {

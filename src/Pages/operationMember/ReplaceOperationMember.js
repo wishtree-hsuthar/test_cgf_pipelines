@@ -75,10 +75,10 @@ const ReplaceOperationMember = () => {
   });
   // seacrchReplaceOP function
   const onSearchChangeHandlerReplaceOP = (e) => {
-    Logger.debug("event", e.key);
+
     if (searchTimeoutReplaceOP) clearTimeout(searchTimeoutReplaceOP);
     setMakeApiCallReplaceOP(false);
-    Logger.debug("seacrchReplaceOP values", e.target.value);
+
     setSearchReplaceOP(e.target.value);
     setSearchTimeoutReplaceOP(
       setTimeout(() => {
@@ -88,7 +88,7 @@ const ReplaceOperationMember = () => {
     );
   };
   const generateUrl = (multiFilterString) => {
-    Logger.debug("Search", seacrchReplaceOP);
+    
 
     let url = `${ADD_OPERATION_MEMBER}/${id}/replaces/list?page=${opListPage}&size=${rowsPerPageReplaceOP}&orderBy=${orderByReplaceOP}&order=${orderReplaceOP}`;
     if (seacrchReplaceOP?.length >= 3)
@@ -98,7 +98,7 @@ const ReplaceOperationMember = () => {
   };
 
   const updateRecordsReplaceOP = (data) => {
-    Logger.debug("data before update----", data);
+    
 
     let staleData = data;
     staleData.forEach((objectRP) => {
@@ -138,7 +138,7 @@ const ReplaceOperationMember = () => {
         objectRP[k] = v;
       });
     });
-    Logger.debug("data in updateRecordsReplaceOP method", staleData);
+    
     setRecordsReplaceOP([...staleData]);
   };
 
@@ -147,30 +147,33 @@ const ReplaceOperationMember = () => {
     controller = new AbortController()
   ) => {
     try {
+      Logger.info("Replace Operation Member - getOperationMember handler")
       let url = generateUrl();
       const response = await privateAxios.get(url, {
         signal: controller.signal,
       });
 
       setTotalRecordsReplaceOP(parseInt(response.headers["x-total-count"]));
-      Logger.debug("Response from operation member api get", response);
+
 
       updateRecordsReplaceOP(response.data.filter((data) => data._id !== id));
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("Error from operation member-------", error);
+      Logger.info(`Replace Operation Member - getOperationMember handler - catch error - ${error?.response?.data?.message}`)
     }
   };
 
   const fetchOperationMember = async (isMounted, controller) => {
     try {
+      Logger.info("Replace Operation Member - fetchOperationMember handler")
       const response = await privateAxios.get(GET_OPERATION_MEMBER_BY_ID + id, {
         signal: controller.signal,
       });
-      Logger.debug("response from fetch sub admin by id", response);
+      
       setOperationMemberReplaceOP(response.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
+      Logger.info(`Replace Operation Member - fetchOperationMember handler - catch error - ${error?.response?.data?.message}`)
       catchError(
         error,
         setToasterDetails,
@@ -184,8 +187,6 @@ const ReplaceOperationMember = () => {
     let isMounted = true;
     const controller = new AbortController();
     makeApiCallReplaceOP && getOperationMember(isMounted, controller);
-    Logger.debug("makeApiCallReplaceOP", makeApiCallReplaceOP);
-    Logger.debug("inside use Effect");
     fetchOperationMember(isMounted, controller);
 
     return () => {
@@ -202,7 +203,6 @@ const ReplaceOperationMember = () => {
   ]);
 
   const handleTableTesterPageChange = (newPage) => {
-    Logger.debug("new Page", newPage);
     setOPPage(newPage);
   };
 
@@ -215,6 +215,7 @@ const ReplaceOperationMember = () => {
   const replaceUser = async () => {
     try {
       setdisableSubmit(true);
+      Logger.info("Replace Operation Member - replaceUser handler")
       const response = await privateAxios.post(
         REPLACE_SUB_ADMIN + "replace",
 
@@ -225,12 +226,7 @@ const ReplaceOperationMember = () => {
         }
       );
       if (response.status == 201) {
-        Logger.debug(
-          selectedOperationMember[0].name +
-            " has replaced " +
-            operationMemberReplaceOP.name +
-            " successfully!"
-        );
+        
         setToasterDetails(
           {
             titleMessage: "Success",
@@ -250,7 +246,7 @@ const ReplaceOperationMember = () => {
       }
     } catch (error) {
       setdisableSubmit(false);
-      Logger.debug("error from replace user");
+      Logger.info(`Replace Operation Member - replaceUser handler - catch error - ${error?.response?.data?.message}`)
 
       catchError(
         error,
@@ -265,21 +261,17 @@ const ReplaceOperationMember = () => {
   const [open, setOpen] = useState(false);
 
   const handleYes = () => {
-    Logger.debug(
-      "Yes replcae" + id + " replace id with",
-      selectedUserReplaceOP
-    );
+   
     replaceUser();
   };
   const handleNo = () => {
-    Logger.debug("No replcae");
-    navigate("/users/operation-members", { state: 0 });
+       navigate("/users/operation-members", { state: 0 });
   };
   const openReplaceDailogBox = () => {
     setOpen(true);
   };
   const selectSingleUser = (opId) => {
-    Logger.debug("select single user---", opId);
+    
     setSelectedUserReplaceOP(opId);
     setSelectedOperationMember({
       ...recordsReplaceOP.filter(

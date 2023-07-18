@@ -55,7 +55,7 @@ function AddNewQuestionnaire() {
   const location = useLocation();
   const { pathname } = location;
   useDocumentTitle(pathname.includes("edit") ? "Edit Questionnaire" : "Add Questionnaire");
-  console.log("pathname",pathname)
+
 
   const [globalSectionTitleError, setGlobalSectionTitleError] = useState({
     errMsg: "",
@@ -113,7 +113,6 @@ function AddNewQuestionnaire() {
     isActive: true,
   });
   const urlParams = useParams();
-  Logger.debug("urlParams- ", urlParams);
   const privilegeObj = useSelector((state) => state?.user?.privilege);
   const userAuthObj = useSelector((state) => state?.user?.userObj);
   const SUPER_ADMIN = privilegeObj?.name === "Super Admin" ? true : false;
@@ -138,15 +137,17 @@ function AddNewQuestionnaire() {
     const fetch = async () => {
       try {
         setIsQuestionnaireLoading(true);
+        Logger.info("Questionnaire - Add New Questionnaire - fetch handler")
         const response = await privateAxios.get(`${ADD_QUESTIONNAIRE}/${id}`, {
           signal: controller.signal,
         });
         setIsQuestionnaireLoading(false);
-        Logger.debug("response from fetch questionnaire", response);
+        
 
         isMounted && setQuestionnaire({ ...response.data });
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
+        Logger.info(`Questionnaire - Add New Questionnaire - fetch handler - catch error - ${error?.response?.data?.message}`)
         setIsQuestionnaireLoading(false);
         catchError(
           error,

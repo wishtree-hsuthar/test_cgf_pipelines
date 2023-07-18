@@ -206,7 +206,7 @@ const Question = ({
             sectionIndex
         ].questions.filter((question) => question.questionTitle === title);
         if (filterSameNameQuestionTitle.length > 1) {
-            Logger.debug("Same question title appeared twice.");
+            
             return true;
         } else {
             return false;

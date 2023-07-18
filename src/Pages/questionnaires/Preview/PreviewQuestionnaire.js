@@ -72,8 +72,6 @@ function PreviewQuestionnaire(props) {
   };
   const params = useParams();
   const navigate = useNavigate();
-  Logger.debug("params in questionnaire", params["*"].includes("version"));
-  Logger.debug("props in questionnaire", props);
   const [questionnaire, setQuestionnaire] = useState({});
 
   const privilege = useSelector((state) => state?.user?.privilege);
@@ -99,6 +97,7 @@ function PreviewQuestionnaire(props) {
     let controller = new AbortController();
     const fetch = async () => {
       try {
+        Logger.info("Questionnaire - Preview Questionnaire - fetch handler")
         setIsPreviewQuestionnaireLoading(true);
         const response = await privateAxios.get(
           `${ADD_QUESTIONNAIRE}/${params.id}`,
@@ -106,15 +105,15 @@ function PreviewQuestionnaire(props) {
             signal: controller.signal,
           }
         );
-        Logger.debug("response from fetch questionnaire", response);
+        
         isMounted && setQuestionnaire({ ...response.data });
         setIsPreviewQuestionnaireLoading(false);
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
+        Logger.info(`Questionnaire - Preview Questionnaire - fetch handler - catch error - ${error?.response?.data?.message}`)
         setIsPreviewQuestionnaireLoading(false);
+
         handleError(error);
-       
-        Logger.debug("error from fetch questionnaire", error);
       }
     };
     // moduleAccesForMember[0].questionnaire.edit &&
@@ -131,10 +130,7 @@ function PreviewQuestionnaire(props) {
   const handleToggle = () => {
     setActive(!isActive);
   };
-  Logger.debug(
-    "edit access = ",
-    moduleAccesForMember[0]?.questionnaire?.edit && params["*"].includes("edit")
-  );
+  
   // download assessment
   // const downloadAssessment = async () => {
   //     try {
@@ -228,7 +224,7 @@ function PreviewQuestionnaire(props) {
   };
   const deleteQuestionnaire = async (deletionType) => {
     try {
-      Logger.debug("Questionnaire", questionnaire);
+      Logger.info("Questionnaire - Preview Questionnaire - deleteQuestionnaire handler")
       await axios.delete(ADD_QUESTIONNAIRE + `/${questionnaire?.uuid}`, {
         data: {
           deletionType: deletionType,
@@ -249,12 +245,14 @@ function PreviewQuestionnaire(props) {
       return setTimeout(() => navigate("/questionnaires", { state: 0 }), 3000);
     } catch (error) {
       handleError(error);
+      Logger.info(`Questionnaire - Preview Questionnaire - deleteQuestionnaire handler - catch error - ${error?.response?.data?.message}`)
     } finally {
       setOpenDialog(false);
     }
   };
   const deleteDraft = async () => {
     try {
+      Logger.info("Questionnaire - Preview Questionnaire - deleteDraft handler")
       const response = await axios.delete(
         DELETE_QUESTIONNAIRE_DRAFT + `/${questionnaire?.uuid}`
       );
@@ -268,6 +266,7 @@ function PreviewQuestionnaire(props) {
       );
       return setTimeout(() => navigate("/questionnaires", { state: 1 }), 3000);
     } catch (error) {
+      Logger.info(`Questionnaire - Preview Questionnaire - deleteDraft handler - catch error - ${error?.response?.data?.message}`)
       handleError(error);
     } finally {
       setOpenDialog(false);

@@ -52,7 +52,7 @@ const TableLayoutCellComponent = ({
     const columnFieldType =
         questionnaire?.sections[sectionIndex]?.columnValues[cellId]?.columnType;
     const column = questionnaire?.sections[sectionIndex]?.columnValues[cellId];
-    Logger.debug("is Preview:- ", isPreview);
+    
     return (
         <div>
             {columnFieldType &&
