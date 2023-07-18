@@ -73,7 +73,7 @@ const VersionHistory = () => {
   const updateRecordsForVersionHistory = (data) => {
     const onboardedKeysOrder = ["vNo", "date", "createdBy"];
 
-    Logger.debug("data before update----", data);
+    
 
     let staleData = data;
     let title = data.filter((data) => data.uuid === params.id);
@@ -98,7 +98,7 @@ const VersionHistory = () => {
         object[k] = v;
       });
     });
-    Logger.debug("data in updaterecords method", staleData);
+    
     setVersionHistoryRecords([...staleData]);
   };
 
@@ -109,19 +109,20 @@ const VersionHistory = () => {
     try {
       let url = generateUrl();
       setIsVersionHistoryLoading(true);
+      Logger.info("Questionnaire - Version History - getVersionHistory handler")
       const response = await privateAxios.get(url, {
         signal: controller.signal,
       });
       setVersionHistoryTotalRecords(
         parseInt(response.headers["x-total-count"])
       );
-      Logger.debug("Response from version history api get", response);
+      
 
       updateRecordsForVersionHistory([...response.data]);
       setIsVersionHistoryLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("Error from version history-------", error);
+      Logger.info(`Questionnaire - Version History - getVersionHistory handler - catch error ${error?.response?.data?.message}`)
 
       if (error?.response?.status == 401) {
         setToasterDetails(
@@ -164,7 +165,7 @@ const VersionHistory = () => {
       setIsVersionHistoryLoading(false);
     }
   };
-  Logger.debug("title from questionnaire = ", questionnaireTitle);
+
 
   const handleTablePageChange = (newPage) => {
     setVersionHistoryPage(newPage);
@@ -180,8 +181,6 @@ const VersionHistory = () => {
     let isMounted = true;
     const controller = new AbortController();
     makeApiCall && getVersionHistory(isMounted, controller);
-    Logger.debug("makeApiCall", makeApiCall);
-    Logger.debug("inside use Effect");
     return () => {
       isMounted = false;
       controller.abort();
@@ -198,7 +197,7 @@ const VersionHistory = () => {
   ]);
 
   const onClickVisibilityIconHandler = (uuid) => {
-    Logger.debug("id", uuid);
+
     return navigate(`/questionnaires/preview-questionnaire-version/${uuid}`);
   };
 

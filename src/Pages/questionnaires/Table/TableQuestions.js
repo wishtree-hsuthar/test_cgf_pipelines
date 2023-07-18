@@ -83,11 +83,11 @@ const TableQuestions = ({
     };
     const onColumnTogleChangeHandler = (event, columnId) => {
         let tempQuestionnaire = { ...questionnaire };
-        Logger.debug("temp Questionnaire before :- ", tempQuestionnaire);
+        
         tempQuestionnaire.sections[sectionIndex].columnValues[
             columnId
         ].isRequired = event.target.checked;
-        Logger.debug("temp Questionnaire after:- ", tempQuestionnaire);
+        
         setQuestionnaire(tempQuestionnaire);
     };
     const onColumnBlurHandler = (event, columnId) => {
@@ -175,7 +175,7 @@ const TableQuestions = ({
             sectionIndex
         ].columnValues.filter((column) => column.title === title);
         if (filterSameNameColumnTitle.length > 1) {
-            Logger.debug("Same title appeared twice.");
+            
             return true;
         } else {
             return false;

@@ -108,7 +108,7 @@ const SectionContent = ({
 
   const validateTableQuestions = (tableCountError, tabIndex) => {
     
-    Logger.debug("inside table question validator");
+    
     let filteredTableSections = questionnaire?.sections.filter(
       (section) => section.layout === "table" // section.columnValues.map((col) => col.title)
     );
@@ -119,17 +119,14 @@ const SectionContent = ({
       })
     );
 
-    Logger.debug(
-      "sameColumnTitleNamesInFilteredTableSections = ",
-      sameColumnTitleNamesInFilteredTableSections
-    );
+    
     for (
       let sectionIndex = 0;
       sectionIndex < questionnaire.sections.length;
       sectionIndex++
     ) {
       const sectionObject = questionnaire.sections[sectionIndex];
-      Logger.debug("section object = ", sectionObject);
+    
       if (sectionObject.layout === "table") {
         for (
           let columnIndex = 0;
@@ -140,13 +137,13 @@ const SectionContent = ({
           const columnType = sectionObject.columnValues[columnIndex].columnType;
           if (columnTitle === "") {
             setTableErr("Error hai");
-            Logger.debug("title not present in section = ", sectionIndex);
+           
 
             tabIndex.push(sectionIndex);
             tableCountError++;
           }
           if (columnType === "prefilled") {
-            Logger.debug("inside prefiled");
+           
             questionnaire?.sections[sectionIndex]?.rowValues?.forEach(
               (row, rowId) => {
                 if (row?.cells[columnIndex]?.value) return;
@@ -184,8 +181,6 @@ const SectionContent = ({
               }
               if (sameNameCount > 1) {
                 tableCountError++;
-                Logger.debug("Same name 1 se zyaada hai", columnTitle);
-                Logger.debug("in section = ", sectionIndex);
                 setTableErr("Same name hai");
                 tabIndex.push(sectionIndex);
 
@@ -199,7 +194,7 @@ const SectionContent = ({
     }
 
    
-    Logger.debug("count Error in table validator: ", tableCountError);
+    
     return tableCountError;
   };
 
@@ -222,7 +217,7 @@ const SectionContent = ({
         const element = sectionTitles[innerIndex];
         if (questionnaire.sections[index].sectionTitle === element) {
           sameNameCount++;
-          Logger.debug("sameNameCount for section =", sameNameCount);
+
         }
       }
       if (sameNameCount > 1) {
@@ -230,7 +225,7 @@ const SectionContent = ({
         tabIndex.push(index);
 
         
-        Logger.debug("same name counter exceeds more than once", sameNameCount);
+        
 
         countError++;
         setGlobalSectionTitleError({
@@ -240,7 +235,7 @@ const SectionContent = ({
         if (questionnaire.sections[index].layout == "table") {
           countError = await validateTableQuestions(countError, tabIndex);
         } else if (questionnaire.sections[index].layout == "form") {
-          Logger.debug("count Error", countError);
+        
           //Rajkumar's save section
           let tempError = {
             questionTitle: "",
@@ -252,18 +247,14 @@ const SectionContent = ({
             sectionIndex++
           ) {
             const index = sectionIndex;
-            Logger.debug("index -", index);
+          
             let questionsOfListEachSection = questionnaire.sections[
               index
             ].questions.map((question) => question.questionTitle);
-            Logger.debug(
-              "questionsOfListEachSection = ",
-              questionsOfListEachSection
-            );
             questionnaire?.sections[index]?.questions?.map(
               (question, questionIdx) => {
                 if (question?.questionTitle === "") {
-                  Logger.debug("question title is empty in section", index);
+          
 
                   tempError["questionTitle"] = "Enter question title";
                   countError++;
@@ -275,15 +266,8 @@ const SectionContent = ({
                   questionsOfListEachSection.filter(
                     (ques) => ques === question?.questionTitle
                   );
-                Logger.debug(
-                  "filterd question titles = ",
-                  filteredSameQuestionList
-                );
+               
                 if (filteredSameQuestionList.length > 1) {
-                  Logger.debug(
-                    "Question title already in use = ",
-                    question.questionTitle
-                  );
                   tempError["questionTitle"] = "Question title already in use.";
                   countError++;
                   tabIndex.push(sectionIndex);
@@ -372,7 +356,7 @@ const SectionContent = ({
           sectionTitleEmpty: "Section title required",
         });
         tabIndex.push(i);
-        Logger.debug("tab sections if section title is empty == ", tabIndex);
+        
         
         countError++;
         
@@ -380,12 +364,12 @@ const SectionContent = ({
     }
     if (tabIndex.length > 0) {
       let distinctTabIndex = [...tabIndex];
-      Logger.debug("disticet tab index = ", distinctTabIndex);
+      
       setValue(distinctTabIndex[0]);
     }
-    Logger.debug("tab which has errors =", tabIndex);
+    
     if (countError === 0) {
-      Logger.debug("count error is 0");
+    
       setDisableButton(true);
 
       return true;
@@ -393,13 +377,13 @@ const SectionContent = ({
 
     return false;
   };
-  Logger.debug("same name array = ", sameSectionsNames);
+  
   const checkNamePresentInSameNameArrayList = (name) => {
     let listnames = [...sameSectionsNames];
     let filteredSameName = listnames.filter((listName) => listName === name);
-    Logger.debug("filtered same name object = ", filteredSameName);
+  
     if (filteredSameName.length > 1) {
-      Logger.debug("filteredSameName = ", filteredSameName);
+      
       return true;
     } else {
       return false;
@@ -408,9 +392,9 @@ const SectionContent = ({
 
   const sectionLayoutChangeHandler = (e) => {
     const { name, value } = e.target;
-    Logger.debug("name:", name, "value:", value);
+    
     let tempQuestionnaire = { ...questionnaire };
-    Logger.debug("tempQuestionnaire: ", tempQuestionnaire);
+    
     tempQuestionnaire.sections[index]["layout"] = value;
     //check if layout is table remove form layout questions and add initial rows and colums
     if (value === "table") {
@@ -463,7 +447,7 @@ const SectionContent = ({
         },
       ];
     }
-    Logger.debug("tempQuestionnaire after layout update", tempQuestionnaire);
+    
     setQuestionnaire(tempQuestionnaire);
   };
   const handleInputSection = (e) => {
@@ -497,6 +481,7 @@ const SectionContent = ({
 
   const saveSection = async (questionnaireObj, isPublished ) => {
     try {
+      Logger.info("Questionnaire - Save Content - saveSection handler")
       const response = await privateAxios.post(
         ADD_QUESTIONNAIRE,
         questionnaireObj ? questionnaireObj : questionnaire
@@ -521,11 +506,11 @@ const SectionContent = ({
               },
               () => myRef.current()
             );
-            Logger.debug("isPublished", isPublished);
+            
             setTimeout(() => navigate("/questionnaires",{state: isPublished ? 0 : 1}), 3000);
             return true;
           } catch (error) {
-            Logger.debug("error from fetch questionnaire", error);
+            
 
             setErrorToaster(error);
             return false;
@@ -537,8 +522,9 @@ const SectionContent = ({
     } catch (error) {
       setDisableButton(false);
       if (error?.code === "ERR_CANCELED") return;
+      Logger.info(`Questionnaire - Save Content - saveSection handler - catch error - ${error?.response?.data?.message}`)
       if (error?.response?.status == 401) {
-        Logger.debug("Session timeout in save questionnaire");
+        
         setToasterDetails(
           {
             titleMessage: "Error!",
@@ -570,10 +556,11 @@ const SectionContent = ({
     setOpenDialog1(true);
   };
   const onPublishButtonClickHandler = async (e) => {
-    Logger.debug("inside publist button click");
+
     const response = await handleSubmitSection(e, true);
     if (response) {
       try {
+        Logger.info("Questionnaire - Section Content - onPublishButtonClickHandler handler")
         const res =await  privateAxios.put(`${ADD_QUESTIONNAIRE}/publish/${response}`);
         setToasterDetails(
           {
@@ -587,8 +574,7 @@ const SectionContent = ({
       } catch (error) {
         setDisableButton(false);
         if (error?.code === "ERR_CANCELED") return;
-
-        Logger.debug("in onPublishButtonClickHandler ",error);
+        Logger.info(`Questionnaire - Section Content - onPublishButtonClickHandler handler - ${error?.response?.data?.message}`)
         setErrorToaster(error);
       }
     }
@@ -677,10 +663,7 @@ const SectionContent = ({
             </div>
           )}
           <form>
-            {Logger.debug(
-              "global section title error:- ",
-              globalSectionTitleError.errMsg
-            )}
+          
             <div className="sect-form-card-blk">
               <div className="sect-form-card-innerblk flex-between">
                 <div className="sect-card-form-leftfield">

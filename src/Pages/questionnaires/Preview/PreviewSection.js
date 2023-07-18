@@ -9,7 +9,7 @@ function PreviewSection({
     sectionIndex,
 }) {
     useEffect(() => {
-        Logger.debug("section:- ", section);
+
     }, []);
     return (
         <>
