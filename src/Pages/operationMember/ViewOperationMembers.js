@@ -101,22 +101,13 @@ const ViewOperationMembers = () => {
         add: data.add,
       },
     }));
-  Logger.debug(
-    "member operation privilege",
-    moduleAccessForOperationMember[0]?.operationMember
-  );
 
   const fetchMemberComapany = async (controller, isMounted) => {
     try {
+      Logger.info("View Operation Member - fetchMemberCompany handler");
       const response = await privateAxios.get(MEMBER + "/list", {
         signal: controller.signal,
       });
-      Logger.debug(
-        "member company---",
-        response.data.map((data) => {
-          Logger.debug("member company=", data.companyName);
-        })
-      );
 
       if (response.status == 200) {
         isMounted &&
@@ -128,10 +119,10 @@ const ViewOperationMembers = () => {
             }))
           );
       }
-
-      Logger.debug("member company---", memberCompanies);
     } catch (error) {
-      Logger.debug("error from fetch member company", error);
+      Logger.info(
+        `View Operation Member - fetchMemberCompany handler - ${error?.response?.data?.message}`
+      );
     }
   };
   let fetchCountries = async (controller, isMounted) => {
@@ -139,15 +130,14 @@ const ViewOperationMembers = () => {
       const response = await privateAxios.get(COUNTRIES, {
         signal: controller.signal,
       });
-      Logger.debug("response", response);
+
       isMounted &&
         setCountries(response.data.map((country) => country.countryCode));
-    } catch (error) {
-      Logger.debug("error from countries api", error);
-    }
+    } catch (error) {}
   };
   const fetchOperationMember = async (controller, isMounted) => {
     try {
+      Logger.info("View Operation Member - fetchOperationMember handler");
       setIsViewOperationMemberLoading(true);
       const response = await privateAxios.get(
         params["*"].includes("pending")
@@ -157,7 +147,6 @@ const ViewOperationMembers = () => {
           signal: controller.signal,
         }
       );
-      Logger.debug("response from fetch operation member", response);
 
       isMounted && setFetchOperationMemberDetaills(response.data);
       reset({
@@ -192,9 +181,8 @@ const ViewOperationMembers = () => {
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setIsViewOperationMemberLoading(false);
-      Logger.debug(
-        "error in fetch operation member method in view page",
-        error
+      Logger.info(
+        `View Operation Member - fetchOperationMember handler - catch error - ${error?.response?.data?.message}`
       );
 
       catchError(
@@ -226,10 +214,12 @@ const ViewOperationMembers = () => {
 
   const handleDeleteOperationMember = async () => {
     try {
+      Logger.info(
+        "View Operation Member - handleDeleteOperationMember handler"
+      );
       const response = await privateAxios.delete(
         DELETE_OPERATION_MEMBER + params.id
       );
-      Logger.debug("Operation member deleted successfully");
       if (response.status == 200) {
         setToasterDetails(
           {
@@ -245,18 +235,21 @@ const ViewOperationMembers = () => {
         }, 2000);
       }
     } catch (error) {
-      Logger.debug("error from handle delete operation member", error);
+      Logger.info(
+        `View Operation Member - handleDeleteOperationMember handler - catch error - ${error?.response?.data?.message}`
+      );
+
       catchError(error, setToasterDetails, toasterRef, navigate);
     }
   };
 
   const withdrawInviteById = async () => {
     try {
+      Logger.info("View Operation Member - withdrawInviteById handler");
       const response = await privateAxios.delete(
         WITHDRAW_OPERATION_MEMBER + params?.id
       );
       if (response.status == 200) {
-        Logger.debug("operation member  invite withdrawn successfully");
         setToasterDetails(
           {
             titleMessage: "Success",
@@ -272,7 +265,7 @@ const ViewOperationMembers = () => {
         }, 2000);
       }
     } catch (error) {
-      Logger.debug("error from withdrawInvite id operation member", error);
+      Logger.info(`View Operation Member - withdrawInvitebyId handler - catch error - ${error?.response?.data?.message}`)
       catchError(error, setToasterDetails, toasterRef, navigate);
     }
   };
@@ -281,15 +274,10 @@ const ViewOperationMembers = () => {
     setActive(!isActive);
   };
   const handleOpen = (index) => {
-    Logger.debug("clicked", index);
-    Logger.debug(index);
+    
     if (index === 0) {
       if (fetchOperationMemberDetaills?.memberId?.isActive) {
-        Logger.debug(
-          "member company is active",
-          fetchOperationMemberDetaills?.isActive
-        );
-
+    
         params["*"].includes("pending")
           ? navigate(
               `/users/operation-member/pending/edit-operation-member/${params.id}`
@@ -298,10 +286,6 @@ const ViewOperationMembers = () => {
               `/users/operation-member/edit-operation-member/${params.id}`
             );
       } else {
-        Logger.debug(
-          "member company is active",
-          fetchOperationMemberDetaills?.isActive
-        );
         setPreventEditDialogBox(true);
       }
     }
