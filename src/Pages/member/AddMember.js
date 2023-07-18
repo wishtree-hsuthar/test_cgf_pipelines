@@ -20,7 +20,7 @@ import {
   PARENT_COMPINES,
   REGIONCOUNTRIES,
   REGIONS,
-  STATES
+  STATES,
 } from "../../api/Url";
 import { privateAxios } from "../../api/axios";
 import Dropdown from "../../components/Dropdown";
@@ -69,7 +69,7 @@ const AddMember = () => {
   //method to call all error toaster from this method
   const [disableAddMemberButton, setdisableAddMemberButton] = useState(false);
   const setErrorToaster = (error) => {
-    Logger.debug("error", error);
+    Logger.info("Add Member - setErrorToaster handler");
     setToasterDetailsAddMember(
       {
         titleMessage: "Error",
@@ -115,11 +115,10 @@ const AddMember = () => {
     reValidateMode: "onChange",
     defaultValues: tempDefaultValues,
   });
-  Logger.debug("Category:- ", watch("cgfCategory"));
   const onSubmitFunctionCallAddMember = async (data) => {
     setIsMemberLoading(true);
     setdisableAddMemberButton(true);
-    Logger.debug("data", data);
+    Logger.info("Add member - onSubmitFunctionCallAddMember");
     try {
       let backendObjectAddMember = {
         parentCompany: data.parentCompany,
@@ -153,7 +152,6 @@ const AddMember = () => {
       const response = await axios.post(MEMBER, {
         ...backendObjectAddMember,
       });
-      Logger.debug("response : ", response);
       if (response.status === 201) {
         setIsMemberLoading(false);
 
@@ -165,12 +163,14 @@ const AddMember = () => {
           },
           () => myRef.current()
         );
-        Logger.debug("Default values: ", tempDefaultValues);
         reset({ ...tempDefaultValues });
         setdisableAddMemberButton(false);
         return true;
       }
     } catch (error) {
+      Logger.info(
+        `Add member - onSubmitFunctionCallAddMember catch error ${error?.response?.data?.message}`
+      );
       setIsMemberLoading(false);
 
       if (error?.response?.status === 401) {
@@ -210,13 +210,12 @@ const AddMember = () => {
   // On Click cancel handler
   const onClickCancelHandlerAddMember = () => {
     reset({ tempDefaultValues });
-    navigate("/users/members",{state:0});
+    navigate("/users/members", { state: 0 });
   };
   const onSubmitAddMember = async (data) => {
-    Logger.debug("data", data);
     const isSubmited = await onSubmitFunctionCallAddMember(data);
-    Logger.debug("is Submited", isSubmited);
-    isSubmited && setTimeout(() => navigate("/users/members",{state:1}), 3000);
+    isSubmited &&
+      setTimeout(() => navigate("/users/members", { state: 1 }), 3000);
   };
   //method to handle on add more button click handler
   const onAddMoreButtonClickHandlerAddMember = async (data) => {
@@ -232,17 +231,15 @@ const AddMember = () => {
           ? country.name
           : country)
     );
-    Logger.debug("arr of country ", regionCountries);
     return regionCountries;
   };
 
   //method to handle country change
   const onCountryChangeHandlerAddMember = async (e) => {
-    Logger.debug("Inside Country Change ", e.target.value);
+    Logger.info(`Add Member - onCountryChangeHandlerAddMember handler`);
     setValue("country", e.target.value);
     const stateCountries = await axios.get(STATES + `/${e.target.value}`);
     setArrOfStateCountryAddMember(stateCountries.data);
-    Logger.debug("state countries: ", stateCountries);
     setValue("state", "");
     setValue("city", "");
     getCitesAddMember();
@@ -259,7 +256,7 @@ const AddMember = () => {
       setArrOfCitesAddMember(response.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("Error in getCitiesAddmember");
+      Logger.info(`Add member - ${error?.response?.data?.message}`);
     }
   };
   //method to handle state change
@@ -268,17 +265,16 @@ const AddMember = () => {
     setValue("city", "");
     getCitesAddMember();
   };
-  
+
   //method to set region and update other fields accordingly
   const onRegionChangeHandlerAddMember = async (e) => {
-    Logger.debug("region: ", e.target.value);
+    Logger.info("Add member - onRegionChangeHandlerAddMember handler");
     setValue("country", "");
     setValue("state", "");
     setValue("city", "");
     setValue("region", e.target.value);
     trigger("region");
     const countriesOnRegion = await getCountriesAddMember(watch("region"));
-    Logger.debug("countries", countriesOnRegion);
     const arrOfCountryRegionsTemp = formatRegionCountriesAddMember(
       countriesOnRegion.data
     );
@@ -300,17 +296,22 @@ const AddMember = () => {
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
 
-      Logger.debug("Error from getCountryCodeAddMember");
+      Logger.info(
+        `Add member - getCountryCodeAddMember - catch error ${error?.response?.data?.message}`
+      );
     }
   };
   const getCountriesAddMember = async (region) => {
+    Logger.info(`Add member - getCountriesAddMember handler`);
     try {
       return await axios.get(REGIONCOUNTRIES + `/${region}`);
       // return regionCountries;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
 
-      Logger.debug("Error from getCountriesAddMember ");
+      Logger.info(
+        `Add member - getCountriesAddMember handler catch error - ${error?.response?.data?.message} `
+      );
       return [];
     }
   };
@@ -360,6 +361,7 @@ const AddMember = () => {
 
   // Fetch addMemberRoles
   let fetchRolesAddMember = async () => {
+    Logger.info(`Add member - fetchRolesAddMember handler`);
     try {
       const response = await privateAxios.get(FETCH_ROLES);
 
@@ -371,13 +373,16 @@ const AddMember = () => {
         }
       });
     } catch (error) {
-      Logger.debug("Error from fetch addMemberRoles", error);
+      Logger.info(
+        `Add member - fetchRolesAddMember handler catch error - ${error?.response?.data?.message}`
+      );
     }
   };
 
   const getParentCompanyAddMember = async (
     controller = new AbortController()
   ) => {
+    Logger.info(`Add member - getParentCompanyAddMember handler`);
     try {
       const response = await axios.get(PARENT_COMPINES, {
         signal: controller.signal,
@@ -385,7 +390,9 @@ const AddMember = () => {
       setArrOfParentCompanyAddMember(response?.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("error from getParentCompanyAddMember");
+      Logger.info(
+        `Add member - getParentCompanyAddMember handler catch error -${error?.response?.data?.message}`
+      );
     }
   };
 
@@ -405,14 +412,6 @@ const AddMember = () => {
     trigger("cgfActivity");
   };
   const phoneNumberChangeHandlerAddMember = (e, name, code) => {
-    Logger.debug(
-      "on number change",
-      e.target.value,
-      "name: ",
-      name,
-      "code",
-      code
-    );
     setValue(name, e.target.value);
     trigger(name);
     trigger(code);
@@ -423,7 +422,6 @@ const AddMember = () => {
 
   const callGetCategories = async () => {
     ADD_MEMBER_LOOKUP = await getCategories();
-    Logger.debug("MEMBER LOOKUP", ADD_MEMBER_LOOKUP);
   };
   useEffect(() => {
     let isMounted = true;
@@ -445,7 +443,6 @@ const AddMember = () => {
     };
   }, []);
 
-  Logger.debug("arrOfparentCompnies", arrOfParentCompanyAddMember);
   return (
     <div className="page-wrapper">
       <Toaster
@@ -588,7 +585,6 @@ const AddMember = () => {
                               }
                               onSubmit={() => setValue("parentCompany", "")}
                               onChange={(event, newValue) => {
-                                Logger.debug("new Value ", newValue);
                                 if (newValue) {
                                   typeof newValue === "object"
                                     ? setValue("parentCompany", newValue.name)

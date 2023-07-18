@@ -62,10 +62,10 @@ const ResetPassword = () => {
           return null;
         }
       } catch (error) {
-        Logger.info("Reset Password - Verify forgot token handler catch error");
+        Logger.info(
+          `Reset Password - Verify forgot token handler catch error - ${error?.response?.data?.message}`
+        );
         if (error?.response?.status == 400) {
-          Logger.debug("Invalid Token");
-
           setShowInvalidTokenMessage(true);
         }
       }

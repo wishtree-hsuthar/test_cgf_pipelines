@@ -72,8 +72,7 @@ const RolesList = () => {
   const [showStatusFilterPlaceholder, setShowStatusFilterPlaceholder] =
     useState(filters.status === "none");
   const onFilterChangeHandler = (e) => {
-    Logger.debug("value: ", e.target.value);
-    // Logger.debug("type of time out func",typeof(timoutFunc))
+    Logger.info(`Role list - onFilterChangeHandler handler`);
     setPage(1);
     setFilters({
       ...filters,
@@ -81,10 +80,9 @@ const RolesList = () => {
     });
   };
   const onSearchChangeHandler = (e) => {
-    Logger.debug("event", e.key);
+    Logger.info(`Role list - onSearchChangeHandler handler`);
     if (searchTimeout) clearTimeout(searchTimeout);
     setMakeApiCall(false);
-    Logger.debug("search values", e.target.value);
     setSearch(e.target.value);
     setSearchTimeout(
       setTimeout(() => {
@@ -135,11 +133,9 @@ const RolesList = () => {
     setPage(1);
   };
   const onClickVisibilityIconHandler = (id) => {
-    Logger.debug("id", id);
     return navigate3(`view-role/${id}`);
   };
   const generateUrl = () => {
-    Logger.debug("filters", filters);
     let url = `${REACT_APP_API_ENDPOINT}roles/list?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
     if (search) url = url + `&search=${search}`;
     if (filters?.status !== "none" && filters?.status !== "all")
@@ -156,7 +152,7 @@ const RolesList = () => {
       const response = await axios.get(url, {
         signal: controller.signal,
       });
-      Logger.debug("Response: ", response);
+      Logger.info(`Role list - getRoles handler`);
       setTotalRecords(parseInt(response.headers["x-total-count"]));
       updateRecords(response.data);
       setIsLoading2(false);
@@ -219,17 +215,13 @@ const RolesList = () => {
     let isMounted = true;
     const controller = new AbortController();
     makeApiCall && getRoles(isMounted, controller);
-    Logger.debug("makeApiCall", makeApiCall);
-    Logger.debug("inside use Effect");
     return () => {
       isMounted = false;
       clearTimeout(searchTimeout);
       controller.abort();
     };
   }, [page, rowsPerPage, orderBy, order, filters, makeApiCall]);
-  {
-    Logger.debug("Records: ", records);
-  }
+
   return (
     <div className="page-wrapper">
       <Toaster

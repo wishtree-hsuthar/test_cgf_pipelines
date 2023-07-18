@@ -103,7 +103,9 @@ const Login = (prop) => {
         navigate("/home");
       }
     } catch (error) {
-      Logger.info("Login - Submit login data handler catch error");
+      Logger.info(
+        `Login - Submit login data handler catch error - ${error?.response?.data?.message}`
+      );
       if (
         error.response.status == 401 &&
         error.response.data.message === "Unauthorized"

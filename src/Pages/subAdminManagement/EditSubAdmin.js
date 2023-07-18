@@ -101,7 +101,6 @@ const EditSubAdmin = () => {
   });
 
   const phoneNumberChangeHandler = (e, name, code) => {
-    Logger.debug("inside on Change");
     setValue(name, e.target.value);
     trigger(name);
     trigger(code);
@@ -114,7 +113,7 @@ const EditSubAdmin = () => {
         const response = await axios.get(COUNTRIES, {
           signal: controller.signal,
         });
-        Logger.debug("response", response);
+        Logger.info(`Edit sub admin - fetchCountries  handler`);
         if (isMounted) {
           let tempCountryCode = response?.data.map(
             (country) => country.countryCode
@@ -123,7 +122,9 @@ const EditSubAdmin = () => {
           setCountries([...tempCountryCodeSet]);
         }
       } catch (error) {
-        Logger.debug("error from countries api of edit sub-admin", error);
+        Logger.info(
+          `Edit sub admin - fetchCountries  handler catch error - ${error?.response?.data?.message}`
+        );
         if (error?.code === "ERR_CANCELED") return;
         catchError(error, setToasterDetails, toasterRef, navigate);
       }
@@ -141,10 +142,10 @@ const EditSubAdmin = () => {
           }
         );
         setIsEditCgfAdminLoading(false);
-        Logger.debug("response from sub admin view page fetch api", response);
+        Logger.info(`Edit sub admin - fetchSubAdmin  handler`);
         isMounted && setFetchSubAdminDetailsForEdit(response.data);
         reset({
-          name: response?.data?.name ,
+          name: response?.data?.name,
           email: response?.data?.email,
           countryCode: response?.data?.countryCode,
           phoneNumber: response?.data?.phoneNumber,
@@ -154,7 +155,9 @@ const EditSubAdmin = () => {
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
         setIsEditCgfAdminLoading(false);
-        Logger.debug("error from sub admin view page fetch api", error);
+        Logger.info(
+          `Edit sub admin - fetchSubAdmin  handler catch error -${error?.response?.data?.message}`
+        );
         catchError(
           error,
           setToasterDetails,
@@ -169,10 +172,13 @@ const EditSubAdmin = () => {
     let fetchRoles = async () => {
       try {
         const response = await privateAxios.get(FETCH_ROLES);
-        Logger.debug("Response from fetch roles - ", response);
+        Logger.info(`Edit sub admin - fetchRoles handler`);
         setRoles(response.data);
       } catch (error) {
-        Logger.debug("Error from fetch roles", error);
+        Logger.info(
+          `Edit sub admin - fetchRoles handler catch error ${error?.response?.data?.message}`
+        );
+
         catchError(error, setToasterDetails, toasterRef, navigate);
       }
     };
@@ -183,13 +189,10 @@ const EditSubAdmin = () => {
     };
   }, []);
 
-  Logger.debug("fetchdetails in edit sub admin", fetchSubAdminDetailsForEdit);
-
   const location = useLocation();
-  Logger.debug(location);
 
   const handleOnSubmit = async (data) => {
-    Logger.debug("data from handle submit edit", data);
+    Logger.info(`Edit sub admin - handleOnSubmit handler`);
     setDisableEditCgfAdminButton(true);
     setIsEditCgfAdminLoading(true);
     try {
@@ -206,7 +209,6 @@ const EditSubAdmin = () => {
           isActive: data?.status === "active" ? true : false,
         }
       );
-      Logger.debug("response from edit sub admin method", response);
       if (response.status == 200) {
         setIsEditCgfAdminLoading(false);
 
@@ -224,7 +226,9 @@ const EditSubAdmin = () => {
         }, 2000);
       }
     } catch (error) {
-      Logger.debug("error from edit sub admin submit method");
+      Logger.info(
+        `Edit sub admin - handleOnSubmit handler catch error ${error?.response?.data?.message}`
+      );
       setIsEditCgfAdminLoading(false);
       setDisableEditCgfAdminButton(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
@@ -360,8 +364,6 @@ const EditSubAdmin = () => {
                                 popupIcon={<KeyboardArrowDownRoundedIcon />}
                                 {...field}
                                 onChange={(event, newValue) => {
-                                  Logger.debug("inside autocomplete onchange");
-                                  Logger.debug("new Value ", newValue);
                                   newValue && typeof newValue === "object"
                                     ? setValue("countryCode", newValue.name)
                                     : setValue("countryCode", newValue);

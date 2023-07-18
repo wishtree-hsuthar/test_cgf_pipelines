@@ -85,7 +85,7 @@ const ChangePassword = () => {
   };
 
   const onSubmitChangePassword = async (data) => {
-    Logger.info("Change Password handler");
+    Logger.info("Change Password - Change Password handler");
     try {
       const response = await privateAxios.post(CHANGE_PASSWORD, {
         oldPassword: data.oldPassword,
@@ -108,7 +108,9 @@ const ChangePassword = () => {
         reset();
       }
     } catch (error) {
-      Logger.error("Error from on change password data", error);
+      Logger.info(
+        `Change Password - Change Password handler catch error${error?.response?.data?.message}`
+      );
       reset();
       catchError(error, setToasterDetails, toasterRef, navigate);
     }

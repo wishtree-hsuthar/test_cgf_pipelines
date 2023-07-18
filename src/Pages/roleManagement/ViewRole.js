@@ -112,7 +112,9 @@ const ViewRole = () => {
       );
       return setTimeout(() => navigate4("/roles"), 3000);
     } catch (error) {
-      Logger.debug("error on delete", error);
+      Logger.info(
+        `View Role - onDialogPrimaryButtonClickHandler catch erro ${error?.response?.data?.message}`
+      );
       if (error?.code === "ERR_CANCELED") return;
       catchError(error, setToasterDetails4, myRef4, navigate4);
     } finally {
@@ -163,16 +165,13 @@ const ViewRole = () => {
     setPage(1);
   };
   const onClickVisibilityIconHandler = (id, isMemberRepresentative) => {
-    Logger.debug("id", id);
-    Logger.debug("isMemberRepresentative in view role", isMemberRepresentative);
     isMemberRepresentative
       ? navigate4(`/users/operation-member/view-operation-member/${id}`)
       : navigate4(`/users/cgf-admin/view-cgf-admin/${id}`);
   };
   const createPrevileges3 = (tempPrivileges) => {
-    Logger.debug("temp data", tempPrivileges);
+    Logger.info(`View role - createPrevileges3`);
     Object.keys(tempPrivileges).forEach((tempPriv) => {
-      // Logger.debug("temp Previ value",tempPrivileges[tempPriv])
       privileges[tempPriv] = {
         add: tempPrivileges[tempPriv]["add"],
         fill: tempPrivileges[tempPriv]["fill"],
@@ -238,7 +237,7 @@ const ViewRole = () => {
     setRecords([...data]);
   };
   const updateFileds = async (data) => {
-    Logger.debug("data", data);
+    Logger.info(`View role - updateFileds`);
     setFieldValues({
       roleName: data?.name,
       description: data?.description,
@@ -274,23 +273,23 @@ const ViewRole = () => {
         ...previous,
         subAdmin: response?.headers?.["x-total-count"],
       }));
-      Logger.debug("response:- ", response);
+      Logger.info(`View Role - getUserByRole`);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
 
-      Logger.debug("error from get users", error);
+      Logger.info(
+        `View Role - getUserByRole handler catch error ${error?.response?.data?.message}`
+      );
     }
   };
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    
-    
+
     (async () => {
       await getRoleById(isMounted, controller);
       await getUsersByRole();
       if (value === 1) {
-        console.log("inside if")
         window.scrollTo({
           top: document.body.scrollHeight,
           behavior: "smooth",

@@ -67,7 +67,7 @@ function FillAssesmentSection({
     });
   };
   const handleAnswersBlur = (name, value) => {
-    Logger.debug("inside on Blur");
+    Logger.info("Fill Assessment section - handleAnswersBlur handler");
 
     setAssessmentQuestionnaire({
       ...assessmentQuestionnaire,
@@ -77,7 +77,6 @@ function FillAssesmentSection({
       },
     });
   };
-  console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
   return (
     <>
       <DialogBox

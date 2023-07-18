@@ -81,7 +81,7 @@ const EditRole = () => {
 
   const onSubmit1 = async (data) => {
     try {
-      Logger.debug("input Data: ", data, "Previleges: ", previleges);
+      Logger.info(`Edit role - onSubmit1 handler`);
       let previlegesForBackend = JSON.parse(JSON.stringify(previleges));
       Object.keys(previlegesForBackend).forEach((p_key) => {
         delete previlegesForBackend[p_key]["all"];
@@ -100,7 +100,6 @@ const EditRole = () => {
       }
       setIsLoading1(true);
 
-      Logger.debug("previleges : ", previlegesForBackend);
       setDisableButton(true);
       const response = await axios.put(
         REACT_APP_API_ENDPOINT + `roles/${params.id}`,
@@ -110,7 +109,6 @@ const EditRole = () => {
           privileges: previlegesForBackend,
         }
       );
-      Logger.debug("response", response);
       if (response.status == 200) {
         setIsLoading1(false);
         setToasterDetails2(
@@ -121,7 +119,6 @@ const EditRole = () => {
           },
           () => myRef2.current()
         );
-        Logger.debug("Default Values", editDefault);
         reset({
           roleName: "",
           status: "active",
@@ -130,7 +127,9 @@ const EditRole = () => {
         setTimeout(() => navigate2(`/roles/view-role/${params.id}`), 3000);
       }
     } catch (error) {
-      Logger.debug("error", error);
+      Logger.info(
+        `Edit role - onSubmit1 handler ${error?.response?.data?.message}`
+      );
       setDisableButton(false);
       catchError(error, setToasterDetails2, myRef2, navigate2);
     }
@@ -139,9 +138,8 @@ const EditRole = () => {
     navigate2(`/roles/view-role/${params.id}`);
   };
   const createPrevileges2 = (tempPrivileges) => {
-    Logger.debug("temp data", tempPrivileges);
+    Logger.info(`Edit role - createPrevileges handler`);
     Object.keys(tempPrivileges).forEach((tempPriv) => {
-      // Logger.debug("temp Previ value",tempPrivileges[tempPriv])
       temp[tempPriv] = {
         add: tempPrivileges[tempPriv]["add"],
         fill: tempPrivileges[tempPriv]["fill"],
@@ -163,11 +161,10 @@ const EditRole = () => {
         name: tempPrivileges[tempPriv]["moduleId"]["name"],
       };
     });
-    Logger.debug("temp", temp);
     setPrevileges({ ...temp });
   };
   const updateEditFields = (data) => {
-    Logger.debug("previleges", data.privileges);
+    Logger.info(`Edit role - updateEditFields handler`);
     reset({
       roleName: data.name,
       status: data.isActive ? "active" : "inactive",
@@ -184,11 +181,14 @@ const EditRole = () => {
           signal: controller.signal,
         }
       );
-      Logger.debug("response: ", response);
+      Logger.info(`Edit role - getRoleById handler`);
       updateEditFields(response.data);
       setIsLoading1(false);
     } catch (error) {
-      Logger.debug("Error", error);
+      Logger.info(
+        `Edit role - getRoleById handler catch error ${error?.response?.data?.message}`
+      );
+
       if (error?.code === "ERR_CANCELED") return;
       setIsLoading1(false);
       catchError(error, setToasterDetails2, myRef2, navigate2);
@@ -203,7 +203,6 @@ const EditRole = () => {
       controller.abort();
     };
   }, []);
-  Logger.debug("Privilege", previleges);
   return (
     <div className="page-wrapper">
       <Toaster
