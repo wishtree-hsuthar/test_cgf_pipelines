@@ -104,16 +104,15 @@ function EditAssessment() {
     id,
     checkIfItIsCgfStaff
   ) => {
+    Logger.info(
+      "Edit Assessment - fetchOperationMembersAccordingToMemberCompanyForAddAssessment handler"
+    );
     try {
       const responseEditMember = await privateAxios.get(
         FETCH_OPERATION_MEMBER + id + "/master"
         // checkIfItIsCgfStaff
         //     ? FETCH_OPERATION_MEMBER + id + "/master/internal"
         //     : FETCH_OPERATION_MEMBER + id
-      );
-      Logger.debug(
-        "Response from fetch operation member according to member company",
-        responseEditMember
       );
       setOperationMemberForAddAssessments(
         responseEditMember.data.map((data) => ({
@@ -125,15 +124,12 @@ function EditAssessment() {
         (data) => data?.isMemberRepresentative
       );
 
-      Logger.debug("Representative---", representative);
-      Logger.debug("is Cgf staff---", checkIfItIsCgfStaff);
       checkIfItIsCgfStaff
         ? setValue("assignedOperationMember", "")
         : setValue("assignedOperationMember", representative[0]._id);
     } catch (error) {
-      Logger.debug(
-        "Error from from fetch operation member according to member company",
-        error
+      Logger.info(
+        "Edit Assessment - fetchOperationMembersAccordingToMemberCompanyForAddAssessment handler catch error"
       );
     }
   };
@@ -157,6 +153,7 @@ function EditAssessment() {
     const controller = new AbortController();
 
     const fetchAssessment = async () => {
+      Logger.info("Edit Assessment - fetchAssessment handler");
       try {
         setIsEditAssessmentLoading(true);
         const responseEditMember = await privateAxios.get(
@@ -166,10 +163,7 @@ function EditAssessment() {
           }
         );
         setIsEditAssessmentLoading(false);
-        Logger.debug(
-          "responseEditMember from fetch assessment",
-          responseEditMember.data
-        );
+
         isMounted &&
           reset({
             title: responseEditMember.data.title,
@@ -188,6 +182,7 @@ function EditAssessment() {
         setQuestionnaireId(responseEditMember.data.questionnaireId);
         fetchMember(responseEditMember.data.assignedMember?._id);
       } catch (error) {
+        Logger.info("Edit Assessment - fetchAssessment handler catch error");
         if (error?.code === "ERR_CANCELED") return;
         catchError(
           error,
@@ -197,11 +192,13 @@ function EditAssessment() {
           "/assessment-list"
         );
         setIsEditAssessmentLoading(false);
-        Logger.debug("Error from fetch assessment", error);
       }
     };
     fetchAssessment();
     const fetchMemberCompaniesForAddAssesments = async () => {
+      Logger.info(
+        "Edit Assessment - fetchMemberCompaniesForAddAssesments handler"
+      );
       try {
         const responseEditMember = await privateAxios.get(
           handlememberDropdownAPI(),
@@ -210,10 +207,6 @@ function EditAssessment() {
           }
         );
 
-        Logger.debug(
-          "responseEditMember from fetch member companies for add assessments",
-          responseEditMember
-        );
         isMounted &&
           setMemberCompaniesForAddAssessments(
             responseEditMember.data.map((data) => ({
@@ -222,12 +215,15 @@ function EditAssessment() {
             }))
           );
       } catch (error) {
-        Logger.debug("Error from fetch member company api", error);
+        Logger.info(
+          "Edit Assessment - fetchMemberCompaniesForAddAssesments handler catch error"
+        );
       }
     };
     fetchMemberCompaniesForAddAssesments();
 
     const fetchQuestionnaires = async () => {
+      Logger.info("Edit Assessment - fetchQuestionnaires handler");
       try {
         const responseEditMember = await privateAxios.get(
           ADD_QUESTIONNAIRE + "/master",
@@ -235,10 +231,7 @@ function EditAssessment() {
             signal: controller.signal,
           }
         );
-        Logger.debug(
-          "responseEditMember from questionnaires api",
-          responseEditMember.data
-        );
+
         isMounted &&
           setQuestionnares(responseEditMember.data.map((data) => data.title));
         setQuestionnaresObj(
@@ -248,7 +241,9 @@ function EditAssessment() {
           }))
         );
       } catch (error) {
-        Logger.debug("Error from fetch questionnaires", error);
+        Logger.info(
+          "Edit Assessment - fetchQuestionnaires handler catch error"
+        );
       }
     };
     fetchQuestionnaires();
@@ -260,11 +255,11 @@ function EditAssessment() {
   }, []);
 
   const fetchMember = async (id) => {
+    Logger.info("Edit Assessment - fetchMember handler");
     try {
       const responseEditMember = await privateAxios.get(
         ADD_OPERATION_MEMBER + "/member/" + id + "/master"
       );
-      Logger.debug("Member fetched", responseEditMember.data);
       setOperationMemberForAddAssessments(
         responseEditMember.data.map((data) => ({
           _id: data._id,
@@ -272,14 +267,14 @@ function EditAssessment() {
         }))
       );
     } catch (error) {
-      Logger.debug("error from fetch member api", error);
+      Logger.info("Edit Assessment - fetchMember handler catch error");
     }
   };
 
   const updateAssessment = async (data) => {
     setDisableEditAssessmentButton(true);
     setIsEditAssessmentLoading(true);
-    Logger.debug("data for update assessment", data);
+    Logger.info("Edit Assessment - updateAssessment handler");
     data = {
       ...data,
       questionnaireId: questionnaireId,
@@ -296,7 +291,6 @@ function EditAssessment() {
         UPDATE_ASSESSMENT_BY_ID + params.id,
         data
       );
-      Logger.debug("responseEditMember from update assessment page");
       if (responseEditMember.status === 200) {
         setDisableEditAssessmentButton(false);
         setIsEditAssessmentLoading(true);
@@ -325,7 +319,8 @@ function EditAssessment() {
         }, 2000);
       }
     } catch (error) {
-      Logger.debug("error from update assessment url", error);
+      Logger.info("Edit Assessment - updateAssessment handler catch error");
+
       setDisableEditAssessmentButton(false);
       setIsEditAssessmentLoading(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
@@ -334,7 +329,6 @@ function EditAssessment() {
 
   const handleChangeForMemberCompany = (e) => {
     setValue("assignedMember", e.target.value);
-    Logger.debug("assignedMember", e.target.value);
     // let memberRepresentative = memberRepresentatives.filter(
 
     // setValue(
@@ -348,7 +342,6 @@ function EditAssessment() {
     let cgfCompany = memberCompaniesForAddAssessments.filter(
       (data) => data._id === e.target.value
     );
-    Logger.debug("cgf company-----", cgfCompany);
 
     if (cgfCompany[0].name === "The Consumer Goods Forum") {
       setIsCGFStaff(true);
@@ -366,11 +359,10 @@ function EditAssessment() {
   };
 
   const handleChangeForAssessmentModule = (e) => {
-    Logger.debug("assessment type", e);
+    Logger.info("Edit Assessment - handleChangeForAssessmentModule handler");
     let filterQuestionnaireById = questionnaresObj.filter(
       (questionnare) => questionnare.name === e.target.value
     );
-    Logger.debug("filtered questionnaire", filterQuestionnaireById);
     setValue("questionnaireId", filterQuestionnaireById[0]._id);
     setQuestionnaireId(filterQuestionnaireById[0]._id);
     setValue("assessmentType", e.target.value);

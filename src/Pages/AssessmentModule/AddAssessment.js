@@ -58,11 +58,8 @@ const AddAssessment = () => {
 
   const handlememberDropdownAPI = () => {
     if (isMemberRepresentative || isOperationMember) {
-      console.log("specific url", `${SPECIFIC_MEMBER_DROPDOWN}`);
       return `${SPECIFIC_MEMBER_DROPDOWN}${memberId}`;
     } else {
-      console.log("master url", `${SPECIFIC_MEMBER_DROPDOWN}$`);
-
       return MEMBER_DROPDOWN;
     }
   };
@@ -118,10 +115,7 @@ const AddAssessment = () => {
           signal: controller.signal,
         });
 
-        Logger.debug(
-          "response from fetch member companies for add assessments",
-          response
-        );
+        Logger.info("Add assessments - Fetch member companies handler");
         isMounted &&
           setMemberCompaniesForAddAssessments(
             response.data.map((data) => ({
@@ -131,17 +125,20 @@ const AddAssessment = () => {
           );
         setMemberRepresentatives(response.data);
       } catch (error) {
-        Logger.debug("Error from fetch member company api", error);
+        Logger.info(
+          "Add assessments - Fetch member companies handler catch error"
+        );
       }
     };
     fetchMemberCompaniesForAddAssesments();
 
     const fetchQuestionnaires = async () => {
+      Logger.info("Add assessments - Fetch questionnaires handler");
+
       try {
         const response = await privateAxios.get(ADD_QUESTIONNAIRE + "/master", {
           signal: controller.signal,
         });
-        Logger.debug("response from questionnaires api", response.data);
         isMounted && setQuestionnares(response.data.map((data) => data.title));
         setQuestionnaresObj(
           response.data.map((data) => ({
@@ -150,8 +147,10 @@ const AddAssessment = () => {
           }))
         );
       } catch (error) {
-        Logger.debug("Error from fetch questionnaires", error);
-        catchError(error, toasterDetails, toasterRef, navigate);
+        Logger.info(
+          "Add assessments - Fetch questionnaires handler catch error"
+        );
+        catchError(error, setToasterDetails, toasterRef, navigate);
       }
     };
     fetchQuestionnaires();
@@ -166,6 +165,7 @@ const AddAssessment = () => {
     id,
     checkCgfStaff
   ) => {
+    Logger.info("Add assessments - Fetch operation member handler");
     try {
       const response = await privateAxios.get(
         // FETCH_OPERATION_MEMBER + id
@@ -173,10 +173,7 @@ const AddAssessment = () => {
           ? FETCH_OPERATION_MEMBER + id + "/master/internal"
           : FETCH_OPERATION_MEMBER + id + "/master"
       );
-      Logger.debug(
-        "Response from fetch operation member according to member company",
-        response
-      );
+
       setOperationMemberForAddAssessments(
         response.data.map((data) => ({
           _id: data._id,
@@ -186,8 +183,7 @@ const AddAssessment = () => {
       let representative = response.data.filter(
         (data) => data?.isMemberRepresentative
       );
-      Logger.debug("Representative---", representative);
-      Logger.debug("is Cgf staff---", checkCgfStaff);
+
       checkCgfStaff
         ? setValue("assignedOperationMember", "")
         : setValue(
@@ -195,23 +191,18 @@ const AddAssessment = () => {
             representative[0]?._id ? representative[0]?._id : ""
           );
     } catch (error) {
-      Logger.debug(
-        "Error from from fetch operation member according to member company",
-        error
+      Logger.info(
+        "Add assessments - Fetch operation member handler catch error"
       );
     }
   };
 
   const handleChangeForMemberCompany = async (e) => {
+    Logger.info("Add assessments - HandleChangeForMemberCompany handler");
     setValue("assignedMember", e.target.value);
-    Logger.debug("assignedMember", e.target.value);
-    Logger.debug("member representatives-----", memberRepresentatives);
-
     let cgfCompany = memberCompaniesForAddAssessments.filter(
       (data) => data._id === e.target.value
     );
-    Logger.debug("cgf company-----", cgfCompany);
-
     let memberRepresentative = memberRepresentatives.filter(
       (data) => data._id === e.target.value
     );
@@ -231,40 +222,30 @@ const AddAssessment = () => {
       trigger("assignedOperationMember");
     }
 
-    Logger.debug("member representative----", memberRepresentative);
-
     trigger("assignedMember");
   };
 
   const handleChangeForAssessmentModule = (e) => {
-    Logger.debug("assessment type", e);
+    Logger.info("Add assessments - handleChangeForAssessmentModule hanler");
     let filterQuestionnaireById = questionnaresObj.filter(
       (questionnare) => questionnare.name === e.target.value
     );
-    Logger.debug("filtered questionnaire", filterQuestionnaireById);
     setValue("questionnaireId", filterQuestionnaireById[0]._id);
     setValue("assessmentType", e.target.value);
     trigger("assessmentType");
   };
 
   const submitAssessments = async (data) => {
-    Logger.debug("data from on submit", data);
+    Logger.info("Add assessments - submitAssessments");
     setDisableEditAssessmentButton(true);
     let someDate = new Date(data.dueDate).setDate(
       new Date(data.dueDate).getDate() + 1
-    );
-
-    Logger.debug(
-      "data after converting to ISOstring",
-
-      new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString()
     );
     data = {
       ...data,
       dueDate: new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString(),
     };
 
-    Logger.debug("submitted data", data);
     setIsAssessmentLoading(true);
     try {
       const response = await privateAxios.post(ADD_ASSESSMENTS, data);
@@ -272,7 +253,6 @@ const AddAssessment = () => {
         setIsAssessmentLoading(false);
 
         setDisableEditAssessmentButton(false);
-        Logger.debug("response from add assessments", response);
         reset({
           title: "",
           assessmentType: "",
@@ -298,6 +278,7 @@ const AddAssessment = () => {
         }, 2000);
       }
     } catch (error) {
+      Logger.info("Add assessments - submitAssessments catch error");
       setDisableEditAssessmentButton(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
     }
@@ -430,7 +411,6 @@ const AddAssessment = () => {
                               value={datevalue}
                               onChange={(event = "") => {
                                 setDateValue(event);
-                                Logger.debug("date" + "  " + event);
                                 setValue(
                                   "dueDate",
 

@@ -99,10 +99,9 @@ const AssessmentList = () => {
   let icons = [];
 
   const onSearchChangeHandler = (e) => {
-    Logger.debug("event", e.key);
+    Logger.info("Assessment list - onSearchChangeHandler handler");
     if (searchTimeout) clearTimeout(searchTimeout);
     setMakeApiCall(false);
-    Logger.debug("search values", e.target.value);
     setSearch(e.target.value);
     setSearchTimeout(
       setTimeout(() => {
@@ -293,7 +292,6 @@ const AssessmentList = () => {
     let icon = Object.entries(assessmentAccessObj).filter(
       (key) => key[1] === true && icons.push(key[0])
     );
-    Logger.debug(icon);
     if (SUPER_ADMIN) {
       icons = ["edit", "visibility"];
       return icons;

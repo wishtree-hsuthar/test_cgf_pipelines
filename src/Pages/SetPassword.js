@@ -41,6 +41,7 @@ const SetPassword = () => {
     let controller = new AbortController();
     document.body.classList.add("login-page");
     const verifyForgotToken = async () => {
+      Logger.info("Set Password - verify confirm token handler");
       try {
         const { response } = await publicAxios.get(
           SET_PASSWORD_VERIFY_TOKEN + params.id,
@@ -52,10 +53,8 @@ const SetPassword = () => {
           return null;
         }
       } catch (error) {
-        Logger.debug("error from verify token", error);
+        Logger.info("Set Password - verify confirm token catch handler error");
         if (error?.response?.status == 400) {
-          Logger.debug("Invalid Token");
-
           setShowExpiredLinkMessage(true);
         }
       }
@@ -95,7 +94,7 @@ const SetPassword = () => {
         CONFIRM_PASSWORD + params.id,
         data
       );
-      Logger.debug("response from confirm passowrd", response);
+      Logger.info("Set Password - submitForm confirm passowrd handler");
       if (response.status == 201) {
         setPasswordToasterDetails(
           {
@@ -110,10 +109,10 @@ const SetPassword = () => {
         }, 3000);
       }
     } catch (error) {
-      Logger.debug("error from confirm password", error);
+      Logger.info(
+        "Set Password - submitForm confirm passowrd handler catch error"
+      );
       if (error?.response?.status == 400) {
-        Logger.debug("Invalid Token");
-
         setShowExpiredLinkMessage(true);
       } else {
         setPasswordToasterDetails(

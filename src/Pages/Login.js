@@ -34,10 +34,7 @@ const Login = (prop) => {
   });
   const loginToasterRef = useRef();
   const dispatch = useDispatch();
-  Logger.info(prop);
   const location = useLocation();
-  Logger.debug("location", location);
-  Logger.debug("---------", prop);
   const navigate = useNavigate();
 
   const {
@@ -53,18 +50,18 @@ const Login = (prop) => {
 
     const controller = new AbortController();
     const fetchUser = async () => {
+      Logger.info("Login - Fetch user handler");
       try {
         const { status, data } = await axios.get(GET_USER, {
           withCredentials: true,
           signal: controller.signal,
         });
-        Logger.debug("data from app fetcuser method app file", data);
         if (status == 200) {
           navigate("/home");
         }
       } catch (error) {
         if (error?.response?.status == 401) {
-          Logger.debug("Error from app file useEffect", error);
+          Logger.info("Login - Fetch user hanller catch error");
         }
       }
     };
@@ -95,20 +92,18 @@ const Login = (prop) => {
     navigate("/forget-password");
   };
   const submitLoginData = async (data) => {
-    Logger.debug(data);
+    Logger.info("Login - Submit login data handler");
     try {
       const response = await publicAxios.post(LOGIN_URL, data, {
         withCredentials: true,
       });
       if (response.status == 201) {
-        Logger.debug("DATA", response?.data?.user);
         dispatch(setUser(response?.data?.user));
         dispatch(setPrivileges(response?.data?.user?.role));
         navigate("/home");
       }
     } catch (error) {
-      Logger.debug("error from submit login method", error);
-
+      Logger.info("Login - Submit login data handler catch error");
       if (
         error.response.status == 401 &&
         error.response.data.message === "Unauthorized"

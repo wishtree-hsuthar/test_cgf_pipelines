@@ -139,23 +139,22 @@ const Header = () => {
   const getReportIssueLink = async () => {
     try {
       const response = await axios.get(MASTER_LINK + "/reportIssueOnZoho");
-      Logger.debug("response:- ", response.data);
+      Logger.info("Header - getReportIssueLink handler");
 
       const url = new URL(response.data);
 
       REPORT_ISSUE_LINK = url;
     } catch (error) {
+      Logger.info("Header - getReportIssueLink handler catch error");
       if (
         error?.response?.status === 403 &&
         error?.response?.data?.message ===
           "You don't have required privileges to access this resource!"
       ) {
-        Logger.debug(
-          "You don't have required privileges to access this resource!"
+        Logger.info(
+          "Header - getReportIssueLink handler -You don't have required privileges to access this resource!"
         );
       }
-      console.log("error", error);
-      Logger.debug("Error:- ", error);
     }
   };
 
@@ -186,13 +185,13 @@ const Header = () => {
     setActive(!isActive);
   };
   const showContent = () => {
-    Logger.debug("show content function");
+    Logger.info("Header - show content function");
     let hideContent;
     if (SUPER_ADMIN && Object.keys(userAuth?.role?.privileges).length === 0) {
-      Logger.debug("showing content to super admin");
+      Logger.info("Header - showing content to super admin");
       hideContent = false;
     } else {
-      Logger.debug("hiding content to others");
+      Logger.info("Header - hiding content to others");
       hideContent = true;
     }
     return hideContent;
