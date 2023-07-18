@@ -166,7 +166,9 @@ function FillAssessment() {
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
 
-      Logger.info("Fill Assessment - fetchQuestionnaire handler catch error");
+      Logger.info(
+        `Fill Assessment - fetchQuestionnaire handler catch error - ${error?.response?.data?.message}`
+      );
       catchError(error, setToasterDetails, myRef, navigate);
     }
   };
@@ -214,7 +216,9 @@ function FillAssessment() {
           response?.data?.assessmentStatus == "Pending"
       );
     } catch (error) {
-      Logger.info("Fill Assessment - fetchAssessments handler catch error");
+      Logger.info(
+        `Fill Assessment - fetchAssessments handler catch error ${error?.response?.data?.message}`
+      );
       if (error?.code === "ERR_CANCELED") return;
       if (error?.response?.status === 401) {
         isMounted &&
