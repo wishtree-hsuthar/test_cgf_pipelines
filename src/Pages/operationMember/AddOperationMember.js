@@ -236,7 +236,7 @@ function AddOperationMember() {
   }, []);
   const fetchReportingManagers = async (id, isCGF) => {
     try {
-      console.log("Add Operation Member - fetchReportingManagers handler");
+      
       const response = await privateAxios.get(
         isCGF
           ? FETCH_OPERATION_MEMBER + id + "/master/rm"

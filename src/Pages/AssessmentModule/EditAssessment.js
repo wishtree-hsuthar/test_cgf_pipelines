@@ -139,10 +139,10 @@ function EditAssessment() {
 
   const handlememberDropdownAPI = () => {
     if (isMemberRepresentative || isOperationMember) {
-      console.log("specific url", `${SPECIFIC_MEMBER_DROPDOWN}`);
+
       return `${SPECIFIC_MEMBER_DROPDOWN}${memberId}`;
     } else {
-      console.log("master url", `${SPECIFIC_MEMBER_DROPDOWN}$`);
+
 
       return MEMBER_DROPDOWN;
     }

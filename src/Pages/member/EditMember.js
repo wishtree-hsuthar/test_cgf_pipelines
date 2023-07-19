@@ -324,7 +324,7 @@ const EditMember = () => {
       return arrOfRegions;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      console.log("caught in catch", error);
+      
       return [];
     }
   };
@@ -357,7 +357,7 @@ const EditMember = () => {
         const response = await axios.get(PENDING_MEMBER + `/${param.id}`, {
           signal: controller.signal,
         });
-        console.log("response for pending member:- ", response?.data);
+       
         return response.data;
       } else {
         const response = await axios.get(MEMBER + `/${param.id}`, {

@@ -9,7 +9,7 @@ const Charts = ({
   chartImages,
   setChartImages,
 }) => {
-  console.log("inside charts");
+  
   return (
     <>
       <Chart1

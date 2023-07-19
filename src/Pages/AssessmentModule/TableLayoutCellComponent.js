@@ -477,7 +477,7 @@ const TableLayoutCellComponent = ({
           answer?.length > 0 &&
           Array.isArray(answer) && (
             <>
-              {console.log("answer: ", answer)}
+              
               {answer.map((file, fileIdx) =>
                 file?.name?.length <= 30
                   ? (fileIdx <= 1 || showMoreAttachment) && (

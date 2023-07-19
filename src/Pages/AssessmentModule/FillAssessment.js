@@ -309,7 +309,7 @@ function FillAssessment() {
         error?.response?.status === 400 &&
         error?.response?.data?.message === "Invalid assessment!"
       ) {
-        console.log("in invalid assessment");
+      
         setToasterDetails(
           {
             titleMessage: "Oops!",
