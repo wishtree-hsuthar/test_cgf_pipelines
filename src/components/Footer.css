@@ -1,0 +1,9 @@
+.footer-wrapper{padding: 9px 0;color: #1E1E1E;justify-content: center;}
+.copyright-wrapper{font-size: 12px; line-height: 12px;}
+.version-txt{font-size: 12px;}
+footer{position: fixed;
+    width: 100%;
+    bottom: 0;
+    background: #f4f7fc;
+    margin-top: 5px;z-index: 1;}
+.login-page footer{background: none;}

@@ -1,0 +1,408 @@
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { TextField, Autocomplete, Paper } from "@mui/material";
+import { useForm, Controller as AddSubAdminController } from "react-hook-form";
+import axios from "axios";
+import { privateAxios } from "../../api/axios";
+import { ADD_SUB_ADMIN, COUNTRIES, FETCH_ROLES } from "../../api/Url";
+import Toaster from "../../components/Toaster";
+import useCallbackState from "../../utils/useCallBackState";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import Input from "../../components/Input";
+import Dropdown from "../../components/Dropdown";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import Loader from "../../utils/Loader";
+import { Logger } from "../../Logger/Logger";
+import { catchError } from "../../utils/CatchError";
+const helperTextForCGFAdmin = {
+  countryCode: {
+    validate: "Select the country code",
+  },
+  phoneNumber: {
+    maxLength: "Max digits limit exceed",
+    minLength: "Enter the valid phone number (Eg: 1234567890)",
+    validate: "Enter the valid phone number (Eg: 1234567890)",
+    pattern: "Invalid format",
+  },
+  name: {
+    required: "Enter the CGF admin name",
+    maxLength: "Max char limit exceed",
+    minLength: "minimum 3 characters required",
+    pattern: "Invalid format",
+  },
+  email: {
+    required: "Enter the email",
+    pattern: "Invalid format",
+    minLength: "minimum 3 characters required",
+  },
+  subRoleId: {
+    required: "Select the role",
+  },
+};
+
+const AddSubAdmin = () => {
+  //custom hook to set title of page
+  useDocumentTitle("Add CGF Admin");
+  const [disableSubmit, setDisableSubmit] = useState(false);
+
+  const navigate = useNavigate();
+  const {
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset,
+    control,
+    trigger,
+    setValue,
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      subRoleId: "",
+      phoneNumber: "",
+      countryCode: "",
+    },
+  });
+  const location = useLocation();
+  const [countriesAddCGFAdmin, setCountriesAddCGFAdmin] = useState([]);
+  const [rolesAddCGFAdmin, setRolesAddCGFAdmin] = useState([]);
+  const [isCgfAdminLoading, setIsCgfAdminLoading] = useState(false);
+  const toasterRef = useRef();
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "error",
+  });
+
+  const phoneNumberChangeHandlerAddCGFAdmin = (e, name, code) => {
+    setValue(name, e.target.value);
+    trigger(name);
+    trigger(code);
+  };
+  useEffect(() => {
+    let isMounted = true;
+    let controller = new AbortController();
+    let fetchRoles = async () => {
+      try {
+        const response = await privateAxios.get(FETCH_ROLES, {
+          signal: controller.signal,
+        });
+        Logger.info(`Add Sub Admin - fetchRoles handler`);
+        setRolesAddCGFAdmin(response.data);
+        response.data.filter(
+          (data) => data.name === "CGF Admin" && reset({ subRoleId: data._id })
+        );
+      } catch (error) {
+        if (error?.code === "ERR_CANCELED") return;
+        Logger.info(
+          `Add Sub Admin - fetchRoles handler catch error ${error?.response?.data?.message}`
+        );
+        catchError(error, setToasterDetails, toasterRef, navigate);
+      }
+    };
+    let addCGFAdminFetchCountries = async () => {
+      try {
+        const response = await axios.get(COUNTRIES, {
+          signal: controller.signal,
+        });
+        Logger.info(`Add sub admin - addCGFAdminFetchCountries handler `);
+        if (isMounted) {
+          let tempCountryCode = response?.data.map(
+            (country) => country.countryCode
+          );
+          let tempCountryCodeSet = new Set(tempCountryCode);
+          setCountriesAddCGFAdmin([...tempCountryCodeSet]);
+        }
+      } catch (error) {
+        if (error?.code === "ERR_CANCELED") return;
+        Logger.info(
+          `Add sub admin - addCGFAdminFetchCountries handler catch error ${error?.response?.data?.message}`
+        );
+      }
+    };
+    fetchRoles();
+    addCGFAdminFetchCountries();
+  }, []);
+
+  const addSubAdminData = async (data) => {
+    Logger.info(`Add sub admin - addSubAdminData handler`);
+    setIsCgfAdminLoading(true);
+    setDisableSubmit(true);
+    try {
+      const response = await axios.post(ADD_SUB_ADMIN, data);
+      if (response.status == 201) {
+        setIsCgfAdminLoading(false);
+
+        setToasterDetails(
+          {
+            titleMessage: "Hurray!",
+            descriptionMessage: response.data.message,
+            messageType: "success",
+          },
+          () => toasterRef.current()
+        );
+        setDisableSubmit(false);
+        reset();
+      }
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      Logger.info(
+        `Add sub admin - addSubAdminData handler catch error ${error?.response?.data?.message}`
+      );
+      setIsCgfAdminLoading(false);
+      setDisableSubmit(false);
+      catchError(error, setToasterDetails, toasterRef, navigate);
+    }
+  };
+  const handleOnsubmitAddCGFAdmin = async (data) => {
+    addSubAdminData(data);
+    setTimeout(() => {
+      navigate("/users/cgf-admin/", { state: 1 });
+    }, 3000);
+  };
+
+  const handleSaveAndMoreAddCGFAdmin = (data) => {
+    addSubAdminData(data);
+    reset();
+    setValue("");
+  };
+  const handleCancel = () => {
+    navigate("/users/cgf-admin/", { state: 0 });
+  };
+
+  return (
+    <div className="page-wrapper">
+      <Toaster
+        myRef={toasterRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
+      <div className="breadcrumb-wrapper">
+        <div className="container">
+          <ul className="breadcrumb">
+            <li>
+              <Link to="/users/cgf-admin/">CGF Admins</Link>
+            </li>
+            <li>Add CGF Admin</li>
+          </ul>
+        </div>
+      </div>
+      <section>
+        <div className="container">
+          <form onSubmit={handleSubmit(handleOnsubmitAddCGFAdmin)}>
+            <div className="form-header flex-between">
+              <h2 className="heading2">Add CGF Admin</h2>
+              <div className="form-header-right-txt">
+                <div
+                  className="tertiary-btn-blk"
+                  onClick={handleSubmit(handleSaveAndMoreAddCGFAdmin)}
+                >
+                  <span className="addmore-icon">
+                    <i className="fa fa-plus"></i>
+                  </span>
+                  <span className="addmore-txt">Save & Add More</span>
+                </div>
+              </div>
+            </div>
+            {isCgfAdminLoading ? (
+              <Loader />
+            ) : (
+              <div className="card-wrapper">
+                <div className="card-blk flex-between">
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="name">
+                        CGF Admin Name <span className="mandatory">*</span>
+                      </label>
+                      <Input
+                        control={control}
+                        onBlur={(e) => setValue("name", e.target.value?.trim())}
+                        name={"name"}
+                        placeholder={"Enter CGF admin name"}
+                        myHelper={helperTextForCGFAdmin}
+                        rules={{
+                          maxLength: 50,
+                          minLength: 3,
+                          required: true,
+                          pattern: /^[a-zA-Z][a-zA-Z ]*$/,
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="email">
+                        Email <span className="mandatory">*</span>
+                      </label>
+                      <Input
+                        name={"email"}
+                        onBlur={(e) =>
+                          setValue("email", e.target.value?.trim())
+                        }
+                        control={control}
+                        placeholder={"example@domain.com"}
+                        myHelper={helperTextForCGFAdmin}
+                        rules={{
+                          required: true,
+                          maxLength: 50,
+                          minLength: 3,
+                          pattern:
+                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="phoneNumber">Phone Number</label>
+                      <div className="phone-number-field">
+                        <div className="select-field country-code">
+                          <AddSubAdminController
+                            control={control}
+                            name="countryCode"
+                            rules={{
+                              validate: () => {
+                                if (
+                                  !watch("countryCode") &&
+                                  watch("phoneNumber")
+                                )
+                                  return "Invalid input";
+                              },
+                            }}
+                            render={({ field, fieldState: { error } }) => (
+                              <Autocomplete
+                                {...field}
+                                className={`${error && "autocomplete-error"}`}
+                                PaperComponent={({ children }) => (
+                                  <Paper
+                                    className={
+                                      countriesAddCGFAdmin?.length > 5
+                                        ? "autocomplete-option-txt autocomplete-option-limit"
+                                        : "autocomplete-option-txt"
+                                    }
+                                  >
+                                    {children}
+                                  </Paper>
+                                )}
+                                popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                onChange={(event, newValue) => {
+                                  newValue && typeof newValue === "object"
+                                    ? setValue("countryCode", newValue.name)
+                                    : setValue("countryCode", newValue);
+                                  trigger("countryCode");
+                                  trigger("phoneNumber");
+                                }}
+                                autoHighlight
+                                options={
+                                  countriesAddCGFAdmin
+                                    ? countriesAddCGFAdmin
+                                    : []
+                                }
+                                getOptionLabel={(country) => country}
+                                renderOption={(props, option) => (
+                                  <li {...props}>{option}</li>
+                                )}
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    inputProps={{
+                                      ...params.inputProps,
+                                    }}
+                                    placeholder={"+00"}
+                                    onChange={() => trigger("countryCode")}
+                                    helperText={
+                                      error
+                                        ? helperTextForCGFAdmin.countryCode[
+                                            error?.type
+                                          ]
+                                        : " "
+                                    }
+                                  />
+                                )}
+                              />
+                            )}
+                          />
+                        </div>
+                        <Input
+                          name={"phoneNumber"}
+                          control={control}
+                          placeholder={"1234567890"}
+                          myOnChange={(e) =>
+                            phoneNumberChangeHandlerAddCGFAdmin(
+                              e,
+                              "phoneNumber",
+                              "countryCode"
+                            )
+                          }
+                          onBlur={(e) =>
+                            setValue("phoneNumber", e.target.value?.trim())
+                          }
+                          myHelper={helperTextForCGFAdmin}
+                          rules={{
+                            minLength: 7,
+                            maxLength: 15,
+                            validate: (value) => {
+                              if (!watch("phoneNumber") && watch("countryCode"))
+                                return "invalid input";
+                              if (value && !Number(value))
+                                return "Invalid input";
+                            },
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="role">
+                        Role <span className="mandatory">*</span>
+                      </label>
+
+                      <div>
+                        <Dropdown
+                          name="subRoleId"
+                          control={control}
+                          options={rolesAddCGFAdmin}
+                          rules={{
+                            required: true,
+                          }}
+                          myHelper={helperTextForCGFAdmin}
+                          placeholder={"Select role"}
+                        />
+
+                        <p className={`password-error`}>
+                          {errors.subRoleId?.message}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-btn flex-between add-members-btn">
+                    <button
+                      type="reset"
+                      onClick={handleCancel}
+                      className="secondary-button mr-10"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="primary-button add-button"
+                      disabled={disableSubmit}
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </form>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default AddSubAdmin;

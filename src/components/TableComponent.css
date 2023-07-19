@@ -1,0 +1,296 @@
+/* .table-blk .css-1q1u3t4-MuiTableRow-root {
+    height: 54px !important;
+} */
+.table-blk tr {
+    height: 54px;
+}
+.table-blk tbody tr:hover {
+    background-color: rgba(171, 184, 195, 0.15) !important;
+}
+.table-blk .MuiTableRow-head {
+    height: 54px;
+    background: rgba(69, 150, 209, 0.1);
+    white-space: nowrap;
+    padding: 0 10px;
+}
+.table-header span {
+    font-size: 15px;
+    color: #1e1e1e !important;
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+}
+.table-blk .MuiPaper-root {
+    box-shadow: 0px 0 6px rgba(0, 0, 0, 0.1) !important;
+    margin-bottom: 0;
+}
+
+.table-blk .MuiTableCell-head {
+    padding: 0 !important;
+    text-align: left;
+}
+/* .table-blk .MuiTableCell-head:nth-child(2){padding: 0 !important;} */
+/* .table-blk .MuiCheckbox-root svg{width: 13px;height: 12px;} */
+.table-blk .MuiTableCell-root {
+    font-family: "ProximaNova-Regular", serif, sans-serif;
+    padding: 0 15px 0 0;
+    border-bottom: none;
+    font-size: 14px;
+}
+.table-blk .MuiTableCell-root:last-child {
+    padding-right: 0;
+}
+.table-blk .MuiCheckbox-root {
+    padding: 16px;
+}
+.table-blk .MuiTableRow-root .button-style span {
+    color: #e53850;
+    background: rgba(229, 56, 80, 0.15);
+    padding: 5px;
+    font-size: 14px;
+    width: 67px;
+    display: inline-block;
+    text-align: center;
+}
+.button-style-success span {
+    color: #6db02d !important;
+    background: rgba(109, 176, 45, 0.15) !important;
+}
+.table-blk .MuiTableCell-root .MuiTableSortLabel-root {
+    flex-direction: initial;
+}
+/* .per-page-select-field .MuiSelect-select.MuiInputBase-input {
+    min-width: 5px !important;
+    background: transparent !important;
+} */
+
+/* CSS added by Rajkumar */
+.table-blk th {
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+}
+.table-blk td {
+    font-family: "ProximaNova-Regular", serif, sans-serif;
+    white-space: nowrap;
+}
+.no-records-blk {
+    padding: 30px;
+    text-align: center;
+}
+.table-checkbox.Mui-disabled svg {
+    color: rgba(30, 30, 30, 0.5) !important;
+}
+.table-checkbox.Mui-checked.Mui-disabled svg {
+    color: rgba(30, 30, 30, 0.5) !important;
+}
+
+.table-blk-without-checkbox .MuiTableCell-head {
+    padding: 0px 10px !important;
+}
+.table-blk-without-checkbox .MuiTableCell-root {
+    padding: 0px 10px !important;
+}
+
+.card-wrapper .table-footer {
+    margin-bottom: 0;
+}
+.table-footer-btm-space .table-footer {
+    margin: 0 0 60px;
+}
+
+.icon svg {
+    font-size: 16px;
+    color: #000000;
+}
+.icon {
+    padding: 0 15px;
+    cursor: pointer;
+}
+.table-blk .MuiTableRow-root.Mui-selected {
+    background-color: rgba(171, 184, 195, 0.26);
+}
+.show-entries-txt {
+    font-size: 14px;
+    color: #1d1d23;
+}
+.per-page-blk {
+    display: flex;
+    align-items: center;
+    margin: 0 50px 0 0;
+}
+.table-footer-left {
+    display: flex;
+    align-items: center;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+.per-page-txt {
+    margin-right: 10px;
+    font-size: 14px;
+    color: #1d1d23;
+}
+.per-page-select-field fieldset {
+    border: none;
+}
+.per-page-select-field .MuiSelect-select {
+    background: transparent !important;
+    padding: 0 30px 0 0 !important;
+    font-family: "ProximaNova-Semibold", serif, sans-serif !important;
+}
+.per-page-select-field svg {
+    color: #1d1d23 !important;
+}
+/* .table-content-wrap .css-19kzrtu{padding: 30px 0 20px;} */
+.table-content-wrap .table-blk {
+    padding: 20px 0;
+}
+/* CSS By Rajkumar */
+/* .table-role-content-wrap .table-blk{padding-bottom: 0;} */
+.table-footer {
+    margin: 0 0 30px;
+}
+.table-role-content-wrap .table-footer {
+    margin-bottom: 0;
+}
+.table-content-width table th:first-child {
+    width: 30%;
+}
+
+.table-blk .sorted-blk .MuiSvgIcon-root {
+    color: #1e1e1e !important;
+    font-size: 18px;
+}
+/* .table-blk-role .sorted-blk {
+    color: #1e1e1e !important;
+    font-size: 18px;
+} */
+.table-checkbox svg {
+    font-size: 18px;
+    color: #707070;
+}
+.table-blk-role .table-checkbox svg {
+    font-size: 20px;
+}
+
+.table-checkbox .Mui-checked svg {
+    font-size: 16px;
+    color: #0082c9;
+}
+.table-checkbox.MuiCheckbox-root.Mui-checked {
+    color: #0082c9;
+}
+.table-checkbox.MuiCheckbox-root.Mui-checked svg {
+    color: #0082c9;
+}
+.table-checkbox .MuiCheckbox-root.MuiCheckbox-indeterminate {
+    color: #0082c9;
+}
+
+/* Pagination CSS */
+
+.pagination-blk .MuiPaginationItem-root.Mui-selected {
+    background: #4596d1;
+    color: #fff;
+    border-color: #4596d1;
+}
+.pagination-blk .MuiPaginationItem-root {
+    margin: 0;
+    border: 1px solid rgba(30, 30, 30, 0.15);
+    background: #fff;
+    border-radius: 3px !important;
+    font-family: "ProximaNova-Regular", serif, sans-serif;
+    font-size: 14px;
+}
+.pagination-blk .MuiPaginationItem-previousNext {
+    background: #fff !important;
+}
+.pagination-blk .MuiPaginationItem-ellipsis {
+    border-radius: 3px;
+    height: 32px;
+}
+.pagination-blk .MuiPaginationItem-root:hover {
+    background: rgba(30, 30, 30, 0.05);
+    color: #4596d1;
+    border: none;
+}
+.pagination-blk .Mui-disabled {
+    background: rgba(255, 255, 255, 0) !important;
+}
+
+.table-blk-role .MuiTableCell-head {
+    padding: 0 10px !important;
+    text-align: center;
+}
+.table-blk-role td {
+    padding: 0px !important;
+}
+.table-blk-role td:first-child {
+    padding: 0 10px !important;
+}
+/* .table-blk-role .MuiTableCell-head:nth-child(2) {
+    padding: 15px !important;
+} */
+.table-blk-role .MuiTableCell-head:first-child {
+    text-align: left;
+}
+
+/* Instruction table css */
+.instruct-table-sect table .MuiTableCell-root {
+    white-space: initial !important;
+    padding: 15px !important;
+    vertical-align: top;
+    text-align: justify;
+    color: #1e1e1e;
+}
+.instruct-table-sect table tr {
+    height: auto;
+}
+.instruct-table-listblk {
+    margin-left: 17px;
+}
+.instruct-table-sect table tr td:first-child {
+    width: 28%;
+    font-family: "ProximaNova-Semibold", serif, sans-serif !important;
+    text-align: left;
+}
+.instruct-red {
+    color: red !important;
+    font-family: "ProximaNova-Semibold", serif, sans-serif !important;
+}
+.instruct-txt-bold-underline {
+    text-decoration: underline;
+    font-family: "ProximaNova-Semibold", serif, sans-serif;
+}
+.instruct-table-sect {
+    margin-bottom: 20px;
+}
+.instruct-table-sect .table-content-wrap .table-blk {
+    padding-bottom: 0;
+}
+
+.instruct-inner-table tr:first-child td {
+    padding: 0 !important;
+}
+.table-blk .instruct-inner-table tbody tr:hover {
+    background: none !important;
+}
+.instruct-inner-table tr td:first-child {
+    padding: 15px 15px 0 63px !important;
+}
+.instruct-inner-table tr:first-child td:first-child {
+    padding: 15px 15px 0 !important;
+}
+.instruct-inner-table tr:first-child td:last-child {
+    padding: 15px 15px 0 15px !important;
+}
+.instruct-inner-table tr td:last-child {
+    padding: 15px 15px 0 15px !important;
+}
+.instruct-table-sect table .MuiTableCell-root.instruct-inner-cell {
+    padding: 0 0 15px !important;
+}
+
+.table-blk .MuiTableRow-root .due-date-style span {
+    color: #e53850;
+    font-size: 14px;
+}
+.due-date-style-success span {
+    color: #6db02d !important;
+}

@@ -1,0 +1,201 @@
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+} from "@mui/material";
+import React from "react";
+import { v4 as uuidv4 } from "uuid";
+import TableLayoutCellComponent from "./TableLayoutCellComponent.js";
+
+const TableRender = ({
+  questionnaire,
+  setQuestionnaire,
+  sectionIndex,
+  tableErr,
+  setTableErr,
+  isPreview,
+}) => {
+  // on Add Row click handler
+  const onAddRowClickHandler = () => {
+    let tempQuestionnaire = { ...questionnaire };
+    let tempRow = {
+      uuid: uuidv4(),
+      cells: [],
+    };
+    tempQuestionnaire?.sections[sectionIndex]?.columnValues?.forEach(
+      (column, columnIdx) =>
+        tempRow?.cells?.push({
+          columnId: column?.uuid,
+          value: "",
+        })
+    );
+    tempQuestionnaire?.sections[sectionIndex]?.rowValues?.push({ ...tempRow });
+    setQuestionnaire(tempQuestionnaire);
+  };
+
+  // on delete Row click handler
+  const onRowDeleteClickHandler = (rowId) => {
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire?.sections[sectionIndex]?.rowValues?.splice(rowId, 1);
+    setQuestionnaire(tempQuestionnaire);
+  };
+
+  return (
+    <div className="que-table-sect">
+      <div
+        className={`que-table-wrap que-table-render-wrap ${
+          isPreview || "que-table-create"
+        }  ${isPreview || "active"} `}
+      >
+        <div className="que-table-innerwrap que-table-render-innerwrap flex-between no-wrap">
+          <Paper
+            sx={{ width: "96%", overflow: "hidden" }}
+            className="que-table-infoblk que-sticky-column pb-0"
+          >
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table
+                stickyHeader
+                aria-label="sticky table"
+                className="que-table que-table-render"
+              >
+                <TableHead>
+                  <TableRow>
+                    {!isPreview && <TableCell width={75}></TableCell>}
+                    {questionnaire &&
+                      questionnaire?.sections[sectionIndex]?.columnValues?.map(
+                        (column, columnId) => (
+                          <TableCell key={column?.uuid}>
+                            <div className="que-table-column-info">
+                              <div className="que-column-ttlblk">
+                                <div className="form-group">
+                                  {column?.title.length > 50 ? (
+                                    <Tooltip
+                                      title={column?.title}
+                                      placement="bottom-start"
+                                    >
+                                      <p>
+                                        {column?.title.slice(0, 50)}
+                                        ...
+                                        {column?.isRequired &&
+                                          column?.title && (
+                                            <span className="mandatory">
+                                              
+                                                *
+                                            </span>
+                                          )}
+                                      </p>
+                                    </Tooltip>
+                                  ) : (
+                                    <p>
+                                      {column?.title}
+                                      {column?.isRequired && column?.title && (
+                                        <span className="mandatory"> *</span>
+                                      )}
+                                    </p>
+                                  )}
+                                  {/* <TextField
+                                    className="input-field column-input-field"
+                                    id="outlined-basic"
+                                    variant="outlined"
+                                    name="title"
+                                    value={column?.title}
+                                    // placeholder="Give column title"
+                                  /> */}
+                                </div>
+                                {/* <div
+                                  className="que-table-col-ttl"
+                                  // contentEditable="true"
+                                >
+                                  {column?.title}
+                                </div> */}
+                              </div>
+                            </div>
+                          </TableCell>
+                        )
+                      )}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {questionnaire?.sections[sectionIndex]?.rowValues?.map(
+                    (row, rowId) => (
+                      <TableRow key={row?.uuid}>
+                        {isPreview || (
+                          <TableCell sx={{ display: "none" }}>
+                            <div
+                              className="que-column-count flex-between"
+                              style={{ cursor: "pointer", display: "" }}
+                            >
+                              <span className="que-column-count-txt">
+                                {rowId + 1}.
+                              </span>
+                              {questionnaire?.sections[sectionIndex]?.rowValues
+                                ?.length > 1 &&
+                                (isPreview || (
+                                  <Tooltip title="Delete Row">
+                                    <span
+                                      className="minus-iconblk"
+                                      onClick={() =>
+                                        onRowDeleteClickHandler(rowId)
+                                      }
+                                    >
+                                      <i className="fa fa-minus"></i>
+                                    </span>
+                                  </Tooltip>
+                                ))}
+                            </div>
+                          </TableCell>
+                        )}
+                        {row &&
+                          row?.cells?.map((cell, cellId) => (
+                            <TableCell key={cell?.columnId}>
+                              <TableLayoutCellComponent
+                                isPreview={isPreview}
+                                questionnaire={questionnaire}
+                                setQuestionnaire={setQuestionnaire}
+                                sectionIndex={sectionIndex}
+                                tableErr={tableErr}
+                                setTableErr={setTableErr}
+                                cellId={cellId}
+                                rowId={rowId}
+                                cell={cell}
+                              />
+                            </TableCell>
+                          ))}
+                      </TableRow>
+                    )
+                  )}
+                  {/* <TableRow>
+                    <TableCell>
+                      <div className="que-column-count flex-between">
+                        <span className="que-column-count-txt">1.</span>
+                        <span className="minus-iconblk">
+                          <i className="fa fa-minus"></i>
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell></TableCell>
+                  </TableRow> */}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </div>
+        {isPreview || (
+          <div className="add-row-btnblk mt-20">
+            <span className="addmore-icon" onClick={onAddRowClickHandler}>
+              <i className="fa fa-plus"></i>
+            </span>{" "}
+            <span onClick={onAddRowClickHandler}>Add Row</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default TableRender;

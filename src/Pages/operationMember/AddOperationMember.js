@@ -1,0 +1,886 @@
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import {
+  Autocomplete as AddOperationMemberAutocomplete,
+  FormControlLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Controller as AddOperationMemberController,
+  useForm,
+} from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { privateAxios } from "../../api/axios";
+import {
+  ADD_OPERATION_MEMBER,
+  COUNTRIES,
+  FETCH_OPERATION_MEMBER,
+  FETCH_ROLES,
+  MEMBER_DROPDOWN,
+  SPECIFIC_MEMBER_DROPDOWN,
+} from "../../api/Url";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
+import Toaster from "../../components/Toaster";
+import {
+  getOperationTypes,
+  helperText,
+} from "../../utils/OperationMemberModuleUtil";
+import useCallbackState from "../../utils/useCallBackState";
+import { useDocumentTitle } from "../../utils/useDocumentTitle";
+import Loader from "../../utils/Loader";
+
+import { Logger } from "../../Logger/Logger";
+import { catchError } from "../../utils/CatchError";
+import { useSelector } from "react-redux";
+let OPERATION_TYPES = [];
+function AddOperationMember() {
+  //custom hook to set title of page
+
+  useDocumentTitle("Add Operation Member");
+  const userAuth = useSelector((state) => state?.user?.userObj);
+
+  const { isMemberRepresentative, isOperationMember, memberId, isCGFStaff } =
+    userAuth;
+
+  const defaultValues = {
+    salutation: "Mr.",
+    memberId: "",
+
+    // memberId: "",
+    // companyType: "",
+    countryCode: "",
+    address: "",
+    isCGFStaff: isCGFStaff ? isCGFStaff : false,
+    roleId: "",
+  };
+  const {
+    handleSubmit,
+    formState: { errors },
+    reset,
+    control,
+    setValue,
+    trigger,
+    watch,
+  } = useForm({
+    defaultValues: defaultValues,
+  });
+
+  const [hideCgfStaff, setHideCgfStaff] = useState(false);
+  const [cgfMember, setCgfMember] = useState([]);
+
+  const handlememberDropdownAPI = () => {
+    if (isMemberRepresentative || isOperationMember || isCGFStaff) {
+      setHideCgfStaff(isMemberRepresentative || isOperationMember);
+      return `${SPECIFIC_MEMBER_DROPDOWN}${memberId}`;
+    } else {
+      return MEMBER_DROPDOWN;
+    }
+  };
+  const handleRoles = (data) => {
+    if (isCGFStaff && isOperationMember) {
+      let role = ["CGF Admin", "Member Representative"];
+      setRoles(data.filter((data) => !role.includes(data.name)));
+    } else if (isMemberRepresentative || isOperationMember) {
+      setRoles(data.filter((data) => data.name !== "CGF Admin"));
+    } else {
+      setRoles(data);
+    }
+  };
+  const navigate = useNavigate();
+  const [memberComapniesLabelsOnly, setMemberComapniesLabelsOnly] = useState(
+    []
+  );
+  const [memberCompanies, setMemberCompanies] = useState([
+    {
+      companyName: "",
+      _id: "",
+      companyType: "",
+    },
+  ]);
+  const [disableAddOperationMemberButton, setDisableAddOperationMemberButton] =
+    useState(false);
+  const [disableReportingManager, setDisableReportingManager] = useState(true);
+  const [countries, setCountries] = useState([]);
+  const [isAddOperationMemberLoading, setIsAddOperationMemberLoading] =
+    useState(false);
+  const [reportingManagers, setReportingManagers] = useState();
+  const toasterRef = useRef();
+  const [toasterDetails, setToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "error",
+  });
+
+  // conditionally render textfield or searchable textfield
+  const [showTextField, setShowTextField] = useState(false);
+  // cgf as member company
+  const [roles, setRoles] = useState([]);
+  // Fetch and set roles
+  let fetchRoles = async () => {
+    try {
+      Logger.info("Add Operation Member - fetchRoles handler");
+      const response = await privateAxios.get(FETCH_ROLES);
+
+      // setRoles(response.data);
+      handleRoles(response.data);
+      response.data.filter(
+        (data) =>
+          data.name === "Operation Member" && setValue("roleId", data._id)
+        // reset({ ...defaultValues, roleId: data._id })
+      );
+    } catch (error) {
+      Logger.info(
+        `Add Operation Member - fetchRoles handler catch error - ${error?.response?.data?.message}`
+      );
+    }
+  };
+
+  const phoneNumberChangeHandler = (e, name, code) => {
+    setValue(name, e.target.value);
+    trigger(name);
+    trigger(code);
+  };
+  const callGetOperationType = async () => {
+    OPERATION_TYPES = await getOperationTypes();
+  };
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    OPERATION_TYPES?.length === 0 && callGetOperationType();
+    const fetchMemberComapany = async () => {
+      try {
+        Logger.info("Add Operation Member - fetchMemberCompany handler");
+        const response = await privateAxios.get(handlememberDropdownAPI(), {
+          signal: controller.signal,
+        });
+
+        setCgfMember(
+          response.data.filter(
+            (data) => data.companyName === "The Consumer Goods Forum"
+          )
+        );
+        let CgfMemberCompany = response.data.filter(
+          (data) => data.companyName === "The Consumer Goods Forum"
+        );
+
+        if (response.status == 200) {
+          isMounted &&
+            setMemberCompanies(
+              response?.data
+                .map((data) => ({
+                  companyName: data?.companyName,
+                  _id: data?._id,
+                  companyType: data?.companyType,
+                }))
+                .sort((a, b) =>
+                  a.companyName > b.companyName
+                    ? 1
+                    : b.companyName > a.companyName
+                    ? -1
+                    : 0
+                )
+            );
+          if (isCGFStaff) {
+            setValue("companyType", "Partner");
+            setValue("memberId", CgfMemberCompany[0]?.companyName);
+            // setValue("memberId", "ABCD");
+
+            setShowTextField(true);
+            setDisableReportingManager(false);
+            fetchReportingManagers(CgfMemberCompany[0]._id, true);
+            setValue("reportingManager", "");
+            setValue("isCGFStaff", true);
+          }
+          setMemberComapniesLabelsOnly(
+            response?.data.map((data) => data.companyName)
+          );
+        }
+      } catch (error) {
+        Logger.info(
+          `Add Operation Member - fetchMemberCompany handler catch error - ${error?.response?.data?.message}`
+        );
+        catchError(error, setToasterDetails, toasterRef, navigate);
+      }
+    };
+    let fetchCountries = async () => {
+      try {
+        Logger.info("Add Operation Member - fetchContries");
+        const response = await privateAxios.get(COUNTRIES, {
+          signal: controller.signal,
+        });
+        if (isMounted) {
+          let tempCountryCode = response.data.map(
+            (country) => country?.countryCode
+          );
+          let conutryCodeSet = new Set(tempCountryCode);
+          setCountries([...conutryCodeSet]);
+        }
+      } catch (error) {
+        Logger.info(
+          `Add Operation Member - fetchContries handler catch error ${error?.response?.data?.message}`
+        );
+      }
+    };
+    fetchCountries();
+    fetchMemberComapany();
+    fetchRoles();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+  const fetchReportingManagers = async (id, isCGF) => {
+    try {
+      
+      const response = await privateAxios.get(
+        isCGF
+          ? FETCH_OPERATION_MEMBER + id + "/master/rm"
+          : FETCH_OPERATION_MEMBER + id + "/master/internal"
+      );
+      if (response.status == 200) {
+        setReportingManagers(
+          response.data.map((data) => ({
+            _id: data?._id,
+            name: data?.name,
+          }))
+        );
+      }
+    } catch (error) {
+      Logger.info(
+        `Add Operation Member - fetchReportingManage handler catch error - ${error?.response?.data?.message}`
+      );
+      catchError(error, setToasterDetails, toasterRef, navigate);
+    }
+  };
+  const addOperationMember = async (data, navigateToListPage) => {
+    let selectedMemberCompany = memberCompanies.filter(
+      (company) => company.companyName === data.memberId
+    );
+    setDisableAddOperationMemberButton(true);
+    data = {
+      ...data,
+      isCGFStaff: isCGFStaff ? true : data.isCGFStaff === "true" ? true : false,
+      memberId:
+        data.isCGFStaff === "true"
+          ? cgfMember[0]._id
+          : selectedMemberCompany[0]._id,
+    };
+    setIsAddOperationMemberLoading(true);
+    try {
+      Logger.info("Add Operation Member - addOperationMember handler");
+      const response = await privateAxios.post(ADD_OPERATION_MEMBER, data);
+      if (response.status == 201) {
+        setIsAddOperationMemberLoading(false);
+        let defaultRoleId = roles.filter(
+          (role) => role.name == "Operation Member"
+        );
+        reset({
+          ...defaultValues,
+          roleId:
+            defaultRoleId.length > 0 && defaultRoleId[0]._id
+              ? defaultRoleId[0]._id
+              : "",
+        });
+        setDisableAddOperationMemberButton(false);
+        setToasterDetails(
+          {
+            titleMessage: "Hurray!",
+            descriptionMessage: response?.data?.message,
+            messageType: "success",
+          },
+          () => toasterRef.current()
+        );
+        navigateToListPage === false &&
+          setTimeout(() => {
+            navigate("/users/operation-members", { state: 1 });
+          }, 3000);
+      }
+    } catch (error) {
+      Logger.info(
+        `Add Operation Member - addOperationMember handler catch error - ${error?.response?.data?.message}`
+      );
+      setDisableAddOperationMemberButton(false);
+      setIsAddOperationMemberLoading(false);
+      catchError(error, setToasterDetails, toasterRef, navigate);
+    }
+  };
+
+  const handleOnSubmit = async (data) => {
+    addOperationMember(data, false);
+  };
+  const handleSaveAndMore = async (data) => {
+    await addOperationMember(data, true);
+    setShowTextField(false);
+    let role = roles.filter((role) => role.name === "Operation Member");
+    reset({
+      ...defaultValues,
+      roleId: role.length > 0 && role[0]._id ? role[0]._id : "",
+    });
+  };
+
+  const handleCGFStaffChange = (e) => {
+    let cgfCompany = memberCompanies?.filter(
+      (company) => company.companyName === "The Consumer Goods Forum"
+    );
+    if (e.target.value === "true") {
+      setValue("companyType", "Partner");
+      setValue("memberId", cgfCompany[0].companyName);
+      setShowTextField(true);
+      setDisableReportingManager(false);
+      fetchReportingManagers(cgfCompany[0]._id, true);
+      setValue("reportingManager", "");
+    } else {
+      setValue("companyType", "N/A");
+      setValue("memberId", undefined);
+      setShowTextField(false);
+      setReportingManagers();
+      setValue("reportingManager", "");
+
+      setDisableReportingManager(true);
+    }
+    trigger("memberId");
+  };
+
+  return (
+    <div className="page-wrapper">
+      <Toaster
+        messageType={toasterDetails.messageType}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        myRef={toasterRef}
+        titleMessage={toasterDetails.titleMessage}
+      />
+      <div className="breadcrumb-wrapper">
+        <div className="container">
+          <ul className="breadcrumb">
+            <li>
+              <Link to="/users/operation-members">Operation Members</Link>
+            </li>
+            <li>Add Operation Member</li>
+          </ul>
+        </div>
+      </div>
+      <section>
+        <div className="container">
+          <form onSubmit={handleSubmit(handleOnSubmit)}>
+            <div className="form-header flex-between">
+              <h2 className="heading2">Add Operation Member</h2>
+              <div className="form-header-right-txt">
+                <div
+                  className="tertiary-btn-blk"
+                  onClick={handleSubmit(handleSaveAndMore)}
+                >
+                  <span className="addmore-icon">
+                    <i className="fa fa-plus"></i>
+                  </span>
+                  <span className="addmore-txt">Save & Add More</span>
+                </div>
+              </div>
+            </div>
+            {isAddOperationMemberLoading ? (
+              <Loader />
+            ) : (
+              <div className="card-wrapper">
+                <div className="card-blk flex-between">
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <div className="salutation-wrap">
+                        <div className="salutation-blk">
+                          <label htmlFor="salutation">
+                            Salutation <span className="mandatory">*</span>
+                          </label>
+
+                          <Dropdown
+                            control={control}
+                            name="salutation"
+                            // placeholder="Mr."
+                            myHelper={helperText}
+                            rules={{
+                              required: true,
+                            }}
+                            options={["Mr.", "Mrs.", "Ms."]}
+                          />
+                        </div>
+                        <div className="salutation-inputblk">
+                          <label htmlFor="name">
+                            Full Name <span className="mandatory">*</span>
+                          </label>
+                          <Input
+                            name={"name"}
+                            onBlur={(e) =>
+                              setValue("name", e.target.value?.trim())
+                            }
+                            control={control}
+                            placeholder={"Enter full name"}
+                            myHelper={helperText}
+                            rules={{
+                              required: true,
+                              maxLength: 50,
+                              minLength: 3,
+                              pattern: /^[a-zA-Z][a-zA-Z ]*$/,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="title">Job Title </label>
+                      <Input
+                        name={"title"}
+                        onBlur={(e) =>
+                          setValue("title", e.target.value?.trim())
+                        }
+                        myHelper={helperText}
+                        control={control}
+                        placeholder={"Enter job title"}
+                        rules={{
+                          maxLength: 50,
+                          minLength: 3,
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="department">Department </label>
+                      <Input
+                        name={"department"}
+                        onBlur={(e) =>
+                          setValue("department", e.target.value?.trim())
+                        }
+                        control={control}
+                        myHelper={helperText}
+                        placeholder={"Enter department"}
+                        rules={{
+                          maxLength: 50,
+                          minLength: 3,
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="email">
+                        Email <span className="mandatory">*</span>
+                      </label>
+                      <Input
+                        name={"email"}
+                        onBlur={(e) =>
+                          setValue("email", e.target.value?.trim())
+                        }
+                        control={control}
+                        myHelper={helperText}
+                        placeholder={"example@domain.com"}
+                        rules={{
+                          required: "true",
+                          maxLength: 50,
+                          minLength: 3,
+                          pattern:
+                            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="phoneNumber">Phone Number</label>
+                      <div className="phone-number-field">
+                        <div className="select-field country-code">
+                          <AddOperationMemberController
+                            control={control}
+                            name="countryCode"
+                            rules={{
+                              validate: () => {
+                                if (
+                                  !watch("countryCode") &&
+                                  watch("phoneNumber")
+                                )
+                                  return "Invalid input";
+                              },
+                            }}
+                            render={({ field, fieldState: { error } }) => (
+                              <AddOperationMemberAutocomplete
+                                {...field}
+                                className={`${error && "autocomplete-error"}`}
+                                PaperComponent={({ children }) => (
+                                  <Paper
+                                    className={
+                                      countries?.length > 5
+                                        ? "autocomplete-option-txt autocomplete-option-limit"
+                                        : "autocomplete-option-txt"
+                                    }
+                                  >
+                                    {children}
+                                  </Paper>
+                                )}
+                                popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                onChange={(event, newValue) => {
+                                  newValue && typeof newValue === "object"
+                                    ? setValue("countryCode", newValue.name)
+                                    : setValue("countryCode", newValue);
+                                  trigger("countryCode");
+                                  trigger("phoneNumber");
+                                }}
+                                autoHighlight
+                                options={countries ? countries : []}
+                                // placeholder="Select country code"
+
+                                renderOption={(props, option) => (
+                                  <li {...props}>{option}</li>
+                                )}
+                                getOptionLabel={(country) => country}
+                                renderInput={(params) => (
+                                  <TextField
+                                    placeholder={"+00"}
+                                    {...params}
+                                    inputProps={{
+                                      ...params.inputProps,
+                                    }}
+                                    onChange={() => trigger("countryCode")}
+                                    helperText={
+                                      error
+                                        ? helperText.countryCode[error?.type]
+                                        : " "
+                                    }
+                                  />
+                                )}
+                              />
+                            )}
+                          />
+                        </div>
+                        <Input
+                          name={"phoneNumber"}
+                          myOnChange={(e) =>
+                            phoneNumberChangeHandler(
+                              e,
+                              "phoneNumber",
+                              "countryCode"
+                            )
+                          }
+                          onBlur={(e) =>
+                            setValue("phoneNumber", e.target.value?.trim())
+                          }
+                          control={control}
+                          myHelper={helperText}
+                          placeholder={"1234567890"}
+                          rules={{
+                            maxLength: 15,
+                            minLength: 7,
+                            validate: (value) => {
+                              if (!watch("phoneNumber") && watch("countryCode"))
+                                return "invalid input";
+                              if (value && !Number(value))
+                                return "Invalid input";
+                            },
+                            // validate: (value) => {
+                            //     if (
+                            //         watch(
+                            //             "phoneNumber"
+                            //         ) &&
+                            //         !watch(
+                            //             "countryCode"
+                            //         )
+                            //     )
+                            //         return "Enter Country code";
+                            // else if (
+                            //     value &&
+                            //     !Number(value)
+                            // )
+                            //     return "Please enter valid phone number";
+                            // },
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="">
+                        Operation Type <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        control={control}
+                        name="operationType"
+                        myHelper={helperText}
+                        placeholder={"Select operation type"}
+                        rules={{ required: true }}
+                        options={OPERATION_TYPES}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="">
+                        CGF Staff <span className="mandatory">*</span>
+                      </label>
+                      <div className="radio-btn-field">
+                        <AddOperationMemberController
+                          name="isCGFStaff"
+                          control={control}
+                          render={({ field }) => (
+                            <RadioGroup
+                              {...field}
+                              // value={editDefault && editDefault.status}
+                              aria-labelledby="demo-radio-buttons-group-label"
+                              name="radio-buttons-group"
+                              className="radio-btn"
+                              onChange={(e) => {
+                                field.onChange(e);
+                                handleCGFStaffChange(e);
+                              }}
+                            >
+                              <FormControlLabel
+                                value="true"
+                                control={<Radio />}
+                                label="Yes"
+                                disabled={hideCgfStaff}
+                              />
+                              <FormControlLabel
+                                value="false"
+                                control={<Radio />}
+                                label="No"
+                                disabled={hideCgfStaff}
+                              />
+                            </RadioGroup>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="">
+                        Member Company <span className="mandatory">*</span>
+                      </label>
+                      {showTextField ? (
+                        <Input
+                          control={control}
+                          name="memberId"
+                          isDisabled
+                          rules={{ required: true }}
+                        />
+                      ) : (
+                        <div className="select-field auto-search-blk">
+                          <AddOperationMemberController
+                            control={control}
+                            name="memberId"
+                            rules={{
+                              required: true,
+                            }}
+                            render={({ field, fieldState: { error } }) => (
+                              <AddOperationMemberAutocomplete
+                                {...field}
+                                className={`${error && "autocomplete-error"}`}
+                                PaperComponent={({ children }) => (
+                                  <Paper
+                                    className={
+                                      memberCompanies?.length > 5
+                                        ? "autocomplete-option-txt autocomplete-option-limit"
+                                        : "autocomplete-option-txt"
+                                    }
+                                  >
+                                    {children}
+                                  </Paper>
+                                )}
+                                popupIcon={<KeyboardArrowDownRoundedIcon />}
+                                // value={
+                                //     memberCompanies._id
+                                // }
+                                // clearIcon={false}
+
+                                disableClearable
+                                onChange={(event, newValue) => {
+                                  let selectedMemberCompany =
+                                    memberCompanies.filter(
+                                      (company) =>
+                                        company.companyName === newValue
+                                    );
+                                 
+                                  newValue &&
+                                    setValue(
+                                      "memberId",
+                                      // selectedMemberCompany[0]
+                                      //     ._id
+                                      newValue
+                                    );
+                                  setValue("reportingManager", "");
+                                  trigger("memberId");
+                                  setDisableReportingManager(false);
+                                  // call fetch Reporting managers here
+                                  fetchReportingManagers(
+                                    selectedMemberCompany[0]._id,
+                                    false
+                                  );
+                                  setValue(
+                                    "companyType",
+                                    selectedMemberCompany[0].companyType
+                                  );
+                                }}
+                                // sx={{ width: 200 }}
+                                options={
+                                  memberComapniesLabelsOnly
+                                    ? memberComapniesLabelsOnly.filter(
+                                        (data) =>
+                                          data !== "The Consumer Goods Forum"
+                                      )
+                                    : []
+                                }
+                                placeholder="Select country code"
+                                getOptionLabel={(company) => company}
+                                renderOption={(props, option) => (
+                                  <li {...props}>{option}</li>
+                                )}
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    inputProps={{
+                                      ...params.inputProps,
+                                    }}
+                                    placeholder={"Select member company"}
+                                    // onChange={() =>
+                                    //     trigger(
+                                    //         "memberId"
+                                    //     )
+                                    // }
+                                    helperText={
+                                      error
+                                        ? helperText.memberId[error?.type]
+                                        : " "
+                                    }
+                                  />
+                                )}
+                              />
+                            )}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="status">Company Type</label>
+                      <Input
+                        isDisabled={true}
+                        control={control}
+                        name={"companyType"}
+                        onBlur={(e) =>
+                          setValue("companyType", e.target.value?.trim())
+                        }
+                        myHelper={helperText}
+                        placeholder={"Enter company type"}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="">Address</label>
+                      <AddOperationMemberController
+                        name="address"
+                        control={control}
+                        rules={{
+                          minLength: 3,
+                          maxLength: 250,
+                        }}
+                        render={({ field, fieldState: { error } }) => (
+                          <TextField
+                            multiline
+                            {...field}
+                            onBlur={(e) =>
+                              setValue("address", e.target.value?.trim())
+                            }
+                            inputProps={{
+                              maxLength: 250,
+                            }}
+                            className={`input-textarea ${
+                              error && "input-textarea-error"
+                            }`}
+                            id="outlined-basic"
+                            placeholder="Enter address"
+                            helperText={
+                              error ? helperText.address[error.type] : " "
+                            }
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="">
+                        Reporting Manager <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        control={control}
+                        name="reportingManager"
+                        // myHelper={myHelper}
+                        placeholder={"Select reporting manager "}
+                        isDisabled={disableReportingManager}
+                        myHelper={helperText}
+                        rules={{ required: true }}
+                        options={reportingManagers ? reportingManagers : []}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="role">
+                        Role <span className="mandatory">*</span>
+                      </label>
+
+                      <div>
+                        <Dropdown
+                          name="roleId"
+                          control={control}
+                          options={roles}
+                          rules={{
+                            required: true,
+                          }}
+                          myHelper={helperText}
+                          placeholder={"Select role"}
+                        />
+
+                        <p className={`password-error`}>
+                          {errors.subRoleId?.message}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-btn flex-between add-members-btn">
+                    <button
+                      type={"reset"}
+                      onClick={() =>
+                        navigate("/users/operation-members", { state: 0 })
+                      }
+                      className="secondary-button mr-10"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="primary-button add-button"
+                      disabled={disableAddOperationMemberButton}
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </form>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export default AddOperationMember;

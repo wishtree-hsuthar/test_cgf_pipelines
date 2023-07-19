@@ -2,7 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!-- <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self';script-src 'unsafe-inline' code.jquery.com/jquery-3.4.1.min.js localhost:3003/static/js/bundle.js; connect-src http://*; img-src 'self'; style-src 'unsafe-inline' localhost:3003/css/font-awesome/css/all.min.css ;base-uri 'self';form-action 'self'"
+    /> -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' code.jquery.com/jquery-3.4.1.min.js 'sha256-nWEXNECyF8fcu3RB3v8D45l+M4NMWlxxi2wfzDjfxcg=' 'sha256-+664jA/i/g+da2yfHLGOGzuzV44WLsvnE4MfcreTHe0=';connect-src http://localhost:3000 http://localhost:3003 ws://localhost:3003 https://staging-cgf-hrdd.wishtree.tech ws://staging-cgf-hrdd.wishtree.tech https://uat.tcgfhumanrights.com ws://uat.tcgfhumanrights.com "
+    />
+    <!-- JQuery is used for OwlCorousal -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" defer></script>
+
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <script>
+      if (self == top) {
+        // Everything checks out, show the page.
+        document.documentElement.style.display = "block";
+      } else {
+        // Break out of the frame.
+        top.location = self.location;
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -15,6 +35,13 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!-- <link rel="stylesheet" href="owlcarousel/owl.carousel.min.css"> -->
+    <!-- <link rel="stylesheet" href="owlcarousel/owl.theme.default.min.css"> -->
+    <!--font awesome  -->
+    <link
+      rel="stylesheet"
+      href="%PUBLIC_URL%/css/font-awesome/css/all.min.css"
+    />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -24,7 +51,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>HRDD System</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
