@@ -126,6 +126,7 @@ function DraftedQuestionnaires({
     try {
       let url = generateUrl();
       setIsDraftedQuestionnaireLoading(true);
+      Logger.info("Questionnaire - Drafted Questionnaire - getQuestionnaire handler")
       const response = await privateAxios.get(url, {
         signal: controller.signal,
       });
@@ -138,9 +139,10 @@ function DraftedQuestionnaires({
       setIsDraftedQuestionnaireLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
+      Logger.info(`Questionnaire - Preview Questionnaire - fetch handler ${error?.response?.data?.message}`)
 
       if (error.response.status === 401) {
-        Logger.debug("Unauthorized user access");
+        
         // Add error toaster here
         setToasterDetails(
           {

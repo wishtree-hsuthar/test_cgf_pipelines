@@ -50,11 +50,12 @@ const ForgetPassword = () => {
   });
 
   const submitEmail = async (data) => {
+    Logger.info("Forgot Password - Submit email handler");
+
     try {
       const response = await privateAxios.get(
         `${FORGET_PASSWORD}${data.email}`
       );
-      Logger.debug("response from forgot password", response);
 
       if (response.status === 200) {
         setToasterDetails(
@@ -73,10 +74,9 @@ const ForgetPassword = () => {
         reset();
       }
     } catch (error) {
+      Logger.info("Forgot Password - Submit email handler catch error");
       if (error?.response?.status === 400) {
         let errorMsg = error?.response?.data?.message;
-        Logger.debug("error message", errorMsg);
-        Logger.debug("error body", error.response);
 
         setToasterDetails(
           {
@@ -90,7 +90,6 @@ const ForgetPassword = () => {
         reset();
       }
     }
-    Logger.debug(data);
   };
 
   return (

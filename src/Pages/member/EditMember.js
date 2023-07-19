@@ -62,7 +62,7 @@ const EditMember = () => {
     });
   //method to call all error toaster from this method
   const setErrorToaster1 = (error) => {
-    Logger.debug("error", error);
+    Logger.info(`Edit Member - setErrorToaster1 handler `);
     setToasterDetailsEditMember(
       {
         titleMessage: "Error",
@@ -122,7 +122,7 @@ const EditMember = () => {
     }
   };
   const onSubmitFunctionCall = async (data) => {
-    Logger.debug("data", data);
+    Logger.info(`Edit member - onSubmitFunctionCall`);
 
     let backendObject = {
       parentCompany: data.parentCompany,
@@ -157,7 +157,6 @@ const EditMember = () => {
       },
     };
 
-    Logger.debug("Member Representative Id", member.createdBy);
     const response = await updateAPICall(backendObject);
 
     if (response.status === 200) {
@@ -178,8 +177,6 @@ const EditMember = () => {
         () => myRef.current()
       );
     }
-
-    Logger.debug("Default values: ", defaultValues);
   };
   // On Click cancel handler
   const onClickCancelHandler = () => {
@@ -187,7 +184,7 @@ const EditMember = () => {
     navigate("/users/members", { state });
   };
   const onSubmit = (data) => {
-    Logger.debug("data", data);
+    Logger.info(`Edit member - onSubmit handler`);
     setDisableEditMemberUpdateButton(true);
 
     onSubmitFunctionCall(data);
@@ -201,7 +198,6 @@ const EditMember = () => {
             ? country?.name
             : country)
       );
-    Logger.debug("arr of country ", regionCountries);
     return regionCountries;
   };
 
@@ -218,7 +214,9 @@ const EditMember = () => {
         setArrOfStateCountry(stateCountries.data);
       }
     } catch (error) {
-      Logger.debug("error");
+      Logger.info(
+        `Edit member - onCountryChangeHandler1 handler - catch error ${error?.response?.data?.message}`
+      );
     }
   };
 
@@ -255,9 +253,13 @@ const EditMember = () => {
         url += `&state=${watch("state")}`;
       }
       const response = await axios.get(url);
-      Logger.debug("cites from backend", response?.data);
+      Logger.info(`Edit Member - getCities handler`);
       setArrOfCites(response?.data);
     } catch (error) {
+      Logger.info(
+        `Edit Member - getCities handler catch error - ${error?.response?.data?.message}`
+      );
+
       if (error?.code === "ERR_CANCELED") return;
 
       setErrorToaster1(error);
@@ -305,32 +307,24 @@ const EditMember = () => {
 
       setArrOfRegions(regions?.data);
       const countriesOnRegion1 = await getCountries1(watch("region"));
-      console.log("countriesOnRegion", countriesOnRegion1);
       const arrOfCountryRegionsTemp1 = formatRegionCountries1(
         countriesOnRegion1?.data
       );
       setArrOfCountryRegions([...arrOfCountryRegionsTemp1]);
-      console.log("cgfOfficeRegion", watch("cgfOfficeRegion"));
       const countriesOnRegion2 = await getCountries1(watch("cgfOfficeRegion"));
-      Logger.debug("countriesOnRegion2", countriesOnRegion2);
       const arrOfCgfOfficeCountryRegionsTemp1 = await formatRegionCountries1(
         countriesOnRegion2?.data ?? []
       );
       setArrOfCgfOfficeCountryRegions([...arrOfCgfOfficeCountryRegionsTemp1]);
       const stateCountries = await axios.get(STATES + `/${watch("country")}`);
-      Logger.debug(
-        "stateCountries",
-        stateCountries,
-        "country",
-        watch("country")
-      );
+
       setArrOfStateCountry(stateCountries?.data);
 
       // getCountries1()
       return arrOfRegions;
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      console.log("caught in catch", error);
+      
       return [];
     }
   };
@@ -339,7 +333,7 @@ const EditMember = () => {
   let fetchRoles = async () => {
     try {
       const response = await privateAxios.get(FETCH_ROLES);
-      Logger.debug("Response from fetch roles - ", response);
+      Logger.info(`Edit Member - fetchRoles handler`);
       setRoles(response.data);
       response.data.filter((data) => {
         if (data.name === "Member Representative") {
@@ -347,11 +341,14 @@ const EditMember = () => {
         }
       });
     } catch (error) {
-      Logger.debug("Error from fetch roles", error);
+      Logger.info(
+        `Edit Member - fetchRoles handler catch error ${error?.response?.data?.message}`
+      );
     }
   };
   const getMemberAPICall = async () => {
-    
+    Logger.info(`Edit Member - getMemberAPICall handler`);
+
     const controller = new AbortController();
 
     try {
@@ -360,7 +357,7 @@ const EditMember = () => {
         const response = await axios.get(PENDING_MEMBER + `/${param.id}`, {
           signal: controller.signal,
         });
-        console.log("response for pending member:- ", response?.data);
+       
         return response.data;
       } else {
         const response = await axios.get(MEMBER + `/${param.id}`, {
@@ -370,7 +367,9 @@ const EditMember = () => {
       }
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("error", error);
+      Logger.info(
+        `Edit Member - getMemberAPICall handler catch error - ${error?.response?.data?.message}`
+      );
       setIsEditMemberLoading(false);
       catchError(error, setToasterDetailsEditMember, myRef, navigate);
     } finally {
@@ -418,14 +417,6 @@ const EditMember = () => {
     if (e.code === "Enter") e.preventDefault();
   };
   const phoneNumberChangeHandler = (e, name, code) => {
-    Logger.debug(
-      "on number change",
-      e.target.value,
-      "name: ",
-      name,
-      "code",
-      code
-    );
     setValue(name, e.target.value);
     trigger(name);
     trigger(code);
@@ -433,6 +424,7 @@ const EditMember = () => {
   const getParentCompanyEditMember = async (
     controller = new AbortController()
   ) => {
+    Logger.info(`Edit Member - getParentCompanyEditMember handler`);
     try {
       const response = await axios.get(PARENT_COMPINES, {
         signal: controller.signal,
@@ -440,13 +432,13 @@ const EditMember = () => {
       setArrOfParentCompanyEditMember(response?.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("error from getParentCompanyAddMember");
+      Logger.info(
+        `Edit Member - getParentCompanyEditMember handler catch error - ${error?.response?.data?.message}`
+      );
     }
   };
   const callGetCategories = async () => {
     MEMBER_LOOKUP = await getCategories();
-
-    Logger.debug("MEMBER LOOKUP", MEMBER_LOOKUP);
   };
   const callGetOffices = async () => {
     CGF_OFFICES = await getCGFOffices();
@@ -467,14 +459,12 @@ const EditMember = () => {
       isMounted && (await getCountryCode1(controller));
       isMounted && fetchRoles();
     })();
-    // Logger.debug("member",member)
 
     return () => {
       isMounted = false;
       controller.abort();
     };
   }, [watch]);
-  Logger.debug("member: ", member);
 
   return (
     <div className="page-wrapper">
@@ -602,7 +592,6 @@ const EditMember = () => {
                               {...field}
                               onSubmit={() => setValue("parentCompany", "")}
                               onChange={(event, newValue) => {
-                                Logger.debug("new Value ", newValue);
                                 if (newValue) {
                                   typeof newValue === "object"
                                     ? setValue("parentCompany", newValue.name)
@@ -808,7 +797,6 @@ const EditMember = () => {
                               disabled={!watch("country")}
                               onSubmit={() => setValue("city", "")}
                               onChange={(event, newValue) => {
-                                Logger.debug("new Value ", newValue);
                                 if (newValue) {
                                   typeof newValue === "object"
                                     ? setValue("city", newValue.name)

@@ -55,12 +55,7 @@ const MemberList = () => {
   const checkViewAccess = SUPER_ADMIN
     ? true
     : moduleAccesForMember[0]?.member?.view;
-  console.log("check View Access:- ", checkViewAccess);
 
-  Logger.debug(
-    "module access member in view member",
-    moduleAccesForMember[0]?.member
-  );
   const [onboardedPage, setOnboardedPage] = useState(1);
   const [pendingPage, setPendingPage] = useState(1);
   //state to hold search timeout delay
@@ -89,16 +84,15 @@ const MemberList = () => {
   };
 
   const handleChange = (event, newValue) => {
-    setPendingPage(1)
-    setOnboardedPage(1)
+    setPendingPage(1);
+    setOnboardedPage(1);
     setValue(newValue);
   };
   //method for time based searching
   const onSearchChangeHandler = (e) => {
-    Logger.debug("event", e.key);
+    Logger.info(`Member list - onSearchChangeHandler handler`);
     if (searchTimeoutMemberList) clearTimeout(searchTimeoutMemberList);
     setMakeApiCallMemberList(false);
-    Logger.debug("searchMember values", e.target.value);
     setSearchMemberList(e.target.value);
     setSearchTimeoutMemberList(
       setTimeout(() => {
@@ -111,7 +105,6 @@ const MemberList = () => {
   //handle sigle select memberFilters
   const onFilterChangehandler = (e) => {
     const { name, value } = e.target;
-    Logger.debug("name", name, "Value ", value);
     setMemberFilters({
       ...memberFilters,
       [name]: value,
@@ -120,7 +113,6 @@ const MemberList = () => {
   //handle createdBy filter change handler
   const handleCreatedByFilter = (e) => {
     const { name, value } = e.target;
-    Logger.debug("name", name, "value", value);
     if (value[value.length - 1] === "")
       return selectedCreatedBy.length - 1 === allMembers.length
         ? setSelectedCreatedBy(["none"])
@@ -204,7 +196,7 @@ const MemberList = () => {
                 </div>
               )}
 
-              {(SUPER_ADMIN  || moduleAccesForMember[0]?.member?.add) &&
+              {(SUPER_ADMIN || moduleAccesForMember[0]?.member?.add) &&
                 value === 0 && (
                   <div className="form-btn">
                     <button

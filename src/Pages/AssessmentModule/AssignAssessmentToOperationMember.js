@@ -64,10 +64,11 @@ const AssignAssessmentToOperationMember = () => {
   // search function
   const onSearchChangeHandler = (e) => {
     e.preventDefault();
-    Logger.debug("event", e.key);
+    Logger.info(
+      "Assign assessment to operation member - onSearchChangeHandler handler"
+    );
     if (searchTimeout) clearTimeout(searchTimeout);
     setMakeApiCall(false);
-    Logger.debug("search values", e.target.value);
     setSearch(e.target.value);
     setSearchTimeout(
       setTimeout(() => {
@@ -77,13 +78,6 @@ const AssignAssessmentToOperationMember = () => {
     );
   };
   const generateUrl = () => {
-    Logger.debug("Search", search);
-    Logger.debug(
-      "assessment?",
-      assessment,
-      window.location.pathname.split("/")[-1]
-    );
-
     let url = `${FETCH_ASSESSMENT_BY_ID}${window.location.pathname
       .split("/")
       .at(
@@ -99,7 +93,9 @@ const AssignAssessmentToOperationMember = () => {
   };
 
   const updateRecords = (data) => {
-    Logger.debug("data before update----", data);
+    Logger.info(
+      "Assign assessment to operation member - updateRecords handler"
+    );
 
     let staleData = data;
     staleData.forEach((object) => {
@@ -138,7 +134,6 @@ const AssignAssessmentToOperationMember = () => {
         object[k] = v;
       });
     });
-    Logger.debug("data in updaterecords method", staleData);
     setRecords([...staleData]);
   };
 
@@ -146,20 +141,24 @@ const AssignAssessmentToOperationMember = () => {
     isMounted = true,
     controller = new AbortController()
   ) => {
+    Logger.info(
+      "Assign assessment to operation member - getOperationMembers handler"
+    );
     try {
       let url = generateUrl();
       setIsLoading(true);
       const response = await privateAxios.get(memberId && url, {
         signal: controller.signal,
       });
-      Logger.debug("Response from  api get operation member api", response);
       setTotalRecords(parseInt(response.headers["x-total-count"]));
 
       updateRecords(response?.data);
       setIsLoading(false);
     } catch (error) {
+      Logger.info(
+        "Assign assessment to operation member - getOperationMembers handler catch error"
+      );
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("Error from operation member-------", error);
       isMounted &&
         setToasterDetails(
           {
@@ -175,14 +174,13 @@ const AssignAssessmentToOperationMember = () => {
           () => myRef.current()
         );
       setIsLoading(false);
-      if (error?.response?.status == 500) {
-        Logger.debug("Error status 500 while fetchiing operation member");
-      }
     }
   };
 
   const handleTableTesterPageChange = (newPage) => {
-    Logger.debug("new Page", newPage);
+    Logger.info(
+      "Assign assessment to operation member - handleTableTesterPageChange handler"
+    );
     setPage(newPage);
   };
 
@@ -193,8 +191,6 @@ const AssignAssessmentToOperationMember = () => {
   };
   // selects single operation member
   const selectSingleUser = (opId) => {
-    Logger.debug("select single user---", opId);
-
     setSelectedUser(opId);
     setNewOperationMember(opId);
   };
@@ -204,19 +200,20 @@ const AssignAssessmentToOperationMember = () => {
     isMounted = true,
     controller = new AbortController()
   ) => {
+    Logger.info(
+      "Assign assessment to operation member - fetchAssessment handler"
+    );
     try {
       const response = await privateAxios.get(FETCH_ASSESSMENT_BY_ID + id, {
         signal: controller.signal,
       });
       isMounted && setAssessment(response.data);
       memberId = response?.data?.assignedMember?._id;
-      
-
-      Logger.debug(
-        "response from fetch assessment in assign assessment page",
-        response
-      );
     } catch (error) {
+      Logger.info(
+        "Assign assessment to operation member - fetchAssessment handler catch error"
+      );
+
       if (
         error?.response?.status === 400 &&
         error?.response?.data?.message === "Invalid assessment!"
@@ -234,17 +231,13 @@ const AssignAssessmentToOperationMember = () => {
           navigate("/assessment-list");
         }, 3000);
       }
-      Logger.debug(
-        "Error from fetch assessment in assign assessment page",
-        error
-      );
     }
   };
 
   // assign assessment to operation member
   const handleReassignAssessment = async () => {
-    Logger.debug(
-      `data from re-assign assessment-${id} and operation-member-${newOperationMember}`
+    Logger.info(
+      `Assign assessment to operation member - handleReassignAssessment handler`
     );
     try {
       const response = await privateAxios.post(
@@ -253,7 +246,6 @@ const AssignAssessmentToOperationMember = () => {
           reassignTo: newOperationMember,
         }
       );
-      Logger.debug("response from handle re-assign assessment", response);
       if (response.status == 201) {
         setToasterDetails(
           {
@@ -269,7 +261,9 @@ const AssignAssessmentToOperationMember = () => {
         }, 2000);
       }
     } catch (error) {
-      Logger.debug("Error from re-assign assessment", error);
+      Logger.info(
+        "Assign assessment to operation member - handleReassignAssessment handler catch error"
+      );
       if (error?.response?.status == 400) {
         setToasterDetails(
           {
@@ -318,7 +312,6 @@ const AssignAssessmentToOperationMember = () => {
         await fetchAssessment(isMounted, controller);
         await getOperationMembers(isMounted, controller);
       })();
-    Logger.debug("assessment - ", assessment);
 
     return () => {
       isMounted = false;

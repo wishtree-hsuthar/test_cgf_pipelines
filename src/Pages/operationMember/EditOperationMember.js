@@ -94,10 +94,11 @@ function EditOperationMember() {
     messageType: "error",
   });
   const [roles, setRoles] = useState([]);
-  Logger.debug("operationMember", operationMember);
-  Logger.debug("watch country code", watch("countryCode"));
   const fetchReportingManagers = async (id) => {
     try {
+      Logger.info(
+        "Edit Operation Member - EditOperationMember - fetchReportingManagers handler"
+      );
       const response = await privateAxios.get(FETCH_OPERATION_MEMBER + id);
       if (response.status == 200) {
         setReportingManagers(
@@ -106,43 +107,38 @@ function EditOperationMember() {
             name: data?.name,
           }))
         );
-        Logger.debug(
-          "reporting managersssss",
-          response?.data.map((data) => ({
-            _id: data?._id,
-            name: data?.name,
-          }))
-        );
       }
     } catch (error) {
-      Logger.debug("error from fetching reporting managers", error);
+      Logger.info(
+        `Edit Operation Member - EditOperationMember - fetchReportingManagers handler - catch error - ${error?.response?.data?.message}`
+      );
     }
   };
   // fetch all countries and its objects
   const fetchCountries = async (isMounted, controller) => {
     try {
+      Logger.info(
+        "Edit Operation Member - EditOperationMember - fetchContries handler"
+      );
       const response = await privateAxios.get(COUNTRIES);
-      Logger.debug("response from countries", response);
       // isMounted &&
       let tempCountries = response.data.map((country) => country?.countryCode);
       tempCountries = new Set(tempCountries);
       setCountries([...tempCountries]);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-
-      Logger.debug("error from countries api", error);
+      Logger.info(
+        `Edit Operation Member - EditOperationMember - fetchContries handler - catch error - ${error?.response?.data?.message}`
+      );
     }
   };
   // Fetch all member comapanies
   const fetchMemberComapany = async (isMounted, controller) => {
     try {
-      const response = await privateAxios.get(MEMBER + "/list");
-      Logger.debug(
-        "member company---",
-        response.data.map((data) => {
-          Logger.debug("member company=", data?.companyName);
-        })
+      Logger.info(
+        "Edit Operation Member - EditOperationMember - fetchMemberCompany handler"
       );
+      const response = await privateAxios.get(MEMBER + "/list");
 
       if (response.status == 200) {
         isMounted &&
@@ -154,19 +150,20 @@ function EditOperationMember() {
             }))
           );
       }
-
-      Logger.debug("member company---", memberCompanies);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-
-      Logger.debug("error from fetch member company", error);
+      Logger.info(
+        `Edit Operation Member - EditOperationMember - fetchMemberCompany handler - catch error ${error?.response?.data?.message}`
+      );
     }
   };
 
   // Fetch reporting managers of all member companies
   const fetchRm = async (id, isCGFStaff) => {
-    Logger.debug("operation member----", operationMember);
     try {
+      Logger.info(
+        "Edit Operation Member - EditOperationMember - fetchRM handler"
+      );
       const response = await privateAxios.get(
         // FETCH_REPORTING_MANAGER + id
         // + isCGFStaff
@@ -177,7 +174,7 @@ function EditOperationMember() {
           ? FETCH_OPERATION_MEMBER + id + "/master/rm"
           : FETCH_OPERATION_MEMBER + id + "/master/internal"
       );
-      Logger.debug("response from rm", response);
+
       setReportingManagers(
         response.data
           .filter((data) => data._id !== params.id)
@@ -187,16 +184,16 @@ function EditOperationMember() {
           }))
       );
     } catch (error) {
-      Logger.debug("Error from fetching rm reporting manager", error);
+      Logger.info(
+        `Edit Operation Member - EditOperationMember - fetchReportingManagers handler - ${error?.response?.data?.message}`
+      );
     }
   };
-
-  // fetch operation member by id
-  Logger.debug("reporting managers", reportingManagers);
 
   const fetchOperationMember = async (controller, isMounted) => {
     try {
       setIsEditOperationMemberLoading(true);
+      Logger.info("Edit Operation Member - EditOperationMember - fetchOperationMember handler")
       const response = await privateAxios.get(
         params["*"].includes("pending")
           ? FETCH_PENDING_OPERATION_MEMBER + params.id
@@ -235,13 +232,13 @@ function EditOperationMember() {
           //     response?.data?.reportingManager?._id,
         });
       setOperationMember(response.data);
-      Logger.debug("response data ----", operationMember);
+      
       let isCGFStaff = response?.data?.isCGFStaff ? true : false;
       fetchRm(response?.data?.memberId?._id, isCGFStaff);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       setIsEditOperationMemberLoading(false);
-      Logger.debug("error from edit operation members", error);
+      Logger.info(`Edit Operation Member - EditOperationMember - fetchOperationMember handler - catch error - ${error?.response?.data?.message}`)
       catchError(
         error,
         setToasterDetails,
@@ -255,26 +252,18 @@ function EditOperationMember() {
   // fetch & set Roles
   let fetchRoles = async (isMounted, controller) => {
     try {
+      Logger.info("Edit Operation Member - EditOperationMember - fetchRoles handler")
       const response = await privateAxios.get(FETCH_ROLES, {
         signal: controller.signal,
       });
-      Logger.debug("Response from fetch roles - ", response);
       setRoles(response.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-
-      Logger.debug("Error from fetch roles", error);
+      Logger.info(`Edit Operation Member - EditOperationMember - fetchRoles handler - catch error - ${error?.response?.data?.message}`)
     }
   };
   const phoneNumberChangeHandler = (e, name, code) => {
-    Logger.debug(
-      "on number change",
-      e.target.value,
-      "name: ",
-      name,
-      "code",
-      code
-    );
+   
     setValue(name, e.target.value);
     trigger(name);
     trigger(code);
@@ -298,9 +287,7 @@ function EditOperationMember() {
       controller.abort();
     };
   }, []);
-  Logger.debug("countries----", countries);
-  Logger.debug("members companies----", memberCompanies);
-
+ 
   const editOperationMember = async (data, navigateToListPage) => {
     setDisableEditMemberUpdateButton(true);
     setIsEditOperationMemberLoading(true);
@@ -309,6 +296,7 @@ function EditOperationMember() {
       isActive: data?.isActive === "true" ? true : false,
     };
     try {
+      Logger.info("Edit Operation Member - EditOperationMember - editOperationMember handler")
       const response = await privateAxios.put(
         params["*"].includes("pending")
           ? UPDATE_PENDING_OPERATION_MEMBER + params.id
@@ -332,7 +320,7 @@ function EditOperationMember() {
         }, 3000);
       }
     } catch (error) {
-      Logger.debug("error in submit data  add operation member method", error);
+      Logger.info(`Edit Operation Member - EditOperationMember - editOperationMember handler - catch error - ${error?.response?.data?.message}`)
       setDisableEditMemberUpdateButton(false);
       setIsEditOperationMemberLoading(false);
       // catchError(error, setToasterDetails,toasterRef, navigate)
@@ -351,7 +339,7 @@ function EditOperationMember() {
   };
 
   const handleOnSubmit = async (data) => {
-    Logger.debug("data from onsubmit", data);
+    
     editOperationMember(data);
   };
 
@@ -531,10 +519,7 @@ function EditOperationMember() {
                                 )}
                                 {...field}
                                 onChange={(event, newValue) => {
-                                  Logger.debug(
-                                    "inside autocomplete onchange .of edit operation member"
-                                  );
-                                  Logger.debug("new Value ", newValue);
+                                
                                   newValue && typeof newValue === "object"
                                     ? setValue("countryCode", newValue.name)
                                     : setValue("countryCode", newValue);
@@ -691,8 +676,7 @@ function EditOperationMember() {
                                       companyName: newValue.companyName,
                                     })
                                   : setValue("memberId", newValue);
-                                Logger.debug("inside autocomplete onchange");
-                                Logger.debug("new Value ", newValue);
+                              
                                 setValue("reportingManager", "");
                                 trigger("memberId");
                                 // call fetch Reporting managers here

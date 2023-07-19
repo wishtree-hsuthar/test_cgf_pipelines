@@ -77,7 +77,7 @@ const PendingMember = ({
   };
 
   const updatePendingRecords = (data) => {
-    Logger.debug("data before update----", data);
+    Logger.info(`Pending members - updatePendingRecords handler`);
 
     let staleData = data;
     staleData.forEach((pendingMember) => {
@@ -90,23 +90,22 @@ const PendingMember = ({
         day: "2-digit",
         year: "numeric",
       });
-      
+
       delete pendingMember["invite"];
-      delete pendingMember["updatedAt"]
-      
+      delete pendingMember["updatedAt"];
+
       keysOrder.forEach((k) => {
         const v = pendingMember[k];
         delete pendingMember[k];
         pendingMember[k] = v;
       });
     });
-    Logger.debug("data in updaterecords method in pending method", staleData);
-    
+
     setRecordsPending(staleData);
   };
   // rows per page method for pending tab
   const rowsPerPageChange = (event) => {
-    Logger.debug("rows per page", event);
+    Logger.info(`Pending member - rowsPerPageChange handler`);
     setRowsPerPagePending(parseInt(event.target.value, 10));
     setPendingPage(1);
   };
@@ -136,15 +135,10 @@ const PendingMember = ({
       );
       setTotalRecordsPending(parseInt(response.headers["x-total-count"]));
       updatePendingRecords(response?.data);
-
-
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-
-
-      Logger.debug(
-        "Error from get all pending operation member  tab table-------",
-        error
+      Logger.info(
+        `Pending member - getPendingMember catch error- ${error?.response?.data?.message} `
       );
       if (error?.response?.status == 401) {
         isMounted &&

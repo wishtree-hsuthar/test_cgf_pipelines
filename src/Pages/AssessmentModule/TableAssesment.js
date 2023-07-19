@@ -69,7 +69,7 @@ const TableAssessment = ({
     columnValues.forEach((column) => {
       temp[sectionUUID][`${[column?.uuid]}_${newRowId}`] = "";
     });
-    Logger.debug("temp after row Add", temp);
+    Logger.info("Table Assesment - onRowClickHandler");
     setAssessmentQuestionnaire({ ...temp });
   };
   const onRowDeleteClickHandler = (toBeDeletedRowId) => {
@@ -86,7 +86,6 @@ const TableAssessment = ({
     tempAsssessmentQuestionnaire[sectionUUID] = newAssessmentSection;
     setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
   };
-  Logger.debug("Assessment Questionnaire:- ", assessmentQuestionnaire);
   return (
     <div className="que-table-sect">
       <div className="que-table-wrap assessment-table-wrap">

@@ -169,14 +169,15 @@ const TableLayoutCellComponent = ({
     return formData;
   };
   const uploadAttachmentButtonClickHandler = async () => {
-    Logger.debug("Current Selected files:- ", currentSelectedFiles);
+    Logger.info(
+      "TableLAyoutCellComponent - uploadAttachmentButtonClickHandlerhandler "
+    );
     setIsDisabledPrimaryButton(true);
 
     try {
       const newlyAddedFiles = getFilesForBackend();
 
       const formData = getFormData(newlyAddedFiles);
-      Logger.debug("newly Added files:- ", newlyAddedFiles);
 
       const oldFiles = getFilesNotRemoved();
 
@@ -185,12 +186,6 @@ const TableLayoutCellComponent = ({
         `/${params?.id}/attachments/${sectionUUID}/${columnUUID + "_" + rowId}`;
       const attachmentResponse = await privateAxios.post(url, formData);
 
-      Logger.debug(
-        "old files:- ",
-        oldFiles,
-        "new files",
-        attachmentResponse.data
-      );
       await privateAxios.put(url, {
         attachments: [...oldFiles, ...attachmentResponse?.data],
       });
@@ -222,7 +217,6 @@ const TableLayoutCellComponent = ({
         error?.response?.status === 400 &&
         error?.response?.data?.message === "Invalid assessment id!"
       ) {
-        console.log("in 400");
         setToasterDetails(
           {
             titleMessage: "Oops!",
@@ -483,7 +477,7 @@ const TableLayoutCellComponent = ({
           answer?.length > 0 &&
           Array.isArray(answer) && (
             <>
-              {console.log("answer: ", answer)}
+              
               {answer.map((file, fileIdx) =>
                 file?.name?.length <= 30
                   ? (fileIdx <= 1 || showMoreAttachment) && (

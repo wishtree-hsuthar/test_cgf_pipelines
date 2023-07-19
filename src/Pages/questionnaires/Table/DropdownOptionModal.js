@@ -79,7 +79,7 @@ const DropdownOptionModal = ({
     // Logger.debug("old options:- ", oldQuestionnare);
     //method to handle cancel questionnaire
     const onCancelButtonClickHandler = () => {
-        Logger.debug("old Questionnaire:- ", oldOptions);
+        
 
         let tempQuestionnaire = { ...questionnaire };
         if (

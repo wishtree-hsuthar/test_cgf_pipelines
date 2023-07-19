@@ -72,7 +72,6 @@ const ViewMember = () => {
   //custom hook to set title of page
   useDocumentTitle("View Member");
 
-
   //code to get id from url
   const param = useParams();
 
@@ -183,8 +182,6 @@ const ViewMember = () => {
       },
     }));
   moduleAccesForMember.push(...operationMemberRights);
-  console.log("moduleAccesForMember = ", moduleAccesForMember);
-  console.log("moduleAccesForMember = ", viewMemberPrivilegeArray);
   //format records as backend requires
   const updateRecords = (data) => {
     data.forEach((object) => {
@@ -419,7 +416,6 @@ const ViewMember = () => {
       }
       return [];
     } catch (error) {
-      console.log("error in get Countries");
       if (error?.code === "ERR_CANCELED") return;
 
       return [];
@@ -434,7 +430,6 @@ const ViewMember = () => {
         signal: controller.signal,
       });
       setArrOfRegions(regions?.data ?? []);
-      console.log("region value:- ", watch("region"));
       const countriesOnRegion1 = await getCountries(watch("region"));
       const arrOfCountryRegionsTemp1 = formatRegionCountries(
         countriesOnRegion1?.data
@@ -490,7 +485,6 @@ const ViewMember = () => {
     }
   };
   const getMemberAPICall = async () => {
-    
     const controller = new AbortController();
 
     try {
@@ -499,7 +493,6 @@ const ViewMember = () => {
         const response = await axios.get(PENDING_MEMBER + `/${param.id}`, {
           signal: controller.signal,
         });
-        console.log("response for pending member:- ", response?.data);
         return response.data;
       } else {
         const response = await axios.get(MEMBER + `/${param.id}`, {
@@ -518,10 +511,8 @@ const ViewMember = () => {
   ) => {
     try {
       const data = await getMemberAPICall();
-    
-      console.log("data", data);
-    
-      Logger.debug("data: ", data);
+
+      Logger.info(`View member - getMemberId handler`);
       setMember({ ...data });
       resetObj = {
         memberCompany: data?.companyName ?? "N/A",
@@ -560,7 +551,8 @@ const ViewMember = () => {
       setIsViewMemberLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      console.log("error:", error);
+      Logger.info(`View member - getMemberId handler`);
+
       if (error?.response?.status == 401) {
         isMounted &&
           setToasterDetailsViewMember(
@@ -596,8 +588,8 @@ const ViewMember = () => {
     }
   };
 
-  Logger.debug("member", member);
   const getOperationMemberByMemberId = async (controller) => {
+    Logger.info(`View member - getOperationMemberByMemberId handler`);
     try {
       let url = generateUrl();
 
@@ -612,7 +604,9 @@ const ViewMember = () => {
       updateRecords(response?.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("Error from get operation member by member id", error);
+      Logger.info(
+        `View member - getOperationMemberByMemberId handler catch error - ${error?.response?.data?.message}`
+      );
     }
   };
 
@@ -665,7 +659,6 @@ const ViewMember = () => {
 
   const callGetCategories = async () => {
     MEMBER_LOOKUP = await getCategories();
-    Logger.debug("MEMBER LOOKUP", MEMBER_LOOKUP);
   };
 
   const callGetOffices = async () => {
@@ -711,8 +704,7 @@ const ViewMember = () => {
         makeApiCall &&
         (isPendingMember || (await getOperationMemberByMemberId(controller)));
 
-      arrOfRegions.length >0  && scrollToend();
-     
+      arrOfRegions.length > 0 && scrollToend();
     })();
 
     return () => {
@@ -729,7 +721,6 @@ const ViewMember = () => {
     orderInViewMember,
     makeApiCall,
   ]);
-  Logger.debug("Member", member);
   return (
     <div className="page-wrapper" onClick={() => isActive && setActive(false)}>
       <Toaster
@@ -790,8 +781,8 @@ const ViewMember = () => {
             <h2 className="heading2">View Member</h2>
             <span className="form-header-right-txt" onClick={handleToggle}>
               {(SUPER_ADMIN === true ||
-                moduleAccesForMember[0]?.member.edit  ||
-                moduleAccesForMember[0]?.member.delete ) && (
+                moduleAccesForMember[0]?.member.edit ||
+                moduleAccesForMember[0]?.member.delete) && (
                 <span
                   className={`crud-operation ${
                     isActive && "crud-operation-active"
@@ -971,11 +962,7 @@ const ViewMember = () => {
                         <div className="radio-btn-field">
                           <RadioGroup
                             // {...field}
-                            value={
-                              member?.isActive 
-                                ? "active"
-                                : "inactive"
-                            }
+                            value={member?.isActive ? "active" : "inactive"}
                             aria-labelledby="demo-radio-buttons-group-label"
                             name="radio-buttons-group"
                             className="radio-btn"

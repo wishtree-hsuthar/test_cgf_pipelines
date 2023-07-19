@@ -6,7 +6,7 @@ import { MEMBER } from "../../api/Url";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../utils/Loader";
 
-const commonObj = {disablePadding: false}
+const commonObj = { disablePadding: false };
 const tableHead = [
   {
     id: "companyName",
@@ -123,11 +123,9 @@ const OnboardedMember = ({
         object.createdBy = "N/A";
       }
       if (object["representative"]) {
-        
         object.email = object["representative"]?.email ?? "N/A";
         object.name = object["representative"]?.name ?? "N/A";
       } else {
-        
         object.email = "N/A";
         object.name = "N/A";
       }
@@ -152,7 +150,6 @@ const OnboardedMember = ({
     setOnboardedPage(1);
   };
   const onClickVisibilityIconHandler = (id) => {
-    Logger.debug("id", id);
     return navigate(`/users/members/view-member/${id}`);
   };
   const generateUrl = () => {
@@ -180,11 +177,13 @@ const OnboardedMember = ({
         signal: controller.signal,
       });
       setTotalRecordsMemberList(parseInt(response.headers["x-total-count"]));
-      Logger.debug("response from backend", response);
+      Logger.info(`Onboarded members - getMembers handler`);
       setIsMemberListLoading(false);
       updateRecords(response?.data);
     } catch (error) {
-      Logger.debug("error from get members api - ", error);
+      Logger.info(
+        `Onboarded members - getMembers handler catch error ${error?.response?.data?.message}`
+      );
       if (error?.code === "ERR_CANCELED") return;
       if (error?.response?.status === 401) {
         setToasterDetailsMemberList(

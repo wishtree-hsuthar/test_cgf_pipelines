@@ -51,7 +51,7 @@ const Chart2 = ({ graphLevelBreakdown, chartImages, setChartImages }) => {
     ],
   };
   useEffect(() => {
-    console.log("chartImages in chart2:- ", chartRef.current.toBase64Image());
+    
     if (val < 3) {
       setVal((val) => val + 1);
       let temp = { ...chartImages };

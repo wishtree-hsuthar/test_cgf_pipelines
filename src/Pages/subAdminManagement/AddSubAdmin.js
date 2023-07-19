@@ -64,7 +64,6 @@ const AddSubAdmin = () => {
     },
   });
   const location = useLocation();
-  Logger.debug(location);
   const [countriesAddCGFAdmin, setCountriesAddCGFAdmin] = useState([]);
   const [rolesAddCGFAdmin, setRolesAddCGFAdmin] = useState([]);
   const [isCgfAdminLoading, setIsCgfAdminLoading] = useState(false);
@@ -76,7 +75,6 @@ const AddSubAdmin = () => {
   });
 
   const phoneNumberChangeHandlerAddCGFAdmin = (e, name, code) => {
-    Logger.debug("inside on Change");
     setValue(name, e.target.value);
     trigger(name);
     trigger(code);
@@ -89,14 +87,16 @@ const AddSubAdmin = () => {
         const response = await privateAxios.get(FETCH_ROLES, {
           signal: controller.signal,
         });
-        Logger.debug("Response from fetch rolesAddCGFAdmin - ", response);
+        Logger.info(`Add Sub Admin - fetchRoles handler`);
         setRolesAddCGFAdmin(response.data);
         response.data.filter(
           (data) => data.name === "CGF Admin" && reset({ subRoleId: data._id })
         );
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
-        Logger.debug("Error from fetch rolesAddCGFAdmin", error);
+        Logger.info(
+          `Add Sub Admin - fetchRoles handler catch error ${error?.response?.data?.message}`
+        );
         catchError(error, setToasterDetails, toasterRef, navigate);
       }
     };
@@ -105,7 +105,7 @@ const AddSubAdmin = () => {
         const response = await axios.get(COUNTRIES, {
           signal: controller.signal,
         });
-        Logger.debug("response from countries API-", response);
+        Logger.info(`Add sub admin - addCGFAdminFetchCountries handler `);
         if (isMounted) {
           let tempCountryCode = response?.data.map(
             (country) => country.countryCode
@@ -115,15 +115,17 @@ const AddSubAdmin = () => {
         }
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
-        Logger.debug("error from countries api", error);
+        Logger.info(
+          `Add sub admin - addCGFAdminFetchCountries handler catch error ${error?.response?.data?.message}`
+        );
       }
     };
     fetchRoles();
     addCGFAdminFetchCountries();
   }, []);
-  Logger.debug("countriess----", countriesAddCGFAdmin);
 
   const addSubAdminData = async (data) => {
+    Logger.info(`Add sub admin - addSubAdminData handler`);
     setIsCgfAdminLoading(true);
     setDisableSubmit(true);
     try {
@@ -144,28 +146,28 @@ const AddSubAdmin = () => {
       }
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("error from add sub admin page", error);
+      Logger.info(
+        `Add sub admin - addSubAdminData handler catch error ${error?.response?.data?.message}`
+      );
       setIsCgfAdminLoading(false);
       setDisableSubmit(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
     }
   };
   const handleOnsubmitAddCGFAdmin = async (data) => {
-    Logger.debug("new phone number", data);
     addSubAdminData(data);
     setTimeout(() => {
-      navigate("/users/cgf-admin/",{state:1});
+      navigate("/users/cgf-admin/", { state: 1 });
     }, 3000);
   };
 
   const handleSaveAndMoreAddCGFAdmin = (data) => {
     addSubAdminData(data);
-    Logger.debug(data);
     reset();
     setValue("");
   };
   const handleCancel = () => {
-    navigate("/users/cgf-admin/",{state:0});
+    navigate("/users/cgf-admin/", { state: 0 });
   };
 
   return (
@@ -286,8 +288,6 @@ const AddSubAdmin = () => {
                                 )}
                                 popupIcon={<KeyboardArrowDownRoundedIcon />}
                                 onChange={(event, newValue) => {
-                                  Logger.debug("inside autocomplete onchange");
-                                  Logger.debug("new Value ", newValue);
                                   newValue && typeof newValue === "object"
                                     ? setValue("countryCode", newValue.name)
                                     : setValue("countryCode", newValue);

@@ -76,7 +76,7 @@ function PendingCGFAdmins({
     // "token",
   ];
   const updatePendingRecordsCGFAdmin = (data) => {
-    Logger.debug("data before update----", data);
+    Logger.info(`Pending cgf admin - updatePendingRecordsCGFAdmin handler `);
 
     let staleData = data;
     staleData.forEach((object) => {
@@ -118,7 +118,6 @@ function PendingCGFAdmins({
         object[k] = v;
       });
     });
-    Logger.debug("data in updaterecords method in pending method", staleData);
     setRecordsForPendingTabCGFAdmin([...staleData]);
   };
 
@@ -129,14 +128,15 @@ function PendingCGFAdmins({
 
   // rows per page method for pending tab
   const handleRowsPerPageChangeForPendingTabCGFAdmin = (event) => {
-    Logger.debug("rows per page", event);
+    Logger.info(
+      `Pending cgf admin - handleRowsPerPageChangeForPendingTabCGFAdmin handler`
+    );
     setRowsPerPageForPendingTabCGFAdmin(parseInt(event.target.value, 10));
     setPageForPendingTabCGFAdmin(1);
   };
 
   // url for pending tab
   const generateUrlForPendingTabCGFAdmin = () => {
-    Logger.debug("Search", search);
     let url = `${ADD_SUB_ADMIN}/pending/list?page=${pageForPendingTabCGFAdmin}&size=${rowsPerPageForPendingTabCGFAdmin}&orderBy=${orderByForPending}&order=${orderForPendingTabCGFAdmin}`;
 
     if (search) url += `&search=${search}`;
@@ -145,7 +145,6 @@ function PendingCGFAdmins({
   };
 
   const onClickVisibilityIconHandler = (id) => {
-    Logger.debug("id", id);
     return navigate(`/users/cgf-admin/pending/view-cgf-admin/${id}`);
   };
 
@@ -163,10 +162,7 @@ function PendingCGFAdmins({
       setTotalRecordsForPendingTabCGFAdmin(
         parseInt(response.headers["x-total-count"])
       );
-      Logger.debug(
-        "Response from sub admin api get for pending tab table",
-        response
-      );
+      Logger.info(`Pending cgf admin - getSubAdminPendingCGFAdmin handler`);
 
       updatePendingRecordsCGFAdmin(response.data);
       setIsPendingCgfAdmin(false);
@@ -174,7 +170,9 @@ function PendingCGFAdmins({
       if (error?.code === "ERR_CANCELED") return;
       catchError(error, setPendingCgfToasterDetails, myRef, navigate);
 
-      Logger.debug("Error from getSubAdmin pending tab table-------", error);
+      Logger.info(
+        `Pending cgf admin - getSubAdminPendingCGFAdmin handler catch error ${error?.response?.data?.message}`
+      );
     }
   };
 
@@ -182,8 +180,7 @@ function PendingCGFAdmins({
     let isMounted = true;
     const controller = new AbortController();
     makeApiCall && getSubAdminPendingCGFAdmin(isMounted, controller);
-    Logger.debug("makeApiCall", makeApiCall);
-    Logger.debug("inside use Effect");
+
     return () => {
       isMounted = false;
       controller.abort();
@@ -196,9 +193,7 @@ function PendingCGFAdmins({
     orderByForPending,
     orderForPendingTabCGFAdmin,
   ]);
-  {
-    Logger.debug("makeApiCall outside UseEffect ", makeApiCall);
-  }
+
   return (
     <>
       {isPendingCgfAdmin ? (

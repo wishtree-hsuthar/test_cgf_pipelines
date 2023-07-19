@@ -52,7 +52,6 @@ const ViewSubAdmin = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const [fetchedSubAdminDetails, setFetchedSubAdminDetails] = useState({});
-  Logger.debug("params = ", params);
   useEffect(() => {
     let isMounted = true;
     let controller = new AbortController();
@@ -68,14 +67,16 @@ const ViewSubAdmin = () => {
             signal: controller.signal,
           }
         );
-        Logger.debug("response from sub admin view page fetch api", response);
+        Logger.info(`View subadmin - getCGFAdmin handler`);
         if (response.status === 200) {
           isMounted && setFetchedSubAdminDetails(response.data);
         }
         setIsCgfLoading(false);
       } catch (error) {
         if (error?.code === "ERR_CANCELED") return;
-        Logger.debug("error from sub admin view page fetch api", error);
+        Logger.info(
+          `View subadmin - getCGFAdmin handler catch error ${error?.response?.data?.message}`
+        );
         setIsCgfLoading(false);
         catchError(
           error,
@@ -111,7 +112,9 @@ const ViewSubAdmin = () => {
         }, 2000);
       }
     } catch (error) {
-      Logger.debug("error from delete API", error);
+      Logger.info(
+        `View subadmin -  handleDeleteSubAdmin handler catch error - ${error?.response?.data?.message}`
+      );
       catchError(error, setToasterDetails, toasterRef, navigate);
     }
   };
@@ -122,7 +125,7 @@ const ViewSubAdmin = () => {
         WITHDRAW_SUB_ADMIN + params.id
       );
       if (response.status == 200) {
-        Logger.debug("user invite withdrawn successfully");
+        Logger.info(`view subadmin - withdrawInviteByIdCGFAdmin handler`);
         setToasterDetails(
           {
             titleMessage: "Success",
@@ -134,23 +137,21 @@ const ViewSubAdmin = () => {
         setTimeout(() => {
           navigate("/users/cgf-admin/", { state: 1 });
         }, 3000);
-        
+
         setOpenDeleteDialogBoxPendingCGFAdmin(false);
       }
     } catch (error) {
       catchError(error, setToasterDetails, toasterRef, navigate);
-
-      Logger.debug("error from withdrawInvite id", error);
+      Logger.info(
+        `view subadmin - withdrawInviteByIdCGFAdmin handler catch error - ${error?.response?.data?.message}`
+      );
     }
   };
 
-  Logger.debug("fetchedSubAdminDetails---", fetchedSubAdminDetails?.isActive);
   const handleToggle = () => {
     setActive(!isActive);
   };
   const handleOpen = (index) => {
-    Logger.debug("clicked", index);
-    Logger.debug(index);
     if (index === 0) {
       params["*"].includes("pending")
         ? history(`/users/cgf-admin/pending/edit-cgf-admin/${params.id}`)
@@ -160,7 +161,6 @@ const ViewSubAdmin = () => {
       history(`/users/cgf-admin/replace-cgf-admin/${params.id}`);
     }
     if (index == 2) {
-      Logger.debug("resend email");
       ResendEmail(params.id, setToasterDetails, toasterRef, navigate);
     }
     if (index === 3) {

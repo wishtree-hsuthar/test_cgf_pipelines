@@ -19,21 +19,12 @@ const Dashboard = (props) => {
   );
 
   const checkUser = useSelector((state) => state?.user?.userObj);
-  console.log("checkPrvilege = ", checkPrivilege);
-  console.log("user = ", checkUser);
 
   let userRoleDeleted =
     Object.keys(checkUser.role).length === 0 ||
     (Object.keys(checkPrivilege).length === 0 &&
       checkUser?.role?.name !== "Super Admin");
 
-  Logger.debug("user role is deleted  =  ", userRoleDeleted);
-  Logger.debug(
-    "user is  super Admin = ",
-    checkPrivilege != undefined &&
-      Object.keys(checkPrivilege).length === 0 &&
-      checkUser?.role?.name === "Super Admin"
-  );
   const navigate = useNavigate();
   const homeRef = useRef();
 
@@ -61,8 +52,9 @@ const Dashboard = (props) => {
       dispatch(setUser(data));
       dispatch(setPrivileges(data?.role));
 
-      Logger.debug("in userloggedin - ", data);
+      Logger.info("Dashboard - Fetch home user handler");
     } catch (error) {
+      Logger.info("Dashboard - Fetch home user handler");
       if (error?.response?.status == 401) {
         setHomeToasterDetails(
           {

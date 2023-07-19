@@ -47,13 +47,12 @@ function FillAssesmentSection({
   const params = useParams();
 
   const showSubmitOnFinalSection = () => {
-    console.log("total sections = ", totalSections);
-    console.log("current index = ", index);
+   
     return totalSections === index + 1 ? false : true;
   };
 
   // cancel dailog box open/close state
-  console.log("section - ", section);
+  
 
   const [openCancelDailog, setOpenCancelDailog] = useState(false);
 
@@ -67,7 +66,7 @@ function FillAssesmentSection({
     });
   };
   const handleAnswersBlur = (name, value) => {
-    Logger.debug("inside on Blur");
+    Logger.info("Fill Assessment section - handleAnswersBlur handler");
 
     setAssessmentQuestionnaire({
       ...assessmentQuestionnaire,
@@ -77,7 +76,6 @@ function FillAssesmentSection({
       },
     });
   };
-  console.log("Assessment Questionnaire:- ", assessmentQuestionnaire);
   return (
     <>
       <DialogBox

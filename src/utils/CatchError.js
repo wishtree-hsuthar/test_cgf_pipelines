@@ -35,9 +35,6 @@ export const catchError = async (
       navigate("/home");
     }, 3000);
   } else {
-    console.log("Else block");
-    console.log("route = ", route);
-    console.log("erro in else block", error);
     setToasterDetails(
       {
         titleMessage: `Oops!`,

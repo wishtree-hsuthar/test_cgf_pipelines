@@ -164,7 +164,6 @@ export default function TableComponent({
     handleChangeRowsPerPage1(event);
   };
   const onClickVisibilityIconHandler = (id, isOperationMember) => {
-    Logger.debug("Inside on click handler", isOperationMember);
     onClickVisibilityIconHandler1(
       id,
       isOperationMember ? isOperationMember : false
@@ -279,8 +278,11 @@ export default function TableComponent({
                               typeof row[cell] === "undefined" ? (
                               <TableCell key={cell}>
                                 {" "}
-                                {(typeof row[cell] === "undefined" || row[cell] === "") && "N/A"}
-                                {typeof row[cell] === "string" && row[cell]?.length > 0 &&
+                                {(typeof row[cell] === "undefined" ||
+                                  row[cell] === "") &&
+                                  "N/A"}
+                                {typeof row[cell] === "string" &&
+                                row[cell]?.length > 0 &&
                                 cell !== "email"
                                   ? row[cell][0].toUpperCase() +
                                     row[cell]?.slice(1)
@@ -314,23 +316,6 @@ export default function TableComponent({
                               </TableCell>
                             );
                           } else if (cell === "dueDate") {
-                            Logger.debug(
-                              "due date  = ",
-                              new Date(row[cell]).toLocaleDateString("en")
-                            );
-                            Logger.debug(
-                              "current date  = ",
-                              new Date().toLocaleDateString("en")
-                            );
-                            Logger.debug(
-                              "Comparison = ",
-                              new Date(
-                                new Date(row[cell]).toLocaleDateString("en")
-                              ).getTime() >=
-                                new Date(
-                                  new Date().toLocaleDateString("en")
-                                ).getTime()
-                            );
                             return (
                               <TableCell
                                 className={`due-date-style ${

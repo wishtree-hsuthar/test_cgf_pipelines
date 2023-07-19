@@ -34,9 +34,6 @@ const MenuProps = {
 
 const PreviewQuestions = ({ question }) => {
     let questionLabel = question.questionTitle;
-    console.log("question: ",question)
-    Logger.debug("title preview question", questionLabel);
-    Logger.debug("title preview question", question.questionTitle);
     let questionComponent =
         question.inputType === "singleTextbox" ? (
             <TextField

@@ -42,7 +42,7 @@ const AddRole = () => {
   });
   //method to call all error toaster from this method
   const setErrorToaster = (error) => {
-    Logger.debug("error", error);
+    Logger.info(`Add role - setErrorToaster handler`);
     setToasterDetails1(
       {
         titleMessage: "Error",
@@ -129,20 +129,16 @@ const AddRole = () => {
   };
 
   const submitCall = async (data) => {
-    Logger.debug("inside on Submit");
+    Logger.info(`Add role - submitCall handler`);
     // Logger.debug("previleges1 : ", previlegesForBackend);
     //backend call
     try {
       let previlegesForBackend = JSON.parse(JSON.stringify(previleges1));
-      Logger.debug("previleges for backend:- ", previlegesForBackend);
       Object.keys(previlegesForBackend).forEach((p_key) => {
         delete previlegesForBackend[p_key]["all"];
         delete previlegesForBackend[p_key]["name"];
       });
-      Logger.debug(
-        "isValid Previleges:- ",
-        validatePrivelages(previlegesForBackend)
-      );
+
       if (!validatePrivelages(previlegesForBackend)) {
         setToasterDetails1(
           {
@@ -415,10 +411,6 @@ const AddRole = () => {
                         <CommonTableHead />
                         <TableBody>
                           {Object.keys(previleges1).map((previleg, _id) => {
-                            Logger.debug(
-                              "previleg",
-                              previleges1[previleg]["name"]
-                            );
                             return (
                               <TableRow key={previleg} hover>
                                 <TableCell>

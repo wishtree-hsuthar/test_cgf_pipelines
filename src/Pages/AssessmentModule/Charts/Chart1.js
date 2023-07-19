@@ -61,9 +61,9 @@ const Chart1 = ({
     ],
   };
   useEffect(() => {
-    console.log("chartImages in chart1:- ", chartImages.resultsGraph);
+   
     if (chartImages.resultsGraph === undefined) {
-      console.log("inside condition");
+   
       let temp = { ...chartImages };
       temp.resultsGraph = chartRef.current.toBase64Image();
       setChartImages(temp);

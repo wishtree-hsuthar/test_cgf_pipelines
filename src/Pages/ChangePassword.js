@@ -85,7 +85,7 @@ const ChangePassword = () => {
   };
 
   const onSubmitChangePassword = async (data) => {
-    Logger.debug("data", data);
+    Logger.info("Change Password - Change Password handler");
     try {
       const response = await privateAxios.post(CHANGE_PASSWORD, {
         oldPassword: data.oldPassword,
@@ -108,7 +108,9 @@ const ChangePassword = () => {
         reset();
       }
     } catch (error) {
-      Logger.debug("Error from on change password data", error);
+      Logger.info(
+        `Change Password - Change Password handler catch error${error?.response?.data?.message}`
+      );
       reset();
       catchError(error, setToasterDetails, toasterRef, navigate);
     }
@@ -164,7 +166,6 @@ const ChangePassword = () => {
                           onClickHandler={handleClickShowOldPassword}
                           onMouseDown={handleMouseDownPassword}
                         />
-                       
                       }
                       {...register("oldPassword")}
                       onBlur={(e) =>
@@ -252,7 +253,6 @@ const ChangePassword = () => {
                         onClickHandler={handleClickShowConfirmPassword}
                         onMouseDown={handleMouseDownPassword}
                       />
-                    
                     }
                     {...register("confirmPassword")}
                     onBlur={(e) =>

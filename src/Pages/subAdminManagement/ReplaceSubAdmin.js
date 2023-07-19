@@ -92,10 +92,9 @@ const ReplaceSubAdmin = () => {
   });
   // search function
   const onSearchChangeHandler = (e) => {
-    Logger.debug("event", e.key);
+    Logger.info(`Replace sub admin - onSearchChangeHandler handler`);
     if (searchTimeout) clearTimeout(searchTimeout);
     setMakeApiCallReplaceCGFAdmin(false);
-    Logger.debug("search values", e.target.value);
     setSearchCGFAdmin(e.target.value);
     setSearchTimeout(
       setTimeout(() => {
@@ -105,8 +104,6 @@ const ReplaceSubAdmin = () => {
     );
   };
   const generateUrl = (multiFilterString) => {
-    Logger.debug("Search", searchCGFAdmin);
-
     let url = `${ADD_SUB_ADMIN}/${id}/replaces/list?page=${replaceCGFAdminPage}&size=${replaceCGFAdminRowsPerPage}&orderBy=${replaceCGFAdminOrderBy}&order=${replaceCGFAdminOrder}`;
     if (searchCGFAdmin?.length >= 3)
       url = `${ADD_SUB_ADMIN}/${id}/replaces/list?page=${replaceCGFAdminPage}&size=${replaceCGFAdminRowsPerPage}&orderBy=${replaceCGFAdminOrderBy}&order=${replaceCGFAdminOrder}&search=${searchCGFAdmin}`;
@@ -115,7 +112,7 @@ const ReplaceSubAdmin = () => {
   };
 
   const updateRecords = (data) => {
-    Logger.debug("data before update----", data);
+    Logger.info(`Replace sub admin - updateRecords handler`);
 
     let staleData = data;
     staleData.forEach((object) => {
@@ -144,7 +141,6 @@ const ReplaceSubAdmin = () => {
         object[k] = v;
       });
     });
-    Logger.debug("data in updaterecords method", staleData);
     setReplaceCGFAdminRecords([...staleData]);
   };
   // fetch users/cgf-admin/
@@ -161,14 +157,15 @@ const ReplaceSubAdmin = () => {
       setTotalReplaceCGFAdminRecords(
         parseInt(response.headers["x-total-count"])
       );
-      Logger.debug("Response from sub admin api get", response);
+      Logger.info(`Replace sub admin - getSubAdmin handler`);
 
       updateRecords(response.data);
       setIsLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("Error from getSubAdmin-------", error);
-
+      Logger.info(
+        `Replace sub admin - getSubAdmin handler ${error?.response?.data?.message}`
+      );
       setIsLoading(false);
       if (error?.response?.status == 401) {
         setToasterDetails(
@@ -199,9 +196,6 @@ const ReplaceSubAdmin = () => {
         }, 3000);
         setOpen(false);
       } else if (error?.response?.status == 500) {
-        Logger.debug(
-          "Error status 500 while fetchiing subadmin from replace sub-admin"
-        );
         navigate("/users/cgf-admin/");
       } else {
         isMounted &&
@@ -230,15 +224,12 @@ const ReplaceSubAdmin = () => {
       const response = await privateAxios.get(FETCH_SUB_ADMIN_BY_ADMIN + id, {
         signal: controller.signal,
       });
-      Logger.debug("response from fetch sub admin by id", response);
+      Logger.info(`Replace sub admin - fetchSubAdmin handler`);
       setCgfAdmin(response.data);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
 
       if (error?.response?.status == 500) {
-        Logger.debug(
-          "Error status 500 while fetchiing subadmin from replace sub-admin"
-        );
         navigate("/users/cgf-admin/", { state: 0 });
       }
     }
@@ -248,8 +239,7 @@ const ReplaceSubAdmin = () => {
     let isMounted = true;
     const controller = new AbortController();
     makeApiCallReplaceCGFAdmin && getSubAdmin(isMounted, controller);
-    Logger.debug("makeApiCallReplaceCGFAdmin", makeApiCallReplaceCGFAdmin);
-    Logger.debug("inside use Effect");
+
     fetchSubAdmin(isMounted, controller);
 
     return () => {
@@ -266,7 +256,7 @@ const ReplaceSubAdmin = () => {
   ]);
   //page change handler
   const handleTableTesterPageChange = (newPage) => {
-    Logger.debug("new Page", newPage);
+    Logger.info(`Replace sub admin - handleTableTesterPageChange handler`);
     setReplaceCGFAdminPage(newPage);
   };
 
@@ -278,9 +268,8 @@ const ReplaceSubAdmin = () => {
 
   //on Click of visibility icon
 
-  Logger.debug("selectedCGFAdminsArray user: ", selectedReplacedCGFAdminUser);
-
   const replaceUser = async () => {
+    Logger.info(`Reaplce sub admin - replaceUser handler`);
     try {
       setDisableSubmit(true);
       const response = await privateAxios.post(REPLACE_SUB_ADMIN + "replace", {
@@ -288,10 +277,6 @@ const ReplaceSubAdmin = () => {
         replacingWith: selectedReplacedCGFAdminUser,
       });
       if (response.status == 201) {
-        Logger.debug(
-          selectedCGFAdmin[0]?.name + " has replaced ",
-          cgfAdmin.name + " successfully!"
-        );
         setToasterDetails(
           {
             titleMessage: "Success",
@@ -308,7 +293,9 @@ const ReplaceSubAdmin = () => {
       }
     } catch (error) {
       setDisableSubmit(false);
-      Logger.debug("error from replace user");
+      Logger.info(
+        `Reaplce sub admin - replaceUser handler catch error ${error?.response?.data?.message}`
+      );
       if (error?.code === "ERR_CANCELED") return;
       if (error?.response?.status == 400) {
         setToasterDetails(
@@ -336,9 +323,6 @@ const ReplaceSubAdmin = () => {
         setOpen(false);
       }
       if (error?.response?.status == 500) {
-        Logger.debug(
-          "Error status 500 while fetchiing subadmin from replace sub-admin"
-        );
         navigate("/users/cgf-admin/", { state: 0 });
       }
     }
@@ -346,22 +330,15 @@ const ReplaceSubAdmin = () => {
   const [open, setOpen] = useState(false);
 
   const handleYes = () => {
-    Logger.debug(
-      "Yes replcae" + id + " replace id with",
-      selectedReplacedCGFAdminUser
-    );
-
     replaceUser();
   };
   const handleNo = () => {
-    Logger.debug("No replcae");
     setOpen(false);
   };
   const openReplaceDailogBox = () => {
     setOpen(true);
   };
   const selectSingleUser = (id) => {
-    Logger.debug("select single user---", id);
     setSelectedReplacedCGFAdminUser(id);
     setSelectedCGFAdmin({
       ...replaceCGFAdminRecords.filter(

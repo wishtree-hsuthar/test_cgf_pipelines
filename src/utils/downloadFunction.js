@@ -2,7 +2,6 @@ import { privateAxios } from "../api/axios";
 import { Logger } from "../Logger/Logger";
 import { catchError } from "./CatchError";
 
-
 export const getTimeStamp = () => {
   let month =
     new Date().getMonth() < 10
@@ -28,7 +27,6 @@ export const downloadFunction = async (
 
   navigate
 ) => {
-  Logger.debug("navigate = ", navigate);
   try {
     const response = await privateAxios.get(
       id ? downloadUrl + id + `/download` : downloadUrl,
@@ -37,11 +35,11 @@ export const downloadFunction = async (
       }
     );
 
-    Logger.debug(`resposne from ${filename}  assessment `, response);
+    Logger.info(` download function -  from ${filename}  assessment `);
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement(`a`);
     link.href = url;
-    let timeStamp = getTimeStamp()
+    let timeStamp = getTimeStamp();
     link.setAttribute(`download`, `${filename} - ${timeStamp}.xlsx`);
     document.body.appendChild(link);
     link.click();
@@ -57,7 +55,7 @@ export const downloadFunction = async (
       );
     }
   } catch (error) {
-    Logger.debug(`Error from ${filename}  Assessment`, error);
+    Logger.info(`downlaod function - error ${error?.response?.data?.message}`);
     catchError(error, setToasterDetails, myRef, navigate);
     return error;
   }

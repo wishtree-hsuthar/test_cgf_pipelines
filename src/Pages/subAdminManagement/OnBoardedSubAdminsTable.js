@@ -86,7 +86,7 @@ function OnBoardedSubAdminsTable({
       "isActive",
     ];
 
-    Logger.debug("data before update----", data);
+    Logger.info(`Onboarded sub admin - updateRecords handler`);
 
     let staleData = data;
     staleData.forEach((onboardedCGFAdmin) => {
@@ -122,12 +122,10 @@ function OnBoardedSubAdminsTable({
         onboardedCGFAdmin[k] = v;
       });
     });
-    Logger.debug("data in updaterecords method", staleData);
     setRecords([...staleData]);
   };
 
   const generateUrl = () => {
-    Logger.debug("Search", search);
     let url = `${ADD_SUB_ADMIN}/list/?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
 
     if (search) url += `&search=${search}`;
@@ -145,14 +143,15 @@ function OnBoardedSubAdminsTable({
         signal: controller.signal,
       });
       setTotalRecords(parseInt(onBoardedCGFAdmin.headers["x-total-count"]));
-      Logger.debug("Response from sub admin api get", onBoardedCGFAdmin);
+      Logger.info(`Onboarded sub admin - getSubAdmin handler`);
 
       updateRecords([...onBoardedCGFAdmin.data]);
       setIsOnboardedCgfAdminLoading(false);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
-      Logger.debug("Error from getSubAdmin-------", error);
-
+      Logger.info(
+        `Onboarded sub admin - getSubAdmin handler catch error ${error?.response?.data?.message}`
+      );
       if (error?.response?.status == 401) {
         setonBoardedCgfAdmintoasterDetails(
           {
@@ -203,7 +202,6 @@ function OnBoardedSubAdminsTable({
   };
   // on click eye icon to  navigate view page
   const onClickVisibilityIconHandler = (id) => {
-    Logger.debug("id", id);
     return navigate(`view-cgf-admin/${id}`);
   };
 
@@ -211,8 +209,7 @@ function OnBoardedSubAdminsTable({
     let isMounted = true;
     const controller = new AbortController();
     makeApiCall && getSubAdmin(isMounted, controller);
-    Logger.debug("makeApiCall", makeApiCall);
-    Logger.debug("inside use Effect");
+
     return () => {
       isMounted = false;
       controller.abort();

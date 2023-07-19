@@ -47,10 +47,9 @@ const SubAdminList = () => {
   const [search, setSearch] = useState("");
 
   const onSearchChangeHandler = (e) => {
-    Logger.debug("event", e.key);
+    Logger.info(`Subadmin list - onSearchChangeHandler handler`);
     if (searchTimeout) clearTimeout(searchTimeout);
     setMakeApiCall(false);
-    Logger.debug("search values", e.target.value);
     setSearch(e.target.value);
     setSearchTimeout(
       setTimeout(() => {
@@ -70,9 +69,7 @@ const SubAdminList = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    Logger.debug("makeApiCall", makeApiCall);
-    Logger.debug("inside use Effect");
-    Logger.debug("page-", state);
+
     setValue(state ? state : 0);
     navigate("", { state: 0 });
     return () => {
@@ -80,14 +77,11 @@ const SubAdminList = () => {
       controller.abort();
     };
   }, []);
-  {
-    Logger.debug("makeApiCall outside UseEffect ", makeApiCall);
-  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setPageForPendingTabCGFAdmin(1);
-    setPage(1)
+    setPage(1);
   };
 
   const onKeyDownChangeHandler = (e) => {

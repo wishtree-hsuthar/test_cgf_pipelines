@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  OutlinedInput as ResetPasswordOutlinedInput
-} from "@mui/material";
+import { OutlinedInput as ResetPasswordOutlinedInput } from "@mui/material";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -52,6 +50,7 @@ const ResetPassword = () => {
     document.body.classList.add("login-page");
     let controller = new AbortController();
     const verifyForgotToken = async () => {
+      Logger.info("Reset Password - Verify forgot token handler");
       try {
         const { response } = await axios.get(
           FORGOT_PASSWORD_VERIFY_TOKEN + params.id,
@@ -63,10 +62,10 @@ const ResetPassword = () => {
           return null;
         }
       } catch (error) {
-        Logger.debug("error from verify token", error);
+        Logger.info(
+          `Reset Password - Verify forgot token handler catch error - ${error?.response?.data?.message}`
+        );
         if (error?.response?.status == 400) {
-          Logger.debug("Invalid Token");
-
           setShowInvalidTokenMessage(true);
         }
       }
@@ -105,8 +104,8 @@ const ResetPassword = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  Logger.debug("params", params);
   const submitForm = async (data) => {
+    Logger.info("Reset password - submitForm handler");
     try {
       const response = await axios.post(`${FORGOT_PASSWORD}${params.id}`, {
         password: data.newPassword,
@@ -124,7 +123,7 @@ const ResetPassword = () => {
         reset();
       }
     } catch (error) {
-      Logger.debug("error from reset password submit method", error);
+      Logger.info("Reset Password - submitForm handler");
       if (
         error?.response?.status == 400 &&
         error?.response?.data?.message !== "Invalid token"
