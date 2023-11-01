@@ -136,27 +136,27 @@ const Header = () => {
     []
   );
 
-  const getReportIssueLink = async () => {
-    try {
-      const response = await axios.get(MASTER_LINK + "/reportIssueOnZoho");
-      Logger.info("Header - getReportIssueLink handler");
+  // const getReportIssueLink = async () => {
+  //   try {
+  //     const response = await axios.get(MASTER_LINK + "/reportIssueOnZoho");
+  //     Logger.info("Header - getReportIssueLink handler");
 
-      const url = new URL(response.data);
+  //     const url = new URL(response.data);
 
-      REPORT_ISSUE_LINK = url;
-    } catch (error) {
-      Logger.info("Header - getReportIssueLink handler catch error");
-      if (
-        error?.response?.status === 403 &&
-        error?.response?.data?.message ===
-          "You don't have required privileges to access this resource!"
-      ) {
-        Logger.info(
-          "Header - getReportIssueLink handler -You don't have required privileges to access this resource!"
-        );
-      }
-    }
-  };
+  //     REPORT_ISSUE_LINK = url;
+  //   } catch (error) {
+  //     Logger.info("Header - getReportIssueLink handler catch error");
+  //     if (
+  //       error?.response?.status === 403 &&
+  //       error?.response?.data?.message ===
+  //         "You don't have required privileges to access this resource!"
+  //     ) {
+  //       Logger.info(
+  //         "Header - getReportIssueLink handler -You don't have required privileges to access this resource!"
+  //       );
+  //     }
+  //   }
+  // };
 
   let profileRole = () => {
     if (
@@ -171,7 +171,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    REPORT_ISSUE_LINK?.length === 0 && getReportIssueLink();
+    // REPORT_ISSUE_LINK?.length === 0 && getReportIssueLink();
   }, []);
   //   Logger.debug("REPORT ISSUE LINK:- ", REPORT_ISSUE_LINK);
   //   console.log("LINK",REPORT_ISSUE_LINK)
@@ -521,7 +521,7 @@ const Header = () => {
                                     Change Password
                                   </span>
                                 </div>
-                                <div className="tertiary-btn-blk mt-20">
+                                {/* <div className="tertiary-btn-blk mt-20">
                                   <span className="addmore-txt">
                                     <a
                                       hidden={showContent()}
@@ -535,7 +535,7 @@ const Header = () => {
                                       Raise an Issue
                                     </a>
                                   </span>
-                                </div>
+                                </div> */}
                                 <div className="form-btn flex-center mt-20">
                                   <button
                                     type="submit"
