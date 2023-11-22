@@ -14,7 +14,10 @@ import {
   FETCH_ASSESSMENT_BY_ID,
   FETCH_OPERATION_MEMBER,
   MEMBER_DROPDOWN,
+  REGIONCOUNTRIES,
+  REGIONS,
   SPECIFIC_MEMBER_DROPDOWN,
+  STATES,
   UPDATE_ASSESSMENT_BY_ID,
 } from "../../api/Url";
 import Dropdown from "../../components/Dropdown";
@@ -46,6 +49,12 @@ const helperTextForAssessment = {
   assignedOperationMember: {
     required: "Select the operation member",
   },
+  region: {
+    required: "Select the region",
+  },
+  country: {
+    required: "Select the country",
+  },
   dueDate: {
     required: "Select the due date",
   },
@@ -60,7 +69,7 @@ function EditAssessment() {
   // state to manage loaders
   const [isEditAssessmentLoading, setIsEditAssessmentLoading] = useState(false);
 
-  const { handleSubmit, control, setValue, reset, watch } = useForm({
+  const { handleSubmit, control, setValue, reset, watch, trigger } = useForm({
     defaultValues: {
       title: "",
       assessmentType: "",
@@ -71,6 +80,8 @@ function EditAssessment() {
       assignedOperationMember: "",
       dueDate: "",
       remarks: "",
+      region: "",
+      country: "",
     },
   });
 
@@ -80,6 +91,14 @@ function EditAssessment() {
   const params = useParams();
 
   const toasterRef = useRef();
+  const [arrOfRegionsAddMember, setArrOfRegionsAddMember] = useState([]);
+
+  const [arrOfCountryRegionsAddMember, setArrOfCountryRegionsAddMember] =
+    useState([]);
+  //to hold array of Country states
+  const [arrOfStateCountryAddMember, setArrOfStateCountryAddMember] = useState(
+    []
+  );
   const [toasterDetails, setToasterDetails] = useCallbackState({
     titleMessage: "",
     descriptionMessage: "",
@@ -139,11 +158,8 @@ function EditAssessment() {
 
   const handlememberDropdownAPI = () => {
     if (isMemberRepresentative || isOperationMember) {
-
       return `${SPECIFIC_MEMBER_DROPDOWN}${memberId}`;
     } else {
-
-
       return MEMBER_DROPDOWN;
     }
   };
@@ -151,7 +167,7 @@ function EditAssessment() {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-
+    getRegionsAddMember(controller, isMounted);
     const fetchAssessment = async () => {
       Logger.info("Edit Assessment - fetchAssessment handler");
       try {
@@ -178,7 +194,16 @@ function EditAssessment() {
             ).setDate(new Date(responseEditMember.data.dueDate).getDate() - 1),
             remarks: responseEditMember.data.remarks,
             questionnaireId: responseEditMember.data.questionnaireId,
+            region: responseEditMember.data.region,
+            country: responseEditMember.data.country,
           });
+        const countriesOnRegion = await getCountriesAddMember(
+          responseEditMember?.data?.region
+        );
+        const arrOfCountryRegionsTemp = formatRegionCountriesAddMember(
+          countriesOnRegion.data
+        );
+        setArrOfCountryRegionsAddMember([...arrOfCountryRegionsTemp]);
         setQuestionnaireId(responseEditMember.data.questionnaireId);
         fetchMember(responseEditMember.data.assignedMember?._id);
       } catch (error) {
@@ -253,6 +278,109 @@ function EditAssessment() {
       controller.abort();
     };
   }, []);
+  const setErrorToaster = (error) => {
+    Logger.info("Add Member - setErrorToaster handler");
+    setToasterDetails(
+      {
+        titleMessage: "Error",
+        descriptionMessage:
+          error?.response?.data?.message &&
+          typeof error.response.data.message === "string"
+            ? error.response.data.message
+            : "Oops! Something went wrong. Please try again later.",
+        messageType: "error",
+      },
+      () => toasterRef.current()
+    );
+  };
+  const onCountryChangeHandlerAddMember = async (e) => {
+    Logger.info(`Add Member - onCountryChangeHandlerAddMember handler`);
+    setValue("country", e.target.value);
+    const stateCountries = await privateAxios.get(
+      STATES + `/${e.target.value}`
+    );
+    setArrOfStateCountryAddMember(stateCountries.data);
+  };
+
+  const getCountriesAddMember = async (region) => {
+    Logger.info(`Add member - getCountriesAddMember handler`);
+    try {
+      return await privateAxios.get(REGIONCOUNTRIES + `/${region}`);
+      // return regionCountries;
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+
+      Logger.info(
+        `Add member - getCountriesAddMember handler catch error - ${error?.response?.data?.message} `
+      );
+      return [];
+    }
+  };
+  const formatRegionCountriesAddMember = (regionCountries) => {
+    regionCountries.forEach(
+      (country, id) =>
+        (regionCountries[id] = country.hasOwnProperty("_id")
+          ? country.name
+          : country)
+    );
+    return regionCountries;
+  };
+  const getRegionsAddMember = async (controller, isMounted) => {
+    try {
+      const regions = await privateAxios.get(REGIONS, {
+        signal: controller.signal,
+      });
+      setArrOfRegionsAddMember(regions.data);
+      return arrOfRegionsAddMember;
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      if (error?.response?.status == 401) {
+        isMounted &&
+          setToasterDetails(
+            {
+              titleMessage: "Error",
+              descriptionMessage: "Session Timeout: Please login again",
+              messageType: "error",
+            },
+            () => toasterRef.current()
+          );
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      } else if (error?.response?.status === 403) {
+        isMounted &&
+          setToasterDetails(
+            {
+              titleMessage: "Error",
+              descriptionMessage: error?.response?.data?.message
+                ? error?.response?.data?.message
+                : "Oops! Something went wrong. Please try again later.",
+              messageType: "error",
+            },
+            () => toasterRef.current()
+          );
+        setTimeout(() => {
+          navigate("/home");
+        }, 3000);
+      } else {
+        setErrorToaster(error);
+        return [];
+      }
+    }
+  };
+
+  const onRegionChangeHandlerAddMember = async (e) => {
+    Logger.info("Add member - onRegionChangeHandlerAddMember handler");
+    setValue("country", "");
+
+    setValue("region", e.target.value);
+    trigger("region");
+    const countriesOnRegion = await getCountriesAddMember(watch("region"));
+    const arrOfCountryRegionsTemp = formatRegionCountriesAddMember(
+      countriesOnRegion.data
+    );
+    setArrOfCountryRegionsAddMember([...arrOfCountryRegionsTemp]);
+  };
 
   const fetchMember = async (id) => {
     Logger.info("Edit Assessment - fetchMember handler");
@@ -547,6 +675,41 @@ function EditAssessment() {
                         myHelper={helperTextForAssessment}
                         rules={{ required: true }}
                         options={operationMemberForAddAssessments}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="region">
+                        Region
+                        <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        control={control}
+                        myOnChange={onRegionChangeHandlerAddMember}
+                        name="region"
+                        rules={{ required: true }}
+                        placeholder="Select region"
+                        myHelper={helperTextForAssessment}
+                        options={arrOfRegionsAddMember}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="country">
+                        Country
+                        <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        isDisabled={!watch("region")}
+                        control={control}
+                        name="country"
+                        rules={{ required: true }}
+                        myOnChange={onCountryChangeHandlerAddMember}
+                        placeholder="Select country"
+                        myHelper={helperTextForAssessment}
+                        options={arrOfCountryRegionsAddMember}
                       />
                     </div>
                   </div>

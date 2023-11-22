@@ -40,6 +40,17 @@ const assessmentListTableHead = [
   },
   {
     ...listObj,
+    id: "region",
+    label: "Region",
+  },
+  {
+    ...listObj,
+    id: "country",
+    label: "Country",
+  },
+
+  {
+    ...listObj,
     id: "assessmentStatus",
     label: "Status",
   },
@@ -73,6 +84,10 @@ const AssessmentList = () => {
     "assessmentType",
     "assignedMember.name",
     "assignedOperationMember.name",
+
+    "region",
+    "country",
+
     "assessmentStatus",
     "dueDate",
     "isUserAuthorizedToFillAssessment",

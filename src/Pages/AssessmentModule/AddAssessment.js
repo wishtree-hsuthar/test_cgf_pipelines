@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Controller as AddAssessmentController,
@@ -14,13 +14,19 @@ import useCallbackState from "../../utils/useCallBackState";
 import { Logger } from "../../Logger/Logger";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
   ADD_ASSESSMENTS,
   ADD_QUESTIONNAIRE,
   FETCH_OPERATION_MEMBER,
   MEMBER_DROPDOWN,
+  REGIONCOUNTRIES,
+  REGIONS,
   SPECIFIC_MEMBER_DROPDOWN,
+  STATES,
 } from "../../api/Url";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
@@ -43,6 +49,12 @@ const helperTextForAssessment = {
   },
   dueDate: {
     required: "Select the due date",
+  },
+  region: {
+    required: "Select the region",
+  },
+  country: {
+    required: "Select the country",
   },
   remarks: {
     minLength: "minimum 3 characters required",
@@ -89,6 +101,7 @@ const AddAssessment = () => {
     reset,
     setValue,
     trigger,
+    watch,
   } = useForm({
     defaultValues: {
       title: "",
@@ -98,9 +111,75 @@ const AddAssessment = () => {
       dueDate: "",
       remarks: "",
       questionnaireId: "",
+      region: "",
+      country: "",
     },
   });
+  const [file, setFile] = useState(null);
+  const [filePreview, setFilePreview] = useState("");
+
+  const allowdedFiles = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".doc",
+    ".txt",
+    ".pdf",
+    ".docx",
+    ".xlsx",
+    ".xls",
+    ".ppt",
+    ".pptx",
+    ".mp4",
+    ".mp3",
+    ".zip",
+    ".rar",
+  ];
+  const removeFile = () => {
+    setFile(null);
+    setFilePreview("");
+  };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    // Check if a file is selected
+    if (file) {
+      // Check if the file type is allowed
+      const fileExtension = `.${file.name.split(".").pop()}`;
+      if (!allowdedFiles.includes(fileExtension.toLowerCase())) {
+        alert("Invalid file type. Please select a valid file.");
+        return;
+      }
+
+      // Check if the file size is within the limit (10 MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert(
+          "File size exceeds the limit of 10 MB. Please select a smaller file."
+        );
+        return;
+      }
+      console.log("inside if");
+      setFilePreview(file.name);
+      // setValue(fname, file.name);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setFile(e?.target?.result);
+      };
+      reader.readAsDataURL(file);
+
+      // Set the selected file
+      // setFile(file);
+    }
+  };
   const [isCGFStaff, setIsCGFStaff] = useState(false);
+  const [arrOfRegionsAddMember, setArrOfRegionsAddMember] = useState([]);
+
+  const [arrOfCountryRegionsAddMember, setArrOfCountryRegionsAddMember] =
+    useState([]);
+  //to hold array of Country states
+  const [arrOfStateCountryAddMember, setArrOfStateCountryAddMember] = useState(
+    []
+  );
   const [disableEditAssessmentButton, setDisableEditAssessmentButton] =
     useState(false);
   const [isAssessmentLoading, setIsAssessmentLoading] = useState(false);
@@ -108,7 +187,7 @@ const AddAssessment = () => {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-
+    getRegionsAddMember(controller, isMounted);
     const fetchMemberCompaniesForAddAssesments = async () => {
       try {
         const response = await privateAxios.get(handlememberDropdownAPI(), {
@@ -160,6 +239,109 @@ const AddAssessment = () => {
       controller.abort();
     };
   }, []);
+  const setErrorToaster = (error) => {
+    Logger.info("Add Member - setErrorToaster handler");
+    setToasterDetails(
+      {
+        titleMessage: "Error",
+        descriptionMessage:
+          error?.response?.data?.message &&
+          typeof error.response.data.message === "string"
+            ? error.response.data.message
+            : "Oops! Something went wrong. Please try again later.",
+        messageType: "error",
+      },
+      () => toasterRef.current()
+    );
+  };
+  const onCountryChangeHandlerAddMember = async (e) => {
+    Logger.info(`Add Member - onCountryChangeHandlerAddMember handler`);
+    setValue("country", e.target.value);
+    const stateCountries = await privateAxios.get(
+      STATES + `/${e.target.value}`
+    );
+    setArrOfStateCountryAddMember(stateCountries.data);
+  };
+
+  const getCountriesAddMember = async (region) => {
+    Logger.info(`Add member - getCountriesAddMember handler`);
+    try {
+      return await privateAxios.get(REGIONCOUNTRIES + `/${region}`);
+      // return regionCountries;
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+
+      Logger.info(
+        `Add member - getCountriesAddMember handler catch error - ${error?.response?.data?.message} `
+      );
+      return [];
+    }
+  };
+  const formatRegionCountriesAddMember = (regionCountries) => {
+    regionCountries.forEach(
+      (country, id) =>
+        (regionCountries[id] = country.hasOwnProperty("_id")
+          ? country.name
+          : country)
+    );
+    return regionCountries;
+  };
+  const getRegionsAddMember = async (controller, isMounted) => {
+    try {
+      const regions = await privateAxios.get(REGIONS, {
+        signal: controller.signal,
+      });
+      setArrOfRegionsAddMember(regions.data);
+      return arrOfRegionsAddMember;
+    } catch (error) {
+      if (error?.code === "ERR_CANCELED") return;
+      if (error?.response?.status == 401) {
+        isMounted &&
+          setToasterDetails(
+            {
+              titleMessage: "Error",
+              descriptionMessage: "Session Timeout: Please login again",
+              messageType: "error",
+            },
+            () => toasterRef.current()
+          );
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      } else if (error?.response?.status === 403) {
+        isMounted &&
+          setToasterDetails(
+            {
+              titleMessage: "Error",
+              descriptionMessage: error?.response?.data?.message
+                ? error?.response?.data?.message
+                : "Oops! Something went wrong. Please try again later.",
+              messageType: "error",
+            },
+            () => toasterRef.current()
+          );
+        setTimeout(() => {
+          navigate("/home");
+        }, 3000);
+      } else {
+        setErrorToaster(error);
+        return [];
+      }
+    }
+  };
+
+  const onRegionChangeHandlerAddMember = async (e) => {
+    Logger.info("Add member - onRegionChangeHandlerAddMember handler");
+    setValue("country", "");
+
+    setValue("region", e.target.value);
+    trigger("region");
+    const countriesOnRegion = await getCountriesAddMember(watch("region"));
+    const arrOfCountryRegionsTemp = formatRegionCountriesAddMember(
+      countriesOnRegion.data
+    );
+    setArrOfCountryRegionsAddMember([...arrOfCountryRegionsTemp]);
+  };
 
   const fetchOperationMembersAccordingToMemberCompanyForAddAssessment = async (
     id,
@@ -244,6 +426,7 @@ const AddAssessment = () => {
     data = {
       ...data,
       dueDate: new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString(),
+      actionPlan: file,
     };
 
     setIsAssessmentLoading(true);
@@ -389,6 +572,41 @@ const AddAssessment = () => {
                   </div>
                   <div className="card-form-field">
                     <div className="form-group">
+                      <label htmlFor="region">
+                        Region
+                        <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        control={control}
+                        myOnChange={onRegionChangeHandlerAddMember}
+                        name="region"
+                        rules={{ required: true }}
+                        placeholder="Select region"
+                        myHelper={helperTextForAssessment}
+                        options={arrOfRegionsAddMember}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label htmlFor="country">
+                        Country
+                        <span className="mandatory">*</span>
+                      </label>
+                      <Dropdown
+                        isDisabled={!watch("region")}
+                        control={control}
+                        name="country"
+                        rules={{ required: true }}
+                        myOnChange={onCountryChangeHandlerAddMember}
+                        placeholder="Select country"
+                        myHelper={helperTextForAssessment}
+                        options={arrOfCountryRegionsAddMember}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
                       <label>
                         Due Date <span className="mandatory">*</span>
                       </label>
@@ -479,6 +697,80 @@ const AddAssessment = () => {
                           />
                         )}
                       />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label>Action Plan</label>
+                      <div className="upload-file-wrap">
+                        <Button
+                          variant="contained"
+                          component="label"
+                          className="upload-file-btn"
+                        >
+                          <div
+                            className={
+                              // currentSelectedFiles?.length > 0
+                              // ? "upload-file-blk selected-file-blk"
+                              // :
+                              "upload-file-blk"
+                            }
+                          >
+                            {/* <input hidden accept="image/*" multiple type="file" /> */}
+                            <input
+                              // ref={fileRef}
+                              type={"file"}
+                              hidden
+                              accept={
+                                ".jpg, .jpeg, .png, .doc, .txt, .pdf, .docx, .xlsx, .xls, .ppt, .pptx, .mp4, .mp3, .zip, .rar"
+                              }
+                              name="files[]"
+                              // value={filePreview}
+                              onChange={handleFileChange}
+                              // multiple
+                            />
+                            <span className="upload-icon">
+                              <CloudUploadOutlinedIcon />
+                            </span>
+                            <span className="file-upload-txt">
+                              Click here to choose files (max file size{" "}
+                              {`${process.env.REACT_APP_MAX_FILE_SIZE_MB} MB`})
+                            </span>
+                          </div>
+                        </Button>
+                        <p
+                          style={{
+                            color: "#f7a823",
+                            fontFamily:
+                              "ProximaNova-Semibold, serif, sans-serif",
+                            margin: "10px 0px",
+                          }}
+                        >
+                          Uploading large files may take some time
+                        </p>
+                        {filePreview}
+                        <span
+                          className="file-close-icon"
+                          style={{
+                            display:
+                              filePreview.length > 1 ? "inline-block" : "none",
+                            cursor: "pointer",
+                          }}
+                          onClick={removeFile}
+                        >
+                          {" "}
+                          <CloseIcon />
+                        </span>
+                        {/* {currentSelectedFiles?.length > 0 && (
+                <RenderCurrentFiles
+                  currentSelectedFiles={currentSelectedFiles}
+                  setCurrentSelectedFiles={setCurrentSelectedFiles}
+                  setIsFileRemoved={setIsFileRemoved}
+                />
+              )} */}
+
+                        {/* </p> */}
+                      </div>
                     </div>
                   </div>
                   <div className="form-btn flex-between add-members-btn">
