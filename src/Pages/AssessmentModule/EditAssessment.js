@@ -1,5 +1,5 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { TextField } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -35,6 +35,8 @@ import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
 import { catchError } from "../../utils/CatchError";
 import { useSelector } from "react-redux";
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+import CloseIcon from "@mui/icons-material/Close";
 const helperTextForAssessment = {
   title: {
     required: "Enter the assessment title",
@@ -119,6 +121,63 @@ function EditAssessment() {
   const [openDialog, setOpenDialog] = useState(false);
   const [disableEditAssessmentButton, setDisableEditAssessmentButton] =
     useState(false);
+
+  const [file, setFile] = useState(null);
+  const [filePreview, setFilePreview] = useState("");
+
+  const allowdedFiles = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".doc",
+    ".txt",
+    ".pdf",
+    ".docx",
+    ".xlsx",
+    ".xls",
+    ".ppt",
+    ".pptx",
+    ".mp4",
+    ".mp3",
+    ".zip",
+    ".rar",
+  ];
+  const removeFile = () => {
+    setFile(null);
+    setFilePreview("");
+  };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    // Check if a file is selected
+    if (file) {
+      // Check if the file type is allowed
+      const fileExtension = `.${file.name.split(".").pop()}`;
+      if (!allowdedFiles.includes(fileExtension.toLowerCase())) {
+        alert("Invalid file type. Please select a valid file.");
+        return;
+      }
+
+      // Check if the file size is within the limit (10 MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert(
+          "File size exceeds the limit of 10 MB. Please select a smaller file."
+        );
+        return;
+      }
+      console.log("inside if");
+      setFilePreview(file.name);
+      // setValue(fname, file.name);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setFile(e?.target?.result);
+      };
+      reader.readAsDataURL(file);
+
+      // Set the selected file
+      // setFile(file);
+    }
+  };
   const fetchOperationMembersAccordingToMemberCompanyForAddAssessment = async (
     id,
     checkIfItIsCgfStaff
@@ -797,6 +856,71 @@ function EditAssessment() {
                           />
                         )}
                       />
+                    </div>
+                  </div>
+                  <div className="card-form-field">
+                    <div className="form-group">
+                      <label>Action Plan</label>
+                      <div className="upload-file-wrap">
+                        <Button
+                          variant="contained"
+                          component="label"
+                          className="upload-file-btn"
+                        >
+                          <div
+                            className={
+                              // currentSelectedFiles?.length > 0
+                              // ? "upload-file-blk selected-file-blk"
+                              // :
+                              "upload-file-blk"
+                            }
+                          >
+                            {/* <input hidden accept="image/*" multiple type="file" /> */}
+                            <input
+                              // ref={fileRef}
+                              type={"file"}
+                              hidden
+                              accept={
+                                ".jpg, .jpeg, .png, .doc, .txt, .pdf, .docx, .xlsx, .xls, .ppt, .pptx, .mp4, .mp3, .zip, .rar"
+                              }
+                              name="files[]"
+                              // value={filePreview}
+                              onChange={handleFileChange}
+                              // multiple
+                            />
+                            <span className="upload-icon">
+                              <CloudUploadOutlinedIcon />
+                            </span>
+                            <span className="file-upload-txt">
+                              Click here to choose files (max file size{" "}
+                              {`${process.env.REACT_APP_MAX_FILE_SIZE_MB} MB`})
+                            </span>
+                          </div>
+                        </Button>
+                        <p
+                          style={{
+                            color: "#f7a823",
+                            fontFamily:
+                              "ProximaNova-Semibold, serif, sans-serif",
+                            margin: "10px 0px",
+                          }}
+                        >
+                          Uploading large files may take some time
+                        </p>
+                        {filePreview}
+                        <span
+                          className="file-close-icon"
+                          style={{
+                            display:
+                              filePreview.length > 1 ? "inline-block" : "none",
+                            cursor: "pointer",
+                          }}
+                          onClick={removeFile}
+                        >
+                          {" "}
+                          <CloseIcon />
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <div className="form-btn flex-between add-members-btn">

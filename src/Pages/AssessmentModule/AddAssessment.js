@@ -427,6 +427,7 @@ const AddAssessment = () => {
       ...data,
       dueDate: new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString(),
       actionPlan: file,
+      actionPlanName: filePreview,
     };
 
     setIsAssessmentLoading(true);
@@ -761,15 +762,6 @@ const AddAssessment = () => {
                           {" "}
                           <CloseIcon />
                         </span>
-                        {/* {currentSelectedFiles?.length > 0 && (
-                <RenderCurrentFiles
-                  currentSelectedFiles={currentSelectedFiles}
-                  setCurrentSelectedFiles={setCurrentSelectedFiles}
-                  setIsFileRemoved={setIsFileRemoved}
-                />
-              )} */}
-
-                        {/* </p> */}
                       </div>
                     </div>
                   </div>

@@ -111,7 +111,7 @@ const AssessmentList = () => {
   const [orderBy, setOrderBy] = useState("");
   const [records, setRecords] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
-  let icons = [];
+  let icons = ["download"];
 
   const onSearchChangeHandler = (e) => {
     Logger.info("Assessment list - onSearchChangeHandler handler");
@@ -307,15 +307,17 @@ const AssessmentList = () => {
     let icon = Object.entries(assessmentAccessObj).filter(
       (key) => key[1] === true && icons.push(key[0])
     );
+    console.log("icons - assessment", icons);
+
     if (SUPER_ADMIN) {
-      icons = ["edit", "visibility"];
+      icons = ["edit", "visibility", "download"];
       return icons;
     } else if (icons.includes("fill")) {
       icons.push("send");
+      icons.push("download");
 
       return icons;
     }
-
     return icons;
   };
   const onKeyDownChangeHandler = (e) => {
@@ -323,6 +325,11 @@ const AssessmentList = () => {
       setMakeApiCall(true);
       setPage(1);
     }
+  };
+  // download action plan
+  const downloadActionPlan = () => {
+    try {
+    } catch (error) {}
   };
   return (
     <div>
