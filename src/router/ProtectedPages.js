@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "../Pages/Layout";
 import RequireAuth from "./RequireAuth";
+import CgfDashboard from "../Pages/Dashboard/CgfDashboard";
 
 const SubAdminList = React.lazy(() =>
   import("../Pages/subAdminManagement/SubAdminList")
@@ -80,7 +81,7 @@ const ProtectedPages = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/home" element={<Dashboard />} />
-
+        <Route path="/cgf-dashboard" element={<CgfDashboard />} />
         <Route
           path="/users/cgf-admin"
           element={
