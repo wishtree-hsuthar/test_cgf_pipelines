@@ -3,17 +3,17 @@ const params = new URLSearchParams(queryString);
 
 const paramDebug = params.get("debug");
 export const Logger = {
-  debug(str) {
+  debug(str,err) {
     if (paramDebug === "1") {
-      console.log(str);
+      console.log(str,err);
     } else {
       console.log = () => {};
     }
   },
 
-  info(str) {
+  info(str,err) {
     if (queryString === "?debug=1" || queryString === "?info=1") {
-      console.info(str);
+      console.info(str,err);
     } else {
       console.info = () => {};
     }

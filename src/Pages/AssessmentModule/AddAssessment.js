@@ -65,6 +65,8 @@ const AddAssessment = () => {
   //custom hook to set title of page
   useDocumentTitle("Add Assessment");
 
+  const [disableRegion, setDisableRegion] = useState(true)
+
   const userAuth = useSelector((state) => state?.user?.userObj);
   const { isMemberRepresentative, isOperationMember, memberId } = userAuth;
 
@@ -227,7 +229,7 @@ const AddAssessment = () => {
         );
       } catch (error) {
         Logger.info(
-          "Add assessments - Fetch questionnaires handler catch error"
+          "Add assessments - Fetch questionnaires handler catch error",error
         );
         catchError(error, setToasterDetails, toasterRef, navigate);
       }
@@ -409,9 +411,15 @@ const AddAssessment = () => {
 
   const handleChangeForAssessmentModule = (e) => {
     Logger.info("Add assessments - handleChangeForAssessmentModule hanler");
+    let selectedQuestionnnaire = e.target.value
     let filterQuestionnaireById = questionnaresObj.filter(
       (questionnare) => questionnare.name === e.target.value
     );
+    if (selectedQuestionnnaire==="Headquarters Hrdd Requirements (ALL OPERATIONS)") {
+      setDisableRegion(false)
+    } else {
+      setDisableRegion(true)   
+    }
     setValue("questionnaireId", filterQuestionnaireById[0]._id);
     setValue("assessmentType", e.target.value);
     trigger("assessmentType");
@@ -578,10 +586,11 @@ const AddAssessment = () => {
                         <span className="mandatory">*</span>
                       </label>
                       <Dropdown
+                        isDisabled={disableRegion}
                         control={control}
                         myOnChange={onRegionChangeHandlerAddMember}
                         name="region"
-                        rules={{ required: true }}
+                        rules={{ required: !disableRegion }}
                         placeholder="Select region"
                         myHelper={helperTextForAssessment}
                         options={arrOfRegionsAddMember}
@@ -592,13 +601,13 @@ const AddAssessment = () => {
                     <div className="form-group">
                       <label htmlFor="country">
                         Country
-                        <span className="mandatory">*</span>
+                        <span className="mandatory"> *</span>
                       </label>
                       <Dropdown
-                        isDisabled={!watch("region")}
+                        isDisabled={disableRegion}
                         control={control}
                         name="country"
-                        rules={{ required: true }}
+                        rules={{ required: !disableRegion }}
                         myOnChange={onCountryChangeHandlerAddMember}
                         placeholder="Select country"
                         myHelper={helperTextForAssessment}

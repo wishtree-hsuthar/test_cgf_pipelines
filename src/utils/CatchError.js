@@ -6,7 +6,10 @@ export const catchError = async (
   route,
   state = 0
 ) => {
-  if (error.response.status == 401) {
+  if (error?.code==="ERR_CANCELED") {
+    return null
+  }
+  if (error?.response?.status == 401) {
     setToasterDetails(
       {
         titleMessage: `Oops!`,
