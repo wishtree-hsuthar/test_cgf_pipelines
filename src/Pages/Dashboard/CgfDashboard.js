@@ -1,12 +1,7 @@
 import React, { useState } from "react";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import ListItemText from "@mui/material/ListItemText";
-import Select from "@mui/material/Select";
-import Checkbox from "@mui/material/Checkbox";
+
 import { saveAs } from "file-saver";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,6 +14,11 @@ import {
 import { Bar } from "react-chartjs-2";
 import DoughnutChart from "./DoughnutChart";
 import { MockData } from "./MockDataForGraph";
+import DashboardFilters from "./DashboardFilters";
+import DashboardAccordian from "./DashboardAccordian";
+import CompanySAQStatus from "./CompanySAQStatus";
+import CountrySAQStatus from "./CountrySAQStatus";
+import { barGraphOptions } from "./DashbaordUtil";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -28,67 +28,94 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      labels: {
-        // This more specific font property overrides the global property
-        font: {
-          size: 10,
-        },
-      },
-    },
 
-    title: {
-      display: true,
-      text: "Brazil",
-    },
-  },
-  scales: {
-    x: {
-      grid: {
-        display: false,
-      },
-      alignToPixels: "start",
-      align: "start",
-    },
-  },
-};
+const options1 = barGraphOptions('')
+const options2 = barGraphOptions('')
+const options3 = barGraphOptions('')
 
 const labels = [
   [
-    "Known directly hired",
-    "workers in all sites",
-    "for prioritised operation",
-    " in the selected",
-    "country who work regularly",
-    "on the sites. (Launched)",
+    "Known directly hired workers in all sites for prioritised operation in the selected country who work regularly on the sites. (Launched)",
   ],
   [
-    "Known third party",
-    "workers working in",
-    "prioritised operation on",
-    "a regular basis. (Established)",
+    "Known third party workers working in prioritised operation on a regular basis. (Established)",
   ],
   [
-    "Known domestic migrant",
-    "and foreign migrant",
-    "workers (Number and Locations) (Leadership)",
+    "Known domestic migrant and foreign migrant workers (Number and Locations) (Leadership)",
   ],
 ];
 
-export const data = {
-  labels,
-  datasets: [...MockData],
-};
+
 
 function CgfDashboard() {
   const [personName, setPersonName] = React.useState([]);
+  const [memberCompanies, setMemberCompanies] = useState([])
+  const [expanded, setExpanded] = useState(false)
   const [dataForgraph, setDataForgraph] = React.useState({
-    ...data,
+    // ...data,
   });
+  const [accordianTitles, setAccordianTitles] = useState({
+    title1: '',
+    title2: "",
+    title3: ""
+  })
+
+  const [dataForBarGraphs, setDataForBarGraphs] = useState({
+    directlyHired: {
+      barGraph: {
+        labels: labels[0],
+        datasets: [{
+          label: '',
+          data: []
+        }]
+      },
+      doughnutGraph: {
+        labels: [''],
+        datasets: [{
+          label: '',
+          data: []
+        }]
+      }
+    },
+    thirdParty: {
+      barGraph: {
+        labels: labels[1],
+        datasets: [{
+          label: '',
+          data: []
+        }]
+      },
+      doughnutGraph: {
+        labels: [''],
+        datasets: [{
+          label: '',
+          data: []
+        }]
+      }
+
+    },
+    domesticMigrants: {
+      barGraph: {
+        labels: labels[2],
+        datasets: [{
+          label: '',
+          data: []
+        }]
+
+      },
+      doughnutGraph: {
+        labels: [''],
+        datasets: [{
+          label: '',
+          data: []
+        }]
+      }
+    }
+  })
+
   const [doughnutGraphData, setDoughnutGraphData] = useState();
+
+
   const saveCanvas = () => {
     // Original chart canvas
     const chartCanvas = document.getElementById("chart");
@@ -188,45 +215,54 @@ function CgfDashboard() {
 
   return (
     <div className="page-wrapper">
-      {/* <Toaster
-        messageType={homeToasterDetails.messageType}
-        descriptionMessage={homeToasterDetails.descriptionMessage}
-        myRef={homeRef}
-        titleMessage={homeToasterDetails.titleMessage}
-      /> */}
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) =>
-            selected.map((data) => data.label).join(", ")
-          }
-          MenuProps={MenuProps}
-        >
-          {MockData.map((data) => (
-            <MenuItem key={data.label} value={data}>
-              <Checkbox checked={personName.indexOf(data) > -1} />
-              <ListItemText primary={data.label} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
       <section>
         <div className="container">
-          <button onClick={saveCanvas}>Download png</button>
-          <Bar
-            id="chart"
-            style={{ backgroundColor: "white" }}
-            options={options}
-            data={dataForgraph}
-          />
-          <DoughnutChart data={doughnutGraphData} />;
-          <div className="dashboard-sect"></div>
+          <DashboardAccordian title={'Filters'} defaultExpanded={true}>
+            <DashboardFilters setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
+          </DashboardAccordian>
+          {dataForBarGraphs && (
+            <DashboardAccordian title={'Bar Graphs'} expanded={expanded}>
+              <DashboardAccordian title={accordianTitles.title1} expanded={expanded}>
+                <button onClick={saveCanvas}>Download png</button>
+                <Bar
+                  id="chart"
+                  style={{ backgroundColor: "white" }}
+                  options={options1}
+                  data={dataForBarGraphs?.directlyHired?.barGraph}
+                />
+              </DashboardAccordian>
+              <DashboardAccordian title={accordianTitles.title2} expanded={expanded} >
+                <Bar
+                  id="chart"
+                  style={{ backgroundColor: "white" }}
+                  options={options2}
+                  data={dataForBarGraphs?.thirdParty?.barGraph}
+                />
+              </DashboardAccordian>
+
+              <DashboardAccordian title={accordianTitles.title3} expanded={expanded}>
+                <Bar
+                  id="chart"
+                  style={{ backgroundColor: "white" }}
+                  options={options3}
+                  data={dataForBarGraphs?.domesticMigrants?.barGraph}
+                />
+              </DashboardAccordian>
+            </DashboardAccordian>)}
+          {
+            dataForBarGraphs?.directlyHired?.doughnutGraph.labels.length >= 1 && <DashboardAccordian expanded={expanded} title={'Doughnut Chart'}>
+              <DoughnutChart data={dataForBarGraphs?.directlyHired?.doughnutGraph} thirdPartyData={dataForBarGraphs?.thirdParty?.doughnutGraph} domesticMigrantsData={dataForBarGraphs?.domesticMigrants?.doughnutGraph}/>;
+
+            </DashboardAccordian>
+          }
+
+          <DashboardAccordian title={'Company\'s SAQ Status'}>
+            <CompanySAQStatus memberCompanies={memberCompanies} />
+          </DashboardAccordian>
+          <DashboardAccordian title={'Country\'s SAQ Status'}>
+            <CountrySAQStatus />
+          </DashboardAccordian>
+
         </div>
       </section>
     </div>

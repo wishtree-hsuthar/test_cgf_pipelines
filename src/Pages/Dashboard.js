@@ -9,7 +9,6 @@ import Toaster from "../components/Toaster";
 import { Logger } from "../Logger/Logger";
 import { setUser, setPrivileges } from "../redux/UserSlice";
 import HomePageTrainingSilder from "./HomePageTrainingSilder";
-
 const Dashboard = (props) => {
   //custom hook to set title of page
   const dispatch = useDispatch();

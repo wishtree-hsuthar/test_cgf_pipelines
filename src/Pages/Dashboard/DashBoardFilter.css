@@ -1,0 +1,23 @@
+.filter-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    background: white;
+    border-radius: 1%;
+    padding: 1%;
+    margin: 1%;
+}
+.filter-container-full {
+    width: 100%;
+    padding: 1%;
+}
+.filter-container-item {
+    width: 50%;
+    padding: 1%;
+
+}
+.dashboard-container {
+    max-width: 1170px;
+    margin: 0 auto;
+    padding: 20px 15px;
+}

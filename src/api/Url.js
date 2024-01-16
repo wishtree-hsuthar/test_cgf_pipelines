@@ -95,3 +95,8 @@ export const DOWNlOAD_FILE = `${REACT_APP_API_ENDPOINT}assessments/`;
 
 // Resend invite
 export const RESEND_INVITE = `${REACT_APP_API_ENDPOINT}auth/invite/resend/`;
+
+// Dashboard
+export const DASHBOARD  =`${REACT_APP_API_ENDPOINT}dashboard`;
+export const COMPANY_SAQ_STATUS = `${REACT_APP_API_ENDPOINT}dashboard/saq/company?memberId=`
+export const COUNTRY_SAQ_STATUS = `${REACT_APP_API_ENDPOINT}dashboard/saq/country?country=`
