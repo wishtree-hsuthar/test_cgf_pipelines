@@ -65,7 +65,6 @@ const AddAssessment = () => {
   //custom hook to set title of page
   useDocumentTitle("Add Assessment");
 
-  const [disableRegion, setDisableRegion] = useState(true)
 
   const userAuth = useSelector((state) => state?.user?.userObj);
   const { isMemberRepresentative, isOperationMember, memberId } = userAuth;
@@ -415,11 +414,7 @@ const AddAssessment = () => {
     let filterQuestionnaireById = questionnaresObj.filter(
       (questionnare) => questionnare.name === e.target.value
     );
-    if (selectedQuestionnnaire==="Headquarters Hrdd Requirements (ALL OPERATIONS)") {
-      setDisableRegion(false)
-    } else {
-      setDisableRegion(true)   
-    }
+   
     setValue("questionnaireId", filterQuestionnaireById[0]._id);
     setValue("assessmentType", e.target.value);
     trigger("assessmentType");
@@ -586,11 +581,10 @@ const AddAssessment = () => {
                         <span className="mandatory">*</span>
                       </label>
                       <Dropdown
-                        isDisabled={disableRegion}
                         control={control}
                         myOnChange={onRegionChangeHandlerAddMember}
                         name="region"
-                        rules={{ required: !disableRegion }}
+                        rules={{ required: true}}
                         placeholder="Select region"
                         myHelper={helperTextForAssessment}
                         options={arrOfRegionsAddMember}
@@ -604,10 +598,9 @@ const AddAssessment = () => {
                         <span className="mandatory"> *</span>
                       </label>
                       <Dropdown
-                        isDisabled={disableRegion}
                         control={control}
                         name="country"
-                        rules={{ required: !disableRegion }}
+                        rules={{ required: true }}
                         myOnChange={onCountryChangeHandlerAddMember}
                         placeholder="Select country"
                         myHelper={helperTextForAssessment}

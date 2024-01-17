@@ -92,7 +92,6 @@ function EditAssessment() {
   // params to extract id/uuid from url
   const params = useParams();
 
-  const [disableRegion, setDisableRegion] = useState(true)
 
   const toasterRef = useRef();
   const [arrOfRegionsAddMember, setArrOfRegionsAddMember] = useState([]);
@@ -267,11 +266,7 @@ function EditAssessment() {
         setArrOfCountryRegionsAddMember([...arrOfCountryRegionsTemp]);
         setQuestionnaireId(responseEditMember.data.questionnaireId);
         fetchMember(responseEditMember.data.assignedMember?._id);
-        if (responseEditMember.data.assessmentType==="Headquarters Hrdd Requirements (ALL OPERATIONS)") {
-          setDisableRegion(false)
-        } else {
-          setDisableRegion(true)  
-        }
+      
       } catch (error) {
         Logger.info("Edit Assessment - fetchAssessment handler catch error");
         if (error?.code === "ERR_CANCELED") return;
@@ -752,10 +747,9 @@ function EditAssessment() {
                       </label>
                       <Dropdown
                         control={control}
-                        isDisabled={disableRegion}
                         myOnChange={onRegionChangeHandlerAddMember}
                         name="region"
-                        rules={{ required: !disableRegion }}
+                        rules={{ required: true }}
                         placeholder="Select region"
                         myHelper={helperTextForAssessment}
                         options={arrOfRegionsAddMember}
@@ -769,10 +763,9 @@ function EditAssessment() {
                         <span className="mandatory">*</span>
                       </label>
                       <Dropdown
-                        isDisabled={disableRegion}
                         control={control}
                         name="country"
-                        rules={{ required: !disableRegion }}
+                        rules={{ required: true }}
                         myOnChange={onCountryChangeHandlerAddMember}
                         placeholder="Select country"
                         myHelper={helperTextForAssessment}
