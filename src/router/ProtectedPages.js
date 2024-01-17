@@ -81,7 +81,7 @@ const ProtectedPages = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/home" element={<Dashboard />} />
-        <Route path="/cgf-dashboard" element={<CgfDashboard />} />
+        {/* <Route path="/cgf-dashboard" element={<CgfDashboard />} /> */}
         <Route
           path="/users/cgf-admin"
           element={
@@ -174,6 +174,15 @@ const ProtectedPages = () => {
             </RequireAuth>
           }
         />
+        {/* Dashboard */}
+        <Route
+          path="/cgf-dashboard"
+          element={
+            <RequireAuth page={"view"} moduleName={"Dashboard"}>
+              <CgfDashboard />
+            </RequireAuth>
+          }
+        ></Route>
 
         {/* Member Pages */}
         <Route

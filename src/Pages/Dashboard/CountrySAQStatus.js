@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { privateAxios } from '../../api/axios'
-import { COMPANY_SAQ_STATUS, COUNTRIES, COUNTRY_SAQ_STATUS, MEMBER_DROPDOWN } from '../../api/Url'
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { COUNTRIES, COUNTRY_SAQ_STATUS,} from '../../api/Url'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -23,6 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 // import { FormControl, MenuItem, Select } from '@mui/base';
 import { ListItemText, OutlinedInput } from '@mui/material';
+import SAQStatsTable from './SAQStatsTable';
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -120,34 +114,7 @@ function CountrySAQStatus({memberCompanies}) {
                width: '50%',
                padding: '1%'
         }}>
-               
-        <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Member Company</TableCell>
-            <TableCell align="right">Submitted</TableCell>
-            <TableCell align="right">Pending</TableCell>
-            <TableCell align="right">Total</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {records.map((row) => (
-            <TableRow
-              key={row?.memberCompany}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row?.memberCompany}
-              </TableCell>
-              <TableCell align="right">{row?.submitted}</TableCell>
-              <TableCell align="right">{row?.pending}</TableCell>
-              <TableCell align="right">{row?.total}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <SAQStatsTable type={'Member Company'} records={records}/>
     </div>
     <div style={{
                width: '50%',

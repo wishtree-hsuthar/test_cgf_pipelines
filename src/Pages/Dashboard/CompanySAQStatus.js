@@ -25,6 +25,7 @@ import Select from '@mui/material/Select';
 // import { FormControl, MenuItem, Select } from '@mui/base';
 import { ListItemText, OutlinedInput } from '@mui/material';
 import CompanySAQDoughnutChart from './CompanySAQDoughnutChart';
+import SAQStatsTable from './SAQStatsTable';
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -131,33 +132,9 @@ function CompanySAQStatus({memberCompanies}) {
         {dropdown}
         <div >
                
-        <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Country</TableCell>
-            <TableCell align="right">Submitted</TableCell>
-            <TableCell align="right">Pending</TableCell>
-            <TableCell align="right">Total</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {records.map((row) => (
-            <TableRow
-              key={row?.country}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row?.country}
-              </TableCell>
-              <TableCell align="right">{row?.submitted}</TableCell>
-              <TableCell align="right">{row?.pending}</TableCell>
-              <TableCell align="right">{row?.total}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+       
+    <SAQStatsTable type={'Country'} records={records}/>
+
     </div>
     <div style={{
                width: '50%',

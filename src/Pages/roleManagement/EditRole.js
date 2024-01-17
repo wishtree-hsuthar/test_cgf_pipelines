@@ -140,6 +140,7 @@ const EditRole = () => {
   const createPrevileges2 = (tempPrivileges) => {
     Logger.info(`Edit role - createPrevileges handler`);
     Object.keys(tempPrivileges).forEach((tempPriv) => {
+      console.log('tempPriv',tempPriv)
       temp[tempPriv] = {
         add: tempPrivileges[tempPriv]["add"],
         fill: tempPrivileges[tempPriv]["fill"],
@@ -161,6 +162,7 @@ const EditRole = () => {
         name: tempPrivileges[tempPriv]["moduleId"]["name"],
       };
     });
+    console.log('temp object',temp)
     setPrevileges({ ...temp });
   };
   const updateEditFields = (data) => {
@@ -182,7 +184,9 @@ const EditRole = () => {
         }
       );
       Logger.info(`Edit role - getRoleById handler`);
+      console.log('edit get role by id',response)
       updateEditFields(response.data);
+
       setIsLoading1(false);
     } catch (error) {
       Logger.info(
@@ -378,6 +382,8 @@ const EditRole = () => {
                                 </TableCell>
 
                                 <TableCell align="center" padding="checkbox">
+                                {previleges[editPrevileg]["name"] !==
+                                    "Dashboard" && (
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges[editPrevileg]["list"]}
@@ -427,9 +433,11 @@ const EditRole = () => {
                                         },
                                       }))
                                     }
-                                  />
+                                  />)}
                                 </TableCell>
                                 <TableCell align="center" padding="checkbox">
+                                {previleges[editPrevileg]["name"] !==
+                                    "Dashboard" && (
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges[editPrevileg]["add"]}
@@ -453,9 +461,11 @@ const EditRole = () => {
                                         },
                                       }))
                                     }
-                                  />
+                                  />)}
                                 </TableCell>
                                 <TableCell align="center" padding="checkbox">
+                                {previleges[editPrevileg]["name"] !==
+                                    "Dashboard" && (
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges[editPrevileg]["edit"]}
@@ -478,7 +488,7 @@ const EditRole = () => {
                                         },
                                       }))
                                     }
-                                  />
+                                  />)}
                                 </TableCell>
                                 <TableCell align="center" padding="checkbox">
                                   <Checkbox
@@ -523,6 +533,8 @@ const EditRole = () => {
                                   />
                                 </TableCell>
                                 <TableCell align="center" padding="checkbox">
+                                {previleges[editPrevileg]["name"] !==
+                                    "Dashboard" && (
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges[editPrevileg]["delete"]}
@@ -549,10 +561,12 @@ const EditRole = () => {
                                         },
                                       }))
                                     }
-                                  />
+                                  />)}
                                 </TableCell>
 
                                 <TableCell align="center" padding="checkbox">
+                                {previleges[editPrevileg]["name"] !==
+                                    "Dashboard" && (
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges[editPrevileg]["all"]}
@@ -575,7 +589,7 @@ const EditRole = () => {
                                         },
                                       }))
                                     }
-                                  />
+                                  />)}
                                 </TableCell>
                               </TableRow>
                             );
