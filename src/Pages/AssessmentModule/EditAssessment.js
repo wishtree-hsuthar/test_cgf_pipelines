@@ -84,6 +84,7 @@ function EditAssessment() {
       remarks: "",
       region: "",
       country: "",
+      actionPlan:''
     },
   });
 
@@ -166,6 +167,7 @@ function EditAssessment() {
         );
         return;
       }
+      setValue('actionPlan',file)
       console.log("inside if");
       setFilePreview(file.name);
       // setValue(fname, file.name);
@@ -256,7 +258,9 @@ function EditAssessment() {
             questionnaireId: responseEditMember.data.questionnaireId,
             region: responseEditMember.data.region,
             country: responseEditMember.data.country,
+            actionPlan:responseEditMember.data.actionPlan
           });
+          setFilePreview(responseEditMember?.data?.actionPlan)
         const countriesOnRegion = await getCountriesAddMember(
           responseEditMember?.data?.region
         );
@@ -475,10 +479,36 @@ function EditAssessment() {
         ).setHours(0, 0, 0, 0)
       ),
     };
+    let ddate= new Date(
+      new Date(
+          new Date(data?.dueDate).setDate(
+              new Date(new Date(data?.dueDate)).getDate() + 1
+          )
+      ).setHours(0, 0, 0, 0)
+  ).toISOString()
+    
+    let formData = new FormData()
+    formData.append('questionnaireId',questionnaireId)
+    formData.append('dueDate', new Date(
+      new Date(
+          new Date(data?.dueDate).setDate(
+              new Date(new Date(data?.dueDate)).getDate()
+          )
+      ).setHours(0, 0, 0, 0)
+  ).toISOString())
+    formData.append('actionPlan',data.actionPlan)
+    formData.append('title',data.title)
+    formData.append('region',data.region)
+    formData.append('country',data.country)
+    formData.append('remarks',data.remarks)
+    formData.append('assignedOperationMember',data.assignedOperationMember)
+    formData.append('assignedMember',data.assignedMember)     
+    formData.append('assessmentType',data.assessmentType) 
+
     try {
       const responseEditMember = await privateAxios.put(
         UPDATE_ASSESSMENT_BY_ID + params.id,
-        data
+        formData
       );
       if (responseEditMember.status === 200) {
         setDisableEditAssessmentButton(false);
@@ -913,7 +943,7 @@ function EditAssessment() {
                           className="file-close-icon"
                           style={{
                             display:
-                              filePreview.length > 1 ? "inline-block" : "none",
+                              filePreview?.length > 1 ? "inline-block" : "none",
                             cursor: "pointer",
                           }}
                           onClick={removeFile}

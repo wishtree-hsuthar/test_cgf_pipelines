@@ -56,6 +56,11 @@ const assessmentListTableHead = [
   },
   {
     ...listObj,
+    id:"submissionDate",
+    label:"Submitted Date"
+  },
+  {
+    ...listObj,
     id: "dueDate",
     label: "Due Date",
   },
@@ -89,6 +94,7 @@ const AssessmentList = () => {
     "country",
 
     "assessmentStatus",
+    "submissionDate",
     "dueDate",
     "isUserAuthorizedToFillAssessment",
   ];
@@ -242,6 +248,8 @@ const AssessmentList = () => {
       delete object["memberCompany"];
       delete object["questionnaireId"];
       delete object["isMemberRepresentative"];
+      delete object["actionPlan"];
+
 
       object["dueDate"] = new Date(
         new Date(object["dueDate"]).setDate(
@@ -252,6 +260,15 @@ const AssessmentList = () => {
         day: "2-digit",
         year: "numeric",
       });
+      object["submissionDate"] = object['submissionDate']?new Date(
+        new Date(object["submissionDate"]).setDate(
+          new Date(object["submissionDate"]).getDate() - 1
+        )
+      ).toLocaleDateString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric",
+      }):'N/A';
       keysOrder.forEach((k) => {
         const v = object[k];
         delete object[k];
