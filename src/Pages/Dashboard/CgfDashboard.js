@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { saveAs } from "file-saver";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 import {
   Chart as ChartJS,
@@ -18,14 +19,17 @@ import DashboardFilters from "./DashboardFilters";
 import DashboardAccordian from "./DashboardAccordian";
 import CompanySAQStatus from "./CompanySAQStatus";
 import CountrySAQStatus from "./CountrySAQStatus";
-import { barGraphOptions } from "./DashbaordUtil";
+import { barGraphOptions, labels } from "./DashbaordUtil";
+import  html2pdf  from "html2pdf.js";
+import "./DashBoardFilter.css"
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels
 );
 
 
@@ -33,24 +37,26 @@ const options1 = barGraphOptions('')
 const options2 = barGraphOptions('')
 const options3 = barGraphOptions('')
 
-const labels = [
-  [
-    "Known directly hired workers in all sites for prioritised operation in the selected country who work regularly on the sites. (Launched)",
-  ],
-  [
-    "Known third party workers working in prioritised operation on a regular basis. (Established)",
-  ],
-  [
-    "Known domestic migrant and foreign migrant workers (Number and Locations) (Leadership)",
-  ],
-];
 
 
 
 function CgfDashboard() {
   const [personName, setPersonName] = React.useState([]);
+  const [isAssessmentCountryType, setIsAssessmentCountryType] = useState(false)
   const [memberCompanies, setMemberCompanies] = useState([])
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState({
+    expandFilters:true,
+    expandBarGraph:false,
+    expandBarGraph1:false,
+    expandBarGraph2:false,
+    expandBarGraph3:false,
+    expandDoughnutgraph1:false,
+    expandDoughnutgraph2:false,
+    expandDoughnutgraph3:false,
+    expandDoughnutGraph:false,
+    expandCompanySAQGraph:false,
+    expandCountrySAQGraph:false
+  })
   const [dataForgraph, setDataForgraph] = React.useState({
     // ...data,
   });
@@ -138,6 +144,42 @@ function CgfDashboard() {
       saveAs(blob, "output.png");
     });
   };
+
+  const saveAsPdf = (containerId) => {
+    const container = document.getElementById(containerId);
+
+    if (!container) {
+      console.error(`Container with ID ${containerId} not found.`);
+      return;
+    }
+
+    // html2pdf(container, {
+    //   margin: [10,5],
+    //   filename: 'multiple_charts.pdf',
+    //   image: { type: 'jpeg', quality: 1.0 },
+    //   html2canvas: { scale: 2 ,width:'1179' },
+    //   jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' , autoScale: true},
+    // });
+
+
+    html2pdf(container, {
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      html2canvas: { scale: 2 ,width:'1200'},
+    }).outputPdf().then((pdf) => {
+      // Optional: Adjust image quality and scale
+      const options = {
+        image: { type: 'jpeg', quality: 1.0 }, // Increase quality if needed
+      };
+
+      pdf.output('blob').then((blob) => {
+        // Save the PDF blob
+        saveAs(blob, 'output.pdf');
+      });
+    });
+  };
+
+
+
   // random color generator
   function getRandomColor() {
     const getRandomValue = () => Math.floor(Math.random() * 256);
@@ -215,15 +257,18 @@ function CgfDashboard() {
 
   return (
     <div className="page-wrapper">
-      <section>
-        <div className="container">
-          <DashboardAccordian title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
+      <section style={{
+        margin:'5%'
+      }}>
+        <div className="container" id="chart-container">
+          <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
+            <DashboardFilters  setIsAssessmentCountryType={setIsAssessmentCountryType} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
           </DashboardAccordian>
-          {dataForBarGraphs && (
-            <DashboardAccordian title={'Bar Graphs'} expanded={expanded}>
-              <DashboardAccordian title={accordianTitles.title1} expanded={expanded}>
-                <button onClick={saveCanvas}>Download png</button>
+          {dataForBarGraphs?.directlyHired?.barGraph?.datasets.length>1 && (
+            <DashboardAccordian setExpanded={setExpanded} title={'Bar Graphs'} expanded={expanded?.expandBarGraph} name={'expandBarGraph'}>
+              <DashboardAccordian title={accordianTitles.title1} expanded={expanded.expandBarGraph1} name={'expandBarGraph1'} setExpanded={setExpanded}  >
+               
+                <button  onClick={()=>saveAsPdf('chart-container')}>Download png</button>
                 <Bar
                   id="chart"
                   style={{ backgroundColor: "white" }}
@@ -231,16 +276,22 @@ function CgfDashboard() {
                   data={dataForBarGraphs?.directlyHired?.barGraph}
                 />
               </DashboardAccordian>
-              <DashboardAccordian title={accordianTitles.title2} expanded={expanded} >
+             
+              <DashboardAccordian title={accordianTitles.title2} expanded={expanded.expandBarGraph2} name={'expandBarGraph2'} setExpanded={setExpanded} >
+              <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}         
+
+       
                 <Bar
-                  id="chart"
+                  // id="chart"
                   style={{ backgroundColor: "white" }}
                   options={options2}
                   data={dataForBarGraphs?.thirdParty?.barGraph}
                 />
+               
               </DashboardAccordian>
-
-              <DashboardAccordian title={accordianTitles.title3} expanded={expanded}>
+              <div class="html2pdf__page-break"></div>
+              <DashboardAccordian title={accordianTitles.title3} expanded={expanded.expandBarGraph3} name={'expandBarGraph3'} setExpanded={setExpanded} >
+                <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}             
                 <Bar
                   id="chart"
                   style={{ backgroundColor: "white" }}
@@ -248,21 +299,24 @@ function CgfDashboard() {
                   data={dataForBarGraphs?.domesticMigrants?.barGraph}
                 />
               </DashboardAccordian>
+           
+
             </DashboardAccordian>)}
+        
           {
-            dataForBarGraphs?.directlyHired?.doughnutGraph.labels.length >= 1 && <DashboardAccordian expanded={expanded} title={'Doughnut Chart'}>
-              <DoughnutChart data={dataForBarGraphs?.directlyHired?.doughnutGraph} thirdPartyData={dataForBarGraphs?.thirdParty?.doughnutGraph} domesticMigrantsData={dataForBarGraphs?.domesticMigrants?.doughnutGraph}/>;
+            dataForBarGraphs?.directlyHired?.doughnutGraph.labels.length > 1 && <DashboardAccordian  expanded={expanded?.expandDoughnutGraph} name={'expandDoughnutGraph'}  setExpanded={setExpanded} title={'Doughnut Chart'}>
+              <DoughnutChart expanded={expanded} setExpanded={setExpanded} graphTitle={accordianTitles}  data={dataForBarGraphs?.directlyHired?.doughnutGraph} thirdPartyData={dataForBarGraphs?.thirdParty?.doughnutGraph} domesticMigrantsData={dataForBarGraphs?.domesticMigrants?.doughnutGraph}/>;
 
             </DashboardAccordian>
           }
-
-          <DashboardAccordian title={'Company\'s SAQ Status'}>
+        { isAssessmentCountryType&&<> <DashboardAccordian expanded={expanded.expandCompanySAQGraph} name={'expandCompanySAQGraph'} setExpanded={setExpanded} title={'Company\'s SAQ Status'}>
             <CompanySAQStatus memberCompanies={memberCompanies} />
           </DashboardAccordian>
-          <DashboardAccordian title={'Country\'s SAQ Status'}>
+          <DashboardAccordian expanded={expanded.expandCountrySAQGraph} name={'expandCountrySAQGraph'} setExpanded={setExpanded} title={'Country\'s SAQ Status'}>
             <CountrySAQStatus />
           </DashboardAccordian>
-
+          </>
+}
         </div>
       </section>
     </div>
