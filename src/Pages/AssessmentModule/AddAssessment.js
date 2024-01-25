@@ -32,6 +32,7 @@ import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import Loader from "../../utils/Loader";
 import { catchError } from "../../utils/CatchError";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const helperTextForAssessment = {
   title: {
@@ -114,6 +115,7 @@ const AddAssessment = () => {
       questionnaireId: "",
       region: "",
       country: "",
+      actionPlan:''
     },
   });
   const [file, setFile] = useState(null);
@@ -140,6 +142,7 @@ const AddAssessment = () => {
     setFile(null);
     setFilePreview("");
   };
+  let actionFile=null
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
@@ -159,6 +162,7 @@ const AddAssessment = () => {
         );
         return;
       }
+      setValue('actionPlan',event.target.files[0])
       console.log("inside if");
       setFilePreview(file.name);
       // setValue(fname, file.name);
@@ -166,12 +170,51 @@ const AddAssessment = () => {
       reader.onload = (e) => {
         setFile(e?.target?.result);
       };
-      reader.readAsDataURL(file);
+      // reader.readAsDataURL(file);
 
       // Set the selected file
       // setFile(file);
     }
+  //   const localFile = event.target.files[0];
+  //   const formData = new FormData();
+
+  // console.log("localFile in selection local",localFile)
+
+  // // Check if a localFile is selected
+  // if (localFile) {
+  //   // Check if the localFile type is allowed
+  //   const fileExtension = `.${localFile.name.split(".").pop()}`;
+  //   if (!allowdedFiles.includes(fileExtension.toLowerCase())) {
+  //     alert("Invalid localFile type. Please select a valid localFile.");
+  //     return;
+  //   }
+
+  //   // Check if the localFile size is within the limit (10 MB)
+  //   if (localFile.size > 10 * 1024 * 1024) {
+  //     alert(
+  //       "File size exceeds the limit of 10 MB. Please select a smaller localFile."
+  //     );
+  //     return;
+  //   }
+
+  //   console.log("inside if");
+
+  //   // Create a FormData object
+
+  //   // Append the localFile to the FormData object
+  //   formData.append("actionPlan", localFile);
+  //    console.log(formData.get('actionPlan'))
+  //   // Set the localFile preview and formData
+  //   setFilePreview(localFile.name);
+  //   setFile(formData);
+  // console.log("localFile in selection method",formData)
+
+  // }
   };
+  console.log("file in selection",file)
+  console.log("action file in selection",actionFile)
+
+
   const [isCGFStaff, setIsCGFStaff] = useState(false);
   const [arrOfRegionsAddMember, setArrOfRegionsAddMember] = useState([]);
 
@@ -423,19 +466,31 @@ const AddAssessment = () => {
   const submitAssessments = async (data) => {
     Logger.info("Add assessments - submitAssessments");
     setDisableEditAssessmentButton(true);
+    console.log("file =",file)
     let someDate = new Date(data.dueDate).setDate(
       new Date(data.dueDate).getDate() + 1
     );
-    data = {
-      ...data,
-      dueDate: new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString(),
-      actionPlan: file,
-      actionPlanName: filePreview,
-    };
-
+    // data = {
+    //   ...data,
+    //   dueDate: new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString(),
+    //   actionPlan: file,
+    //   actionPlanName: filePreview,
+    // };
+    let formData= new FormData()
+    formData.append('actionPlan',data.actionPlan)
+    formData.append('actionPlanName',filePreview)
+    formData.append('dueDate',new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString())
+    formData.append('title',data?.title)
+    formData.append('assessmentType',data?.assessmentType)
+    formData.append('assignedMember',data?.assignedMember)
+    formData.append('assignedOperationMember',data?.assignedOperationMember)
+    formData.append('remarks',data?.remarks)
+    formData.append('questionnaireId',data?.questionnaireId)
+    formData.append('region',data?.region)
+    formData.append('country',data?.country)
     setIsAssessmentLoading(true);
     try {
-      const response = await privateAxios.post(ADD_ASSESSMENTS, data);
+      const response = await privateAxios.post(ADD_ASSESSMENTS,formData,{headers:{"Content-Type": "multipart/form-data"}});
       if (response.status === 201) {
         setIsAssessmentLoading(false);
 
