@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import TableComponent from "../../components/TableComponent";
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
-import { ASSESSMENTS } from "../../api/Url";
+import { ASSESSMENTS, DOWNLOAD_ACTION_PLAN } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -153,6 +153,34 @@ const AssessmentList = () => {
     return navigate(`/assessment-list/fill-assessment/${uuid}`);
   };
 
+  const onClickDownload =async (uuid)=>{
+    try {
+      const response = await privateAxios.get(DOWNLOAD_ACTION_PLAN+uuid+'/action-plan',{
+        responseType:"blob"
+      })
+      Logger.info(` download function -  from   assessment `);
+      console.log('response-download = ',response)
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement(`a`);
+      link.href = url;
+      link.setAttribute(`download`, `${response.headers['file-name']}`);
+      document.body.appendChild(link);
+      link.click();
+      if (response.status == 200) {
+        setToasterDetails(
+          {
+            titleMessage: `Success!`,
+            descriptionMessage: "Downloaded Successfully!",
+  
+            messageType: `success`,
+          },
+          () => myRef.current()
+        );
+      }
+    } catch (error) {
+      console.log("error from action plan download",error)
+    }
+  }
   const generateUrl = () => {
     let url = `${ASSESSMENTS}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
     if (search?.length >= 3) url += `&search=${search}`;
@@ -429,6 +457,7 @@ const AssessmentList = () => {
                     }
                     onClickFillAssessmentFunction={onClickFillAssessmentHandler}
                     viewAssessment={true}
+                    onClickActionPlanDownload={onClickDownload}
                   />
                 )}
               </div>

@@ -118,6 +118,7 @@ export default function TableComponent({
   onClickAssignAssesmentFunction,
   onClickFillAssessmentFunction,
   viewAssessment = false,
+  onClickActionPlanDownload
 }) {
   console.log("icons - ", icons);
   const handleRequestSort = (_event, property) => {
@@ -182,6 +183,10 @@ export default function TableComponent({
     onClickFillAssessmentFunction(uuid);
   };
   const isSelected = (id) => selected.indexOf(id) !== -1;
+
+  const onClickDownload = (uuid)=>{
+    onClickActionPlanDownload(uuid)
+  }
 
   // Avoid a layout jump when reaching the last page with empty records.
   // const emptyRows =
@@ -435,7 +440,7 @@ export default function TableComponent({
                                 <Tooltip title="Action plan">
                                   <CloudDownloadRoundedIcon
                                     onClick={() =>
-                                      onClickFillAssessmentHandler(row.uuid)
+                                      onClickDownload(row.uuid)
                                     }
                                   />
                                   {/* <img
