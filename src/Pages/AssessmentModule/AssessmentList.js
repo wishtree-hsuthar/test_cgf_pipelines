@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import TableComponent from "../../components/TableComponent";
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
-import { ASSESSMENTS } from "../../api/Url";
+import { ASSESSMENTS, DOWNLOAD_ACTION_PLAN } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -40,8 +40,24 @@ const assessmentListTableHead = [
   },
   {
     ...listObj,
+    id: "region",
+    label: "Region",
+  },
+  {
+    ...listObj,
+    id: "country",
+    label: "Country",
+  },
+
+  {
+    ...listObj,
     id: "assessmentStatus",
     label: "Status",
+  },
+  {
+    ...listObj,
+    id:"submissionDate",
+    label:"Submitted Date"
   },
   {
     ...listObj,
@@ -73,7 +89,12 @@ const AssessmentList = () => {
     "assessmentType",
     "assignedMember.name",
     "assignedOperationMember.name",
+
+    "region",
+    "country",
+
     "assessmentStatus",
+    "submissionDate",
     "dueDate",
     "isUserAuthorizedToFillAssessment",
   ];
@@ -96,7 +117,7 @@ const AssessmentList = () => {
   const [orderBy, setOrderBy] = useState("");
   const [records, setRecords] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
-  let icons = [];
+  let icons = ["download"];
 
   const onSearchChangeHandler = (e) => {
     Logger.info("Assessment list - onSearchChangeHandler handler");
@@ -132,6 +153,34 @@ const AssessmentList = () => {
     return navigate(`/assessment-list/fill-assessment/${uuid}`);
   };
 
+  const onClickDownload =async (uuid)=>{
+    try {
+      const response = await privateAxios.get(DOWNLOAD_ACTION_PLAN+uuid+'/action-plan',{
+        responseType:"blob"
+      })
+      Logger.info(` download function -  from   assessment `);
+      console.log('response-download = ',response)
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement(`a`);
+      link.href = url;
+      link.setAttribute(`download`, `${response.headers['file-name']}`);
+      document.body.appendChild(link);
+      link.click();
+      if (response.status == 200) {
+        setToasterDetails(
+          {
+            titleMessage: `Success!`,
+            descriptionMessage: "Downloaded Successfully!",
+  
+            messageType: `success`,
+          },
+          () => myRef.current()
+        );
+      }
+    } catch (error) {
+      console.log("error from action plan download",error)
+    }
+  }
   const generateUrl = () => {
     let url = `${ASSESSMENTS}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
     if (search?.length >= 3) url += `&search=${search}`;
@@ -227,6 +276,8 @@ const AssessmentList = () => {
       delete object["memberCompany"];
       delete object["questionnaireId"];
       delete object["isMemberRepresentative"];
+      delete object["actionPlan"];
+
 
       object["dueDate"] = new Date(
         new Date(object["dueDate"]).setDate(
@@ -237,6 +288,15 @@ const AssessmentList = () => {
         day: "2-digit",
         year: "numeric",
       });
+      object["submissionDate"] = object['submissionDate']?new Date(
+        new Date(object["submissionDate"]).setDate(
+          new Date(object["submissionDate"]).getDate() - 1
+        )
+      ).toLocaleDateString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric",
+      }):'N/A';
       keysOrder.forEach((k) => {
         const v = object[k];
         delete object[k];
@@ -292,15 +352,17 @@ const AssessmentList = () => {
     let icon = Object.entries(assessmentAccessObj).filter(
       (key) => key[1] === true && icons.push(key[0])
     );
+    console.log("icons - assessment", icons);
+
     if (SUPER_ADMIN) {
-      icons = ["edit", "visibility"];
+      icons = ["edit", "visibility", "download"];
       return icons;
     } else if (icons.includes("fill")) {
       icons.push("send");
+      icons.push("download");
 
       return icons;
     }
-
     return icons;
   };
   const onKeyDownChangeHandler = (e) => {
@@ -308,6 +370,11 @@ const AssessmentList = () => {
       setMakeApiCall(true);
       setPage(1);
     }
+  };
+  // download action plan
+  const downloadActionPlan = () => {
+    try {
+    } catch (error) {}
   };
   return (
     <div>
@@ -390,6 +457,7 @@ const AssessmentList = () => {
                     }
                     onClickFillAssessmentFunction={onClickFillAssessmentHandler}
                     viewAssessment={true}
+                    onClickActionPlanDownload={onClickDownload}
                   />
                 )}
               </div>

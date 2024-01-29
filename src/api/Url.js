@@ -100,3 +100,5 @@ export const RESEND_INVITE = `${REACT_APP_API_ENDPOINT}auth/invite/resend/`;
 export const DASHBOARD  =`${REACT_APP_API_ENDPOINT}dashboard`;
 export const COMPANY_SAQ_STATUS = `${REACT_APP_API_ENDPOINT}dashboard/saq/company?memberId=`
 export const COUNTRY_SAQ_STATUS = `${REACT_APP_API_ENDPOINT}dashboard/saq/country?country=`
+// download Assessment
+export const DOWNLOAD_ACTION_PLAN = `${REACT_APP_API_ENDPOINT}assessments/`

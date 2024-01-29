@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import Radio from "@mui/material/Radio";
+import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 import { Logger } from "../Logger/Logger";
 
 import { MenuItem, Pagination, Select, Stack, Tooltip } from "@mui/material";
@@ -117,7 +118,9 @@ export default function TableComponent({
   onClickAssignAssesmentFunction,
   onClickFillAssessmentFunction,
   viewAssessment = false,
+  onClickActionPlanDownload
 }) {
+  console.log("icons - ", icons);
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -180,6 +183,10 @@ export default function TableComponent({
     onClickFillAssessmentFunction(uuid);
   };
   const isSelected = (id) => selected.indexOf(id) !== -1;
+
+  const onClickDownload = (uuid)=>{
+    onClickActionPlanDownload(uuid)
+  }
 
   // Avoid a layout jump when reaching the last page with empty records.
   // const emptyRows =
@@ -428,6 +435,24 @@ export default function TableComponent({
                                   </Tooltip>
                                 </span>
                               )}
+                            {icons.includes("download") && (
+                              <span className="icon">
+                                <Tooltip title="Action plan">
+                                  <CloudDownloadRoundedIcon
+                                    onClick={() =>
+                                      onClickDownload(row.uuid)
+                                    }
+                                  />
+                                  {/* <img
+                                                                        src={
+                                                                            "/images/delete-icon.svg"
+                                                                        }
+                                                                        
+                                                                        }
+                                                                    /> */}
+                                </Tooltip>
+                              </span>
+                            )}
                           </TableCell>
                         )}
                       </TableRow>
