@@ -95,3 +95,6 @@ export const DOWNlOAD_FILE = `${REACT_APP_API_ENDPOINT}assessments/`;
 
 // Resend invite
 export const RESEND_INVITE = `${REACT_APP_API_ENDPOINT}auth/invite/resend/`;
+
+// download Assessment
+export const DOWNLOAD_ACTION_PLAN = `${REACT_APP_API_ENDPOINT}assessments/`
