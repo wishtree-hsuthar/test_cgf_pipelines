@@ -201,9 +201,9 @@ function DashboardFilters({ setIsAssessmentCountryType,expanded, setExpanded, se
 
 
 
-      let labelsFordoughnutGraph1 = response?.data?.data.map(data => `${data?.memberName}-${data?.directlyHiredPercent}`)
-      let labelsFordoughnutGraph2= response?.data?.data.map(data => `${data?.memberName}-${data?.thirdPartyPercent}`)
-      let labelsFordoughnutGraph3= response?.data?.data.map(data => `${data?.memberName}-${data?.domesticMigrantPercent}`)
+      let labelsFordoughnutGraph1 = response?.data?.data.map(data => `${data?.memberName}: ${data?.directlyHiredPercent}%`)
+      let labelsFordoughnutGraph2= response?.data?.data.map(data => `${data?.memberName}: ${data?.thirdPartyPercent}%`)
+      let labelsFordoughnutGraph3= response?.data?.data.map(data => `${data?.memberName}: ${data?.domesticMigrantPercent}%`)
       
       let directHiredPercentData = response?.data?.data.map(data => data?.directlyHiredPercent)
       let thirdPartyPercentData = response?.data?.data.map(data => data?.thirdPartyPercent)

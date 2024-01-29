@@ -48,12 +48,12 @@ function splitSentences(sentence, wordsPerChunk = 15) {
     }
   });
 
-    // Add the last chunk
-    if (currentChunk.trim().length > 0) {
-      chunks.push(currentChunk.trim());
-    }
-  
-    return chunks;
+  // Add the last chunk
+  if (currentChunk.trim().length > 0) {
+    chunks.push(currentChunk.trim());
+  }
+
+  return chunks;
 }
 
 // Example usage
@@ -66,12 +66,12 @@ console.log(result);
 
 export default function DoughnutChart(props) {
 
-  let title01=splitSentences(props.graphTitle.title1,9)
-  let title02=splitSentences(props.graphTitle.title2,9)
-  let title03=splitSentences(props.graphTitle.title3,9)
+  let title01 = splitSentences(props.graphTitle.title1, 9)
+  let title02 = splitSentences(props.graphTitle.title2, 9)
+  let title03 = splitSentences(props.graphTitle.title3, 9)
 
-  console.log('title01',title01)
-  console.log('props form doughnut chart page = ',props);
+  console.log('title01', title01)
+  console.log('props form doughnut chart page = ', props);
 
   const options1 = doughnutGraphOptions(title01)
   const options2 = doughnutGraphOptions(title02)
@@ -86,51 +86,49 @@ export default function DoughnutChart(props) {
       className="container"
     >
       {" "}
-     
+
       <DashboardAccordian title={title01} expanded={props?.expanded?.expandDoughnutgraph1} name={'expandDoughnutgraph1'} setExpanded={props.setExpanded} >
-             <div style={{
-              // width:"60%"
-              // padding:'10%'
-             }}>
-              <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}         
+        <div style={{
+          // width:"60%"
+          // padding:'10%'
+        }}>
+          <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
 
-              <Doughnut
-          data={props?.data}
-          options={options1}
-        />
-           </div>
-               
-              </DashboardAccordian>
-       
-      
- 
-              <DashboardAccordian title={title02} expanded={props?.expanded?.expandDoughnutgraph2} name={'expandDoughnutgraph2'} setExpanded={props.setExpanded} >
-             <div style={{
-              width:"60%"
-             }}>
-              <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}         
+          <Doughnut
+            data={props?.data}
+            options={options1}
+          />
+        </div>
 
-        <Doughnut
-          data={props.thirdPartyData}
-          width={500}
-          height={500}
-          options={options2}
-        />
-      </div>
+      </DashboardAccordian>
+
+
+
+      <DashboardAccordian title={title02} expanded={props?.expanded?.expandDoughnutgraph2} name={'expandDoughnutgraph2'} setExpanded={props.setExpanded} >
+        <div style={{
+
+        }}>
+          <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
+
+          <Doughnut
+            data={props.thirdPartyData}
+
+            options={options2}
+          />
+        </div>
       </DashboardAccordian>
       <DashboardAccordian title={title03} expanded={props?.expanded?.expandDoughnutgraph3} name={'expandDoughnutgraph3'} setExpanded={props.setExpanded} >
-             <div style={{
-              width:"60%"
-             }}>
-              <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}         
+        <div style={{
 
-        <Doughnut
-          data={props.domesticMigrantsData}
-          width={500}
-          height={500}
-          options={options3}
-        />
-      </div>
+        }}>
+          <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
+
+          <Doughnut
+            data={props.domesticMigrantsData}
+
+            options={options3}
+          />
+        </div>
       </DashboardAccordian>
     </div>
   );

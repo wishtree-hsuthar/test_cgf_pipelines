@@ -70,7 +70,9 @@ export const barGraphOptions =(CountryTitle)=>
           // This more specific font property overrides the global property
           font: {
             size: 10,
+            weight: "bold",
           },
+          color: "black",
         },
       },
   
@@ -80,6 +82,10 @@ export const barGraphOptions =(CountryTitle)=>
         font: {
           size: 12,
 
+        },
+        datalabels: {
+          color: "black",
+          formatter: (value) =>  "    "+ value + "%",
         },
         
       },
