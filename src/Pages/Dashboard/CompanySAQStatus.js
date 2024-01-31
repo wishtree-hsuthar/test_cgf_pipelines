@@ -122,12 +122,7 @@ function CompanySAQStatus({memberCompanies}) {
     </Select>
   </FormControl>
   return (
-    <div style={{
-      display:'flex',
-      flexDirection:"row",
-       flexWrap:"wrap",
-      padding: '1%'
-}}>
+    <div >
           
         {dropdown}
         <div >
@@ -136,16 +131,10 @@ function CompanySAQStatus({memberCompanies}) {
     <SAQStatsTable type={'Country'} records={records}/>
 
     </div>
-    <div style={{
-               width: '50%',
-               padding: '1%'
-        }}>
+    <div >
             <Bar options={options} data={data} />
             </div>
-            <div style={{
-               width: '50%',
-               padding: '1%'
-        }}>
+            <div >
             <CompanySAQDoughnutChart data={doughnutChartData} />
             </div>
             

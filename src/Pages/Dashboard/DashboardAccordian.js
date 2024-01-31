@@ -4,7 +4,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-function DashboardAccordian({title,children,defaultExpanded,expanded,setExpanded,name}) {
+function DashboardAccordian({title,children,defaultExpanded=true,expanded=true,setExpanded=()=>{},name=''}) {
   console.log('expanded in expanded',expanded)
   const changeExpanded=(e,expanded)=>{
     console.log('expanded onchange',expanded)

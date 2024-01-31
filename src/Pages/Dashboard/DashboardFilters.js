@@ -23,7 +23,7 @@ const MenuProps = {
     },
   },
 };
-function DashboardFilters({ setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
+function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
   const [personName, setPersonName] = React.useState([]);
   const [memberCompanyOptions, setMemberCompanyOptions] = useState([])
   const [countryListOption, setCountryListOption] = useState([])
@@ -176,7 +176,7 @@ function DashboardFilters({ setIsAssessmentCountryType,expanded, setExpanded, se
   const submitFilterData = async (data) => {
 
     // set member companies for company SAQ status dropdown
-    setMemberCompanies(memberCompanyOptions.filter(member => data?.memberCompanies?.includes(member.id)))
+    setMemberCompanies(memberCompanyOptions.filter(member => data?.memberCompanies?.includes(member?.id)))
 
 
 
@@ -593,9 +593,10 @@ function DashboardFilters({ setIsAssessmentCountryType,expanded, setExpanded, se
                 </div>
               </div>
               <div className="form-btn flex-between add-members-btn">
-              <button       type="reset"
+              <button type="reset"
                       className="secondary-button mr-10" onClick={handleReset}>Reset Filter</button>
-
+  <button type="reset"
+ className="secondary-button mr-10" onClick={()=>saveAsPdf('chart-container')}>Download</button>
               <button type='submit'  className="primary-button add-button">Search</button>
               </div>
             </div>

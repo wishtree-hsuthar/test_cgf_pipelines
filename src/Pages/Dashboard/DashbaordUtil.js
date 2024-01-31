@@ -54,7 +54,7 @@ export const barGraphOptions =(CountryTitle)=>
     },
   }};
 
-  export const doughnutGraphOptions =(title)=> {
+  export const doughnutGraphOptions =(title,position='left')=> {
     return {
     // responsive: true,
     plugins: {
@@ -63,7 +63,7 @@ export const barGraphOptions =(CountryTitle)=>
         
       },
       legend: {
-        position:"left",
+        position:position,
         labels: {
           usePointStyle: true,
          

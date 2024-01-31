@@ -78,20 +78,14 @@ export default function DoughnutChart(props) {
   const options3 = doughnutGraphOptions(title03)
   return (
     <div
-      // style={{
-      //   display: "flex",
-      //   flexDirection:"column",
-      //   alignItems:"center"
-      // }}
+     
       className="container"
     >
-      {" "}
+        {/* <div class="html2pdf__page-break"></div> */}
 
       <DashboardAccordian title={title01} expanded={props?.expanded?.expandDoughnutgraph1} name={'expandDoughnutgraph1'} setExpanded={props.setExpanded} >
-        <div style={{
-          // width:"60%"
-          // padding:'10%'
-        }}>
+        <div>
+
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
 
           <Doughnut
@@ -101,13 +95,10 @@ export default function DoughnutChart(props) {
         </div>
 
       </DashboardAccordian>
-
-
+      <div class="html2pdf__page-break"></div>
 
       <DashboardAccordian title={title02} expanded={props?.expanded?.expandDoughnutgraph2} name={'expandDoughnutgraph2'} setExpanded={props.setExpanded} >
-        <div style={{
-
-        }}>
+        <div>
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
 
           <Doughnut
@@ -117,19 +108,17 @@ export default function DoughnutChart(props) {
           />
         </div>
       </DashboardAccordian>
+      <div class="html2pdf__page-break"></div>
+
       <DashboardAccordian title={title03} expanded={props?.expanded?.expandDoughnutgraph3} name={'expandDoughnutgraph3'} setExpanded={props.setExpanded} >
-        <div style={{
-
-        }}>
+        <div>
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
-
           <Doughnut
             data={props.domesticMigrantsData}
-
             options={options3}
           />
         </div>
       </DashboardAccordian>
     </div>
-  );
+  )
 }
