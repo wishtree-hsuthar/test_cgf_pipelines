@@ -132,10 +132,10 @@ function CompanySAQStatus({memberCompanies}) {
 
     </div>
     <div >
-            <Bar options={options} data={data} />
+            {/* <Bar options={options} data={data} /> */}
             </div>
             <div >
-            <CompanySAQDoughnutChart data={doughnutChartData} />
+            {/* <CompanySAQDoughnutChart data={doughnutChartData} /> */}
             </div>
             
     </div>

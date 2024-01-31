@@ -30,7 +30,7 @@ function TotalWorkerDashboard() {
     
 
     }, [])
-    // let totalWorkerData={...defaultValue}
+    const [totalWorkers, setTotalWorkers] = useState('')
    
     const fetchTotalWorkersData=async()=>{
         try {
@@ -39,6 +39,7 @@ function TotalWorkerDashboard() {
             // let totalWorkersData={...defaultValue}
             TotalWorkerValue.datasets[0].data=[response?.data?.total?.directlyHiredPercent,response?.data?.total?.thirdPartyPercent,response?.data?.total?.domesticMigrantPercent]   
             setTotalWorkerData({...TotalWorkerValue})
+            setTotalWorkers(`Total workers - ${response?.data?.total?.total}`)
         } catch (error) {
             console.log('error from fetch total workers',error)
         }
@@ -56,7 +57,7 @@ function TotalWorkerDashboard() {
 
 <Doughnut
   data={totalWorkerData}
-  options={doughnutGraphOptions('Total Workers','top')}
+  options={doughnutGraphOptions(totalWorkers,'top')}
   width={200}
   height={200}
 />

@@ -114,7 +114,7 @@ function CountrySAQStatus({ memberCompanies }) {
         <SAQStatsTable type={'Member Company'} records={records} />
       </div>
       <div>
-        <Bar options={options} data={data} />
+         {/* <Bar options={options} data={data} /> */}
       </div>
 
     </div>
