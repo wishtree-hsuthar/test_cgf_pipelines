@@ -230,7 +230,7 @@ const AddRole = () => {
       const { data } = await axios.get(
         REACT_APP_API_ENDPOINT + "system-modules"
       );
-      createModules(data);
+      createModules([...data]);
     } catch (error) {
       if (error?.code === "ERR_CANCELED") return;
       catchError(error, setToasterDetails1, myRef, navigate1);
@@ -451,6 +451,8 @@ const AddRole = () => {
                                   )}
                                 </TableCell>
                                 <TableCell align="center" padding="checkbox">
+                                {previleges1[previleg]["name"] !==
+                                    "Dashboard" &&
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges1[previleg]["list"]}
@@ -489,9 +491,11 @@ const AddRole = () => {
                                         },
                                       }))
                                     }
-                                  />
+                                  />}
                                 </TableCell>
                                 <TableCell align="center" padding="checkbox">
+                                {previleges1[previleg]["name"] !==
+                                    "Dashboard" &&
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges1[previleg]["add"]}
@@ -515,9 +519,11 @@ const AddRole = () => {
                                         },
                                       }))
                                     }
-                                  />
+                                  />}
                                 </TableCell>
                                 <TableCell align="center" padding="checkbox">
+                                {previleges1[previleg]["name"] !==
+                                    "Dashboard" &&
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges1[previleg]["edit"]}
@@ -540,7 +546,7 @@ const AddRole = () => {
                                         },
                                       }))
                                     }
-                                  />
+                                  />}
                                 </TableCell>
                                 <TableCell align="center" padding="checkbox">
                                   <Checkbox
@@ -578,6 +584,8 @@ const AddRole = () => {
                                   />
                                 </TableCell>
                                 <TableCell align="center" padding="checkbox">
+                                {previleges1[previleg]["name"] !==
+                                    "Dashboard" &&
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges1[previleg]["delete"]}
@@ -602,7 +610,7 @@ const AddRole = () => {
                                         },
                                       }))
                                     }
-                                  />
+                                  />}
                                 </TableCell>
                                 {/* <TableCell align="center" padding="checkbox">
                                 <Checkbox
@@ -621,6 +629,8 @@ const AddRole = () => {
                                 />
                               </TableCell> */}
                                 <TableCell align="center" padding="checkbox">
+                                {previleges1[previleg]["name"] !==
+                                    "Dashboard" &&
                                   <Checkbox
                                     className="table-checkbox"
                                     checked={previleges1[previleg]["all"]}
@@ -643,7 +653,7 @@ const AddRole = () => {
                                         },
                                       }))
                                     }
-                                  />
+                                  />}
                                 </TableCell>
                               </TableRow>
                             );
