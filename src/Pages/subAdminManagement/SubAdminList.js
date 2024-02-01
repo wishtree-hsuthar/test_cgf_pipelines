@@ -20,7 +20,7 @@ function a11yProps(index) {
 
 const SubAdminList = () => {
   //custom hook to set title of page
-  useDocumentTitle("CGF Admins");
+  useDocumentTitle("Admins");
 
   const [value, setValue] = React.useState(0);
   const { state } = useLocation();
@@ -105,7 +105,7 @@ const SubAdminList = () => {
 
           <div className="form-header member-form-header flex-between">
             <div className="form-header-left-blk flex-start">
-              <h2 className="heading2">CGF Admins</h2>
+              <h2 className="heading2">Admins</h2>
             </div>
 
             <div className="form-header-right-txt">
@@ -135,7 +135,7 @@ const SubAdminList = () => {
                     onClick={() => navigate("/users/cgf-admin/add-cgf-admin")}
                     className="primary-button add-button"
                   >
-                    Add CGF Admin
+                    Add Admin
                   </button>
                 </div>
               )}
