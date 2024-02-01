@@ -42,7 +42,7 @@ const helperTextForCGFAdmin = {
 
 const AddSubAdmin = () => {
   //custom hook to set title of page
-  useDocumentTitle("Add CGF Admin");
+  useDocumentTitle("Add Admin");
   const [disableSubmit, setDisableSubmit] = useState(false);
 
   const navigate = useNavigate();
@@ -182,9 +182,9 @@ const AddSubAdmin = () => {
         <div className="container">
           <ul className="breadcrumb">
             <li>
-              <Link to="/users/cgf-admin/">CGF Admins</Link>
+              <Link to="/users/cgf-admin/">Admins</Link>
             </li>
-            <li>Add CGF Admin</li>
+            <li>Add Admin</li>
           </ul>
         </div>
       </div>
@@ -192,7 +192,7 @@ const AddSubAdmin = () => {
         <div className="container">
           <form onSubmit={handleSubmit(handleOnsubmitAddCGFAdmin)}>
             <div className="form-header flex-between">
-              <h2 className="heading2">Add CGF Admin</h2>
+              <h2 className="heading2">Add Admin</h2>
               <div className="form-header-right-txt">
                 <div
                   className="tertiary-btn-blk"
@@ -213,7 +213,7 @@ const AddSubAdmin = () => {
                   <div className="card-form-field">
                     <div className="form-group">
                       <label htmlFor="name">
-                        CGF Admin Name <span className="mandatory">*</span>
+                        Admin Name <span className="mandatory">*</span>
                       </label>
                       <Input
                         control={control}

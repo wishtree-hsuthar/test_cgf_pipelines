@@ -51,7 +51,7 @@ const tableHead = [
 
 const ReplaceSubAdmin = () => {
   //custom hook to set title of page
-  useDocumentTitle("Replace CGF Admin");
+  useDocumentTitle("Replace Admin");
   const replaceHeaderKeyOrder = ["_id", "name", "email", "role"];
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [replaceCGFAdminPage, setReplaceCGFAdminPage] = React.useState(1);
@@ -363,11 +363,11 @@ const ReplaceSubAdmin = () => {
         titleMessage={toasterDetails.titleMessage}
       />
       <DialogBox
-        title={<p> Replace & Delete CGF admin "{cgfAdmin?.name}" </p>}
+        title={<p> Replace & Delete admin "{cgfAdmin?.name}" </p>}
         info1={
           <p>
             On replacing, all the existing management will be shifted to the new
-            CGF admin.
+             admin.
           </p>
         }
         info2={
@@ -391,23 +391,23 @@ const ReplaceSubAdmin = () => {
                 to="/users/cgf-admin/"
                 state={params["*"].includes("pending") ? 1 : 0}
               >
-                CGF Admins{" "}
+                Admins{" "}
                 {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
               </Link>
             </li>
             <li>
               <Link to={`/users/cgf-admin/view-cgf-admin/${id}`}>
-                View CGF Admin
+                View Admin
               </Link>
             </li>
-            <li>Replace & Delete CGF Admin</li>
+            <li>Replace & Delete Admin</li>
           </ul>
         </div>
       </div>
       <section>
         <div className="container">
           <div className="form-header flex-between ">
-            <h2 className="heading2">Replace & Delete CGF Admin</h2>
+            <h2 className="heading2">Replace & Delete Admin</h2>
 
             <div className="member-filter-left">
               {/* <div className="tertiary-btn-blk"> */}

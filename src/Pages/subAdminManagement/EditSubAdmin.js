@@ -57,7 +57,7 @@ const helperTextForCGFAdmin = {
 
 const EditSubAdmin = () => {
   //custom hook to set title of page
-  useDocumentTitle("Edit CGF Admin");
+  useDocumentTitle("Edit Admin");
   // state to manage loaders
   const [isEditCgfAdminLoading, setIsEditCgfAdminLoading] = useState(false);
 
@@ -254,7 +254,7 @@ const EditSubAdmin = () => {
                 to="/users/cgf-admin/"
                 state={params["*"].includes("pending") ? 1 : 0}
               >
-                CGF Admins{" "}
+                Admins{" "}
                 {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
               </Link>
             </li>
@@ -266,17 +266,17 @@ const EditSubAdmin = () => {
                     : `/users/cgf-admin/view-cgf-admin/${params.id}`
                 }
               >
-                View CGF Admin
+                View Admin
               </Link>
             </li>
-            <li>Edit CGF Admin</li>
+            <li>Edit Admin</li>
           </ul>
         </div>
       </div>
       <section>
         <div className="container">
           <div className="form-header flex-between">
-            <h2 className="heading2">Edit CGF Admin</h2>
+            <h2 className="heading2">Edit Admin</h2>
           </div>
           {isEditCgfAdminLoading ? (
             <Loader />
@@ -287,7 +287,7 @@ const EditSubAdmin = () => {
                   <div className="card-form-field">
                     <div className="form-group">
                       <label htmlFor="subAdminName">
-                        CGF Admin Name <span className="mandatory">*</span>
+                        Admin Name <span className="mandatory">*</span>
                       </label>
 
                       <Input
