@@ -21,6 +21,7 @@ import {
   import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 // import { FormControl, MenuItem, Select } from '@mui/base';
 import { ListItemText, OutlinedInput } from '@mui/material';
@@ -107,8 +108,21 @@ function CompanySAQStatus({memberCompanies}) {
           },
         ]
       }
-    const dropdown=  <FormControl fullWidth>
+      const ITEM_HEIGHT = 42;
+      const MenuProps = {
+          PaperProps: {
+              style: {
+                  maxHeight: ITEM_HEIGHT * 4,
+              },
+          },
+      };
+    const dropdown=  <FormControl style={{width:"50%"}}>
     <Select
+      IconComponent={(props) => (
+        <KeyboardArrowDownRoundedIcon {...props} />
+    )}
+    MenuProps={MenuProps}
+    className='saq-status-dropdown'
       labelId="demo-simple-select-label"
       id="demo-simple-select"
       value={selectedMemberCompany}
@@ -125,7 +139,7 @@ function CompanySAQStatus({memberCompanies}) {
     <div >
           
         {dropdown}
-        <div >
+        <div className='saq-status-table-wrapper'>
                
        
     <SAQStatsTable type={'Country'} records={records}/>
