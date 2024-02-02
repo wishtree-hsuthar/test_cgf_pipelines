@@ -349,7 +349,7 @@ const Header = () => {
                                   cursor: "pointer",
                                 }}
                               >
-                                CGF Admins
+                                Admins
                               </a>
                             </li>
                           )}

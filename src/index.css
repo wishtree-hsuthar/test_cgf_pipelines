@@ -369,6 +369,9 @@ textarea:disabled {
 .select-field:hover .Mui-disabled fieldset {
   border-color: rgba(30, 30, 30, 0.15) !important;
 }
+.dashboard-select-component .MuiSelect-select{
+  max-width: calc(100% - 60px);
+}
 /* .select-field::before {
     font-size: 14px;
     content: "\f078";
@@ -654,7 +657,18 @@ ul.breadcrumb li a:hover {
   padding: 5px 15px !important;
   font-family: "ProximaNova-Regular", serif, sans-serif !important;
 }
+.MuiMenuItem-gutters  .MuiListItemText-root span ,.saq-status-dropdown .MuiListItemText-root span{
+  font-size: 14px !important;
+  font-family: "ProximaNova-Regular", serif, sans-serif !important;
+  padding-top: 4px !important;
+}
+.saq-status-table-wrapper{
+  margin-top: 20px;
+}
+.saq-status-table-wrapper th:first-child{
+  padding-left: 10px !important;
 
+}
 .MuiList-root.MuiMenu-list {
   padding: 15px 0 0 !important;
 }
@@ -2398,6 +2412,21 @@ input:-webkit-autofill:active {
 .assessment-list-table td .icon:first-child {
   padding-left: 0;
 }
+.assessment-list-table td:nth-child(8),.assessment-list-table td:nth-child(9){
+text-align: right;
+padding-right: 33px !important;
+
+}
+/* .assessment-list-table th:last-child, .assessment-list-table td:last-child{
+  position: sticky;
+  top: 0;
+  right: 0;
+  background: #fff;
+  z-index: 1;
+}
+.assessment-list-table td:last-child{
+  background: #fff;
+} */
 
 .que-table-create {
   padding: 0 20px 20px;

@@ -10,6 +10,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { privateAxios } from '../../api/axios';
 import { COUNTRIES, DASHBOARD, MEMBER, MEMBER_DROPDOWN, STATES } from '../../api/Url';
 import { data } from './CgfDashboard';
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 import './DashBoardFilter.css'
 import { labels } from './DashbaordUtil';
@@ -432,15 +433,17 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
                   control={control}
                   rules={{required:"Select the member company"}}
                   render={({field,fieldState:{error}})=>(
-                    <FormControl {...field}>
+                    <FormControl {...field} style={{width:"100%"}}>
                   <Select
-                  
+                  IconComponent={(props) => (
+                    <KeyboardArrowDownRoundedIcon {...props} />
+                )}
                   {...field}
                   multiple
                   displayEmpty
-                    fullWidth={true}
-                    // fullWidth
-                    style={{maxWidth:"300px"}}
+                  className='dashboard-select-component'
+                     fullWidth
+                   
                   value={personName}
                   onChange={handleChange}
                   input={<OutlinedInput {...field} />}
