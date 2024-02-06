@@ -18,6 +18,7 @@ import TableQuestions from "./Table/TableQuestions.js";
 import { v4 as uuidv4 } from "uuid";
 import Toaster from "../../components/Toaster";
 import { Logger } from "../../Logger/Logger";
+import OtherDocumentSection from "./OtherDocumentSection.js";
 const SectionContent = ({
   value,
   questionnaire,
@@ -252,7 +253,7 @@ const SectionContent = ({
               index
             ].questions.map((question) => question.questionTitle);
             questionnaire?.sections[index]?.questions?.map(
-              (question, questionIdx) => {
+              (question,questionIdx) => {
                 if (question?.questionTitle === "") {
           
 
@@ -293,7 +294,54 @@ const SectionContent = ({
             setErr({ ...tempError });
           }
         }
+       else if (questionnaire.sections[index].layout == "documents") {
+        
+        //document layout section
+        let tempError = {
+          documentTitle: "",
+          // option: "",
+        };
+        for (
+          let sectionIndex = 0;
+          sectionIndex < questionnaire?.sections.length;
+          sectionIndex++
+        ) {
+          const index = sectionIndex;
+        
+          let questionsOfListEachSection = questionnaire?.sections[
+            index
+          ]?.documents?.map((document) => document.documentTitle);
+          questionnaire?.sections[index]?.documents?.map(
+            (document, docIndex) => {
+              if (document.documentTitle === "") {
+        
+
+                tempError["documentTitle"] = "Enter document title";
+                countError++;
+                tabIndex.push(sectionIndex);
+
+                
+              }
+              let filteredSameDocumentTitles =
+                questionsOfListEachSection.filter(
+                  (ques) => ques === document?.documentTitle
+                );
+             
+              if (filteredSameDocumentTitles.length > 1) {
+                tempError["documentTitle"] = "Document title already in use.";
+                countError++;
+                tabIndex.push(sectionIndex);
+
+                
+              }
+
+             
+            }
+          );
+          setErr({ ...tempError });
+        }
       }
+    }
     }
 
     // if (questionnaire?.sections[index]?.layout === "table") {
@@ -447,6 +495,17 @@ const SectionContent = ({
         },
       ];
     }
+    // check if layout is documents then remove table/form content and add initail document object ie title,doc
+    if(value==='documents'){
+      tempQuestionnaire.sections[index].questions = [];
+      tempQuestionnaire.sections[index].documents=[
+        {
+          uuid:uuidv4(),
+          documentTitle:'',
+          originalName:''
+        }
+      ]
+    }
     
     setQuestionnaire(tempQuestionnaire);
   };
@@ -482,6 +541,7 @@ const SectionContent = ({
   const saveSection = async (questionnaireObj, isPublished ) => {
     try {
       Logger.info("Questionnaire - Save Content - saveSection handler")
+      console.log("save section called")
       const response = await privateAxios.post(
         ADD_QUESTIONNAIRE,
         questionnaireObj ? questionnaireObj : questionnaire
@@ -722,6 +782,9 @@ const SectionContent = ({
                           <MenuItem value="table" selected>
                             Table
                           </MenuItem>
+                          <MenuItem value="documents" >
+                            Other documents
+                          </MenuItem>
                         </Select>
                         <FormHelperText> </FormHelperText>
                       </FormControl>
@@ -804,7 +867,9 @@ const SectionContent = ({
           questionTitleList={questionTitleList}
           setQuestionTitleList={setQuestionTitleList}
         />
-      ) : (
+      ) : 
+      section?.layout ==='table'?
+      (
         <TableQuestions
           sectionIndex={index}
           questionnaire={questionnaire}
@@ -812,7 +877,15 @@ const SectionContent = ({
           tableErr={tableErr}
           setTableErr={setTableErr}
         />
-      )}
+      ):
+      <OtherDocumentSection
+      sectionIndex={index}
+      questionnaire={questionnaire}
+      setQuestionnaire={setQuestionnaire}
+      documents={questionnaire?.documents}
+      err={err}
+      />
+      }
       <div className="form-btn flex-between add-members-btn que-page-btn">
         <button
           type="reset"

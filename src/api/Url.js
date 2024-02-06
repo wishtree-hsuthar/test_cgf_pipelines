@@ -103,3 +103,6 @@ export const COUNTRY_SAQ_STATUS = `${REACT_APP_API_ENDPOINT}dashboard/saq/countr
 export const TOTAL_WORKERS=`${REACT_APP_API_ENDPOINT}dashboard/doughnut`
 // download Assessment
 export const DOWNLOAD_ACTION_PLAN = `${REACT_APP_API_ENDPOINT}assessments/`
+
+// other document
+export const UPLOAD_OTHER_DOC=`${REACT_APP_API_ENDPOINT}questionnaires/other-documents`
