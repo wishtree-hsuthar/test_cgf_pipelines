@@ -40,10 +40,7 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
     },
     memberCompanies: {
       required: "Select the member company",
-      maxLength:{
-        value:12,
-        message:"Max 12"
-      }
+      
      
     },
     startDate: {
@@ -58,6 +55,7 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
   const {
     handleSubmit,
     // formState: { errors },
+    getValues,
     control,
     reset,
     setValue,
@@ -65,10 +63,10 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
     watch
   } = useForm({
     defaultValues: {
-      type: "SAQ",
-      assessment: 'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)',
-      country: "India",
-      memberCompanies: [],
+      type: "",
+      assessment: '',
+      country: "",
+      memberCompanies: '',
       endDate: '',
       startDate: '',
 
@@ -88,10 +86,7 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
     setValue('assessment', event.target.value);
   };
 
-  const handleChangeMemberCompanies = (event) => {
-    let companies = event.target.value
-    setValue('memberCompanies', companies)
-  }
+
 
 
   // random color generator
@@ -111,7 +106,7 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
       type: "",
       assessment: '',
       country: "",
-      memberCompanies: [],
+      memberCompanies: '',
       endDate: '',
       startDate: '',
     })
@@ -177,11 +172,14 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
   const submitFilterData = async (data) => {
 
     // set member companies for company SAQ status dropdown
-    setMemberCompanies(memberCompanyOptions.filter(member => data?.memberCompanies?.includes(member?.id)))
+  //   let memberCompaniesForCompanySAQ=memberCompanyOptions.filter(member => data?.memberCompanies?.includes(member?.id))
+  //  console.log('member comapnies for company saq = ',memberCompaniesForCompanySAQ)
+  //   setMemberCompanies(...memberCompaniesForCompanySAQ)
 
-
-
-    console.log('member company = ', memberCompanyOptions.filter(member => data.memberCompanies.includes(member.id)))
+console.log('data = ',data)
+data.memberCompanies=personName.map(member=>member?.id)
+setMemberCompanies([...personName])
+    // console.log('member company = ', memberCompanyOptions.filter(member => data.memberCompanies.includes(member.id)))
     console.log('member company data = ', data.memberCompanies)
 
     data.endDate = new Date(new Date().setDate(new Date(data.endDate).getDate() + 1)).toISOString()
@@ -301,6 +299,8 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
         return dataForBarGraphs
       })
 
+
+
     } catch (error) {
       console.log("error from submit filter data", error)
     }
@@ -317,20 +317,40 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
 
       // Set the memberCompanies to all company ids
       let companyIds = memberCompanyOptions.map(data => data.id);
-      setValue('memberCompanies', companyIds);
+      // setValue('memberCompanies', companyIds);
+
+      // set member companies for company SAQ dropdown
+      // let companies = memberCompanyOptions.map(data=>data)
+      // setMemberCompanies([...companies])
     } else {
       // If individual companies are selected
       setPersonName(value.filter(item => item !== 'all')); // Remove 'all' if present
 
       // Set the memberCompanies to the selected company ids
-      let selectedCompanyIds = value.map(data => data.id);
-      setValue('memberCompanies', selectedCompanyIds);
+      let selectedCompanyIds = value.filter(item => item !== 'all').map(data => data.id);
+      console.log('selecgted companies id - ',selectedCompanyIds)
+      // setValue('memberCompanies', selectedCompanyIds);
+      trigger('memberCompanies')
+         // set selected member companies for company SAQ dropdown
+        //  let selectedCompanies = value.map(data=>data)
+        //  setMemberCompanies([...selectedCompanies])
     }
+    setValue('memberCompanies',['213123'],{
+      shouldValidate: false,
+      shouldDirty:false,
+      shouldTouch:false
+    })
 
     console.log('selected company = ', value);
 
 
   };
+
+  
+
+  
+  console.log( 'member companies values = ',getValues('memberCompanies') )
+
   const handleChangeCountry = (e) => {
     setValue('country', e.target.value)
 
@@ -339,7 +359,6 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
   const getMemberCompanies = async () => {
     try {
       const response = await privateAxios.get(MEMBER_DROPDOWN)
-      console.log(response)
       setMemberCompanyOptions(response.data.map(data => ({ id: data._id, label: data.companyName })))
     } catch (error) {
       console.log("error from getMemberCompanies from data filtres", error)
@@ -359,7 +378,6 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
     getMemberCompanies()
     getCountryListOptions()
   }, [])
-  console.log('option list = ', memberCompanyOptions)
 
   return (
     <div className="page-wrapper">
@@ -431,7 +449,7 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
                   name={'memberCompanies'}
 
                   control={control}
-                  rules={{required:"Select the member company"}}
+                  rules={{required:'Select the member company'}}
                   render={({field,fieldState:{error}})=>(
                     <FormControl {...field} style={{width:"100%"}}>
                   <Select

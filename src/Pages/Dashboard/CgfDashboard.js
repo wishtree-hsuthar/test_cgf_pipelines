@@ -285,7 +285,7 @@ function CgfDashboard() {
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
 
-          {dataForBarGraphs?.directlyHired?.barGraph?.datasets.length>1 && (
+          {dataForBarGraphs?.directlyHired?.barGraph?.datasets?.length>0 && (
             <>
               <div class="html2pdf__page-break"></div>
             <DashboardAccordian setExpanded={setExpanded} title={'Bar Graphs'} expanded={expanded?.expandBarGraph} name={'expandBarGraph'}>
