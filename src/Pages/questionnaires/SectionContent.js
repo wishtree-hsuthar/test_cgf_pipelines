@@ -204,7 +204,12 @@ const SectionContent = ({
     let sectionTitles = questionnaire?.sections.map(
       (section) => section.sectionTitle
     );
-  
+   let tempError = {
+            questionTitle: "",
+            option: "",
+            documentTitle:"",
+            originalName:""
+          };
     let tabIndex = [];
     setSameSectionsNames([...sectionTitles]);
 
@@ -238,10 +243,11 @@ const SectionContent = ({
         } else if (questionnaire.sections[index].layout == "form") {
         
           //Rajkumar's save section
-          let tempError = {
-            questionTitle: "",
-            option: "",
-          };
+          // let tempError = {
+          //   questionTitle: "",
+          //   option: "",
+          //   documentTitle:""
+          // };
           for (
             let sectionIndex = 0;
             sectionIndex < questionnaire?.sections.length;
@@ -275,6 +281,7 @@ const SectionContent = ({
 
                   
                 }
+                console.log('error in form question title missing')
 
                 if (
                   ["dropdown", "checkbox", "radioGroup"].includes(
@@ -291,16 +298,17 @@ const SectionContent = ({
                 }
               }
             );
-            setErr({ ...tempError });
           }
+          setErr({ ...tempError,...err });
+
         }
        else if (questionnaire.sections[index].layout == "documents") {
         
         //document layout section
-        let tempError = {
-          documentTitle: "",
-          // option: "",
-        };
+        // let tempError = {
+        //   documentTitle: "",
+        //   // option: "",
+        // };
         for (
           let sectionIndex = 0;
           sectionIndex < questionnaire?.sections.length;
@@ -322,6 +330,15 @@ const SectionContent = ({
 
                 
               }
+              if (document.originalName === "") {
+        
+
+                tempError["originalName"] = "upload document";
+                countError++;
+                tabIndex.push(sectionIndex);
+
+                
+              }
               let filteredSameDocumentTitles =
                 questionsOfListEachSection.filter(
                   (ques) => ques === document?.documentTitle
@@ -338,8 +355,9 @@ const SectionContent = ({
              
             }
           );
-          setErr({ ...tempError });
         }
+        setErr({ ...tempError ,...err});
+
       }
     }
     }

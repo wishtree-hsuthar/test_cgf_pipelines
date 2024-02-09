@@ -61,6 +61,14 @@ function OtherDocumentSection({
         });
         setQuestionnaire(tempQuestionnaire);
     };
+    const deleteDocumenthandler=(uuid)=>{
+      let tempQuestionnaire = { ...questionnaire };
+      let tempQuestions = tempQuestionnaire?.sections[
+          sectionIndex
+      ]?.documents.filter((document) => document.uuid !== uuid);
+      tempQuestionnaire.sections[sectionIndex].documents = [...tempQuestions];
+      setQuestionnaire(tempQuestionnaire);
+    }
     let docs = questionnaire?.sections?.filter(section=>section.layout==='documents')
     console.log('docs = ',docs[0]?.documents.map(doc=>doc))
     console.log('section index', sectionIndex)
@@ -142,6 +150,7 @@ function OtherDocumentSection({
             console.log("error from file ")
         }
     }
+    console.log('error from other doc',err)
   return (
     <>
     <DialogBox
@@ -277,7 +286,8 @@ function OtherDocumentSection({
 
             {/* // <input type="file" onChange={onAttachmetChangeHandler} multiple /> */}
             <FormHelperText>
-             
+             { !document?.originalName &&
+                                    err?.originalName?"Upload document":" "}
             </FormHelperText>
           </FormControl>
                     </div>
@@ -299,8 +309,31 @@ function OtherDocumentSection({
                                 </Tooltip>
                             </div>
                         )}
+                        { docs[0].documents?.length!== 1 && (
+                            <div className="que-card-icon delete-iconblk mr-40">
+                                <Tooltip title="Delete Question">
+                                    <img
+                                        onClick={() =>
+                                            deleteDocumenthandler(
+                                                document?.uuid,
+                                            )
+                                        }
+                                        src={
+                                            process.env.PUBLIC_URL +
+                                            "/images/delete-icon.svg"
+                                        }
+                                        alt=""
+                                    />
+                                </Tooltip>
+                            </div>
+                        )}
+                        <div className="required-toggle-btnblk">
+                          
                         </div>
                         </div>
+                        
+                        </div>
+                        
                 </div>
 
 
