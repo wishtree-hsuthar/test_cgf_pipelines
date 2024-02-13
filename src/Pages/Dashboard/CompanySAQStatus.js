@@ -128,7 +128,7 @@ function CompanySAQStatus({memberCompanies}) {
       value={selectedMemberCompany}
       onChange={(e)=>setSelectedMemberCompany(e?.target?.value)}
     >
-     {memberCompanies.map((data) => (
+     {memberCompanies?.map((data) => (
               <MenuItem key={data.label} value={data.id}>
                 <ListItemText primary={data.label} />
               </MenuItem>
