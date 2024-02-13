@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import PreviewQuestions from "./PreviewQuestions";
 import TableRender from "../Table/TableRender.js";
 import { Logger } from "../../../Logger/Logger";
+import PreviewOtherDocument from "./PreviewOtherDocument.js";
 function PreviewSection({
     questionnaire,
 
@@ -33,7 +34,15 @@ function PreviewSection({
                                 question={question}
                             />
                         ))
-                    ) : (
+                    ) : section?.layout==='documents'?(
+                      section.documents.map((document)=>(
+                        <PreviewOtherDocument
+                        key={document?.uuid}
+                        doc={document}
+                      />)))
+                    
+                    :
+                    (
                         <TableRender
                             questionnaire={questionnaire}
                             sectionIndex={sectionIndex}

@@ -254,25 +254,6 @@ const Header = () => {
                       </a>
                     </li>
                     {(SUPER_ADMIN ||
-                      moduleAccessForAssessment[0]?.assessment?.list) && (
-                      <li
-                        className={
-                          location.pathname.includes("/assessment-list")
-                            ? "list-item active"
-                            : "list-item"
-                        }
-                      >
-                        <a
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          onClick={() => navigate("/assessment-list")}
-                        >
-                          Assessments
-                        </a>
-                      </li>
-                    )}
-                    {(SUPER_ADMIN ||
                       moduleAccesForDashboard[0]?.dashboard?.view) && (
                       <li
                         className={
@@ -291,6 +272,26 @@ const Header = () => {
                         </a>
                       </li>
                     )}
+                    {(SUPER_ADMIN ||
+                      moduleAccessForAssessment[0]?.assessment?.list) && (
+                      <li
+                        className={
+                          location.pathname.includes("/assessment-list")
+                            ? "list-item active"
+                            : "list-item"
+                        }
+                      >
+                        <a
+                          style={{
+                            cursor: "pointer",
+                          }}
+                          onClick={() => navigate("/assessment-list")}
+                        >
+                          Assessments
+                        </a>
+                      </li>
+                    )}
+                   
 
 
                     {(SUPER_ADMIN ||

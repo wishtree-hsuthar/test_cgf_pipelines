@@ -5,7 +5,7 @@ import DialogBox from '../../components/DialogBox';
 // import { Button } from '@mui/base';
 import { privateAxios } from '../../api/axios';
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
-import { UPLOAD_OTHER_DOC } from '../../api/Url';
+import { DELETE_OTHER_DOCS, UPLOAD_OTHER_DOC } from '../../api/Url';
 
 function OtherDocumentSection({
     setQuestionnaire,questionnaire,sectionIndex,documents,err
@@ -61,7 +61,14 @@ function OtherDocumentSection({
         });
         setQuestionnaire(tempQuestionnaire);
     };
-    const deleteDocumenthandler=(uuid)=>{
+    const deleteDocumenthandler=async(uuid)=>{
+      console.log('questionnaire id = ',questionnaire?.uuid)
+      try {
+        const response = await privateAxios.delete(DELETE_OTHER_DOCS,{data:{questionnaireId:questionnaire.uuid,documentId:uuid}})
+        console.log("document deleted",response)
+      } catch (error) {
+        console.log("Error from delete uploaded other doc",error)
+      }
       let tempQuestionnaire = { ...questionnaire };
       let tempQuestions = tempQuestionnaire?.sections[
           sectionIndex

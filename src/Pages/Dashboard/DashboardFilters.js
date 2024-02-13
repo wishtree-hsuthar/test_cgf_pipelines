@@ -202,13 +202,73 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
 
 
 
-      let labelsFordoughnutGraph1 = response?.data?.data.map(data => `${data?.memberName}: ${data?.directlyHiredPercent}%`)
-      let labelsFordoughnutGraph2= response?.data?.data.map(data => `${data?.memberName}: ${data?.thirdPartyPercent}%`)
-      let labelsFordoughnutGraph3= response?.data?.data.map(data => `${data?.memberName}: ${data?.domesticMigrantPercent}%`)
+      let labelsFordoughnutGraph1 = response?.data?.data.sort((a,b)=>{
+        let memberA=a?.memberName?.toUpperCase()
+        let memberB=b?.memberName?.toUpperCase()
+        if (memberA<memberB) {
+          return -1
+        }
+        if (memberA>memberB) {
+          return 1
+        } 
+        return 0
+      }).map(data => `${data?.memberName}: ${data?.directlyHiredPercent}%`)
+      let labelsFordoughnutGraph2= response?.data?.data.sort((a,b)=>{
+        let memberA=a?.memberName?.toUpperCase()
+        let memberB=b?.memberName?.toUpperCase()
+        if (memberA<memberB) {
+          return -1
+        }
+        if (memberA>memberB) {
+          return 1
+        } 
+        return 0
+      }).map(data => `${data?.memberName}: ${data?.thirdPartyPercent}%`)
+      let labelsFordoughnutGraph3= response?.data?.data.sort((a,b)=>{
+        let memberA=a?.memberName?.toUpperCase()
+        let memberB=b?.memberName?.toUpperCase()
+        if (memberA<memberB) {
+          return -1
+        }
+        if (memberA>memberB) {
+          return 1
+        } 
+        return 0
+      }).map(data => `${data?.memberName}: ${data?.domesticMigrantPercent}%`)
       
-      let directHiredPercentData = response?.data?.data.map(data => data?.directlyHiredPercent)
-      let thirdPartyPercentData = response?.data?.data.map(data => data?.thirdPartyPercent)
-      let domesticMigrantsPercentData = response?.data?.data.map(data => data?.domesticMigrantPercent)
+      let directHiredPercentData = response?.data?.data.sort((a,b)=>{
+        let memberA=a?.memberName?.toUpperCase()
+        let memberB=b?.memberName?.toUpperCase()
+        if (memberA<memberB) {
+          return -1
+        }
+        if (memberA>memberB) {
+          return 1
+        } 
+        return 0
+      }).map(data => data?.directlyHiredPercent)
+      let thirdPartyPercentData = response?.data?.data.sort((a,b)=>{
+        let memberA=a?.memberName?.toUpperCase()
+        let memberB=b?.memberName?.toUpperCase()
+        if (memberA<memberB) {
+          return -1
+        }
+        if (memberA>memberB) {
+          return 1
+        } 
+        return 0
+      }).map(data => data?.thirdPartyPercent)
+      let domesticMigrantsPercentData = response?.data?.data.sort((a,b)=>{
+        let memberA=a?.memberName?.toUpperCase()
+        let memberB=b?.memberName?.toUpperCase()
+        if (memberA<memberB) {
+          return -1
+        }
+        if (memberA>memberB) {
+          return 1
+        } 
+        return 0
+      }).map(data => data?.domesticMigrantPercent)
       let bgColors = directHiredPercentData.map(() => getRandomColor())
 
       // set accordian titles
@@ -219,7 +279,17 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
         let dataForBarGraphs = { ...data }
 
         //dataset for thirdParty
-        dataForBarGraphs.thirdParty.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").map((data) => {
+        dataForBarGraphs.thirdParty.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").sort((a,b)=>{
+          let memberA=a?.memberName?.toUpperCase()
+          let memberB=b?.memberName?.toUpperCase()
+          if (memberA<memberB) {
+            return -1
+          }
+          if (memberA>memberB) {
+            return 1
+          } 
+          return 0
+        }).map((data) => {
           return {
             label: data.memberName,
             data: [data.thirdParty],
@@ -248,7 +318,17 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
 
 
         // dataset for directly hired
-        dataForBarGraphs.directlyHired.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").map((data) => {
+        dataForBarGraphs.directlyHired.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").sort((a,b)=>{
+          let memberA=a?.memberName?.toUpperCase()
+          let memberB=b?.memberName?.toUpperCase()
+          if (memberA<memberB) {
+            return -1
+          }
+          if (memberA>memberB) {
+            return 1
+          } 
+          return 0
+        }).map((data) => {
           return {
             label: data.memberName,
             data: [data.directlyHired],
@@ -272,7 +352,17 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
         ]
 
         // dataset for domestic migrants
-        dataForBarGraphs.domesticMigrants.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").map((data) => {
+        dataForBarGraphs.domesticMigrants.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").sort((a,b)=>{
+          let memberA=a?.memberName?.toUpperCase()
+          let memberB=b?.memberName?.toUpperCase()
+          if (memberA<memberB) {
+            return -1
+          }
+          if (memberA>memberB) {
+            return 1
+          } 
+          return 0
+        }).map((data) => {
           return {
             label: data.memberName,
             data: [data.domesticMigrant],
