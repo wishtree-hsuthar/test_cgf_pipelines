@@ -23,6 +23,8 @@ import { barGraphOptions, labels } from "./DashbaordUtil";
 import  html2pdf  from "html2pdf.js";
 import "./DashBoardFilter.css"
 import TotalWorkerDashboard from "./TotalWorkerDashboard";
+import IndicatorGraph from './IndicatorGraph'
+// import IndicatorData from './IndicatorGraph '
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -57,11 +59,16 @@ function CgfDashboard() {
     expandDoughnutGraph:false,
     expandCompanySAQGraph:false,
     expandCountrySAQGraph:false,
+    expandIndicator:false,
     expandTotalWorker:true
   })
   const [dataForgraph, setDataForgraph] = React.useState({
     // ...data,
   });
+
+  const [indicatorData, setIndicatorData] = useState({
+
+  })
   const [accordianTitles, setAccordianTitles] = useState({
     title1: '',
     title2: "",
@@ -276,7 +283,7 @@ function CgfDashboard() {
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={saveAsPdf} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
+            <DashboardFilters setIndicatorData={setIndicatorData}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={saveAsPdf} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
           <div id="chart-container">
@@ -284,8 +291,10 @@ function CgfDashboard() {
             <TotalWorkerDashboard />
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
-
-          {dataForBarGraphs?.directlyHired?.barGraph?.datasets?.length>0 && (
+          <DashboardAccordian title={'Indicators'} expanded={expanded.expandIndicator} name={'expandIndicator'} setExpanded={setExpanded}  >
+               <IndicatorGraph indicatorData={indicatorData}/>
+             </DashboardAccordian>
+          {dataForBarGraphs?.directlyHired?.barGraph?.datasets?.data?.length>0 && (
             <>
               <div class="html2pdf__page-break"></div>
             <DashboardAccordian setExpanded={setExpanded} title={'Bar Graphs'} expanded={expanded?.expandBarGraph} name={'expandBarGraph'}>
