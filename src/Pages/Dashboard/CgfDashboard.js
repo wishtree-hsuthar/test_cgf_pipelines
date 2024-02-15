@@ -42,6 +42,11 @@ const options3 = barGraphOptions('')
 
 
 function CgfDashboard() {
+  const [optionsForBarGraph, setOptionsForBarGraph] = useState({
+    barGraphOptions1:barGraphOptions(''),
+    barGraphOptions2:barGraphOptions(''),
+    barGraphOptions3:barGraphOptions(''),
+    })
   const [personName, setPersonName] = React.useState([]);
   const [isAssessmentCountryType, setIsAssessmentCountryType] = useState(false)
   const [memberCompanies, setMemberCompanies] = useState([])
@@ -276,7 +281,7 @@ function CgfDashboard() {
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={saveAsPdf} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
+            <DashboardFilters setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={saveAsPdf} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
           <div id="chart-container">
@@ -296,7 +301,7 @@ function CgfDashboard() {
                 <Bar
                   id="chart"
                   style={{ backgroundColor: "white" }}
-                  options={options1}
+                  options={optionsForBarGraph.barGraphOptions1}
                   data={dataForBarGraphs?.directlyHired?.barGraph}
                 />
               </DashboardAccordian>
@@ -310,7 +315,7 @@ function CgfDashboard() {
                 <Bar
                   // id="chart"
                   style={{ backgroundColor: "white" }}
-                  options={options2}
+                  options={optionsForBarGraph.barGraphOptions2}
                   data={dataForBarGraphs?.thirdParty?.barGraph}
                 />
                
@@ -322,7 +327,7 @@ function CgfDashboard() {
                 <Bar
                   id="chart"
                   style={{ backgroundColor: "white" }}
-                  options={options3}
+                  options={optionsForBarGraph.barGraphOptions3}
                   data={dataForBarGraphs?.domesticMigrants?.barGraph}
                 />
               </DashboardAccordian>

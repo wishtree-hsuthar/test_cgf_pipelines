@@ -13,7 +13,7 @@ import { data } from './CgfDashboard';
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 import './DashBoardFilter.css'
-import { labels } from './DashbaordUtil';
+import { barGraphOptions, labels } from './DashbaordUtil';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -24,7 +24,7 @@ const MenuProps = {
     },
   },
 };
-function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
+function DashboardFilters({ setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
   const [personName, setPersonName] = React.useState([]);
   const [memberCompanyOptions, setMemberCompanyOptions] = useState([])
   const [countryListOption, setCountryListOption] = useState([])
@@ -171,10 +171,7 @@ function DashboardFilters({ saveAsPdf,setIsAssessmentCountryType,expanded, setEx
   }
   const submitFilterData = async (data) => {
 
-    // set member companies for company SAQ status dropdown
-  //   let memberCompaniesForCompanySAQ=memberCompanyOptions.filter(member => data?.memberCompanies?.includes(member?.id))
-  //  console.log('member comapnies for company saq = ',memberCompaniesForCompanySAQ)
-  //   setMemberCompanies(...memberCompaniesForCompanySAQ)
+  
 
 console.log('data = ',data)
 data.memberCompanies=personName.map(member=>member?.id)
@@ -193,13 +190,40 @@ setMemberCompanies([...personName])
 
       console.log("Response from dashboard", response.data)
       // graph titles
-      options1.plugins.title.text = `Total - ${response?.data?.total?.directlyHired}`
+      // options1.plugins.title.text = `Total - ${response?.data?.total?.directlyHired}`
       options2.plugins.title.text = `Total - ${response?.data?.total?.thirdParty}`
       options3.plugins.title.text = `Total - ${response?.data?.total?.domesticMigrant}`
 
+      let maxDirectlyHired=0
+      let maxThirdParty=0
+      let maxDomesticMigrants=0
+      let companies = response?.data?.data.filter(data=>data?.memberName!=='other').map(data=>data)
+      companies.forEach(company => {
+        if (company.directlyHired > maxDirectlyHired) {
+            maxDirectlyHired = company.directlyHired;
+        }
+        if (company.thirdParty > maxThirdParty) {
+          maxThirdParty = company.thirdParty;
+      }
+      if (company.domesticMigrant>maxDomesticMigrants) {
+        maxDomesticMigrants=company.domesticMigrant
+      }
+    });
+    // Round up the maximum value to the nearest 1000
+    maxDirectlyHired = Math.ceil(maxDirectlyHired / 10000) * 10000+10000;
+    maxThirdParty = Math.ceil(maxThirdParty / 10000) * 10000+10000;
+    maxDomesticMigrants = Math.ceil(maxDomesticMigrants / 10000) * 10000+1000;
 
 
 
+    setBarGraphOptions1({
+      barGraphOptions1:barGraphOptions(`Total - ${response?.data?.total?.directlyHired}`,maxDirectlyHired),
+      barGraphOptions2:barGraphOptions(`Total - ${response?.data?.total?.thirdParty}`,maxThirdParty),
+      barGraphOptions3:barGraphOptions(`Total - ${response?.data?.total?.domesticMigrant}`,maxDomesticMigrants)
+
+    })
+    // options1.scales.y.suggestedMax=maxDirectlyHired
+    // setBarGraphOptions(barGraphOptions)
       let labelsFordoughnutGraph1 = response?.data?.data.map(data => `${data?.memberName}: ${data?.directlyHiredPercent}%`)
       let labelsFordoughnutGraph2= response?.data?.data.map(data => `${data?.memberName}: ${data?.thirdPartyPercent}%`)
       let labelsFordoughnutGraph3= response?.data?.data.map(data => `${data?.memberName}: ${data?.domesticMigrantPercent}%`)
@@ -311,35 +335,42 @@ setMemberCompanies([...personName])
     const {
       target: { value },
     } = event;
-    if (value.includes('all')) {
-      // If 'all' is selected, setPersonName to all companies
-      setPersonName(memberCompanyOptions);
-
-      // Set the memberCompanies to all company ids
-      let companyIds = memberCompanyOptions.map(data => data.id);
-      // setValue('memberCompanies', companyIds);
-
-      // set member companies for company SAQ dropdown
-      // let companies = memberCompanyOptions.map(data=>data)
-      // setMemberCompanies([...companies])
-    } else {
-      // If individual companies are selected
-      setPersonName(value.filter(item => item !== 'all')); // Remove 'all' if present
-
-      // Set the memberCompanies to the selected company ids
-      let selectedCompanyIds = value.filter(item => item !== 'all').map(data => data.id);
-      console.log('selecgted companies id - ',selectedCompanyIds)
-      // setValue('memberCompanies', selectedCompanyIds);
-      trigger('memberCompanies')
-         // set selected member companies for company SAQ dropdown
-        //  let selectedCompanies = value.map(data=>data)
-        //  setMemberCompanies([...selectedCompanies])
+    // const value = event.target.value;
+    if (value[value.length - 1] === "all") {
+     
+      setPersonName(personName.length === memberCompanyOptions.length ? [] : memberCompanyOptions);
+      setValue('memberCompanies',personName.length === memberCompanyOptions.length ?'':'213123')
+     
+      return;
     }
-    setValue('memberCompanies',['213123'],{
+    setPersonName(value);
+
+
+
+    setValue('memberCompanies','213123',{
       shouldValidate: false,
       shouldDirty:false,
       shouldTouch:false
     })
+
+
+
+
+    // if (value.includes('all')) {
+    //   // If 'all' is selected, setPersonName to all companies
+    //   setPersonName(memberCompanyOptions);
+
+    //   // Set the memberCompanies to all company ids
+    //   let companyIds = memberCompanyOptions.map(data => data.id);
+    //   setValue('memberCompanies', companyIds);
+    // } else {
+    //   // If individual companies are selected
+    //   setPersonName(value.filter(item => item !== 'all')); // Remove 'all' if present
+
+    //   // Set the memberCompanies to the selected company ids
+    //   let selectedCompanyIds = value.map(data => data.id);
+    //   setValue('memberCompanies', selectedCompanyIds);
+    // }
 
     console.log('selected company = ', value);
 
@@ -449,7 +480,7 @@ setMemberCompanies([...personName])
                   name={'memberCompanies'}
 
                   control={control}
-                  rules={{required:'Select the member company'}}
+                  rules={{required:"Select the member company"}}
                   render={({field,fieldState:{error}})=>(
                     <FormControl {...field} style={{width:"100%"}}>
                   <Select
@@ -469,7 +500,7 @@ setMemberCompanies([...personName])
                   MenuProps={MenuProps}
                 >
                   <MenuItem key={'all'} value={'all'}>
-                    {/* <Checkbox checked={personName.length === memberCompanyOptions.length} /> */}
+                    <Checkbox checked={memberCompanyOptions.length>0&&personName.length === memberCompanyOptions.length} />
                     <ListItemText primary={'Select All'} />
                   </MenuItem>
               

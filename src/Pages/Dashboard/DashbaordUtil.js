@@ -11,7 +11,7 @@ export const labels = [
     "Known domestic migrant and foreign migrant workers (Number and Locations) (Leadership)",
   ],
 ];
-export const barGraphOptions =(CountryTitle)=>
+export const barGraphOptions =(CountryTitle='',max)=>
 
  {
     return {
@@ -49,7 +49,7 @@ export const barGraphOptions =(CountryTitle)=>
       },
       y:{
         min:0,
-        // max:
+        max:max
       },
     },
   }};
