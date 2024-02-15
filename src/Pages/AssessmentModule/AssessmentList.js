@@ -12,6 +12,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
+import  {catchError}  from "../../utils/CatchError";
 
 const listObj = {
   width: "30%",
@@ -167,6 +168,7 @@ const AssessmentList = () => {
       document.body.appendChild(link);
       link.click();
       if (response.status == 200) {
+        console.log('response from download',response)
         setToasterDetails(
           {
             titleMessage: `Success!`,
@@ -178,7 +180,24 @@ const AssessmentList = () => {
         );
       }
     } catch (error) {
-      console.log("error from action plan download",error)
+      if (error.response) {
+        // Error response received from the server
+        let reader = new FileReader();
+        reader.onload = function () {
+          let errorData = JSON.parse(reader.result);
+          // Handle errorData
+          catchError(errorData,setToasterDetails,myRef,navigate)
+
+        };
+        console.log(reader.readAsText(error.response.data));
+
+      } else if (error.request) {
+        // No response received from the server
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
     }
   }
   const generateUrl = () => {

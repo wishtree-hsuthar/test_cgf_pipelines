@@ -147,6 +147,8 @@ function EditAssessment() {
   const removeFile = () => {
     setFile(null);
     setFilePreview("");
+    setValue('actionPlan','')
+    
   };
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -479,13 +481,7 @@ function EditAssessment() {
         ).setHours(0, 0, 0, 0)
       ),
     };
-    let ddate= new Date(
-      new Date(
-          new Date(data?.dueDate).setDate(
-              new Date(new Date(data?.dueDate)).getDate() + 1
-          )
-      ).setHours(0, 0, 0, 0)
-  ).toISOString()
+   
     
     let formData = new FormData()
     formData.append('questionnaireId',questionnaireId)
@@ -527,7 +523,7 @@ function EditAssessment() {
           assessmentType: "",
           assignedMember: "",
           // name: .assignedMember?.companyName,
-
+          actionPlan:'',
           assignedOperationMember: "",
           dueDate: "",
           remarks: "",
