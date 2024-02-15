@@ -438,8 +438,7 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
                   />
                 </div>
               </div>
-              {
-                (watch('assessment')==="Country Level Operations"||watch('assessment')==="COUNTRY- OPERATION HRDD REQUIREMENTS")&&
+              
               
               <div className="card-form-field">
                 <div className="form-group" >
@@ -458,7 +457,7 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
                   />
                 </div>
               </div>
-              }
+              
               {
                 watch('type')==='Indicators'&&
               <div className="card-form-field">
