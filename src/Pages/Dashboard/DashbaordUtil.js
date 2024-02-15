@@ -11,7 +11,7 @@ export const labels = [
     "Known domestic migrant and foreign migrant workers (Number and Locations) (Leadership)",
   ],
 ];
-export const barGraphOptions =(CountryTitle)=>
+export const barGraphOptions =(CountryTitle='',max)=>
 
  {
     return {
@@ -49,7 +49,7 @@ export const barGraphOptions =(CountryTitle)=>
       },
       y:{
         min:0,
-        // max:
+        suggestedMax:max
       },
     },
   }};
@@ -98,7 +98,7 @@ export const barGraphOptions =(CountryTitle)=>
       {
         // label: "# of Votes",
         data: [35,25,40],
-        backgroundColor: ['#ffc20000','blue','green'],
+        backgroundColor: ['red','blue','green'],
         borderColor: [
           ''
         ],
@@ -106,21 +106,3 @@ export const barGraphOptions =(CountryTitle)=>
       },
     ]
   }
-  export const indicatordefaultValue={
-    labels: ['Leadership',"Not Initiated","Established","Launched"],
-
-    datasets: [
-      {
-        // label: "# of Votes",
-        data: [35,25,40],
-        backgroundColor: ['orange','red','blue','green'],
-        borderColor: [
-          ''
-        ],
-        borderWidth: 1,
-      },
-    ]
-  }
-  export const indicators=['Policy Commitment','Governing Structure','Roles & Responsibility','Impact/Risk Assessment','Prevent and Mitigate Risks and Impacts','Remediation Processes','Public Reporting']
-  export const assessmentOptions=['COUNTRY- OPERATION HRDD REQUIREMENTS', 'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)']
-  export const assessmentIndicatorOptions=['HQ Level Operations','Country Level Operations']

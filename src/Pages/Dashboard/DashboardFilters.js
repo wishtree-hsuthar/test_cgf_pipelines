@@ -1,5 +1,6 @@
 import { Checkbox, FormControl, FormHelperText, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import { MockData } from './MockDataForGraph'
 import Dropdown from '../../components/Dropdown';
 import { Controller, useForm } from 'react-hook-form';
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
@@ -8,10 +9,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from '@mui/x-date-pickers';
 import { privateAxios } from '../../api/axios';
 import { COUNTRIES, DASHBOARD, MEMBER, MEMBER_DROPDOWN, STATES } from '../../api/Url';
+import { data } from './CgfDashboard';
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 import './DashBoardFilter.css'
-import { assessmentIndicatorOptions, assessmentOptions, indicatordefaultValue, indicators, labels } from './DashbaordUtil';
+import { barGraphOptions, labels } from './DashbaordUtil';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -22,7 +24,7 @@ const MenuProps = {
     },
   },
 };
-function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryType, expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
+function DashboardFilters({ setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
   const [personName, setPersonName] = React.useState([]);
   const [memberCompanyOptions, setMemberCompanyOptions] = useState([])
   const [countryListOption, setCountryListOption] = useState([])
@@ -31,22 +33,19 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
       required: "Select the type",
     },
     assessment: {
-      required: "Select the asssessment"
+      required:"Select the asssessment"
     },
-    country: {
-      required: "Select the country"
-    },
-    indicator: {
-      required: "Select the indicator"
+    country:{
+      required:"Select the country"
     },
     memberCompanies: {
       required: "Select the member company",
-
-
+      
+     
     },
     startDate: {
       required: "Select the start date",
-
+      
     },
     endDate: {
       required: "Select the end date",
@@ -70,7 +69,6 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
       memberCompanies: '',
       endDate: '',
       startDate: '',
-      indicator: ''
 
     },
   });
@@ -82,7 +80,6 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
   const handleChangeForType = (e) => {
     setType(prev => e.target.value)
     setValue('type', e.target.value)
-    setValue('assessment','')
   }
 
   const handleChangeAssesment = (event) => {
@@ -104,7 +101,7 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
     e.preventDefault();
   };
   // reset filter 
-  const handleReset = () => {
+  const handleReset=()=>{
     reset({
       type: "",
       assessment: '',
@@ -116,7 +113,7 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
     setStartDate(null)
     setEndDate(null)
     setPersonName([]);
-    setExpanded(expanded => { return { ...expanded, expandBarGraph: false, expandDoughnutGraph: false, expandFilters: true, expandDoughnutgraph1: false } })
+    setExpanded(expanded => { return { ...expanded, expandBarGraph: false, expandDoughnutGraph: false,expandFilters:true ,expandDoughnutgraph1:false} })
     setIsAssessmentCountryType(false)
     setDataForBarGraphs({
       directlyHired: {
@@ -150,7 +147,7 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
             data: []
           }]
         }
-
+  
       },
       domesticMigrants: {
         barGraph: {
@@ -159,7 +156,7 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
             label: '',
             data: []
           }]
-
+  
         },
         doughnutGraph: {
           labels: [''],
@@ -174,48 +171,66 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
   }
   const submitFilterData = async (data) => {
 
-    // set member companies for company SAQ status dropdown
-    //   let memberCompaniesForCompanySAQ=memberCompanyOptions.filter(member => data?.memberCompanies?.includes(member?.id))
-    //  console.log('member comapnies for company saq = ',memberCompaniesForCompanySAQ)
-    //   setMemberCompanies(...memberCompaniesForCompanySAQ)
+  
 
-    console.log('data = ', data)
-    data.memberCompanies = personName.map(member => member?.id)
-    setMemberCompanies([...personName])
+console.log('data = ',data)
+data.memberCompanies=personName.map(member=>member?.id)
+setMemberCompanies([...personName])
     // console.log('member company = ', memberCompanyOptions.filter(member => data.memberCompanies.includes(member.id)))
     console.log('member company data = ', data.memberCompanies)
 
-    if (data.type !== 'Indicators') { data.endDate = new Date(new Date().setDate(new Date(data.endDate).getDate() + 1)).toISOString() } 
-    else {
-      data = {
-        indicator:data?.indicator,
-        assessment:data?.assessment,
-        type:data?.type
-      }
-    }
-    setIsAssessmentCountryType(data.assessment === "COUNTRY- OPERATION HRDD REQUIREMENTS")
-
+    data.endDate = new Date(new Date().setDate(new Date(data.endDate).getDate() + 1)).toISOString()
+    setIsAssessmentCountryType(data.assessment==="COUNTRY- OPERATION HRDD REQUIREMENTS")
     try {
       const response = await privateAxios.post(DASHBOARD, {
         ...data
       })
       console.log('expanded graph in dashboard filter= ', expanded.expandBarGraph)
-      setExpanded(expanded => { return { ...expanded, expandBarGraph: !expanded.expandBarGraph, expandBarGraph1: !expanded.expandBarGraph1, expandBarGraph2: !expanded.expandBarGraph2, expandBarGraph3: !expanded.expandBarGraph3, expandDoughnutGraph: !expanded.expandDoughnutGraph, expandFilters: !expanded.expandFilters, expandDoughnutgraph1: !expanded.expandDoughnutgraph1,expandIndicator:!expanded.expandIndicator } })
+      setExpanded(expanded => { return { ...expanded, expandBarGraph: !expanded.expandBarGraph,expandBarGraph1: !expanded.expandBarGraph1,expandBarGraph2: !expanded.expandBarGraph2,expandBarGraph3: !expanded.expandBarGraph3, expandDoughnutGraph: !expanded.expandDoughnutGraph,expandFilters:!expanded.expandFilters,expandDoughnutgraph1:!expanded.expandDoughnutgraph1 } })
 
       console.log("Response from dashboard", response.data)
-      if (watch('type')==='SAQ') 
-     { // graph titles
-      options1.plugins.title.text = `Total - ${response?.data?.total?.directlyHired}`
+      // graph titles
+      // options1.plugins.title.text = `Total - ${response?.data?.total?.directlyHired}`
       options2.plugins.title.text = `Total - ${response?.data?.total?.thirdParty}`
       options3.plugins.title.text = `Total - ${response?.data?.total?.domesticMigrant}`
 
+      let maxDirectlyHired=0
+      let maxThirdParty=0
+      let maxDomesticMigrants=0
+      let companies = response?.data?.data.filter(data=>data?.memberName!=='other').map(data=>data)
+      companies.forEach(company => {
+        if (company.directlyHired > maxDirectlyHired) {
+            maxDirectlyHired = company.directlyHired;
+        }
+        if (company.thirdParty > maxThirdParty) {
+          maxThirdParty = company.thirdParty;
+      }
+      if (company.domesticMigrant>maxDomesticMigrants) {
+        maxDomesticMigrants=company.domesticMigrant
+      }
+    });
+    // Round up the maximum value to the nearest 1000
+    maxDirectlyHired = Math.ceil(maxDirectlyHired / 10000) * 10000+10000;
+    maxThirdParty = Math.ceil(maxThirdParty / 10000) * 10000+10000;
+    maxDomesticMigrants = Math.ceil(maxDomesticMigrants / 10000) * 10000+10000;
+console.log('max directly hired',maxDirectlyHired)
+console.log('max third party',maxThirdParty)
+console.log('max domestic migrants',maxDomesticMigrants)
 
 
 
+    setBarGraphOptions1({
+      barGraphOptions1:barGraphOptions(`Total - ${response?.data?.total?.directlyHired}`,maxDirectlyHired),
+      barGraphOptions2:barGraphOptions(`Total - ${response?.data?.total?.thirdParty}`,maxThirdParty),
+      barGraphOptions3:barGraphOptions(`Total - ${response?.data?.total?.domesticMigrant}`,maxDomesticMigrants)
+
+    })
+    // options1.scales.y.suggestedMax=maxDirectlyHired
+    // setBarGraphOptions(barGraphOptions)
       let labelsFordoughnutGraph1 = response?.data?.data.map(data => `${data?.memberName}: ${data?.directlyHiredPercent}%`)
-      let labelsFordoughnutGraph2 = response?.data?.data.map(data => `${data?.memberName}: ${data?.thirdPartyPercent}%`)
-      let labelsFordoughnutGraph3 = response?.data?.data.map(data => `${data?.memberName}: ${data?.domesticMigrantPercent}%`)
-
+      let labelsFordoughnutGraph2= response?.data?.data.map(data => `${data?.memberName}: ${data?.thirdPartyPercent}%`)
+      let labelsFordoughnutGraph3= response?.data?.data.map(data => `${data?.memberName}: ${data?.domesticMigrantPercent}%`)
+      
       let directHiredPercentData = response?.data?.data.map(data => data?.directlyHiredPercent)
       let thirdPartyPercentData = response?.data?.data.map(data => data?.thirdPartyPercent)
       let domesticMigrantsPercentData = response?.data?.data.map(data => data?.domesticMigrantPercent)
@@ -310,10 +325,7 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
 
         return dataForBarGraphs
       })
-} else {
-  setIndicatorData({...response.data,indicator:getValues('indicator')})
 
-}
 
 
     } catch (error) {
@@ -326,45 +338,52 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
     const {
       target: { value },
     } = event;
-    if (value.includes('all')) {
-      // If 'all' is selected, setPersonName to all companies
-      setPersonName(memberCompanyOptions);
-
-      // Set the memberCompanies to all company ids
-      let companyIds = memberCompanyOptions.map(data => data.id);
-      // setValue('memberCompanies', companyIds);
-
-      // set member companies for company SAQ dropdown
-      // let companies = memberCompanyOptions.map(data=>data)
-      // setMemberCompanies([...companies])
-    } else {
-      // If individual companies are selected
-      setPersonName(value.filter(item => item !== 'all')); // Remove 'all' if present
-
-      // Set the memberCompanies to the selected company ids
-      let selectedCompanyIds = value.filter(item => item !== 'all').map(data => data.id);
-      console.log('selecgted companies id - ', selectedCompanyIds)
-      // setValue('memberCompanies', selectedCompanyIds);
-      trigger('memberCompanies')
-      // set selected member companies for company SAQ dropdown
-      //  let selectedCompanies = value.map(data=>data)
-      //  setMemberCompanies([...selectedCompanies])
+    // const value = event.target.value;
+    if (value[value.length - 1] === "all") {
+     
+      setPersonName(personName.length === memberCompanyOptions.length ? [] : memberCompanyOptions);
+      setValue('memberCompanies',personName.length === memberCompanyOptions.length ?'':'213123')
+     
+      return;
     }
-    setValue('memberCompanies', ['213123'], {
+    setPersonName(value);
+
+
+
+    setValue('memberCompanies','213123',{
       shouldValidate: false,
-      shouldDirty: false,
-      shouldTouch: false
+      shouldDirty:false,
+      shouldTouch:false
     })
+
+
+
+
+    // if (value.includes('all')) {
+    //   // If 'all' is selected, setPersonName to all companies
+    //   setPersonName(memberCompanyOptions);
+
+    //   // Set the memberCompanies to all company ids
+    //   let companyIds = memberCompanyOptions.map(data => data.id);
+    //   setValue('memberCompanies', companyIds);
+    // } else {
+    //   // If individual companies are selected
+    //   setPersonName(value.filter(item => item !== 'all')); // Remove 'all' if present
+
+    //   // Set the memberCompanies to the selected company ids
+    //   let selectedCompanyIds = value.map(data => data.id);
+    //   setValue('memberCompanies', selectedCompanyIds);
+    // }
 
     console.log('selected company = ', value);
 
 
   };
 
+  
 
-
-
-  console.log('member companies values = ', getValues('memberCompanies'))
+  
+  console.log( 'member companies values = ',getValues('memberCompanies') )
 
   const handleChangeCountry = (e) => {
     setValue('country', e.target.value)
@@ -430,7 +449,7 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
                     control={control}
                     myOnChange={handleChangeAssesment}
                     name={'assessment'}
-                    options={watch('type') === 'Indicators' ? assessmentIndicatorOptions : assessmentOptions}
+                    options={['COUNTRY- OPERATION HRDD REQUIREMENTS', 'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)']}
                     rules={{ required: true }}
                     myHelper={helperTextForFilters}
                     placeholder="Select assessment"
@@ -438,97 +457,68 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
                   />
                 </div>
               </div>
-              
-              
               <div className="card-form-field">
                 <div className="form-group" >
                   <label>
                     Country <span className="mandatory"> *</span>
                   </label>
                   <Dropdown
-                    isDisabled={watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS'?false:watch('assessment')!=='Country Level Operations'?true:false}
+                  isDisabled={watch('assessment')!=='COUNTRY- OPERATION HRDD REQUIREMENTS'}
                     control={control}
                     myOnChange={handleChangeCountry}
                     name={'country'}
                     options={countryListOption}
-                    rules={{ required: watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS' }}
+                    rules={{ required: watch('assessment')==='COUNTRY- OPERATION HRDD REQUIREMENTS' }}
                     myHelper={helperTextForFilters}
                     placeholder="Select country"
                   />
                 </div>
               </div>
-              
-              {
-                watch('type')==='Indicators'&&
-              <div className="card-form-field">
-                <div className='form-group'>
-                  <label>
-                    Indicators <span className="mandatory"> *</span>
-                  </label>
-                  <Dropdown
-                    isDisabled={watch('type') === 'SAQ'}
-                    control={control}
-                    name={'indicator'}
-                    options={indicators}
-                    rules={{ required: watch('type') === 'Indicators' }}
-                    myHelper={helperTextForFilters}
-                    placeholder="Select indicator"
-
-                  />
-
-                </div>
-
-              </div>
-              }
-              {
-                watch('type')==='SAQ'&&<>
               <div className="card-form-field">
                 <div className='form-group'>
                   <label>
                     Member Companies <span className="mandatory"> *</span>
                   </label>
-                  <Controller
-                    name={'memberCompanies'}
-                    disabled={watch('type') === 'Indicators'}
+                  <Controller 
+                  name={'memberCompanies'}
 
-                    control={control}
-                    rules={{ required: 'Select the member company' }}
-                    render={({ field, fieldState: { error } }) => (
-                      <FormControl {...field} style={{ width: "100%" }}>
-                        <Select
-                          IconComponent={(props) => (
-                            <KeyboardArrowDownRoundedIcon {...props} />
-                          )}
-                          {...field}
-                          multiple
-                          displayEmpty
-                          className='dashboard-select-component'
-                          fullWidth
-                          disabled={watch('type') === 'Indicators'}
-
-                          value={personName}
-                          onChange={handleChange}
-                          input={<OutlinedInput {...field} />}
-                          renderValue={(selected) => selected?.includes('all') ? 'All Member Companies' : selected?.length < 1 ? 'Select member companies' : selected?.map((data) => data?.label).join(", ")}
-                          MenuProps={MenuProps}
-                        >
-                          <MenuItem key={'all'} value={'all'}>
-                            {/* <Checkbox checked={personName.length === memberCompanyOptions.length} /> */}
-                            <ListItemText primary={'Select All'} />
-                          </MenuItem>
-
-                          {memberCompanyOptions.map((data) => (
-                            <MenuItem key={data.label} value={data}>
-                              <Checkbox checked={personName.includes('all') || personName.includes(data)} />
-                              <ListItemText primary={data.label} />
-                            </MenuItem>
-                          ))}
-                        </Select>
-                        <FormHelperText>{error && error?.message}</FormHelperText>
-                      </FormControl>
-                    )}
+                  control={control}
+                  rules={{required:"Select the member company"}}
+                  render={({field,fieldState:{error}})=>(
+                    <FormControl {...field} style={{width:"100%"}}>
+                  <Select
+                  IconComponent={(props) => (
+                    <KeyboardArrowDownRoundedIcon {...props} />
+                )}
+                  {...field}
+                  multiple
+                  displayEmpty
+                  className='dashboard-select-component'
+                     fullWidth
+                   
+                  value={personName}
+                  onChange={handleChange}
+                  input={<OutlinedInput {...field} />}
+                      renderValue={(selected) => selected?.includes('all') ? 'All Member Companies' :selected?.length<1?'Select member companies': selected?.map((data) => data?.label).join(", ") }
+                  MenuProps={MenuProps}
+                >
+                  <MenuItem key={'all'} value={'all'}>
+                    <Checkbox checked={memberCompanyOptions.length>0&&personName.length === memberCompanyOptions.length} />
+                    <ListItemText primary={'Select All'} />
+                  </MenuItem>
+              
+                  {memberCompanyOptions.map((data) => (
+                    <MenuItem key={data.label} value={data}>
+                      <Checkbox checked={personName.includes('all') || personName.includes(data)} />
+                      <ListItemText primary={data.label} />
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{error&&error?.message}</FormHelperText>
+                </FormControl>
+                  )}
                   />
-
+                  
                 </div>
 
               </div>
@@ -539,16 +529,15 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
                   </label>
 
                   <Controller
-
+                  
                     name="startDate"
                     control={control}
-                    disabled={watch('type') === 'Indicators'}
                     rules={{ required: true }}
                     render={({ field, fieldState: { error } }) => (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
-                          name="startDate"
-                          disabled={watch('type') === 'Indicators'}
+                    name="startDate"
+
                           componentsProps={{
                             actionBar: {
                               actions: ['clear',]
@@ -581,13 +570,13 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
                               onKeyDown={handleOnKeyDownChange}
                               placeholder="MM/DD/YYYY"
                               error
-                              helperText={
-                                error
-                                  ? helperTextForFilters.startDate[
-                                  error.type
+                            helperText={
+                              error
+                                ? helperTextForFilters.startDate[
+                                    error.type
                                   ]
-                                  : " "
-                              }
+                                : " "
+                            }
                             />
                           )}
                         // {...field}
@@ -606,13 +595,10 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
                   <Controller
                     name="endDate"
                     control={control}
-                    disabled={watch('type') === 'Indicators'}
-
                     rules={{ required: true }}
                     render={({ field, fieldState: { error } }) => (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
-                          disabled={watch('type') === 'Indicators'}
 
                           componentsProps={{
                             actionBar: {
@@ -645,13 +631,13 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
                               onKeyDown={handleOnKeyDownChange}
                               placeholder="MM/DD/YYYY"
                               error
-                              helperText={
-                                error
-                                  ? helperTextForFilters.endDate[
-                                  error.type
+                            helperText={
+                              error
+                                ? helperTextForFilters.endDate[
+                                    error.type
                                   ]
-                                  : " "
-                              }
+                                : " "
+                            }
                             />
                           )}
                         // {...field}
@@ -661,14 +647,12 @@ function DashboardFilters({ setIndicatorData,saveAsPdf, setIsAssessmentCountryTy
                   />
                 </div>
               </div>
-              </>
-              }
               <div className="form-btn flex-between add-members-btn">
-                <button type="reset"
-                  className="secondary-button mr-10" onClick={handleReset}>Reset Filter</button>
-                <button type="reset"
-                  className="secondary-button mr-10" onClick={() => saveAsPdf('chart-container')}>Download</button>
-                <button type='submit' className="primary-button add-button">Search</button>
+              <button type="reset"
+                      className="secondary-button mr-10" onClick={handleReset}>Reset Filter</button>
+  <button type="reset"
+ className="secondary-button mr-10" onClick={()=>saveAsPdf('chart-container')}>Download</button>
+              <button type='submit'  className="primary-button add-button">Search</button>
               </div>
             </div>
           </form>
