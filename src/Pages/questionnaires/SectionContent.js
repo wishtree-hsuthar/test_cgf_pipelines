@@ -299,7 +299,7 @@ const SectionContent = ({
               }
             );
           }
-          setErr({ ...tempError,...err });
+          setErr({ ...tempError });
 
         }
        else if (questionnaire.sections[index].layout == "documents") {
@@ -319,44 +319,82 @@ const SectionContent = ({
           let questionsOfListEachSection = questionnaire?.sections[
             index
           ]?.documents?.map((document) => document.documentTitle);
+          let linksTitleOfListEachSectionDocs = questionnaire?.sections[
+            index
+          ]?.documents?.map((document) => document.linkTitle);
           questionnaire?.sections[index]?.documents?.map(
             (document, docIndex) => {
-              if (document.documentTitle === "") {
+              if (document?.type==='File') {
+                if (document.documentTitle === "") {
         
 
-                tempError["documentTitle"] = "Enter document title";
-                countError++;
-                tabIndex.push(sectionIndex);
-
-                
-              }
-              if (document.originalName === "") {
+                  tempError["documentTitle"] = "Enter document title";
+                  countError++;
+                  tabIndex.push(sectionIndex);
+  
+                  
+                }
+                if (document.originalName === "") {
+          
+  
+                  tempError["originalName"] = "upload document";
+                  countError++;
+                  tabIndex.push(sectionIndex);
+  
+                  
+                }
+                let filteredSameDocumentTitles =
+                  questionsOfListEachSection.filter(
+                    (ques) => ques === document?.documentTitle
+                  );
+               
+                if (filteredSameDocumentTitles.length > 1) {
+                  tempError["documentTitle"] = "Document title already in use.";
+                  countError++;
+                  tabIndex.push(sectionIndex);
+  
+                  
+                }
+              } 
+              if (document?.type==='Link') {
+                if (document.linkTitle === "") {
         
 
-                tempError["originalName"] = "upload document";
-                countError++;
-                tabIndex.push(sectionIndex);
-
-                
+                  tempError["linkTitle"] = "Enter Link title";
+                  countError++;
+                  tabIndex.push(sectionIndex);
+  
+                  
+                }
+                if (document.link=== "") {
+          
+  
+                  tempError["link"] = "Add link";
+                  countError++;
+                  tabIndex.push(sectionIndex);
+  
+                  
+                }
+                let filterSameLinkTitles =
+                linksTitleOfListEachSectionDocs.filter(
+                    (link) => link === document?.linkTitle
+                  );
+               
+                if (filterSameLinkTitles.length > 1) {
+                  tempError["linkTitle"] = "Link title already in use.";
+                  countError++;
+                  tabIndex.push(sectionIndex);
+  
+                  
+                }
               }
-              let filteredSameDocumentTitles =
-                questionsOfListEachSection.filter(
-                  (ques) => ques === document?.documentTitle
-                );
-             
-              if (filteredSameDocumentTitles.length > 1) {
-                tempError["documentTitle"] = "Document title already in use.";
-                countError++;
-                tabIndex.push(sectionIndex);
-
-                
-              }
+              
 
              
             }
           );
         }
-        setErr({ ...tempError ,...err});
+        setErr({ ...tempError });
 
       }
     }
@@ -520,7 +558,8 @@ const SectionContent = ({
         {
           uuid:uuidv4(),
           documentTitle:'',
-          originalName:''
+          originalName:'',
+          type:'File'
         }
       ]
     }

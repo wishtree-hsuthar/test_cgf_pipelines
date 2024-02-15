@@ -1,14 +1,26 @@
-import { FormHelperText, TextField,Tooltip ,FormControl,Button} from '@mui/material';
-import React, { useState } from 'react'
+import { FormHelperText, TextField, Tooltip, FormControl, Button, Select, MenuItem } from '@mui/material';
+import React, { useRef, useState } from 'react'
 import { v4 as uuidv4 } from "uuid";
 import DialogBox from '../../components/DialogBox';
 // import { Button } from '@mui/base';
 import { privateAxios } from '../../api/axios';
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { DELETE_OTHER_DOCS, UPLOAD_OTHER_DOC } from '../../api/Url';
-
+import { catchError } from '../../utils/CatchError';
+import Toaster from '../../components/Toaster';
+import useCallbackState from '../../utils/useCallBackState';
+import { useNavigate } from 'react-router-dom';
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+const ITEM_HEIGHT = 42;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4,
+        },
+    },
+};
 function OtherDocumentSection({
-    setQuestionnaire,questionnaire,sectionIndex,documents,err
+  setQuestionnaire, questionnaire, sectionIndex, documents, err
 }) {
   const allowdedFiles = [
     ".jpg",
@@ -27,140 +39,227 @@ function OtherDocumentSection({
     ".zip",
     ".rar",
   ];
-    const [fileUploadDailog, setFileUploadDailog] = useState(false)
-    const [file, setFile] = useState(null)
-    let formData = new FormData()
-    const [documentIndexforFIle, setDocumentIndexforFIle] = useState('')
-    console.log("questionnaire in other doc=",questionnaire)
-      //method to handle question change handler
-      const onQuestionChangeHandler = (event, docIndex) => {
-        const { name, value } = event.target;
-        let tempQuestionnaire = { ...questionnaire };
-        tempQuestionnaire.sections[sectionIndex].documents[docIndex][name] =
-            value;
-        setQuestionnaire(tempQuestionnaire);
-    };
-    //method to handle question blur event
-    const onQuestionBlurHandler = (event, docIndex) => {
-        const { name, value } = event.target;
-        let tempQuestionnaire = { ...questionnaire };
-        tempQuestionnaire.sections[sectionIndex].documents[docIndex][name] =
-            value?.trim();
-        setQuestionnaire(tempQuestionnaire);
-    };
+  const [fileUploadDailog, setFileUploadDailog] = useState(false)
+  const [file, setFile] = useState(null)
+  let formData = new FormData()
+  const navigate = useNavigate();
+  const [otherDocsToasterDetails, setOtherDocsToasterDetails] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "error",
+  });
+  const otherDocToasterRef = useRef()
+  const [documentIndexforFIle, setDocumentIndexforFIle] = useState('')
+  console.log("questionnaire in other doc=", questionnaire)
+  console.log("section index in other doc=", sectionIndex)
 
-     //On + icon click new question will get added
-     const addQuestionHandler = () => {
-        let tempQuestionnaire = { ...questionnaire };
-        tempQuestionnaire.sections[sectionIndex].documents.push({
-            
-                uuid:uuidv4(),
-                documentTitle:'',
-                originalName:''
-              
-        });
-        setQuestionnaire(tempQuestionnaire);
+  //method to handle question change handler
+  const onQuestionChangeHandler = (event, docIndex) => {
+    const { name, value } = event.target;
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire.sections[sectionIndex].documents[docIndex][name] =
+      value;
+    setQuestionnaire(tempQuestionnaire);
+  };
+  //method to handle question blur event
+  const onQuestionBlurHandler = (event, docIndex) => {
+    const { name, value } = event.target;
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire.sections[sectionIndex].documents[docIndex][name] =
+      value?.trim();
+    setQuestionnaire(tempQuestionnaire);
+  };
+
+  //On + icon click new question will get added
+  const addQuestionHandler = () => {
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire.sections[sectionIndex].documents.push({
+
+      uuid: uuidv4(),
+      documentTitle: '',
+      originalName: '',
+      type:'File'
+
+    });
+    setQuestionnaire(tempQuestionnaire);
+  };
+  const changeTypeHanlder=(e,docIndex)=>{
+
+    let tempQuestionnaire = { ...questionnaire };
+    tempQuestionnaire.sections[sectionIndex].documents[docIndex].type=e.target.value;
+    if (e.target.value==='Link') {
+    tempQuestionnaire.sections[sectionIndex].documents[docIndex]={
+      uuid:tempQuestionnaire.sections[sectionIndex].documents[docIndex].uuid,
+      linkTitle:tempQuestionnaire.sections[sectionIndex].documents[docIndex].documentTitle,
+      type:e.target.value,
+      link:''
     };
-    const deleteDocumenthandler=async(uuid)=>{
-      console.log('questionnaire id = ',questionnaire?.uuid)
-      try {
-        const response = await privateAxios.delete(DELETE_OTHER_DOCS,{data:{questionnaireId:questionnaire.uuid,documentId:uuid}})
-        console.log("document deleted",response)
-      } catch (error) {
-        console.log("Error from delete uploaded other doc",error)
+    
+    setQuestionnaire(tempQuestionnaire);
+      
+    }
+    setQuestionnaire(tempQuestionnaire);
+  }
+  const deleteDocumenthandler = async (uuid) => {
+    console.log('questionnaire id = ', questionnaire?.uuid)
+    try {
+      const response = await privateAxios.delete(DELETE_OTHER_DOCS, { data: { questionnaireId: questionnaire.uuid, documentId: uuid } })
+      console.log("document deleted", response)
+    } catch (error) {
+      console.log("Error from delete uploaded other doc", error)
+    }
+    let tempQuestionnaire = { ...questionnaire };
+    let tempQuestions = tempQuestionnaire?.sections[
+      sectionIndex
+    ]?.documents.filter((document) => document.uuid !== uuid);
+    tempQuestionnaire.sections[sectionIndex].documents = [...tempQuestions];
+    setQuestionnaire(tempQuestionnaire);
+  }
+  let docs = questionnaire?.sections?.filter(section => section.layout === 'documents')
+  console.log('docs = ', docs)
+  console.log('section index', sectionIndex)
+  const checkIfSameQuestionTitlePresent = (title,typeTitle) => {
+    let filterSameNameQuestionTitle = questionnaire.sections[
+      sectionIndex
+    ].documents.filter((document) => document?.[typeTitle] === title);
+    if (filterSameNameQuestionTitle.length > 1) {
+
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  // file change handler
+  const fileChangeHandler = (event) => {
+    console.log('file change hadler clicked', questionnaire)
+    const file = event.target.files[0];
+
+    // Check if a file is selected
+    if (file) {
+      // Check if the file type is allowed
+      const fileExtension = `.${file.name.split(".").pop()}`;
+      if (!allowdedFiles.includes(fileExtension.toLowerCase())) {
+        alert("Invalid file type. Please select a valid file.");
+        return;
       }
+
+      // Check if the file size is within the limit (10 MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert(
+          "File size exceeds the limit of 10 MB. Please select a smaller file."
+        );
+        return;
+      }
+      setFile(event.target.files[0])
+      // formData.append('document',event.target.files[0])
+      console.log("inside if");
+
       let tempQuestionnaire = { ...questionnaire };
-      let tempQuestions = tempQuestionnaire?.sections[
-          sectionIndex
-      ]?.documents.filter((document) => document.uuid !== uuid);
-      tempQuestionnaire.sections[sectionIndex].documents = [...tempQuestions];
+      tempQuestionnaire.sections[sectionIndex].documents[documentIndexforFIle]['originalName'] =
+        file.name;
       setQuestionnaire(tempQuestionnaire);
+      //  setFilePreview(file.name);
+      // setValue(fname, file.name);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // setFile(e?.target?.result);
+      };
+      // reader.readAsDataURL(file);
+
+      // Set the selected file
+      // setFile(file);
     }
-    let docs = questionnaire?.sections?.filter(section=>section.layout==='documents')
-    console.log('docs = ',docs[0]?.documents.map(doc=>doc))
-    console.log('section index', sectionIndex)
-    const checkIfSameQuestionTitlePresent = (title) => {
-        let filterSameNameQuestionTitle = questionnaire.sections[
-            sectionIndex
-        ].documents.filter((document) => document.documentTitle === title);
-        if (filterSameNameQuestionTitle.length > 1) {
-            
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    // file change handler
-    const fileChangeHandler=(event)=>{
-      console.log('file change hadler clicked',questionnaire)
-      const file = event.target.files[0];
-
-      // Check if a file is selected
-      if (file) {
-        // Check if the file type is allowed
-        const fileExtension = `.${file.name.split(".").pop()}`;
-        if (!allowdedFiles.includes(fileExtension.toLowerCase())) {
-          alert("Invalid file type. Please select a valid file.");
-          return;
-        }
-  
-        // Check if the file size is within the limit (10 MB)
-        if (file.size > 10 * 1024 * 1024) {
-          alert(
-            "File size exceeds the limit of 10 MB. Please select a smaller file."
-          );
-          return;
-        }
-        setFile(event.target.files[0])
-        // formData.append('document',event.target.files[0])
-        console.log("inside if");
-        
-        let tempQuestionnaire = { ...questionnaire };
-        tempQuestionnaire.sections[sectionIndex].documents[documentIndexforFIle]['originalName'] =
-            file.name;
-        setQuestionnaire(tempQuestionnaire);
-        //  setFilePreview(file.name);
-        // setValue(fname, file.name);
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          // setFile(e?.target?.result);
-        };
-        // reader.readAsDataURL(file);
-  
-        // Set the selected file
-        // setFile(file);
+  }
+  // file upload
+  const fileUpload = async () => {
+    formData.append('questionnaireId', questionnaire?.uuid)
+    formData.append('sectionId', questionnaire.sections[sectionIndex].uuid)
+    formData.append('documentId', questionnaire.sections[sectionIndex].documents[documentIndexforFIle].uuid)
+    formData.append('documentTitle', questionnaire.sections[sectionIndex].documents[documentIndexforFIle].documentTitle)
+    formData.append('document', file)
+    try {
+      const response = await privateAxios.post(UPLOAD_OTHER_DOC, formData, { headers: { "Content-Type": "multipart/form-data" } })
+      if (response.status === 201) {
+        formData.append('questionnaireId', questionnaire?.uuid)
+        formData.append('sectionId', questionnaire.sections[sectionIndex].uuid)
+        formData.delete('document')
+        formData.delete('documentTitle')
+        formData.delete('documentId')
+        setFile('')
+        setFileUploadDailog(false)
+        setDocumentIndexforFIle('')
+        setOtherDocsToasterDetails(
+          {
+            titleMessage: "Hurray!",
+            descriptionMessage: response.data.message,
+            messageType: "success",
+          },
+          () => otherDocToasterRef.current()
+        )
       }
+
+    } catch (error) {
+      catchError(error, setOtherDocsToasterDetails, otherDocToasterRef, navigate)
+      formData.delete('document')
+      formData.delete('documentTitle')
+      formData.delete('documentId')
+      console.log("error from file ")
     }
-    // file upload
-    const fileUpload=async()=>{
-      console.log("file upload click",file)
-      formData.append('questionnaireId',questionnaire?.uuid)
-      formData.append('sectionId',questionnaire.sections[sectionIndex].uuid)
-      formData.append('documentId',questionnaire.sections[sectionIndex].documents[documentIndexforFIle].uuid)
-      formData.append('documentTitle',questionnaire.sections[sectionIndex].documents[documentIndexforFIle].documentTitle)
-      formData.append('document',file)
-        try {
-            const response = await privateAxios.post(UPLOAD_OTHER_DOC,formData,{headers:{"Content-Type": "multipart/form-data"}}) 
-            if (response.status===201) {
-            window.alert('response',response)
-            formData.append('questionnaireId',questionnaire?.uuid)
-            formData.append('sectionId',questionnaire.sections[sectionIndex].uuid)
-            formData.delete('document')
-            formData.delete('documentTitle')
-            formData.delete('documentId')
-            setFile('')
-              setFileUploadDailog(false)
-              setDocumentIndexforFIle('')
-            }
-        } catch (error) {
-            console.log("error from file ")
-        }
+  }
+  console.log('error from other doc', err)
+  const classnameForTitle=(document,docIndex)=>{
+    if(questionnaire.sections[sectionIndex].documents[docIndex].type==='Link')
+    {
+      return `input-field ${(!document?.linkTitle &&
+        err?.linkTitle &&
+        "input-error") ||
+      (checkIfSameQuestionTitlePresent(
+        document?.linkTitle,'linkTitle'
+      ) &&
+        err?.linkTitle &&
+        "input-error")
+      } `
+    } else {
+      return `input-field ${(!document?.documentTitle &&
+        err?.documentTitle &&
+        "input-error") ||
+      (checkIfSameQuestionTitlePresent(
+        document?.documentTitle,'documentTitle'
+      ) &&
+        err?.documentTitle &&
+        "input-error")
+      } `
     }
-    console.log('error from other doc',err)
+  }
+  const helperTextForTitle=(document,docIndex)=>{
+    if (questionnaire.sections[sectionIndex].documents[docIndex].type==='Link') {
+      return !document?.linkTitle &&
+      err?.linkTitle ? "Enter Link title" :
+      checkIfSameQuestionTitlePresent(
+        document?.linkTitle,'linkTitle'
+      ) &&
+        err?.linkTitle
+        ? "Link Title already in use" : ""
+    } else {
+     return !document?.documentTitle &&
+      err?.documentTitle ? "Enter document title" :
+      checkIfSameQuestionTitlePresent(
+        document?.documentTitle,'documentTitle'
+      ) &&
+        err?.documentTitle
+        ? "Title already in use" : ""
+    }
+  }
   return (
     <>
-    <DialogBox
+      <Toaster
+        myRef={otherDocToasterRef}
+        titleMessage={otherDocsToasterDetails.titleMessage}
+        descriptionMessage={otherDocsToasterDetails.descriptionMessage}
+        messageType={otherDocsToasterDetails.messageType}
+      />
+      <DialogBox
         title={<p>Upload other documents</p>}
         info1={" "}
         info2={
@@ -173,7 +272,7 @@ function OtherDocumentSection({
               >
                 <div
                   className={
-                  "upload-file-blk"
+                    "upload-file-blk"
                   }
                 >
                   {/* <input hidden accept="image/*" multiple type="file" /> */}
@@ -187,7 +286,7 @@ function OtherDocumentSection({
                     name="files[]"
                     // value={file}
                     onChange={fileChangeHandler}
-                    // multiple
+                  // multiple
                   />
                   <span className="upload-icon">
                     <CloudUploadOutlinedIcon />
@@ -195,6 +294,7 @@ function OtherDocumentSection({
                   <span className="file-upload-txt">
                     Click here to choose files (max file size{" "}
                     {`${process.env.REACT_APP_MAX_FILE_SIZE_MB} MB`})
+                    '.doc', '.txt', '.pdf','.docx', '.xls', '.ppt', '.pptx', '.xlsx', '.jpg', '.jpeg', '.png
                   </span>
                 </div>
               </Button>
@@ -217,139 +317,207 @@ function OtherDocumentSection({
         secondaryButtonText={"Cancel"}
         onPrimaryModalButtonClickHandler={fileUpload}
         isDisabledPrimaryButton={false}
-        onSecondaryModalButtonClickHandler={()=>setFileUploadDailog(false)}
+        onSecondaryModalButtonClickHandler={() => setFileUploadDailog(false)}
         openModal={fileUploadDailog}
         setOpenModal={setFileUploadDailog}
         isModalForm={true}
-        handleCloseRedirect={()=>setFileUploadDailog(false)}
+        handleCloseRedirect={() => setFileUploadDailog(false)}
       />
-    
-    <div className="que-form-card-wrapper">
-    <div className="drag-drop-box"></div>
-    {/* <div className="que-form-blk"> */}
-    {
-    docs[0]?.documents.map((document,docIndex)=> {return(
-        <div
-        className={`que-card-blk 
-        ${docIndex + 1 === docs[0].documents.length && "active"}
+
+      <div className="que-form-card-wrapper">
+        <div className="drag-drop-box"></div>
+        {/* <div className="que-form-blk"> */}
+        {
+          questionnaire.sections?.[sectionIndex].documents.map((document, docIndex) => {
+            return (
+              <div
+                className={`que-card-blk 
+        ${docIndex + 1 === questionnaire.sections?.[sectionIndex].documents.length && "active"}
         `}
-        key={document?.uuid}
-    >
-        <div className="que-form-blk">
-            <div className="que-card-innerblk flex-between">
-                <div className="que-card-form-leftfield">
-                    <div className="form-group">
+                key={document?.uuid}
+              >
+                <div className="que-form-blk">
+                  <div className="que-card-innerblk flex-between">
+                    <div className="que-card-form-leftfield">
+                      <div className="form-group">
                         <label htmlFor="questionTitle">
-                            Other Document Title{" "}{docIndex+1}
-                            <span className="mandatory">*</span>
+                          {questionnaire?.sections[sectionIndex]?.documents[docIndex]?.type==='File'?"Other Document Title":"Link Title"}{" "}{docIndex + 1}
+                          <span className="mandatory">*</span>
                         </label>
                         <TextField
-                            className={`input-field ${
-                                (!document?.documentTitle &&
-                                    err?.documentTitle &&
-                                    "input-error") ||
-                                (checkIfSameQuestionTitlePresent(
-                                    document?.documentTitle
-                                ) &&
-                                    err?.documentTitle &&
-                                    "input-error")
-                            } `}
-                            placeholder="Enter document title"
-                            name="documentTitle"
-                            value={document?.documentTitle}
-                            helperText={
-                                !document?.documentTitle &&
-                                    err?.documentTitle ?"Enter document title":
-                                    checkIfSameQuestionTitlePresent(
-                                        document?.documentTitle
-                                    ) &&
-                                        err?.documentTitle
-                                    ?"Title already in use":""
-                            }
-                            onChange={(e) =>
-                                onQuestionChangeHandler(e, docIndex)
-                            }
-                            onBlur={(e) =>
-                                onQuestionBlurHandler(e, docIndex)
-                            }
+                          className={classnameForTitle(document,docIndex)}
+                          placeholder="Enter document title"
+                          name={questionnaire.sections[sectionIndex].documents[docIndex].type==='Link'?'linkTitle':"documentTitle"}
+                          value={questionnaire.sections[sectionIndex].documents[docIndex].type==='Link'?document?.linkTitle:document?.documentTitle}
+                          helperText={
+                            helperTextForTitle(document,docIndex)
+                          }
+                          onChange={(e) =>
+                            onQuestionChangeHandler(e, docIndex)
+                          }
+                          onBlur={(e) =>
+                            onQuestionBlurHandler(e, docIndex)
+                          }
                         />
-                    </div>
-                    
-                </div>
-                <div className="que-card-form-rightfield flex-between">
-                <FormControl>
-            <a
-              href="#"
-              onClick={() =>{ setFileUploadDailog(true);setDocumentIndexforFIle(docIndex)}}
-              style={{
-                color: "#f7a823",
-                textDecoration: "none",
-                pointerEvents: 'auto',
-              }}
-            >
-              Upload other document
-            </a>
-            {questionnaire?.sections[sectionIndex]?.documents?.[docIndex]?.['originalName']}
+                      </div>
 
-            {/* // <input type="file" onChange={onAttachmetChangeHandler} multiple /> */}
-            <FormHelperText>
-             { !document?.originalName &&
-                                    err?.originalName?"Upload document":" "}
-            </FormHelperText>
-          </FormControl>
                     </div>
-                </div>
-                </div>
-                <div className="que-card-icon-sect">
-                    <div className="que-card-icon-blk">
-                        {docIndex === docs[0].documents?.length - 1 && (
-                            <div className="que-card-icon add-que-iconblk mr-40">
-                                <Tooltip title="Add document">
-                                    <img
-                                        onClick={addQuestionHandler}
-                                        src={
-                                            process.env.PUBLIC_URL +
-                                            "/images/add-question-icon.svg"
-                                        }
-                                        alt=""
-                                    />
-                                </Tooltip>
-                            </div>
-                        )}
-                        { docs[0].documents?.length!== 1 && (
-                            <div className="que-card-icon delete-iconblk mr-40">
-                                <Tooltip title="Delete Question">
-                                    <img
-                                        onClick={() =>
-                                            deleteDocumenthandler(
-                                                document?.uuid,
+                    <div className="que-card-form-rightfield flex-between">
+                    <div className="form-group">
+                            <label htmlFor="inputField">
+                                File/Link Type <span className="mandatory">*</span>
+                            </label>
+                            <FormControl className="fullwidth-field">
+                                <div className="select-field">
+                                    <Select
+                                        MenuProps={MenuProps}
+                                        placeholder="Select type"
+                                        IconComponent={(props) => (
+                                            <KeyboardArrowDownRoundedIcon
+                                                {...props}
+                                            />
+                                        )}
+                                        name="inputType"
+                                        value={document?.type}
+                                        onChange={(e) =>
+                                            changeTypeHanlder(
+                                                e,
+                                                docIndex
                                             )
                                         }
-                                        src={
-                                            process.env.PUBLIC_URL +
-                                            "/images/delete-icon.svg"
-                                        }
-                                        alt=""
-                                    />
-                                </Tooltip>
-                            </div>
-                        )}
-                        <div className="required-toggle-btnblk">
-                          
+                                        // onChange={(e) => onQuestionChangeHandler(e, questionIdx)}
+                                    >
+                                        { 
+                                            ['Link','File'].map((option) => (
+                                                <MenuItem
+                                                    // key={option?._id}
+                                                    value={option}
+                                                >
+                                                    {option}
+                                                </MenuItem>
+                                            ))}
+                                    </Select>
+                                </div>
+                                <FormHelperText> </FormHelperText>
+                            </FormControl>
                         </div>
-                        </div>
-                        
-                        </div>
-                        
+                        <div className="form-group">
+                          </div>
+                    </div>
+                    
+                    <div className="que-card-form-leftfield">
+                      {
+                       questionnaire.sections[sectionIndex].documents[docIndex].type==='File'?
+                      
+                      <FormControl>
+                        <a
+                          href="#"
+                          onClick={() => { setFileUploadDailog(true); setDocumentIndexforFIle(docIndex) }}
+                          style={{
+                            color: "#f7a823",
+                            textDecoration: "none",
+                            pointerEvents: 'auto',
+                          }}
+                        >
+                          Upload other document
+                        </a>
+                        {questionnaire?.sections[sectionIndex]?.documents?.[docIndex]?.['originalName']}
+
+                        <FormHelperText>
+                          {!document?.originalName &&
+                            err?.originalName ? "Upload document" : " "}
+                        </FormHelperText>
+                      </FormControl>:
+                        <div className="form-group">
+                        <label htmlFor="questionTitle">
+                          Link {" "}
+                          <span className="mandatory">*</span>
+                        </label>
+                        <TextField
+                          className={`input-field ${(!document?.link &&
+                              err?.link &&
+                              "input-error") ||
+                            (checkIfSameQuestionTitlePresent(
+                              document?.link
+                            ) &&
+                              err?.link &&
+                              "input-error")
+                            } `}
+                          placeholder="Enter Link"
+                          name="link"
+                          value={document?.link}
+                          helperText={
+                            !document?.link &&
+                              err?.link ? "Enter Link" :
+                              checkIfSameQuestionTitlePresent(
+                                document?.link
+                              ) &&
+                                err?.link
+                                ? "Link already added" : ""
+                          }
+                          onChange={(e) =>
+                            onQuestionChangeHandler(e, docIndex)
+                          }
+                          onBlur={(e) =>
+                            onQuestionBlurHandler(e, docIndex)
+                          }
+                        />
+                      </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div className="que-card-icon-sect">
+                  <div className="que-card-icon-blk">
+                    
+                      <div className="que-card-icon add-que-iconblk mr-40">
+                        <Tooltip title="Add document">
+                          <img
+                            onClick={addQuestionHandler}
+                            src={
+                              process.env.PUBLIC_URL +
+                              "/images/add-question-icon.svg"
+                            }
+                            alt=""
+                          />
+                        </Tooltip>
+                      </div>
+                    
+                    {docIndex ===docs[0].documents?.length !== 1 && (
+                      <div className="que-card-icon delete-iconblk mr-40">
+                        <Tooltip title="Delete Question">
+                          <img
+                            onClick={() =>
+                              deleteDocumenthandler(
+                                document?.uuid,
+                              )
+                            }
+                            src={
+                              process.env.PUBLIC_URL +
+                              "/images/delete-icon.svg"
+                            }
+                            alt=""
+                          />
+                        </Tooltip>
+                      </div>
+                    )}
+                    <div className="required-toggle-btnblk">
+
+                    </div>
+                  </div>
+
                 </div>
 
+              </div>
 
 
-     )})
-    }
-    </div>
+
+            )
+          })
+        }
+      </div>
     </>
-//    </div>
+    //    </div>
     // </div>
   )
 }

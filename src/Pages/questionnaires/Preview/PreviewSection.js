@@ -39,6 +39,8 @@ function PreviewSection({
                         <PreviewOtherDocument
                         key={document?.uuid}
                         doc={document}
+                        sectionUUID={section?.uuid}
+                        questionnaireId={questionnaire?.uuid}
                       />)))
                     
                     :
