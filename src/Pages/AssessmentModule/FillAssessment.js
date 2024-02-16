@@ -1292,6 +1292,7 @@ function FillAssessment() {
                       totalSections={questionnaire?.sections?.length}
                       setToasterDetails={setToasterDetails}
                       myRef={myRef}
+                      questionnaireId={assessment?.questionnaireId}
                     />
                   </TabPanel>
                 ))}
