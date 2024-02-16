@@ -106,3 +106,6 @@ export const barGraphOptions =(CountryTitle='',max)=>
       },
     ]
   }
+  export const indicators=['Policy Commitment','Governing Structure','Roles & Responsibility','Impact/Risk Assessment','Prevent and Mitigate Risks and Impacts','Remediation Processes','Public Reporting']
+  export const assessmentOptions=['COUNTRY- OPERATION HRDD REQUIREMENTS', 'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)']
+  export const assessmentIndicatorOptions=['HQ Level Operations','Country Level Operations']

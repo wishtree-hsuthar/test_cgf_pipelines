@@ -289,7 +289,7 @@ function CgfDashboard() {
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={saveAsPdf} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
+            <DashboardFilters setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={saveAsPdf} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
           <div id="chart-container">
