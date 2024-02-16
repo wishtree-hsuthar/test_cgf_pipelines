@@ -38,12 +38,13 @@ export const catchError = async (
       navigate("/home");
     }, 3000);
   } else {
+    console.log('error - ',error)
     setToasterDetails(
       {
         titleMessage: `Oops!`,
         descriptionMessage: error?.response?.data?.message
           ? error?.response?.data?.message
-          : "Oops! Something went wrong. Please try again later.",
+          :error?.message?'File not uploaded yet': "Oops! Something went wrong. Please try again later.",
 
         messageType: `error`,
       },

@@ -13,7 +13,7 @@ import { data } from './CgfDashboard';
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 import './DashBoardFilter.css'
-import { barGraphOptions, labels } from './DashbaordUtil';
+import { assessmentIndicatorOptions, assessmentOptions, barGraphOptions, indicators, labels } from './DashbaordUtil';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -24,7 +24,7 @@ const MenuProps = {
     },
   },
 };
-function DashboardFilters({ setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
+function DashboardFilters({setIndicatorData, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
   const [personName, setPersonName] = React.useState([]);
   const [memberCompanyOptions, setMemberCompanyOptions] = useState([])
   const [countryListOption, setCountryListOption] = useState([])
@@ -80,6 +80,8 @@ function DashboardFilters({ setBarGraphOptions1,saveAsPdf,setIsAssessmentCountry
   const handleChangeForType = (e) => {
     setType(prev => e.target.value)
     setValue('type', e.target.value)
+    setValue('assessment','')
+    setValue('country','')
   }
 
   const handleChangeAssesment = (event) => {
@@ -178,9 +180,16 @@ data.memberCompanies=personName.map(member=>member?.id)
 setMemberCompanies([...personName])
     // console.log('member company = ', memberCompanyOptions.filter(member => data.memberCompanies.includes(member.id)))
     console.log('member company data = ', data.memberCompanies)
-
-    data.endDate = new Date(new Date().setDate(new Date(data.endDate).getDate() + 1)).toISOString()
+    if (data.type !== 'Indicators') { data.endDate = new Date(new Date().setDate(new Date(data.endDate).getDate() + 1)).toISOString() } 
+    else {
+      data = {
+        indicator:data?.indicator,
+        assessment:data?.assessment,
+        type:data?.type
+      }
+    }
     setIsAssessmentCountryType(data.assessment==="COUNTRY- OPERATION HRDD REQUIREMENTS")
+  
     try {
       const response = await privateAxios.post(DASHBOARD, {
         ...data
@@ -189,11 +198,9 @@ setMemberCompanies([...personName])
       setExpanded(expanded => { return { ...expanded, expandBarGraph: !expanded.expandBarGraph,expandBarGraph1: !expanded.expandBarGraph1,expandBarGraph2: !expanded.expandBarGraph2,expandBarGraph3: !expanded.expandBarGraph3, expandDoughnutGraph: !expanded.expandDoughnutGraph,expandFilters:!expanded.expandFilters,expandDoughnutgraph1:!expanded.expandDoughnutgraph1 } })
 
       console.log("Response from dashboard", response.data)
-      // graph titles
-      // options1.plugins.title.text = `Total - ${response?.data?.total?.directlyHired}`
-      options2.plugins.title.text = `Total - ${response?.data?.total?.thirdParty}`
-      options3.plugins.title.text = `Total - ${response?.data?.total?.domesticMigrant}`
+      if (watch('type')==='SAQ') {
 
+      
       let maxDirectlyHired=0
       let maxThirdParty=0
       let maxDomesticMigrants=0
@@ -412,7 +419,9 @@ setMemberCompanies([...personName])
 
         return dataForBarGraphs
       })
-
+    } else {
+      setIndicatorData({...response.data,indicator:getValues('indicator')})
+    }
 
 
     } catch (error) {
@@ -536,7 +545,7 @@ setMemberCompanies([...personName])
                     control={control}
                     myOnChange={handleChangeAssesment}
                     name={'assessment'}
-                    options={['COUNTRY- OPERATION HRDD REQUIREMENTS', 'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)']}
+                    options={watch('type') === 'Indicators' ? assessmentIndicatorOptions : assessmentOptions}
                     rules={{ required: true }}
                     myHelper={helperTextForFilters}
                     placeholder="Select assessment"
@@ -550,7 +559,7 @@ setMemberCompanies([...personName])
                     Country <span className="mandatory"> *</span>
                   </label>
                   <Dropdown
-                  isDisabled={watch('assessment')!=='COUNTRY- OPERATION HRDD REQUIREMENTS'}
+                  isDisabled={watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS'?false:watch('assessment')!=='Country Level Operations'?true:false}
                     control={control}
                     myOnChange={handleChangeCountry}
                     name={'country'}
@@ -561,70 +570,89 @@ setMemberCompanies([...personName])
                   />
                 </div>
               </div>
+              {
+                watch('type')==='Indicators'&&
+              <div className="card-form-field">
+                <div className='form-group'>
+                  <label>
+                    Indicators <span className="mandatory"> *</span>
+                  </label>
+                  <Dropdown
+                    isDisabled={watch('type') === 'SAQ'}
+                    control={control}
+                    name={'indicator'}
+                    options={indicators}
+                    rules={{ required: watch('type') === 'Indicators' }}
+                    myHelper={helperTextForFilters}
+                    placeholder="Select indicator"
+                  />
+                </div>
+              </div>
+              }
+              {
+                
+                watch('type')==='SAQ'&&
+                <>
               <div className="card-form-field">
                 <div className='form-group'>
                   <label>
                     Member Companies <span className="mandatory"> *</span>
                   </label>
-                  <Controller 
-                  name={'memberCompanies'}
-
-                  control={control}
-                  rules={{required:"Select the member company"}}
-                  render={({field,fieldState:{error}})=>(
-                    <FormControl {...field} style={{width:"100%"}}>
-                  <Select
-                  IconComponent={(props) => (
-                    <KeyboardArrowDownRoundedIcon {...props} />
-                )}
-                  {...field}
-                  multiple
-                  displayEmpty
-                  className='dashboard-select-component'
-                     fullWidth
-                   
-                  value={personName}
-                  onChange={handleChange}
-                  input={<OutlinedInput {...field} />}
-                      renderValue={(selected) => selected?.includes('all') ? 'All Member Companies' :selected?.length<1?'Select member companies': selected?.map((data) => data?.label).join(", ") }
-                  MenuProps={MenuProps}
-                >
-                  <MenuItem key={'all'} value={'all'}>
-                    <Checkbox checked={memberCompanyOptions.length>0&&personName.length === memberCompanyOptions.length} />
-                    <ListItemText primary={'Select All'} />
-                  </MenuItem>
-              
-                  {memberCompanyOptions.map((data) => (
-                    <MenuItem key={data.label} value={data}>
-                      <Checkbox checked={personName.includes('all') || personName.includes(data)} />
-                      <ListItemText primary={data.label} />
-                    </MenuItem>
-                  ))}
-                </Select>
-                <FormHelperText>{error&&error?.message}</FormHelperText>
-                </FormControl>
-                  )}
+                  <Controller
+                    name={'memberCompanies'}
+                    disabled={watch('type') === 'Indicators'}
+                    control={control}
+                    rules={{ required: 'Select the member company' }}
+                    render={({ field, fieldState: { error } }) => (
+                      <FormControl {...field} style={{ width: "100%" }}>
+                        <Select
+                          IconComponent={(props) => (
+                            <KeyboardArrowDownRoundedIcon {...props} />
+                          )}
+                          {...field}
+                          multiple
+                          displayEmpty
+                          className='dashboard-select-component'
+                          fullWidth
+                          disabled={watch('type') === 'Indicators'}
+                          value={personName}
+                          onChange={handleChange}
+                          input={<OutlinedInput {...field} />}
+                          renderValue={(selected) => selected?.includes('all') ? 'All Member Companies' : selected?.length < 1 ? 'Select member companies' : selected?.map((data) => data?.label).join(", ")}
+                          MenuProps={MenuProps}
+                        >
+                          <MenuItem key={'all'} value={'all'}>
+                            {/* <Checkbox checked={personName.length === memberCompanyOptions.length} /> */}
+                            <ListItemText primary={'Select All'} />
+                          </MenuItem>
+                          {memberCompanyOptions.map((data) => (
+                            <MenuItem key={data.label} value={data}>
+                              <Checkbox checked={personName.includes('all') || personName.includes(data)} />
+                              <ListItemText primary={data.label} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        <FormHelperText>{error && error?.message}</FormHelperText>
+                      </FormControl>
+                    )}
                   />
-                  
                 </div>
-
               </div>
               <div className='card-form-field'>
                 <div className='form-group'>
                   <label>
                     Start Date <span className="mandatory"> *</span>
                   </label>
-
                   <Controller
-                  
                     name="startDate"
                     control={control}
+                    disabled={watch('type') === 'Indicators'}
                     rules={{ required: true }}
                     render={({ field, fieldState: { error } }) => (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
-                    name="startDate"
-
+                          name="startDate"
+                          disabled={watch('type') === 'Indicators'}
                           componentsProps={{
                             actionBar: {
                               actions: ['clear',]
@@ -643,13 +671,11 @@ setMemberCompanies([...personName])
                             setStartDate(event);
                             setValue(
                               "startDate",
-
                               event?.toISOString()
                             );
                           }}
                           renderInput={(params) => (
                             <TextField
-
                               autoComplete="off"
                               {...params}
                               className={` input-field ${error && "input-error"
@@ -657,13 +683,13 @@ setMemberCompanies([...personName])
                               onKeyDown={handleOnKeyDownChange}
                               placeholder="MM/DD/YYYY"
                               error
-                            helperText={
-                              error
-                                ? helperTextForFilters.startDate[
-                                    error.type
+                              helperText={
+                                error
+                                  ? helperTextForFilters.startDate[
+                                  error.type
                                   ]
-                                : " "
-                            }
+                                  : " "
+                              }
                             />
                           )}
                         // {...field}
@@ -678,15 +704,15 @@ setMemberCompanies([...personName])
                   <label>
                     End Date <span className="mandatory"> *</span>
                   </label>
-
                   <Controller
                     name="endDate"
                     control={control}
+                    disabled={watch('type') === 'Indicators'}
                     rules={{ required: true }}
                     render={({ field, fieldState: { error } }) => (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
-
+                          disabled={watch('type') === 'Indicators'}
                           componentsProps={{
                             actionBar: {
                               actions: ['clear',]
@@ -697,15 +723,12 @@ setMemberCompanies([...personName])
                           components={{
                             OpenPickerIcon: DateRangeOutlinedIcon,
                           }}
-
                           value={endDate}
                           disableFuture
-
                           onChange={(event = "") => {
                             setEndDate(event);
                             setValue(
                               "endDate",
-
                               event?.toISOString()
                             );
                           }}
@@ -718,13 +741,13 @@ setMemberCompanies([...personName])
                               onKeyDown={handleOnKeyDownChange}
                               placeholder="MM/DD/YYYY"
                               error
-                            helperText={
-                              error
-                                ? helperTextForFilters.endDate[
-                                    error.type
+                              helperText={
+                                error
+                                  ? helperTextForFilters.endDate[
+                                  error.type
                                   ]
-                                : " "
-                            }
+                                  : " "
+                              }
                             />
                           )}
                         // {...field}
@@ -734,6 +757,9 @@ setMemberCompanies([...personName])
                   />
                 </div>
               </div>
+              </>
+              }
+            
               <div className="form-btn flex-between add-members-btn">
               <button type="reset"
                       className="secondary-button mr-10" onClick={handleReset}>Reset Filter</button>
