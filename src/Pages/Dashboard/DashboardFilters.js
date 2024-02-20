@@ -204,10 +204,15 @@ setMemberCompanies([...personName])
       let maxDirectlyHired=0
       let maxThirdParty=0
       let maxDomesticMigrants=0
-      let companies = response?.data?.data.filter(data=>data?.memberName!=='other').map(data=>data)
+      let companies = response?.data?.data.filter(data=>data?.memberName!=='Other').map(data=>data)
+      console.log('companies=',companies)
       companies.forEach(company => {
         if (company.directlyHired > maxDirectlyHired) {
+    console.log("max directly hired before in foreach",maxDirectlyHired)
+
             maxDirectlyHired = company.directlyHired;
+    console.log("max directly hired after in foreach",maxDirectlyHired)
+
         }
         if (company.thirdParty > maxThirdParty) {
           maxThirdParty = company.thirdParty;
@@ -216,10 +221,19 @@ setMemberCompanies([...personName])
         maxDomesticMigrants=company.domesticMigrant
       }
     });
+    
+    // change bar width to avoid mess
+    let barPercentage=companies.length>30?0.4:companies.length>15&&companies.length<=30?0.5:companies.length<15?0.8:0
+    console.log('bar percent',barPercentage)
+    console.log('companies - ',companies?.length)
+    
+    console.log("max directly hired before",maxDirectlyHired)
+    
     // Round up the maximum value to the nearest 1000
-    maxDirectlyHired = Math.ceil(maxDirectlyHired / 10000) * 10000+10000;
-    maxThirdParty = Math.ceil(maxThirdParty / 10000) * 10000+10000;
-    maxDomesticMigrants = Math.ceil(maxDomesticMigrants / 10000) * 10000+1000;
+    maxDirectlyHired = Math.ceil(maxDirectlyHired / 1000) * 1000+10000;
+    maxThirdParty = Math.ceil(maxThirdParty / 1000) * 1000+10000;
+    maxDomesticMigrants = Math.ceil(maxDomesticMigrants / 1000) * 1000+1000;
+    console.log("max directly hired",maxDirectlyHired)
 
 
 
@@ -229,6 +243,10 @@ setMemberCompanies([...personName])
       barGraphOptions3:barGraphOptions(`Total - ${response?.data?.total?.domesticMigrant}`,maxDomesticMigrants)
 
     })
+     maxDirectlyHired=0
+     maxThirdParty=0
+     maxDomesticMigrants=0
+
     // options1.scales.y.suggestedMax=maxDirectlyHired
     // setBarGraphOptions(barGraphOptions)
       let labelsFordoughnutGraph1 = response?.data?.data.sort((a,b)=>{
@@ -241,7 +259,7 @@ setMemberCompanies([...personName])
           return 1
         } 
         return 0
-      }).map(data => `${data?.memberName}: ${data?.directlyHiredPercent}%`)
+      }).map(data => `${data?.memberName}`)
       let labelsFordoughnutGraph2= response?.data?.data.sort((a,b)=>{
         let memberA=a?.memberName?.toUpperCase()
         let memberB=b?.memberName?.toUpperCase()
@@ -322,10 +340,10 @@ setMemberCompanies([...personName])
           return {
             label: data.memberName,
             data: [data.thirdParty],
-            barPercentage: 0.9,
-            barThickness: 30,
-            maxBarThickness: 30,
-            minBarLength: 2,
+            barPercentage: barPercentage,
+            // barThickness: 30,
+            // maxBarThickness: 30,
+            // minBarLength: 2,
             backgroundColor: getRandomColor(),
           }
         })
@@ -361,10 +379,10 @@ setMemberCompanies([...personName])
           return {
             label: data.memberName,
             data: [data.directlyHired],
-            barPercentage: 0.9,
-            barThickness: 30,
-            maxBarThickness: 30,
-            minBarLength: 2,
+            barPercentage: barPercentage,
+            // barThickness: 20,
+            // maxBarThickness: 20,
+            // minBarLength: 2,
             backgroundColor: getRandomColor(),
           }
         })
@@ -395,10 +413,10 @@ setMemberCompanies([...personName])
           return {
             label: data.memberName,
             data: [data.domesticMigrant],
-            barPercentage: 0.9,
-            barThickness: 30,
-            maxBarThickness: 30,
-            minBarLength: 2,
+            barPercentage: barPercentage,
+            // barThickness: 30,
+            // maxBarThickness: 30,
+            // minBarLength: 2,
             backgroundColor: getRandomColor(),
           }
         })
@@ -446,11 +464,7 @@ setMemberCompanies([...personName])
 
 
 
-    setValue('memberCompanies','213123',{
-      shouldValidate: false,
-      shouldDirty:false,
-      shouldTouch:false
-    })
+    setValue('memberCompanies','213123')
 
 
 

@@ -83,12 +83,19 @@ export const barGraphOptions =(CountryTitle='',max)=>
           size: 12,
 
         },
-        datalabels: {
-          color: "black",
-          formatter: (value) =>  "    "+ value + "%",
-        },
+       
         
       },
+      // datalabels: {
+      //   color: "black",
+      //   // formatter: (value) =>  "    "+ value + "%",
+      //   formatter: (val, context) => `${val}%`,
+      // },
+      tooltip: {
+        callbacks: {
+          label: (ttItem) => `: ${ttItem.parsed}%`
+        }
+      }
     },
   }};
   export const defaultValue={
