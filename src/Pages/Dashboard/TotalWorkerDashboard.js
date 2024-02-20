@@ -9,7 +9,7 @@ import { TOTAL_WORKERS } from '../../api/Url';
 DoughnutChartJS.register(ArcElement, Tooltip, Legend);
 function TotalWorkerDashboard() {
     const TotalWorkerValue={
-        labels: ['Directly hired workers',"Third Party workers","Domestic Migrants"],
+        labels: ['Directly hired workers',"Third Party workers",],
     
         datasets: [
           {
@@ -23,8 +23,24 @@ function TotalWorkerDashboard() {
           },
         ]
       }
-    const [totalWorkerData, setTotalWorkerData] = useState({...TotalWorkerValue})
+      const DomesticMigrantsvalue={
+        labels: ['Domestic Migrants',"Others",],
+    
+        datasets: [
+          {
+            // label: "# of Votes",
+            data: [],
+            backgroundColor: ['Orange','grey'],
+            borderColor: [
+              ''
+            ],
+            borderWidth: 1,
+          },
+        ]
+      }
 
+    const [totalWorkerData, setTotalWorkerData] = useState({...TotalWorkerValue})
+      const [domesticMigrantData, setDomesticMigrantData] = useState({...DomesticMigrantsvalue})
     useEffect(() => {
       fetchTotalWorkersData()
     
@@ -37,9 +53,11 @@ function TotalWorkerDashboard() {
             const response = await privateAxios.get(TOTAL_WORKERS)
             console.log('Response from total workers',response)
             // let totalWorkersData={...defaultValue}
-            TotalWorkerValue.datasets[0].data=[response?.data?.total?.directlyHiredPercent,response?.data?.total?.thirdPartyPercent,response?.data?.total?.domesticMigrantPercent]   
+            TotalWorkerValue.datasets[0].data=[response?.data?.graph1?.directlyHiredPercent,response?.data?.graph1?.thirdPartyPercent]   
+            DomesticMigrantsvalue.datasets[0].data=[response?.data?.graph2?.domesticMigrantPercent,response?.data?.graph2?.otherPercent]   
+
             setTotalWorkerData({...TotalWorkerValue})
-            setTotalWorkers(`Total workers - ${response?.data?.total?.total}`)
+            setTotalWorkers(`Total workers - ${response?.data?.graph1?.total}`)
         } catch (error) {
             console.log('error from fetch total workers',error)
         }
@@ -58,6 +76,22 @@ function TotalWorkerDashboard() {
 <Doughnut
   data={totalWorkerData}
   options={doughnutGraphOptions(totalWorkers,'top')}
+  width={200}
+  height={200}
+/>
+</div>
+}
+{
+    totalWorkerData?.datasets[0]?.data.length>0&&
+<div style={{
+  width:'50%',
+  margin:'auto'
+}}>
+         <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
+
+<Doughnut
+  data={domesticMigrantData}
+  options={doughnutGraphOptions('','top')}
   width={200}
   height={200}
 />
