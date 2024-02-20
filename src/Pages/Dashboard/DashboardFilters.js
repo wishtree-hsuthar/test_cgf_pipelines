@@ -270,7 +270,7 @@ setMemberCompanies([...personName])
           return 1
         } 
         return 0
-      }).map(data => `${data?.memberName}: ${data?.thirdPartyPercent}%`)
+      }).map(data => `${data?.memberName}`)
       let labelsFordoughnutGraph3= response?.data?.data.sort((a,b)=>{
         let memberA=a?.memberName?.toUpperCase()
         let memberB=b?.memberName?.toUpperCase()
@@ -281,7 +281,7 @@ setMemberCompanies([...personName])
           return 1
         } 
         return 0
-      }).map(data => `${data?.memberName}: ${data?.domesticMigrantPercent}%`)
+      }).map(data => `${data?.memberName}`)
       
       let directHiredPercentData = response?.data?.data.sort((a,b)=>{
         let memberA=a?.memberName?.toUpperCase()
