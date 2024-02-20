@@ -83,7 +83,7 @@ export default function DoughnutChart(props) {
     >
         {/* <div class="html2pdf__page-break"></div> */}
 
-      <DashboardAccordian title={title01} expanded={props?.expanded?.expandDoughnutgraph1} name={'expandDoughnutgraph1'} setExpanded={props.setExpanded} >
+      <DashboardAccordian title={props?.graphTitle?.title1} expanded={props?.expanded?.expandDoughnutgraph1} name={'expandDoughnutgraph1'} setExpanded={props.setExpanded} >
         <div>
 
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
@@ -97,7 +97,7 @@ export default function DoughnutChart(props) {
       </DashboardAccordian>
       <div class="html2pdf__page-break"></div>
 
-      <DashboardAccordian title={title02} expanded={props?.expanded?.expandDoughnutgraph2} name={'expandDoughnutgraph2'} setExpanded={props.setExpanded} >
+      <DashboardAccordian title={props?.graphTitle?.title2} expanded={props?.expanded?.expandDoughnutgraph2} name={'expandDoughnutgraph2'} setExpanded={props.setExpanded} >
         <div>
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
 
@@ -110,7 +110,7 @@ export default function DoughnutChart(props) {
       </DashboardAccordian>
       <div class="html2pdf__page-break"></div>
 
-      <DashboardAccordian title={title03} expanded={props?.expanded?.expandDoughnutgraph3} name={'expandDoughnutgraph3'} setExpanded={props.setExpanded} >
+      <DashboardAccordian title={props?.graphTitle?.title3} expanded={props?.expanded?.expandDoughnutgraph3} name={'expandDoughnutgraph3'} setExpanded={props.setExpanded} >
         <div>
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
           <Doughnut
