@@ -95,6 +95,7 @@ export default function DoughnutChart(props) {
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
 
           <Doughnut
+          id="chart4"
           width={200}
           height={200}
             data={props?.data}
@@ -117,6 +118,7 @@ export default function DoughnutChart(props) {
 
           <Doughnut
             data={props.thirdPartyData}
+            id="chart5"
 
             options={options2}
           />
@@ -135,6 +137,8 @@ export default function DoughnutChart(props) {
         }>
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
           <Doughnut
+          id="chart6"
+
             data={props.domesticMigrantsData}
             options={options3}
           />

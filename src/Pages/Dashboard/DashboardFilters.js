@@ -186,7 +186,8 @@ setMemberCompanies([...personName])
       data = {
         indicator:data?.indicator,
         assessment:data?.assessment,
-        type:data?.type
+        type:data?.type,
+        country:data?.country
       }
     }
     setIsAssessmentCountryType(data.assessment==="COUNTRY- OPERATION HRDD REQUIREMENTS")
