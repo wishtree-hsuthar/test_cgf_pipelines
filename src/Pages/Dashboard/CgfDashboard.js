@@ -24,6 +24,8 @@ import  html2pdf  from "html2pdf.js";
 import "./DashBoardFilter.css"
 import TotalWorkerDashboard from "./TotalWorkerDashboard";
 import IndicatorGraph from './IndicatorGraph'
+import {jsPDF} from 'jspdf'
+import html2canvas from "html2canvas";
 // import IndicatorData from './IndicatorGraph '
 ChartJS.register(
   CategoryScale,
@@ -82,7 +84,7 @@ function CgfDashboard() {
   const [dataForBarGraphs, setDataForBarGraphs] = useState({
     directlyHired: {
       barGraph: {
-        labels: labels[0],
+        labels: [''],
         datasets: [{
           label: '',
           data: []
@@ -98,7 +100,7 @@ function CgfDashboard() {
     },
     thirdParty: {
       barGraph: {
-        labels: labels[1],
+        labels: [''],
         datasets: [{
           label: '',
           data: []
@@ -115,7 +117,7 @@ function CgfDashboard() {
     },
     domesticMigrants: {
       barGraph: {
-        labels: labels[2],
+        labels: [''],
         datasets: [{
           label: '',
           data: []
@@ -158,8 +160,54 @@ function CgfDashboard() {
     });
   };
 
+  const saveChartsAsPDF = async (containerIds) => {
+    // Create a new jsPDF instance
+    const doc = new jsPDF('landscape', 'mm', 'a4');
+  
+    for (let i = 0; i < containerIds.length; i++) {
+      const containerId = containerIds[i];
+      const container = document.getElementById(containerId);
+  
+      if (!container) {
+        console.error(`Container with ID ${containerId} not found.`);
+        continue;
+      }
+  
+      // Create a canvas for saving the chart image
+      const chartCanvas = document.createElement("canvas");
+      chartCanvas.width = container.offsetWidth;
+      chartCanvas.height = container.offsetHeight;
+      const chartContext = chartCanvas.getContext("2d");
+  
+      // Draw the content of the container onto the canvas
+      await html2canvas(container).then((canvas) => {
+        chartContext.drawImage(canvas, 0, 0, chartCanvas.width, chartCanvas.height);
+      });
+  
+      // Convert the canvas to a data URL
+      const chartDataURL = chartCanvas.toDataURL("image/png", 1.0);
+  
+      // Add a new page to the PDF, except for the first iteration
+      if (i > 0) {
+        doc.addPage();
+      }
+  
+      // Add the chart image to the PDF using the actual canvas size
+      doc.addImage(chartDataURL, 'PNG', 0, 0, doc.internal.pageSize?.getWidth(), doc.internal.pageSize?.getHeight());
+    }
+  
+    // Save the PDF
+    doc.save('output.pdf');
+  };
+  
+  
+ 
+
   const saveAsPdf = (containerId) => {
+    console.log('container id = ',containerId)
     const container = document.getElementById(containerId);
+    console.log('container  = ',container)
+
 
     if (!container) {
       console.error(`Container with ID ${containerId} not found.`);
@@ -289,62 +337,75 @@ function CgfDashboard() {
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={saveAsPdf} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
+            <DashboardFilters setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={()=>saveChartsAsPDF(indicatorData?.graphData?['ichart1']:['chart1','chart2','chart3','chart4','chart5','chart6'])} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
           <div id="chart-container">
           <DashboardAccordian  expanded={expanded.expandTotalWorker} name={'expandTotalWorker'} setExpanded={setExpanded} title={'Total no of workers across globe'}>
             <TotalWorkerDashboard />
           </DashboardAccordian>
-          <div class="html2pdf__page-break"></div>
-          <DashboardAccordian title={'Indicators'} expanded={expanded.expandIndicator} name={'expandIndicator'} setExpanded={setExpanded}  >
+         
+        {indicatorData?.graphData&& 
+        <>
+         <div class="html2pdf__page-break"></div>
+         <DashboardAccordian title={'Indicators'} expanded={expanded.expandIndicator} name={'expandIndicator'} setExpanded={setExpanded}  >
                <IndicatorGraph indicatorData={indicatorData}/>
              </DashboardAccordian>
-          {dataForBarGraphs?.directlyHired?.barGraph?.datasets?.length>0 && (
+             </>
+             }
+               <div class="html2pdf__page-break"></div>
+          {dataForBarGraphs?.directlyHired?.barGraph?.datasets[0]?.label?.length>0 && (
             <>
-              <div class="html2pdf__page-break"></div>
+            
+          
             <DashboardAccordian setExpanded={setExpanded} title={'Bar Graphs'} expanded={expanded?.expandBarGraph} name={'expandBarGraph'}>
         
-              
+          
               <DashboardAccordian title={accordianTitles.title1} expanded={expanded.expandBarGraph1} name={'expandBarGraph1'} setExpanded={setExpanded}  >
-               
+              <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}         
+           
                 <Bar
-                  id="chart"
+                  id="chart1"
                   style={{ backgroundColor: "white" }}
                   options={optionsForBarGraph.barGraphOptions1}
                   data={dataForBarGraphs?.directlyHired?.barGraph}
                 />
+               
               </DashboardAccordian>
-          <div class="html2pdf__page-break"></div>
-
-        
+           
+              <div class="html2pdf__page-break"></div>
+             
               <DashboardAccordian title={accordianTitles.title2} expanded={expanded.expandBarGraph2} name={'expandBarGraph2'} setExpanded={setExpanded} >
+              <div class="html2pdf__page-break"></div>
+              
               <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}         
 
-       
+              
                 <Bar
-                  // id="chart"
+                  id="chart2"
                   style={{ backgroundColor: "white" }}
                   options={optionsForBarGraph.barGraphOptions2}
                   data={dataForBarGraphs?.thirdParty?.barGraph}
                 />
-               
               </DashboardAccordian>
               <div class="html2pdf__page-break"></div>
-              
+            
+          
               <DashboardAccordian title={accordianTitles.title3} expanded={expanded.expandBarGraph3} name={'expandBarGraph3'} setExpanded={setExpanded} >
                 <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}             
                 <Bar
-                  id="chart"
+                  id="chart3"
                   style={{ backgroundColor: "white" }}
                   options={optionsForBarGraph.barGraphOptions3}
                   data={dataForBarGraphs?.domesticMigrants?.barGraph}
                 />
+              <div class="html2pdf__page-break"></div>
+
               </DashboardAccordian>
-           
+             
 
             </DashboardAccordian>
-            <div class="html2pdf__page-break"></div>
+           
             </>
             )}
         

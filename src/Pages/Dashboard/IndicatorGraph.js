@@ -51,14 +51,24 @@ function IndicatorGraph({indicatorData}) {
   }, [indicatorData])
   
   return (
-    <div>
+    <div id='ichart1'>
       {
       
       indicatorDataForDisplay.datasets[0].data.length>0&&
-       <Doughnut
+     <div 
+     style={{
+      width: '60%',
+      display: 'block',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+
+}}
+     >
+      <Doughnut
             data={indicatorDataForDisplay}
-            options={doughnutGraphOptions(indicatorData?.indicator)}
-          />}
+            options={doughnutGraphOptions(indicatorData?.indicator,'top')}
+          />
+          </div>}
            <div>
            <TableContainer component={Paper} className='table-blk'>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

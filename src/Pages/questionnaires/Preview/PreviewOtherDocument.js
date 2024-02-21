@@ -49,21 +49,21 @@ const downloadOtherDocument=async()=>{
     }
 }
   return (
-    <div className="preview-que-blk">
+    <div >
          <Toaster
         myRef={otherDocToasterRef}
         titleMessage={otherDocsToasterDetails.titleMessage}
         descriptionMessage={otherDocsToasterDetails.descriptionMessage}
         messageType={otherDocsToasterDetails.messageType}
       />
-    <div className="form-group">
+    <div >
         <label htmlFor="questionTitle">
-            <div className="preview-sect-txt">
+            <div >
           Document title -   {documentObj?.documentTitle??doc?.documentTitle}
               
             </div>
         </label>
-        <div className="que-half-sect"  href="#"
+        <div  href="#"
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 downloadOtherDocument()
