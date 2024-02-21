@@ -117,10 +117,11 @@ function DashboardFilters({setIndicatorData, setBarGraphOptions1,saveAsPdf,setIs
     setPersonName([]);
     setExpanded(expanded => { return { ...expanded, expandBarGraph: false, expandDoughnutGraph: false,expandFilters:true ,expandDoughnutgraph1:false} })
     setIsAssessmentCountryType(false)
+    setIndicatorData({})
     setDataForBarGraphs({
       directlyHired: {
         barGraph: {
-          labels: labels[0],
+          labels: [''],
           datasets: [{
             label: '',
             data: []
@@ -136,7 +137,7 @@ function DashboardFilters({setIndicatorData, setBarGraphOptions1,saveAsPdf,setIs
       },
       thirdParty: {
         barGraph: {
-          labels: labels[1],
+          labels: [''],
           datasets: [{
             label: '',
             data: []
@@ -153,7 +154,7 @@ function DashboardFilters({setIndicatorData, setBarGraphOptions1,saveAsPdf,setIs
       },
       domesticMigrants: {
         barGraph: {
-          labels: labels[2],
+          labels: [''],
           datasets: [{
             label: '',
             data: []
@@ -434,11 +435,64 @@ setMemberCompanies([...personName])
         ]
 
         console.log('data for bar graphs = ', dataForBarGraphs)
+        setIndicatorData({})
 
         return dataForBarGraphs
       })
     } else {
       setIndicatorData({...response.data,indicator:getValues('indicator')})
+      setDataForBarGraphs({
+        directlyHired: {
+          barGraph: {
+            labels: [''],
+            datasets: [{
+              label: '',
+              data: []
+            }]
+          },
+          doughnutGraph: {
+            labels: [''],
+            datasets: [{
+              label: '',
+              data: []
+            }]
+          }
+        },
+        thirdParty: {
+          barGraph: {
+            labels: [''],
+            datasets: [{
+              label: '',
+              data: []
+            }]
+          },
+          doughnutGraph: {
+            labels: [''],
+            datasets: [{
+              label: '',
+              data: []
+            }]
+          }
+    
+        },
+        domesticMigrants: {
+          barGraph: {
+            labels: [''],
+            datasets: [{
+              label: '',
+              data: []
+            }]
+    
+          },
+          doughnutGraph: {
+            labels: [''],
+            datasets: [{
+              label: '',
+              data: []
+            }]
+          }
+        }
+      })
     }
 
 
@@ -612,43 +666,44 @@ setMemberCompanies([...personName])
                   <label>
                     Member Companies <span className="mandatory"> *</span>
                   </label>
-                  <Controller
-                    name={'memberCompanies'}
-                    disabled={watch('type') === 'Indicators'}
-                    control={control}
-                    rules={{ required: 'Select the member company' }}
-                    render={({ field, fieldState: { error } }) => (
-                      <FormControl {...field} style={{ width: "100%" }}>
-                        <Select
-                          IconComponent={(props) => (
-                            <KeyboardArrowDownRoundedIcon {...props} />
-                          )}
-                          {...field}
-                          multiple
-                          displayEmpty
-                          className='dashboard-select-component'
-                          fullWidth
-                          disabled={watch('type') === 'Indicators'}
-                          value={personName}
-                          onChange={handleChange}
-                          input={<OutlinedInput {...field} />}
-                          renderValue={(selected) => selected?.includes('all') ? 'All Member Companies' : selected?.length < 1 ? 'Select member companies' : selected?.map((data) => data?.label).join(", ")}
-                          MenuProps={MenuProps}
-                        >
-                          <MenuItem key={'all'} value={'all'}>
-                            {/* <Checkbox checked={personName.length === memberCompanyOptions.length} /> */}
-                            <ListItemText primary={'Select All'} />
-                          </MenuItem>
-                          {memberCompanyOptions.map((data) => (
-                            <MenuItem key={data.label} value={data}>
-                              <Checkbox checked={personName.includes('all') || personName.includes(data)} />
-                              <ListItemText primary={data.label} />
-                            </MenuItem>
-                          ))}
-                        </Select>
-                        <FormHelperText>{error && error?.message}</FormHelperText>
-                      </FormControl>
-                    )}
+                  <Controller 
+                  name={'memberCompanies'}
+
+                  control={control}
+                  rules={{required:"Select the member company"}}
+                  render={({field,fieldState:{error}})=>(
+                    <FormControl {...field} style={{width:"100%"}}>
+                  <Select
+                  IconComponent={(props) => (
+                    <KeyboardArrowDownRoundedIcon {...props} />
+                )}
+                  {...field}
+                  multiple
+                  displayEmpty
+                  className='dashboard-select-component'
+                     fullWidth
+                   
+                  value={personName}
+                  onChange={handleChange}
+                  input={<OutlinedInput {...field} />}
+                      renderValue={(selected) => selected?.includes('all') ? 'All Member Companies' :selected?.length<1?'Select member companies': selected?.map((data) => data?.label).join(", ") }
+                  MenuProps={MenuProps}
+                >
+                  <MenuItem key={'all'} value={'all'}>
+                    <Checkbox checked={memberCompanyOptions.length>0&&personName.length === memberCompanyOptions.length} />
+                    <ListItemText primary={'Select All'} />
+                  </MenuItem>
+              
+                  {memberCompanyOptions.map((data) => (
+                    <MenuItem key={data.label} value={data}>
+                      <Checkbox checked={personName.includes('all') || personName.includes(data)} />
+                      <ListItemText primary={data.label} />
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{error&&error?.message}</FormHelperText>
+                </FormControl>
+                  )}
                   />
                 </div>
               </div>
