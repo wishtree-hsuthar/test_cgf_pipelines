@@ -205,7 +205,7 @@ function CgfDashboard() {
     }
   
     // Save the PDF
-    doc.save('output.pdf');
+    doc.save(`Dashboard-report-${new Date().toISOString()}.pdf`);
     setDashboardReport({
       
         titleMessage: "Hurray!",

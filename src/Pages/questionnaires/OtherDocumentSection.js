@@ -341,7 +341,7 @@ function OtherDocumentSection({
                     <div className="que-card-form-leftfield">
                       <div className="form-group">
                         <label htmlFor="questionTitle">
-                          {questionnaire?.sections[sectionIndex]?.documents[docIndex]?.type==='File'?"Other Document Title":"Link Title"}{" "}{docIndex + 1}
+                          Title {" "}
                           <span className="mandatory">*</span>
                         </label>
                         <TextField
@@ -365,7 +365,7 @@ function OtherDocumentSection({
                     <div className="que-card-form-rightfield flex-between">
                     <div className="form-group">
                             <label htmlFor="inputField">
-                                File/Link Type <span className="mandatory">*</span>
+                                 Type <span className="mandatory">*</span>
                             </label>
                             <FormControl className="fullwidth-field">
                                 <div className="select-field">
@@ -419,7 +419,7 @@ function OtherDocumentSection({
                             pointerEvents: 'auto',
                           }}
                         >
-                          Upload other document
+                          Upload Document
                         </a>
                         {questionnaire?.sections[sectionIndex]?.documents?.[docIndex]?.['originalName']}
 
