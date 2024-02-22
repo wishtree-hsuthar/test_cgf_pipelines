@@ -17,7 +17,15 @@ function PreviewOtherDocument({key,documentObj={},doc={},sectionUUID='',question
     console.log('qid',questionnaireId)
     console.log('documentObj',documentObj)
     console.log('doc',doc)
-
+    console.log('LINK ',documentObj?.link)
+    let link=()=>{
+      if (documentObj?.link) {
+        return documentObj?.link
+      } else {
+        return doc?.link
+        
+      }
+    }
     const navigate = useNavigate();
     const [otherDocsToasterDetails, setOtherDocsToasterDetails] = useCallbackState({
       titleMessage: "",
@@ -99,12 +107,12 @@ const downloadOtherDocument=async()=>{
               // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
             
-              <TableCell align='center' width={'50%'}>{documentObj?.documentTitle??doc?.documentTitle??doc?.linkTitle}</TableCell>
+              <TableCell align='center' width={'50%'}>{documentObj?.documentTitle??documentObj?.linkTitle??doc?.documentTitle??doc?.linkTitle}</TableCell>
            
               <TableCell align='left' width={'50%'}>{
                 doc?.type==='Link'||documentObj?.type==='Link'?
                 
-                <a href={"http://"+doc?.link??documentObj?.link} target='_blank' >{doc?.link??documentObj?.link}</a>:
+                <a href={"http://"+link()} onClick={()=>console.log('LINK ON ONCLICK',"http://"+doc?.link??documentObj?.link)}target='_blank' >{doc?.link??documentObj?.link}</a>:
                   <div  href="#"
                   onClick={(e) => {
                       e.preventDefault();
