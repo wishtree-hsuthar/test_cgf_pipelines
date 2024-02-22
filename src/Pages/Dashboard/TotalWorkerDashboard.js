@@ -47,7 +47,7 @@ function TotalWorkerDashboard() {
 
     }, [])
     const [totalWorkers, setTotalWorkers] = useState('')
-   
+   const [TotalMigrants,setTotalMigrants] = useState('')
     const fetchTotalWorkersData=async()=>{
         try {
             const response = await privateAxios.get(TOTAL_WORKERS)
@@ -57,16 +57,25 @@ function TotalWorkerDashboard() {
             DomesticMigrantsvalue.datasets[0].data=[response?.data?.graph2?.domesticMigrantPercent,response?.data?.graph2?.otherPercent]   
 
             setTotalWorkerData({...TotalWorkerValue})
-            setTotalWorkers(`Total workers - ${response?.data?.graph1?.total}`)
+            setTotalWorkers(`Total Workers - ${response?.data?.graph1?.total}`)
+            setTotalMigrants(`Domestic & Foreign Migrant Workers - ${response?.data?.graph2?.domesticMigrantTotal}`)
         } catch (error) {
             console.log('error from fetch total workers',error)
         }
     }
     console.log('totaldata=',totalWorkerData)
   return (
-    <div>
+    <div  id={'tchart'}>
+      {/* <h6>{totalWorkers}</h6> */}
 {
     totalWorkerData?.datasets[0]?.data.length>0&&
+    <div style={{
+      display:"flex",
+      width:"80",
+      margin:'auto'
+    }}
+   
+    >
 <div style={{
   width:'50%',
   margin:'auto'
@@ -80,9 +89,7 @@ function TotalWorkerDashboard() {
   height={200}
 />
 </div>
-}
-{
-    totalWorkerData?.datasets[0]?.data.length>0&&
+
 <div style={{
   width:'50%',
   margin:'auto'
@@ -91,10 +98,11 @@ function TotalWorkerDashboard() {
 
 <Doughnut
   data={domesticMigrantData}
-  options={doughnutGraphOptions('','top')}
-  width={200}
-  height={200}
+  options={doughnutGraphOptions(TotalMigrants,'top')}
+  width={100}
+  height={100}
 />
+</div>
 </div>
 }
     </div>

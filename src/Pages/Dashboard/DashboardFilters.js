@@ -597,7 +597,7 @@ setMemberCompanies([...personName])
                     control={control}
                     myOnChange={handleChangeForType}
                     name={'type'}
-                    options={['SAQ', 'Indicators']}
+                    options={['SAQ',]}
                     rules={{ required: true }}
                     myHelper={helperTextForFilters}
                     placeholder="Select type"

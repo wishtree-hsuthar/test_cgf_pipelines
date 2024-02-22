@@ -347,8 +347,8 @@ function OtherDocumentSection({
                         <TextField
                           className={classnameForTitle(document,docIndex)}
                           placeholder="Enter document title"
-                          name={questionnaire.sections[sectionIndex].documents[docIndex].type==='Link'?'linkTitle':"documentTitle"}
-                          value={questionnaire.sections[sectionIndex].documents[docIndex].type==='Link'?document?.linkTitle:document?.documentTitle}
+                          name={questionnaire.sections[sectionIndex].documents[docIndex].type==='File'?'documentTitle':"linkTitle"}
+                          value={questionnaire.sections[sectionIndex].documents[docIndex].type==='File'?document?.documentTitle:document?.linkTitle}
                           helperText={
                             helperTextForTitle(document,docIndex)
                           }
