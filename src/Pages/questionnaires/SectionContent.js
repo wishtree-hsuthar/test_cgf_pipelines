@@ -840,7 +840,7 @@ const SectionContent = ({
                             Table
                           </MenuItem>
                           <MenuItem value="documents" >
-                            Other documents
+                            Other Documents
                           </MenuItem>
                         </Select>
                         <FormHelperText> </FormHelperText>

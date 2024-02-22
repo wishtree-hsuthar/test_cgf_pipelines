@@ -20,9 +20,21 @@ function PreviewOtherDocument({key,documentObj={},doc={},sectionUUID='',question
     console.log('LINK ',documentObj?.link)
     let link=()=>{
       if (documentObj?.link) {
-        return documentObj?.link
+        if(documentObj?.link.toLowerCase().startsWith("http"))
+        {
+          return documentObj?.link
+        } else {
+          return 'http://'+documentObj?.link
+        }
+       
+
       } else {
-        return doc?.link
+        if(doc?.link.toLowerCase().startsWith("http"))
+        {
+          return doc?.link
+        } else {
+          return 'http://'+doc?.link
+        }
         
       }
     }
@@ -112,7 +124,7 @@ const downloadOtherDocument=async()=>{
               <TableCell align='left' width={'50%'}>{
                 doc?.type==='Link'||documentObj?.type==='Link'?
                 
-                <a href={"http://"+link()} onClick={()=>console.log('LINK ON ONCLICK',"http://"+doc?.link??documentObj?.link)}target='_blank' >{doc?.link??documentObj?.link}</a>:
+                <a href={link()} onClick={()=>console.log('LINK ON ONCLICK',"http://"+doc?.link??documentObj?.link)}target='_blank' >{doc?.link??documentObj?.link}</a>:
                   <div  href="#"
                   onClick={(e) => {
                       e.preventDefault();

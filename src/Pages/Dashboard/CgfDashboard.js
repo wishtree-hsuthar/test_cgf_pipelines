@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import { saveAs } from "file-saver";
 import ChartDataLabels from "chartjs-plugin-datalabels";
@@ -26,6 +26,8 @@ import TotalWorkerDashboard from "./TotalWorkerDashboard";
 import IndicatorGraph from './IndicatorGraph'
 import {jsPDF} from 'jspdf'
 import html2canvas from "html2canvas";
+import useCallbackState from "../../utils/useCallBackState";
+import Toaster from "../../components/Toaster";
 // import IndicatorData from './IndicatorGraph '
 ChartJS.register(
   CategoryScale,
@@ -46,6 +48,12 @@ const options3 = barGraphOptions('')
 
 
 function CgfDashboard() {
+  const [dashboardReport, setDashboardReport] = useCallbackState({
+    titleMessage: "",
+    descriptionMessage: "",
+    messageType: "error",
+  });
+ const dashboardRef = useRef()
   const [optionsForBarGraph, setOptionsForBarGraph] = useState({
     barGraphOptions1:barGraphOptions(''),
     barGraphOptions2:barGraphOptions(''),
@@ -185,7 +193,7 @@ function CgfDashboard() {
       });
   
       // Convert the canvas to a data URL
-      const chartDataURL = chartCanvas.toDataURL("image/png", 1.0);
+      const chartDataURL = chartCanvas.toDataURL("image/svg", 1.0);
   
       // Add a new page to the PDF, except for the first iteration
       if (i > 0) {
@@ -193,11 +201,19 @@ function CgfDashboard() {
       }
   
       // Add the chart image to the PDF using the actual canvas size
-      doc.addImage(chartDataURL, 'PNG', 0, 0, doc.internal.pageSize?.getWidth(), doc.internal.pageSize?.getHeight());
+      doc.addImage(chartDataURL, 'SVG', 0, 0, doc.internal.pageSize?.getWidth(), doc.internal.pageSize?.getHeight());
     }
   
     // Save the PDF
     doc.save('output.pdf');
+    setDashboardReport({
+      
+        titleMessage: "Hurray!",
+        descriptionMessage: 'File downloaded successfully!',
+        messageType: "success",
+      },
+      () => dashboardRef.current()
+    )
   };
   
   
@@ -333,11 +349,17 @@ function CgfDashboard() {
       <section style={{
         margin:'5%'
       }}>
+          <Toaster
+        myRef={dashboardRef}
+        titleMessage={dashboardReport.titleMessage}
+        descriptionMessage={dashboardReport.descriptionMessage}
+        messageType={dashboardReport.messageType}
+      />
         <div className="container" >
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={()=>saveChartsAsPDF(indicatorData?.graphData?['ichart1']:['chart1','chart2','chart3','chart4','chart5','chart6'])} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
+            <DashboardFilters setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={()=>saveChartsAsPDF(indicatorData?.graphData?['tchart','ichart1']:['tchart','chart1','chart2','chart3','chart4','chart5','chart6'])} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
           <div id="chart-container">
