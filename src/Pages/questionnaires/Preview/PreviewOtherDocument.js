@@ -5,10 +5,19 @@ import { useNavigate } from 'react-router-dom'
 import useCallbackState from '../../../utils/useCallBackState'
 import Toaster from '../../../components/Toaster'
 import { catchError } from '../../../utils/CatchError'
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 function PreviewOtherDocument({key,documentObj={},doc={},sectionUUID='',questionnaireId=''}) {
     console.log('qid',questionnaireId)
     console.log('documentObj',documentObj)
+    console.log('doc',doc)
+
     const navigate = useNavigate();
     const [otherDocsToasterDetails, setOtherDocsToasterDetails] = useCallbackState({
       titleMessage: "",
@@ -17,6 +26,7 @@ function PreviewOtherDocument({key,documentObj={},doc={},sectionUUID='',question
     });
     const otherDocToasterRef=useRef()
 const downloadOtherDocument=async()=>{
+ 
     try {
         const response = await privateAxios.post(DOWNLOAD_OTHER_DOCS,{
             questionnaireId:questionnaireId,
@@ -56,7 +66,7 @@ const downloadOtherDocument=async()=>{
         descriptionMessage={otherDocsToasterDetails.descriptionMessage}
         messageType={otherDocsToasterDetails.messageType}
       />
-    <div >
+    {/* <div >
         <label htmlFor="questionTitle">
             <div >
           Document title -   {documentObj?.documentTitle??doc?.documentTitle}
@@ -71,7 +81,44 @@ const downloadOtherDocument=async()=>{
                                             style={{ color:  "#4596D1",cursor:"pointer"}} >
             {documentObj?.originalName??doc.originalName}
         </div>
-    </div>
+    </div> */}
+     <TableContainer component={Paper} className='table-blk'>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        {/* <TableHead>
+          <TableRow>
+        
+            <TableCell align='center' >Title</TableCell>
+            <TableCell align='center'>File/Link</TableCell>
+        
+          </TableRow>
+        </TableHead> */}
+        <TableBody>
+          
+            <TableRow
+              // key={}
+              // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+            
+              <TableCell align='center' width={'50%'}>{documentObj?.documentTitle??doc?.documentTitle??doc?.linkTitle}</TableCell>
+           
+              <TableCell align='left' width={'50%'}>{
+                doc?.type==='Link'||documentObj?.type==='Link'?
+                
+                <a href={"http://"+doc?.link??documentObj?.link} target='_blank' >{doc?.link??documentObj?.link}</a>:
+                  <div  href="#"
+                  onClick={(e) => {
+                      e.preventDefault();
+
+                      downloadOtherDocument()
+                  }}
+                  style={{ color:doc?.link?'none':  "#4596D1",cursor:doc?.link?'default':"pointer"}} >
+{documentObj?.originalName??doc.originalName??doc?.link}
+</div>}</TableCell>
+            </TableRow>
+        
+        </TableBody>
+      </Table>
+    </TableContainer>
 </div>
   )
 }
