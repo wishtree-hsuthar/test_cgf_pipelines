@@ -119,7 +119,7 @@ const downloadOtherDocument=async()=>{
               // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
             
-              <TableCell align='center' width={'50%'}>{documentObj?.documentTitle??documentObj?.linkTitle??doc?.documentTitle??doc?.linkTitle}</TableCell>
+              <TableCell align='left' width={'50%'}>{documentObj?.documentTitle??documentObj?.linkTitle??doc?.documentTitle??doc?.linkTitle}</TableCell>
            
               <TableCell align='left' width={'50%'}>{
                 doc?.type==='Link'||documentObj?.type==='Link'?

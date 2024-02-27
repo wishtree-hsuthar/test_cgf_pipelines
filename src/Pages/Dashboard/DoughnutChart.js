@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { Chart as DoughnutChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { total } from "./MockDataForGraph";
@@ -65,10 +65,24 @@ console.log(result);
 
 
 export default function DoughnutChart(props) {
+  const [width, setWidth] = useState(1000)
+  const [screenSize, setScreenSize] = useState(1024)
+  useEffect(() => {
+    
+    console.log('screen size - ',window.innerWidth)
+  
+    if (screenSize<=window.innerWidth) {
+    console.log('in if screen size - ',window.innerWidth)
 
-  let title01 = splitSentences(props.graphTitle.title1, 9)
-  let title02 = splitSentences(props.graphTitle.title2, 9)
-  let title03 = splitSentences(props.graphTitle.title3, 9)
+      setWidth(500)
+      setScreenSize(window.innerWidth)
+    }
+  }, [screenSize,window.innerWidth])
+  
+  console.log('screen size - ',window.innerWidth)
+  let title01 = splitSentences(props.graphTitle.title1, 30)
+  let title02 = splitSentences(props.graphTitle.title2, 30)
+  let title03 = splitSentences(props.graphTitle.title3, 30)
 
   console.log('title01', title01)
   console.log('props form doughnut chart page = ', props);
@@ -84,64 +98,66 @@ export default function DoughnutChart(props) {
         {/* <div class="html2pdf__page-break"></div> */}
 
       <DashboardAccordian title={props?.graphTitle?.title1} expanded={props?.expanded?.expandDoughnutgraph1} name={'expandDoughnutgraph1'} setExpanded={props.setExpanded} >
-        <div style={{
-              width: '60%',
-              display: 'block',
-              marginLeft: 'auto',
-              marginRight: 'auto',
+        <div
+        //  style={{
+        //       width: '60%',
+        //       display: 'block',
+        //       marginLeft: 'auto',
+        //       marginRight: 'auto',
 
-        }}>
+        // }}
+        >
 
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
-
+    <div style={{
+      height:'500px'
+    }}>
           <Doughnut
           id="chart4"
-          width={200}
-          height={200}
+          width={1000}
+          height={500}  
+          options={{responsive:true,maintainAspectRatio: false ,...options1}}
+
+         
             data={props?.data}
-            options={options1}
+            
           />
+          </div>
         </div>
 
       </DashboardAccordian>
       <div class="html2pdf__page-break"></div>
 
       <DashboardAccordian title={props?.graphTitle?.title2} expanded={props?.expanded?.expandDoughnutgraph2} name={'expandDoughnutgraph2'} setExpanded={props.setExpanded} >
-        <div  style={{
-            width: '60%',
-            display: 'block',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-
-        }}>
+        <div  >
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
-
+          <div style={{
+      height:'500px'
+    }}>
           <Doughnut
             data={props.thirdPartyData}
             id="chart5"
 
-            options={options2}
+            options={{responsive:true,maintainAspectRatio: false,...options2}}
           />
+          </div>
         </div>
       </DashboardAccordian>
       <div class="html2pdf__page-break"></div>
 
       <DashboardAccordian title={props?.graphTitle?.title3} expanded={props?.expanded?.expandDoughnutgraph3} name={'expandDoughnutgraph3'} setExpanded={props.setExpanded} >
-        <div style={
-          {
-            width: '60%',
-              display: 'block',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-          }
-        }>
+        <div >
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
+          <div style={{
+      height:'500px'
+    }}>
           <Doughnut
           id="chart6"
 
             data={props.domesticMigrantsData}
-            options={options3}
+            options={{responsive:true,maintainAspectRatio: false,...options3}}
           />
+          </div>
         </div>
       </DashboardAccordian>
     </div>

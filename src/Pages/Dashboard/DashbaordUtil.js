@@ -57,6 +57,7 @@ export const barGraphOptions =(CountryTitle='',max)=>
   export const doughnutGraphOptions =(title,position='left')=> {
     return {
     // responsive: true,
+    // maintainAspectRatio: false ,
     plugins: {
       datalabels:{
         display:false,
@@ -70,7 +71,6 @@ export const barGraphOptions =(CountryTitle='',max)=>
           // This more specific font property overrides the global property
           font: {
             size: 10,
-            weight: "bold",
           },
           color: "black",
         },

@@ -2796,3 +2796,27 @@ input::-ms-reveal {
 /* td .Toastify {
   display: none;
 } */
+
+/* other document section */
+.flex-between-other-section {
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  flex-wrap: wrap;
+}
+.flex-between-other-section-left {
+  flex: 0 0 30%;
+    max-width: 50%;
+}
+.flex-mid-other-section {
+  width: 40%;
+}
+.flex-end-other-section {
+  width: 27%;
+}
+.flex-between-other-section-right {
+    flex: 0 0 69%;
+}
+.flex-between-other-section-right .form-group{
+  flex: 0 0 49%;
+}
