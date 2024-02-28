@@ -9,28 +9,28 @@ import Paper from '@mui/material/Paper';
 function SAQStatsTable({records,type}) {
   return (
     <div>
-           <TableContainer component={Paper} className='table-blk'>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+           <TableContainer component={Paper} >
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>{type}</TableCell>
-            <TableCell >Submitted</TableCell>
-            <TableCell>Pending</TableCell>
-            <TableCell>Total</TableCell>
+            <TableCell style={{width:'40%'}}>{type}</TableCell>
+            <TableCell align='center'>Submitted</TableCell>
+            <TableCell align='center'>Pending</TableCell>
+            <TableCell align='center'>Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {records.map((row,index) => (
             <TableRow
               key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell style={{width:'40%'}}component="th" scope="row">
                 {type==='Member Company'?row?.memberCompany:row.country}
               </TableCell>
-              <TableCell >{row?.submitted}</TableCell>
-              <TableCell >{row?.pending}</TableCell>
-              <TableCell >{row?.total}</TableCell>
+              <TableCell align='center'>{row?.submitted}</TableCell>
+              <TableCell align='center'>{row?.pending}</TableCell>
+              <TableCell align='center'>{row?.total}</TableCell>
             </TableRow>
           ))}
         </TableBody>

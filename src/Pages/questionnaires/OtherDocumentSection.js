@@ -155,10 +155,10 @@ function OtherDocumentSection({
       // formData.append('document',event.target.files[0])
       console.log("inside if");
 
-      let tempQuestionnaire = { ...questionnaire };
-      tempQuestionnaire.sections[sectionIndex].documents[documentIndexforFIle]['originalName'] =
-        file.name;
-      setQuestionnaire(tempQuestionnaire);
+      // let tempQuestionnaire = { ...questionnaire };
+      // tempQuestionnaire.sections[sectionIndex].documents[documentIndexforFIle]['originalName'] =
+      //   file.name;
+      // setQuestionnaire(tempQuestionnaire);
       //  setFilePreview(file.name);
       // setValue(fname, file.name);
       const reader = new FileReader();
@@ -173,6 +173,30 @@ function OtherDocumentSection({
   }
   // file upload
   const fileUpload = async () => {
+    if (questionnaire.sections[sectionIndex].documents[documentIndexforFIle].documentTitle==='') {
+      setFileUploadDailog(false)
+      setFile('')
+      setOtherDocsToasterDetails(
+        {
+          titleMessage: "oops!",
+          descriptionMessage: 'Please enter title first',
+          messageType: "error",
+        },
+        () => otherDocToasterRef.current()
+      )
+        return;
+    } else if (file===''||file===null) {
+      setOtherDocsToasterDetails(
+        {
+          titleMessage: "oops!",
+          descriptionMessage: 'Please upload document',
+          messageType: "error",
+        },
+        () => otherDocToasterRef.current()
+      )
+    } else {
+      
+    
     formData.append('questionnaireId', questionnaire?.uuid)
     formData.append('sectionId', questionnaire.sections[sectionIndex].uuid)
     formData.append('documentId', questionnaire.sections[sectionIndex].documents[documentIndexforFIle].uuid)
@@ -181,6 +205,10 @@ function OtherDocumentSection({
     try {
       const response = await privateAxios.post(UPLOAD_OTHER_DOC, formData, { headers: { "Content-Type": "multipart/form-data" } })
       if (response.status === 201) {
+        let tempQuestionnaire = { ...questionnaire };
+        tempQuestionnaire.sections[sectionIndex].documents[documentIndexforFIle]['originalName'] =
+          file.name;
+        setQuestionnaire(tempQuestionnaire);
         formData.append('questionnaireId', questionnaire?.uuid)
         formData.append('sectionId', questionnaire.sections[sectionIndex].uuid)
         formData.delete('document')
@@ -206,6 +234,7 @@ function OtherDocumentSection({
       formData.delete('documentId')
       console.log("error from file ")
     }
+  }
   }
   console.log('error from other doc', err)
   const classnameForTitle = (document, docIndex) => {
@@ -234,15 +263,15 @@ function OtherDocumentSection({
   const helperTextForTitle = (document, docIndex) => {
     if (questionnaire.sections[sectionIndex].documents[docIndex].type === 'Link') {
       return !document?.linkTitle &&
-        err?.linkTitle ? "Enter Link title" :
+        err?.linkTitle ? "Enter title" :
         checkIfSameQuestionTitlePresent(
           document?.linkTitle, 'linkTitle'
         ) &&
           err?.linkTitle
-          ? "Link Title already in use" : ""
+          ? "Title already in use" : ""
     } else {
       return !document?.documentTitle &&
-        err?.documentTitle ? "Enter document title" :
+        err?.documentTitle ? "Enter title" :
         checkIfSameQuestionTitlePresent(
           document?.documentTitle, 'documentTitle'
         ) &&
@@ -306,7 +335,7 @@ function OtherDocumentSection({
               >
                 Uploading large files may take some time
               </p>
-              {questionnaire?.sections[sectionIndex]?.documents?.[documentIndexforFIle]?.['originalName']}
+              {file?.name??questionnaire?.sections[sectionIndex]?.documents?.[documentIndexforFIle]?.['originalName']}
 
               {/* </p> */}
             </div>
@@ -316,11 +345,11 @@ function OtherDocumentSection({
         secondaryButtonText={"Cancel"}
         onPrimaryModalButtonClickHandler={fileUpload}
         isDisabledPrimaryButton={false}
-        onSecondaryModalButtonClickHandler={() => setFileUploadDailog(false)}
+        onSecondaryModalButtonClickHandler={() => {setFileUploadDailog(false);setFile(null)}}
         openModal={fileUploadDailog}
         setOpenModal={setFileUploadDailog}
         isModalForm={true}
-        handleCloseRedirect={() => setFileUploadDailog(false)}
+        handleCloseRedirect={() => {setFileUploadDailog(false);setFile(null)}}
       />
 
       <div className="que-form-card-wrapper">
@@ -388,7 +417,7 @@ function OtherDocumentSection({
                         </label>
                         <TextField
                           className={classnameForTitle(document, docIndex)}
-                          placeholder="Enter document title"
+                          placeholder="Enter title"
                           name={questionnaire.sections[sectionIndex].documents[docIndex].type === 'File' ? 'documentTitle' : "linkTitle"}
                           value={questionnaire.sections[sectionIndex].documents[docIndex].type === 'File' ? document?.documentTitle : document?.linkTitle}
                           helperText={
