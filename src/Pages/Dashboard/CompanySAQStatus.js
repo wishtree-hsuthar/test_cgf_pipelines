@@ -54,7 +54,7 @@ import SAQStatsTable from './SAQStatsTable';
   };
 
 
-function CompanySAQStatus({memberCompanies}) {
+function CompanySAQStatus({memberCompanies,setCompanySAQData}) {
     const [records, setRecords] = useState([])
     console.log("member companies = ",memberCompanies)
     const [memberCompaniesOption, setMemberCompaniesOption] = useState(memberCompanies)
@@ -67,6 +67,23 @@ function CompanySAQStatus({memberCompanies}) {
         try {
             const response =await privateAxios.get(COMPANY_SAQ_STATUS+selectedMemberCompany)
             console.log("response from company saq status = ",response)
+            console.log("rows= ",response?.data?.barGraph.map(row=>Object.values(row)))
+            console.log("rows= ",response?.data?.barGraph.map(row=>Object.keys(row)))
+            let columns = ['country','submitted','pending','total']
+            // Function to retrieve ordered values from an object
+const getOrderedValues = (obj) => {
+  return columns.map(key => obj[key]);
+};
+            setCompanySAQData({columns:columns,
+              rows:response?.data?.barGraph.map(row=>getOrderedValues(row))})
+              // response?.data?.barGraph.map(row=>
+              //   ({
+              //     country:row.country,
+              //     pending:row.pending.toString(),
+              //     submitted:row.pending.toString(),
+              // total:row.total.toString()}))}
+              
+              
             setRecords(response.data.barGraph)
             setPieChart(response.data.pieChart)
         } catch (error) {

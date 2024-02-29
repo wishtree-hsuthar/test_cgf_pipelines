@@ -261,7 +261,7 @@ setMemberCompanies([...personName])
           return 1
         } 
         return 0
-      }).map(data => `${data?.memberName}`)
+      }).map(data => `${data?.memberName} - ${data?.directlyHiredPercent}%`)
       let labelsFordoughnutGraph2= response?.data?.data.sort((a,b)=>{
         let memberA=a?.memberName?.toUpperCase()
         let memberB=b?.memberName?.toUpperCase()
@@ -272,7 +272,7 @@ setMemberCompanies([...personName])
           return 1
         } 
         return 0
-      }).map(data => `${data?.memberName}`)
+      }).map(data => `${data?.memberName} - ${data?.thirdPartyPercent}%`)
       let labelsFordoughnutGraph3= response?.data?.data.sort((a,b)=>{
         let memberA=a?.memberName?.toUpperCase()
         let memberB=b?.memberName?.toUpperCase()
@@ -283,7 +283,7 @@ setMemberCompanies([...personName])
           return 1
         } 
         return 0
-      }).map(data => `${data?.memberName}`)
+      }).map(data => `${data?.memberName} - ${data?.domesticMigrantPercent}%`)
       
       let directHiredPercentData = response?.data?.data.sort((a,b)=>{
         let memberA=a?.memberName?.toUpperCase()
@@ -413,7 +413,7 @@ setMemberCompanies([...personName])
           return 0
         }).map((data) => {
           return {
-            label: data.memberName,
+            label: data.memberName ,
             data: [data.domesticMigrant],
             barPercentage: barPercentage,
             // barThickness: 30,
@@ -722,6 +722,7 @@ setMemberCompanies([...personName])
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           name="startDate"
+                          disableFuture
                           disabled={watch('type') === 'Indicators'}
                           componentsProps={{
                             actionBar: {

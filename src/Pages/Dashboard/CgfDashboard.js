@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import 'jspdf-autotable';
 import { Bar } from "react-chartjs-2";
 import DoughnutChart from "./DoughnutChart";
 import { MockData } from "./MockDataForGraph";
@@ -53,6 +54,10 @@ function CgfDashboard() {
     descriptionMessage: "",
     messageType: "error",
   });
+  const [companySAQData, setCompanySAQData] = useState({
+    columns:[],
+    rows:[]
+  })
  const dashboardRef = useRef()
   const [optionsForBarGraph, setOptionsForBarGraph] = useState({
     barGraphOptions1:barGraphOptions(''),
@@ -173,35 +178,51 @@ function CgfDashboard() {
     const doc = new jsPDF('landscape', 'mm', 'a4');
   
     for (let i = 0; i < containerIds.length; i++) {
-      const containerId = containerIds[i];
-      const container = document.getElementById(containerId);
-  
-      if (!container) {
-        console.error(`Container with ID ${containerId} not found.`);
-        continue;
+      if (containerIds[i]!=='companySAQ') {
+        const containerId = containerIds[i];
+        const container = document.getElementById(containerId);
+    
+        if (!container) {
+          console.error(`Container with ID ${containerId} not found.`);
+          continue;
+        }
+    
+        // Create a canvas for saving the chart image
+        const chartCanvas = document.createElement("canvas");
+        chartCanvas.width = container.offsetWidth;
+        chartCanvas.height = container.offsetHeight;
+        const chartContext = chartCanvas.getContext("2d");
+    
+        // Draw the content of the container onto the canvas
+        await html2canvas(container).then((canvas) => {
+          chartContext.drawImage(canvas, 0, 0, chartCanvas.width, chartCanvas.height);
+        });
+    
+        // Convert the canvas to a data URL
+        const chartDataURL = chartCanvas.toDataURL("image/png", 1.0);
+    
+        // Add a new page to the PDF, except for the first iteration
+        if (i > 0) {
+          doc.addPage();
+        }
+    
+        // Add the chart image to the PDF using the actual canvas size
+        doc.addImage(chartDataURL, 'PNG', 0, 0, doc.internal.pageSize?.getWidth(), doc.internal.pageSize?.getHeight());
+        // doc.addPage()
+      } else {
+        const title = "Company SAQ Stat";
+
+        if (i > 0) {
+          doc.addPage();
+        }
+         // Add the title
+      doc.setFontSize(16);
+      doc.text(10, 20,title);
+
+      // Add the table to the PDF
+      doc.autoTable(companySAQData.columns, companySAQData.rows, { startY: 30 ,theme:"plain"});
+        // doc.table(5,100,companySAQData?.rows,headers);
       }
-  
-      // Create a canvas for saving the chart image
-      const chartCanvas = document.createElement("canvas");
-      chartCanvas.width = container.offsetWidth;
-      chartCanvas.height = container.offsetHeight;
-      const chartContext = chartCanvas.getContext("2d");
-  
-      // Draw the content of the container onto the canvas
-      await html2canvas(container).then((canvas) => {
-        chartContext.drawImage(canvas, 0, 0, chartCanvas.width, chartCanvas.height);
-      });
-  
-      // Convert the canvas to a data URL
-      const chartDataURL = chartCanvas.toDataURL("image/svg", 1.0);
-  
-      // Add a new page to the PDF, except for the first iteration
-      if (i > 0) {
-        doc.addPage();
-      }
-  
-      // Add the chart image to the PDF using the actual canvas size
-      doc.addImage(chartDataURL, 'SVG', 0, 0, doc.internal.pageSize?.getWidth(), doc.internal.pageSize?.getHeight());
     }
   
     // Save the PDF
@@ -359,11 +380,11 @@ function CgfDashboard() {
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={()=>saveChartsAsPDF(indicatorData?.graphData?['tchart','ichart1']:['tchart','chart1','chart2','chart3','chart4','chart5','chart6'])} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
+            <DashboardFilters setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={()=>saveChartsAsPDF(indicatorData?.graphData?['tchart','ichart1']:['tchart','chart1','chart2','chart3','chart4','chart5','chart6','companySAQ'])} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
           <div id="chart-container">
-          <DashboardAccordian  expanded={expanded.expandTotalWorker} name={'expandTotalWorker'} setExpanded={setExpanded} title={'Total no of workers across globe'}>
+          <DashboardAccordian  expanded={expanded.expandTotalWorker} name={'expandTotalWorker'} setExpanded={setExpanded} title={'Total number of workers across globe'}>
             <TotalWorkerDashboard />
           </DashboardAccordian>
          
@@ -380,7 +401,7 @@ function CgfDashboard() {
             <>
             
           
-            <DashboardAccordian setExpanded={setExpanded} title={'Bar Graphs'} expanded={expanded?.expandBarGraph} name={'expandBarGraph'}>
+            <DashboardAccordian setExpanded={setExpanded} title={'Disaggregated Data'} expanded={expanded?.expandBarGraph} name={'expandBarGraph'}>
         
           
               <DashboardAccordian title={accordianTitles.title1} expanded={expanded.expandBarGraph1} name={'expandBarGraph1'} setExpanded={setExpanded}  >
@@ -436,7 +457,7 @@ function CgfDashboard() {
             <>      
                   <div class="html2pdf__page-break"></div>
             
-            <DashboardAccordian  expanded={expanded?.expandDoughnutGraph} name={'expandDoughnutGraph'}  setExpanded={setExpanded} title={'Doughnut Chart'}>
+            <DashboardAccordian  expanded={expanded?.expandDoughnutGraph} name={'expandDoughnutGraph'}  setExpanded={setExpanded} title={'Worker Status'}>
               <DoughnutChart expanded={expanded} setExpanded={setExpanded} graphTitle={accordianTitles}  data={dataForBarGraphs?.directlyHired?.doughnutGraph} thirdPartyData={dataForBarGraphs?.thirdParty?.doughnutGraph} domesticMigrantsData={dataForBarGraphs?.domesticMigrants?.doughnutGraph}/>
 
             </DashboardAccordian>
@@ -446,7 +467,7 @@ function CgfDashboard() {
               <div class="html2pdf__page-break"></div>
 
         { isAssessmentCountryType&&<> <DashboardAccordian expanded={expanded.expandCompanySAQGraph} name={'expandCompanySAQGraph'} setExpanded={setExpanded} title={'Company\'s SAQ Status'}>
-            <CompanySAQStatus memberCompanies={memberCompanies} />
+            <CompanySAQStatus setCompanySAQData={setCompanySAQData} memberCompanies={memberCompanies} />
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
 

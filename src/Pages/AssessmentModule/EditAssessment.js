@@ -158,15 +158,29 @@ function EditAssessment() {
       // Check if the file type is allowed
       const fileExtension = `.${file.name.split(".").pop()}`;
       if (!allowdedFiles.includes(fileExtension.toLowerCase())) {
-        alert("Invalid file type. Please select a valid file.");
+        setToasterDetails(
+          {
+            titleMessage: "Error",
+            descriptionMessage:"Invalid file type. Please select a valid file.",
+            messageType: "error",
+          },
+          () => toasterRef.current()
+        );
+       
         return;
       }
 
       // Check if the file size is within the limit (10 MB)
       if (file.size > 10 * 1024 * 1024) {
-        alert(
-          "File size exceeds the limit of 10 MB. Please select a smaller file."
+        setToasterDetails(
+          {
+            titleMessage: "Error",
+            descriptionMessage:"File size exceeds the limit of 10 MB. Please select a smaller file.",
+            messageType: "error",
+          },
+          () => toasterRef.current()
         );
+       
         return;
       }
       setValue('actionPlan',file)
@@ -921,6 +935,7 @@ function EditAssessment() {
                             <span className="file-upload-txt">
                               Click here to choose files (max file size{" "}
                               {`${process.env.REACT_APP_MAX_FILE_SIZE_MB} MB`})
+                    '.doc', '.txt', '.pdf','.docx', '.xls', '.ppt', '.pptx', '.xlsx', '.jpg', '.jpeg', '.png
                             </span>
                           </div>
                         </Button>
