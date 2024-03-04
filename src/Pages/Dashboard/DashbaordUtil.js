@@ -38,6 +38,12 @@ export const barGraphOptions =(CountryTitle='',max)=>
         display: true,
         text: CountryTitle,
       },
+      tooltip: {
+        callbacks: {
+          title: (titem) =>  `${titem[0]?.dataset.label} - ${titem[0]?.raw}`, //
+          label: (ttItem) => {return `${ttItem.raw}`}
+        }
+      }
     },
     scales: {
       x: {
@@ -116,3 +122,33 @@ export const barGraphOptions =(CountryTitle='',max)=>
   export const indicators=['Policy Commitment','Governing Structure','Roles & Responsibility','Impact/Risk Assessment','Prevent and Mitigate Risks and Impacts','Remediation Processes','Public Reporting']
   export const assessmentOptions=['COUNTRY- OPERATION HRDD REQUIREMENTS', 'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)']
   export const assessmentIndicatorOptions=['HQ Level Operations','Country Level Operations']
+
+  export const  splitSentences=(sentence, wordsPerChunk = 15)=> {
+    // Remove consecutive spaces
+    const cleanedSentence = sentence.replace(/\s{2,}/g, ' ');
+  
+    const words = cleanedSentence.split(' ');
+  
+    const chunks = [];
+    let currentChunk = '';
+  
+    words.forEach((word) => {
+      if (word.trim() !== '') {
+        // Check for non-empty word
+        if (currentChunk.split(' ').length + 1 <= wordsPerChunk) {
+          // Adjust the wordsPerChunk value based on your needs
+          currentChunk += word + ' ';
+        } else {
+          chunks.push(currentChunk.trim());
+          currentChunk = word + ' ';
+        }
+      }
+    });
+  
+    // Add the last chunk
+    if (currentChunk.trim().length > 0) {
+      chunks.push(currentChunk.trim());
+    }
+  
+    return chunks;
+  }

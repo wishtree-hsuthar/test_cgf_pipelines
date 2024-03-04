@@ -13,7 +13,7 @@ import { data } from './CgfDashboard';
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 import './DashBoardFilter.css'
-import { assessmentIndicatorOptions, assessmentOptions, barGraphOptions, indicators, labels } from './DashbaordUtil';
+import { assessmentIndicatorOptions, assessmentOptions, barGraphOptions, indicators, labels, splitSentences } from './DashbaordUtil';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -326,7 +326,10 @@ setMemberCompanies([...personName])
       // one state for bar graphs
       setDataForBarGraphs((data) => {
         let dataForBarGraphs = { ...data }
-
+        dataForBarGraphs.directlyHired.barGraph.labels=splitSentences(response?.data.columns[0],30)
+        dataForBarGraphs.thirdParty.barGraph.labels=splitSentences(response?.data.columns[0],30)
+        dataForBarGraphs.domesticMigrants.barGraph.labels=splitSentences(response?.data.columns[0],30)
+        
         //dataset for thirdParty
         dataForBarGraphs.thirdParty.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").sort((a,b)=>{
           let memberA=a?.memberName?.toUpperCase()

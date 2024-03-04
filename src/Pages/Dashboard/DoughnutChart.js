@@ -2,7 +2,7 @@ import React, { useEffect,useState } from "react";
 import { Chart as DoughnutChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { total } from "./MockDataForGraph";
-import { defaultValue, doughnutGraphOptions } from "./DashbaordUtil";
+import { defaultValue, doughnutGraphOptions, splitSentences } from "./DashbaordUtil";
 import DashboardAccordian from "./DashboardAccordian";
 
 DoughnutChartJS.register(ArcElement, Tooltip, Legend);
@@ -26,41 +26,41 @@ const titles = [
   ],
 ];
 
-function splitSentences(sentence, wordsPerChunk = 15) {
-  // Remove consecutive spaces
-  const cleanedSentence = sentence.replace(/\s{2,}/g, ' ');
+// function splitSentences(sentence, wordsPerChunk = 15) {
+//   // Remove consecutive spaces
+//   const cleanedSentence = sentence.replace(/\s{2,}/g, ' ');
 
-  const words = cleanedSentence.split(' ');
+//   const words = cleanedSentence.split(' ');
 
-  const chunks = [];
-  let currentChunk = '';
+//   const chunks = [];
+//   let currentChunk = '';
 
-  words.forEach((word) => {
-    if (word.trim() !== '') {
-      // Check for non-empty word
-      if (currentChunk.split(' ').length + 1 <= wordsPerChunk) {
-        // Adjust the wordsPerChunk value based on your needs
-        currentChunk += word + ' ';
-      } else {
-        chunks.push(currentChunk.trim());
-        currentChunk = word + ' ';
-      }
-    }
-  });
+//   words.forEach((word) => {
+//     if (word.trim() !== '') {
+//       // Check for non-empty word
+//       if (currentChunk.split(' ').length + 1 <= wordsPerChunk) {
+//         // Adjust the wordsPerChunk value based on your needs
+//         currentChunk += word + ' ';
+//       } else {
+//         chunks.push(currentChunk.trim());
+//         currentChunk = word + ' ';
+//       }
+//     }
+//   });
 
-  // Add the last chunk
-  if (currentChunk.trim().length > 0) {
-    chunks.push(currentChunk.trim());
-  }
+//   // Add the last chunk
+//   if (currentChunk.trim().length > 0) {
+//     chunks.push(currentChunk.trim());
+//   }
 
-  return chunks;
-}
+//   return chunks;
+// }
 
 // Example usage
-const inputSentence = "This is a sample sentence. It is used for demonstration purposes. Feel free to customize it based on your needs. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+// const inputSentence = "This is a sample sentence. It is used for demonstration purposes. Feel free to customize it based on your needs. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
-const result = splitSentences(inputSentence);
-console.log(result);
+// const result = splitSentences(inputSentence);
+// console.log(result);
 
 
 
