@@ -13,7 +13,7 @@ import { data } from './CgfDashboard';
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 import './DashBoardFilter.css'
-import { assessmentIndicatorOptions, assessmentOptions, barGraphOptions, indicators, labels, splitSentences } from './DashbaordUtil';
+import { assessmentIndicatorOptions, assessmentOptions, assessmentOptions2, barGraphOptions, indicators, labels, splitSentences } from './DashbaordUtil';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -89,12 +89,18 @@ function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1
   };
 
 
-
+  function getCryptoRandomValue() {
+    // Generate a Uint8Array of 1 element
+    const randomValue = window.crypto.getRandomValues(new Uint8Array(1))[0];
+    // Scale the value to the 0-255 range
+    return Math.floor(randomValue / 256 * 255);
+  }
+  
 
   // random color generator
   function getRandomColor() {
-    const getRandomValue = () => Math.floor(Math.random() * 256);
-    const randomColor = `rgba(${getRandomValue()}, ${getRandomValue()}, ${getRandomValue()}, 0.5)`;
+
+    const randomColor = `rgba(${getCryptoRandomValue()}, ${getCryptoRandomValue()}, ${getCryptoRandomValue()}, 0.5)`;
     return randomColor;
   }
 
@@ -181,7 +187,17 @@ data.memberCompanies=personName.map(member=>member?.id)
 setMemberCompanies([...personName])
     // console.log('member company = ', memberCompanyOptions.filter(member => data.memberCompanies.includes(member.id)))
     console.log('member company data = ', data.memberCompanies)
-    if (data.type !== 'Indicators') { data.endDate = new Date(new Date().setDate(new Date(data.endDate).getDate() + 1)).toISOString() } 
+     if(data.assessment==='COUNTRY'){
+      data.assessment='COUNTRY- OPERATION HRDD REQUIREMENTS'
+     }
+     if(data?.assessment==='HEADQUARTER')
+     {
+      data.assessment='HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)'
+     }
+    if (data.type !== 'Indicators') { 
+      data.endDate = new Date(new Date().setDate(new Date(data.endDate).getDate() + 1)).toISOString() 
+      data.type='SAQ'
+    } 
     else {
       data = {
         indicator:data?.indicator,
@@ -208,11 +224,11 @@ setMemberCompanies([...personName])
         expandDoughnutGraph:true,
         expandCompanySAQGraph:true,
         expandCountrySAQGraph:true,
-        
+        expandFilters:false,
         } })
 
       console.log("Response from dashboard", response.data)
-      if (watch('type')==='SAQ') {
+      if (watch('type')==='Workforce Data') {
 
       
       let maxDirectlyHired=0
@@ -612,7 +628,7 @@ setMemberCompanies([...personName])
                     control={control}
                     myOnChange={handleChangeForType}
                     name={'type'}
-                    options={['SAQ',]}
+                    options={['Workforce Data',]}
                     rules={{ required: true }}
                     myHelper={helperTextForFilters}
                     placeholder="Select type"
@@ -629,7 +645,7 @@ setMemberCompanies([...personName])
                     control={control}
                     myOnChange={handleChangeAssesment}
                     name={'assessment'}
-                    options={watch('type') === 'Indicators' ? assessmentIndicatorOptions : assessmentOptions}
+                    options={watch('type') === 'Indicators' ? assessmentIndicatorOptions : assessmentOptions2}
                     rules={{ required: true }}
                     myHelper={helperTextForFilters}
                     placeholder="Select assessment"
@@ -643,12 +659,12 @@ setMemberCompanies([...personName])
                     Country <span className="mandatory"> *</span>
                   </label>
                   <Dropdown
-                  isDisabled={watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS'?false:watch('assessment')!=='Country Level Operations'?true:false}
+                  isDisabled={watch('assessment') === 'COUNTRY'?false:watch('assessment')!=='Country Level Operations'?true:false}
                     control={control}
                     myOnChange={handleChangeCountry}
                     name={'country'}
                     options={countryListOption}
-                    rules={{ required: watch('assessment')==='COUNTRY- OPERATION HRDD REQUIREMENTS' }}
+                    rules={{ required: watch('assessment')==='COUNTRY' }}
                     myHelper={helperTextForFilters}
                     placeholder="Select country"
                   />
@@ -662,7 +678,7 @@ setMemberCompanies([...personName])
                     Indicators <span className="mandatory"> *</span>
                   </label>
                   <Dropdown
-                    isDisabled={watch('type') === 'SAQ'}
+                    isDisabled={watch('type') === 'Workforce Data'}
                     control={control}
                     name={'indicator'}
                     options={indicators}
@@ -675,7 +691,7 @@ setMemberCompanies([...personName])
               }
               {
                 
-                watch('type')==='SAQ'&&
+                watch('type')==='Workforce Data'&&
                 <>
               <div className="card-form-field">
                 <div className='form-group'>

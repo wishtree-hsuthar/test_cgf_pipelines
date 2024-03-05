@@ -15,7 +15,7 @@ function TotalWorkerDashboard() {
       {
         // label: "# of Votes",
         data: [],
-        backgroundColor: ['#9195F6', '#B7C9F2',],
+        backgroundColor: ['#318ad0', '#cedfee',],
         borderColor: [
           ''
         ],
@@ -24,13 +24,13 @@ function TotalWorkerDashboard() {
     ]
   }
   const DomesticMigrantsvalue = {
-    labels: ['Domestic Migrants', "Others",],
+    labels: ['Domestic & Foreign Migrant Workers', "Others",],
 
     datasets: [
       {
         // label: "# of Votes",
         data: [],
-        backgroundColor: ['#F9F07A', '#FB88B4'],
+        backgroundColor: ['#f6a623', '#fbe6c1'],
         borderColor: [
           ''
         ],
@@ -53,10 +53,13 @@ function TotalWorkerDashboard() {
       const response = await privateAxios.get(TOTAL_WORKERS)
       console.log('Response from total workers', response)
       // let totalWorkersData={...defaultValue}
+      TotalWorkerValue.labels=[`Directly Hired Workers - ${response?.data?.graph1?.directlyHiredPercent}%`, `Third Party Workers - ${response?.data?.graph1?.thirdPartyPercent}%`]
       TotalWorkerValue.datasets[0].data = [response?.data?.graph1?.directlyHiredPercent, response?.data?.graph1?.thirdPartyPercent]
+      DomesticMigrantsvalue.labels=[`Domestic & Foreign Migrant Workers - ${response?.data?.graph2?.domesticMigrantPercent}%`,`Others - ${response?.data?.graph2?.otherPercent}%`]
       DomesticMigrantsvalue.datasets[0].data = [response?.data?.graph2?.domesticMigrantPercent, response?.data?.graph2?.otherPercent]
 
       setTotalWorkerData({ ...TotalWorkerValue })
+      setDomesticMigrantData({...DomesticMigrantsvalue})
       setTotalWorkers(`Total Workers - ${response?.data?.graph1?.total}`)
       setTotalMigrants(`Domestic & Foreign Migrant Workers - ${response?.data?.graph2?.domesticMigrantTotal}`)
     } catch (error) {

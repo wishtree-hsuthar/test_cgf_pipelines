@@ -33,15 +33,15 @@ function PreviewOtherDocument({ key, documentObj = {}, doc = {}, sectionUUID = '
       if (documentObj?.link.toLowerCase().startsWith("http")) {
         return documentObj?.link
       } else {
-        return 'http://' + documentObj?.link
+        return 'https://' + documentObj?.link
       }
 
 
     } else {
-      if (doc?.link.toLowerCase().startsWith("http")) {
+      if (doc?.link.toLowerCase().startsWith("https")) {
         return doc?.link
       } else {
-        return 'http://' + doc?.link
+        return 'https://' + doc?.link
       }
 
     }
@@ -108,7 +108,7 @@ function PreviewOtherDocument({ key, documentObj = {}, doc = {}, sectionUUID = '
               <TableCell align='left'  >{
                 doc?.type === 'Link' || documentObj?.type === 'Link' ?
 
-                  <a href={link()} onClick={() => console.log('LINK ON ONCLICK', "http://" + doc?.link ?? documentObj?.link)} target='_blank' >
+                  <a href={link()} onClick={() => console.log('LINK ON ONCLICK', "https://" + doc?.link ?? documentObj?.link)} target='_blank' >
                     <Tooltip title={documentObj?.link ?? doc.link ?? doc?.link}>
                     
                     {truncateText(doc?.link ?? documentObj?.link,70)}
