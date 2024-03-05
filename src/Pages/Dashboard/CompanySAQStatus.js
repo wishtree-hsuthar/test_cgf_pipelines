@@ -82,8 +82,9 @@ const getOrderedValues = (obj) => {
               //     pending:row.pending.toString(),
               //     submitted:row.pending.toString(),
               // total:row.total.toString()}))}
-              
-              
+              let selectedMemberCompanyName = memberCompanies.filter(company=>company.id===selectedMemberCompany)
+              console.log('selectedMemberCompanyName',selectedMemberCompanyName)
+              setCompanySAQData(companySAQData=> ({...companySAQData,company:selectedMemberCompanyName[0].label}))
             setRecords(response.data.barGraph)
             setPieChart(response.data.pieChart)
         } catch (error) {
@@ -143,7 +144,7 @@ const getOrderedValues = (obj) => {
       labelId="demo-simple-select-label"
       id="demo-simple-select"
       value={selectedMemberCompany}
-      onChange={(e)=>setSelectedMemberCompany(e?.target?.value)}
+      onChange={(e)=>{setSelectedMemberCompany(e?.target?.value);}}
     >
      {memberCompanies?.map((data) => (
               <MenuItem key={data.label} value={data.id}>
