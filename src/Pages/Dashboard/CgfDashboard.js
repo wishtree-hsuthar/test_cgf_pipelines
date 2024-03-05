@@ -219,10 +219,10 @@ function CgfDashboard() {
         if (containerId === 'tchart') {
           console.log('tchart it is')
           doc.setFontSize(16);
-          doc.text(10, 10, 'Total number of workers across globe');
+          doc.text(10, 10, 'Total number of workers across the globe');
         }
-      } else if (containerIds[i] === 'companySAQ') {
-        const title = `Company SAQ Stat - ${companySAQData?.company ?? 'No company selected'}`;
+      } else if (containerIds[i] === 'companySAQ'&&isAssessmentCountryType) {
+        const title = `Company's SAQ Status - ${companySAQData?.company ?? 'No company selected'}`;
         console.log('companySAQData', companySAQData)
         if (i > 0) {
           doc.addPage();
@@ -232,14 +232,14 @@ function CgfDashboard() {
         doc.text(10, 20, title);
 
         // Add the table to the PDF
-        doc.autoTable(['Country', 'Sumitted', 'Pending', 'Total'], companySAQData.rows, {
+        doc.autoTable(['Country', 'Sumitted', 'Pending', 'Total'], companySAQData.rows.length>0?companySAQData?.rows:[['--','--','--','--']], {
           startY: 30, theme: "grid", headStyles: {
             fillColor: [69, 150, 209] // RGB color for the header background
           }
         });
         // doc.table(5,100,companySAQData?.rows,headers);
-      } else if (containerIds[i] === 'countrySAQ') {
-        const title = `Country SAQ Stat - ${countrySAQData?.country??'No country selected'}`;
+      } else if (containerIds[i] === 'countrySAQ'&&isAssessmentCountryType) {
+        const title = `Country's SAQ Status - ${countrySAQData?.country??'No country selected'}`;
 
         if (i > 0) {
           doc.addPage();
@@ -323,70 +323,8 @@ console.log('companySAQData - ',companySAQData)
   }
 
 
-  // random color generator
-  function getRandomColor() {
-    const getRandomValue = () => Math.floor(Math.random() * 256);
-    const randomColor = `rgba(${getRandomValue()}, ${getRandomValue()}, ${getRandomValue()}, 0.5)`;
-    return randomColor;
-  }
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-
-    console.log("selected company = ", event.target.value);
-    // total sum object
-
-    const sumObjectValues = (array) => {
-      return array.reduce(
-        (accumulator, currentValue) => {
-          accumulator.directlyHiredWorkers += currentValue.directlyHiredWorkers;
-          accumulator.thirdParty += currentValue.thirdParty;
-          accumulator.domesticMigrants += currentValue.domesticMigrants;
-          return accumulator;
-        },
-        { directlyHiredWorkers: 0, thirdParty: 0, domesticMigrants: 0 }
-      );
-    };
-    const total = sumObjectValues(MockData);
-
-    // console.log("new company = ", newComp);
-    setDoughnutGraphData(event.target.value);
-    setDataForgraph((data) => {
-      let graphData = { ...data };
-      graphData.datasets = event.target.value.map((data) => {
-        return {
-          label: data.label,
-          data: [
-            data.directlyHiredWorkers,
-            data.thirdParty,
-            data.domesticMigrants,
-          ],
-          backgroundColor: getRandomColor(),
-        };
-      });
-      graphData.datasets = [
-        ...graphData.datasets,
-        {
-          label: "Total",
-          data: [
-            total.directlyHiredWorkers,
-            total.thirdParty,
-            total.domesticMigrants,
-          ],
-          backgroundColor: "rgba(255, 99, 132, 0.5)",
-        },
-      ];
-      console.log("new graph data = ", graphData);
-      return graphData;
-    });
-
-    // data.datasets = personName;
-  };
+ 
+ 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -427,11 +365,11 @@ console.log('companySAQData - ',companySAQData)
         expandCompanySAQGraph:true,
         expandCountrySAQGraph:true,
         
-        } })}} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
+        } })}} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} />
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
           <div id="chart-container">
-          <DashboardAccordian  expanded={expanded.expandTotalWorker} name={'expandTotalWorker'} setExpanded={setExpanded} title={'Total number of workers across globe'}>
+          <DashboardAccordian  expanded={expanded.expandTotalWorker} name={'expandTotalWorker'} setExpanded={setExpanded} title={'Total number of workers across the globe'}>
             <TotalWorkerDashboard />
           </DashboardAccordian>
          

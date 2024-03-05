@@ -516,7 +516,7 @@ function OtherDocumentSection({
                       </Tooltip>
                     </div>
 
-                    {docIndex === docs[0].documents?.length !== 1 && (
+                    {docIndex === docs[0].documents?.length != 1 && (
                       <div className="que-card-icon delete-iconblk mr-40">
                         <Tooltip title="Delete Question">
                           <img
