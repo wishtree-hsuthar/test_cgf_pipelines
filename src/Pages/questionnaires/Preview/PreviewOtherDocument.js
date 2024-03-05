@@ -86,6 +86,22 @@ function PreviewOtherDocument({ key, documentObj = {}, doc = {}, sectionUUID = '
       console.log("Error from download other doc", error)
     }
   }
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(doc?.link || documentObj?.link);
+      setOtherDocsToasterDetails(
+        {
+          titleMessage: "Hurray!",
+          descriptionMessage: 'Link copied successfully!',
+          messageType: "success",
+        },
+        () => otherDocToasterRef.current()
+      )
+    } catch (error) {
+      console.error('Failed to copy link: ', error);
+    }
+  };
+
   return (
     <div >
       <Toaster
@@ -107,13 +123,17 @@ function PreviewOtherDocument({ key, documentObj = {}, doc = {}, sectionUUID = '
 
               <TableCell align='left'  >{
                 doc?.type === 'Link' || documentObj?.type === 'Link' ?
-
+                  <>
                   <a href={link()} onClick={() => console.log('LINK ON ONCLICK', "https://" + doc?.link ?? documentObj?.link)} target='_blank' >
                     <Tooltip title={documentObj?.link ?? doc.link ?? doc?.link}>
                     
                     {truncateText(doc?.link ?? documentObj?.link,70)}
                     </Tooltip>
-                    </a> :
+                    
+                    </a> 
+                    <button onClick={copyToClipboard}>Copy Link</button>
+                    </>
+                    :
                   <div href="#"
                     onClick={(e) => {
                       e.preventDefault();
