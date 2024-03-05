@@ -24,7 +24,7 @@ const MenuProps = {
     },
   },
 };
-function DashboardFilters({setIndicatorData, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
+function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
   const [personName, setPersonName] = React.useState([]);
   const [memberCompanyOptions, setMemberCompanyOptions] = useState([])
   const [countryListOption, setCountryListOption] = useState([])
@@ -197,7 +197,19 @@ setMemberCompanies([...personName])
         ...data
       })
       console.log('expanded graph in dashboard filter= ', expanded.expandBarGraph)
-      setExpanded(expanded => { return { ...expanded, expandBarGraph: !expanded.expandBarGraph,expandBarGraph1: !expanded.expandBarGraph1,expandBarGraph2: !expanded.expandBarGraph2,expandBarGraph3: !expanded.expandBarGraph3, expandDoughnutGraph: !expanded.expandDoughnutGraph,expandFilters:!expanded.expandFilters,expandDoughnutgraph1:!expanded.expandDoughnutgraph1 } })
+      setExpanded(expanded => { return { ...expanded,
+        expandBarGraph:true,
+        expandBarGraph1:true,
+        expandBarGraph2:true,
+        expandBarGraph3:true,
+        expandDoughnutgraph1:true,
+        expandDoughnutgraph2:true,
+        expandDoughnutgraph3:true,
+        expandDoughnutGraph:true,
+        expandCompanySAQGraph:true,
+        expandCountrySAQGraph:true,
+        
+        } })
 
       console.log("Response from dashboard", response.data)
       if (watch('type')==='SAQ') {
@@ -838,7 +850,7 @@ setMemberCompanies([...personName])
               <button type="reset"
                       className="secondary-button mr-10" onClick={handleReset}>Reset Filter</button>
   <button type="reset"
- className="secondary-button mr-10" onClick={()=>saveAsPdf('chart-container')}>Download</button>
+ className="secondary-button mr-10" disabled={disableDownload}onClick={()=>saveAsPdf('chart-container')}>Download</button>
               <button type='submit'  className="primary-button add-button">Search</button>
               </div>
             </div>

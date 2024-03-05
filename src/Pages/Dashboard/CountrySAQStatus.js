@@ -46,7 +46,7 @@ export const options = {
 };
 
 
-function CountrySAQStatus({ memberCompanies }) {
+function CountrySAQStatus({ memberCompanies ,setCountrySAQData}) {
   const [records, setRecords] = useState([])
   console.log("member companies = ", memberCompanies)
   const [selectedCountry, setSelectedCountry] = useState('Select Company')
@@ -69,6 +69,13 @@ function CountrySAQStatus({ memberCompanies }) {
       const response = await privateAxios.get(COUNTRY_SAQ_STATUS + selectedCountry)
       console.log("response from country saq status = ", response)
       setRecords(response.data)
+      let columns = ['memberCompany','submitted','pending','total']
+
+      const getOrderedValues = (obj) => {
+        return columns.map(key => obj[key]);
+      };
+      setCountrySAQData({columns:columns,
+        rows:response?.data?.map(row=>getOrderedValues(row)),country:selectedCountry})
     } catch (error) {
       console.log("error from country saq", error)
     }

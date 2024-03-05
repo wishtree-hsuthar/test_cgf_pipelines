@@ -58,6 +58,10 @@ function CgfDashboard() {
     columns:[],
     rows:[]
   })
+  const [countrySAQData, setCountrySAQData] = useState({
+    columns:[],
+    rows:[]
+  })
  const dashboardRef = useRef()
   const [optionsForBarGraph, setOptionsForBarGraph] = useState({
     barGraphOptions1:barGraphOptions(''),
@@ -84,6 +88,7 @@ function CgfDashboard() {
   const [dataForgraph, setDataForgraph] = React.useState({
     // ...data,
   });
+  const [disableDownload, setDisableDownload] = useState(false)
 
   const [indicatorData, setIndicatorData] = useState({
 
@@ -175,70 +180,100 @@ function CgfDashboard() {
 
   const saveChartsAsPDF = async (containerIds) => {
     // Create a new jsPDF instance
+    setDisableDownload(true)
+
     const doc = new jsPDF('landscape', 'mm', 'a4');
   
     for (let i = 0; i < containerIds.length; i++) {
-      if (containerIds[i]!=='companySAQ') {
+      if (containerIds[i] !== 'companySAQ' && containerIds[i] !== 'countrySAQ') {
         const containerId = containerIds[i];
         const container = document.getElementById(containerId);
-    
+
         if (!container) {
           console.error(`Container with ID ${containerId} not found.`);
           continue;
         }
-    
+
         // Create a canvas for saving the chart image
         const chartCanvas = document.createElement("canvas");
         chartCanvas.width = container.offsetWidth;
         chartCanvas.height = container.offsetHeight;
         const chartContext = chartCanvas.getContext("2d");
-    
+
         // Draw the content of the container onto the canvas
         await html2canvas(container).then((canvas) => {
           chartContext.drawImage(canvas, 0, 0, chartCanvas.width, chartCanvas.height);
         });
-    
+
         // Convert the canvas to a data URL
         const chartDataURL = chartCanvas.toDataURL("image/png", 1.0);
-    
+
         // Add a new page to the PDF, except for the first iteration
         if (i > 0) {
           doc.addPage();
         }
-    
+
         // Add the chart image to the PDF using the actual canvas size
         doc.addImage(chartDataURL, 'PNG', 0, 0, doc.internal.pageSize?.getWidth(), doc.internal.pageSize?.getHeight());
         // doc.addPage()
-      } else {
-        const title = "Company SAQ Stat";
+        if (containerId === 'tchart') {
+          console.log('tchart it is')
+          doc.setFontSize(16);
+          doc.text(10, 10, 'Total number of workers across globe');
+        }
+      } else if (containerIds[i] === 'companySAQ') {
+        const title = `Company SAQ Stat - ${companySAQData?.company ?? 'No company selected'}`;
+        console.log('companySAQData', companySAQData)
+        if (i > 0) {
+          doc.addPage();
+        }
+        // Add the title
+        doc.setFontSize(16);
+        doc.text(10, 20, title);
+
+        // Add the table to the PDF
+        doc.autoTable(['Country', 'Sumitted', 'Pending', 'Total'], companySAQData.rows, {
+          startY: 30, theme: "grid", headStyles: {
+            fillColor: [69, 150, 209] // RGB color for the header background
+          }
+        });
+        // doc.table(5,100,companySAQData?.rows,headers);
+      } else if (containerIds[i] === 'countrySAQ') {
+        const title = `Country SAQ Stat - ${countrySAQData?.country??'No country selected'}`;
 
         if (i > 0) {
           doc.addPage();
         }
-         // Add the title
-      doc.setFontSize(16);
-      doc.text(10, 20,title);
-
-      // Add the table to the PDF
-      doc.autoTable(companySAQData.columns, companySAQData.rows, { startY: 30 ,theme:"plain"});
+        // Add the title
+        doc.setFontSize(16);
+        doc.text(10, 20, title);
+        console.log('countrySAQdata', countrySAQData)
+        // Add the table to the PDF
+        doc.autoTable(['Member Company', 'Sumitted', 'Pending', 'Total'], countrySAQData.rows.length>0?countrySAQData.rows:[['--','--','--','--']], {
+          startY: 30, theme: "grid", headStyles: {
+            fillColor: [69, 150, 209] // RGB color for the header background
+          }
+        });
         // doc.table(5,100,companySAQData?.rows,headers);
       }
     }
-  
+
     // Save the PDF
-    doc.save(`Dashboard-report-${new Date().toISOString()}.pdf`);
+    doc.save(`Dashboard-report-${new Date().toLocaleString()}.pdf`);
     setDashboardReport({
-      
-        titleMessage: "Hurray!",
-        descriptionMessage: 'File downloaded successfully!',
-        messageType: "success",
-      },
+
+      titleMessage: "Hurray!",
+      descriptionMessage: 'File downloaded successfully!',
+      messageType: "success",
+    },
       () => dashboardRef.current()
     )
+    setDisableDownload(false)
   };
   
+console.log('countrySAQdata',countrySAQData)
   
- 
+console.log('companySAQData - ',companySAQData)
 
   const saveAsPdf = (containerId) => {
     console.log('container id = ',containerId)
@@ -380,7 +415,19 @@ function CgfDashboard() {
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={()=>saveChartsAsPDF(indicatorData?.graphData?['tchart','ichart1']:['tchart','chart1','chart2','chart3','chart4','chart5','chart6','companySAQ'])} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
+            <DashboardFilters disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={()=>{saveChartsAsPDF(indicatorData?.graphData?['tchart','ichart1']:['tchart','chart1','chart2','chart3','chart4','chart5','chart6','companySAQ','countrySAQ']); setExpanded(expanded => { return { ...expanded,
+        expandBarGraph:true,
+        expandBarGraph1:true,
+        expandBarGraph2:true,
+        expandBarGraph3:true,
+        expandDoughnutgraph1:true,
+        expandDoughnutgraph2:true,
+        expandDoughnutgraph3:true,
+        expandDoughnutGraph:true,
+        expandCompanySAQGraph:true,
+        expandCountrySAQGraph:true,
+        
+        } })}} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} handleChange={handleChange}/>
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
           <div id="chart-container">
@@ -472,7 +519,7 @@ function CgfDashboard() {
           <div class="html2pdf__page-break"></div>
 
           <DashboardAccordian expanded={expanded.expandCountrySAQGraph} name={'expandCountrySAQGraph'} setExpanded={setExpanded} title={'Country\'s SAQ Status'}>
-            <CountrySAQStatus />
+            <CountrySAQStatus  setCountrySAQData={setCountrySAQData} />
           </DashboardAccordian>
          
           </>

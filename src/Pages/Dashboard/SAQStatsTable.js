@@ -6,13 +6,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import "../../components/TableComponent.css";
+
 function SAQStatsTable({records,type}) {
   return (
     <div>
            <TableContainer component={Paper} >
       <Table aria-label="simple table">
         <TableHead>
-          <TableRow>
+          <TableRow style={{background:'rgba(69, 150, 209, 0.1)'}}>
             <TableCell style={{width:'40%'}}>{type}</TableCell>
             <TableCell align='center'>Submitted</TableCell>
             <TableCell align='center'>Pending</TableCell>
@@ -20,7 +22,7 @@ function SAQStatsTable({records,type}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {records.map((row,index) => (
+          {records.length>0?records.map((row,index) => (
             <TableRow
               key={index}
               // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -32,7 +34,14 @@ function SAQStatsTable({records,type}) {
               <TableCell align='center'>{row?.pending}</TableCell>
               <TableCell align='center'>{row?.total}</TableCell>
             </TableRow>
-          ))}
+          )):  
+          <tr>
+          <td colSpan="10">
+            <div className="no-records-blk">
+              <h2 className="heading2">No records available</h2>
+            </div>
+          </td>
+        </tr>}
         </TableBody>
       </Table>
     </TableContainer>

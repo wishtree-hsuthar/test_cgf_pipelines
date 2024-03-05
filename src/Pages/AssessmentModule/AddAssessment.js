@@ -807,7 +807,7 @@ const AddAssessment = () => {
                             <span className="file-upload-txt">
                               Click here to choose files (max file size{" "}
                               {`${process.env.REACT_APP_MAX_FILE_SIZE_MB} MB`})
-                    '.doc', '.txt', '.pdf','.docx', '.xls', '.ppt', '.pptx', '.xlsx', '.jpg', '.jpeg', '.png
+                    '.doc','.pdf','.xlsx',
                             </span>
                           </div>
                         </Button>
