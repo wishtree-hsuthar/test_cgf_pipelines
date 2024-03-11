@@ -13,7 +13,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Tooltip } from '@mui/material'
-
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 function PreviewOtherDocument({ key, documentObj = {}, doc = {}, sectionUUID = '', questionnaireId = '' }) {
   console.log('qid', questionnaireId)
   console.log('documentObj', documentObj)
@@ -131,7 +131,10 @@ function PreviewOtherDocument({ key, documentObj = {}, doc = {}, sectionUUID = '
                     </Tooltip>
                     
                     </a> 
-                    <button onClick={copyToClipboard}>Copy Link</button>
+                    {'   '}
+                    <Tooltip title={'Copy link'}>
+                    <ContentCopyRoundedIcon fontSize='small' style={{cursor:"pointer"}} onClick={copyToClipboard}></ContentCopyRoundedIcon>
+                    </Tooltip>
                     </>
                     :
                   <div href="#"

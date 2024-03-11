@@ -232,14 +232,14 @@ function CgfDashboard() {
         doc.text(10, 20, title);
 
         // Add the table to the PDF
-        doc.autoTable(['Country', 'Sumitted', 'Pending', 'Total'], companySAQData.rows.length>0?companySAQData?.rows:[['--','--','--','--']], {
+        doc.autoTable(['Country', 'Submitted', 'Pending', 'Total'], companySAQData.rows.length>0?companySAQData?.rows:[['--','--','--','--']], {
           startY: 30, theme: "grid", headStyles: {
             fillColor: [69, 150, 209] // RGB color for the header background
           }
         });
         // doc.table(5,100,companySAQData?.rows,headers);
       } else if (containerIds[i] === 'countrySAQ'&&isAssessmentCountryType) {
-        const title = `Country's SAQ Status - ${countrySAQData?.country??'No country selected'}`;
+        const title = `Country's SAQ Status - ${countrySAQData?.country.length>0?countrySAQData?.country:'No country selected'}`;
 
         if (i > 0) {
           doc.addPage();
@@ -249,7 +249,7 @@ function CgfDashboard() {
         doc.text(10, 20, title);
         console.log('countrySAQdata', countrySAQData)
         // Add the table to the PDF
-        doc.autoTable(['Member Company', 'Sumitted', 'Pending', 'Total'], countrySAQData.rows.length>0?countrySAQData.rows:[['--','--','--','--']], {
+        doc.autoTable(['Member Company', 'Submitted', 'Pending', 'Total'], countrySAQData.rows.length>0?countrySAQData.rows:[['--','--','--','--']], {
           startY: 30, theme: "grid", headStyles: {
             fillColor: [69, 150, 209] // RGB color for the header background
           }
