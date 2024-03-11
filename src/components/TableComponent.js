@@ -279,7 +279,8 @@ export default function TableComponent({
                             cell !== "isUserAuthorizedToFillAssessment" &&
                             cell !== "isOperationMember" &&
                             cell !== "isMemberRepresentative" &&
-                            cell !== "dueDate"
+                            cell !== "dueDate"&&
+                            cell !== "submissionDate"
                           ) {
                             return row[cell]?.length <= 28 ||
                               typeof row[cell] === "undefined" ? (
@@ -336,6 +337,24 @@ export default function TableComponent({
                                 key={cell}
                               >
                                 <span>{row[cell] ?? row[cell]}</span>
+                              </TableCell>
+                            );
+                          } 
+                          else if (cell === "submissionDate") {
+                            return (
+                              <TableCell
+                                // className={`due-date-style ${
+                                //   new Date(
+                                //     new Date(row[cell]).toLocaleDateString("en")
+                                //   ).getTime() >=
+                                //     new Date(
+                                //       new Date().toLocaleDateString("en")
+                                //     ).getTime() && "due-date-style-success"
+                                // }`}
+                                style={{textAlign:"center"}}
+                                key={cell}
+                              >
+                                <span >{row[cell] ?? row[cell]}</span>
                               </TableCell>
                             );
                           }
