@@ -49,7 +49,7 @@ export const options = {
 function CountrySAQStatus({ memberCompanies ,setCountrySAQData}) {
   const [records, setRecords] = useState([])
   console.log("member companies = ", memberCompanies)
-  const [selectedCountry, setSelectedCountry] = useState('Select Company')
+  const [selectedCountry, setSelectedCountry] = useState('')
   const [countryListOption, setCountryListOption] = useState([])
   useEffect(() => {
     getCountryStat()
