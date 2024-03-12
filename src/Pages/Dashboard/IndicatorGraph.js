@@ -10,12 +10,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import CheckIcon from '@mui/icons-material/Check';
+import "../../components/TableComponent.css";
+
 DoughnutChartJS.register(ArcElement, Tooltip, Legend);
 
 function IndicatorGraph({indicatorData}) {
   console.log("indicator data",indicatorData)
   console.log("established",indicatorData?.['graphData']?.['Established'])
- 
+  let members = [...indicatorData?.['tableData']?.['Established'],...indicatorData?.['tableData']?.['Not Initiated'],...indicatorData?.['tableData']?.['Launched'],...indicatorData?.['tableData']?.['Leadership']]
+  console.log('all member companies',members)
   // indicatordefaultValue.datasets[0].data=[indicatorData?.['graphData']?.['Established'],indicatorData?.['graphData']?.['Launched'],indicatorData?.['graphData']?.['Leadership'],indicatorData?.['graphData']?.['Not Initiated']]
   // console.log('indicator data = ',indicatordefaultValue)
   const indicatordefaultValue={
@@ -25,7 +29,7 @@ function IndicatorGraph({indicatorData}) {
       {
         // label: "# of Votes",
         data: [],
-        backgroundColor: ['orange','red','blue','green'],
+        backgroundColor: ['#FFF67E','#BFEA7C','#9BCF53','#416D19'],
         borderColor: [
           ''
         ],
@@ -66,22 +70,25 @@ function IndicatorGraph({indicatorData}) {
      >
       <Doughnut
             data={indicatorDataForDisplay}
-            options={doughnutGraphOptions(indicatorData?.indicator,'top')}
+            width={800}
+            height={500}  
+            options={{responsive:true,maintainAspectRatio: false,...doughnutGraphOptions(indicatorData?.indicator,'top')}}
           />
           </div>}
            <div>
-           <TableContainer component={Paper} className='table-blk'>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
+           <TableContainer style={{ maxHeight: 400 }} component={Paper} >
+      <Table  aria-label="simple table" style={{position:"relative"}}>
+        <TableHead  style={{position:"sticky",top:"0",zIndex:"9999", background:"#fff"}} >
           <TableRow>
-            <TableCell>Not Initiated</TableCell>
-            <TableCell >Launched</TableCell>
-            <TableCell>Leadership</TableCell>
-            <TableCell>Established</TableCell>
+          <TableCell style={{background:'rgba(69, 150, 209, 0.1)',opacity:'1'}} >Member Company</TableCell>
+            <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Not Initiated</TableCell>
+            <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Launched</TableCell>
+            <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Leadership</TableCell>
+            <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Established</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {indicatorData?.['tableData']?.[maxMembers[3]?.name].map((row,index) => (
+          {/* {indicatorData?.['tableData']?.[maxMembers[3]?.name].map((row,index) => (
             <TableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -91,6 +98,19 @@ function IndicatorGraph({indicatorData}) {
               <TableCell >{indicatorData?.['tableData']?.['Launched'][index]??"--"}</TableCell>
               <TableCell >{indicatorData?.['tableData']?.['Leadership'][index]??"--"}</TableCell>
               <TableCell >{indicatorData?.['tableData']?.['Established'][index]??"--"}</TableCell>
+
+            </TableRow>
+          ))} */}
+           {members.map((member,index) => (
+            <TableRow
+              key={index}
+              // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+             <TableCell >{member}</TableCell>
+              <TableCell >{indicatorData?.['tableData']?.['Not Initiated'].includes(member)?<CheckIcon />:'--'}</TableCell>
+              <TableCell >{indicatorData?.['tableData']?.['Launched'].includes(member)?<CheckIcon />:'--'}</TableCell>
+              <TableCell >{indicatorData?.['tableData']?.['Leadership'].includes(member)?<CheckIcon />:'--'}</TableCell>
+              <TableCell >{indicatorData?.['tableData']?.['Established'].includes(member)?<CheckIcon />:'--'}</TableCell>
 
             </TableRow>
           ))}

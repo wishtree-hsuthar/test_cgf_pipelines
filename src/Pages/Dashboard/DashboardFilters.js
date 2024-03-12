@@ -628,7 +628,7 @@ setMemberCompanies([...personName])
                     control={control}
                     myOnChange={handleChangeForType}
                     name={'type'}
-                    options={['Workforce Data',]}
+                    options={['Workforce Data','Indicators']}
                     rules={{ required: true }}
                     myHelper={helperTextForFilters}
                     placeholder="Select type"
