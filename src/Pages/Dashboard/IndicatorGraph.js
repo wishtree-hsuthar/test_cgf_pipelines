@@ -15,13 +15,12 @@ import "../../components/TableComponent.css";
 
 DoughnutChartJS.register(ArcElement, Tooltip, Legend);
 
-function IndicatorGraph({indicatorData}) {
+function IndicatorGraph({indicatorData,setIndicatorTableData}) {
   console.log("indicator data",indicatorData)
   console.log("established",indicatorData?.['graphData']?.['Established'])
   let members = [...indicatorData?.['tableData']?.['Established'],...indicatorData?.['tableData']?.['Not Initiated'],...indicatorData?.['tableData']?.['Launched'],...indicatorData?.['tableData']?.['Leadership']]
   console.log('all member companies',members)
-  // indicatordefaultValue.datasets[0].data=[indicatorData?.['graphData']?.['Established'],indicatorData?.['graphData']?.['Launched'],indicatorData?.['graphData']?.['Leadership'],indicatorData?.['graphData']?.['Not Initiated']]
-  // console.log('indicator data = ',indicatordefaultValue)
+ 
   const indicatordefaultValue={
     labels: ["Not Initiated",'Launched','Leadership',"Established"],
 
@@ -49,8 +48,15 @@ function IndicatorGraph({indicatorData}) {
   useEffect(() => {
     
   let value = {...indicatordefaultValue}
+  value.labels=[`Not Inititated - ${indicatorData?.['graphData']?.['Not Initiated']}%`,`Launched - ${indicatorData?.['graphData']?.['Launched']}%`,`Leadership - ${indicatorData?.['graphData']?.['Leadership']}%`,`Established - ${indicatorData?.['graphData']?.['Established']}%`]
   value.datasets[0].data=[indicatorData?.['graphData']?.['Not Initiated'],indicatorData?.['graphData']?.['Launched'],indicatorData?.['graphData']?.['Leadership'],indicatorData?.['graphData']?.['Established']]
   setIndicatorDataForDisplay({...value})
+  setIndicatorTableData({rows:members.map((member,index) => [member,
+        indicatorData?.['tableData']?.['Not Initiated'].includes(member)? 'Yes' :'--',
+        indicatorData?.['tableData']?.['Launched'].includes(member)?'Yes':'--',
+        indicatorData?.['tableData']?.['Leadership'].includes(member)?'Yes':'--',
+        indicatorData?.['tableData']?.['Established'].includes(member)?'Yes':'--',
+    ]),indicator:indicatorData?.indicator})
    
   }, [indicatorData])
   
@@ -69,6 +75,7 @@ function IndicatorGraph({indicatorData}) {
 }}
      >
       <Doughnut
+        id='indicatorchart'
             data={indicatorDataForDisplay}
             width={800}
             height={500}  

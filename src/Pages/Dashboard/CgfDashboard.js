@@ -62,6 +62,10 @@ function CgfDashboard() {
     columns:[],
     rows:[]
   })
+  const [indicatorTableData, setIndicatorTableData] = useState({
+    columns:[],
+    rows:[]
+  })
  const dashboardRef = useRef()
   const [optionsForBarGraph, setOptionsForBarGraph] = useState({
     barGraphOptions1:barGraphOptions(''),
@@ -152,7 +156,6 @@ function CgfDashboard() {
     }
   })
 
-  const [doughnutGraphData, setDoughnutGraphData] = useState();
 
 
   const saveCanvas = () => {
@@ -185,7 +188,7 @@ function CgfDashboard() {
     const doc = new jsPDF('landscape', 'mm', 'a4');
   
     for (let i = 0; i < containerIds.length; i++) {
-      if (containerIds[i] !== 'companySAQ' && containerIds[i] !== 'countrySAQ') {
+      if (containerIds[i] !== 'companySAQ' && containerIds[i] !== 'countrySAQ'&&containerIds[i]!=='indicatorTableChart') {
         const containerId = containerIds[i];
         const container = document.getElementById(containerId);
 
@@ -250,6 +253,25 @@ function CgfDashboard() {
         console.log('countrySAQdata', countrySAQData)
         // Add the table to the PDF
         doc.autoTable(['Member Company', 'Submitted', 'Pending', 'Total'], countrySAQData.rows.length>0?countrySAQData.rows:[['--','--','--','--']], {
+          startY: 30, theme: "grid", headStyles: {
+            fillColor: [69, 150, 209] // RGB color for the header background
+          }
+        });
+        // doc.table(5,100,companySAQData?.rows,headers);
+      }
+      else if (containerIds[i] === 'indicatorTableChart') {
+        const title = `Indicator - ${indicatorTableData?.indicator}`;
+
+        if (i > 0) {
+          doc.addPage();
+        }
+        
+        // Add the title
+        doc.setFontSize(16);
+        doc.text(10, 20, title);
+        console.log('indicator table data',indicatorTableData )
+        // Add the table to the PDF
+        doc.autoTable(['Member Company', 'Not Initiated', 'Launched','Leadership', 'Established'], indicatorTableData.rows, {
           startY: 30, theme: "grid", headStyles: {
             fillColor: [69, 150, 209] // RGB color for the header background
           }
@@ -353,7 +375,7 @@ console.log('companySAQData - ',companySAQData)
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={()=>{saveChartsAsPDF(indicatorData?.graphData?['tchart','ichart1']:['tchart','chart1','chart2','chart3','chart4','chart5','chart6','companySAQ','countrySAQ']); setExpanded(expanded => { return { ...expanded,
+            <DashboardFilters disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={()=>{saveChartsAsPDF(indicatorData?.graphData?['tchart','indicatorchart','indicatorTableChart']:['tchart','chart1','chart2','chart3','chart4','chart5','chart6','companySAQ','countrySAQ']); setExpanded(expanded => { return { ...expanded,
         expandBarGraph:true,
         expandBarGraph1:true,
         expandBarGraph2:true,
@@ -377,7 +399,7 @@ console.log('companySAQData - ',companySAQData)
         <>
          <div class="html2pdf__page-break"></div>
          <DashboardAccordian title={'Indicators'} expanded={expanded.expandIndicator} name={'expandIndicator'} setExpanded={setExpanded}  >
-               <IndicatorGraph indicatorData={indicatorData}/>
+               <IndicatorGraph indicatorData={indicatorData} setIndicatorTableData={setIndicatorTableData} />
              </DashboardAccordian>
              </>
              }
