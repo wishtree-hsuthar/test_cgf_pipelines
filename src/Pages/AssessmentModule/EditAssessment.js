@@ -128,21 +128,11 @@ function EditAssessment() {
   const [filePreview, setFilePreview] = useState("");
 
   const allowdedFiles = [
-    ".jpg",
-    ".jpeg",
-    ".png",
     ".doc",
-    ".txt",
     ".pdf",
     ".docx",
     ".xlsx",
     ".xls",
-    ".ppt",
-    ".pptx",
-    ".mp4",
-    ".mp3",
-    ".zip",
-    ".rar",
   ];
   const removeFile = () => {
     setFile(null);
@@ -922,7 +912,7 @@ function EditAssessment() {
                               type={"file"}
                               hidden
                               accept={
-                                ".jpg, .jpeg, .png, .doc, .txt, .pdf, .docx, .xlsx, .xls, .ppt, .pptx, .mp4, .mp3, .zip, .rar"
+                                ".doc,  .pdf, .docx, .xlsx, .xls"
                               }
                               name="files[]"
                               // value={filePreview}

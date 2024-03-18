@@ -122,25 +122,22 @@ const AddAssessment = () => {
   const [filePreview, setFilePreview] = useState("");
 
   const allowdedFiles = [
-    ".jpg",
-    ".jpeg",
-    ".png",
+   
     ".doc",
-    ".txt",
     ".pdf",
     ".docx",
     ".xlsx",
     ".xls",
-    ".ppt",
-    ".pptx",
-    ".mp4",
-    ".mp3",
-    ".zip",
-    ".rar",
+  
   ];
+  let formData= new FormData()
+
   const removeFile = () => {
     setFile(null);
     setFilePreview("");
+    formData.delete('actionPlan')
+    formData.delete('actionPlanName')
+
   };
   let actionFile=null
   const handleFileChange = (event) => {
@@ -490,7 +487,7 @@ const AddAssessment = () => {
     //   actionPlan: file,
     //   actionPlanName: filePreview,
     // };
-    let formData= new FormData()
+    // let formData= new FormData()
     formData.append('actionPlan',data.actionPlan)
     formData.append('actionPlanName',filePreview)
     formData.append('dueDate',new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString())
@@ -537,6 +534,7 @@ const AddAssessment = () => {
       Logger.info("Add assessments - submitAssessments catch error");
       setDisableEditAssessmentButton(false);
       catchError(error, setToasterDetails, toasterRef, navigate);
+    
     }
     setIsAssessmentLoading(false);
   };
@@ -794,7 +792,7 @@ const AddAssessment = () => {
                               type={"file"}
                               hidden
                               accept={
-                                ".jpg, .jpeg, .png, .doc, .txt, .pdf, .docx, .xlsx, .xls, .ppt, .pptx, .mp4, .mp3, .zip, .rar"
+                                ".doc,  .pdf, .docx, .xlsx, .xls"
                               }
                               name="files[]"
                               // value={filePreview}
