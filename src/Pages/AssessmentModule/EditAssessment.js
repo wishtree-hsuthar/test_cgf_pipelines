@@ -923,7 +923,7 @@ function EditAssessment() {
                               <CloudUploadOutlinedIcon />
                             </span>
                             <span className="file-upload-txt">
-                              Click here to choose files (max file size{" "}
+                              Click here to choose file (max file size{" "}
                               {`${process.env.REACT_APP_MAX_FILE_SIZE_MB} MB`})
                               '.doc','.pdf','.xlsx',
                             </span>
