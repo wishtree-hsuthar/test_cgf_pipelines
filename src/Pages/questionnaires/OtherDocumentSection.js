@@ -140,16 +140,30 @@ function OtherDocumentSection({
       // Check if the file type is allowed
       const fileExtension = `.${file.name.split(".").pop()}`;
       if (!allowdedFiles.includes(fileExtension.toLowerCase())) {
-        alert("Invalid file type. Please select a valid file.");
-        return;
+       
+        setOtherDocsToasterDetails(
+          {
+            titleMessage: "oops!",
+            descriptionMessage: "Invalid file type. Please select a valid file.",
+            messageType: "error",
+          },
+          () => otherDocToasterRef.current()
+        )
+          return;
       }
 
       // Check if the file size is within the limit (10 MB)
       if (file.size > 10 * 1024 * 1024) {
-        alert(
-          "File size exceeds the limit of 10 MB. Please select a smaller file."
-        );
-        return;
+       
+        setOtherDocsToasterDetails(
+          {
+            titleMessage: "oops!",
+            descriptionMessage: "File size exceeds the limit of 10 MB. Please select a smaller file.",
+            messageType: "error",
+          },
+          () => otherDocToasterRef.current()
+        )
+          return;
       }
       setFile(event.target.files[0])
       // formData.append('document',event.target.files[0])
@@ -516,7 +530,7 @@ function OtherDocumentSection({
                       </Tooltip>
                     </div>
 
-                    {docIndex === docs[0].documents?.length != 1 && (
+                    {docs[0].documents?.length > 1 && (
                       <div className="que-card-icon delete-iconblk mr-40">
                         <Tooltip title="Delete Question">
                           <img
