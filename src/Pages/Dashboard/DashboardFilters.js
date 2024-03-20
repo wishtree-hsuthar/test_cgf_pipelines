@@ -33,7 +33,7 @@ function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1
       required: "Select the type",
     },
     assessment: {
-      required:"Select the asssessment"
+      required:"Select the assessment"
     },
     country:{
       required:"Select the country"
