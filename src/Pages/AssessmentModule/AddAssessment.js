@@ -488,6 +488,7 @@ const AddAssessment = () => {
     //   actionPlanName: filePreview,
     // };
     // let formData= new FormData()
+    console.log('data while add =>',data)
     formData.append('actionPlan',data.actionPlan)
     formData.append('actionPlanName',filePreview)
     formData.append('dueDate',new Date(new Date(someDate).setHours(0, 0, 0, 0)).toISOString())
