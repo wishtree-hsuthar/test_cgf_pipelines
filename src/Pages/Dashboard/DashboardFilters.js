@@ -33,7 +33,7 @@ function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1
       required: "Select the type",
     },
     assessment: {
-      required:"Select the asssessment"
+      required:"Select the assessment"
     },
     country:{
       required:"Select the country"
@@ -355,8 +355,8 @@ setMemberCompanies([...personName])
       setDataForBarGraphs((data) => {
         let dataForBarGraphs = { ...data }
         dataForBarGraphs.directlyHired.barGraph.labels=splitSentences(response?.data.columns[0],30)
-        dataForBarGraphs.thirdParty.barGraph.labels=splitSentences(response?.data.columns[0],30)
-        dataForBarGraphs.domesticMigrants.barGraph.labels=splitSentences(response?.data.columns[0],30)
+        dataForBarGraphs.thirdParty.barGraph.labels=splitSentences(response?.data.columns[1],30)
+        dataForBarGraphs.domesticMigrants.barGraph.labels=splitSentences(response?.data.columns[2],30)
         
         //dataset for thirdParty
         dataForBarGraphs.thirdParty.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").sort((a,b)=>{
