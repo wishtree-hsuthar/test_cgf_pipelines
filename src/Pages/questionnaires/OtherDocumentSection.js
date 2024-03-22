@@ -199,16 +199,19 @@ function OtherDocumentSection({
         () => otherDocToasterRef.current()
       )
         return;
-    } else if (file===''||file===null) {
-      setOtherDocsToasterDetails(
-        {
-          titleMessage: "oops!",
-          descriptionMessage: 'Please upload document',
-          messageType: "error",
-        },
-        () => otherDocToasterRef.current()
-      )
-    } else {
+    } 
+    else if (file===''||file===null) {
+      setFileUploadDailog(false)
+      // setOtherDocsToasterDetails(
+      //   {
+      //     titleMessage: "oops!",
+      //     descriptionMessage: 'Please upload document',
+      //     messageType: "error",
+      //   },
+      //   () => otherDocToasterRef.current()
+      // )
+    }
+     else {
       
     
     formData.append('questionnaireId', questionnaire?.uuid)
