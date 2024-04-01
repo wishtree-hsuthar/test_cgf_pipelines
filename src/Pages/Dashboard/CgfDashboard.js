@@ -54,6 +54,7 @@ function CgfDashboard() {
     descriptionMessage: "",
     messageType: "error",
   });
+  const [selectedCountry, setSelectedCountry] = useState('')
   const [companySAQData, setCompanySAQData] = useState({
     columns:[],
     rows:[]
@@ -62,6 +63,11 @@ function CgfDashboard() {
     columns:[],
     rows:[]
   })
+  const [indicatorTableData, setIndicatorTableData] = useState({
+    columns:[],
+    rows:[]
+  })
+  
  const dashboardRef = useRef()
   const [optionsForBarGraph, setOptionsForBarGraph] = useState({
     barGraphOptions1:barGraphOptions(''),
@@ -91,6 +97,8 @@ function CgfDashboard() {
   const [disableDownload, setDisableDownload] = useState(false)
 
   const [indicatorData, setIndicatorData] = useState({
+  })
+  const [filteredData, setFilteredData] = useState({
 
   })
   const [accordianTitles, setAccordianTitles] = useState({
@@ -152,7 +160,6 @@ function CgfDashboard() {
     }
   })
 
-  const [doughnutGraphData, setDoughnutGraphData] = useState();
 
 
   const saveCanvas = () => {
@@ -180,12 +187,27 @@ function CgfDashboard() {
 
   const saveChartsAsPDF = async (containerIds) => {
     // Create a new jsPDF instance
-    setDisableDownload(true)
+
 
     const doc = new jsPDF('landscape', 'mm', 'a4');
+    const title = `Filters`;
+    console.log('filteredData', filteredData)
+    // Add the title
+    doc.setFontSize(16);
+    doc.text(10, 20, title);
+
+    // Add the table to the PDF
+    doc.autoTable(['Filters','Selected Values'],filteredData, {
+      startY: 30, theme: "grid", headStyles: {
+        fillColor: [69, 150, 209] // RGB color for the header background
+      }
+    });
+   
+    doc.addPage()
   
     for (let i = 0; i < containerIds.length; i++) {
-      if (containerIds[i] !== 'companySAQ' && containerIds[i] !== 'countrySAQ') {
+
+      if (containerIds[i] !== 'companySAQ' && containerIds[i] !== 'countrySAQ'&&containerIds[i]!=='indicatorTableChart') {
         const containerId = containerIds[i];
         const container = document.getElementById(containerId);
 
@@ -256,7 +278,39 @@ function CgfDashboard() {
         });
         // doc.table(5,100,companySAQData?.rows,headers);
       }
+      else if (containerIds[i] === 'indicatorTableChart') {
+        const title = `Indicator - ${indicatorTableData?.indicator}`;
+
+        if (i > 0) {
+          doc.addPage();
+        }
+        
+        // Add the title
+        doc.setFontSize(16);
+        doc.text(10, 20, title);
+        console.log('indicator table data',indicatorTableData )
+        // Add the table to the PDF
+        doc.autoTable(['Member Company', 'Not Initiated', 'Launched', 'Established','Leadership'], indicatorTableData.rows, {
+          startY: 30, theme: "grid", headStyles: {
+            fillColor: [69, 150, 209] // RGB color for the header background
+          }
+        });
+        // doc.table(5,100,companySAQData?.rows,headers);
+      }
     }
+   
+
+    // Store the content of the last page
+// const lastPageContent = doc.internal.pages.pop();
+// console.log('LAST PAGE CONTENT',lastPageContent)
+// // Shift the content of all other pages by one
+// for (let i = doc.internal.pages.length - 1; i >= 0; i--) {
+//     doc.internal.pages[i + 1] = doc.internal.pages[i];
+// }
+
+// // Add the stored content as the first page
+// doc.internal.pages[0] = lastPageContent;
+
 
     // Save the PDF
     doc.save(`Dashboard-report-${new Date().toLocaleString()}.pdf`);
@@ -353,31 +407,38 @@ console.log('companySAQData - ',companySAQData)
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} saveAsPdf={()=>{saveChartsAsPDF(indicatorData?.graphData?['tchart','ichart1']:['tchart','chart1','chart2','chart3','chart4','chart5','chart6','companySAQ','countrySAQ']); setExpanded(expanded => { return { ...expanded,
-        expandBarGraph:true,
-        expandBarGraph1:true,
-        expandBarGraph2:true,
-        expandBarGraph3:true,
-        expandDoughnutgraph1:true,
-        expandDoughnutgraph2:true,
-        expandDoughnutgraph3:true,
-        expandDoughnutGraph:true,
-        expandCompanySAQGraph:true,
-        expandCountrySAQGraph:true,
-        
-        } })}} expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} />
+            <DashboardFilters setSelectedCountry={setSelectedCountry} setFilteredData={setFilteredData} disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} 
+            saveAsPdf={()=>{
+              setExpanded(expanded => { return { ...expanded,
+                expandTotalWorker:true,
+                expandBarGraph:true,
+                expandBarGraph1:true,
+                expandBarGraph2:true,
+                expandBarGraph3:true,
+                expandDoughnutgraph1:true,
+                expandDoughnutgraph2:true,
+                expandDoughnutgraph3:true,
+                expandDoughnutGraph:true,
+                expandCompanySAQGraph:true,
+                expandCountrySAQGraph:true
+                } })
+                setDisableDownload(true)
+              setTimeout(()=>saveChartsAsPDF(indicatorData?.graphData?['indicatorchart','indicatorTableChart']:['tchart','chart1','chart2','chart3','chart4','chart5','chart6','companySAQ','countrySAQ']),1000);
+             
+        }
+        } expanded={expanded} setExpanded={setExpanded} setMemberCompanies={setMemberCompanies} setDataForBarGraphs={setDataForBarGraphs} personName={personName} options1={options1} options2={options2} options3={options3} setAccordianTitles={setAccordianTitles} />
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
           <div id="chart-container">
-          <DashboardAccordian  expanded={expanded.expandTotalWorker} name={'expandTotalWorker'} setExpanded={setExpanded} title={'Total number of workers across the globe'}>
+         {!indicatorData?.graphData&& <DashboardAccordian  expanded={expanded.expandTotalWorker} name={'expandTotalWorker'} setExpanded={setExpanded} title={'Total number of workers across the globe'}>
             <TotalWorkerDashboard />
           </DashboardAccordian>
-         
+}
         {indicatorData?.graphData&& 
         <>
          <div class="html2pdf__page-break"></div>
          <DashboardAccordian title={'Indicators'} expanded={expanded.expandIndicator} name={'expandIndicator'} setExpanded={setExpanded}  >
-               <IndicatorGraph indicatorData={indicatorData}/>
+               <IndicatorGraph indicatorData={indicatorData} setIndicatorTableData={setIndicatorTableData} />
              </DashboardAccordian>
              </>
              }
@@ -386,7 +447,7 @@ console.log('companySAQData - ',companySAQData)
             <>
             
           
-            <DashboardAccordian setExpanded={setExpanded} title={'Disaggregated Data'} expanded={expanded?.expandBarGraph} name={'expandBarGraph'}>
+            <DashboardAccordian setExpanded={setExpanded} title={selectedCountry.length>0?`Disaggregated Data  - (${selectedCountry})`:`Disaggregated Data`} expanded={expanded?.expandBarGraph} name={'expandBarGraph'}>
         
           
               <DashboardAccordian title={accordianTitles.title1} expanded={expanded.expandBarGraph1} name={'expandBarGraph1'} setExpanded={setExpanded}  >
@@ -442,7 +503,7 @@ console.log('companySAQData - ',companySAQData)
             <>      
                   <div class="html2pdf__page-break"></div>
             
-            <DashboardAccordian  expanded={expanded?.expandDoughnutGraph} name={'expandDoughnutGraph'}  setExpanded={setExpanded} title={'Worker Status'}>
+            <DashboardAccordian  expanded={expanded?.expandDoughnutGraph} name={'expandDoughnutGraph'}  setExpanded={setExpanded} title={selectedCountry.length>0?`Worker Status - (${selectedCountry})`:`Worker Status`}>
               <DoughnutChart expanded={expanded} setExpanded={setExpanded} graphTitle={accordianTitles}  data={dataForBarGraphs?.directlyHired?.doughnutGraph} thirdPartyData={dataForBarGraphs?.thirdParty?.doughnutGraph} domesticMigrantsData={dataForBarGraphs?.domesticMigrants?.doughnutGraph}/>
 
             </DashboardAccordian>
@@ -451,7 +512,7 @@ console.log('companySAQData - ',companySAQData)
           }
               <div class="html2pdf__page-break"></div>
 
-        { isAssessmentCountryType&&<> <DashboardAccordian expanded={expanded.expandCompanySAQGraph} name={'expandCompanySAQGraph'} setExpanded={setExpanded} title={'Company\'s SAQ Status'}>
+        { (isAssessmentCountryType&&!indicatorData?.graphData)&&<> <DashboardAccordian expanded={expanded.expandCompanySAQGraph} name={'expandCompanySAQGraph'} setExpanded={setExpanded} title={'Company\'s SAQ Status'}>
             <CompanySAQStatus setCompanySAQData={setCompanySAQData} memberCompanies={memberCompanies} />
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
