@@ -13,7 +13,7 @@ import { data } from './CgfDashboard';
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 import './DashBoardFilter.css'
-import { assessmentIndicatorOptions, assessmentOptions, assessmentOptions2, barGraphOptions, indicators, labels, splitSentences } from './DashbaordUtil';
+import { assessmentIndicatorOptions, assessmentOptions, assessmentOptions2, barGraphOptions, indicators, indicatorsForNew, indicatorsForNewCountry, indicatorsForOld, labels, splitSentences } from './DashbaordUtil';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -225,9 +225,11 @@ setMemberCompanies([...personName])
         expandCompanySAQGraph:true,
         expandCountrySAQGraph:true,
         expandFilters:false,
+        expandTotalWorker:false
         } })
 
       console.log("Response from dashboard", response.data)
+      window.scrollBy({ top: 250, behavior: 'smooth' }); // Adjust the scrolling distance as needed
       if (watch('type')==='Workforce Data') {
 
       
@@ -645,7 +647,7 @@ setMemberCompanies([...personName])
                     control={control}
                     myOnChange={handleChangeAssesment}
                     name={'assessment'}
-                    options={watch('type') === 'Indicators' ? assessmentIndicatorOptions : assessmentOptions2}
+                    options={assessmentIndicatorOptions}
                     rules={{ required: true }}
                     myHelper={helperTextForFilters}
                     placeholder="Select assessment"
@@ -659,7 +661,7 @@ setMemberCompanies([...personName])
                     Country <span className="mandatory"> *</span>
                   </label>
                   <Dropdown
-                  isDisabled={watch('assessment') === 'COUNTRY'?false:watch('assessment')!=='Country Level Operations'?true:false}
+                  isDisabled={watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS'?false:watch('assessment')!=='COUNTRY- OPERATION HRDD REQUIREMENTS (New)'?true:false}
                     control={control}
                     myOnChange={handleChangeCountry}
                     name={'country'}
@@ -681,7 +683,7 @@ setMemberCompanies([...personName])
                     isDisabled={watch('type') === 'Workforce Data'}
                     control={control}
                     name={'indicator'}
-                    options={indicators}
+                  options={watch('assessment')==='HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS) (New)'?indicatorsForNew:watch('assessment')==='COUNTRY- OPERATION HRDD REQUIREMENTS (New)'?indicatorsForNewCountry:indicatorsForOld}
                     rules={{ required: watch('type') === 'Indicators' }}
                     myHelper={helperTextForFilters}
                     placeholder="Select indicator"

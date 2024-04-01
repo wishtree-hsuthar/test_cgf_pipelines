@@ -181,10 +181,11 @@ const TableLayoutCellComponent = ({
 
       const oldFiles = getFilesNotRemoved();
 
+
       let url =
         UPLOAD_ATTACHMENTS_MULTER +
         `/${params?.id}/attachments/${sectionUUID}/${columnUUID + "_" + rowId}`;
-      const attachmentResponse = await privateAxios.post(url, formData);
+      const attachmentResponse = await privateAxios.post(url, formData,{headers:{"Content-Type": "multipart/form-data"}});
 
       await privateAxios.put(url, {
         attachments: [...oldFiles, ...attachmentResponse?.data],
@@ -211,6 +212,7 @@ const TableLayoutCellComponent = ({
       setOpenFileAttachmntDialog(false);
       setIsFileRemoved(false);
     } catch (error) {
+      console.log('error while adding attachment',error)
       setIsDisabledPrimaryButton(false);
       if (error?.code === "ERR_CANCELED") return;
       if (
