@@ -22,7 +22,7 @@ function IndicatorGraph({indicatorData,setIndicatorTableData}) {
   console.log('all member companies',members)
  
   const indicatordefaultValue={
-    labels: ["Not Initiated",'Launched','Leadership',"Established"],
+    labels: ["Not Initiated",'Launched',"Established",'Leadership'],
 
     datasets: [
       {
@@ -48,14 +48,15 @@ function IndicatorGraph({indicatorData,setIndicatorTableData}) {
   useEffect(() => {
     
   let value = {...indicatordefaultValue}
-  value.labels=[`Not Inititated - ${indicatorData?.['graphData']?.['Not Initiated']}%`,`Launched - ${indicatorData?.['graphData']?.['Launched']}%`,`Leadership - ${indicatorData?.['graphData']?.['Leadership']}%`,`Established - ${indicatorData?.['graphData']?.['Established']}%`]
-  value.datasets[0].data=[indicatorData?.['graphData']?.['Not Initiated'],indicatorData?.['graphData']?.['Launched'],indicatorData?.['graphData']?.['Leadership'],indicatorData?.['graphData']?.['Established']]
+  value.labels=[`Not Inititated - ${indicatorData?.['graphData']?.['Not Initiated']}%`,`Launched - ${indicatorData?.['graphData']?.['Launched']}%`,`Established - ${indicatorData?.['graphData']?.['Established']}%`,`Leadership - ${indicatorData?.['graphData']?.['Leadership']}%`,]
+  value.datasets[0].data=[indicatorData?.['graphData']?.['Not Initiated'],indicatorData?.['graphData']?.['Launched'],indicatorData?.['graphData']?.['Established'],indicatorData?.['graphData']?.['Leadership']]
   setIndicatorDataForDisplay({...value})
   setIndicatorTableData({rows:members.map((member,index) => [member,
         indicatorData?.['tableData']?.['Not Initiated'].includes(member)? 'Yes' :'--',
         indicatorData?.['tableData']?.['Launched'].includes(member)?'Yes':'--',
-        indicatorData?.['tableData']?.['Leadership'].includes(member)?'Yes':'--',
+      
         indicatorData?.['tableData']?.['Established'].includes(member)?'Yes':'--',
+        indicatorData?.['tableData']?.['Leadership'].includes(member)?'Yes':'--',
     ]),indicator:indicatorData?.indicator})
    
   }, [indicatorData])
@@ -71,6 +72,7 @@ function IndicatorGraph({indicatorData,setIndicatorTableData}) {
       display: 'block',
       marginLeft: 'auto',
       marginRight: 'auto',
+      padding:'3%'
 
 }}
      >
@@ -90,8 +92,9 @@ function IndicatorGraph({indicatorData,setIndicatorTableData}) {
           <TableCell style={{background:'rgba(69, 150, 209, 0.1)',opacity:'1'}} >Member Company</TableCell>
             <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Not Initiated</TableCell>
             <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Launched</TableCell>
-            <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Leadership</TableCell>
+           
             <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Established</TableCell>
+            <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Leadership</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -116,8 +119,9 @@ function IndicatorGraph({indicatorData,setIndicatorTableData}) {
              <TableCell >{member}</TableCell>
               <TableCell >{indicatorData?.['tableData']?.['Not Initiated'].includes(member)?<CheckIcon />:'--'}</TableCell>
               <TableCell >{indicatorData?.['tableData']?.['Launched'].includes(member)?<CheckIcon />:'--'}</TableCell>
-              <TableCell >{indicatorData?.['tableData']?.['Leadership'].includes(member)?<CheckIcon />:'--'}</TableCell>
               <TableCell >{indicatorData?.['tableData']?.['Established'].includes(member)?<CheckIcon />:'--'}</TableCell>
+              <TableCell >{indicatorData?.['tableData']?.['Leadership'].includes(member)?<CheckIcon />:'--'}</TableCell>
+              
 
             </TableRow>
           ))}
