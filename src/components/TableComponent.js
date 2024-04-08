@@ -280,8 +280,10 @@ export default function TableComponent({
                             cell !== "isOperationMember" &&
                             cell !== "isMemberRepresentative" &&
                             cell !== "dueDate"&&
-                            cell !== "submissionDate"
+                            cell !== "submissionDate"&&
+                            cell !=='title'
                           ) {
+                            console.log('cell',cell)
                             return row[cell]?.length <= 28 ||
                               typeof row[cell] === "undefined" ? (
                               <TableCell key={cell}>
@@ -312,7 +314,26 @@ export default function TableComponent({
                                 </TableCell>
                               </Tooltip>
                             );
-                          } else if (cell === "isActive") {
+                          } 
+                          else if (cell==='title') {
+                            return (
+                            <Tooltip
+                            key={cell}
+                            placement="bottom-start"
+                            enterDelay={1000}
+                            title={row[cell]}
+                          >
+                            <TableCell key={cell}>
+                            {typeof row[cell] === "string" &&
+                                row[cell]?.length > 0 &&
+                                cell === "title"
+                                  ? row[cell][0].toUpperCase() +
+                                    row[cell]?.slice(1)
+                                  : row[cell]}
+                            </TableCell>
+                          </Tooltip>)
+                          }
+                          else if (cell === "isActive") {
                             return (
                               <TableCell
                                 className={`button-style ${

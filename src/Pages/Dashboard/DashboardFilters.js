@@ -24,10 +24,12 @@ const MenuProps = {
     },
   },
 };
-function DashboardFilters({setSelectedCountry,setIndicatorData,setFilteredData,disableDownload, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
+function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,setResultType,setSelectedCountry,setIndicatorData,setFilteredData,disableDownload, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
   const [personName, setPersonName] = React.useState([]);
   const [memberCompanyOptions, setMemberCompanyOptions] = useState([])
   const [countryListOption, setCountryListOption] = useState([])
+
+
   const helperTextForFilters = {
     type: {
       required: "Select the type",
@@ -50,6 +52,9 @@ function DashboardFilters({setSelectedCountry,setIndicatorData,setFilteredData,d
     endDate: {
       required: "Select the end date",
     },
+    indicator:{
+      required:"Select the indicator"
+    }
   };
 
   const {
@@ -63,7 +68,7 @@ function DashboardFilters({setSelectedCountry,setIndicatorData,setFilteredData,d
     watch
   } = useForm({
     defaultValues: {
-      type: "",
+      type: "Workforce Data",
       assessment: '',
       country: "",
       memberCompanies: '',
@@ -79,9 +84,67 @@ function DashboardFilters({setSelectedCountry,setIndicatorData,setFilteredData,d
   )
   const handleChangeForType = (e) => {
     setType(prev => e.target.value)
+    setResultType(e.target.value)
     setValue('type', e.target.value)
     setValue('assessment','')
     setValue('country','')
+    setIndicatorData({})
+    setDisableDownload(true)
+    setIsAssessmentCountryType(false)
+
+    setDataForBarGraphs({
+      directlyHired: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      },
+      thirdParty: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+  
+      },
+      domesticMigrants: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+  
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      }
+    })
+
     if (e.target.value==='Indicators') {
       setValue('endDate','')
       setValue('startDate','')
@@ -94,8 +157,12 @@ function DashboardFilters({setSelectedCountry,setIndicatorData,setFilteredData,d
   const handleChangeAssesment = (event) => {
     setValue('assessment', event.target.value);
     setValue('memberCompanies','')
+    setIsAssessmentCountryType(false)
+
     setValue('country','')
     setPersonName([])
+    setIndicatorData({})
+    setDisableDownload(true)
   };
 
 
@@ -121,7 +188,7 @@ function DashboardFilters({setSelectedCountry,setIndicatorData,setFilteredData,d
   // reset filter 
   const handleReset=()=>{
     reset({
-      type: "",
+      type: "Workforce Data",
       assessment: '',
       country: "",
       memberCompanies: '',
@@ -135,6 +202,7 @@ function DashboardFilters({setSelectedCountry,setIndicatorData,setFilteredData,d
     setIsAssessmentCountryType(false)
     setIndicatorData({})
     setFilteredData([])
+    setDisableDownload(true)
 setSelectedCountry()
 
     setDataForBarGraphs({
@@ -254,6 +322,7 @@ setSelectedCountry(data?.country)
         expandDoughnutGraph:true,
         expandCompanySAQGraph:true,
         expandCountrySAQGraph:true,
+        expandIndicator:true,
         expandFilters:false,
         expandTotalWorker:false
         } })
@@ -558,9 +627,17 @@ setSelectedCountry(data?.country)
         }
       })
     }
-
+    setDisableDownload(false)
 
     } catch (error) {
+    setDisableDownload(true)
+    setDashboardReport({
+
+      titleMessage: "Oops!",
+      descriptionMessage: 'Something went wrong!',
+      messageType: "error",
+    },
+      () => dashboardRef.current())
       console.log("error from submit filter data", error)
     }
     console.log(data)
@@ -575,6 +652,7 @@ setSelectedCountry(data?.country)
      
       setPersonName(personName.length === memberCompanyOptions.length ? [] : memberCompanyOptions);
       setValue('memberCompanies',personName.length === memberCompanyOptions.length ?'':'213123')
+    setDisableDownload(true)
      
       return;
     }
@@ -602,6 +680,8 @@ setSelectedCountry(data?.country)
     //   let selectedCompanyIds = value.map(data => data.id);
     //   setValue('memberCompanies', selectedCompanyIds);
     // }
+    setDisableDownload(true)
+
 
     console.log('selected company = ', value);
 
@@ -615,6 +695,9 @@ setSelectedCountry(data?.country)
 
   const handleChangeCountry = (e) => {
     setValue('country', e.target.value)
+    setDisableDownload(true)
+
+    setIndicatorData({})
 
   }
 
@@ -692,12 +775,12 @@ setSelectedCountry(data?.country)
                     Country <span className="mandatory"> *</span>
                   </label>
                   <Dropdown
-                  isDisabled={watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS'?false:watch('assessment')!=='COUNTRY- OPERATION HRDD REQUIREMENTS (New)'?true:false}
+                  isDisabled={watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS'?false:watch('assessment')!=='HRDD Reporting Framework (Country)'?true:false}
                     control={control}
                     myOnChange={handleChangeCountry}
                     name={'country'}
                     options={countryListOption}
-                    rules={{ required: watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS'||watch('assessment')==='COUNTRY- OPERATION HRDD REQUIREMENTS (New)' }}
+                    rules={{ required: watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS'||watch('assessment')==='HRDD Reporting Framework (Country)' }}
                     myHelper={helperTextForFilters}
                     placeholder="Select country"
                   />
@@ -708,14 +791,14 @@ setSelectedCountry(data?.country)
               <div className="card-form-field">
                 <div className='form-group'>
                   <label>
-                    Indicators <span className="mandatory"> *</span>
+                    Indicator <span className="mandatory"> *</span>
                   </label>
                   <Dropdown
                     isDisabled={watch('type') === 'Workforce Data'}
                     control={control}
                     name={'indicator'}
-                  options={watch('assessment')==='HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS) (New)'?indicatorsForNew:watch('assessment')==='COUNTRY- OPERATION HRDD REQUIREMENTS (New)'?indicatorsForNewCountry:indicatorsForOld}
-                    rules={{ required: watch('type') === 'Indicators' }}
+                  options={watch('assessment')==='HRDD Reporting Framework (Global)'?indicatorsForNew:watch('assessment')==='HRDD Reporting Framework (Country)'?indicatorsForNewCountry:indicatorsForOld}
+                    rules={{ required: watch('type') === 'Indicators' ,}}
                     myHelper={helperTextForFilters}
                     placeholder="Select indicator"
                   />
@@ -804,6 +887,8 @@ setSelectedCountry(data?.country)
                           value={startDate}
                           onChange={(event = "") => {
                             setStartDate(event);
+                            setDisableDownload(true)
+
                             setValue(
                               "startDate",
                               event?.toISOString()
@@ -862,6 +947,8 @@ setSelectedCountry(data?.country)
                           disableFuture
                           onChange={(event = "") => {
                             setEndDate(event);
+                            setDisableDownload(true)
+
                             setValue(
                               "endDate",
                               event?.toISOString()

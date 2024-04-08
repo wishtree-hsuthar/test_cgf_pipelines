@@ -49,6 +49,7 @@ const options3 = barGraphOptions('')
 
 
 function CgfDashboard() {
+  const [resultType, setResultType] = useState('Workforce Data')
   const [dashboardReport, setDashboardReport] = useCallbackState({
     titleMessage: "",
     descriptionMessage: "",
@@ -94,7 +95,7 @@ function CgfDashboard() {
   const [dataForgraph, setDataForgraph] = React.useState({
     // ...data,
   });
-  const [disableDownload, setDisableDownload] = useState(false)
+  const [disableDownload, setDisableDownload] = useState(true)
 
   const [indicatorData, setIndicatorData] = useState({
   })
@@ -106,7 +107,6 @@ function CgfDashboard() {
     title2: "",
     title3: ""
   })
-
   const [dataForBarGraphs, setDataForBarGraphs] = useState({
     directlyHired: {
       barGraph: {
@@ -391,7 +391,7 @@ console.log('companySAQData - ',companySAQData)
   };
 
   console.log('DATA IN BAR GRAPH 1 - ',dataForBarGraphs)
-
+console.log('indicator data',indicatorData.graphData)
   return (
     <div className="page-wrapper">
       <section style={{
@@ -407,7 +407,7 @@ console.log('companySAQData - ',companySAQData)
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters setSelectedCountry={setSelectedCountry} setFilteredData={setFilteredData} disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} 
+            <DashboardFilters dashboardRef={dashboardRef} setDashboardReport={setDashboardReport} setDisableDownload={setDisableDownload} setResultType={setResultType} setSelectedCountry={setSelectedCountry} setFilteredData={setFilteredData} disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} 
             saveAsPdf={()=>{
               setExpanded(expanded => { return { ...expanded,
                 expandTotalWorker:true,
@@ -430,7 +430,7 @@ console.log('companySAQData - ',companySAQData)
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>
           <div id="chart-container">
-         {!indicatorData?.graphData&& <DashboardAccordian  expanded={expanded.expandTotalWorker} name={'expandTotalWorker'} setExpanded={setExpanded} title={'Total number of workers across the globe'}>
+         {resultType==='Workforce Data'&& <DashboardAccordian  expanded={expanded.expandTotalWorker} name={'expandTotalWorker'} setExpanded={setExpanded} title={'Total number of workers across the globe'}>
             <TotalWorkerDashboard />
           </DashboardAccordian>
 }
@@ -512,7 +512,7 @@ console.log('companySAQData - ',companySAQData)
           }
               <div class="html2pdf__page-break"></div>
 
-        { (isAssessmentCountryType&&!indicatorData?.graphData)&&<> <DashboardAccordian expanded={expanded.expandCompanySAQGraph} name={'expandCompanySAQGraph'} setExpanded={setExpanded} title={'Company\'s SAQ Status'}>
+        { (isAssessmentCountryType&&resultType==='Workforce Data')&&<> <DashboardAccordian expanded={expanded.expandCompanySAQGraph} name={'expandCompanySAQGraph'} setExpanded={setExpanded} title={'Company\'s SAQ Status'}>
             <CompanySAQStatus setCompanySAQData={setCompanySAQData} memberCompanies={memberCompanies} />
           </DashboardAccordian>
           <div class="html2pdf__page-break"></div>

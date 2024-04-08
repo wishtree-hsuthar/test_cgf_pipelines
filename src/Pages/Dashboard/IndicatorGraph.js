@@ -111,7 +111,7 @@ function IndicatorGraph({indicatorData,setIndicatorTableData}) {
 
             </TableRow>
           ))} */}
-           {members.map((member,index) => (
+           {members.length>0?members.map((member,index) => (
             <TableRow
               key={index}
               // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -124,7 +124,15 @@ function IndicatorGraph({indicatorData,setIndicatorTableData}) {
               
 
             </TableRow>
-          ))}
+          )):
+          <tr>
+          <td colSpan="10">
+            <div className="no-records-blk">
+              <h2 className="heading2">No records available</h2>
+            </div>
+          </td>
+        </tr>
+          }
         </TableBody>
       </Table>
     </TableContainer>
