@@ -124,7 +124,7 @@ export const barGraphOptions =(CountryTitle='',max)=>
       },
     ]
   }
-  export const indicatorsForNew=['Policy','Governance','Identify and Assess','Address, Prevent and Mitigate','Remedy','Transparency and verification']
+  export const indicatorsForNew=['Policy','Governance','Identify and Assess','Address, Prevent & Mitigate','Remedy','Transparency and verification']
   export const indicatorsForOld=['Policy Commitment','Governance','Assess Human Rights Potential and Actual Impact','Integrate and Act in order To Prevent and Mitigate','Track The Effectiveness Of Responses','Report','Remedy']
   export const indicatorsForNewCountry=['Policy','Governance','Identify and Assess','Address, Prevent & Mitigate','Remedy','Transparency and verification']
   export const indicatorsForOldCountry=['Policy Commitment','Governance','Assess Human Rights Potential and Actual Impact','Integrate and Act To Prevent and Mitigate','Track The Effectiveness Of Responses','Report','Remedy']
@@ -134,8 +134,8 @@ export const barGraphOptions =(CountryTitle='',max)=>
   export const assessmentIndicatorOptions=[
     'COUNTRY- OPERATION HRDD REQUIREMENTS',
   'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)',
-  'COUNTRY- OPERATION HRDD REQUIREMENTS (New)',
-  'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS) (New)']
+  'HRDD Reporting Framework (Country)',
+  'HRDD Reporting Framework (Global)']
 
   export const  splitSentences=(sentence, wordsPerChunk = 15)=> {
     // Remove consecutive spaces
