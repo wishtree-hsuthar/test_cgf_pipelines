@@ -701,6 +701,62 @@ setSelectedCountry(data?.country)
       target: { value },
     } = event;
     // const value = event.target.value;
+    setIndicatorData({})
+
+    setIsAssessmentCountryType(false)
+
+    setDataForBarGraphs({
+      directlyHired: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      },
+      thirdParty: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+  
+      },
+      domesticMigrants: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+  
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      }
+    })
     if (value[value.length - 1] === "all") {
      
       setPersonName(personName.length === memberCompanyOptions.length ? [] : memberCompanyOptions);
@@ -752,6 +808,60 @@ setSelectedCountry(data?.country)
 
     setIndicatorData({})
 
+    setIsAssessmentCountryType(false)
+
+    setDataForBarGraphs({
+      directlyHired: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      },
+      thirdParty: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+  
+      },
+      domesticMigrants: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+  
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      }
+    })
   }
 
   const getMemberCompanies = async () => {
