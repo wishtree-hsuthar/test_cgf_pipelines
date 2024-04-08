@@ -163,6 +163,59 @@ function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,se
     setPersonName([])
     setIndicatorData({})
     setDisableDownload(true)
+
+    setDataForBarGraphs({
+      directlyHired: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      },
+      thirdParty: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+  
+      },
+      domesticMigrants: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+  
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      }
+    })
   };
 
 
