@@ -76,7 +76,7 @@ export const barGraphOptions =(CountryTitle='',max)=>
          
           // This more specific font property overrides the global property
           font: {
-            size: 10,
+            size: 12,
           },
           color: "black",
         },
@@ -86,10 +86,10 @@ export const barGraphOptions =(CountryTitle='',max)=>
         display: true,
         text: title,
         font: {
-          size: 12,
+          size: 14,
 
         },
-       
+        color: "black",
         
       },
       // datalabels: {
@@ -103,6 +103,11 @@ export const barGraphOptions =(CountryTitle='',max)=>
         }
       }
     },
+    // animation: {
+    //   animateRotate: true, // Enable rotation animation
+    //   animateScale: true, // Enable scale animation
+    //   duration: 1000, // Animation duration in milliseconds
+    // },
   }};
   export const defaultValue={
     labels: ['Directly hired workers',"Third Party workers","Domestic Migrants"],
@@ -119,11 +124,18 @@ export const barGraphOptions =(CountryTitle='',max)=>
       },
     ]
   }
-  export const indicators=['Policy Commitment','Governing Structure','Roles & Responsibility','Impact/Risk Assessment','Prevent and Mitigate Risks and Impacts','Remediation Processes','Public Reporting']
-  export const assessmentOptions1=['COUNTRY- OPERATION HRDD REQUIREMENTS', 'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)']
+  export const indicatorsForNew=['Policy','Governance','Identify and Assess','Address, Prevent & Mitigate','Remedy','Transparency and verification']
+  export const indicatorsForOld=['Policy Commitment','Governance','Assess Human Rights Potential and Actual Impact','Integrate and Act in order To Prevent and Mitigate','Track The Effectiveness Of Responses','Report','Remedy']
+  export const indicatorsForNewCountry=['Policy','Governance','Identify and Assess','Address, Prevent & Mitigate','Remedy','Transparency and verification']
+  export const indicatorsForOldCountry=['Policy Commitment','Governance','Assess Human Rights Potential and Actual Impact','Integrate and Act To Prevent and Mitigate','Track The Effectiveness Of Responses','Report','Remedy']
+  export const assessmentWorkforceOptions=['COUNTRY- OPERATION HRDD REQUIREMENTS', 'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)']
   export const assessmentOptions2=['COUNTRY', 'HEADQUARTER']
 
-  export const assessmentIndicatorOptions=['HQ Level Operations','Country Level Operations']
+  export const assessmentIndicatorOptions=[
+    'COUNTRY- OPERATION HRDD REQUIREMENTS',
+  'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)',
+  'HRDD Reporting Framework (Country)',
+  'HRDD Reporting Framework (Global)']
 
   export const  splitSentences=(sentence, wordsPerChunk = 15)=> {
     // Remove consecutive spaces

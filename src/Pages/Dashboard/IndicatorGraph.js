@@ -10,22 +10,25 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import CheckIcon from '@mui/icons-material/Check';
+import "../../components/TableComponent.css";
+
 DoughnutChartJS.register(ArcElement, Tooltip, Legend);
 
-function IndicatorGraph({indicatorData}) {
+function IndicatorGraph({indicatorData,setIndicatorTableData}) {
   console.log("indicator data",indicatorData)
   console.log("established",indicatorData?.['graphData']?.['Established'])
+  let members = [...indicatorData?.['tableData']?.['Established'],...indicatorData?.['tableData']?.['Not Initiated'],...indicatorData?.['tableData']?.['Launched'],...indicatorData?.['tableData']?.['Leadership']]
+  console.log('all member companies',members)
  
-  // indicatordefaultValue.datasets[0].data=[indicatorData?.['graphData']?.['Established'],indicatorData?.['graphData']?.['Launched'],indicatorData?.['graphData']?.['Leadership'],indicatorData?.['graphData']?.['Not Initiated']]
-  // console.log('indicator data = ',indicatordefaultValue)
   const indicatordefaultValue={
-    labels: ["Not Initiated",'Launched','Leadership',"Established"],
+    labels: ["Not Initiated",'Launched',"Established",'Leadership'],
 
     datasets: [
       {
         // label: "# of Votes",
         data: [],
-        backgroundColor: ['orange','red','blue','green'],
+        backgroundColor: ['#FFF67E','#BFEA7C','#9BCF53','#416D19'],
         borderColor: [
           ''
         ],
@@ -45,8 +48,16 @@ function IndicatorGraph({indicatorData}) {
   useEffect(() => {
     
   let value = {...indicatordefaultValue}
-  value.datasets[0].data=[indicatorData?.['graphData']?.['Not Initiated'],indicatorData?.['graphData']?.['Launched'],indicatorData?.['graphData']?.['Leadership'],indicatorData?.['graphData']?.['Established']]
+  value.labels=[`Not Inititated - ${indicatorData?.['graphData']?.['Not Initiated']}%`,`Launched - ${indicatorData?.['graphData']?.['Launched']}%`,`Established - ${indicatorData?.['graphData']?.['Established']}%`,`Leadership - ${indicatorData?.['graphData']?.['Leadership']}%`,]
+  value.datasets[0].data=[indicatorData?.['graphData']?.['Not Initiated'],indicatorData?.['graphData']?.['Launched'],indicatorData?.['graphData']?.['Established'],indicatorData?.['graphData']?.['Leadership']]
   setIndicatorDataForDisplay({...value})
+  setIndicatorTableData({rows:members.map((member,index) => [member,
+        indicatorData?.['tableData']?.['Not Initiated'].includes(member)? 'Yes' :'--',
+        indicatorData?.['tableData']?.['Launched'].includes(member)?'Yes':'--',
+      
+        indicatorData?.['tableData']?.['Established'].includes(member)?'Yes':'--',
+        indicatorData?.['tableData']?.['Leadership'].includes(member)?'Yes':'--',
+    ]),indicator:indicatorData?.indicator})
    
   }, [indicatorData])
   
@@ -61,27 +72,33 @@ function IndicatorGraph({indicatorData}) {
       display: 'block',
       marginLeft: 'auto',
       marginRight: 'auto',
+      padding:'3%'
 
 }}
      >
       <Doughnut
+        id='indicatorchart'
             data={indicatorDataForDisplay}
-            options={doughnutGraphOptions(indicatorData?.indicator,'top')}
+            width={800}
+            height={500}  
+            options={{responsive:true,maintainAspectRatio: false,...doughnutGraphOptions(indicatorData?.indicator,'top')}}
           />
           </div>}
            <div>
-           <TableContainer component={Paper} className='table-blk'>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
+           <TableContainer style={{ maxHeight: 400 }} component={Paper} >
+      <Table  aria-label="simple table" style={{position:"relative"}}>
+        <TableHead  style={{position:"sticky",top:"0",zIndex:"9999", background:"#fff"}} >
           <TableRow>
-            <TableCell>Not Initiated</TableCell>
-            <TableCell >Launched</TableCell>
-            <TableCell>Leadership</TableCell>
-            <TableCell>Established</TableCell>
+          <TableCell style={{background:'rgba(69, 150, 209, 0.1)',opacity:'1'}} >Member Company</TableCell>
+            <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Not Initiated</TableCell>
+            <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Launched</TableCell>
+           
+            <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Established</TableCell>
+            <TableCell style={{background:'rgba(69, 150, 209, 0.1)'}}>Leadership</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {indicatorData?.['tableData']?.[maxMembers[3]?.name].map((row,index) => (
+          {/* {indicatorData?.['tableData']?.[maxMembers[3]?.name].map((row,index) => (
             <TableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -93,7 +110,29 @@ function IndicatorGraph({indicatorData}) {
               <TableCell >{indicatorData?.['tableData']?.['Established'][index]??"--"}</TableCell>
 
             </TableRow>
-          ))}
+          ))} */}
+           {members.length>0?members.map((member,index) => (
+            <TableRow
+              key={index}
+              // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+             <TableCell >{member}</TableCell>
+              <TableCell >{indicatorData?.['tableData']?.['Not Initiated'].includes(member)?<CheckIcon />:'--'}</TableCell>
+              <TableCell >{indicatorData?.['tableData']?.['Launched'].includes(member)?<CheckIcon />:'--'}</TableCell>
+              <TableCell >{indicatorData?.['tableData']?.['Established'].includes(member)?<CheckIcon />:'--'}</TableCell>
+              <TableCell >{indicatorData?.['tableData']?.['Leadership'].includes(member)?<CheckIcon />:'--'}</TableCell>
+              
+
+            </TableRow>
+          )):
+          <tr>
+          <td colSpan="10">
+            <div className="no-records-blk">
+              <h2 className="heading2">No records available</h2>
+            </div>
+          </td>
+        </tr>
+          }
         </TableBody>
       </Table>
     </TableContainer>

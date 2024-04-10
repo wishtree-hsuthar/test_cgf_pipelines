@@ -13,7 +13,7 @@ import { data } from './CgfDashboard';
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 import './DashBoardFilter.css'
-import { assessmentIndicatorOptions, assessmentOptions, assessmentOptions2, barGraphOptions, indicators, labels, splitSentences } from './DashbaordUtil';
+import { assessmentIndicatorOptions, assessmentOptions, assessmentOptions1, assessmentOptions2, assessmentWorkforceOptions, barGraphOptions, indicators, indicatorsForNew, indicatorsForNewCountry, indicatorsForOld, labels, splitSentences } from './DashbaordUtil';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -24,16 +24,18 @@ const MenuProps = {
     },
   },
 };
-function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
+function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,setResultType,setSelectedCountry,setIndicatorData,setFilteredData,disableDownload, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
   const [personName, setPersonName] = React.useState([]);
   const [memberCompanyOptions, setMemberCompanyOptions] = useState([])
   const [countryListOption, setCountryListOption] = useState([])
+
+
   const helperTextForFilters = {
     type: {
       required: "Select the type",
     },
     assessment: {
-      required:"Select the asssessment"
+      required:"Select the assessment"
     },
     country:{
       required:"Select the country"
@@ -50,6 +52,9 @@ function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1
     endDate: {
       required: "Select the end date",
     },
+    indicator:{
+      required:"Select the indicator"
+    }
   };
 
   const {
@@ -63,7 +68,7 @@ function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1
     watch
   } = useForm({
     defaultValues: {
-      type: "",
+      type: "Workforce Data",
       assessment: '',
       country: "",
       memberCompanies: '',
@@ -79,13 +84,139 @@ function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1
   )
   const handleChangeForType = (e) => {
     setType(prev => e.target.value)
+    setResultType(e.target.value)
     setValue('type', e.target.value)
     setValue('assessment','')
     setValue('country','')
+    setIndicatorData({})
+    setDisableDownload(true)
+    setIsAssessmentCountryType(false)
+
+    setDataForBarGraphs({
+      directlyHired: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      },
+      thirdParty: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+  
+      },
+      domesticMigrants: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+  
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      }
+    })
+
+    if (e.target.value==='Indicators') {
+      setValue('endDate','')
+      setValue('startDate','')
+      setStartDate(null)
+      setEndDate(null)
+
+    }
   }
 
   const handleChangeAssesment = (event) => {
     setValue('assessment', event.target.value);
+    setValue('memberCompanies','')
+    setValue('indicator','')
+    setIsAssessmentCountryType(false)
+
+    setValue('country','')
+    setPersonName([])
+    setIndicatorData({})
+    setDisableDownload(true)
+
+    setDataForBarGraphs({
+      directlyHired: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      },
+      thirdParty: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+  
+      },
+      domesticMigrants: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+  
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      }
+    })
   };
 
 
@@ -111,7 +242,7 @@ function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1
   // reset filter 
   const handleReset=()=>{
     reset({
-      type: "",
+      type: "Workforce Data",
       assessment: '',
       country: "",
       memberCompanies: '',
@@ -124,6 +255,10 @@ function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1
     setExpanded(expanded => { return { ...expanded, expandBarGraph: false, expandDoughnutGraph: false,expandFilters:true ,expandDoughnutgraph1:false} })
     setIsAssessmentCountryType(false)
     setIndicatorData({})
+    setFilteredData([])
+    setDisableDownload(true)
+setSelectedCountry()
+
     setDataForBarGraphs({
       directlyHired: {
         barGraph: {
@@ -185,18 +320,29 @@ function DashboardFilters({setIndicatorData,disableDownload, setBarGraphOptions1
 console.log('data = ',data)
 data.memberCompanies=personName.map(member=>member?.id)
 setMemberCompanies([...personName])
+setSelectedCountry(data?.country)
     // console.log('member company = ', memberCompanyOptions.filter(member => data.memberCompanies.includes(member.id)))
     console.log('member company data = ', data.memberCompanies)
-     if(data.assessment==='COUNTRY'){
-      data.assessment='COUNTRY- OPERATION HRDD REQUIREMENTS'
-     }
-     if(data?.assessment==='HEADQUARTER')
-     {
-      data.assessment='HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)'
-     }
+    console.log('member company  = ', personName)
+
+    //  if(data.assessment==='COUNTRY'){
+    //   data.assessment='COUNTRY- OPERATION HRDD REQUIREMENTS'
+    //  }
+    //  if(data?.assessment==='HEADQUARTER')
+    //  {
+    //   data.assessment='HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)'
+    //  }
     if (data.type !== 'Indicators') { 
       data.endDate = new Date(new Date().setDate(new Date(data.endDate).getDate() + 1)).toISOString() 
       data.type='SAQ'
+      setFilteredData([
+        ['Type',data?.type],
+        ['Assessment',data?.assessment],
+      ['Country',data?.country?data?.country:'NA'],
+        ['Member Companies',[...personName.map(member=>" "+member?.label)]],
+        ['Start Date',new Date(data?.startDate).toLocaleDateString('en')],
+        ['End Date',new Date(data?.endDate).toLocaleDateString('en')]
+      ])
     } 
     else {
       data = {
@@ -205,6 +351,12 @@ setMemberCompanies([...personName])
         type:data?.type,
         country:data?.country
       }
+      setFilteredData([
+        ['Type',data?.type],
+        ['Assessment',data?.assessment],
+        ['Country',data?.country?data?.country:'NA'],
+        ['Indicator',data?.indicator]
+      ])
     }
     setIsAssessmentCountryType(data.assessment==="COUNTRY- OPERATION HRDD REQUIREMENTS")
   
@@ -224,10 +376,13 @@ setMemberCompanies([...personName])
         expandDoughnutGraph:true,
         expandCompanySAQGraph:true,
         expandCountrySAQGraph:true,
+        expandIndicator:true,
         expandFilters:false,
+        expandTotalWorker:false
         } })
 
       console.log("Response from dashboard", response.data)
+      window.scrollBy({ top: 250, behavior: 'smooth' }); // Adjust the scrolling distance as needed
       if (watch('type')==='Workforce Data') {
 
       
@@ -526,9 +681,17 @@ setMemberCompanies([...personName])
         }
       })
     }
-
+    setDisableDownload(false)
 
     } catch (error) {
+    setDisableDownload(true)
+    setDashboardReport({
+
+      titleMessage: "Oops!",
+      descriptionMessage: 'Something went wrong!',
+      messageType: "error",
+    },
+      () => dashboardRef.current())
       console.log("error from submit filter data", error)
     }
     console.log(data)
@@ -539,10 +702,67 @@ setMemberCompanies([...personName])
       target: { value },
     } = event;
     // const value = event.target.value;
+    setIndicatorData({})
+
+    setIsAssessmentCountryType(false)
+
+    setDataForBarGraphs({
+      directlyHired: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      },
+      thirdParty: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+  
+      },
+      domesticMigrants: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+  
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      }
+    })
     if (value[value.length - 1] === "all") {
      
       setPersonName(personName.length === memberCompanyOptions.length ? [] : memberCompanyOptions);
       setValue('memberCompanies',personName.length === memberCompanyOptions.length ?'':'213123')
+    setDisableDownload(true)
      
       return;
     }
@@ -570,6 +790,8 @@ setMemberCompanies([...personName])
     //   let selectedCompanyIds = value.map(data => data.id);
     //   setValue('memberCompanies', selectedCompanyIds);
     // }
+    setDisableDownload(true)
+
 
     console.log('selected company = ', value);
 
@@ -583,7 +805,64 @@ setMemberCompanies([...personName])
 
   const handleChangeCountry = (e) => {
     setValue('country', e.target.value)
+    setDisableDownload(true)
 
+    setIndicatorData({})
+
+    setIsAssessmentCountryType(false)
+
+    setDataForBarGraphs({
+      directlyHired: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      },
+      thirdParty: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+  
+      },
+      domesticMigrants: {
+        barGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+  
+        },
+        doughnutGraph: {
+          labels: [''],
+          datasets: [{
+            label: '',
+            data: []
+          }]
+        }
+      }
+    })
   }
 
   const getMemberCompanies = async () => {
@@ -628,7 +907,7 @@ setMemberCompanies([...personName])
                     control={control}
                     myOnChange={handleChangeForType}
                     name={'type'}
-                    options={['Workforce Data',]}
+                    options={['Workforce Data','Indicators']}
                     rules={{ required: true }}
                     myHelper={helperTextForFilters}
                     placeholder="Select type"
@@ -645,7 +924,8 @@ setMemberCompanies([...personName])
                     control={control}
                     myOnChange={handleChangeAssesment}
                     name={'assessment'}
-                    options={watch('type') === 'Indicators' ? assessmentIndicatorOptions : assessmentOptions2}
+                    options={watch('type')==='Indicators'?assessmentIndicatorOptions:assessmentWorkforceOptions}
+
                     rules={{ required: true }}
                     myHelper={helperTextForFilters}
                     placeholder="Select assessment"
@@ -659,12 +939,12 @@ setMemberCompanies([...personName])
                     Country <span className="mandatory"> *</span>
                   </label>
                   <Dropdown
-                  isDisabled={watch('assessment') === 'COUNTRY'?false:watch('assessment')!=='Country Level Operations'?true:false}
+                  isDisabled={watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS'?false:watch('assessment')!=='HRDD Reporting Framework (Country)'?true:false}
                     control={control}
                     myOnChange={handleChangeCountry}
                     name={'country'}
                     options={countryListOption}
-                    rules={{ required: watch('assessment')==='COUNTRY' }}
+                    rules={{ required: watch('assessment') === 'COUNTRY- OPERATION HRDD REQUIREMENTS'||watch('assessment')==='HRDD Reporting Framework (Country)' }}
                     myHelper={helperTextForFilters}
                     placeholder="Select country"
                   />
@@ -675,14 +955,14 @@ setMemberCompanies([...personName])
               <div className="card-form-field">
                 <div className='form-group'>
                   <label>
-                    Indicators <span className="mandatory"> *</span>
+                    Indicator <span className="mandatory"> *</span>
                   </label>
                   <Dropdown
                     isDisabled={watch('type') === 'Workforce Data'}
                     control={control}
                     name={'indicator'}
-                    options={indicators}
-                    rules={{ required: watch('type') === 'Indicators' }}
+                  options={watch('assessment')==='HRDD Reporting Framework (Global)'?indicatorsForNew:watch('assessment')==='HRDD Reporting Framework (Country)'?indicatorsForNewCountry:indicatorsForOld}
+                    rules={{ required: watch('type') === 'Indicators' ,}}
                     myHelper={helperTextForFilters}
                     placeholder="Select indicator"
                   />
@@ -771,6 +1051,8 @@ setMemberCompanies([...personName])
                           value={startDate}
                           onChange={(event = "") => {
                             setStartDate(event);
+                            setDisableDownload(true)
+
                             setValue(
                               "startDate",
                               event?.toISOString()
@@ -829,6 +1111,8 @@ setMemberCompanies([...personName])
                           disableFuture
                           onChange={(event = "") => {
                             setEndDate(event);
+                            setDisableDownload(true)
+
                             setValue(
                               "endDate",
                               event?.toISOString()

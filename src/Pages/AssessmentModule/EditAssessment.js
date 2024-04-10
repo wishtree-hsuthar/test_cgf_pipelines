@@ -84,7 +84,8 @@ function EditAssessment() {
       remarks: "",
       region: "",
       country: "",
-      actionPlan:''
+      actionPlan:'',
+      deleteActionPlan:false
     },
   });
 
@@ -138,6 +139,7 @@ function EditAssessment() {
     setFile(null);
     setFilePreview("");
     setValue('actionPlan','')
+    setValue('deleteActionPlan',true)
     
   };
   const handleFileChange = (event) => {
@@ -174,6 +176,8 @@ function EditAssessment() {
         return;
       }
       setValue('actionPlan',file)
+    setValue('deleteActionPlan',false)
+
       console.log("inside if");
       setFilePreview(file.name);
       // setValue(fname, file.name);
@@ -504,11 +508,13 @@ function EditAssessment() {
     formData.append('assignedOperationMember',data.assignedOperationMember)
     formData.append('assignedMember',data.assignedMember)     
     formData.append('assessmentType',data.assessmentType) 
-
+    formData.append('deleteActionPlan',data.deleteActionPlan)
+            console.log('data ->',data)
     try {
       const responseEditMember = await privateAxios.put(
         UPDATE_ASSESSMENT_BY_ID + params.id,
-        formData
+        formData,
+        {headers:{"Content-Type": "multipart/form-data"}}
       );
       if (responseEditMember.status === 200) {
         setDisableEditAssessmentButton(false);
