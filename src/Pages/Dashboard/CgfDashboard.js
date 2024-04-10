@@ -289,8 +289,10 @@ function CgfDashboard() {
         doc.setFontSize(16);
         doc.text(10, 20, title);
         console.log('indicator table data',indicatorTableData )
+        let records = indicatorTableData?.rows.length<1?[['--','--','--','--','--']]:indicatorTableData.rows
+        console.log('records --',records)
         // Add the table to the PDF
-        doc.autoTable(['Member Company', 'Not Initiated', 'Launched', 'Established','Leadership'], indicatorTableData.rows, {
+        doc.autoTable(['Member Company', 'Not Initiated', 'Launched', 'Established','Leadership'], records, {
           startY: 30, theme: "grid", headStyles: {
             fillColor: [69, 150, 209] // RGB color for the header background
           }

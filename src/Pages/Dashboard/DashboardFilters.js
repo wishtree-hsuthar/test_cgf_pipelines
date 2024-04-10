@@ -157,6 +157,7 @@ function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,se
   const handleChangeAssesment = (event) => {
     setValue('assessment', event.target.value);
     setValue('memberCompanies','')
+    setValue('indicator','')
     setIsAssessmentCountryType(false)
 
     setValue('country','')
