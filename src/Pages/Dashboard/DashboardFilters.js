@@ -71,7 +71,7 @@ function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,se
       type: "Workforce Data",
       assessment: '',
       country: "",
-      memberCompanies: '',
+      memberCompanies: [],
       endDate: '',
       startDate: '',
 
@@ -148,6 +148,7 @@ function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,se
     if (e.target.value==='Indicators') {
       setValue('endDate','')
       setValue('startDate','')
+      setValue('assessment','HRDD Reporting Framework (Global)')
       setStartDate(null)
       setEndDate(null)
 
@@ -156,7 +157,7 @@ function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,se
 
   const handleChangeAssesment = (event) => {
     setValue('assessment', event.target.value);
-    setValue('memberCompanies','')
+    setValue('memberCompanies',[])
     setValue('indicator','')
     setIsAssessmentCountryType(false)
 
@@ -318,8 +319,10 @@ setSelectedCountry()
   
 
 console.log('data = ',data)
-data.memberCompanies=personName.map(member=>member?.id)
-setMemberCompanies([...personName])
+// data.memberCompanies=personName.map(member=>member?.id)
+let membersOption = memberCompanyOptions.filter(member=>personName.find(person=>member.id===person))
+console.log('memberOption',membersOption)
+setMemberCompanies([...membersOption])
 setSelectedCountry(data?.country)
     // console.log('member company = ', memberCompanyOptions.filter(member => data.memberCompanies.includes(member.id)))
     console.log('member company data = ', data.memberCompanies)
@@ -703,7 +706,7 @@ setSelectedCountry(data?.country)
     } = event;
     // const value = event.target.value;
     setIndicatorData({})
-
+    console.log('value in member company change',value)
     setIsAssessmentCountryType(false)
 
     setDataForBarGraphs({
@@ -759,18 +762,22 @@ setSelectedCountry(data?.country)
       }
     })
     if (value[value.length - 1] === "all") {
+      console.log("if value member company change",value)
      
-      setPersonName(personName.length === memberCompanyOptions.length ? [] : memberCompanyOptions);
-      setValue('memberCompanies',personName.length === memberCompanyOptions.length ?'':'213123')
+      setPersonName(personName.length === memberCompanyOptions.length ? [] : memberCompanyOptions.map(member=>member.id));
+      setValue('memberCompanies',personName.length === memberCompanyOptions.length?[]:memberCompanyOptions.map(member=>member.id))
     setDisableDownload(true)
      
       return;
+    } else {
+      console.log("else value member company change",value)
+      setPersonName(value);
+
+
+
+      setValue('memberCompanies',value)
     }
-    setPersonName(value);
-
-
-
-    setValue('memberCompanies','213123')
+   
 
 
 
@@ -792,8 +799,8 @@ setSelectedCountry(data?.country)
     // }
     setDisableDownload(true)
 
-
-    console.log('selected company = ', value);
+    // return
+    // console.log('selected company = ', value);
 
 
   };
@@ -802,7 +809,13 @@ setSelectedCountry(data?.country)
 
   
   console.log( 'member companies values = ',getValues('memberCompanies') )
+  const handleChangeAssessment = (e)=>{
+    setValue('indicator',e.target.value)
+    setDisableDownload(true)
+    setIndicatorData({})
 
+
+  }
   const handleChangeCountry = (e) => {
     setValue('country', e.target.value)
     setDisableDownload(true)
@@ -965,6 +978,7 @@ setSelectedCountry(data?.country)
                     rules={{ required: watch('type') === 'Indicators' ,}}
                     myHelper={helperTextForFilters}
                     placeholder="Select indicator"
+                    myOnChange={handleChangeAssessment}
                   />
                 </div>
               </div>
@@ -973,7 +987,7 @@ setSelectedCountry(data?.country)
                 
                 watch('type')==='Workforce Data'&&
                 <>
-              <div className="card-form-field">
+              {/* <div className="card-form-field">
                 <div className='form-group'>
                   <label>
                     Member Companies <span className="mandatory"> *</span>
@@ -1008,7 +1022,54 @@ setSelectedCountry(data?.country)
               
                   {memberCompanyOptions.map((data) => (
                     <MenuItem key={data.label} value={data}>
-                      <Checkbox checked={personName.includes('all') || personName.includes(data)} />
+                      <Checkbox color={'default'} style={{color:personName.includes('all') || personName.includes(data)?'#1976d2':'black'}} disabled  checked={personName.includes('all') || personName.includes(data)} />
+                      <ListItemText primary={data.label} />
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{error&&error?.message}</FormHelperText>
+                </FormControl>
+                  )}
+                  />
+                </div>
+              </div> */}
+              <div className="card-form-field">
+                <div className='form-group'>
+                  <label>
+                    Member Companies <span className="mandatory"> *</span>
+                  </label>
+                  <Controller 
+                  name={'memberCompanies'}
+
+                  control={control}
+                  rules={{required:"Select the member company"}}
+                  render={({field,fieldState:{error}})=>(
+                    <FormControl style={{width:"100%"}}>
+                  <Select
+                    {...field}
+                  IconComponent={(props) => (
+                    <KeyboardArrowDownRoundedIcon {...props} />
+                )}
+                
+                  multiple
+                  displayEmpty
+                  className='dashboard-select-component'
+                  fullWidth
+                   
+                  // value={personName}
+                  onChange={handleChange}
+                  input={<OutlinedInput {...field} />}
+                      renderValue={(selected) => selected?.includes('all') ? 'All Member Companies' :selected?.length<1?'Select member companies': selected?.map((data) => memberCompanyOptions.find(member=>member.id===data).label).join(", ") }
+                  MenuProps={MenuProps}
+                >
+                  <MenuItem key={'all'} value={'all'}>
+                    <Checkbox checked={memberCompanyOptions.length>0&&personName.length === memberCompanyOptions.length} />
+                    <ListItemText primary={'Select All'} />
+                  </MenuItem>
+              
+                  {memberCompanyOptions.map((data) => (
+                    <MenuItem key={data.label} value={data.id}>
+                      <Checkbox  checked={personName.includes('all') || personName.includes(data.id)} />
                       <ListItemText primary={data.label} />
                     </MenuItem>
                   ))}

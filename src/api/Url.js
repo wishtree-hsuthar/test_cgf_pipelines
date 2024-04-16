@@ -108,3 +108,6 @@ export const DOWNLOAD_ACTION_PLAN = `${REACT_APP_API_ENDPOINT}assessments/`
 export const UPLOAD_OTHER_DOC=`${REACT_APP_API_ENDPOINT}questionnaires/other-documents`
 export const DOWNLOAD_OTHER_DOCS=`${REACT_APP_API_ENDPOINT}questionnaires/other-documents/download`
 export const DELETE_OTHER_DOCS=`${REACT_APP_API_ENDPOINT}questionnaires/other-documents`
+
+// file download
+export const ZIP_FILE_DOWNLOAD = `${REACT_APP_API_ENDPOINT}assessments/export/assessments?search=`
