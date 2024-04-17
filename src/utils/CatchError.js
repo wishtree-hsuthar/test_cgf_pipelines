@@ -37,7 +37,22 @@ export const catchError = async (
     setTimeout(() => {
       navigate("/home");
     }, 3000);
-  } else {
+  }
+  else if (error?.response?.status === 404) {
+    setToasterDetails(
+      {
+        titleMessage: `Oops!`,
+        descriptionMessage: error?.response?.data?.message
+          ? error?.response?.data?.message
+          : "Oops! Something went wrong. Please try again later.",
+
+        messageType: `error`,
+      },
+      () => myRef.current()
+    );
+    
+  } 
+  else {
     console.log('error - ',error)
     setToasterDetails(
       {

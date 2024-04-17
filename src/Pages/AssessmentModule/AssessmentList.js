@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import TableComponent from "../../components/TableComponent";
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
-import { ASSESSMENTS, DOWNLOAD_ACTION_PLAN } from "../../api/Url";
+import { ASSESSMENTS, DOWNLOAD_ACTION_PLAN, ZIP_FILE_DOWNLOAD } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -13,6 +13,9 @@ import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
 import  {catchError}  from "../../utils/CatchError";
+import { CloudDownloadOutlined, ImportExportOutlined } from "@mui/icons-material";
+import { getTimeStamp } from "../../utils/downloadFunction";
+import { Tooltip } from "@mui/material";
 
 const listObj = {
   width: "30%",
@@ -391,9 +394,38 @@ const AssessmentList = () => {
     }
   };
   // download action plan
-  const downloadActionPlan = () => {
+  const downnloadZipFile =async () => {
     try {
-    } catch (error) {}
+      const response = await privateAxios.get(ZIP_FILE_DOWNLOAD+search,{
+          responseType: "blob",
+        }
+      );
+      // Logger.info(` download function -  from ${filename}  assessment `);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement(`a`);
+      link.href = url;
+      let timeStamp = getTimeStamp();
+      link.setAttribute(`download`, `Assessments - ${timeStamp}.zip`);
+      document.body.appendChild(link);
+      link.click();
+      if (response.status == 200) {
+        setIsAssessmentListLoading(false)
+        setToasterDetails(
+          {
+            titleMessage: `Success!`,
+            descriptionMessage: "Downloaded Successfully!",
+  
+            messageType: `success`,
+          },
+          () => myRef.current()
+        );
+      }
+    } catch (error) {
+      setIsAssessmentListLoading(false)
+      Logger.info(`downlaod function - error ${error?.response?.data?.message}`);
+      catchError(error, setToasterDetails, myRef, navigate);
+      return error;
+    }
   };
   return (
     <div>
@@ -410,7 +442,7 @@ const AssessmentList = () => {
               <div className="form-header-left-blk flex-start">
                 <h2 className="heading2 mr-40">Assessments</h2>
               </div>
-              <div className="form-header-right-txt search-and-btn-field-right view-instruct-field-right">
+              <div className="form-header-right-txt search-and-btn-field-right view-instruct-field-right-edited">
                 <div className="search-and-btn-field-blk mr-0">
                   <div className="searchbar">
                     <input
@@ -424,7 +456,10 @@ const AssessmentList = () => {
                     <button type="submit">
                       <i className="fa fa-search"></i>
                     </button>
+
                   </div>
+               
+
                 </div>
                 {(SUPER_ADMIN ||
                   moduleAccesForAssessment[0]?.assessment?.add) && (
@@ -438,6 +473,16 @@ const AssessmentList = () => {
                     </button>
                   </div>
                 )}
+             <div className="form-btn ml-20" onClick={()=>{downnloadZipFile();
+      setIsAssessmentListLoading(true)
+            
+            }}
+            style={{cursor:'pointer'}}
+            >
+              <Tooltip title={'Downlaod Assessments'}>
+                   <CloudDownloadOutlined  />
+                   </Tooltip>
+                  </div>
                 <div
                   className="tertiary-btn-blk ml-20"
                   onClick={viewInstruction}
@@ -447,6 +492,7 @@ const AssessmentList = () => {
                   </span>
                   <span className="addmore-txt">View Instructions</span>
                 </div>
+             
               </div>
             </div>
 
