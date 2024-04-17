@@ -246,7 +246,7 @@ function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,se
       type: "Workforce Data",
       assessment: '',
       country: "",
-      memberCompanies: '',
+      memberCompanies: [],
       endDate: '',
       startDate: '',
     })
