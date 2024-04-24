@@ -24,7 +24,7 @@ const MenuProps = {
     },
   },
 };
-function DashboardFilters({setSubmittedData,setDashboardReport,dashboardRef,setDisableDownload,setResultType,setSelectedCountry,setIndicatorData,setFilteredData,disableDownload, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
+function DashboardFilters({setDashboardReportPresent,setSubmittedData,setDashboardReport,dashboardRef,setDisableDownload,setResultType,setSelectedCountry,setIndicatorData,setFilteredData,disableDownload, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
   const [personName, setPersonName] = React.useState([]);
   const [memberCompanyOptions, setMemberCompanyOptions] = useState([])
   const [countryListOption, setCountryListOption] = useState([])
@@ -88,6 +88,7 @@ function DashboardFilters({setSubmittedData,setDashboardReport,dashboardRef,setD
     setType(prev => e.target.value)
     setResultType(e.target.value)
     setValue('type', e.target.value)
+    setDashboardReportPresent(false)
     setValue('assessment','')
     setValue('country','')
     setValue('endDate',new Date())
@@ -164,7 +165,7 @@ function DashboardFilters({setSubmittedData,setDashboardReport,dashboardRef,setD
     setValue('memberCompanies',[])
     setValue('indicator','')
     setIsAssessmentCountryType(false)
-   
+    setDashboardReportPresent(false)
     setValue('country','')
     setPersonName([])
     setIndicatorData({})
@@ -256,6 +257,7 @@ function DashboardFilters({setSubmittedData,setDashboardReport,dashboardRef,setD
     })
     setStartDate(null)
     setEndDate(new Date())
+    setDashboardReportPresent(false)
     setPersonName([]);
     setExpanded(expanded => { return { ...expanded, expandBarGraph: false, expandDoughnutGraph: false,expandFilters:true ,expandDoughnutgraph1:false} })
     setIsAssessmentCountryType(false)
@@ -374,6 +376,7 @@ setSelectedCountry(data?.country)
         ...data
       })
       console.log('expanded graph in dashboard filter= ', expanded.expandBarGraph)
+      setDashboardReportPresent(true)
       setExpanded(expanded => { return { ...expanded,
         expandBarGraph:true,
         expandBarGraph1:true,
@@ -719,6 +722,7 @@ setSelectedCountry(data?.country)
     setIndicatorData({})
     console.log('value in member company change',value)
     setIsAssessmentCountryType(false)
+    setDashboardReportPresent(false)
 
     setDataForBarGraphs({
       directlyHired: {
@@ -824,6 +828,7 @@ setSelectedCountry(data?.country)
     setValue('indicator',e.target.value)
     setDisableDownload(true)
     setIndicatorData({})
+    setDashboardReportPresent(false)
 
 
   }
@@ -832,6 +837,7 @@ setSelectedCountry(data?.country)
     setDisableDownload(true)
 
     setIndicatorData({})
+    setDashboardReportPresent(false)
 
     setIsAssessmentCountryType(false)
 
@@ -1129,6 +1135,8 @@ setSelectedCountry(data?.country)
                           onChange={(event = "") => {
                             setStartDate(event);
                             setDisableDownload(true)
+    setDashboardReportPresent(false)
+
                             // setOpen1(true)
                             setValue(
                               "startDate",
@@ -1199,6 +1207,7 @@ setSelectedCountry(data?.country)
                           onChange={(event = "") => {
                             setEndDate(event);
                             setDisableDownload(true)
+                            setDashboardReportPresent(false)
 
                             setValue(
                               "endDate",
