@@ -80,9 +80,9 @@ export default function DoughnutChart(props) {
   }, [screenSize, window.innerWidth])
 
   console.log('screen size - ', window.innerWidth)
-  let t1=[...splitSentences(props.graphTitle.title1, 30),`Submitted - ${props?.submittedData?.submittedPercent}%, Not Submitted - ${props?.submittedData?.unsubmittedPercent}%`]
-  let t2=[...splitSentences(props.graphTitle.title2, 30),`Submitted - ${props?.submittedData?.submittedPercent}%, Not Per - ${props?.submittedData?.unsubmittedPercent}%`]
-  let t3=[...splitSentences(props.graphTitle.title3, 30),`Submitted - ${props?.submittedData?.submittedPercent}%, Not Submitted - ${props?.submittedData?.unsubmittedPercent}%`]
+  let t1=[...splitSentences(props.graphTitle.title1, 30),`Submitted - ${props?.submittedData?.submittedPercent?props?.submittedData?.submittedPercent:0}%, Not Submitted - ${props?.submittedData?.unsubmittedPercent?props?.submittedData?.unsubmittedPercent:0}%`]
+  let t2=[...splitSentences(props.graphTitle.title2, 30),`Submitted - ${props?.submittedData?.submittedPercent?props?.submittedData?.submittedPercent:0}%, Not Submitted - ${props?.submittedData?.unsubmittedPercent?props?.submittedData?.unsubmittedPercent:0}%`]
+  let t3=[...splitSentences(props.graphTitle.title3, 30),`Submitted - ${props?.submittedData?.submittedPercent?props?.submittedData?.submittedPercent:0}%, Not Submitted - ${props?.submittedData?.unsubmittedPercent?props?.submittedData?.unsubmittedPercent:0}%`]
 
   let title01 = t1
   let title02 = t2
