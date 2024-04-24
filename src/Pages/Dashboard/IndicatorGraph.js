@@ -81,7 +81,7 @@ function IndicatorGraph({indicatorData,setIndicatorTableData,submittedData}) {
             data={indicatorDataForDisplay}
             width={800}
             height={500}  
-            options={{responsive:true,maintainAspectRatio: false,...doughnutGraphOptions([indicatorData?.indicator,`Submitted - ${submittedData?.submittedPercent}%, Not Submitted - ${submittedData?.unsubmittedPercent}%`],'top')}}
+            options={{responsive:true,maintainAspectRatio: false,...doughnutGraphOptions([indicatorData?.indicator,`Submitted - ${submittedData?.submittedPercent?submittedData?.submittedPercent:0}%, Not Submitted - ${submittedData?.unsubmittedPercent?submittedData?.unsubmittedPercent:0}%`],'top')}}
           />
           </div>}
            <div>

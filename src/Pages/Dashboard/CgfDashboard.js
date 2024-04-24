@@ -77,6 +77,7 @@ function CgfDashboard() {
     barGraphOptions3:barGraphOptions(''),
     })
   const [personName, setPersonName] = React.useState([]);
+  const [dashboardReportPresent, setDashboardReportPresent] = useState(false)
   const [isAssessmentCountryType, setIsAssessmentCountryType] = useState(false)
   const [memberCompanies, setMemberCompanies] = useState([])
   const [expanded, setExpanded] = useState({
@@ -410,7 +411,7 @@ console.log('indicator data',indicatorData.graphData)
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters setSubmittedData={setSubmittedData} dashboardRef={dashboardRef} setDashboardReport={setDashboardReport} setDisableDownload={setDisableDownload} setResultType={setResultType} setSelectedCountry={setSelectedCountry} setFilteredData={setFilteredData} disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} 
+            <DashboardFilters setDashboardReportPresent={setDashboardReportPresent} setSubmittedData={setSubmittedData} dashboardRef={dashboardRef} setDashboardReport={setDashboardReport} setDisableDownload={setDisableDownload} setResultType={setResultType} setSelectedCountry={setSelectedCountry} setFilteredData={setFilteredData} disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} 
             saveAsPdf={()=>{
               setExpanded(expanded => { return { ...expanded,
                 expandTotalWorker:true,
@@ -446,7 +447,10 @@ console.log('indicator data',indicatorData.graphData)
              </>
              }
                <div class="html2pdf__page-break"></div>
-          {dataForBarGraphs?.directlyHired?.barGraph?.datasets[0]?.label?.length>0 && (
+          {
+          // dataForBarGraphs?.directlyHired?.barGraph?.datasets[0]?.label?.length>0 
+         (resultType==='Workforce Data'&& dashboardReportPresent)
+          && (
             <>
             
           
@@ -515,7 +519,10 @@ console.log('indicator data',indicatorData.graphData)
             )}
         
           {
-            dataForBarGraphs?.directlyHired?.doughnutGraph.labels.length > 1 && 
+            // dataForBarGraphs?.directlyHired?.doughnutGraph.labels.length > 1
+         (resultType==='Workforce Data'&& dashboardReportPresent)
+            
+            && 
             <>      
                   <div class="html2pdf__page-break"></div>
             
