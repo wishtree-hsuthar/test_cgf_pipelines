@@ -1,5 +1,7 @@
 
 import './DashBoardFilter.css'
+import 'chartjs-plugin-annotation';
+
 export const labels = [
   [
     "Known directly hired workers in all sites for prioritised operation in the selected country who work regularly on the sites. (Launched)",
@@ -65,6 +67,27 @@ export const barGraphOptions =(CountryTitle='',max)=>
     // responsive: true,
     // maintainAspectRatio: false ,
     plugins: {
+      annotation: {
+        // clip:false,
+        annotations: {
+          label1: {
+            display:false,
+            type: 'label',
+            position:"end",
+            textAlign:'left',
+            xValue: 2.5,
+            yValue: 60,
+            backgroundColor: 'rgba(245, 245, 245)',
+            content: ["**Note - Companies that do not appear on the graph is because they"," have 0 directly hired workers or have not submitted their data"],
+            font: {
+              size: 10,
+            },
+            // padding:10,
+            // width:'20%',
+            xAdjust: 350, // Adjust horizontally if needed
+            yAdjust: 320, // Adjust vertically if needed
+        },
+      }},
       datalabels:{
         display:false,
         

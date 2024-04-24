@@ -2824,3 +2824,20 @@ input::-ms-reveal {
 .flex-between-other-section-right .form-group{
   flex: 0 0 49%;
 }
+
+/* doughnut chart note */
+.doughnut-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column-reverse;
+}
+.note {
+  display: inline-block;
+  position: absolute;
+  top: 90%;
+  font-size: x-small;
+  width: 33%;
+  left: 65%;
+}
+
