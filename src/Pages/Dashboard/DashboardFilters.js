@@ -24,7 +24,7 @@ const MenuProps = {
     },
   },
 };
-function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,setResultType,setSelectedCountry,setIndicatorData,setFilteredData,disableDownload, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
+function DashboardFilters({setSubmittedData,setDashboardReport,dashboardRef,setDisableDownload,setResultType,setSelectedCountry,setIndicatorData,setFilteredData,disableDownload, setBarGraphOptions1,saveAsPdf,setIsAssessmentCountryType,expanded, setExpanded, setMemberCompanies, setDataForBarGraphs, options1, options2, options3, setAccordianTitles, setDoughnutGraphData1, setDoughnutGraphData2, setDoughnutGraphData }) {
   const [personName, setPersonName] = React.useState([]);
   const [memberCompanyOptions, setMemberCompanyOptions] = useState([])
   const [countryListOption, setCountryListOption] = useState([])
@@ -72,22 +72,26 @@ function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,se
       assessment: '',
       country: "",
       memberCompanies: [],
-      endDate: '',
+      endDate: new Date(),
       startDate: '',
 
     },
   });
   const [type, setType] = useState('')
-  const [endDate, setEndDate] = useState(null)
+  const [endDate, setEndDate] = useState(new Date())
   const [startDate, setStartDate] = useState(
     null
   )
+  const [open1, setOpen1] = useState(false)
+  const [open2, setOpen2] = useState(false)
   const handleChangeForType = (e) => {
     setType(prev => e.target.value)
     setResultType(e.target.value)
     setValue('type', e.target.value)
     setValue('assessment','')
     setValue('country','')
+    setValue('endDate',new Date())
+    setEndDate(new Date())
     setIndicatorData({})
     setDisableDownload(true)
     setIsAssessmentCountryType(false)
@@ -160,7 +164,7 @@ function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,se
     setValue('memberCompanies',[])
     setValue('indicator','')
     setIsAssessmentCountryType(false)
-
+   
     setValue('country','')
     setPersonName([])
     setIndicatorData({})
@@ -247,19 +251,21 @@ function DashboardFilters({setDashboardReport,dashboardRef,setDisableDownload,se
       assessment: '',
       country: "",
       memberCompanies: [],
-      endDate: '',
+      endDate: new Date(),
       startDate: '',
     })
     setStartDate(null)
-    setEndDate(null)
+    setEndDate(new Date())
     setPersonName([]);
     setExpanded(expanded => { return { ...expanded, expandBarGraph: false, expandDoughnutGraph: false,expandFilters:true ,expandDoughnutgraph1:false} })
     setIsAssessmentCountryType(false)
     setIndicatorData({})
     setFilteredData([])
     setDisableDownload(true)
-setSelectedCountry()
-
+    setSelectedCountry()
+    setSubmittedData({
+      
+    })
     setDataForBarGraphs({
       directlyHired: {
         barGraph: {
@@ -342,7 +348,7 @@ setSelectedCountry(data?.country)
         ['Type',data?.type],
         ['Assessment',data?.assessment],
       ['Country',data?.country?data?.country:'NA'],
-        ['Member Companies',[...personName.map(member=>" "+member?.label)]],
+        ['Member Companies',[...membersOption.map(member=>" "+member?.label)]],
         ['Start Date',new Date(data?.startDate).toLocaleDateString('en')],
         ['End Date',new Date(data?.endDate).toLocaleDateString('en')]
       ])
@@ -384,6 +390,10 @@ setSelectedCountry(data?.country)
         expandTotalWorker:false
         } })
 
+         // set submitted data
+    setSubmittedData({
+      ...response?.data?.submissionData
+    })
       console.log("Response from dashboard", response.data)
       window.scrollBy({ top: 250, behavior: 'smooth' }); // Adjust the scrolling distance as needed
       if (watch('type')==='Workforce Data') {
@@ -422,7 +432,8 @@ setSelectedCountry(data?.country)
     maxThirdParty = Math.ceil(maxThirdParty / 1000) * 1000+10000;
     maxDomesticMigrants = Math.ceil(maxDomesticMigrants / 1000) * 1000+1000;
     console.log("max directly hired",maxDirectlyHired)
-
+    
+   
 
 
     setBarGraphOptions1({
@@ -447,7 +458,7 @@ setSelectedCountry(data?.country)
           return 1
         } 
         return 0
-      }).map(data => `${data?.memberName} - ${data?.directlyHiredPercent}%`)
+      }).filter(data=>data.directlyHiredPercent!==undefined).map(data => `${data?.memberName} - ${data?.directlyHiredPercent}%`)
       let labelsFordoughnutGraph2= response?.data?.data.sort((a,b)=>{
         let memberA=a?.memberName?.toUpperCase()
         let memberB=b?.memberName?.toUpperCase()
@@ -458,7 +469,7 @@ setSelectedCountry(data?.country)
           return 1
         } 
         return 0
-      }).map(data => `${data?.memberName} - ${data?.thirdPartyPercent}%`)
+      }).filter(data=>data.thirdPartyPercent!==undefined).map(data => `${data?.memberName} - ${data?.thirdPartyPercent}%`)
       let labelsFordoughnutGraph3= response?.data?.data.sort((a,b)=>{
         let memberA=a?.memberName?.toUpperCase()
         let memberB=b?.memberName?.toUpperCase()
@@ -469,7 +480,7 @@ setSelectedCountry(data?.country)
           return 1
         } 
         return 0
-      }).map(data => `${data?.memberName} - ${data?.domesticMigrantPercent}%`)
+      }).filter(data=>data.domesticMigrantPercent!==undefined).map(data => `${data?.memberName} - ${data?.domesticMigrantPercent}%`)
       
       let directHiredPercentData = response?.data?.data.sort((a,b)=>{
         let memberA=a?.memberName?.toUpperCase()
@@ -517,7 +528,7 @@ setSelectedCountry(data?.country)
         dataForBarGraphs.domesticMigrants.barGraph.labels=splitSentences(response?.data.columns[2],30)
         
         //dataset for thirdParty
-        dataForBarGraphs.thirdParty.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").sort((a,b)=>{
+        dataForBarGraphs.thirdParty.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other"&&data.thirdParty!==undefined).sort((a,b)=>{
           let memberA=a?.memberName?.toUpperCase()
           let memberB=b?.memberName?.toUpperCase()
           if (memberA<memberB) {
@@ -556,7 +567,7 @@ setSelectedCountry(data?.country)
 
 
         // dataset for directly hired
-        dataForBarGraphs.directlyHired.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").sort((a,b)=>{
+        dataForBarGraphs.directlyHired.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other"&&data.directlyHired!=undefined).sort((a,b)=>{
           let memberA=a?.memberName?.toUpperCase()
           let memberB=b?.memberName?.toUpperCase()
           if (memberA<memberB) {
@@ -590,7 +601,7 @@ setSelectedCountry(data?.country)
         ]
 
         // dataset for domestic migrants
-        dataForBarGraphs.domesticMigrants.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other").sort((a,b)=>{
+        dataForBarGraphs.domesticMigrants.barGraph.datasets = response?.data?.data.filter(data => data.memberName != "Other"&&data.domesticMigrant!=undefined).sort((a,b)=>{
           let memberA=a?.memberName?.toUpperCase()
           let memberB=b?.memberName?.toUpperCase()
           if (memberA<memberB) {
@@ -1093,6 +1104,11 @@ setSelectedCountry(data?.country)
                     render={({ field, fieldState: { error } }) => (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
+                        open={open1}
+                        onClose={() => setOpen1(false)}
+                        onOpen={()=>setOpen1(true)}
+                        
+                        
                           name="startDate"
                           disableFuture
                           disabled={watch('type') === 'Indicators'}
@@ -1113,7 +1129,7 @@ setSelectedCountry(data?.country)
                           onChange={(event = "") => {
                             setStartDate(event);
                             setDisableDownload(true)
-
+                            // setOpen1(true)
                             setValue(
                               "startDate",
                               event?.toISOString()
@@ -1121,6 +1137,7 @@ setSelectedCountry(data?.country)
                           }}
                           renderInput={(params) => (
                             <TextField
+                            onClick={(e)=>setOpen1(true)}
                               autoComplete="off"
                               {...params}
                               className={` input-field ${error && "input-error"
@@ -1157,6 +1174,14 @@ setSelectedCountry(data?.country)
                     render={({ field, fieldState: { error } }) => (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
+                           open={open2}
+                           onClose={() => setOpen2(false)}
+                           onOpen={()=>setOpen2(true)}
+                           slotProps={{
+                             textField: {
+                              onClick: () => setOpen2(true),             
+                             },
+                           }}
                           disabled={watch('type') === 'Indicators'}
                           componentsProps={{
                             actionBar: {
@@ -1170,6 +1195,7 @@ setSelectedCountry(data?.country)
                           }}
                           value={endDate}
                           disableFuture
+                          
                           onChange={(event = "") => {
                             setEndDate(event);
                             setDisableDownload(true)
@@ -1186,6 +1212,7 @@ setSelectedCountry(data?.country)
                               className={` input-field ${error && "input-error"
                                 }`}
                               onKeyDown={handleOnKeyDownChange}
+                              onClick={(e)=>setOpen2(true)}
                               placeholder="MM/DD/YYYY"
                               error
                               helperText={

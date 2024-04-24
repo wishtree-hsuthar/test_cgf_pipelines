@@ -15,7 +15,7 @@ import "../../components/TableComponent.css";
 
 DoughnutChartJS.register(ArcElement, Tooltip, Legend);
 
-function IndicatorGraph({indicatorData,setIndicatorTableData}) {
+function IndicatorGraph({indicatorData,setIndicatorTableData,submittedData}) {
   console.log("indicator data",indicatorData)
   console.log("established",indicatorData?.['graphData']?.['Established'])
   let members = [...indicatorData?.['tableData']?.['Established'],...indicatorData?.['tableData']?.['Not Initiated'],...indicatorData?.['tableData']?.['Launched'],...indicatorData?.['tableData']?.['Leadership']]
@@ -81,7 +81,7 @@ function IndicatorGraph({indicatorData,setIndicatorTableData}) {
             data={indicatorDataForDisplay}
             width={800}
             height={500}  
-            options={{responsive:true,maintainAspectRatio: false,...doughnutGraphOptions(indicatorData?.indicator,'top')}}
+            options={{responsive:true,maintainAspectRatio: false,...doughnutGraphOptions([indicatorData?.indicator,`Submitted - ${submittedData?.submittedPercent}%, Not Submitted - ${submittedData?.unsubmittedPercent}%`],'top')}}
           />
           </div>}
            <div>

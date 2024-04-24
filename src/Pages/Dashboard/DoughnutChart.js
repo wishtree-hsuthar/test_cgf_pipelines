@@ -4,8 +4,8 @@ import { Doughnut } from "react-chartjs-2";
 import { total } from "./MockDataForGraph";
 import { defaultValue, doughnutGraphOptions, splitSentences } from "./DashbaordUtil";
 import DashboardAccordian from "./DashboardAccordian";
-
-DoughnutChartJS.register(ArcElement, Tooltip, Legend);
+import Annotation from "chartjs-plugin-annotation";
+DoughnutChartJS.register(ArcElement, Tooltip, Legend,Annotation);
 const titles = [
   [
     "Known directly hired workers in all sites",
@@ -80,9 +80,13 @@ export default function DoughnutChart(props) {
   }, [screenSize, window.innerWidth])
 
   console.log('screen size - ', window.innerWidth)
-  let title01 = splitSentences(props.graphTitle.title1, 30)
-  let title02 = splitSentences(props.graphTitle.title2, 30)
-  let title03 = splitSentences(props.graphTitle.title3, 30)
+  let t1=[...splitSentences(props.graphTitle.title1, 30),`Submitted - ${props?.submittedData?.submittedPercent}%, Not Submitted - ${props?.submittedData?.unsubmittedPercent}%`]
+  let t2=[...splitSentences(props.graphTitle.title2, 30),`Submitted - ${props?.submittedData?.submittedPercent}%, Not Per - ${props?.submittedData?.unsubmittedPercent}%`]
+  let t3=[...splitSentences(props.graphTitle.title3, 30),`Submitted - ${props?.submittedData?.submittedPercent}%, Not Submitted - ${props?.submittedData?.unsubmittedPercent}%`]
+
+  let title01 = t1
+  let title02 = t2
+  let title03 = t3
 
   console.log('title01', title01)
   console.log('props form doughnut chart page = ', props);
@@ -99,21 +103,19 @@ export default function DoughnutChart(props) {
 
       <DashboardAccordian title={props?.graphTitle?.title1} expanded={props?.expanded?.expandDoughnutgraph1} name={'expandDoughnutgraph1'} setExpanded={props.setExpanded} >
         <div
-        //  style={{
-        //       width: '60%',
-        //       display: 'block',
-        //       marginLeft: 'auto',
-        //       marginRight: 'auto',
-
-        // }}
+       
+        id="chart4"
         >
 
-          <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
+          <div className="note">
+            <p><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
+            </div>  {/*this div is used to manage resize issue of bar graph*/}
           <div style={{
-            height: '500px'
+            height: '500px',
+          
           }}>
             <Doughnut
-              id="chart4"
+            
               width={1000}
               height={500}
               options={{ responsive: true, maintainAspectRatio: false, ...options1 }}
@@ -129,14 +131,19 @@ export default function DoughnutChart(props) {
       <div class="html2pdf__page-break"></div>
 
       <DashboardAccordian title={props?.graphTitle?.title2} expanded={props?.expanded?.expandDoughnutgraph2} name={'expandDoughnutgraph2'} setExpanded={props.setExpanded} >
-        <div  >
+        <div   id="chart5"  >
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
+          
+          <div className="note">
+            <p><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
+            </div>  {/*this div is used to manage resize issue of bar graph*/}
+
           <div style={{
             height: '500px'
           }}>
             <Doughnut
               data={props.thirdPartyData}
-              id="chart5"
+            
 
               options={{ responsive: true, maintainAspectRatio: false, ...options2 }}
             />
@@ -146,13 +153,18 @@ export default function DoughnutChart(props) {
       <div class="html2pdf__page-break"></div>
 
       <DashboardAccordian title={props?.graphTitle?.title3} expanded={props?.expanded?.expandDoughnutgraph3} name={'expandDoughnutgraph3'} setExpanded={props.setExpanded} >
-        <div >
+        <div  id="chart6">
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
+         
+          <div className="note">
+            <p><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
+            </div>  {/*this div is used to manage resize issue of bar graph*/}
+
           <div style={{
             height: '500px'
           }}>
             <Doughnut
-              id="chart6"
+             
 
               data={props.domesticMigrantsData}
               options={{ responsive: true, maintainAspectRatio: false, ...options3 }}

@@ -16,6 +16,8 @@ import  {catchError}  from "../../utils/CatchError";
 import { CloudDownloadOutlined, ImportExportOutlined } from "@mui/icons-material";
 import { getTimeStamp } from "../../utils/downloadFunction";
 import { Tooltip } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
+
 
 const listObj = {
   width: "30%",
@@ -27,11 +29,11 @@ const assessmentListTableHead = [
     id: "title",
     label: "Title",
   },
-  {
-    ...listObj,
-    id: "assessmentType",
-    label: "Assessment Type",
-  },
+  // {
+  //   ...listObj,
+  //   id: "assessmentType",
+  //   label: "Assessment Type",
+  // },
   {
     ...listObj,
     id: "assignedMember.name",
@@ -42,11 +44,11 @@ const assessmentListTableHead = [
     id: "assignedOperationMember.name",
     label: "Assigned To",
   },
-  {
-    ...listObj,
-    id: "region",
-    label: "Region",
-  },
+  // {
+  //   ...listObj,
+  //   id: "region",
+  //   label: "Region",
+  // },
   {
     ...listObj,
     id: "country",
@@ -90,11 +92,11 @@ const AssessmentList = () => {
     "uuid",
     "_id",
     "title",
-    "assessmentType",
+    // "assessmentType",
     "assignedMember.name",
     "assignedOperationMember.name",
 
-    "region",
+    // "region",
     "country",
 
     "assessmentStatus",
@@ -299,6 +301,8 @@ const AssessmentList = () => {
       delete object["questionnaireId"];
       delete object["isMemberRepresentative"];
       delete object["actionPlan"];
+      delete object['region']
+      delete object['assessmentType']
 
 
       object["dueDate"] = new Date(
@@ -473,16 +477,23 @@ const AssessmentList = () => {
                     </button>
                   </div>
                 )}
-             <div className="form-btn ml-20" onClick={()=>{downnloadZipFile();
+             <div className="tertiary-btn-blk ml-20" onClick={()=>{downnloadZipFile();
       setIsAssessmentListLoading(true)
             
             }}
-            style={{cursor:'pointer'}}
+            style={{cursor:'pointer',margin:'auto'}}
+
             >
-              <Tooltip title={'Downlaod Assessments'}>
-                   <CloudDownloadOutlined  />
+              
+              <Tooltip title={'Downlaod All Assessments'}>
+                   {/* <CloudDownloadOutlined  /> */}
+                   <span className="download-icon">
+                   <DownloadIcon />
+                   </span>
                    </Tooltip>
+                 
                   </div>
+                  
                 <div
                   className="tertiary-btn-blk ml-20"
                   onClick={viewInstruction}

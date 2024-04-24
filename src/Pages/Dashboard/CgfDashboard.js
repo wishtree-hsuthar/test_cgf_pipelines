@@ -50,6 +50,7 @@ const options3 = barGraphOptions('')
 
 function CgfDashboard() {
   const [resultType, setResultType] = useState('Workforce Data')
+  const [submittedData, setSubmittedData] = useState({})
   const [dashboardReport, setDashboardReport] = useCallbackState({
     titleMessage: "",
     descriptionMessage: "",
@@ -409,7 +410,7 @@ console.log('indicator data',indicatorData.graphData)
  
 
           <DashboardAccordian expanded={expanded.expandFilters} name={'expandFilters'} setExpanded={setExpanded} title={'Filters'} defaultExpanded={true}>
-            <DashboardFilters dashboardRef={dashboardRef} setDashboardReport={setDashboardReport} setDisableDownload={setDisableDownload} setResultType={setResultType} setSelectedCountry={setSelectedCountry} setFilteredData={setFilteredData} disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} 
+            <DashboardFilters setSubmittedData={setSubmittedData} dashboardRef={dashboardRef} setDashboardReport={setDashboardReport} setDisableDownload={setDisableDownload} setResultType={setResultType} setSelectedCountry={setSelectedCountry} setFilteredData={setFilteredData} disableDownload={disableDownload} setIndicatorData={setIndicatorData} setBarGraphOptions1={setOptionsForBarGraph}  setIsAssessmentCountryType={setIsAssessmentCountryType} 
             saveAsPdf={()=>{
               setExpanded(expanded => { return { ...expanded,
                 expandTotalWorker:true,
@@ -440,7 +441,7 @@ console.log('indicator data',indicatorData.graphData)
         <>
          <div class="html2pdf__page-break"></div>
          <DashboardAccordian title={'Indicators'} expanded={expanded.expandIndicator} name={'expandIndicator'} setExpanded={setExpanded}  >
-               <IndicatorGraph indicatorData={indicatorData} setIndicatorTableData={setIndicatorTableData} />
+               <IndicatorGraph submittedData={submittedData} indicatorData={indicatorData} setIndicatorTableData={setIndicatorTableData} />
              </DashboardAccordian>
              </>
              }
@@ -453,43 +454,56 @@ console.log('indicator data',indicatorData.graphData)
         
           
               <DashboardAccordian title={accordianTitles.title1} expanded={expanded.expandBarGraph1} name={'expandBarGraph1'} setExpanded={setExpanded}  >
-              <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}         
+             <div id="chart1">
+              <div style={{display:"inline-block"}}>
+            <p style={{fontSize:'x-small',width:'100%'}}><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
+                
+                </div>  {/*this div is used to manage resize issue of bar graph*/}         
            
                 <Bar
-                  id="chart1"
+                 
                   style={{ backgroundColor: "white" }}
                   options={optionsForBarGraph.barGraphOptions1}
                   data={dataForBarGraphs?.directlyHired?.barGraph}
                 />
-               
+               </div>
               </DashboardAccordian>
            
               <div class="html2pdf__page-break"></div>
              
               <DashboardAccordian title={accordianTitles.title2} expanded={expanded.expandBarGraph2} name={'expandBarGraph2'} setExpanded={setExpanded} >
               <div class="html2pdf__page-break"></div>
-              
-              <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}         
+              <div id="chart2">
+              <div style={{display:"inline-block"}}>
+            <p style={{fontSize:'x-small',width:'100%'}}><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
+                
+                </div>  {/*this div is used to manage resize issue of bar graph*/}         
 
               
                 <Bar
-                  id="chart2"
+                
                   style={{ backgroundColor: "white" }}
                   options={optionsForBarGraph.barGraphOptions2}
                   data={dataForBarGraphs?.thirdParty?.barGraph}
                 />
+                </div>
               </DashboardAccordian>
               <div class="html2pdf__page-break"></div>
             
           
               <DashboardAccordian title={accordianTitles.title3} expanded={expanded.expandBarGraph3} name={'expandBarGraph3'} setExpanded={setExpanded} >
-                <div style={{display:"inline-block"}}></div>  {/*this div is used to manage resize issue of bar graph*/}             
+                <div id="chart3"> 
+                <div style={{display:"inline-block"}}>
+            <p style={{fontSize:'x-small',width:'100%'}}><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
+                  
+                  </div>  {/*this div is used to manage resize issue of bar graph*/}             
                 <Bar
-                  id="chart3"
+              
                   style={{ backgroundColor: "white" }}
                   options={optionsForBarGraph.barGraphOptions3}
                   data={dataForBarGraphs?.domesticMigrants?.barGraph}
                 />
+                </div>
               <div class="html2pdf__page-break"></div>
 
               </DashboardAccordian>
@@ -506,7 +520,7 @@ console.log('indicator data',indicatorData.graphData)
                   <div class="html2pdf__page-break"></div>
             
             <DashboardAccordian  expanded={expanded?.expandDoughnutGraph} name={'expandDoughnutGraph'}  setExpanded={setExpanded} title={selectedCountry.length>0?`Worker Status - (${selectedCountry})`:`Worker Status`}>
-              <DoughnutChart expanded={expanded} setExpanded={setExpanded} graphTitle={accordianTitles}  data={dataForBarGraphs?.directlyHired?.doughnutGraph} thirdPartyData={dataForBarGraphs?.thirdParty?.doughnutGraph} domesticMigrantsData={dataForBarGraphs?.domesticMigrants?.doughnutGraph}/>
+              <DoughnutChart submittedData={submittedData} expanded={expanded} setExpanded={setExpanded} graphTitle={accordianTitles}  data={dataForBarGraphs?.directlyHired?.doughnutGraph} thirdPartyData={dataForBarGraphs?.thirdParty?.doughnutGraph} domesticMigrantsData={dataForBarGraphs?.domesticMigrants?.doughnutGraph}/>
 
             </DashboardAccordian>
             </>
