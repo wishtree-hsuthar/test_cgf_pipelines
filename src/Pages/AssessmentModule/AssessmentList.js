@@ -485,7 +485,7 @@ const AssessmentList = () => {
 
             >
               
-              <Tooltip title={'Downlaod All Assessments'}>
+              <Tooltip title={'Download All Assessments'}>
                    {/* <CloudDownloadOutlined  /> */}
                    <span className="download-icon">
                    <DownloadIcon />

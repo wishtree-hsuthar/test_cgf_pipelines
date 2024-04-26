@@ -48,7 +48,7 @@ function IndicatorGraph({indicatorData,setIndicatorTableData,submittedData}) {
   useEffect(() => {
     
   let value = {...indicatordefaultValue}
-  value.labels=[`Not Inititated - ${indicatorData?.['graphData']?.['Not Initiated']}%`,`Launched - ${indicatorData?.['graphData']?.['Launched']}%`,`Established - ${indicatorData?.['graphData']?.['Established']}%`,`Leadership - ${indicatorData?.['graphData']?.['Leadership']}%`,]
+  value.labels=[`Not Initiated - ${indicatorData?.['graphData']?.['Not Initiated']}%`,`Launched - ${indicatorData?.['graphData']?.['Launched']}%`,`Established - ${indicatorData?.['graphData']?.['Established']}%`,`Leadership - ${indicatorData?.['graphData']?.['Leadership']}%`,]
   value.datasets[0].data=[indicatorData?.['graphData']?.['Not Initiated'],indicatorData?.['graphData']?.['Launched'],indicatorData?.['graphData']?.['Established'],indicatorData?.['graphData']?.['Leadership']]
   setIndicatorDataForDisplay({...value})
   setIndicatorTableData({rows:members.map((member,index) => [member,

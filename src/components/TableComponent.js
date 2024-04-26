@@ -281,7 +281,8 @@ export default function TableComponent({
                             cell !== "isMemberRepresentative" &&
                             cell !== "dueDate"&&
                             cell !== "submissionDate"&&
-                            cell !=='title'
+                            cell !=='title'&&
+                            cell!=='country'
                           ) {
                             console.log('cell',cell)
                             return row[cell]?.length <= 28 ||
@@ -330,6 +331,30 @@ export default function TableComponent({
                                   ? row[cell][0].toUpperCase() +
                                     row[cell]?.slice(1)
                                   : row[cell]}
+                            </TableCell>
+                          </Tooltip>)
+                          }
+                          else if (cell==='country') {
+                            return (
+                              
+                             <Tooltip
+                                key={cell}
+                                placement="bottom-start"
+                                enterDelay={1000}
+                                title={row[cell]}
+                              >
+                            <TableCell key={cell}>
+
+                            {
+                            (typeof row[cell] === "undefined" ||
+                            row[cell] === "") ?
+                            "N/A":
+                            typeof row[cell] === "string" &&
+                                row[cell]?.length > 0 && row[cell]?.length <= 10&&
+                                cell === "country"
+                                  ? row[cell][0].toUpperCase() +
+                                  `${row[cell]?.slice(1, 10)}`
+                                : `${row[cell]?.slice(0, 10)}...`}
                             </TableCell>
                           </Tooltip>)
                           }
