@@ -2252,7 +2252,7 @@ input:-webkit-autofill:active {
 }
 .que-col-form-leftfield .form-group {
   flex: 0 0 30%;
-  max-width: 30%;
+  max-width: 20%;
 }
 .que-column-layout-sect {
   padding: 20px 0 0;

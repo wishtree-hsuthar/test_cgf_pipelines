@@ -120,6 +120,39 @@ const SectionContent = ({
       })
     );
 
+  //   let checkAllHideColumns=filteredTableSections.map(
+  //     (section) => ({
+  //       section: section.sectionTitle,
+  //       hiddenColmns: section.columnValues.map((col) => col.hideColumn),
+  //     })
+  //   );
+
+    
+  //  for (let columnIndex = 0; columnIndex < checkAllHideColumns.length; columnIndex++) {
+  //   const element = checkAllHideColumns[columnIndex];
+  //   console.log('element=',element)
+  //   if(element.hiddenColmns.every(value=>value==='yes'))
+  //  {
+  //   console.log("every column is hidden",element)
+  //   setToasterDetails(
+  //     {
+  //       titleMessage: "Error",
+  //       descriptionMessage:
+  //         "All columns are hidden in one of the sections having table layout.Make at least one column visible in that section.",
+  //       messageType: "error",
+  //     },
+  //     () => myRef.current()
+  //   );
+  //   tableCountError++;
+  //   break;
+  //  } else {
+  //   console.log("every column is not hidden",element)
+
+  //   break
+  //  }
+
+  //  }
+
     
     for (
       let sectionIndex = 0;
@@ -129,6 +162,23 @@ const SectionContent = ({
       const sectionObject = questionnaire.sections[sectionIndex];
     
       if (sectionObject.layout === "table") {
+        let  hiddenColmns= sectionObject.columnValues.map((col) => col.hideColumn)
+      if(hiddenColmns.every(value=>value==='yes'))
+   {
+    console.log("every column is hidden",hiddenColmns)
+    setToasterDetails(
+      {
+        titleMessage: "Error",
+        descriptionMessage:
+          "All columns are hidden.Make at least one column visible.",
+        messageType: "error",
+      },
+      () => myRef.current()
+    );
+    tabIndex.push(sectionIndex);
+    tableCountError++;
+    break;
+   }
         for (
           let columnIndex = 0;
           columnIndex < sectionObject.columnValues.length;
@@ -512,6 +562,7 @@ const SectionContent = ({
           columnType: "textbox",
           options: ["", ""],
           validation: "",
+          hideColumn:'no'
         },
       ];
       tempQuestionnaire.sections[index].rowValues = [

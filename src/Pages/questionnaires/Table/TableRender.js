@@ -45,6 +45,25 @@ const TableRender = ({
     setQuestionnaire(tempQuestionnaire);
   };
 
+  // show hide table cell
+  const hideCell=(cell,cellId)=>{
+    let column = questionnaire?.sections[sectionIndex]?.columnValues[cellId];
+    if (!isPreview) {
+      return true
+    }
+    else if (column.uuid===cell.columnId&&column?.hideColumn=='no'&&column?.columnType==='prefilled') {
+      return true
+    }
+    else if (column.uuid===cell.columnId&&column?.hideColumn=='yes'&&column?.columnType==='prefilled') {
+      return false
+    }
+    else {
+      return true      
+    }
+  }
+
+ 
+
   return (
     <div className="que-table-sect">
       <div
@@ -66,9 +85,64 @@ const TableRender = ({
                 <TableHead>
                   <TableRow>
                     {!isPreview && <TableCell width={75}></TableCell>}
-                    {questionnaire &&
-                      questionnaire?.sections[sectionIndex]?.columnValues?.map(
+                    {questionnaire && isPreview?
+                      questionnaire?.sections[sectionIndex]?.columnValues.filter(column=>column.hideColumn==='no'||column.columnType!='prefilled').map(
                         (column, columnId) => (
+
+                          // columnValues?column.uuid===cell.columnId&&column.hideColumn=='no'
+                          <TableCell key={column?.uuid} width="200px">
+                            <div className="que-table-column-info">
+                              <div className="que-column-ttlblk">
+                                <div className="form-group">
+                                  {column?.title.length > 50 ? (
+                                    <Tooltip
+                                      title={column?.title}
+                                      placement="bottom-start"
+                                    >
+                                      <p>
+                                        {column?.title.slice(0, 50)}
+                                        ...
+                                        {column?.isRequired &&
+                                          column?.title && (
+                                            <span className="mandatory">
+                                              
+                                                *
+                                            </span>
+                                          )}
+                                      </p>
+                                    </Tooltip>
+                                  ) : (
+                                    <p>
+                                      {column?.title}
+                                      {column?.isRequired && column?.title && (
+                                        <span className="mandatory"> *</span>
+                                      )}
+                                    </p>
+                                  )}
+                                  {/* <TextField
+                                    className="input-field column-input-field"
+                                    id="outlined-basic"
+                                    variant="outlined"
+                                    name="title"
+                                    value={column?.title}
+                                    // placeholder="Give column title"
+                                  /> */}
+                                </div>
+                                {/* <div
+                                  className="que-table-col-ttl"
+                                  // contentEditable="true"
+                                >
+                                  {column?.title}
+                                </div> */}
+                              </div>
+                            </div>
+                          </TableCell>
+                        )
+                      ):
+                      questionnaire?.sections[sectionIndex]?.columnValues.map(
+                        (column, columnId) => (
+
+                          // columnValues?column.uuid===cell.columnId&&column.hideColumn=='no'
                           <TableCell key={column?.uuid}>
                             <div className="que-table-column-info">
                               <div className="que-column-ttlblk">
@@ -117,7 +191,53 @@ const TableRender = ({
                             </div>
                           </TableCell>
                         )
-                      )}
+                      )
+                    
+                    }
+                      {/* {
+                    questionnaire && !isPreview && questionnaire?.sections[sectionIndex]?.columnValues.filter(column=>column.columnType!='prefilled').map(
+                        (column, columnId) => (
+
+                          // columnValues?column.uuid===cell.columnId&&column.hideColumn=='no'
+                          <TableCell key={column?.uuid}>
+                            <div className="que-table-column-info">
+                              <div className="que-column-ttlblk">
+                                <div className="form-group">
+                                  {column?.title.length > 50 ? (
+                                    <Tooltip
+                                      title={column?.title}
+                                      placement="bottom-start"
+                                    >
+                                      <p>
+                                        {column?.title.slice(0, 50)}
+                                        ...
+                                        {column?.isRequired &&
+                                          column?.title && (
+                                            <span className="mandatory">
+                                              
+                                                *
+                                            </span>
+                                          )}
+                                      </p>
+                                    </Tooltip>
+                                  ) : (
+                                    <p>
+                                      {column?.title}
+                                      {column?.isRequired && column?.title && (
+                                        <span className="mandatory"> *</span>
+                                      )}
+                                    </p>
+                                  )}
+                                 
+                                </div>
+                               
+                              </div>
+                            </div>
+                          </TableCell>
+                        )
+                      )
+                    
+                    } */} 
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -152,6 +272,7 @@ const TableRender = ({
                         )}
                         {row &&
                           row?.cells?.map((cell, cellId) => (
+                            hideCell(cell,cellId)&&
                             <TableCell key={cell?.columnId}>
                               <TableLayoutCellComponent
                                 isPreview={isPreview}

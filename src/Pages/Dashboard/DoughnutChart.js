@@ -94,6 +94,9 @@ export default function DoughnutChart(props) {
   const options1 = doughnutGraphOptions(title01, 'top')
   const options2 = doughnutGraphOptions(title02, 'top')
   const options3 = doughnutGraphOptions(title03, 'top')
+  const note=<div className="note">
+  <p><b>Note</b> - Companies not represented on the graph either have zero workers in this category or have not submitted their data. Additionally, the data from the submitted companies constitutes 100% of the data represented on the graph.</p>
+  </div>
   return (
     <div
 
@@ -106,10 +109,13 @@ export default function DoughnutChart(props) {
        
         id="chart4"
         >
+          {note}
 
-          <div className="note">
-            <p><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
-            </div>  {/*this div is used to manage resize issue of bar graph*/}
+          {/* <div className="note">
+            <p><b>Note</b> - Companies not represented on the graph either have zero workers in this category or have not submitted their data. Additionally, the data from the submitted companies constitutes 100% of the data represented on the graph.</p>
+            </div>   */}
+
+            {/*this div is used to manage resize issue of bar graph*/}
           <div style={{
             height: '500px',
           
@@ -133,10 +139,12 @@ export default function DoughnutChart(props) {
       <DashboardAccordian title={props?.graphTitle?.title2} expanded={props?.expanded?.expandDoughnutgraph2} name={'expandDoughnutgraph2'} setExpanded={props.setExpanded} >
         <div   id="chart5"  >
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
-          
-          <div className="note">
+        {note}  
+          {/* <div className="note">
             <p><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
-            </div>  {/*this div is used to manage resize issue of bar graph*/}
+            </div>  
+             */}
+            {/*this div is used to manage resize issue of bar graph*/}
 
           <div style={{
             height: '500px'
@@ -155,10 +163,12 @@ export default function DoughnutChart(props) {
       <DashboardAccordian title={props?.graphTitle?.title3} expanded={props?.expanded?.expandDoughnutgraph3} name={'expandDoughnutgraph3'} setExpanded={props.setExpanded} >
         <div  id="chart6">
           <div style={{ display: "inline-block" }}></div>  {/*this div is used to manage resize issue of bar graph*/}
-         
-          <div className="note">
+         {note}
+          {/* <div className="note">
             <p><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
-            </div>  {/*this div is used to manage resize issue of bar graph*/}
+            </div>  */}
+            
+             {/*this div is used to manage resize issue of bar graph*/}
 
           <div style={{
             height: '500px'
