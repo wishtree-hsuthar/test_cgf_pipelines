@@ -52,12 +52,19 @@ const TableLayoutCellComponent = ({
     const columnFieldType =
         questionnaire?.sections[sectionIndex]?.columnValues[cellId]?.columnType;
     const column = questionnaire?.sections[sectionIndex]?.columnValues[cellId];
+    console.log('cell id -',cellId)
+    console.log('cell  -',cell)
+    console.log('column',column.uuid===cell.columnId&&column.hideColumn=='no')
     
+
     return (
         <div>
             {columnFieldType &&
-                columnFieldType === "prefilled" &&
-                isPreview && (
+                columnFieldType === "prefilled" && 
+                isPreview && 
+                    (column.uuid===cell.columnId&&column.hideColumn=='no')
+                    &&
+                (
                     <p style={{ textAlign: "justify" }}>
                         {showMore ? (
                             <span>
@@ -104,7 +111,7 @@ const TableLayoutCellComponent = ({
                 <span className="no-attachment-txt">No Attachments</span>
             )}
             {columnFieldType &&
-                columnFieldType === "prefilled" &&
+                columnFieldType === "prefilled" && 
                 !isPreview && (
                     <TextField
                         multiline

@@ -63,6 +63,17 @@ const validationOptions = [
         name: "Numeric",
     },
 ];
+const hideColumnOptions = [
+    {
+        _id: "yes",
+        name: "Yes",
+    },
+    {
+        _id: "no",
+        name: "No",
+    },
+   
+];
 
 const TableQuestions = ({
     sectionIndex,
@@ -106,10 +117,18 @@ const TableQuestions = ({
         tempQuestionnaire.sections[sectionIndex].columnValues[
             columnId
         ].validation = "";
+       
         tempQuestionnaire.sections[sectionIndex].columnValues[
             columnId
         ].options = [];
-
+        tempQuestionnaire.sections[sectionIndex].columnValues[
+            columnId
+        ].hideColumn = "no";
+        if (value==='prefilled') {
+            tempQuestionnaire.sections[sectionIndex].columnValues[
+                columnId
+            ].hideColumn = "no";
+        }
         if (value === "dropdown") {
             tempQuestionnaire.sections[sectionIndex].columnValues[
                 columnId
@@ -131,6 +150,7 @@ const TableQuestions = ({
             isRequired: true,
             options: [],
             validation: "",
+            hideColumn:'no'
         });
         tempQuestionnaire.sections[sectionIndex].rowValues?.forEach(
             (row, rowId) => {
@@ -370,6 +390,105 @@ const TableQuestions = ({
                             </MenuItem> */}
                                                         {validationOptions &&
                                                             validationOptions.map(
+                                                                (option) => (
+                                                                    <MenuItem
+                                                                        key={
+                                                                            option?._id
+                                                                        }
+                                                                        value={
+                                                                            option?._id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            option?.name
+                                                                        }
+                                                                    </MenuItem>
+                                                                )
+                                                            )}
+                                                    </Select>
+                                                    <FormHelperText>
+                                                        {" "}
+                                                    </FormHelperText>
+                                                </FormControl>
+                                            </div>
+                                            {column?.columnType ===
+                                                "dropdown" && (
+                                                <div className="add-dropdown-btnblk edit-dropdown-btn">
+                                                    <span
+                                                        className="addmore-icon"
+                                                        onClick={() =>
+                                                            onEditOptionClickHandler(
+                                                                columnId
+                                                            )
+                                                        }
+                                                    >
+                                                        <ModeEditOutlineOutlinedIcon />
+                                                    </span>{" "}
+                                                    <span
+                                                        onClick={() =>
+                                                            onEditOptionClickHandler(
+                                                                columnId
+                                                            )
+                                                        }
+                                                    >
+                                                        Edit Dropdown
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="emailid">
+                                                Hide Column
+                                            </label>
+                                            <div className="select-field">
+                                                <FormControl className="fullwidth-field">
+                                                    <Select
+                                                        disabled={
+                                                            column?.columnType ===
+                                                            "textbox"||
+                                                            column?.columnType ===
+                                                            "date"||
+                                                            column?.columnType ===
+                                                            "dropdown"||
+                                                            column?.columnType ===
+                                                            "attachments"
+                                                        }
+                                                        IconComponent={(
+                                                            props
+                                                        ) => (
+                                                            <KeyboardArrowDownRoundedIcon
+                                                                {...props}
+                                                            />
+                                                        )}
+                                                        renderValue={
+                                                            column?.hideColumn !==
+                                                            ""
+                                                                ? undefined
+                                                                : () => (
+                                                                      <Placeholder>
+                                                                          Yes or No
+                                                                      </Placeholder>
+                                                                  )
+                                                        }
+                                                        displayEmpty
+                                                        name="hideColumn"
+                                                        value={
+                                                            column?.hideColumn
+                                                        }
+                                                        onChange={(e) =>
+                                                            onColumnChangeHandler(
+                                                                e,
+                                                                columnId
+                                                            )
+                                                        }
+                                                        className="select-dropdown"
+                                                        MenuProps={MenuProps}
+                                                    >
+                                                        {/* <MenuItem disabled value="">
+                              Select Validator
+                            </MenuItem> */}
+                                                        {hideColumnOptions &&
+                                                            hideColumnOptions.map(
                                                                 (option) => (
                                                                     <MenuItem
                                                                         key={

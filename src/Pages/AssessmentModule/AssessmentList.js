@@ -446,7 +446,7 @@ const AssessmentList = () => {
               <div className="form-header-left-blk flex-start">
                 <h2 className="heading2 mr-40">Assessments</h2>
               </div>
-              <div className="form-header-right-txt search-and-btn-field-right view-instruct-field-right-edited">
+              <div className={`${SUPER_ADMIN ||  moduleAccesForAssessment[0]?.assessment?.add? "view-instruct-field-right-edited":""} form-header-right-txt search-and-btn-field-right`}>
                 <div className="search-and-btn-field-blk mr-0">
                   <div className="searchbar">
                     <input
@@ -481,7 +481,7 @@ const AssessmentList = () => {
       setIsAssessmentListLoading(true)
             
             }}
-            style={{cursor:'pointer',margin:'auto'}}
+            style={{cursor:'pointer'}}
 
             >
               

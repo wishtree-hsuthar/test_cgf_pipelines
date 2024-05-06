@@ -396,6 +396,8 @@ console.log('companySAQData - ',companySAQData)
 
   console.log('DATA IN BAR GRAPH 1 - ',dataForBarGraphs)
 console.log('indicator data',indicatorData.graphData)
+const note=<p style={{fontSize:'x-small',width:'100%'}}><b>Note</b> - Companies not represented on the graph either have zero workers in this category or have not submitted their data. Additionally, the data from the submitted companies constitutes 100% of the data represented on the graph.</p>
+
   return (
     <div className="page-wrapper">
       <section style={{
@@ -460,7 +462,8 @@ console.log('indicator data',indicatorData.graphData)
               <DashboardAccordian title={accordianTitles.title1} expanded={expanded.expandBarGraph1} name={'expandBarGraph1'} setExpanded={setExpanded}  >
              <div id="chart1">
               <div style={{display:"inline-block"}}>
-            <p style={{fontSize:'x-small',width:'100%'}}><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
+            {note}
+            {/* <p style={{fontSize:'x-small',width:'100%'}}><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p> */}
                 
                 </div>  {/*this div is used to manage resize issue of bar graph*/}         
            
@@ -479,7 +482,9 @@ console.log('indicator data',indicatorData.graphData)
               <div class="html2pdf__page-break"></div>
               <div id="chart2">
               <div style={{display:"inline-block"}}>
-            <p style={{fontSize:'x-small',width:'100%'}}><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
+            {note}
+
+            {/* <p style={{fontSize:'x-small',width:'100%'}}><b>Note</b> - Companies not represented on the graph either have zero workers in this category or have not submitted their data. Additionally, the data from the submitted companies constitutes 100% of the data represented on the graph.</p> */}
                 
                 </div>  {/*this div is used to manage resize issue of bar graph*/}         
 
@@ -498,7 +503,9 @@ console.log('indicator data',indicatorData.graphData)
               <DashboardAccordian title={accordianTitles.title3} expanded={expanded.expandBarGraph3} name={'expandBarGraph3'} setExpanded={setExpanded} >
                 <div id="chart3"> 
                 <div style={{display:"inline-block"}}>
-            <p style={{fontSize:'x-small',width:'100%'}}><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p>
+            {note}
+
+            {/* <p style={{fontSize:'x-small',width:'100%'}}><b>Note</b> - Companies that do not appear on the graph is because they have 0 workers in this category or have not submitted their data</p> */}
                   
                   </div>  {/*this div is used to manage resize issue of bar graph*/}             
                 <Bar

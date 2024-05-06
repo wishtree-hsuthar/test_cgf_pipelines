@@ -155,6 +155,7 @@ function FillAssesmentSection({
               editMode={editMode}
               myRef={myRef}
               setToasterDetails={setToasterDetails}
+              section={section}
             />
           )}
         </div>
