@@ -94,13 +94,13 @@ export default function DoughnutChart(props) {
   const options1 = doughnutGraphOptions(title01, 'top')
   const options2 = doughnutGraphOptions(title02, 'top')
   const options3 = doughnutGraphOptions(title03, 'top')
-  const note=<div className="note">
+  const note=<div style={{fontSize:'x-small',width:'100%'}}>
   <p><b>Note</b> - Companies not represented on the graph either have zero workers in this category or have not submitted their data. Additionally, the data from the submitted companies constitutes 100% of the data represented on the graph.</p>
   </div>
   return (
     <div
 
-      className="container"
+      // className="container"
     >
       {/* <div class="html2pdf__page-break"></div> */}
 
@@ -109,6 +109,7 @@ export default function DoughnutChart(props) {
        
         id="chart4"
         >
+            <div style={{ display: "inline-block" }}></div> 
           {note}
 
           {/* <div className="note">
