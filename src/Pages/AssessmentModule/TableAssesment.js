@@ -129,46 +129,49 @@ const TableAssessment = ({
                     {!isPrefilled && !params["*"].includes("view") && (
                       <TableCell width={75}></TableCell>
                     )}
-                    {columnValues?.filter(column=>column.columnType=='prefilled'&&column.hideColumn==='no').map((column, columnId) => (
-                      <TableCell key={column?.uuid} width="200px">
-                        {/* {isPrefilled ||
-                          (column?.columnType === "prefilled" &&
-                            setIsPrefilled(true))} */}
-                        <div className="que-table-column-info">
-                          <div className="que-column-ttlblk">
-                            <div
-                              className="que-table-col-ttl"
-                              // contentEditable="true"
-                            >
-                              {column?.title.length > 50 ? (
-                                <Tooltip
-                                  title={column?.title}
-                                  placement="bottom-start"
-                                >
-                                  <p>
-                                    {column?.title.slice(0, 50)}
-                                    ...
-                                    {column?.isRequired && (
-                                      <span className="mandatory">*</span>
-                                    )}
-                                  </p>
-                                </Tooltip>
-                              ) : (
-                                <p>
-                                  {column?.title}{" "}
-                                  {column?.isRequired && (
-                                    <span className="mandatory">*</span>
-                                  )}
-                                </p>
-                              )}
-                              {/* <p>{column?.title}</p> */}
-                            </div>
-                          </div>
-                        </div>
-                      </TableCell>
-                    ))}
-                    {columnValues?.filter(column=>column.columnType!='prefilled'||(column.columnType==='prefilled'&&!column.hideColumn)).map((column, columnId) => (
-                      <TableCell key={column?.uuid} width="200px">
+                    {
+                    // columnValues?.filter(column=>column.columnType!=='prefilled'||column.hideColumn==='no').map((column, columnId) => (
+                    //   <TableCell key={column?.uuid} width="200px">
+                    //     {/* {isPrefilled ||
+                    //       (column?.columnType === "prefilled" &&
+                    //         setIsPrefilled(true))} */}
+                    //     <div className="que-table-column-info">
+                    //       <div className="que-column-ttlblk">
+                    //         <div
+                    //           className="que-table-col-ttl"
+                    //           // contentEditable="true"
+                    //         >
+                    //           {column?.title.length > 50 ? (
+                    //             <Tooltip
+                    //               title={column?.title}
+                    //               placement="bottom-start"
+                    //             >
+                    //               <p>
+                    //                 {column?.title.slice(0, 50)}
+                    //                 ...
+                    //                 {column?.isRequired && (
+                    //                   <span className="mandatory">*</span>
+                    //                 )}
+                    //               </p>
+                    //             </Tooltip>
+                    //           ) : (
+                    //             <p>
+                    //               {column?.title}{" "}
+                    //               {column?.isRequired && (
+                    //                 <span className="mandatory">*</span>
+                    //               )}
+                    //             </p>
+                    //           )}
+                    //           {/* <p>{column?.title}</p> */}
+                    //         </div>
+                    //       </div>
+                    //     </div>
+                    //   </TableCell>
+                    // )
+                    // )
+                    }
+                    {columnValues?.filter(column=>column.hideColumn==='no'||column.hideColumn===undefined).map((column, columnId) => (
+                      <TableCell  key={column?.uuid} width="200px">
                         {isPrefilled ||
                           (column?.columnType === "prefilled" &&
                             setIsPrefilled(true))}
