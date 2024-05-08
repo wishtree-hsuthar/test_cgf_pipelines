@@ -344,16 +344,17 @@ setSelectedCountry(data?.country)
     //   data.assessment='HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)'
     //  }
     if (data.type !== 'Indicators') { 
-      data.endDate = new Date(new Date().setDate(new Date(data.endDate).getDate() + 1)).toISOString() 
-      data.type='SAQ'
       setFilteredData([
         ['Type',data?.type],
         ['Assessment',data?.assessment],
       ['Country',data?.country?data?.country:'NA'],
         ['Member Companies',[...membersOption.map(member=>" "+member?.label)]],
         ['Start Date',new Date(data?.startDate).toLocaleDateString('en')],
-        ['End Date',new Date(data?.endDate).toLocaleDateString('en')]
+        ['End Date',new Date(data?.endDate).toLocaleDateString('en',{timeZone:'UTC'})]
       ])
+      data.endDate = new Date(new Date().setDate(new Date(data.endDate).getDate() + 1)).toISOString() 
+      data.type='SAQ'
+     
     } 
     else {
       data = {
