@@ -1488,8 +1488,18 @@ input:-webkit-autofill:active {
   justify-content: flex-end;
   margin: 0 0 20px;
 }
+.que-card-icon-sect-mod {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 20px;
+  align-items: center;
+}
 .required-toggle-btnblk {
   display: inline;
+}
+.required-toggle-btnblk-mod {
+  display: inline;
+  margin: 0% -1% 0% 5%;
 }
 .que-card-icon-blk {
   /* flex: 0 0 25%;
@@ -1521,6 +1531,33 @@ input:-webkit-autofill:active {
   padding: 5px;
 }
 .required-toggle-btnblk .MuiSwitch-root .MuiSwitch-track {
+  background: #fff;
+  border: 0.8px solid #f7a823;
+  border-radius: 10px;
+}
+.required-toggle-btnblk-mod p {
+  font-size: 14px;
+  font-family: "ProximaNova-Regular", serif, sans-serif;
+  color: #1e1e1e;
+}
+.required-toggle-btnblk-mod
+  .MuiSwitch-root
+  .MuiSwitch-switchBase.Mui-checked
+  + .MuiSwitch-track {
+  background: #fff;
+}
+.required-toggle-btnblk-mod .MuiSwitch-switchBase .MuiSwitch-thumb {
+  width: 7px;
+  height: 7px;
+  color: rgba(204, 204, 204, 1);
+}
+.required-toggle-btnblk-mod .MuiSwitch-switchBase.Mui-checked .MuiSwitch-thumb {
+  color: #f7a823;
+}
+.required-toggle-btnblk-mod .MuiSwitch-root .MuiSwitch-switchBase {
+  padding: 5px;
+}
+.required-toggle-btnblk-mod .MuiSwitch-root .MuiSwitch-track {
   background: #fff;
   border: 0.8px solid #f7a823;
   border-radius: 10px;
@@ -2252,7 +2289,7 @@ input:-webkit-autofill:active {
 }
 .que-col-form-leftfield .form-group {
   flex: 0 0 30%;
-  max-width: 20%;
+  max-width: 30%;
 }
 .que-column-layout-sect {
   padding: 20px 0 0;

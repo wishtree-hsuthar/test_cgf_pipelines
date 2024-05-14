@@ -1,6 +1,7 @@
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import {
+    Checkbox,
     FormControl,
     FormGroup,
     FormHelperText,
@@ -17,6 +18,7 @@ import { Logger } from "../../../Logger/Logger.js";
 import AntSwitch from "../../../utils/AntSwitch.js";
 import DropdownOptionModal from "./DropdownOptionModal.js";
 import TableRender from "./TableRender.js";
+import { CheckBox } from "@mui/icons-material";
 const ITEM_HEIGHT = 42;
 const MenuProps = {
     PaperProps: {
@@ -86,11 +88,20 @@ const TableQuestions = ({
     const [modalIndex, setModalIndex] = useState(-1);
 
     const onColumnChangeHandler = (event, columnId) => {
-        const { name, value } = event.target;
+        const { name, value ,checked} = event.target;
         let tempQuestionnaire = { ...questionnaire };
-        tempQuestionnaire.sections[sectionIndex].columnValues[columnId][name] =
+        if (name==='hideColumn') {
+            console.log('value in hidecol change handler - ',checked)
+            
+            tempQuestionnaire.sections[sectionIndex].columnValues[columnId][name] =checked?'yes':'no';
+        } else {
+            tempQuestionnaire.sections[sectionIndex].columnValues[columnId][name] =
             value;
+        }
+        
+
         setQuestionnaire(tempQuestionnaire);
+
     };
     const onColumnTogleChangeHandler = (event, columnId) => {
         let tempQuestionnaire = { ...questionnaire };
@@ -436,7 +447,7 @@ const TableQuestions = ({
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="form-group">
+                                        {/* <div >
                                             <label htmlFor="emailid">
                                                 Hide Column
                                             </label>
@@ -484,9 +495,7 @@ const TableQuestions = ({
                                                         className="select-dropdown"
                                                         MenuProps={MenuProps}
                                                     >
-                                                        {/* <MenuItem disabled value="">
-                              Select Validator
-                            </MenuItem> */}
+                                                     
                                                         {hideColumnOptions &&
                                                             hideColumnOptions.map(
                                                                 (option) => (
@@ -508,6 +517,22 @@ const TableQuestions = ({
                                                     <FormHelperText>
                                                         {" "}
                                                     </FormHelperText>
+                                                </FormControl>
+                                                <FormControl>
+                                                <Checkbox
+                                                type="checkbox" 
+                                                 name="hideColumn"
+                                                 checked={
+                                                     column?.hideColumn==='yes'
+                                                 }
+                                                 onChange={(e) =>
+                                                     onColumnChangeHandler(
+                                                         e,
+                                                         columnId
+                                                     )
+                                                 }
+                                                
+                                                />
                                                 </FormControl>
                                             </div>
                                             {column?.columnType ===
@@ -534,7 +559,7 @@ const TableQuestions = ({
                                                     </span>
                                                 </div>
                                             )}
-                                        </div>
+                                        </div> */}
 
                                         {questionnaire?.sections[sectionIndex]
                                             ?.columnValues?.length > 1 && (
@@ -564,7 +589,7 @@ const TableQuestions = ({
                                             </div>
                                         )}
                                     </div>
-                                    <div className="que-card-icon-sect">
+                                    <div className="que-card-icon-sect-mod">
                                         <div className="required-toggle-btnblk">
                                             <FormGroup>
                                                 <Stack
@@ -599,6 +624,37 @@ const TableQuestions = ({
                                                     />
                                                 </Stack>
                                             </FormGroup>
+                                            
+                                        </div>
+                                        <div className="required-toggle-btnblk-mod">
+                                            <FormGroup>
+                                                <Stack
+                                                    direction="row"
+                                                    spacing={1}
+                                                    alignItems="center"
+                                                >
+                                                    <Typography>
+                                                       Hide Column
+                                                    </Typography>
+                                                    <FormControl>
+                                                <Checkbox
+                                                type="checkbox" 
+                                                 name="hideColumn"
+                                                 checked={
+                                                     column?.hideColumn==='yes'
+                                                 }
+                                                 onChange={(e) =>
+                                                     onColumnChangeHandler(
+                                                         e,
+                                                         columnId
+                                                     )
+                                                 }
+                                                
+                                                />
+                                                </FormControl>
+                                                </Stack>
+                                            </FormGroup>
+                                            
                                         </div>
                                     </div>
                                 </div>

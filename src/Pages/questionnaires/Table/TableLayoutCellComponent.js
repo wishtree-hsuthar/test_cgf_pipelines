@@ -52,11 +52,7 @@ const TableLayoutCellComponent = ({
     const columnFieldType =
         questionnaire?.sections[sectionIndex]?.columnValues[cellId]?.columnType;
     const column = questionnaire?.sections[sectionIndex]?.columnValues[cellId];
-    console.log('cell id -',cellId)
-    console.log('cell  -',cell)
-    console.log('column',column.uuid===cell.columnId&&column.hideColumn=='no')
-    
-
+   
     return (
         <div>
             {columnFieldType &&
