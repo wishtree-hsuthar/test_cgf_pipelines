@@ -49,7 +49,7 @@ const options3 = barGraphOptions('')
 
 
 function CgfDashboard() {
-  const [resultType, setResultType] = useState('Workforce Data')
+  const [resultType, setResultType] = useState('')
   const [submittedData, setSubmittedData] = useState({})
   const [dashboardReport, setDashboardReport] = useCallbackState({
     titleMessage: "",
