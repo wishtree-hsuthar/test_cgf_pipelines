@@ -68,8 +68,8 @@ function DashboardFilters({setDashboardReportPresent,setSubmittedData,setDashboa
     watch
   } = useForm({
     defaultValues: {
-      type: "Workforce Data",
-      assessment: '',
+      type: "Indicators",
+      assessment: 'HRDD Reporting Framework (Global)',
       country: "",
       memberCompanies: [],
       endDate: new Date(),
@@ -938,7 +938,7 @@ setSelectedCountry(data?.country)
                     control={control}
                     myOnChange={handleChangeForType}
                     name={'type'}
-                    options={['Workforce Data','Indicators']}
+                    options={['Indicators','Workforce Data']}
                     rules={{ required: true }}
                     myHelper={helperTextForFilters}
                     placeholder="Select type"
