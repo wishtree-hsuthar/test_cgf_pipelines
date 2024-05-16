@@ -155,10 +155,13 @@ export const barGraphOptions =(CountryTitle='',max)=>
   export const assessmentOptions2=['COUNTRY', 'HEADQUARTER']
 
   export const assessmentIndicatorOptions=[
+    'HRDD Reporting Framework (Global)',
+    'HRDD Reporting Framework (Country)',
+    'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)',
     'COUNTRY- OPERATION HRDD REQUIREMENTS',
-  'HEADQUARTERS HRDD REQUIREMENTS (ALL OPERATIONS)',
-  'HRDD Reporting Framework (Country)',
-  'HRDD Reporting Framework (Global)']
+ 
+ 
+ ]
 
   export const  splitSentences=(sentence, wordsPerChunk = 15)=> {
     // Remove consecutive spaces
