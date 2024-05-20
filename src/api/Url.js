@@ -111,3 +111,6 @@ export const DELETE_OTHER_DOCS=`${REACT_APP_API_ENDPOINT}questionnaires/other-do
 
 // file download
 export const ZIP_FILE_DOWNLOAD = `${REACT_APP_API_ENDPOINT}assessments/export/assessments?search=`
+// rule engine
+export const FETCH_RULE_ENGINE_OBJECT = `${REACT_APP_API_ENDPOINT}dashboard/rules/`
+export const UPDATE_RULE_ENGINE_OBJECT = `${REACT_APP_API_ENDPOINT}dashboard/rules/`
