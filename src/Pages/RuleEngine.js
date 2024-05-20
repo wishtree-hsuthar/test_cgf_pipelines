@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Dropdown from "../components/Dropdown";
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,9 @@ import Input from '../components/Input';
 import axios from 'axios';
 import { privateAxios } from '../api/axios';
 import { FETCH_RULE_ENGINE_OBJECT, UPDATE_RULE_ENGINE_OBJECT } from '../api/Url';
+import Toaster from '../components/Toaster';
+import useCallbackState from '../utils/useCallBackState';
+import { catchError } from '../utils/CatchError';
 
 function RuleEngine() {
   const helperTextForRuleEngine = {
@@ -26,6 +29,13 @@ function RuleEngine() {
     const handleChange = (e) => {
         setRuleEngine(e.target.value)
     }
+    const toasterRef = useRef();
+    const [toasterDetails, setToasterDetails] = useCallbackState({
+      titleMessage: "",
+      descriptionMessage: "",
+      messageType: "error",
+    });
+  
     const navigate = useNavigate();
     const {
       handleSubmit,
@@ -66,9 +76,16 @@ function RuleEngine() {
     }
     const updateRuleEngine=async(rules)=>{
       try {
-        const resposne = await privateAxios.put(UPDATE_RULE_ENGINE_OBJECT+ruleType,{rules})
-        if(resposne.status===200){
-          window.alert(resposne.data.message)
+        const response = await privateAxios.put(UPDATE_RULE_ENGINE_OBJECT+ruleType,{rules})
+        if(response.status===200){
+          setToasterDetails(
+            {
+              titleMessage: "Hurray!",
+              descriptionMessage: response.data.message,
+              messageType: "success",
+            },
+            () => toasterRef.current()
+          );
         }
       } catch (error) {
         console.log('error from update rule engine',error)
@@ -77,15 +94,35 @@ function RuleEngine() {
 
     const resetConfiguration=async(ruleType)=>{
       try {
-        const response = await privateAxios.put(UPDATE_RULE_ENGINE_OBJECT+ruleType)
+        const response = await privateAxios.put(UPDATE_RULE_ENGINE_OBJECT+'reset/all')
+        if(response.status===200){
+          setToasterDetails(
+            {
+              titleMessage: "Hurray!",
+              descriptionMessage: response.data.message,
+              messageType: "success",
+            },
+            () => toasterRef.current()
+          );
+          setTimeout(() => {
+            navigate('/home')
+            
+          }, 2000);
+        }
       } catch (error) {
         console.log('Error from reset configuration',error)
+        catchError(error, setToasterDetails, toasterRef, navigate);
       }
     }
     
     return (
       <form onSubmit={handleSubmit(handleSubmitRuleEngine)}>
-      
+       <Toaster
+        myRef={toasterRef}
+        titleMessage={toasterDetails.titleMessage}
+        descriptionMessage={toasterDetails.descriptionMessage}
+        messageType={toasterDetails.messageType}
+      />
         <div className="page-wrapper">
             <div className="card-wrapper">
                
@@ -136,7 +173,7 @@ function RuleEngine() {
                 <div className="form-btn flex-between add-members-btn">
                 <button
                       type="reset"
-                    //   onClick={handleCancel}
+                      onClick={resetConfiguration}
                       className="secondary-button mr-10"
                     >
                       Reset
