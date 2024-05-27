@@ -25,8 +25,9 @@ const Input = ({
     
     return (
         <TextField
+            multiline={multiline}
             disabled={isDisabled}
-            className={`input-field ${error && "input-error"}`}
+            className={multiline?`input-textarea ${error && "input-textarea-error"}`:`input-field ${error && "input-error"}`}
             placeholder={placeholder}
             onChange={myOnChange ? myOnChange : onChange} // send value to hook form
             onBlur={onBlur} // notify when input is touched/blur

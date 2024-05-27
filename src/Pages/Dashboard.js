@@ -9,7 +9,6 @@ import Toaster from "../components/Toaster";
 import { Logger } from "../Logger/Logger";
 import { setUser, setPrivileges } from "../redux/UserSlice";
 import HomePageTrainingSilder from "./HomePageTrainingSilder";
-
 const Dashboard = (props) => {
   //custom hook to set title of page
   const dispatch = useDispatch();
@@ -101,12 +100,7 @@ const Dashboard = (props) => {
         <div className="container">
           <div className="dashboard-sect">
             <p className="dashboard-header-message">
-              Welcome to the CGF Human Rights Coalition HRDD Dashboard! We are
-              delighted to have you here. This powerful tool empowers you to
-              navigate and fill in the Human Rights Due Diligence (HRDD)
-              assessment. As you familiarize yourself with this dashboard, below
-              are some resources that can help you to get started. We encourage
-              you to explore its features and fill in the assessment.
+              Welcome to the CGF Human Rights Coalition HRDD Dashboard
             </p>
             <HomePageTrainingSilder />
           </div>

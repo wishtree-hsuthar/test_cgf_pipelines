@@ -54,6 +54,7 @@ const TableAssessment = ({
   editMode,
   myRef,
   setToasterDetails,
+  section
 }) => {
   const params = useParams();
 
@@ -86,6 +87,24 @@ const TableAssessment = ({
     tempAsssessmentQuestionnaire[sectionUUID] = newAssessmentSection;
     setAssessmentQuestionnaire(tempAsssessmentQuestionnaire);
   };
+
+   // show hide table cell
+   const hideCell=(cell,cellId)=>{
+    let column = section?.columnValues[cellId];
+    if (column.hideColumn) {
+      if (column.uuid===cell.columnId&&column.hideColumn=='no') {
+        return true
+      } else {
+        return false      
+      }
+    } else {
+      return true
+    }
+     
+  }
+    columnValues.map(column=> {isPrefilled ||
+      (column?.columnType === "prefilled" &&
+        setIsPrefilled(true))})
   return (
     <div className="que-table-sect">
       <div className="que-table-wrap assessment-table-wrap">
@@ -110,8 +129,49 @@ const TableAssessment = ({
                     {!isPrefilled && !params["*"].includes("view") && (
                       <TableCell width={75}></TableCell>
                     )}
-                    {columnValues?.map((column, columnId) => (
-                      <TableCell key={column?.uuid} width="200px">
+                    {
+                    // columnValues?.filter(column=>column.columnType!=='prefilled'||column.hideColumn==='no').map((column, columnId) => (
+                    //   <TableCell key={column?.uuid} width="200px">
+                    //     {/* {isPrefilled ||
+                    //       (column?.columnType === "prefilled" &&
+                    //         setIsPrefilled(true))} */}
+                    //     <div className="que-table-column-info">
+                    //       <div className="que-column-ttlblk">
+                    //         <div
+                    //           className="que-table-col-ttl"
+                    //           // contentEditable="true"
+                    //         >
+                    //           {column?.title.length > 50 ? (
+                    //             <Tooltip
+                    //               title={column?.title}
+                    //               placement="bottom-start"
+                    //             >
+                    //               <p>
+                    //                 {column?.title.slice(0, 50)}
+                    //                 ...
+                    //                 {column?.isRequired && (
+                    //                   <span className="mandatory">*</span>
+                    //                 )}
+                    //               </p>
+                    //             </Tooltip>
+                    //           ) : (
+                    //             <p>
+                    //               {column?.title}{" "}
+                    //               {column?.isRequired && (
+                    //                 <span className="mandatory">*</span>
+                    //               )}
+                    //             </p>
+                    //           )}
+                    //           {/* <p>{column?.title}</p> */}
+                    //         </div>
+                    //       </div>
+                    //     </div>
+                    //   </TableCell>
+                    // )
+                    // )
+                    }
+                    {columnValues?.filter(column=>column.hideColumn==='no'||column.hideColumn===undefined).map((column, columnId) => (
+                      <TableCell  key={column?.uuid} width="200px">
                         {isPrefilled ||
                           (column?.columnType === "prefilled" &&
                             setIsPrefilled(true))}
@@ -174,6 +234,7 @@ const TableAssessment = ({
                         )}
                         {row &&
                           row?.cells?.map((cell, cellId) => (
+                            hideCell(cell,cellId)&&
                             <TableCell key={cell?.columnId}>
                               <TableLayoutCellComponent
                                 sectionUUID={sectionUUID}

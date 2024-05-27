@@ -158,6 +158,7 @@
     display: inline-block;
     width: 100%;
     cursor: pointer;
+    white-space: nowrap;
 }
 .list-item.active a ~ .header-submenu li a::before {
     display: none;

@@ -2,6 +2,8 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "../Pages/Layout";
 import RequireAuth from "./RequireAuth";
+import CgfDashboard from "../Pages/Dashboard/CgfDashboard";
+import RuleEngine from "../Pages/RuleEngine";
 
 const SubAdminList = React.lazy(() =>
   import("../Pages/subAdminManagement/SubAdminList")
@@ -80,12 +82,20 @@ const ProtectedPages = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/home" element={<Dashboard />} />
-
+        {/* <Route path="/cgf-dashboard" element={<CgfDashboard />} /> */}
         <Route
           path="/users/cgf-admin"
           element={
             <RequireAuth moduleName={""} page={""}>
               <SubAdminList />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/rule-engine"
+          element={
+            <RequireAuth moduleName={""} page={""}>
+              <RuleEngine />
             </RequireAuth>
           }
         />
@@ -173,6 +183,15 @@ const ProtectedPages = () => {
             </RequireAuth>
           }
         />
+        {/* Dashboard */}
+        <Route
+          path="/cgf-dashboard"
+          element={
+            <RequireAuth page={"view"} moduleName={"Dashboard"}>
+              <CgfDashboard />
+            </RequireAuth>
+          }
+        ></Route>
 
         {/* Member Pages */}
         <Route

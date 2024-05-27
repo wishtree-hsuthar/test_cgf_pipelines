@@ -6,7 +6,10 @@ export const catchError = async (
   route,
   state = 0
 ) => {
-  if (error.response.status == 401) {
+  if (error?.code==="ERR_CANCELED") {
+    return null
+  }
+  if (error?.response?.status == 401) {
     setToasterDetails(
       {
         titleMessage: `Oops!`,
@@ -34,13 +37,29 @@ export const catchError = async (
     setTimeout(() => {
       navigate("/home");
     }, 3000);
-  } else {
+  }
+  else if (error?.response?.status === 404) {
     setToasterDetails(
       {
         titleMessage: `Oops!`,
         descriptionMessage: error?.response?.data?.message
           ? error?.response?.data?.message
           : "Oops! Something went wrong. Please try again later.",
+
+        messageType: `error`,
+      },
+      () => myRef.current()
+    );
+    
+  } 
+  else {
+    console.log('error - ',error)
+    setToasterDetails(
+      {
+        titleMessage: `Oops!`,
+        descriptionMessage: error?.response?.data?.message
+          ? error?.response?.data?.message
+          :error?.message?'File not uploaded yet': "Oops! Something went wrong. Please try again later.",
 
         messageType: `error`,
       },

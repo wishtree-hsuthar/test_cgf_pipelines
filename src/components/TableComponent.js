@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import Radio from "@mui/material/Radio";
+import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 import { Logger } from "../Logger/Logger";
 
 import { MenuItem, Pagination, Select, Stack, Tooltip } from "@mui/material";
@@ -117,7 +118,9 @@ export default function TableComponent({
   onClickAssignAssesmentFunction,
   onClickFillAssessmentFunction,
   viewAssessment = false,
+  onClickActionPlanDownload
 }) {
+  console.log("icons - ", icons);
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -180,6 +183,10 @@ export default function TableComponent({
     onClickFillAssessmentFunction(uuid);
   };
   const isSelected = (id) => selected.indexOf(id) !== -1;
+
+  const onClickDownload = (uuid)=>{
+    onClickActionPlanDownload(uuid)
+  }
 
   // Avoid a layout jump when reaching the last page with empty records.
   // const emptyRows =
@@ -272,8 +279,12 @@ export default function TableComponent({
                             cell !== "isUserAuthorizedToFillAssessment" &&
                             cell !== "isOperationMember" &&
                             cell !== "isMemberRepresentative" &&
-                            cell !== "dueDate"
+                            cell !== "dueDate"&&
+                            cell !== "submissionDate"&&
+                            cell !=='title'&&
+                            cell!=='country'
                           ) {
+                            console.log('cell',cell)
                             return row[cell]?.length <= 28 ||
                               typeof row[cell] === "undefined" ? (
                               <TableCell key={cell}>
@@ -304,7 +315,50 @@ export default function TableComponent({
                                 </TableCell>
                               </Tooltip>
                             );
-                          } else if (cell === "isActive") {
+                          } 
+                          else if (cell==='title') {
+                            return (
+                            <Tooltip
+                            key={cell}
+                            placement="bottom-start"
+                            enterDelay={1000}
+                            title={row[cell]}
+                          >
+                            <TableCell key={cell}>
+                            {typeof row[cell] === "string" &&
+                                row[cell]?.length > 0 &&
+                                cell === "title"
+                                  ? row[cell][0].toUpperCase() +
+                                    row[cell]?.slice(1)
+                                  : row[cell]}
+                            </TableCell>
+                          </Tooltip>)
+                          }
+                          else if (cell==='country') {
+                            return (
+                              
+                             <Tooltip
+                                key={cell}
+                                placement="bottom-start"
+                                enterDelay={1000}
+                                title={row[cell]}
+                              >
+                            <TableCell key={cell}>
+
+                            {
+                            (typeof row[cell] === "undefined" ||
+                            row[cell] === "") ?
+                            "N/A":
+                            typeof row[cell] === "string" &&
+                                row[cell]?.length > 0 && row[cell]?.length <= 10&&
+                                cell === "country"
+                                  ? row[cell][0].toUpperCase() +
+                                  `${row[cell]?.slice(1, 10)}`
+                                : `${row[cell]?.slice(0, 10)}...`}
+                            </TableCell>
+                          </Tooltip>)
+                          }
+                          else if (cell === "isActive") {
                             return (
                               <TableCell
                                 className={`button-style ${
@@ -329,6 +383,24 @@ export default function TableComponent({
                                 key={cell}
                               >
                                 <span>{row[cell] ?? row[cell]}</span>
+                              </TableCell>
+                            );
+                          } 
+                          else if (cell === "submissionDate") {
+                            return (
+                              <TableCell
+                                // className={`due-date-style ${
+                                //   new Date(
+                                //     new Date(row[cell]).toLocaleDateString("en")
+                                //   ).getTime() >=
+                                //     new Date(
+                                //       new Date().toLocaleDateString("en")
+                                //     ).getTime() && "due-date-style-success"
+                                // }`}
+                                style={{textAlign:"center"}}
+                                key={cell}
+                              >
+                                <span >{row[cell] ?? row[cell]}</span>
                               </TableCell>
                             );
                           }
@@ -428,6 +500,24 @@ export default function TableComponent({
                                   </Tooltip>
                                 </span>
                               )}
+                            {icons.includes("download") && (
+                              <span className="icon">
+                                <Tooltip title="Action plan">
+                                  <CloudDownloadRoundedIcon
+                                    onClick={() =>
+                                      onClickDownload(row.uuid)
+                                    }
+                                  />
+                                  {/* <img
+                                                                        src={
+                                                                            "/images/delete-icon.svg"
+                                                                        }
+                                                                        
+                                                                        }
+                                                                    /> */}
+                                </Tooltip>
+                              </span>
+                            )}
                           </TableCell>
                         )}
                       </TableRow>

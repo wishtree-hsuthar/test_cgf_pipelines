@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/cgfhrdd/gitProjects/PR74-CGF-HRDD-Web-Front
+    overwrite: true
+file_exists_behavior: OVERWRITE
+hooks:
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      timeout: 300
+      runas: cgfhrdd
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 300
+      runas: cgfhrdd

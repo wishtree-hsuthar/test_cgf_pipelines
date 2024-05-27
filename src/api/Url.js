@@ -95,3 +95,22 @@ export const DOWNlOAD_FILE = `${REACT_APP_API_ENDPOINT}assessments/`;
 
 // Resend invite
 export const RESEND_INVITE = `${REACT_APP_API_ENDPOINT}auth/invite/resend/`;
+
+// Dashboard
+export const DASHBOARD  =`${REACT_APP_API_ENDPOINT}dashboard`;
+export const COMPANY_SAQ_STATUS = `${REACT_APP_API_ENDPOINT}dashboard/saq/company?memberId=`
+export const COUNTRY_SAQ_STATUS = `${REACT_APP_API_ENDPOINT}dashboard/saq/country?country=`
+export const TOTAL_WORKERS=`${REACT_APP_API_ENDPOINT}dashboard/doughnut`
+// download Assessment
+export const DOWNLOAD_ACTION_PLAN = `${REACT_APP_API_ENDPOINT}assessments/`
+
+// other document
+export const UPLOAD_OTHER_DOC=`${REACT_APP_API_ENDPOINT}questionnaires/other-documents`
+export const DOWNLOAD_OTHER_DOCS=`${REACT_APP_API_ENDPOINT}questionnaires/other-documents/download`
+export const DELETE_OTHER_DOCS=`${REACT_APP_API_ENDPOINT}questionnaires/other-documents`
+
+// file download
+export const ZIP_FILE_DOWNLOAD = `${REACT_APP_API_ENDPOINT}assessments/export/assessments?search=`
+// rule engine
+export const FETCH_RULE_ENGINE_OBJECT = `${REACT_APP_API_ENDPOINT}dashboard/rules/`
+export const UPDATE_RULE_ENGINE_OBJECT = `${REACT_APP_API_ENDPOINT}dashboard/rules/`

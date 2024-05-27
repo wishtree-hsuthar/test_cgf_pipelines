@@ -43,6 +43,7 @@ const Header = () => {
       ? []
       : Object.values(privilege?.privileges ?? {});
 
+      console.log('privilege array = ',privilegeArray)
   let moduleAccesForMember = privilegeArray
     .filter((data) => data?.moduleId?.name === "Members")
     .map((data) => ({
@@ -83,6 +84,16 @@ const Header = () => {
         delete: data.delete,
       },
     }));
+
+    let moduleAccesForDashboard = privilegeArray.filter((data)=>data?.moduleId?.name==="Dashboard")
+    .map((data)=>({
+      dashboard:{
+        list: data.list,
+        view: data.view,
+        edit: data.edit,
+        delete: data.delete,
+      }
+    }))
 
   const userNameInitials = () => {
     let letter = "";
@@ -243,6 +254,25 @@ const Header = () => {
                       </a>
                     </li>
                     {(SUPER_ADMIN ||
+                      moduleAccesForDashboard[0]?.dashboard?.view) && (
+                      <li
+                        className={
+                          location.pathname.includes("/cgf-dashboard")
+                            ? "list-item active"
+                            : "list-item"
+                        }
+                      >
+                        <a
+                          style={{
+                            cursor: "pointer",
+                          }}
+                          onClick={() => navigate("/cgf-dashboard")}
+                        >
+                          Dashboard
+                        </a>
+                      </li>
+                    )}
+                    {(SUPER_ADMIN ||
                       moduleAccessForAssessment[0]?.assessment?.list) && (
                       <li
                         className={
@@ -261,6 +291,8 @@ const Header = () => {
                         </a>
                       </li>
                     )}
+                   
+
 
                     {(SUPER_ADMIN ||
                       moduleAccessForQuestionnaire[0]?.questionnaire?.list) && (
@@ -318,7 +350,7 @@ const Header = () => {
                                   cursor: "pointer",
                                 }}
                               >
-                                CGF Admins
+                                Admins
                               </a>
                             </li>
                           )}

@@ -5,13 +5,19 @@ import { useNavigate } from "react-router-dom";
 import TableComponent from "../../components/TableComponent";
 import { useSelector } from "react-redux";
 import { privateAxios } from "../../api/axios";
-import { ASSESSMENTS } from "../../api/Url";
+import { ASSESSMENTS, DOWNLOAD_ACTION_PLAN, ZIP_FILE_DOWNLOAD } from "../../api/Url";
 import useCallbackState from "../../utils/useCallBackState";
 import { useDocumentTitle } from "../../utils/useDocumentTitle";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Toaster from "../../components/Toaster";
 import Loader from "../../utils/Loader";
 import { Logger } from "../../Logger/Logger";
+import  {catchError}  from "../../utils/CatchError";
+import { CloudDownloadOutlined, ImportExportOutlined } from "@mui/icons-material";
+import { getTimeStamp } from "../../utils/downloadFunction";
+import { Tooltip } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
+
 
 const listObj = {
   width: "30%",
@@ -23,11 +29,11 @@ const assessmentListTableHead = [
     id: "title",
     label: "Title",
   },
-  {
-    ...listObj,
-    id: "assessmentType",
-    label: "Assessment Type",
-  },
+  // {
+  //   ...listObj,
+  //   id: "assessmentType",
+  //   label: "Assessment Type",
+  // },
   {
     ...listObj,
     id: "assignedMember.name",
@@ -38,10 +44,26 @@ const assessmentListTableHead = [
     id: "assignedOperationMember.name",
     label: "Assigned To",
   },
+  // {
+  //   ...listObj,
+  //   id: "region",
+  //   label: "Region",
+  // },
+  {
+    ...listObj,
+    id: "country",
+    label: "Country",
+  },
+
   {
     ...listObj,
     id: "assessmentStatus",
     label: "Status",
+  },
+  {
+    ...listObj,
+    id:"submissionDate",
+    label:"Submitted Date"
   },
   {
     ...listObj,
@@ -70,10 +92,15 @@ const AssessmentList = () => {
     "uuid",
     "_id",
     "title",
-    "assessmentType",
+    // "assessmentType",
     "assignedMember.name",
     "assignedOperationMember.name",
+
+    // "region",
+    "country",
+
     "assessmentStatus",
+    "submissionDate",
     "dueDate",
     "isUserAuthorizedToFillAssessment",
   ];
@@ -96,7 +123,7 @@ const AssessmentList = () => {
   const [orderBy, setOrderBy] = useState("");
   const [records, setRecords] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
-  let icons = [];
+  let icons = ["download"];
 
   const onSearchChangeHandler = (e) => {
     Logger.info("Assessment list - onSearchChangeHandler handler");
@@ -132,6 +159,52 @@ const AssessmentList = () => {
     return navigate(`/assessment-list/fill-assessment/${uuid}`);
   };
 
+  const onClickDownload =async (uuid)=>{
+    try {
+      const response = await privateAxios.get(DOWNLOAD_ACTION_PLAN+uuid+'/action-plan',{
+        responseType:"blob"
+      })
+      Logger.info(` download function -  from   assessment `);
+      console.log('response-download = ',response)
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement(`a`);
+      link.href = url;
+      link.setAttribute(`download`, `${response.headers['file-name']}`);
+      document.body.appendChild(link);
+      link.click();
+      if (response.status == 200) {
+        console.log('response from download',response)
+        setToasterDetails(
+          {
+            titleMessage: `Success!`,
+            descriptionMessage: "Downloaded Successfully!",
+  
+            messageType: `success`,
+          },
+          () => myRef.current()
+        );
+      }
+    } catch (error) {
+      if (error.response) {
+        // Error response received from the server
+        let reader = new FileReader();
+        reader.onload = function () {
+          let errorData = JSON.parse(reader.result);
+          // Handle errorData
+          catchError(errorData,setToasterDetails,myRef,navigate)
+
+        };
+        console.log(reader.readAsText(error.response.data));
+
+      } else if (error.request) {
+        // No response received from the server
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+    }
+  }
   const generateUrl = () => {
     let url = `${ASSESSMENTS}?page=${page}&size=${rowsPerPage}&orderBy=${orderBy}&order=${order}`;
     if (search?.length >= 3) url += `&search=${search}`;
@@ -227,6 +300,10 @@ const AssessmentList = () => {
       delete object["memberCompany"];
       delete object["questionnaireId"];
       delete object["isMemberRepresentative"];
+      delete object["actionPlan"];
+      delete object['region']
+      delete object['assessmentType']
+
 
       object["dueDate"] = new Date(
         new Date(object["dueDate"]).setDate(
@@ -237,6 +314,15 @@ const AssessmentList = () => {
         day: "2-digit",
         year: "numeric",
       });
+      object["submissionDate"] = object['submissionDate']?new Date(
+        new Date(object["submissionDate"]).setDate(
+          new Date(object["submissionDate"]).getDate() - 1
+        )
+      ).toLocaleDateString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric",
+      }):'N/A';
       keysOrder.forEach((k) => {
         const v = object[k];
         delete object[k];
@@ -292,21 +378,57 @@ const AssessmentList = () => {
     let icon = Object.entries(assessmentAccessObj).filter(
       (key) => key[1] === true && icons.push(key[0])
     );
+    console.log("icons - assessment", icons);
+
     if (SUPER_ADMIN) {
-      icons = ["edit", "visibility"];
+      icons = ["edit", "visibility", "download"];
       return icons;
     } else if (icons.includes("fill")) {
       icons.push("send");
+      icons.push("download");
 
       return icons;
     }
-
     return icons;
   };
   const onKeyDownChangeHandler = (e) => {
     if (e.key === "Enter") {
       setMakeApiCall(true);
       setPage(1);
+    }
+  };
+  // download action plan
+  const downnloadZipFile =async () => {
+    try {
+      const response = await privateAxios.get(ZIP_FILE_DOWNLOAD+search,{
+          responseType: "blob",
+        }
+      );
+      // Logger.info(` download function -  from ${filename}  assessment `);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement(`a`);
+      link.href = url;
+      let timeStamp = getTimeStamp();
+      link.setAttribute(`download`, `Assessments - ${timeStamp}.zip`);
+      document.body.appendChild(link);
+      link.click();
+      if (response.status == 200) {
+        setIsAssessmentListLoading(false)
+        setToasterDetails(
+          {
+            titleMessage: `Success!`,
+            descriptionMessage: "Downloaded Successfully!",
+  
+            messageType: `success`,
+          },
+          () => myRef.current()
+        );
+      }
+    } catch (error) {
+      setIsAssessmentListLoading(false)
+      Logger.info(`downlaod function - error ${error?.response?.data?.message}`);
+      catchError(error, setToasterDetails, myRef, navigate);
+      return error;
     }
   };
   return (
@@ -324,7 +446,7 @@ const AssessmentList = () => {
               <div className="form-header-left-blk flex-start">
                 <h2 className="heading2 mr-40">Assessments</h2>
               </div>
-              <div className="form-header-right-txt search-and-btn-field-right view-instruct-field-right">
+              <div className={`${SUPER_ADMIN ||  moduleAccesForAssessment[0]?.assessment?.add? "view-instruct-field-right-edited":""} form-header-right-txt search-and-btn-field-right`}>
                 <div className="search-and-btn-field-blk mr-0">
                   <div className="searchbar">
                     <input
@@ -338,7 +460,10 @@ const AssessmentList = () => {
                     <button type="submit">
                       <i className="fa fa-search"></i>
                     </button>
+
                   </div>
+               
+
                 </div>
                 {(SUPER_ADMIN ||
                   moduleAccesForAssessment[0]?.assessment?.add) && (
@@ -352,6 +477,23 @@ const AssessmentList = () => {
                     </button>
                   </div>
                 )}
+             <div className="tertiary-btn-blk ml-20" onClick={()=>{downnloadZipFile();
+      setIsAssessmentListLoading(true)
+            
+            }}
+            style={{cursor:'pointer'}}
+
+            >
+              
+              <Tooltip title={'Download All Assessments'}>
+                   {/* <CloudDownloadOutlined  /> */}
+                   <span className="download-icon">
+                   <DownloadIcon />
+                   </span>
+                   </Tooltip>
+                 
+                  </div>
+                  
                 <div
                   className="tertiary-btn-blk ml-20"
                   onClick={viewInstruction}
@@ -361,6 +503,7 @@ const AssessmentList = () => {
                   </span>
                   <span className="addmore-txt">View Instructions</span>
                 </div>
+             
               </div>
             </div>
 
@@ -390,6 +533,7 @@ const AssessmentList = () => {
                     }
                     onClickFillAssessmentFunction={onClickFillAssessmentHandler}
                     viewAssessment={true}
+                    onClickActionPlanDownload={onClickDownload}
                   />
                 )}
               </div>

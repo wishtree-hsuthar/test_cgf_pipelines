@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import DialogBox from "../../components/DialogBox";
 import { Logger } from "../../Logger/Logger";
+import PreviewOtherDocument from "../questionnaires/Preview/PreviewOtherDocument";
 const FillAssessmentQuestion = React.lazy(() =>
   import("./FillAssessmentQuestions")
 );
@@ -42,6 +43,7 @@ function FillAssesmentSection({
   disableFillAssessment,
   totalSections,
   index,
+  questionnaireId
 }) {
   const navigate = useNavigate();
   const params = useParams();
@@ -133,7 +135,14 @@ function FillAssesmentSection({
                 setEditMode={setEditMode}
               />
             ))
-          ) : (
+          ) : section?.layout==='documents'?(
+            section.documents.map((document)=>(<PreviewOtherDocument 
+              sectionUUID={section?.uuid}
+              questionnaireId={questionnaireId}
+              documentObj={document}  />))
+          ):
+          
+          (
             <TableAssessment
               setAssessmentQuestionnaire={setAssessmentQuestionnaire}
               assessmentQuestionnaire={assessmentQuestionnaire}
@@ -146,6 +155,7 @@ function FillAssesmentSection({
               editMode={editMode}
               myRef={myRef}
               setToasterDetails={setToasterDetails}
+              section={section}
             />
           )}
         </div>

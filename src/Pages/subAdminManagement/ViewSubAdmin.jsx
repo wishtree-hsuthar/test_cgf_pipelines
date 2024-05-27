@@ -29,7 +29,7 @@ import { catchError } from "../../utils/CatchError";
 import { ResendEmail } from "../../utils/ResendEmail";
 const ViewSubAdmin = () => {
   //custom hook to set title of page
-  useDocumentTitle("View CGF Admin");
+  useDocumentTitle("View Admin");
   const params = useParams();
   const state = params["*"].includes("pending") ? 1 : 0;
   // state to manage loader
@@ -207,7 +207,7 @@ const ViewSubAdmin = () => {
         }
         info1={
           <p>
-            On withdrawal, CGF Admin will not be able to verify their account.
+            On withdrawal,Admin will not be able to verify their account.
           </p>
         }
         info2={<p>Do you still want to withdraw the invitation?</p>}
@@ -223,7 +223,7 @@ const ViewSubAdmin = () => {
         setOpenModal={setOpenDeleteDialogBoxPendingCGFAdmin}
       />
       <DialogBox
-        title={<p> Delete CGF Admin "{fetchedSubAdminDetails?.name}" </p>}
+        title={<p> Delete Admin "{fetchedSubAdminDetails?.name}" </p>}
         info1={
           <p>
             Deleting all the details will be an irreversible action, we
@@ -253,18 +253,18 @@ const ViewSubAdmin = () => {
                 to="/users/cgf-admin/"
                 state={params["*"].includes("pending") ? 1 : 0}
               >
-                CGF Admins{" "}
+                Admins{" "}
                 {params["*"].includes("pending") ? "(Pending)" : "(Onboarded)"}
               </Link>
             </li>
-            <li>View CGF Admin</li>
+            <li>View Admin</li>
           </ul>
         </div>
       </div>
       <section>
         <div className="container">
           <div className="form-header flex-between">
-            <h2 className="heading2">View CGF Admin</h2>
+            <h2 className="heading2">View Admin</h2>
 
             <span className="form-header-right-txt" onClick={handleToggle}>
               <span
@@ -305,7 +305,7 @@ const ViewSubAdmin = () => {
                 <div className="card-form-field">
                   <div className="form-group">
                     <label htmlFor="subAdminName">
-                      CGF Admin Name <span className="mandatory">*</span>
+                      Admin Name <span className="mandatory">*</span>
                     </label>
                     <TextField
                       id="outlined-basic"
@@ -407,7 +407,7 @@ const ViewSubAdmin = () => {
                   hidden={params["*"].includes("pending")}
                 >
                   <div className="form-group">
-                    <label htmlFor="email">Replaced CGF Admin </label>
+                    <label htmlFor="email">Replaced Admin </label>
                     <TextField
                       className={`input-field `}
                       id="outlined-basic"

@@ -1,6 +1,7 @@
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import {
+    Checkbox,
     FormControl,
     FormGroup,
     FormHelperText,
@@ -17,6 +18,7 @@ import { Logger } from "../../../Logger/Logger.js";
 import AntSwitch from "../../../utils/AntSwitch.js";
 import DropdownOptionModal from "./DropdownOptionModal.js";
 import TableRender from "./TableRender.js";
+import { CheckBox } from "@mui/icons-material";
 const ITEM_HEIGHT = 42;
 const MenuProps = {
     PaperProps: {
@@ -63,6 +65,17 @@ const validationOptions = [
         name: "Numeric",
     },
 ];
+const hideColumnOptions = [
+    {
+        _id: "yes",
+        name: "Yes",
+    },
+    {
+        _id: "no",
+        name: "No",
+    },
+   
+];
 
 const TableQuestions = ({
     sectionIndex,
@@ -75,11 +88,20 @@ const TableQuestions = ({
     const [modalIndex, setModalIndex] = useState(-1);
 
     const onColumnChangeHandler = (event, columnId) => {
-        const { name, value } = event.target;
+        const { name, value ,checked} = event.target;
         let tempQuestionnaire = { ...questionnaire };
-        tempQuestionnaire.sections[sectionIndex].columnValues[columnId][name] =
+        if (name==='hideColumn') {
+            console.log('value in hidecol change handler - ',checked)
+            
+            tempQuestionnaire.sections[sectionIndex].columnValues[columnId][name] =checked?'yes':'no';
+        } else {
+            tempQuestionnaire.sections[sectionIndex].columnValues[columnId][name] =
             value;
+        }
+        
+
         setQuestionnaire(tempQuestionnaire);
+
     };
     const onColumnTogleChangeHandler = (event, columnId) => {
         let tempQuestionnaire = { ...questionnaire };
@@ -106,10 +128,18 @@ const TableQuestions = ({
         tempQuestionnaire.sections[sectionIndex].columnValues[
             columnId
         ].validation = "";
+       
         tempQuestionnaire.sections[sectionIndex].columnValues[
             columnId
         ].options = [];
-
+        tempQuestionnaire.sections[sectionIndex].columnValues[
+            columnId
+        ].hideColumn = "no";
+        if (value==='prefilled') {
+            tempQuestionnaire.sections[sectionIndex].columnValues[
+                columnId
+            ].hideColumn = "no";
+        }
         if (value === "dropdown") {
             tempQuestionnaire.sections[sectionIndex].columnValues[
                 columnId
@@ -131,6 +161,7 @@ const TableQuestions = ({
             isRequired: true,
             options: [],
             validation: "",
+            hideColumn:'no'
         });
         tempQuestionnaire.sections[sectionIndex].rowValues?.forEach(
             (row, rowId) => {
@@ -416,6 +447,119 @@ const TableQuestions = ({
                                                 </div>
                                             )}
                                         </div>
+                                        {/* <div >
+                                            <label htmlFor="emailid">
+                                                Hide Column
+                                            </label>
+                                            <div className="select-field">
+                                                <FormControl className="fullwidth-field">
+                                                    <Select
+                                                        disabled={
+                                                            column?.columnType ===
+                                                            "textbox"||
+                                                            column?.columnType ===
+                                                            "date"||
+                                                            column?.columnType ===
+                                                            "dropdown"||
+                                                            column?.columnType ===
+                                                            "attachments"
+                                                        }
+                                                        IconComponent={(
+                                                            props
+                                                        ) => (
+                                                            <KeyboardArrowDownRoundedIcon
+                                                                {...props}
+                                                            />
+                                                        )}
+                                                        renderValue={
+                                                            column?.hideColumn !==
+                                                            ""
+                                                                ? undefined
+                                                                : () => (
+                                                                      <Placeholder>
+                                                                          Yes or No
+                                                                      </Placeholder>
+                                                                  )
+                                                        }
+                                                        displayEmpty
+                                                        name="hideColumn"
+                                                        value={
+                                                            column?.hideColumn
+                                                        }
+                                                        onChange={(e) =>
+                                                            onColumnChangeHandler(
+                                                                e,
+                                                                columnId
+                                                            )
+                                                        }
+                                                        className="select-dropdown"
+                                                        MenuProps={MenuProps}
+                                                    >
+                                                     
+                                                        {hideColumnOptions &&
+                                                            hideColumnOptions.map(
+                                                                (option) => (
+                                                                    <MenuItem
+                                                                        key={
+                                                                            option?._id
+                                                                        }
+                                                                        value={
+                                                                            option?._id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            option?.name
+                                                                        }
+                                                                    </MenuItem>
+                                                                )
+                                                            )}
+                                                    </Select>
+                                                    <FormHelperText>
+                                                        {" "}
+                                                    </FormHelperText>
+                                                </FormControl>
+                                                <FormControl>
+                                                <Checkbox
+                                                type="checkbox" 
+                                                 name="hideColumn"
+                                                 checked={
+                                                     column?.hideColumn==='yes'
+                                                 }
+                                                 onChange={(e) =>
+                                                     onColumnChangeHandler(
+                                                         e,
+                                                         columnId
+                                                     )
+                                                 }
+                                                
+                                                />
+                                                </FormControl>
+                                            </div>
+                                            {column?.columnType ===
+                                                "dropdown" && (
+                                                <div className="add-dropdown-btnblk edit-dropdown-btn">
+                                                    <span
+                                                        className="addmore-icon"
+                                                        onClick={() =>
+                                                            onEditOptionClickHandler(
+                                                                columnId
+                                                            )
+                                                        }
+                                                    >
+                                                        <ModeEditOutlineOutlinedIcon />
+                                                    </span>{" "}
+                                                    <span
+                                                        onClick={() =>
+                                                            onEditOptionClickHandler(
+                                                                columnId
+                                                            )
+                                                        }
+                                                    >
+                                                        Edit Dropdown
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div> */}
 
                                         {questionnaire?.sections[sectionIndex]
                                             ?.columnValues?.length > 1 && (
@@ -445,7 +589,7 @@ const TableQuestions = ({
                                             </div>
                                         )}
                                     </div>
-                                    <div className="que-card-icon-sect">
+                                    <div className="que-card-icon-sect-mod">
                                         <div className="required-toggle-btnblk">
                                             <FormGroup>
                                                 <Stack
@@ -480,6 +624,37 @@ const TableQuestions = ({
                                                     />
                                                 </Stack>
                                             </FormGroup>
+                                            
+                                        </div>
+                                        <div className="required-toggle-btnblk-mod">
+                                            <FormGroup>
+                                                <Stack
+                                                    direction="row"
+                                                    spacing={1}
+                                                    alignItems="center"
+                                                >
+                                                    <Typography>
+                                                       Hide Column
+                                                    </Typography>
+                                                    <FormControl>
+                                                <Checkbox
+                                                type="checkbox" 
+                                                 name="hideColumn"
+                                                 checked={
+                                                     column?.hideColumn==='yes'
+                                                 }
+                                                 onChange={(e) =>
+                                                     onColumnChangeHandler(
+                                                         e,
+                                                         columnId
+                                                     )
+                                                 }
+                                                
+                                                />
+                                                </FormControl>
+                                                </Stack>
+                                            </FormGroup>
+                                            
                                         </div>
                                     </div>
                                 </div>
