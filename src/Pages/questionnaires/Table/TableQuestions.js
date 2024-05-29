@@ -627,7 +627,7 @@ const TableQuestions = ({
                                             
                                         </div>
                                         <div className="required-toggle-btnblk-mod">
-                                            <FormGroup>
+                                            <FormGroup >
                                                 <Stack
                                                     direction="row"
                                                     spacing={1}
@@ -638,6 +638,7 @@ const TableQuestions = ({
                                                     </Typography>
                                                     <FormControl>
                                                 <Checkbox
+                                                disabled={column?.columnType!=='prefilled'}
                                                 type="checkbox" 
                                                  name="hideColumn"
                                                  checked={

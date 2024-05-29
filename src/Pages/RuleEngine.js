@@ -181,7 +181,7 @@ function RuleEngine() {
                    
                     <button
                       type="reset"
-                    //   onClick={handleCancel}
+                      onClick={()=>navigate('/home')}
                       className="secondary-button mr-10"
                     >
                       Cancel
