@@ -634,15 +634,25 @@ const TableLayoutCellComponent = ({
                 onChange={(e) => {
                   handleAnswersChange(e.target.name, e.target.value);
                 }}
-                renderValue={
-                  answer !== ""
-                    ? undefined
-                    : () => (
-                        <div className="select-placeholder">
-                          Choose dropdown value
-                        </div>
-                      )
-                }
+                // renderValue={
+                //   answer !== ""
+                //     ? undefined
+                //     : () => (
+                //         <div className="select-placeholder">
+                //           Choose dropdown value
+                //         </div>
+                //       )
+                // }
+                renderValue={(selected) => {
+                  const matchingOption = transformedColumns[columnUUID].options.find(
+                    (option) => option.toLowerCase() === selected.toLowerCase()
+                  );
+                  return matchingOption ? matchingOption : (
+                    <div className="select-placeholder">
+                      Choose dropdown value
+                    </div>
+                  );
+                }}
               >
                 {transformedColumns[columnUUID].options.map((option) => (
                   <MenuItem key={option} value={option}>

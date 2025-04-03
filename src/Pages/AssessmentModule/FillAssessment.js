@@ -309,7 +309,6 @@ function FillAssessment() {
         error?.response?.status === 400 &&
         error?.response?.data?.message === "Invalid assessment!"
       ) {
-      
         setToasterDetails(
           {
             titleMessage: "Oops!",
@@ -328,7 +327,7 @@ function FillAssessment() {
 
   const handleFormSubmit = (e, saveAsDraft) => {
     Logger.info("Fill assessment - handleFormSubmit handler");
-
+console.log("saveAsDraft", saveAsDraft);
     e.preventDefault();
     const tempErrors = {};
     let sections = [];
@@ -361,30 +360,48 @@ function FillAssessment() {
               sectionErrors[`${column?.uuid}_${tempRowId}`] =
                 "This is required field";
               sections.push(index);
-            } else if (
+            }  else if (
               column.columnType === "dropdown" &&
               currentSectionAnswers[`${column?.uuid}_${tempRowId}`] &&
               !column.options?.includes(
                 currentSectionAnswers[`${column?.uuid}_${tempRowId}`]
               )
             ) {
-              Logger.info(
+              console.log(
                 "Fill Assessment - handleFormSubmit - Fetched value not present in column dropdown options"
               );
-              sectionErrors[`${column?.uuid}_${tempRowId}`] = `Entered value "${
-                currentSectionAnswers[`${column?.uuid}_${tempRowId}`]
-              }" is not part of above list. Please select valid option among listed values from list.
+              // sectionErrors[`${column?.uuid}_${tempRowId}`] = `Entered value "${
+              //   currentSectionAnswers[`${column?.uuid}_${tempRowId}`]
+              // }" is not part of above list. Please select valid option among listed values from list.
 
+              const options = column.options;
+              let value = currentSectionAnswers[`${column?.uuid}_${tempRowId}`]; // Your input value
 
-                            `;
-              sections.push(index);
-              tempAsssessmentQuestionnaire = {
-                ...tempAsssessmentQuestionnaire,
-                [section?.uuid]: {
-                  ...tempAsssessmentQuestionnaire[section?.uuid],
-                  [`${column?.uuid}_${tempRowId}`]: "",
-                },
-              };
+              const normalizedValue = options.find(
+                (option) => option.toLowerCase() === value.toLowerCase()
+              );
+
+              if (normalizedValue) {
+                sections.push(index);
+                tempAsssessmentQuestionnaire = {
+                  ...tempAsssessmentQuestionnaire,
+                  [section?.uuid]: {
+                    ...tempAsssessmentQuestionnaire[section?.uuid],
+                    [`${column?.uuid}_${tempRowId}`]: normalizedValue,
+                  },
+                };
+                Logger.info(normalizedValue); // Output: "No Action Taken"
+              } else {
+                Logger.info("not normalized");
+                sections.push(index);
+                tempAsssessmentQuestionnaire = {
+                  ...tempAsssessmentQuestionnaire,
+                  [section?.uuid]: {
+                    ...tempAsssessmentQuestionnaire[section?.uuid],
+                    [`${column?.uuid}_${tempRowId}`]: "",
+                  },
+                };
+              }
 
               if (!saveAsDraft) {
                 sectionErrors[`${column?.uuid}_${tempRowId}`] =
