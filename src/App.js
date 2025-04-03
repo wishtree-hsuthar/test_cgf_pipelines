@@ -7,6 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import UserLoggedIn from "./router/UserLoggedIn";
 import Loader from "./utils/Loader";
+import OneTimePassword from "./Pages/OneTimePassword";
 const Login = React.lazy(() => import("./Pages/Login"));
 const ProtectedPages = React.lazy(() => import("./router/ProtectedPages"));
 const SetPassword = React.lazy(() => import("./Pages/SetPassword"));
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           {/* <Route path="/questionnare" element={<AddQuestionnaires/>}/> */}
           <Route path="/login" element={<Login />} />
+          <Route path="/otp-verification" element={<OneTimePassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           {/* <Route path="auth/*" element={<AuthOutlet />} /> */}
           <Route path="auth/confirm/:id" element={<SetPassword />} />
