@@ -5,7 +5,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import axios from "axios";
 import { set, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { useLocation, useNavigate,useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { Logger } from "../Logger/Logger";
 import { GET_USER, LOGIN_URL, OTP_VERIFY, RESEND_OTP } from "../api/Url";
@@ -19,7 +19,7 @@ import Slider from "./Slider";
 const otpSchema = yup.object().shape({
   otp: yup
     .string()
-    .required("Please enter the One Time Password sent to your email")
+    .required("Please enter the One Time Password sent to your email"),
 });
 const OneTimePassword = (prop) => {
   //custom hook to set title of page
@@ -32,13 +32,13 @@ const OneTimePassword = (prop) => {
   const otpToasterRef = useRef();
   const dispatch = useDispatch();
   const location = useLocation();
-  const {id} = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(10);
   const [isActive, setIsActive] = useState(false);
-  const [hideInitialTime, setHideInitialTime] = useState(true)
+  const [hideInitialTime, setHideInitialTime] = useState(true);
   const [regenrateCodeDisable, setRegenrateCodeDisable] = useState(false);
-  const [fetchOnce, setFetchOnce] = useState(false)
+  const [fetchOnce, setFetchOnce] = useState(false);
   const {
     register,
     setValue,
@@ -52,45 +52,41 @@ const OneTimePassword = (prop) => {
 
     const controller = new AbortController();
 
-   
-
     // startTimer();
-   
-const fetchUser = async () => {
-  setFetchOnce(true)
-    Logger.info("Login - Fetch user handler");
-    try {
-      const { status, data } = await axios.get(GET_USER, {
-        withCredentials: true,
-        signal: controller.signal,
-      });
-      if (status == 200) {
-        navigate("/home");
+
+    const fetchUser = async () => {
+      setFetchOnce(true);
+      Logger.info("Login - Fetch user handler");
+      try {
+        const { status, data } = await axios.get(GET_USER, {
+          withCredentials: true,
+          signal: controller.signal,
+        });
+        if (status == 200) {
+          navigate("/home");
+        }
+      } catch (error) {
+        if (error?.response?.status == 401) {
+          Logger.info("Login - Fetch user hanller catch error");
+        }
       }
-    } catch (error) {
-      if (error?.response?.status == 401) {
-        Logger.info("Login - Fetch user hanller catch error");
-      }
+    };
+    if (!fetchOnce) {
+      fetchUser();
     }
-  };
-  if (!fetchOnce) {
 
-  fetchUser();
-  }
-
-  let timer;
-  if (isActive && timeLeft > 0) {
+    let timer;
+    if (isActive && timeLeft > 0) {
       timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-  } else if (timeLeft === 0) {
+    } else if (timeLeft === 0) {
       setIsActive(false);
       setRegenrateCodeDisable(false);
-  }
-  if (hideInitialTime && timeLeft>0) {
-    timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-  } else {
-    setHideInitialTime(false);
-  }
-    
+    }
+    if (hideInitialTime && timeLeft > 0) {
+      timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    } else {
+      setHideInitialTime(false);
+    }
 
     return () => {
       document.body.classList.remove("login-page");
@@ -99,26 +95,25 @@ const fetchUser = async () => {
     };
   }, [isActive, timeLeft]);
 
-  
-
   const startTimer = () => {
     setTimeLeft(30);
     setIsActive(true);
-};
+  };
 
   const [values, setValues] = React.useState({
     otp: "",
-   });
+  });
 
- 
- 
- 
   const submitOtp = async (data) => {
     Logger.info("Otp - Submit otp data handler");
     try {
-      const response = await publicAxios.post(OTP_VERIFY, {...data,userId:id}, {
-        withCredentials: true,
-      });
+      const response = await publicAxios.post(
+        OTP_VERIFY,
+        { ...data, userId: id },
+        {
+          withCredentials: true,
+        }
+      );
       if (response.status == 201) {
         dispatch(setUser(response?.data?.user));
         dispatch(setPrivileges(response?.data?.user?.role));
@@ -128,13 +123,13 @@ const fetchUser = async () => {
       Logger.info(
         `Login - Submit login data handler catch error - ${error?.response?.data?.message}`
       );
-      if (error.response.status === 429) {
-        // setInterval(() => {
-          
-        //   navigate("/login");
-        // }, 2000);
-
-        return setLoginToasterDetails(
+      if (error?.response?.status === 429) {
+      
+        setTimeout(() => {
+          console.log('navigate login')
+          navigate("/login");
+        }, 3000);
+       return  setLoginToasterDetails(
           {
             titleMessage: "Too Many Requests",
             descriptionMessage: "Too many attempts. Redirecting to login...",
@@ -142,7 +137,7 @@ const fetchUser = async () => {
           },
           () => otpToasterRef.current()
         );
-        
+      
       }
       if (
         error.response.status == 401 &&
@@ -184,17 +179,21 @@ const fetchUser = async () => {
     }
   };
 
-  const resendOtp = async (id) => {
+  const resendOtp = async () => {
     Logger.info("Otp - Submit otp data handler");
     try {
-      const response = await publicAxios.post(RESEND_OTP, {userId:id}, {
-        withCredentials: true,
-      });
+      const response = await publicAxios.post(
+        RESEND_OTP,
+        { userId: id },
+        {
+          withCredentials: true,
+        }
+      );
       if (response.status == 201) {
         setRegenrateCodeDisable(true);
         setIsActive(true);
         setTimeLeft(30);
-       
+
         setLoginToasterDetails(
           {
             titleMessage: "Success",
@@ -208,7 +207,7 @@ const fetchUser = async () => {
       Logger.info(
         `Login - Submit login data handler catch error - ${error?.response?.data?.message}`
       );
-    
+
       if (
         error.response.status == 401 &&
         error.response.data.message === "Unauthorized"
@@ -246,10 +245,9 @@ const fetchUser = async () => {
           () => otpToasterRef.current()
         );
       }
-      
+
       if (error?.response?.status === 429) {
-        setInterval(() => {
-          
+        setTimeout(() => {
           navigate("/login");
         }, 3000);
 
@@ -261,7 +259,6 @@ const fetchUser = async () => {
           },
           () => otpToasterRef.current()
         );
-        
       }
     }
   };
@@ -299,57 +296,53 @@ const fetchUser = async () => {
                         One Time Password <span className="mandatory">*</span>
                       </label>
                       <TextField
-                        className={`input-field ${
-                          errors.otp && "input-error"
-                        }`}
+                        className={`input-field ${errors.otp && "input-error"}`}
                         id="outlined-basic"
                         placeholder="789456"
                         variant="outlined"
                         inputProps={{
                           maxLength: 6,
                         }}
-                        
                         {...register("otp")}
                         onBlur={(e) => setValue("otp", e.target.value.trim())}
                         helperText={errors.otp ? errors.otp.message : " "}
                       />
                     </div>
-                    
-                    
+
                     <div className="form-btn flex-between">
                       <button type="submit" className="primary-button">
                         Submit
                       </button>
-                      {
-                        !hideInitialTime
-                      &&
-                      <div
-                        className="tertiary-btn-blk"
-                        style={{cursor: isActive ? 'not-allowed' : 'pointer'}}
-                        onClick={() => {
-                          if (regenrateCodeDisable) {
-                            return
-                          } else {
-                            resendOtp(id)
-                            // setRegenrateCodeDisable(true);
-                            // startTimer();
-                            // setIsActive(true);
-                          }
-                          
-                        }}
-                      >
-                        <span style={{color: isActive ? 'black' : 'orange'}} aria-disabled={isActive}>
-                          Resend Verification Code
-                        </span>
-                      </div>
-                      }
-                     
-                      
+                      {!hideInitialTime && (
+                        <div
+                          className="tertiary-btn-blk"
+                          style={{
+                            cursor: isActive ? "not-allowed" : "pointer",
+                          }}
+                          onClick={() => {
+                            if (regenrateCodeDisable) {
+                              return;
+                            } else {
+                              resendOtp();
+                              // setRegenrateCodeDisable(true);
+                              // startTimer();
+                              // setIsActive(true);
+                            }
+                          }}
+                        >
+                          <span
+                            style={{ color: isActive ? "black" : "orange" }}
+                            aria-disabled={isActive}
+                          >
+                            Resend Verification Code
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <div className="flex-between ">
                       <span></span>
-                       <span> 0:{timeLeft}</span>
-                        </div>
+                      <span> 0:{timeLeft}</span>
+                    </div>
                   </form>
                 </div>
               </div>
