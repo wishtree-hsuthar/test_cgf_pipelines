@@ -201,22 +201,7 @@ const fetchUser = async () => {
       Logger.info(
         `Login - Submit login data handler catch error - ${error?.response?.data?.message}`
       );
-      if (error.response.status === 429) {
-        // setInterval(() => {
-          
-        //   navigate("/login");
-        // }, 2000);
-
-        return setLoginToasterDetails(
-          {
-            titleMessage: "Too Many Requests",
-            descriptionMessage: "Too many attempts. Redirecting to login...",
-            messageType: "error",
-          },
-          () => otpToasterRef.current()
-        );
-        
-      }
+    
       if (
         error.response.status == 401 &&
         error.response.data.message === "Unauthorized"
@@ -253,6 +238,23 @@ const fetchUser = async () => {
           },
           () => otpToasterRef.current()
         );
+      }
+      
+      if (error?.response?.status === 429) {
+        setInterval(() => {
+          
+          navigate("/login");
+        }, 3000);
+
+        return setLoginToasterDetails(
+          {
+            titleMessage: "Too Many Requests",
+            descriptionMessage: "Too many attempts. Redirecting to login...",
+            messageType: "error",
+          },
+          () => otpToasterRef.current()
+        );
+        
       }
     }
   };
