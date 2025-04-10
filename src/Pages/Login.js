@@ -100,7 +100,7 @@ const Login = (prop) => {
       if (response.status == 201) {
         dispatch(setUser(response?.data?.user));
         dispatch(setPrivileges(response?.data?.user?.role));
-        navigate("/home");
+        navigate(`/otp-verification/${response?.data?._id}`);
       }
     } catch (error) {
       Logger.info(

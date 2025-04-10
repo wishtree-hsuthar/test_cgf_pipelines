@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TextField } from "@mui/material";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import axios from "axios";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate,useParams } from "react-router-dom";
 import * as yup from "yup";
 import { Logger } from "../Logger/Logger";
-import { GET_USER, LOGIN_URL } from "../api/Url";
+import { GET_USER, LOGIN_URL, OTP_VERIFY, RESEND_OTP } from "../api/Url";
 import { publicAxios } from "../api/axios";
 import Toaster from "../components/Toaster";
 import { setPrivileges, setUser } from "../redux/UserSlice";
@@ -33,9 +32,12 @@ const OneTimePassword = (prop) => {
   const otpToasterRef = useRef();
   const dispatch = useDispatch();
   const location = useLocation();
+  const {id} = useParams();
   const navigate = useNavigate();
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(10);
   const [isActive, setIsActive] = useState(false);
+  const [hideInitialTime, setHideInitialTime] = useState(true)
+  const [regenrateCodeDisable, setRegenrateCodeDisable] = useState(false);
   const {
     register,
     setValue,
@@ -54,28 +56,34 @@ const OneTimePassword = (prop) => {
         timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
     } else if (timeLeft === 0) {
         setIsActive(false);
+        setRegenrateCodeDisable(false);
+    }
+    if (hideInitialTime && timeLeft>0) {
+      timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    } else {
+      setHideInitialTime(false);
     }
 
     // startTimer();
    
-
-    const fetchUser = async () => {
-      Logger.info("Login - Fetch user handler");
-      try {
-        const { status, data } = await axios.get(GET_USER, {
-          withCredentials: true,
-          signal: controller.signal,
-        });
-        if (status == 200) {
-          navigate("/home");
-        }
-      } catch (error) {
-        if (error?.response?.status == 401) {
-          Logger.info("Login - Fetch user hanller catch error");
-        }
+const fetchUser = async () => {
+    Logger.info("Login - Fetch user handler");
+    try {
+      const { status, data } = await axios.get(GET_USER, {
+        withCredentials: true,
+        signal: controller.signal,
+      });
+      if (status == 200) {
+        navigate("/home");
       }
-    };
-    // fetchUser();
+    } catch (error) {
+      if (error?.response?.status == 401) {
+        Logger.info("Login - Fetch user hanller catch error");
+      }
+    }
+  };
+    
+    fetchUser();
 
     return () => {
       document.body.classList.remove("login-page");
@@ -84,10 +92,13 @@ const OneTimePassword = (prop) => {
     };
   }, [isActive, timeLeft]);
 
+  
+
   const startTimer = () => {
     setTimeLeft(30);
     setIsActive(true);
 };
+
   const [values, setValues] = React.useState({
     otp: "",
    });
@@ -98,7 +109,7 @@ const OneTimePassword = (prop) => {
   const submitOtp = async (data) => {
     Logger.info("Otp - Submit otp data handler");
     try {
-      const response = await publicAxios.post(LOGIN_URL, data, {
+      const response = await publicAxios.post(OTP_VERIFY, {...data,userId:id}, {
         withCredentials: true,
       });
       if (response.status == 201) {
@@ -110,6 +121,102 @@ const OneTimePassword = (prop) => {
       Logger.info(
         `Login - Submit login data handler catch error - ${error?.response?.data?.message}`
       );
+      if (error.response.status === 429) {
+        // setInterval(() => {
+          
+        //   navigate("/login");
+        // }, 2000);
+
+        return setLoginToasterDetails(
+          {
+            titleMessage: "Too Many Requests",
+            descriptionMessage: "Too many attempts. Redirecting to login...",
+            messageType: "error",
+          },
+          () => otpToasterRef.current()
+        );
+        
+      }
+      if (
+        error.response.status == 401 &&
+        error.response.data.message === "Unauthorized"
+      ) {
+        return setLoginToasterDetails(
+          {
+            titleMessage: "Invalid Credentials",
+            descriptionMessage: "Invalid email or password!",
+            messageType: "error",
+          },
+          () => otpToasterRef.current()
+        );
+      }
+      if (
+        error.response.status == 401 &&
+        error.response.data.message ===
+          "Access denied. Kindly contact system admin."
+      ) {
+        return setLoginToasterDetails(
+          {
+            titleMessage: "Invalid Credentials",
+            descriptionMessage: error?.response?.data?.message,
+            messageType: "error",
+          },
+          () => otpToasterRef.current()
+        );
+      }
+      if (error.response.status == 400) {
+        return setLoginToasterDetails(
+          {
+            titleMessage: "Session Active",
+            descriptionMessage: error?.response?.data?.message,
+            messageType: "error",
+          },
+          () => otpToasterRef.current()
+        );
+      }
+    }
+  };
+
+  const resendOtp = async (id) => {
+    Logger.info("Otp - Submit otp data handler");
+    try {
+      const response = await publicAxios.post(RESEND_OTP, {userId:id}, {
+        withCredentials: true,
+      });
+      if (response.status == 201) {
+        setRegenrateCodeDisable(true);
+        setIsActive(true);
+        setTimeLeft(30);
+       
+        setLoginToasterDetails(
+          {
+            titleMessage: "Success",
+            descriptionMessage: "OTP sent to your email",
+            messageType: "success",
+          },
+          () => otpToasterRef.current()
+        );
+      }
+    } catch (error) {
+      Logger.info(
+        `Login - Submit login data handler catch error - ${error?.response?.data?.message}`
+      );
+      if (error.response.status === 429) {
+        // setInterval(() => {
+          
+        //   navigate("/login");
+        // }, 2000);
+
+        return setLoginToasterDetails(
+          {
+            titleMessage: "Too Many Requests",
+            descriptionMessage: "Too many attempts. Redirecting to login...",
+            messageType: "error",
+          },
+          () => otpToasterRef.current()
+        );
+        
+      }
       if (
         error.response.status == 401 &&
         error.response.data.message === "Unauthorized"
@@ -187,30 +294,47 @@ const OneTimePassword = (prop) => {
                           errors.otp && "input-error"
                         }`}
                         id="outlined-basic"
-                        placeholder="wdowqd123"
+                        placeholder="789456"
                         variant="outlined"
+                        inputProps={{
+                          maxLength: 6,
+                        }}
+                        
                         {...register("otp")}
                         onBlur={(e) => setValue("otp", e.target.value.trim())}
                         helperText={errors.otp ? errors.otp.message : " "}
                       />
                     </div>
                     
+                    
                     <div className="form-btn flex-between">
                       <button type="submit" className="primary-button">
                         Submit
                       </button>
+                      {
+                        !hideInitialTime
+                      &&
                       <div
                         className="tertiary-btn-blk"
-                        
+                        style={{cursor: isActive ? 'not-allowed' : 'pointer'}}
                         onClick={() => {
-                          startTimer();
-                          setIsActive(true);
+                          if (regenrateCodeDisable) {
+                            return
+                          } else {
+                            resendOtp(id)
+                            // setRegenrateCodeDisable(true);
+                            // startTimer();
+                            // setIsActive(true);
+                          }
+                          
                         }}
                       >
-
-                        <span style={{color:isActive?'black':'orange'}} aria-disabled={{isActive}}>Resend Verification Code</span>
-
+                        <span style={{color: isActive ? 'black' : 'orange'}} aria-disabled={isActive}>
+                          Resend Verification Code
+                        </span>
                       </div>
+                      }
+                     
                       
                     </div>
                     <div className="flex-between ">

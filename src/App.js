@@ -22,7 +22,7 @@ function App() {
         <Routes>
           {/* <Route path="/questionnare" element={<AddQuestionnaires/>}/> */}
           <Route path="/login" element={<Login />} />
-          <Route path="/otp-verification" element={<OneTimePassword />} />
+          <Route path="/otp-verification/:id" element={<OneTimePassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           {/* <Route path="auth/*" element={<AuthOutlet />} /> */}
           <Route path="auth/confirm/:id" element={<SetPassword />} />

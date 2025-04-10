@@ -17,7 +17,7 @@ let REPORT_ISSUE_LINK = "";
 const Header = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isActive, setActive] = React.useState("false");
-  const userAuth = useSelector((state) => state?.user?.userObj);
+  const userAuth = useSelector((state) => state?.user?.userObj)??'';
   const privilege = useSelector((state) => state?.user?.privilege);
 
   let initials = userAuth?.name?.split(" ");
@@ -97,11 +97,11 @@ const Header = () => {
 
   const userNameInitials = () => {
     let letter = "";
-    if (initials.length > 1) {
-      letter = initials[0].slice(0, 1) + initials[1]?.slice(0, 1);
+    if (initials&&initials?.length > 1) {
+      letter = initials?.[0].slice(0, 1) + initials[1]?.slice(0, 1);
       return letter;
     }
-    letter = initials[0].slice(0, 1);
+    letter = initials?.[0].slice(0, 1);
     return letter;
   };
 
@@ -172,8 +172,8 @@ const Header = () => {
   let profileRole = () => {
     if (
       userAuth?.role?.name === "Super Admin" ||
-      (Object.keys(userAuth.role).length > 0 &&
-        Object.keys(userAuth?.role?.privileges).length > 0)
+      (Object.keys(userAuth?.role ?? {}).length > 0 &&
+        Object.keys(userAuth?.role?.privileges ?? {}).length > 0)
     ) {
       return userAuth?.role?.name;
     } else {

@@ -1,6 +1,8 @@
 export const { REACT_APP_API_ENDPOINT, REACT_APP_FILE_ENCRYPT_SECRET } =
   process.env;
 //login
+export const OTP_VERIFY = `${REACT_APP_API_ENDPOINT}auth/verify-otp`;
+export const RESEND_OTP = `${REACT_APP_API_ENDPOINT}auth/resend-otp`;
 export const LOGIN_URL = `${REACT_APP_API_ENDPOINT}auth/login`;
 export const LOGOUT_URL = `${REACT_APP_API_ENDPOINT}auth/logout`;
 export const GET_USER = `${REACT_APP_API_ENDPOINT}auth/current`;
