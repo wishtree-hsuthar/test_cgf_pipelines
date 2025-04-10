@@ -38,6 +38,7 @@ const OneTimePassword = (prop) => {
   const [isActive, setIsActive] = useState(false);
   const [hideInitialTime, setHideInitialTime] = useState(true)
   const [regenrateCodeDisable, setRegenrateCodeDisable] = useState(false);
+  const [fetchOnce, setFetchOnce] = useState(false)
   const {
     register,
     setValue,
@@ -51,22 +52,12 @@ const OneTimePassword = (prop) => {
 
     const controller = new AbortController();
 
-    let timer;
-    if (isActive && timeLeft > 0) {
-        timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-    } else if (timeLeft === 0) {
-        setIsActive(false);
-        setRegenrateCodeDisable(false);
-    }
-    if (hideInitialTime && timeLeft>0) {
-      timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-    } else {
-      setHideInitialTime(false);
-    }
+   
 
     // startTimer();
    
 const fetchUser = async () => {
+  setFetchOnce(true)
     Logger.info("Login - Fetch user handler");
     try {
       const { status, data } = await axios.get(GET_USER, {
@@ -82,8 +73,24 @@ const fetchUser = async () => {
       }
     }
   };
+  if (!fetchOnce) {
+
+  fetchUser();
+  }
+
+  let timer;
+  if (isActive && timeLeft > 0) {
+      timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+  } else if (timeLeft === 0) {
+      setIsActive(false);
+      setRegenrateCodeDisable(false);
+  }
+  if (hideInitialTime && timeLeft>0) {
+    timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+  } else {
+    setHideInitialTime(false);
+  }
     
-    fetchUser();
 
     return () => {
       document.body.classList.remove("login-page");
