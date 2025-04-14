@@ -100,7 +100,8 @@ const Login = (prop) => {
       if (response.status == 201) {
         dispatch(setUser(response?.data?.user));
         dispatch(setPrivileges(response?.data?.user?.role));
-        navigate(`/otp-verification/${response?.data?._id}`);
+        navigate(`/otp-verification`);
+        localStorage.setItem("token", response?.data?.token);
       }
     } catch (error) {
       Logger.info(

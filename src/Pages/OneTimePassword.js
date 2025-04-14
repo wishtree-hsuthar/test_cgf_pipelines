@@ -32,7 +32,6 @@ const OneTimePassword = (prop) => {
   const otpToasterRef = useRef();
   const dispatch = useDispatch();
   const location = useLocation();
-  const { id } = useParams();
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(10);
   const [isActive, setIsActive] = useState(false);
@@ -105,11 +104,12 @@ const OneTimePassword = (prop) => {
   });
 
   const submitOtp = async (data) => {
+    let token = localStorage.getItem("token");
     Logger.info("Otp - Submit otp data handler");
     try {
       const response = await publicAxios.post(
-        OTP_VERIFY,
-        { ...data, userId: id },
+        `${OTP_VERIFY}/${token}`,
+        { ...data },
         {
           withCredentials: true,
         }
@@ -117,6 +117,8 @@ const OneTimePassword = (prop) => {
       if (response.status == 201) {
         dispatch(setUser(response?.data?.user));
         dispatch(setPrivileges(response?.data?.user?.role));
+        localStorage.clear()
+
         navigate("/home");
       }
     } catch (error) {
@@ -127,6 +129,7 @@ const OneTimePassword = (prop) => {
       
         setTimeout(() => {
           console.log('navigate login')
+          localStorage.clear() 
           navigate("/login");
         }, 3000);
        return  setLoginToasterDetails(
@@ -180,11 +183,13 @@ const OneTimePassword = (prop) => {
   };
 
   const resendOtp = async () => {
+    let token = localStorage.getItem("token");
+
     Logger.info("Otp - Submit otp data handler");
     try {
       const response = await publicAxios.post(
-        RESEND_OTP,
-        { userId: id },
+        `${RESEND_OTP}/${token}`,
+        {},
         {
           withCredentials: true,
         }
@@ -193,6 +198,8 @@ const OneTimePassword = (prop) => {
         setRegenrateCodeDisable(true);
         setIsActive(true);
         setTimeLeft(30);
+
+        localStorage.setItem("token", response?.data?.token);
 
         setLoginToasterDetails(
           {
