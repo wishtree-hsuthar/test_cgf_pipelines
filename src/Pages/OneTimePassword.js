@@ -19,11 +19,11 @@ import Slider from "./Slider";
 const otpSchema = yup.object().shape({
   otp: yup
     .string()
-    .required("Please enter the One Time Password sent to your email"),
+    .required("Please enter the One Time Password sent to your email address"),
 });
 const OneTimePassword = (prop) => {
   //custom hook to set title of page
-  useDocumentTitle("OTP-Verification");
+  useDocumentTitle("verification-code");
   const [loginToasterDetails, setLoginToasterDetails] = useCallbackState({
     titleMessage: "",
     descriptionMessage: "",
@@ -131,11 +131,11 @@ const OneTimePassword = (prop) => {
           console.log('navigate login')
           localStorage.clear() 
           navigate("/login");
-        }, 3000);
+        }, 4000);
        return  setLoginToasterDetails(
           {
             titleMessage: "Too Many Requests",
-            descriptionMessage: "Too many attempts. Redirecting to login...",
+            descriptionMessage: "Too many incorrect OTP attempts. Please try again after 5 minutes.",
             messageType: "error",
           },
           () => otpToasterRef.current()
@@ -300,12 +300,12 @@ const OneTimePassword = (prop) => {
                   <form onSubmit={handleSubmit(submitOtp)}>
                     <div className="form-group">
                       <label htmlFor="emailid">
-                        One Time Password <span className="mandatory">*</span>
+                        One-Time-Password Verification Code <span className="mandatory">*</span>
                       </label>
                       <TextField
                         className={`input-field ${errors.otp && "input-error"}`}
                         id="outlined-basic"
-                        placeholder="789456"
+                        placeholder="Enter OTP"
                         variant="outlined"
                         inputProps={{
                           maxLength: 6,
@@ -338,7 +338,7 @@ const OneTimePassword = (prop) => {
                           }}
                         >
                           <span
-                            style={{ color: isActive ? "black" : "orange" }}
+                            style={{ color: isActive ? "darkgrey" : "orange" }}
                             aria-disabled={isActive}
                           >
                             Resend Verification Code
@@ -346,10 +346,12 @@ const OneTimePassword = (prop) => {
                         </div>
                       )}
                     </div>
-                    <div className="flex-between ">
+
+                    { isActive&&<div className="flex-between ">
+                    
                       <span></span>
                       <span> 0:{timeLeft}</span>
-                    </div>
+                    </div>}
                   </form>
                 </div>
               </div>
