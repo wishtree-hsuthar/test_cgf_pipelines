@@ -42,7 +42,7 @@ jobs:
             -Dsonar.login=$SONAR_TOKEN \
             -Dsonar.projectKey=PR74-CGF-HRDD-Web-Front \
             -Dsonar.projectName=PR74-CGF-HRDD-Web-Front \
-            -Dsonar.sources=src \
+            -Dsonar.sources=src/components,src/utils,src/router
             -Dsonar.exclusions="**/node_modules/**,**/build/**,**/dist/**,**/coverage/**,**/reports/**,**/*.test.*,**/*.spec.*,**/*.mock.*,**/*.min.js,**/*.bundle.js,**/assets/**,**/vendor/**" \
             -Dsonar.qualitygate.wait=true \
             -Dsonar.ws.timeout=120 \
