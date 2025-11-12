@@ -42,3 +42,5 @@ jobs:
             -Dsonar.upload.compression=true \
             -Dsonar.cpd.skip=true \
             -Dsonar.verbose=true
+            -Dsonar.ws.timeout=600 \
+            -Dsonar.ce.taskTimeout=600000
