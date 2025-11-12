@@ -26,7 +26,11 @@ function App() {
           <Route path="/forget-password" element={<ForgetPassword />} />
           {/* <Route path="auth/*" element={<AuthOutlet />} /> */}
           <Route path="auth/confirm/:id" element={<SetPassword />} />
+
+          
           <Route path="auth/forgot/:id" element={<ResetPassword />} />
+
+          <Route path="auth/test" element={<ResetPassword />} />
           {/* <Route path="/*" element={<Layout />}> */}
           <Route
             path={"/*"}
