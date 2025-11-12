@@ -6,7 +6,8 @@ on:
 
 jobs:
   sonarqube:
-    runs-on: ubuntu-latest
+    name: Run SonarQube Code Analysis
+    runs-on: ubuntu-latest # ✅ GitHub-hosted runner
 
     steps:
       - name: Checkout repository
@@ -17,30 +18,40 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Clean large or unnecessary directories
+      - name: Test SonarQube Connectivity
         run: |
-          rm -rf coverage reports dist build public node_modules/.cache || true
+          echo "Testing connectivity to SonarQube at ${{ secrets.SONAR_HOST_URL }}"
+          curl -v --max-time 20 ${{ secrets.SONAR_HOST_URL }}/api/system/status || echo "❌ Server not reachable"
 
       - name: Install dependencies
         run: |
-          npm cache clean --force
           npm ci --no-audit --prefer-offline
 
-      - name: Run SonarQube Scan
+      - name: Clean unnecessary folders
+        run: |
+          rm -rf coverage reports dist build node_modules/.cache || true
+
+      - name: Run SonarQube Scanner
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
+          echo "Running SonarQube scanner..."
           npx sonar-scanner \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN \
             -Dsonar.projectKey=PR74-CGF-HRDD-Web-Front \
             -Dsonar.projectName=PR74-CGF-HRDD-Web-Front \
-            -Dsonar.sources=src/components,src/utils,src/router
-            -Dsonar.exclusions="**/node_modules/**,**/build/**,**/dist/**,**/coverage/**,**/reports/**,**/public/**,**/*.test.*,**/*.spec.*,**/*.mock.*,**/*.min.js,**/*.bundle.js,**/assets/**,**/vendor/**" \
-            -Dsonar.scm.disabled=true \
-            -Dsonar.upload.compression=true \
-            -Dsonar.cpd.skip=true \
-            -Dsonar.verbose=true
-            -Dsonar.ws.timeout=600 \
-            -Dsonar.ce.taskTimeout=600000
+            -Dsonar.sources=src \
+            -Dsonar.exclusions="**/node_modules/**,**/build/**,**/dist/**,**/coverage/**,**/reports/**,**/*.test.*,**/*.spec.*,**/*.mock.*,**/*.min.js,**/*.bundle.js,**/assets/**,**/vendor/**" \
+            -Dsonar.qualitygate.wait=true \
+            -Dsonar.ws.timeout=120 \
+            -Dsonar.ce.task.timeout=1200 \
+            -Dsonar.scanner.connectTimeout=60000 \
+            -Dsonar.scanner.readTimeout=60000 \
+            || (echo "SonarQube upload failed, retrying in 15 seconds..." && sleep 15 && \
+            npx sonar-scanner \
+              -Dsonar.host.url=$SONAR_HOST_URL \
+              -Dsonar.login=$SONAR_TOKEN \
+              -Dsonar.projectKey=PR74-CGF-HRDD-Web-Front \
+              -Dsonar.sources=src)
