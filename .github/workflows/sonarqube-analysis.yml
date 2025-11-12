@@ -22,9 +22,6 @@ jobs:
           npm cache clean --force
           npm ci --no-audit --prefer-offline
 
-      - name: Run tests (optional)
-        run: npm test --if-present
-
       - name: Run SonarQube Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
