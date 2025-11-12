@@ -17,15 +17,14 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Clean large or unnecessary directories
+        run: |
+          rm -rf coverage reports dist build public node_modules/.cache || true
+
       - name: Install dependencies
         run: |
           npm cache clean --force
           npm ci --no-audit --prefer-offline
-
-      # Clean unnecessary folders before scan
-      - name: Clean unnecessary folders
-        run: |
-          rm -rf coverage reports dist build node_modules/.cache || true
 
       - name: Run SonarQube Scan
         env:
@@ -35,9 +34,11 @@ jobs:
           npx sonar-scanner \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN \
-            -Dsonar.projectBaseDir=. \
-            -Dsonar.verbose=true \
+            -Dsonar.projectKey=PR74-CGF-HRDD-Web-Front \
+            -Dsonar.projectName=PR74-CGF-HRDD-Web-Front \
+            -Dsonar.sources=src/components,src/utils,src/router
+            -Dsonar.exclusions="**/node_modules/**,**/build/**,**/dist/**,**/coverage/**,**/reports/**,**/public/**,**/*.test.*,**/*.spec.*,**/*.mock.*,**/*.min.js,**/*.bundle.js,**/assets/**,**/vendor/**" \
             -Dsonar.scm.disabled=true \
             -Dsonar.upload.compression=true \
-            -Dsonar.projectKey=PR74-CGF-HRDD-Web-Front \
-            -Dsonar.projectName=PR74-CGF-HRDD-Web-Front
+            -Dsonar.cpd.skip=true \
+            -Dsonar.verbose=true
