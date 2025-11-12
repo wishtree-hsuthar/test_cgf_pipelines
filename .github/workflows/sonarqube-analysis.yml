@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -22,6 +22,11 @@ jobs:
           npm cache clean --force
           npm ci --no-audit --prefer-offline
 
+      # Clean unnecessary folders before scan
+      - name: Clean unnecessary folders
+        run: |
+          rm -rf coverage reports dist build node_modules/.cache || true
+
       - name: Run SonarQube Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -29,4 +34,10 @@ jobs:
         run: |
           npx sonar-scanner \
             -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.login=$SONAR_TOKEN
+            -Dsonar.login=$SONAR_TOKEN \
+            -Dsonar.projectBaseDir=. \
+            -Dsonar.verbose=true \
+            -Dsonar.scm.disabled=true \
+            -Dsonar.upload.compression=true \
+            -Dsonar.projectKey=PR74-CGF-HRDD-Web-Front \
+            -Dsonar.projectName=PR74-CGF-HRDD-Web-Front
