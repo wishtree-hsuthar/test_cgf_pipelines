@@ -10,6 +10,12 @@ jobs:
   snyk_security_check:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+
     steps:
       # 1. Checkout source code
       - name: Checkout Code
