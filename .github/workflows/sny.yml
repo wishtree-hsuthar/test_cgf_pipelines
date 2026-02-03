@@ -2,62 +2,61 @@ name: Snyk Security Scan for JavaScript
 
 on:
   pull_request:
-    # Triggers on every PR to main/master to act as a security gate
     branches: [ main, master ]
   push:
-    # Also runs on push to main/master for monitoring
     branches: [ main, master ]
 
 jobs:
   snyk_security_check:
     runs-on: ubuntu-latest
+
     steps:
+      # 1. Checkout source code
       - name: Checkout Code
         uses: actions/checkout@v4
-        
-      # 1. Setup Node.js (Prerequisite for a Node.js/JavaScript project)
+
+      # 2. Setup Node.js
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Use a stable Node.js version
-          
-      # 2. Install Project Dependencies
+          node-version: '20'
+
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # 3. Snyk Scan (The PR Blocking/Gate Step)
+      # 4. Snyk Security Test (PR Gate)
       - name: Snyk Security Gate (Test)
-        # Use the official Snyk action for Node.js projects
-        uses: snyk/actions/node@master 
-        
-        env:
-          # Pass the token from the GitHub Secret
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} 
-          
-        with:
-          # The key to blocking the PR. If a vulnerability of 'high' severity 
-          # or greater is found, this step will fail the workflow.
-          args: >
-            --severity-threshold=high
-            --all-projects
-            --sarif-file-output=snyk-report.sarif 
-            --fail-on=all # Fail on all supported issue types (Open Source, Code, etc.)
-
-      # 4. Snyk Monitor (Upload Report to Snyk Server)
-      - name: Snyk Monitor (Upload Snapshot)
-        uses: snyk/actions/node@master
-        
+        uses: snyk/actions/node@v3
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        
+          SNYK_ORG: ${{ secrets.SNYK_ORG }}
         with:
-          # The 'monitor' command uploads a project snapshot to your Snyk dashboard
-          command: monitor
+          args: >
+            --severity-threshold=high
+            --org=${{ secrets.SNYK_ORG }}
+            --project-name=my-system-name
+            --tags=system=my-system,team=platform,env=prod
+            --all-projects
+            --fail-on=all
+            --sarif-file-output=snyk-report.sarif
 
-      # 5. Upload SARIF Report to GitHub Code Scanning
-      # This step must run even if the Snyk test failed, so we can see the results.
+      # 5. Snyk Monitor (Upload snapshot to Snyk dashboard)
+      - name: Snyk Monitor (Upload Snapshot)
+        uses: snyk/actions/node@v3
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_ORG: ${{ secrets.SNYK_ORG }}
+        with:
+          command: monitor
+          args: >
+            --org=${{ secrets.SNYK_ORG }}
+            --project-name=my-system-name
+            --tags=system=my-system,team=platform,env=prod
+
+      # 6. Upload SARIF report to GitHub Code Scanning
       - name: Upload Snyk Report to GitHub Code Scanning
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
-        if: always() # IMPORTANT: Always run this step!
         with:
           sarif_file: snyk-report.sarif
