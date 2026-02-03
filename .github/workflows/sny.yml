@@ -27,7 +27,7 @@ jobs:
 
       # 4. Snyk Security Test (PR Gate)
       - name: Snyk Security Gate (Test)
-        uses: snyk/actions/node@v3
+        uses: snyk/actions/node@v1
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           SNYK_ORG: ${{ secrets.SNYK_ORG }}
@@ -43,7 +43,7 @@ jobs:
 
       # 5. Snyk Monitor (Upload snapshot to Snyk dashboard)
       - name: Snyk Monitor (Upload Snapshot)
-        uses: snyk/actions/node@v3
+        uses: snyk/actions/node@v1
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           SNYK_ORG: ${{ secrets.SNYK_ORG }}
