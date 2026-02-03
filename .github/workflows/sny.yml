@@ -35,9 +35,8 @@ jobs:
           args: >
             --severity-threshold=high
             --org=${{ secrets.SNYK_ORG }}
-            --project-name=my-system-name
+            --project-name=pr74-cgf-hrdd-web-front
             --tags=system=my-system,team=platform,env=prod
-            --all-projects
             --fail-on=all
             --sarif-file-output=snyk-report.sarif
 
