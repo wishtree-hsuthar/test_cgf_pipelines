@@ -2,6 +2,8 @@ import { RESEND_INVITE } from "../api/Url";
 import { privateAxios } from "../api/axios";
 import { catchError } from "./CatchError";
 
+const testVariable = "This is the test variable";
+
 export const ResendEmail = async (
   inviteid,
   setToasterDetails,
