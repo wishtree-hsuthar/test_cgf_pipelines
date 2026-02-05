@@ -41,45 +41,212 @@ jobs:
           const { GoogleGenerativeAI } = require('@google/generative-ai');
           const fs = require('fs');
           
-          const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
-          const model = genAI.getGenerativeModel({ model: 'models/gemini-flash-latest' });
+          // Validate API key
+          if (!process.env.GOOGLE_GEMINI_API_KEY) {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## ❌ Gemini AI Code Review Failed\n\n**Error:** GOOGLE_GEMINI_API_KEY is not configured.\n\nPlease add the API key to repository secrets.`
+            });
+            core.setFailed('GOOGLE_GEMINI_API_KEY is not set');
+            return;
+          }
           
-          // Read the diff
-          const diff = fs.readFileSync('pr_diff.txt', 'utf8');
+          const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
+          
+          // Models to try in order of preference
+          const modelConfigs = [
+            { name: 'models/gemini-flash-latest', displayName: 'Gemini Flash (Latest)' },
+            { name: 'models/gemini-pro-latest', displayName: 'Gemini Pro (Latest)' },
+            { name: 'models/gemini-2.5-flash-preview-09-2025', displayName: 'Gemini 2.5 Flash' },
+            { name: 'models/gemini-3-flash-preview', displayName: 'Gemini 3 Flash' }
+          ];
+          
+          let diff;
+          try {
+            diff = fs.readFileSync('pr_diff.txt', 'utf8');
+            
+            if (!diff || diff.trim().length === 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: `## ℹ️ Gemini AI Code Review\n\n**No changes detected** in this PR to review.`
+              });
+              console.log('No changes to review');
+              return;
+            }
+            
+            // Truncate large diffs
+            const maxDiffSize = 30000;
+            if (diff.length > maxDiffSize) {
+              console.log(`Diff size: ${diff.length} chars, truncating to ${maxDiffSize}`);
+              diff = diff.substring(0, maxDiffSize) + '\n\n... (diff truncated due to size)';
+            }
+          } catch (error) {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## ❌ Gemini AI Code Review Failed\n\n**Error:** Could not read PR diff.\n\`\`\`\n${error.message}\n\`\`\``
+            });
+            core.setFailed(`Failed to read diff: ${error.message}`);
+            return;
+          }
           
           // Get PR details
-          const { data: pr } = await github.rest.pulls.get({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: context.issue.number,
-          });
+          let pr;
+          try {
+            const response = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            pr = response.data;
+            console.log(`Reviewing PR #${pr.number}: ${pr.title}`);
+          } catch (error) {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## ❌ Gemini AI Code Review Failed\n\n**Error:** Could not fetch PR details.\n\`\`\`\n${error.message}\n\`\`\``
+            });
+            core.setFailed(`Failed to get PR details: ${error.message}`);
+            return;
+          }
           
-          // Request Gemini review
-          const prompt = `Please review this pull request code changes. Focus on:
-          
-          1. Code quality and best practices
-          2. Potential bugs or issues
-          3. Security concerns
-          4. Performance improvements
-          5. Code maintainability
-          
-          PR Title: ${pr.title}
-          PR Description: ${pr.body || 'No description provided'}
-          
-          Code Changes:
+          // Build review prompt
+          const prompt = `You are an expert code reviewer. Please review this pull request thoroughly.
+
+          **PR Title:** ${pr.title}
+          **PR Description:** ${pr.body || 'No description provided'}
+
+          **Code Changes:**
           \`\`\`diff
           ${diff}
           \`\`\`
+
+          Please provide a comprehensive code review with the following structure:
+
+          ## 🔍 Summary
+          Brief overview of the changes (2-3 sentences)
+
+          ## ⚠️ Issues Found
+          List any critical issues, bugs, or security concerns:
+          - **Critical:** Issues that could break functionality or cause security problems
+          - **Major:** Significant code quality or performance issues
+          - **Minor:** Small improvements or style suggestions
+
+          ## 💡 Suggestions
+          Specific, actionable recommendations for improvement
+
+          ## ✅ Positive Aspects
+          What was done well in this PR
+
+          ## 📊 Overall Assessment
+          Rate the code quality: Excellent / Good / Needs Improvement / Requires Changes
+
+          Use markdown formatting and be specific with file names and line references where possible.`;
+
+          // Try models in order
+          let review = null;
+          let usedModel = null;
+          let lastError = null;
           
-          Provide a structured review with specific line references where applicable.`;
+          for (const config of modelConfigs) {
+            try {
+              console.log(`Attempting review with: ${config.displayName}`);
+              
+              const model = genAI.getGenerativeModel({ 
+                model: config.name,
+                generationConfig: {
+                  temperature: 0.3,
+                  topP: 0.95,
+                  topK: 40,
+                  maxOutputTokens: 8192,
+                }
+              });
+              
+              const result = await model.generateContent(prompt);
+              
+              if (!result || !result.response) {
+                throw new Error('Empty response from model');
+              }
+              
+              review = result.response.text();
+              usedModel = config.displayName;
+              console.log(`✅ Successfully generated review using ${config.displayName}`);
+              break;
+              
+            } catch (error) {
+              console.log(`❌ Failed with ${config.displayName}: ${error.message}`);
+              lastError = error;
+              
+              // Check for specific errors
+              if (error.message.includes('quota')) {
+                console.log('Quota exceeded, trying next model...');
+              } else if (error.message.includes('404')) {
+                console.log('Model not found, trying next model...');
+              } else if (error.message.includes('429')) {
+                console.log('Rate limited, trying next model...');
+              }
+              
+              continue;
+            }
+          }
           
-          const result = await model.generateContent(prompt);
-          const review = result.response.text();
-          
-          // Post review as comment
-          await github.rest.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-            body: `## 🤖 Gemini AI Code Review\n\n${review}\n\n---\n*Review generated by Google Gemini 1.5 Pro*`
-          });
+          // Post review or error comment
+          if (review && usedModel) {
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: `## 🤖 Gemini AI Code Review
+
+          ${review}
+
+          ---
+          ✨ *Review generated by ${usedModel}*
+          📝 *Diff size: ${diff.length} characters*
+          🔄 *Review requested by @${context.actor}*`
+              });
+              
+              console.log('✅ Review posted successfully!');
+              
+            } catch (error) {
+              console.error('Failed to post review comment:', error);
+              core.setFailed(`Posted review but failed to create comment: ${error.message}`);
+            }
+            
+          } else {
+            // All models failed
+            const errorDetails = lastError ? lastError.message : 'Unknown error';
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## ❌ Gemini AI Code Review Failed
+
+          **Error:** Could not generate review with any available Gemini model.
+
+          **Last Error:** 
+          \`\`\`
+          ${errorDetails}
+          \`\`\`
+
+          **Attempted Models:**
+          ${modelConfigs.map(m => `- ${m.displayName}`).join('\n')}
+
+          **Troubleshooting:**
+          - Check if API key is valid and has quota
+          - Verify API key has access to Gemini models
+          - Check if there are any API outages
+
+          **Need Help?** Contact your repository administrator or check [Google AI Studio](https://aistudio.google.com/)`
+            });
+            
+            core.setFailed(`All models failed. Last error: ${errorDetails}`);
+          }
